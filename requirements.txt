@@ -1,0 +1,31 @@
+# 🚀 SmartHaus Group M365 Automation Dependencies 🚀
+
+# Azure and Microsoft Graph dependencies
+azure-identity>=1.24.0
+azure-mgmt-graphservices>=1.0.0
+azure-core>=1.35.0
+msal>=1.33.0
+
+# HTTP requests and JSON handling
+requests>=2.32.0
+
+# Date and time handling
+python-dateutil>=2.8.0
+
+# Type hints support
+typing-extensions>=4.0.0
+
+# Additional Azure modules for extended functionality
+azure-mgmt-resource>=23.3.0
+azure-mgmt-storage>=21.0.0
+azure-mgmt-keyvault>=10.0.0
+
+# Security and cryptography
+cryptography>=2.5.0
+PyJWT>=1.0.0
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
