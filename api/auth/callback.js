@@ -51,7 +51,9 @@ export default async function handler(req, res) {
         }
 
         // Exchange authorization code for access token
-        const tokenResponse = await fetch('https://login.microsoftonline.com/common/oauth2/v2.0/token', {
+        // Use specific tenant ID instead of /common for single-tenant apps
+        const tenantId = process.env.MICROSOFT_TENANT_ID || 'common';
+        const tokenResponse = await fetch(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

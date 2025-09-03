@@ -7,9 +7,9 @@
     base = 'http://localhost:9000';
     window.__ENVIRONMENT__ = 'development';
   } else {
-    base = base || 'https://api.m365.smarthaus.ai';
+    // In production, default to same-origin to avoid cross-domain issues
+    base = base || window.location.origin;
     window.__ENVIRONMENT__ = 'production';
   }
   window.__API_BASE_URL__ = base;
 })();
-

@@ -54,7 +54,8 @@ Containers persist data under per-instance directories `./instances/<NAME>/` unl
 Vercel (cloud frontend)
 - Build static dashboard: `make build-dashboard` → outputs to `dist/`
 - Deploy with `vercel` CLI or Git integration using `vercel.json`
-- Set env `API_BASE_URL` in Vercel to point at your API (e.g., `https://api.m365.smarthaus.ai` or `https://your-host:8000`)
+- Default behavior: frontend uses same-origin for API calls in production
+- Optional: set env `API_BASE_URL` in Vercel only if your API is on a different domain
 - Configure custom domain `m365.smarthaus.ai` in Vercel project settings
 
 CORS for Cloud Frontend
@@ -66,8 +67,8 @@ Hybrid (cloud + local)
   - Logs: `make docker-dev-logs`
   - Stop: `make docker-dev-down`
 - Smart routing in UI: the enterprise dashboard auto-detects environment
-  - If opened on localhost, it targets `http://localhost:8000`
-  - Otherwise, it uses the injected `API_BASE_URL` (e.g., `https://api.m365.smarthaus.ai`)
+  - If opened on localhost, it targets `http://localhost:9000` (dev)
+  - Otherwise, it defaults to same-origin; set `API_BASE_URL` only to override
 - Compose file: `docker-compose.local.yml` (editable for dev env)
 
 Notes

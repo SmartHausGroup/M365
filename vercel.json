@@ -4,8 +4,7 @@
   "outputDirectory": "dist",
 
   "env": {
-    "DASHBOARD_TITLE": "SmartHaus M365 Automation Empire",
-    "API_BASE_URL": "https://m365.smarthaus.ai"
+    "DASHBOARD_TITLE": "SmartHaus M365 Automation Empire"
   },
   "rewrites": [
     {

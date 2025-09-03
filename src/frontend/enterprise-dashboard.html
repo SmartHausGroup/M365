@@ -8,7 +8,7 @@
     <script>var __INJECTED_API__='__API_BASE_URL__';</script>
     <script src="/env.js"></script>
     <script src="/api.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha384-IHkzvXWJYg2EjuiCa1kL7yBXMUpR1FfKkp3F8rHjT3z0xwWcc9H2hMpI0a2m2+6X" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <!-- AUTHENTICATION OVERLAY -->
@@ -155,7 +155,8 @@
     </div>
 
     <script>
-      const API_BASE = (window.__API_BASE_URL__ || '__API_BASE_URL__').replace(/\/$/, '');
+      // Prefer injected base; otherwise default to same-origin for production
+      const API_BASE = (window.__INJECTED_API__ || window.location.origin).replace(/\/$/, '');
       function authHeaders(){ const t=localStorage.getItem('access_token'); return t?{Authorization:`Bearer ${t}`}:{ }; }
       async function getJSON(p){ const base=(window.api?window.api.base():API_BASE); const r=await fetch(`${base}${p}`,{headers:authHeaders()}); if(!r.ok) throw new Error(await r.text()); return r.json(); }
       async function postJSON(p,body){ const base=(window.api?window.api.base():API_BASE); const r=await fetch(`${base}${p}`,{method:'POST',headers:{'Content-Type':'application/json',...authHeaders()},body:JSON.stringify(body||{})}); if(!r.ok) throw new Error(await r.text()); return r.json(); }
@@ -311,8 +312,12 @@
 
       // Set up auth login button
       document.getElementById('auth-login-btn').onclick = () => {
+        console.log('Login button clicked!');
+        console.log('API_BASE:', API_BASE);
         const ret = window.location.href.split('#')[0];
-        window.location.href = `${API_BASE}/api/auth/login?r=${encodeURIComponent(ret)}`;
+        const loginUrl = `${API_BASE}/api/auth/login?r=${encodeURIComponent(ret)}`;
+        console.log('Redirecting to:', loginUrl);
+        window.location.href = loginUrl;
       };
       
       captureToken(); checkAuth(); refreshStatus(); refreshOverview();

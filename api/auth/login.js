@@ -46,7 +46,9 @@ export default async function handler(req, res) {
     const state = Buffer.from(JSON.stringify(stateData)).toString('base64');
     
     // Build Microsoft OAuth URL with proper parameters
-    const authUrl = new URL('https://login.microsoftonline.com/common/oauth2/v2.0/authorize');
+    // Use specific tenant ID instead of /common for single-tenant apps
+    const tenantId = process.env.MICROSOFT_TENANT_ID || 'common';
+    const authUrl = new URL(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/authorize`);
     authUrl.searchParams.set('client_id', clientId);
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('redirect_uri', redirectUri);
@@ -55,6 +57,7 @@ export default async function handler(req, res) {
     authUrl.searchParams.set('state', state);
     authUrl.searchParams.set('code_challenge', codeChallenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
+    authUrl.searchParams.set('prompt', 'login'); // Force login prompt every time
     
     console.log('Redirecting to Microsoft OAuth:', authUrl.toString());
     
