@@ -4,7 +4,7 @@
   const injected = '__API_BASE_URL__';
   let base = injected && injected !== '__API_BASE_URL__' ? injected.replace(/\/$/, '') : '';
   if (host === 'localhost' || host === '127.0.0.1') {
-    base = 'http://localhost:8000';
+    base = 'http://localhost:9000';
     window.__ENVIRONMENT__ = 'development';
   } else {
     base = base || 'https://api.m365.smarthaus.ai';

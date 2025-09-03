@@ -57,7 +57,7 @@ build-dashboard: ## Build static dashboard for Vercel (dist/)
 	@cp src/frontend/environment-detection.js dist/env.js
 	@cp src/frontend/api-router.js dist/api.js
 	@DASH_TITLE="$${DASHBOARD_TITLE:-SmartHaus M365 Automation Empire}"; \
-	 API_URL="$${API_BASE_URL:-http://localhost:8000}"; \
+	 API_URL="$${API_BASE_URL:-https://api.m365.smarthaus.ai}"; \
 	 sed -e "s#__DASHBOARD_TITLE__#$$DASH_TITLE#g" -e "s#__API_BASE_URL__#$$API_URL#g" src/frontend/enterprise-dashboard.html > dist/index.html
 	@echo "✅ Built to dist/"
 

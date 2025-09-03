@@ -25,16 +25,16 @@ RUN pip install --no-index --find-links=/wheels smarthaus-m365 && rm -rf /wheels
 COPY templates ./templates
 COPY static ./static
 
-# Non-root user
-RUN useradd -m -u 10001 appuser && mkdir -p /app/data /app/logs /app/config && chown -R appuser:appuser /app
-USER appuser
-
 # Healthcheck port env
 ENV PORT=8000
 
 # Entrypoint to allow dynamic port
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+# Non-root user
+RUN useradd -m -u 10001 appuser && mkdir -p /app/data /app/logs /app/config && chown -R appuser:appuser /app
+USER appuser
 
 EXPOSE 8000
 

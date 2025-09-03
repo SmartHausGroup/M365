@@ -2,10 +2,21 @@
   "version": 2,
   "buildCommand": "make build-dashboard",
   "outputDirectory": "dist",
+
   "env": {
     "DASHBOARD_TITLE": "SmartHaus M365 Automation Empire",
-    "API_BASE_URL": "http://localhost:8000"
+    "API_BASE_URL": "https://m365.smarthaus.ai"
   },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

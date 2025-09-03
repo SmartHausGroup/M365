@@ -17,7 +17,7 @@ services:
       - SP_HOSTNAME=${SP_HOSTNAME:-smarthausgroup.sharepoint.com}
       - CORS_ORIGINS=http://localhost:3000,http://localhost:8000
     ports:
-      - "8000:8000"
+      - "9000:8000"
     volumes:
       - ./data:/app/data
       - ./config:/app/config

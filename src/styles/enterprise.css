@@ -148,3 +148,50 @@ main {
 /* Accessibility focus */
 a:focus, button:focus { outline: 2px solid var(--primary-500); outline-offset: 2px; }
 
+/* Authentication Overlay */
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--neutral-900), var(--neutral-800));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.auth-modal {
+  background: var(--accent-50);
+  color: var(--neutral-900);
+  padding: var(--spacing-3xl);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+
+.auth-modal h2 {
+  color: var(--primary-900);
+  margin: 0 0 var(--spacing-lg);
+  font-size: 24px;
+}
+
+.auth-modal p {
+  color: var(--neutral-600);
+  margin: 0 0 var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.auth-modal .btn-primary {
+  font-size: 16px;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+}
+
+.auth-note {
+  margin-top: var(--spacing-lg);
+  color: var(--neutral-500);
+}
+

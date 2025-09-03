@@ -1,0 +1,30 @@
+{
+  "name": "smarthaus-m365-api",
+  "version": "1.0.0",
+  "description": "SmartHaus M365 Enterprise Platform API",
+  "main": "index.js",
+  "scripts": {
+    "build": "make build-dashboard",
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@azure/msal-node": "^2.6.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "m365",
+    "sharepoint",
+    "teams",
+    "enterprise",
+    "smarthaus"
+  ],
+  "author": "Philip Siniscalchi",
+  "license": "MIT"
+}
