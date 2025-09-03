@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>__DASHBOARD_TITLE__</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>__DASHBOARD_TITLE__</h1>
+      <nav>
+        <a href="#tai">TAI</a>
+        <a href="#lattice">LATTICE</a>
+        <a href="#website">Website</a>
+        <a href="#provisioning">Provisioning</a>
+        <a href="#teams">Teams</a>
+        <a href="#overview">Overview</a>
+      </nav>
+      <div id="auth-section" style="float:right"></div>
+    </header>
+
+    <main>
+      <section id="provisioning">
+        <h2>M365 Provisioning</h2>
+        <div class="controls">
+          <button onclick="createTAISite()">Create TAI Research Site</button>
+          <button onclick="createLATTICESite()">Create LATTICE Research Site</button>
+          <button onclick="createBusinessSite()">Create Business Hub Site</button>
+        </div>
+        <pre id="prov-status"></pre>
+      </section>
+
+      <section id="teams">
+        <h2>Teams Provisioning</h2>
+        <div class="controls">
+          <button onclick="createTAITeam()">Create TAI Research Team</button>
+          <button onclick="createLATTICETeam()">Create LATTICE Research Team</button>
+          <button onclick="createBusinessTeam()">Create Business Team</button>
+        </div>
+        <pre id="teams-status"></pre>
+      </section>
+
+      <section id="tai">
+        <h2>TAI Research</h2>
+        <form id="tai-form">
+          <input name="title" placeholder="Research Title" required />
+          <textarea name="description" placeholder="Description"></textarea>
+          <input name="tags" placeholder="Tags (comma separated)" />
+          <button type="submit">Add TAI Research</button>
+        </form>
+        <div class="search">
+          <input id="tai-q" placeholder="Search TAI..." />
+          <input id="tai-tags" placeholder="Tags (comma separated)" />
+          <button onclick="searchTAI()">Search</button>
+        </div>
+        <h3>TAI Data</h3>
+        <pre id="tai-data"></pre>
+      </section>
+
+      <section id="lattice">
+        <h2>LATTICE Development</h2>
+        <form id="lattice-form">
+          <input name="title" placeholder="Development Update" required />
+          <textarea name="description" placeholder="Description"></textarea>
+          <input name="tags" placeholder="Tags (comma separated)" />
+          <button type="submit">Add LATTICE Update</button>
+        </form>
+        <div class="search">
+          <input id="lattice-q" placeholder="Search LATTICE..." />
+          <input id="lattice-tags" placeholder="Tags (comma separated)" />
+          <button onclick="searchLattice()">Search</button>
+        </div>
+        <h3>LATTICE Data</h3>
+        <pre id="lattice-data"></pre>
+      </section>
+
+      <section id="website">
+        <h2>Website Updates</h2>
+        <h3>Recent Website Updates</h3>
+        <pre id="website-data"></pre>
+      </section>
+
+      <section id="overview">
+        <h2>Empire Overview</h2>
+        <div class="controls">
+          <button onclick="loadOverview()">Load Overview</button>
+          <button onclick="loadAutomationStatus()">Automation Status</button>
+        </div>
+        <pre id="overview-data"></pre>
+      </section>
+    </main>
+
+    <script>
+      const API_BASE = '__API_BASE_URL__'.replace(/\/$/, '');
+
+      function toTags(str) {
+        return (str || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+
+      function authHeaders() {
+        const h = { 'Content-Type': 'application/json' };
+        const tok = localStorage.getItem('access_token');
+        if (tok) h['Authorization'] = `Bearer ${tok}`;
+        return h;
+      }
+
+      async function postJSON(path, payload) {
+        const res = await fetch(`${API_BASE}${path}`, {
+          method: 'POST',
+          headers: authHeaders(),
+          body: JSON.stringify(payload || {}),
+        });
+        if (!res.ok) throw new Error(await res.text());
+        return res.json();
+      }
+
+      async function getJSON(path) {
+        const res = await fetch(`${API_BASE}${path}`, { headers: authHeaders() });
+        if (!res.ok) throw new Error(await res.text());
+        return res.json();
+      }
+
+      // Provisioning
+      async function callProvision(path, outId) {
+        const out = document.getElementById(outId);
+        out.textContent = 'Working...';
+        try {
+          const data = await postJSON(path, {});
+          out.textContent = JSON.stringify(data, null, 2);
+        } catch (e) {
+          out.textContent = `Error: ${e}`;
+        }
+      }
+      function createTAISite() { callProvision('/api/m365/provision/tai', 'prov-status'); }
+      function createLATTICESite() { callProvision('/api/m365/provision/lattice', 'prov-status'); }
+      function createBusinessSite() { callProvision('/api/m365/provision/business', 'prov-status'); }
+      function createTAITeam() { callProvision('/api/m365/teams/tai', 'teams-status'); }
+      function createLATTICETeam() { callProvision('/api/m365/teams/lattice', 'teams-status'); }
+      function createBusinessTeam() { callProvision('/api/m365/teams/business', 'teams-status'); }
+
+      // Forms
+      document.getElementById('tai-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = e.target;
+        const payload = {
+          title: f.title.value,
+          description: f.description.value,
+          tags: toTags(f.tags.value),
+        };
+        await postJSON('/api/tai/research', payload);
+        await refreshTAI();
+      });
+      document.getElementById('lattice-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = e.target;
+        const payload = {
+          title: f.title.value,
+          description: f.description.value,
+          tags: toTags(f.tags.value),
+        };
+        await postJSON('/api/lattice/research', payload);
+        await refreshLattice();
+      });
+
+      // Search
+      async function searchTAI() {
+        const q = document.getElementById('tai-q').value;
+        const tags = document.getElementById('tai-tags').value;
+        const data = await getJSON(`/api/tai/search?q=${encodeURIComponent(q)}&tags=${encodeURIComponent(tags)}`);
+        document.getElementById('tai-data').textContent = JSON.stringify(data, null, 2);
+      }
+      async function searchLattice() {
+        const q = document.getElementById('lattice-q').value;
+        const tags = document.getElementById('lattice-tags').value;
+        const data = await getJSON(`/api/lattice/search?q=${encodeURIComponent(q)}&tags=${encodeURIComponent(tags)}`);
+        document.getElementById('lattice-data').textContent = JSON.stringify(data, null, 2);
+      }
+
+      // Overview
+      async function loadOverview() {
+        const data = await getJSON('/api/m365/empire-overview');
+        document.getElementById('overview-data').textContent = JSON.stringify(data, null, 2);
+      }
+      async function loadAutomationStatus() {
+        const data = await getJSON('/api/m365/automation-status');
+        document.getElementById('overview-data').textContent = JSON.stringify(data, null, 2);
+      }
+
+      // Initial refresh of datasets
+      async function refreshTAI() {
+        const data = await getJSON('/api/tai/research');
+        document.getElementById('tai-data').textContent = JSON.stringify(data, null, 2);
+      }
+      async function refreshLattice() {
+        const data = await getJSON('/api/lattice/research');
+        document.getElementById('lattice-data').textContent = JSON.stringify(data, null, 2);
+      }
+      async function refreshWebsite() {
+        // For now, show updates collection
+        const data = await getJSON('/api/website/updates');
+        document.getElementById('website-data').textContent = JSON.stringify(data, null, 2);
+      }
+
+      // Load initial content
+      refreshTAI();
+      refreshLattice();
+      refreshWebsite();
+
+      // --- Auth integration ---
+      function showLoginButton() {
+        document.getElementById('auth-section').innerHTML = `<button onclick="loginWithMicrosoft()">Sign in with Microsoft</button>`;
+      }
+
+      function showAuthenticatedUser(user) {
+        const name = (user && user.user && (user.user.displayName || user.user.userPrincipalName)) || 'User';
+        document.getElementById('auth-section').innerHTML = `<span>Welcome, ${name}</span> <button onclick="logout()">Sign Out</button>`;
+      }
+
+      function logout() {
+        localStorage.removeItem('access_token');
+        window.location.reload();
+      }
+
+      function loginWithMicrosoft() {
+        const ret = window.location.origin;
+        window.location.href = `${API_BASE}/api/auth/login?r=${encodeURIComponent(ret)}`;
+      }
+
+      function captureTokenFromHash() {
+        const h = window.location.hash || '';
+        const m = h.match(/token=([^&]+)/);
+        if (m) {
+          localStorage.setItem('access_token', decodeURIComponent(m[1]));
+          history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+
+      async function checkAuth() {
+        const tok = localStorage.getItem('access_token');
+        if (!tok) { showLoginButton(); return; }
+        try {
+          const me = await getJSON('/api/auth/me');
+          showAuthenticatedUser(me);
+        } catch (e) {
+          showLoginButton();
+        }
+      }
+
+      captureTokenFromHash();
+      checkAuth();
+    </script>
+  </body>
+  </html>

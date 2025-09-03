@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  m365-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: m365-api-local
+    environment:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=info
+      - ENABLE_CACHING=true
+      - ENABLE_AUDIT_LOGGING=true
+      - AUTH_DISABLED=true
+      - GRAPH_TENANT_ID=${GRAPH_TENANT_ID}
+      - GRAPH_CLIENT_ID=${GRAPH_CLIENT_ID}
+      - GRAPH_CLIENT_SECRET=${GRAPH_CLIENT_SECRET}
+      - SP_HOSTNAME=${SP_HOSTNAME:-smarthausgroup.sharepoint.com}
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+      - ./logs:/app/logs
+    restart: unless-stopped
+

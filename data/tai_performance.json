@@ -1,0 +1,146 @@
+[
+  {
+    "id": "dece2baf-6a7d-483f-89ca-604448e3c0f9",
+    "ts": 1756903906,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "71c85c87-d126-422b-893f-a60a8cdb51e2",
+    "ts": 1756903918,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "1022701a-f892-4838-b1c1-9f536719cb8b",
+    "ts": 1756904037,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "3edd9308-3693-4e82-a783-b331cbb8cd03",
+    "ts": 1756905045,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "cfbf9016-77c0-4611-814c-b0474583015a",
+    "ts": 1756906967,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "530f35ff-47f9-41b6-8556-3794974d3bf3",
+    "ts": 1756907435,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "26d8c1a5-a448-447d-adeb-889551c4c570",
+    "ts": 1756907791,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "9b394b61-ecfb-4780-83c0-d6bb551bca70",
+    "ts": 1756908393,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "cd331152-f117-4337-a5db-36afddec9e76",
+    "ts": 1756908947,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "af4ba34c-16e6-4071-98f1-0f969cdf7c65",
+    "ts": 1756909532,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "5e6388ae-167c-48d8-83cc-735d5ab51920",
+    "ts": 1756909882,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "03c45065-4b7d-42b0-8bd4-6196b0c1b1bc",
+    "ts": 1756912563,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "f6c211c7-d45f-40d5-9130-c2c7037ba250",
+    "ts": 1756912965,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "ff0120d0-298a-4597-a267-de97f32e1213",
+    "ts": 1756912990,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "bc0d6de6-ac6e-409a-b11d-d98331c01b51",
+    "ts": 1756913971,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "03591453-68e2-4ed0-ae42-163e7a9361ff",
+    "ts": 1756915173,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "02ade279-3d23-4be0-8298-19420c19bc21",
+    "ts": 1756915494,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  },
+  {
+    "id": "06215f52-889e-4139-8e05-957be24d1484",
+    "ts": 1756916213,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
+  }
+]

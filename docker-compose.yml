@@ -1,0 +1,35 @@
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=${PORT:-8000}
+      - INSTANCE_NAME=${NAME:-m365-dashboard}
+      - INSTANCE_ENV=${INSTANCE_ENV:-production}
+      - GRAPH_TENANT_ID
+      - GRAPH_CLIENT_ID
+      - GRAPH_CLIENT_SECRET
+      - SP_HOSTNAME=${SP_HOSTNAME:-smarthausgroup.sharepoint.com}
+    ports:
+      - "${PORT:-8000}:8000"
+    volumes:
+      - ${HOST_DATA:-./data}:/app/data:rw
+      - ${HOST_CONFIG:-./config}:/app/config:ro
+      - ${HOST_LOGS:-./logs}:/app/logs:rw
+      - ./templates:/app/templates:ro
+    restart: unless-stopped
+    labels:
+      - "com.smarthaus.m365=1"
+      - "com.smarthaus.instance=${NAME:-m365-dashboard}"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import os,sys,urllib.request,json; p=os.getenv(\"PORT\",\"8000\"); d=urllib.request.urlopen(f"http://127.0.0.1:{p}/health",timeout=2).read(); import json as _j; sys.exit(0 if _j.loads(d).get("status")=="ok" else 1)' || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+networks:
+  default:
+    name: ${NAME:-m365-dashboard}-net
+

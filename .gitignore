@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+*.pyo
+*.pyd
+
+# Environments
+.env
+.venv/
+venv/
+
+# Editors/OS
+.DS_Store
+.idea/
+.vscode/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Logs
+logs/
+*.log
+
+# Node (if needed later)
+node_modules/
+
+.vercel
