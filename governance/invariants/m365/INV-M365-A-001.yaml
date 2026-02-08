@@ -1,0 +1,26 @@
+id: INV-M365-A-001
+category: Instruction Structure & Completeness
+derived_from:
+  - "Phase 1 Section 1: Sets and Domains"
+  - "Phase 1 Section 2: Instruction Structure"
+statement: >
+  Every instruction is a 4-tuple (persona, identity, action, parameters).
+  No component may be omitted or replaced by an alternate source.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  instruction has exactly four components; each component is present and
+  is the sole source for that position (persona, identity, action, parameters).
+fail_condition:
+  instruction has fewer than four or more than four components; or any
+  component is missing, or any component is derived from a source other
+  than the instruction tuple.
+notes:
+  Codomains (e.g. persona ∈ P, action ∈ A) are constrained by other
+  invariants. This invariant constrains structure and completeness only.

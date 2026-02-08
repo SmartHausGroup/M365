@@ -1,0 +1,26 @@
+id: INV-M365-D-001
+category: Read vs Mutation Semantics
+derived_from:
+  - "Phase 1 Section 3: Core Evaluation Function(s) (read-only)"
+  - "Phase 1 Section 4: Mutation vs Read Semantics (read-only)"
+statement: >
+  For every read-only action, when evaluation is defined the new tenant
+  state equals the input tenant state and the audit event list is empty.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every instruction with action ∈ A_read and Eval(instruction,
+  tenant_state) defined, new_tenant_state = tenant_state and
+  |audit_events| = 0.
+fail_condition:
+  action is read-only and (new_tenant_state ≠ tenant_state or
+  |audit_events| ≠ 0).
+notes:
+  Read-only partition A_read is disjoint from A_mut. This invariant
+  does not define how A_read is enumerated.

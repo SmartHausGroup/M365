@@ -1,0 +1,21 @@
+id: INV-M365-A-002
+category: Instruction Structure & Completeness
+derived_from:
+  - "Phase 1 Section 1: Sets and Domains (P = {Admin, User})"
+  - "Phase 1 Section 2: Instruction Structure"
+statement: >
+  The persona component of every instruction is exactly one of Admin or User.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  instruction.persona ∈ { Admin, User }.
+fail_condition:
+  instruction.persona ∉ { Admin, User } or persona is absent or ambiguous.
+notes:
+  No other persona value is permitted. Exactly two personas exist.

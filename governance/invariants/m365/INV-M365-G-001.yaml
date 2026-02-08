@@ -1,0 +1,29 @@
+id: INV-M365-G-001
+category: Instruction Mediation
+derived_from:
+  - "Phase 1 Section 7: Explicit Non-Goals (no intent, routing, persona decision)"
+statement: >
+  M365 does not decide intent, routing, or persona. The persona, identity,
+  action, and parameters used for evaluation are exactly those supplied
+  in the instruction tuple; they are not inferred, chosen, or overridden
+  by M365.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  The evaluation function uses instruction.persona, instruction.identity,
+  instruction.action, and instruction.parameters as the sole source for
+  those values; no other logic assigns or overrides them.
+fail_condition:
+  Persona, identity, action, or parameters are derived from any source
+  other than the instruction input (e.g. inferred from context, chosen
+  by routing, or overridden by policy inside M365).
+notes:
+  Checkable by design/code review: single code path that reads only
+  the instruction tuple for these fields. M365 only evaluates
+  validated instructions; it does not validate or assign persona/action.

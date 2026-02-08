@@ -1,0 +1,30 @@
+id: INV-M365-C-001
+category: Determinism
+derived_from:
+  - "Phase 1 Section 3: Core Evaluation Function(s) (Determinism)"
+  - "Phase 1 Section 6: Determinism and Failure Constraints"
+statement: >
+  For the same instruction and the same tenant state, the evaluation
+  produces exactly one outcome: the same (result, new_tenant_state,
+  audit_events), or the same rejection (no defined outcome).
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For any (instruction, tenant_state), any two evaluations produce
+  identical (result, new_tenant_state, audit_events) when both succeed,
+  or both reject with no side effects.
+fail_condition:
+  Two evaluations with the same (instruction, tenant_state) produce
+  different (result, new_tenant_state, or audit_events), or one succeeds
+  and the other rejects.
+notes:
+  Keystone invariant; other invariants assume determinism.
+  Machine-checkable by invoking Eval twice with the same (instruction,
+  tenant_state) and comparing outputs. Rejection must be consistent
+  (no state change, no audit) per INV-M365-F-001 and INV-M365-E-002.

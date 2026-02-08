@@ -1,0 +1,24 @@
+id: INV-M365-D-002
+category: Read vs Mutation Semantics
+derived_from:
+  - "Phase 1 Section 4: Mutation vs Read Semantics (mutating)"
+statement: >
+  Mutating actions may change tenant state and may produce audit events;
+  only Admin persona may use mutating actions (covered by INV-M365-B-002).
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every instruction with action ∈ A_mut, persona = Admin. For such
+  instructions, new_tenant_state may differ from tenant_state and
+  audit_events are constrained by INV-M365-E-001 / E-002.
+fail_condition:
+  action ∈ A_mut and persona ≠ Admin.
+notes:
+  This restates persona-mutation alignment. Audit cardinality for
+  successful mutations is constrained by INV-M365-E-001.

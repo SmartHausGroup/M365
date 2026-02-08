@@ -1,0 +1,27 @@
+id: INV-M365-F-001
+category: Failure-Closed / No Side Effects
+derived_from:
+  - "Phase 1 Section 6: Determinism and Failure Constraints (failure closed)"
+statement: >
+  Invalid or rejected instructions cause no tenant state change. The
+  observable tenant state after a rejected evaluation equals the
+  tenant state before the evaluation.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  Whenever Eval(instruction, tenant_state) is undefined (invalid or
+  rejected), the tenant state used by any subsequent evaluation is
+  unchanged from tenant_state (no observable mutation).
+fail_condition:
+  A rejected or invalid evaluation is followed by an observable change
+  in tenant state attributable to that evaluation.
+notes:
+  "Invalid" includes syntactically invalid instructions and
+  semantically invalid (e.g. Valid(x, τ) false) when defined by Phase 1.
+  Audit semantics for rejection are covered by INV-M365-E-002.

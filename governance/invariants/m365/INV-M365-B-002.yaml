@@ -1,0 +1,22 @@
+id: INV-M365-B-002
+category: Persona Isolation
+derived_from:
+  - "Phase 1 Section 4: Mutation vs Read Semantics (A_mut ⊆ A_Admin)"
+statement: >
+  Only the Admin persona may perform mutating actions. When persona = User,
+  the action must not be in the mutating action set.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every instruction with persona = User, action ∉ A_mut.
+fail_condition:
+  persona = User and action ∈ A_mut.
+notes:
+  Mutating actions are a subset of Admin actions; User persona never
+  has access to them.

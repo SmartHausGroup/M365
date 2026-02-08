@@ -1,0 +1,23 @@
+id: INV-M365-E-001
+category: Audit Semantics
+derived_from:
+  - "Phase 1 Section 5: Audit Event Semantics (successful Admin mutation)"
+statement: >
+  Every successful Admin mutation produces exactly one audit record.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every evaluation where persona = Admin, action ∈ A_mut, and result
+  indicates success, |audit_events| = 1.
+fail_condition:
+  persona = Admin, action ∈ A_mut, result indicates success, and
+  |audit_events| ≠ 1 (including 0 or ≥ 2).
+notes:
+  "Success" must be defined by the result type (e.g. a dedicated
+  success value). Exactly one audit event; no ambiguity in cardinality.

@@ -1,0 +1,24 @@
+id: INV-M365-B-001
+category: Persona Isolation
+derived_from:
+  - "Phase 1 Section 2: Instruction Structure (A_Admin, A_User disjoint)"
+  - "Phase 1 Section 4: Mutation vs Read Semantics (A_mut ⊆ A_Admin)"
+statement: >
+  Admin-only actions are unreachable from the User persona. When
+  persona = User, the action must be in the User-allowed action set only.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every instruction with persona = User, action ∈ A_User (and thus
+  action ∉ A_Admin and action ∉ A_mut).
+fail_condition:
+  persona = User and action is in the Admin-allowed or mutating action set.
+notes:
+  Equivalent to: no User-scoped instruction may invoke an Admin-only
+  or mutating action.

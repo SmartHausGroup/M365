@@ -1,0 +1,30 @@
+id: INV-M365-G-002
+category: Instruction Mediation
+derived_from:
+  - "Phase 1 Section 3: Core Evaluation Function(s)"
+  - "Phase 1 Section 7: Explicit Non-Goals (no hidden context)"
+statement: >
+  No hidden context; the outcome of evaluation (result, new_tenant_state,
+  audit_events) is determined solely by (instruction, tenant_state).
+  No other input may affect the outputs.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For every evaluation, result, new_tenant_state, and audit_events are
+  computable from (instruction, tenant_state) only; no additional inputs
+  are used. No input other than instruction and tenant_state is used to
+  compute the outputs.
+fail_condition:
+  Any output depends on an input other than instruction or tenant_state
+  (e.g. time, request ID, caller identity, or any hidden context).
+notes:
+  Merged from instruction completeness (outcome determined solely by
+  (instruction, tenant_state)) and no hidden context. CI may check that
+  the evaluation interface accepts only (instruction, tenant_state) and
+  that no other inputs are read for the purpose of Eval.

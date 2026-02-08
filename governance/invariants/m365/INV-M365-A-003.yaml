@@ -1,0 +1,26 @@
+id: INV-M365-A-003
+category: Instruction Structure & Completeness
+derived_from:
+  - "Phase 1 Section 2: Instruction Structure (valid instruction)"
+statement: >
+  Every instruction accepted for evaluation is syntactically valid:
+  (persona = Admin ∧ action ∈ A_Admin) ∨ (persona = User ∧ action ∈ A_User).
+  A_Admin and A_User are disjoint.
+scope:
+  inputs:
+    - instruction
+    - tenant_state
+  outputs:
+    - result
+    - new_tenant_state
+    - audit_events
+pass_condition:
+  For the instruction (p, i, a, params), either (p = Admin and a is in
+  the Admin-allowed action set) or (p = User and a is in the User-allowed
+  action set). The Admin and User action sets have no common element.
+fail_condition:
+  persona is Admin but action is not in Admin-allowed set; or persona is
+  User but action is not in User-allowed set; or action is in both sets.
+notes:
+  Enforcement requires a manifest or predicate that defines Admin-allowed
+  and User-allowed actions. This invariant does not define that manifest.
