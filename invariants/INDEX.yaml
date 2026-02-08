@@ -1,0 +1,20 @@
+# M365 invariants index (MA-aligned)
+# Contract and system guarantees; each has a YAML file and optional lemma.
+
+invariants:
+  - id: INV-CAIO-M365-001
+    name: CAIO-M365 instruction API response postcondition
+    owner: m365-contract
+    file: invariants/INV-CAIO-M365-001.yaml
+  - id: INV-CAIO-M365-002
+    name: CAIO-M365 instruction API idempotency
+    owner: m365-contract
+    file: invariants/INV-CAIO-M365-002.yaml
+  - id: INV-CAIO-M365-003
+    name: CAIO-M365 instruction API authentication
+    owner: m365-contract
+    file: invariants/INV-CAIO-M365-003.yaml
+  - id: INV-M365-AUDIT-001
+    name: M365 instruction API audit one-record-per-request
+    owner: m365-contract
+    file: invariants/INV-M365-AUDIT-001.yaml

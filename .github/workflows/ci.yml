@@ -26,4 +26,22 @@ jobs:
         run: mypy src
       - name: Tests
         run: pytest -q --cov=src --cov-report=term-missing
+      - name: MA contract verification (CAIO-M365)
+        run: python scripts/ci/verify_caio_m365_contract.py
+      - name: MA idempotency verification
+        run: python scripts/ci/verify_m365_idempotency.py
+      - name: MA auth verification
+        run: python scripts/ci/verify_m365_auth.py
+      - name: MA audit verification
+        run: python scripts/ci/verify_m365_audit.py
+      - name: MA artifact check
+        run: |
+          test -f configs/generated/caio_m365_contract_verification.json || (echo "Contract artifact missing" && exit 1)
+          grep -q '"postcondition_pass": true' configs/generated/caio_m365_contract_verification.json || (echo "Contract verification failed" && exit 1)
+          test -f configs/generated/m365_idempotency_verification.json || (echo "Idempotency artifact missing" && exit 1)
+          grep -q '"idempotency_pass": true' configs/generated/m365_idempotency_verification.json || (echo "Idempotency verification failed" && exit 1)
+          test -f configs/generated/m365_auth_verification.json || (echo "Auth artifact missing" && exit 1)
+          grep -q '"auth_pass": true' configs/generated/m365_auth_verification.json || (echo "Auth verification failed" && exit 1)
+          test -f configs/generated/m365_audit_verification.json || (echo "Audit artifact missing" && exit 1)
+          grep -q '"audit_pass": true' configs/generated/m365_audit_verification.json || (echo "Audit verification failed" && exit 1)
 

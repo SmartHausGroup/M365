@@ -1,0 +1,32 @@
+id: INV-CAIO-M365-001
+name: CAIO-M365 instruction API response postcondition
+owner: m365-contract
+status: proposed
+summary: Every instruction API response satisfies ok⇒result present and schema, ¬ok⇒error present (Eq. 1–2, MATHEMATICS.md).
+math:
+  equations:
+    - "ok(S) = true ⇒ result(S) ≠ null ∧ shape(result(S)) ∈ S_action"
+    - "ok(S) = false ⇒ error(S) ≠ null"
+  assumptions:
+    - Provider implements contract as in docs/contracts/caio-m365/MATHEMATICS.md
+    - Verification runs against declared action set and result shapes
+thresholds: {}
+acceptance:
+  - description: Response schema and postconditions hold for sampled actions
+    artifact: configs/generated/caio_m365_contract_verification.json
+    path: response_schema_pass
+    op: "=="
+    value: true
+  - description: Postcondition checks pass
+    artifact: configs/generated/caio_m365_contract_verification.json
+    path: postcondition_pass
+    op: "=="
+    value: true
+producers:
+  - type: script
+    path: scripts/ci/verify_caio_m365_contract.py
+artifacts:
+  - configs/generated/caio_m365_contract_verification.json
+rollback:
+  criteria: Verification fails in CI or artifact missing
+  safe_mode: Do not deploy provider/consumer until contract verification is green; fix implementation or update contract and math

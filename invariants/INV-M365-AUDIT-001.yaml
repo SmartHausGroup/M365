@@ -1,0 +1,28 @@
+id: INV-M365-AUDIT-001
+name: M365 instruction API audit one-record-per-request
+owner: m365-contract
+status: proposed
+summary: When ENABLE_AUDIT_LOGGING is true, every instruction execution (success, error, or blocked) produces exactly one audit record with schema (ts, action, user, details). Eq. 5, MATHEMATICS.md.
+math:
+  equations:
+    - "auditEnabled() ∧ executionCompleted(request) ⇒ ∃ exactly one audit record for request"
+  assumptions:
+    - Audit writer is called exactly once per request path in execute_instruction_contract
+    - Record schema includes ts, action, user, details (action, params, ok, result/error, trace_id, blocked?, idempotent_replay?)
+thresholds: {}
+acceptance:
+  - description: One instruction execution yields one new audit record when audit enabled
+    artifact: configs/generated/m365_audit_verification.json
+    path: audit_pass
+    op: "=="
+    value: true
+producers:
+  - type: script
+    path: scripts/ci/verify_m365_audit.py
+  - type: notebook
+    path: notebooks/ma_m365_audit.ipynb
+artifacts:
+  - configs/generated/m365_audit_verification.json
+rollback:
+  criteria: Verification fails in CI or artifact missing when audit is required
+  safe_mode: Fix audit write path or disable audit until invariant holds

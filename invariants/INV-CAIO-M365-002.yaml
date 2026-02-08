@@ -1,0 +1,28 @@
+id: INV-CAIO-M365-002
+name: CAIO-M365 instruction API idempotency
+owner: m365-contract
+status: proposed
+summary: Same Idempotency-Key and same (action, params) with first success ⇒ second response equals first (cached). Eq. 3, MATHEMATICS.md.
+math:
+  equations:
+    - "sameKey(H1, H2) ∧ sameBody(R1, R2) ∧ success(S1) ⇒ S2 = S1 (cached)"
+  assumptions:
+    - Provider uses shared or single-instance idempotency store (request_hash = hash(action, params))
+    - Verification runs with two requests with same Idempotency-Key and body
+thresholds: {}
+acceptance:
+  - description: Second response equals first for same key and body
+    artifact: configs/generated/m365_idempotency_verification.json
+    path: idempotency_pass
+    op: "=="
+    value: true
+producers:
+  - type: script
+    path: scripts/ci/verify_m365_idempotency.py
+  - type: notebook
+    path: notebooks/ma_m365_idempotency.ipynb
+artifacts:
+  - configs/generated/m365_idempotency_verification.json
+rollback:
+  criteria: Verification fails in CI or artifact missing
+  safe_mode: Do not deploy until idempotency behavior is restored or contract updated

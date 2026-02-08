@@ -1,0 +1,28 @@
+id: INV-CAIO-M365-003
+name: CAIO-M365 instruction API authentication
+owner: m365-contract
+status: proposed
+summary: When CAIO_API_KEY is set, key missing or invalid ⇒ response status 401. Eq. 4, MATHEMATICS.md.
+math:
+  equations:
+    - "keyMissingOrInvalid(H) ⇒ status(S) = 401"
+  assumptions:
+    - Provider checks X-CAIO-API-Key or X-CAIO-Token when CAIO_API_KEY env is set
+    - Verification runs with no key or wrong key when key is required
+thresholds: {}
+acceptance:
+  - description: Missing or invalid key returns 401 when key required
+    artifact: configs/generated/m365_auth_verification.json
+    path: auth_pass
+    op: "=="
+    value: true
+producers:
+  - type: script
+    path: scripts/ci/verify_m365_auth.py
+  - type: notebook
+    path: notebooks/ma_m365_auth.ipynb
+artifacts:
+  - configs/generated/m365_auth_verification.json
+rollback:
+  criteria: Verification fails in CI or artifact missing
+  safe_mode: Do not deploy until auth behavior is correct or contract updated
