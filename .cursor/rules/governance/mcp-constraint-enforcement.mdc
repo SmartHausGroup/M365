@@ -1,0 +1,55 @@
+# MCP Constraint Enforcement Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Rule: Call validate_action Before Every Write Operation
+
+**MANDATORY:** Before performing ANY write or mutating action, you MUST call the SmartHaus MCP tool `validate_action` and obey the verdict.
+
+---
+
+## Before Any Write
+
+Call `validate_action` with:
+
+- `repo`: path to the repository being modified
+- `action_type`: one of `file_edit`, `commit`, `push`, `deploy`, `test_run`, `command_exec`, `config_change`, `governance_edit`
+- `target`: the file or resource being modified
+- `scope`: one of `code`, `config`, `docs`, `governance`, `infrastructure`, `math`, `test`
+- `plan_ref`: the plan reference (e.g., `plan:my-plan:T1`)
+- `approval`: whether the user approved this action (`true`/`false`)
+- `branch`: current branch name (optional)
+- `metadata`: additional context (optional object)
+
+## Enforce the Verdict
+
+- If `allowed` is `true`: proceed with the action.
+- If `allowed` is `false`: **STOP immediately**. Report the violations to the user. Do NOT proceed.
+
+## Inspect Constraints
+
+Use `constraint_status` to see all loaded constraints and their sources before planning changes.
+
+## What This Replaces
+
+The constraint algebra enforces governance rules deterministically at runtime. This is the primary enforcement mechanism. The 33 YAML constraints in `configs/constraints/` cover: plan references, approval gates, scorecard checks, branch guards, tier gating, notebook backing, phase minimums, and compound policies.
+
+## Example
+
+Before editing a file:
+
+```
+validate_action(
+  repo="/path/to/repo",
+  action_type="file_edit",
+  target="src/module.py",
+  scope="code",
+  plan_ref="plan:my-plan:T1",
+  approval=true
+)
+```
+
+If the verdict is `allowed: false`, stop and report the violation reasons to the user.
