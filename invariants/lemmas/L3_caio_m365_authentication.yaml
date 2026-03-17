@@ -1,0 +1,9 @@
+lemma_id: L3
+name: CAIO M365 authentication projection
+source_lemma: docs/contracts/caio-m365/LEMMA_L3.md
+source_invariant: invariants/INV-CAIO-M365-003.yaml
+evidence:
+  artifact: configs/generated/m365_auth_verification.json
+  checks:
+    - auth_pass == true
+status: projected

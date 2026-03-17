@@ -1,0 +1,16 @@
+{
+  "item_id": "L3",
+  "item_kind": "lemma",
+  "lemma_id": "L3",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "notebook": "notebooks/ma_m365_auth.ipynb",
+  "notebook_hash": "2e3e1f97b4826cfbfa664924396fe357902934e21805e8d6551da3ff5142a187",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "docs/contracts/caio-m365/LEMMA_L3.md",
+    "invariants/INV-CAIO-M365-003.yaml",
+    "configs/generated/m365_auth_verification.json"
+  ]
+}

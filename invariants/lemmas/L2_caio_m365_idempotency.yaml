@@ -1,0 +1,9 @@
+lemma_id: L2
+name: CAIO M365 idempotency projection
+source_lemma: docs/contracts/caio-m365/LEMMA_L2.md
+source_invariant: invariants/INV-CAIO-M365-002.yaml
+evidence:
+  artifact: configs/generated/m365_idempotency_verification.json
+  checks:
+    - idempotency_pass == true
+status: projected

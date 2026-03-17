@@ -1,0 +1,39 @@
+{
+  "status": "green",
+  "decision": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "notebook_hash": "eb9d3fb6a7a9ff3493402b214de05d8bd8d7d4657ad35fdcc00ba70e587a9280",
+  "failing_lemma_ids": [],
+  "failing_module_ids": [],
+  "lemma_scorecards": {
+    "L1": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l1.json",
+      "status": "green"
+    },
+    "L2": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l2.json",
+      "status": "green"
+    },
+    "L3": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l3.json",
+      "status": "green"
+    },
+    "L4": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l4.json",
+      "status": "green"
+    },
+    "L5": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l5.json",
+      "status": "green"
+    }
+  },
+  "module_scorecards": {
+    "m365_contracts": {
+      "scorecard_path": "artifacts/scorecards/scorecard_m365_contracts.json",
+      "status": "green"
+    }
+  },
+  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
+}

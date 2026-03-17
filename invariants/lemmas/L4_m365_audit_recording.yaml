@@ -1,0 +1,9 @@
+lemma_id: L4
+name: M365 audit recording projection
+source_lemma: docs/contracts/caio-m365/LEMMA_L4.md
+source_invariant: invariants/INV-M365-AUDIT-001.yaml
+evidence:
+  artifact: configs/generated/m365_audit_verification.json
+  checks:
+    - audit_pass == true
+status: projected

@@ -156,9 +156,23 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-enterprise-commercialization-readiness:R1`
 
-**Status:** 🟡 `P0A` and `P0B` complete (2026-03-17); `P1A` next — Standalone M365 v1 commercialization is fail-closed to the 9 router-implemented actions documented in `docs/commercialization/m365-v1-supported-surface.md`, and the buyer/operator/deployment model is now defined in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`. `Operations/NORTHSTAR.md` has been synchronized to distinguish the broader AI Workforce repo vision from the current standalone M365 module launch scope. Remaining execution units are `P1A` config inventory and canonical target contract, `P1B` config migration and auth/secret policy, `P2A` audit/governance evidence model, `P2B` permission/approval/fail-closed hardening, `P3A` live-tenant validation matrix, `P3B` release gates/certification model, `P4A` packaging/install/bootstrap, `P4B` onboarding/runbooks/support boundary, `P5A` enterprise collateral pack, and `P5B` pilot acceptance/customer handoff.
+**Status:** 🟡 `P0A`, `P0B`, and `P1A` complete (2026-03-17); `P1B` next — Standalone M365 v1 commercialization is fail-closed to the 9 router-implemented actions documented in `docs/commercialization/m365-v1-supported-surface.md`, the buyer/operator/deployment model is defined in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`, and the canonical production config target is now defined in `docs/commercialization/m365-canonical-config-contract.md`. The repo now distinguishes tenant YAML plus env-assisted secret fallback as the target production contract, while repo-root/app-root `.env` surfaces are classified as bootstrap or compatibility behavior pending migration in `P1B`. Remaining execution units are `P1B` config migration and auth/secret policy, `P2A` audit/governance evidence model, `P2B` permission/approval/fail-closed hardening, `P3A` live-tenant validation matrix, `P3B` release gates/certification model, `P4A` packaging/install/bootstrap, `P4B` onboarding/runbooks/support boundary, `P5A` enterprise collateral pack, and `P5B` pilot acceptance/customer handoff.
 
 **Prompt artifacts:** umbrella prompt pair plus per-subphase MATHS prompt pairs under `docs/prompts/`
+
+---
+
+## Initiative: M365 MA Scorecard Alignment (Push Unblock)
+
+**Initiative:** Align the repo's existing M365 Mathematical Autopsy evidence to the structural artifact layout required by UCP governance, emit a legitimate aggregate `scorecard.json`, and unblock governed `push` without runtime code changes.
+
+**Plan:** `plans/m365-ma-scorecard-alignment/m365-ma-scorecard-alignment.md`
+
+**Reference:** `plan:m365-ma-scorecard-alignment:R1`
+
+**Status:** ✅ Complete (2026-03-17) — MA bridge documents, projected lemma/invariant/notebook paths, per-lemma scorecards, module scorecard, and aggregate `scorecard.json` have been added in the UCP-required layout. Validation is green: `phase_status` reports phase `9`, `validate_scorecard` reports `green=true`, and `validate_action(push)` now returns `allowed=true`.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-ma-scorecard-alignment.md`, `docs/prompts/codex-m365-ma-scorecard-alignment-prompt.txt`
 
 ---
 

@@ -1,0 +1,18 @@
+{
+  "item_id": "m365_contracts",
+  "item_kind": "module",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "notebook": "notebooks/ma_m365_master.ipynb",
+  "notebook_hash": "eb9d3fb6a7a9ff3493402b214de05d8bd8d7d4657ad35fdcc00ba70e587a9280",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "configs/generated/caio_m365_contract_verification.json",
+    "configs/generated/capability_registry_verification.json",
+    "configs/generated/m365_idempotency_verification.json",
+    "configs/generated/m365_auth_verification.json",
+    "configs/generated/m365_audit_verification.json",
+    "notebooks/ma_m365_master.ipynb"
+  ]
+}

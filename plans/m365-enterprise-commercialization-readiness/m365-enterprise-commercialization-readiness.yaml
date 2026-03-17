@@ -27,7 +27,14 @@ execution_status:
         in docs/commercialization/m365-v1-positioning-and-north-star-delta.md and
         synchronized Operations/NORTHSTAR.md so the broader AI Workforce vision no
         longer overclaims the standalone M365 v1 commercial boundary.
-  next_phase: P1A
+    - phase: P1A
+      date: "2026-03-17"
+      summary: >
+        Inventoried the current config-loading surfaces, locked tenant YAML plus
+        env-assisted secret fallback as the canonical production contract in
+        docs/commercialization/m365-canonical-config-contract.md, and narrowed
+        the env docs so .env is no longer described as the production authority.
+  next_phase: P1B
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface
