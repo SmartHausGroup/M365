@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Commercialization Readiness
 
 **Plan ID:** `m365-enterprise-commercialization-readiness`
-**Status:** Active (`P0A`, `P0B`, `P1A`, `P1B`, `P2A`, and `P2B` complete 2026-03-17; `P3A` next)
+**Status:** Active (`P0A`, `P0B`, `P1A`, `P1B`, `P2A`, `P2B`, `P3A`, `P3B`, and `P4A` complete 2026-03-17; `P4B` next)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
@@ -23,7 +23,10 @@ Define the minimum set of M365-only changes required to make the current M365 ca
 - `P1B` complete on 2026-03-17: defined the migration path, auth-mode decision matrix, secret policy, certificate guidance, and legacy-surface deprecation map in `docs/commercialization/m365-config-migration-and-auth-policy.md`. The supported posture is now singular: tenant YAML selected by `UCP_TENANT` is the production authority, `app_only` is the default production auth mode, certificate auth is the enterprise-preferred credential model, client secret is transitional only, and delegated auth is local/test/support only.
 - `P2A` complete on 2026-03-17: defined the audit-event model, governance-evidence model, current gap map, and enterprise acceptance boundary in `docs/commercialization/m365-audit-and-governance-evidence-model.md`. The repo now explicitly distinguishes the formally evidenced instruction API audit surface from the broader but only partially evidenced ops-adapter and admin audit surfaces, and it documents `snapshot_mode` admin audit as a real commercialization gap rather than an implied feature.
 - `P2B` complete on 2026-03-17: defined the permission-tier posture, approval-boundary model, fail-closed rules, and exception/escalation boundary in `docs/commercialization/m365-permission-approval-fail-closed-hardening.md`. The repo now explicitly documents that permission tiers and ops-adapter approvals exist, but permissive tier fallbacks, OPA fail-open paths, and approval-less instruction-API mutations remain hardening gaps rather than enterprise-ready claims.
-- `P3A` is the next execution unit.
+- `P3A` complete on 2026-03-17: defined the live-tenant validation matrix, prerequisite set, evidence-artifact rules, and release-use boundary in `docs/commercialization/m365-live-tenant-validation-matrix.md`. The repo now explicitly separates mock/local MA confidence from live-tenant release evidence and blocks enterprise release claims from relying on mock-passing auth or idempotency artifacts.
+- `P3B` complete on 2026-03-17: defined the ordered release-gate sequence, explicit go/no-go rules, evidence-retention expectations, and current deterministic certification outcome in `docs/commercialization/m365-release-gates-and-certification.md`. The repo now has an explicit rule that enterprise certification is `NO-GO` until the live evidence packet exists and the release certification packet is assembled and signed.
+- `P4A` complete on 2026-03-17: defined the package variants, canonical standalone install path, bootstrap flow, environment setup split, and prerequisite set in `docs/commercialization/m365-packaging-install-bootstrap.md`. The repo now treats Python package install plus the `m365-server` launcher as the one canonical standalone path for the current repo state, while the TAI-hosted module form remains a compatible but non-canonical packaging variant.
+- `P4B` is the next execution unit.
 
 ---
 

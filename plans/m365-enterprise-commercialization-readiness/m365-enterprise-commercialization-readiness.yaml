@@ -64,7 +64,35 @@ execution_status:
         ops-adapter approvals exist, but permissive tier fallbacks, OPA
         fail-open paths, and approval-less instruction-API mutations remain
         hardening gaps rather than enterprise-ready claims.
-  next_phase: P3A
+    - phase: P3A
+      date: "2026-03-17"
+      summary: >
+        Defined the live-tenant validation matrix, prerequisite set,
+        evidence-artifact rules, and release-use boundary in
+        docs/commercialization/m365-live-tenant-validation-matrix.md. The repo
+        now explicitly separates mock or local MA confidence from live-tenant
+        release evidence and blocks enterprise release claims from relying on
+        mock-passing auth or idempotency artifacts.
+    - phase: P3B
+      date: "2026-03-17"
+      summary: >
+        Defined the ordered release-gate sequence, explicit go and no-go rules,
+        evidence-retention expectations, and current deterministic certification
+        outcome in docs/commercialization/m365-release-gates-and-certification.md.
+        The repo now explicitly treats enterprise certification as NO-GO until
+        the live evidence packet exists and the release certification packet is
+        assembled and signed.
+    - phase: P4A
+      date: "2026-03-17"
+      summary: >
+        Defined the package variants, canonical standalone install path,
+        bootstrap flow, environment setup split, and prerequisite set in
+        docs/commercialization/m365-packaging-install-bootstrap.md. The repo now
+        treats Python package install plus the m365-server launcher as the one
+        canonical standalone path for the current repo state, while the
+        TAI-hosted module form remains a compatible but non-canonical packaging
+        variant.
+  next_phase: P4B
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface
