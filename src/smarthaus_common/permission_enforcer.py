@@ -27,6 +27,8 @@ from typing import Any
 
 import yaml
 
+from smarthaus_common.config import has_selected_tenant
+
 
 # ---------------------------------------------------------------------------
 # Tier definitions loader (from permission_tiers.yaml)
@@ -37,10 +39,17 @@ _TIERS_PATH: str | None = None
 _TIERS_MTIME: float = 0.0
 
 
+def _fail_open_enabled() -> bool:
+    return os.getenv("M365_PERMISSION_FAIL_OPEN", "false").lower() in ("1", "true", "yes", "on")
+
+
 def _find_tiers_yaml() -> str | None:
     """Locate permission_tiers.yaml using standard search paths."""
+    explicit_path = os.getenv("M365_PERMISSION_TIERS_PATH", "").strip()
+    if explicit_path:
+        return os.path.normpath(os.path.expanduser(explicit_path))
+
     search_paths = [
-        os.getenv("M365_PERMISSION_TIERS_PATH", ""),
         os.path.join(os.getenv("M365_REPO_ROOT", ""), "registry", "permission_tiers.yaml"),
     ]
 
@@ -156,24 +165,28 @@ def check_user_permission(
     # Load tier definitions
     tiers = _load_tiers()
     if not tiers:
-        # No tier file — permissive mode (governance not configured)
-        return True, ""
+        if _fail_open_enabled():
+            return True, ""
+        return False, "permission_tiers_missing"
 
-    # If no user identity is available, pass through permissively.
-    # Tier enforcement requires a known identity — without one, we can't
-    # determine what to allow or deny. This is expected during early setup
-    # or when the session doesn't carry user context yet.
     if not user_email:
-        return True, ""
+        if _fail_open_enabled():
+            return True, ""
+        return False, "user_identity_missing"
 
     # Resolve user's tier from tenant config
     if tenant_config is None:
+        if not has_selected_tenant():
+            if _fail_open_enabled():
+                return True, ""
+            return False, "tenant_selection_missing"
         try:
             from smarthaus_common.tenant_config import get_tenant_config
             tenant_config = get_tenant_config()
-        except Exception:
-            # Can't load tenant config — permissive fallback
-            return True, ""
+        except Exception as exc:
+            if _fail_open_enabled():
+                return True, ""
+            return False, f"tenant_config_unavailable:{type(exc).__name__}"
 
     tier_name = tenant_config.permission_tiers.get_user_tier(user_email)
     tier_def = get_tier_definition(tier_name)

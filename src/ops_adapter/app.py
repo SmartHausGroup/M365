@@ -13,6 +13,9 @@ from .rate_limit import RateLimiter
 from .approvals import ApprovalsStore
 from .models import ActionRequest, ActionResponse
 from .actions import execute as execute_action
+from smarthaus_common.config import has_selected_tenant
+from smarthaus_common.permission_enforcer import check_user_permission, get_confirmation_override
+from smarthaus_common.tenant_config import get_tenant_config
 
 
 def create_app() -> FastAPI:
@@ -47,6 +50,54 @@ def create_app() -> FastAPI:
         x_request_id: str | None = Header(default=None),
     ) -> ActionResponse:
         correlation_id = getattr(request.state, "correlation_id", x_request_id) or str(uuid.uuid4())
+        user_email = (request.headers.get("X-User-Email") or "").strip().lower()
+
+        if not user_email:
+            audit_log(
+                "policy_denied",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason="user_identity_missing",
+            )
+            raise HTTPException(status_code=403, detail="user_identity_missing")
+
+        if not has_selected_tenant():
+            audit_log(
+                "policy_denied",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason="tenant_selection_missing",
+            )
+            raise HTTPException(status_code=403, detail="tenant_selection_missing")
+        try:
+            tenant_config = get_tenant_config()
+        except Exception as exc:
+            reason = f"tenant_config_unavailable:{type(exc).__name__}"
+            audit_log(
+                "policy_denied",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=reason,
+            )
+            raise HTTPException(status_code=403, detail=reason)
+
+        allowed, reason = check_user_permission(
+            user_email=user_email,
+            action=action,
+            tenant_config=tenant_config,
+        )
+        if not allowed:
+            audit_log(
+                "policy_denied",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=reason,
+            )
+            raise HTTPException(status_code=403, detail=reason)
 
         # Rate limit per agent
         if not limiter.allow(agent):
@@ -54,7 +105,9 @@ def create_app() -> FastAPI:
 
         # Policy check via OPA (fail-open behavior is handled by OPA client)
         # Pass rate_allowed=True since limiter already enforced
-        decision = await opa.check(agent=agent, action=action, data=payload.model_dump().get("params", {}), rate_allowed=True, correlation_id=correlation_id)
+        params = payload.model_dump().get("params", {})
+        params.setdefault("requestor", user_email)
+        decision = await opa.check(agent=agent, action=action, data=params, rate_allowed=True, correlation_id=correlation_id)
         if not decision.get("allowed", False):
             audit_log(
                 "policy_denied",
@@ -66,19 +119,38 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=403, detail="policy_denied")
 
         # Handle approval requirements
-        if decision.get("approval_required"):
-            approval = approvals.create(agent=agent, action=action, payload=payload.model_dump())
+        approval_required = bool(decision.get("approval_required"))
+        if get_confirmation_override(user_email, action, tenant_config) == "always":
+            approval_required = True
+
+        if approval_required:
+            registry = getattr(approvals, "registry", {}) or {}
+            approvers: list[str] = []
+            for rule in registry.get("agents", {}).get(agent, {}).get("approval_rules", []) or []:
+                if rule.get("action") == action:
+                    approvers = rule.get("approvers", []) or []
+                    break
+            if not approvers:
+                audit_log(
+                    "policy_denied",
+                    agent=agent,
+                    action=action,
+                    correlation_id=correlation_id,
+                    reason="approval_configuration_missing",
+                )
+                raise HTTPException(status_code=500, detail="approval_configuration_missing")
+            approval_id = approvals.create(agent=agent, action=action, params=params)
             audit_log(
                 "approval_pending",
                 agent=agent,
                 action=action,
                 correlation_id=correlation_id,
-                approval_id=approval["id"],
+                approval_id=approval_id,
             )
             return ActionResponse(
-                status="pending",
-                approval_id=approval["id"],
-                message="approval_required",
+                status="pending_approval",
+                approval_id=approval_id,
+                reason="approval_required",
             )
 
         # Execute action (may be dry-run)
@@ -89,33 +161,11 @@ def create_app() -> FastAPI:
             mapped_action = action
 
         try:
-            result = await execute_action(agent=agent, action=mapped_action, params=payload.params, correlation_id=correlation_id)
+            result = await execute_action(agent=agent, action=mapped_action, params=params, correlation_id=correlation_id)
             audit_log("action_executed", agent=agent, action=action, correlation_id=correlation_id, result=result)
             return ActionResponse(status="ok", result=result)
         except Exception as e:
-            # Check if this is a GraphAPIError and we're in fail-open mode
-            from .actions import GraphAPIError
-            if isinstance(e, GraphAPIError) and opa.fail_open:
-                audit_log(
-                    "action_failed_fail_open",
-                    agent=agent,
-                    action=action,
-                    correlation_id=correlation_id,
-                    error=str(e),
-                    status_code=e.status
-                )
-                return ActionResponse(
-                    status="ok", 
-                    result={
-                        "stub": True,
-                        "action": action,
-                        "error": str(e),
-                        "fail_open": True
-                    }
-                )
-            else:
-                # Re-raise the exception for proper error handling
-                raise
+            raise
 
     @app.get("/approvals/{approval_id}")
     async def get_approval(approval_id: str):

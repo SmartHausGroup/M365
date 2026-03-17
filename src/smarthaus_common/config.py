@@ -1,38 +1,99 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from pydantic import BaseModel, Field
 
 
+def has_selected_tenant() -> bool:
+    return bool(os.getenv("UCP_TENANT", "").strip())
+
+
+def load_bootstrap_env(*paths: str | Path) -> str | None:
+    """Load the first available dotenv file as bootstrap-only input."""
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return None
+
+    for raw_path in paths:
+        path = Path(raw_path).expanduser().resolve()
+        if path.exists():
+            load_dotenv(path, override=False)
+            return str(path)
+    return None
+
+
+def _selected_tenant_config():
+    if not has_selected_tenant():
+        return None
+    try:
+        from smarthaus_common.tenant_config import get_tenant_config
+
+        return get_tenant_config()
+    except Exception:
+        return None
+
+
+def _resolve_graph_value(field_name: str, env_keys: tuple[str, ...]) -> str:
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is not None:
+        tenant_value = getattr(tenant_cfg.azure, field_name, "")
+        if tenant_value:
+            return tenant_value
+
+    for key in env_keys:
+        value = os.getenv(key)
+        if value:
+            return value
+    return ""
+
+
+def _resolve_graph_scope() -> str:
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is not None and tenant_cfg.auth.app_only.scope:
+        return tenant_cfg.auth.app_only.scope
+    return "https://graph.microsoft.com/.default"
+
+
+def resolve_sharepoint_hostname(default: str = "smarthausgroup.sharepoint.com") -> str:
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is not None and tenant_cfg.org.sharepoint_hostname:
+        return tenant_cfg.org.sharepoint_hostname
+    return os.getenv("SHAREPOINT_HOSTNAME") or os.getenv("SP_HOSTNAME") or default
+
+
 class GraphAuthConfig(BaseModel):
     tenant_id: str = Field(
-        default_factory=lambda: (
-            os.getenv("GRAPH_TENANT_ID")
-            or os.getenv("AZURE_TENANT_ID")
-            or os.getenv("MICROSOFT_TENANT_ID")
-            or ""
+        default_factory=lambda: _resolve_graph_value(
+            "tenant_id",
+            ("GRAPH_TENANT_ID", "AZURE_TENANT_ID", "MICROSOFT_TENANT_ID"),
         )
     )
     client_id: str = Field(
-        default_factory=lambda: (
-            os.getenv("AZURE_APP_CLIENT_ID_TAI")
-            or os.getenv("GRAPH_CLIENT_ID")
-            or os.getenv("AZURE_CLIENT_ID")
-            or os.getenv("MICROSOFT_CLIENT_ID")
-            or ""
+        default_factory=lambda: _resolve_graph_value(
+            "client_id",
+            (
+                "AZURE_APP_CLIENT_ID_TAI",
+                "GRAPH_CLIENT_ID",
+                "AZURE_CLIENT_ID",
+                "MICROSOFT_CLIENT_ID",
+            ),
         )
     )
     client_secret: str = Field(
-        default_factory=lambda: (
-            os.getenv("AZURE_APP_CLIENT_SECRET_TAI")
-            or os.getenv("GRAPH_CLIENT_SECRET")
-            or os.getenv("AZURE_CLIENT_SECRET")
-            or os.getenv("MICROSOFT_CLIENT_SECRET")
-            or ""
+        default_factory=lambda: _resolve_graph_value(
+            "client_secret",
+            (
+                "AZURE_APP_CLIENT_SECRET_TAI",
+                "GRAPH_CLIENT_SECRET",
+                "AZURE_CLIENT_SECRET",
+                "MICROSOFT_CLIENT_SECRET",
+            ),
         )
     )
-    scope: str = Field(default="https://graph.microsoft.com/.default")
+    scope: str = Field(default_factory=_resolve_graph_scope)
 
 
 class AppConfig(BaseModel):

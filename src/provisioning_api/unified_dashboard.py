@@ -6,17 +6,17 @@ One page to rule them all - complete business management system
 import os
 import json
 import asyncio
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 from fastapi import FastAPI, Request, HTTPException, Depends, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 import httpx
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
+from smarthaus_common.config import load_bootstrap_env
+
+load_bootstrap_env(Path(__file__).resolve().parents[2] / ".env")
 
 app = FastAPI(title="SmartHaus Unified Dashboard", version="6.0.0")
 

@@ -1,9 +1,13 @@
 plan_id: m365-enterprise-commercialization-readiness
-status: Active
+status: Absorbed
 date: "2026-03-17"
 owner: SmartHaus
 execution_plan_reference: plan:m365-enterprise-commercialization-readiness:R1
 north_star: Operations/NORTHSTAR.md
+absorbed_by: m365-enterprise-readiness-master-plan
+execution_note: >
+  Historical commercialization-definition plan only. New execution is re-homed
+  into the integrated enterprise-readiness master plan.
 ma_process_required: false
 
 objective: >
@@ -102,7 +106,7 @@ execution_status:
         day-to-day runtime and tenant ownership with the customer while
         bounding SmartHaus support to the canonical standalone path and the
         supported 9-action v1 surface.
-  next_phase: P5A
+  next_phase: null
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface

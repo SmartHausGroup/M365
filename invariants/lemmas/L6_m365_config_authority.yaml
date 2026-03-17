@@ -1,6 +1,6 @@
 lemma_id: L6
 name: M365 tenant-selected runtime config authority
-source_notebook: notebooks/lemma_proofs/L6_m365_config_authority.ipynb
+source_notebook: notebooks/m365/INV-M365-H-config-authority.ipynb
 evidence:
   artifacts:
     - src/smarthaus_common/tenant_config.py

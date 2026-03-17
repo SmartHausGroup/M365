@@ -1,0 +1,7 @@
+Execute D2 Pilot Acceptance and Customer Handoff
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-d2-pilot-acceptance-customer-handoff.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:D2
+
+Only execute after collateral is aligned to the certified product state. Keep the handoff model consistent with the operator/support boundary.

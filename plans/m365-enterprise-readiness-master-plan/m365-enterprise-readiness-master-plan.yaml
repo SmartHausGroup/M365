@@ -1,0 +1,142 @@
+plan_id: m365-enterprise-readiness-master-plan
+status: Active
+date: "2026-03-17"
+owner: SmartHaus
+execution_plan_reference: plan:m365-enterprise-readiness-master-plan:R1
+north_star: Operations/NORTHSTAR.md
+historical_lineage: m365-enterprise-commercialization-readiness
+ma_process_required: false
+
+objective: >
+  Define and execute the full critical path required to make the current M365
+  capability commercially honest, operationally supportable, technically
+  hardened, and enterprise-ready as a standalone deterministic module.
+
+decision_rule: >
+  Enterprise readiness requires product boundary lock, runtime hardening,
+  live-tenant certification, and launch readiness. Documentation alone is not
+  sufficient.
+
+execution_status:
+  completed:
+    - phase: A1
+      date: "2026-03-17"
+      summary: >
+        Imported the supported-surface and buyer/operator boundary work from
+        P0A and P0B in docs/commercialization/m365-v1-supported-surface.md and
+        docs/commercialization/m365-v1-positioning-and-north-star-delta.md.
+    - phase: A2
+      date: "2026-03-17"
+      summary: >
+        Imported the canonical config-contract and auth/secret posture work
+        from P1A and P1B in docs/commercialization/m365-canonical-config-contract.md
+        and docs/commercialization/m365-config-migration-and-auth-policy.md.
+    - phase: A3
+      date: "2026-03-17"
+      summary: >
+        Imported the governance, audit, live-validation, and release-gate
+        definition work from P2A, P2B, P3A, and P3B in the commercialization
+        document set.
+    - phase: A4
+      date: "2026-03-17"
+      summary: >
+        Imported the packaging, onboarding, runbooks, and support-boundary
+        work from P4A and P4B in docs/commercialization/m365-packaging-install-bootstrap.md
+        and docs/commercialization/m365-operator-onboarding-and-support-boundary.md.
+    - phase: B1
+      date: "2026-03-17"
+      summary: >
+        Added the repo-local configs/ma_phases.yaml bridge required by UCP
+        validate_action, made UCP_TENANT-selected tenant config the runtime
+        authority in shared config resolution, extended tenant lookup to the
+        sibling UCP/tenants directory, converted legacy entrypoints to
+        bootstrap-only dotenv loading, updated M365 runtime paths to honor
+        tenant-first authority, and added targeted tests in
+        tests/test_env_loading.py.
+    - phase: B2
+      date: "2026-03-17"
+      summary: >
+        Hardened the active ops-adapter and shared permission-enforcement path
+        so missing acting identity, missing tenant selection, missing tenant
+        config, missing permission tiers, denied OPA decisions, and missing
+        approval-owner configuration fail closed by default, expanded
+        high-risk m365-administrator approval requirements in policies/ops.rego
+        and registry/agents.yaml, removed inferred non-production OPA
+        fail-open behavior, and added targeted deny and approval coverage in
+        tests/test_ops_adapter.py and tests/test_policies.py.
+  next_phase: B3
+
+open_enterprise_blockers:
+  - admin audit remains incomplete for enterprise review
+  - live-tenant certification evidence has not yet been executed
+  - launch collateral and pilot handoff remain downstream of runtime and certification blockers
+
+requirements:
+  - id: R1
+    name: Integrated enterprise-readiness control plane
+  - id: R2
+    name: Runtime configuration authority remediation
+  - id: R3
+    name: Fail-closed governance and approval remediation
+  - id: R4
+    name: Admin audit and evidence-surface remediation
+  - id: R5
+    name: Live-tenant certification and release closure
+  - id: R6
+    name: Launch collateral and handoff
+  - id: R7
+    name: Governance synchronization
+
+phases:
+  - id: A
+    name: Imported Foundation and Product Boundary
+    goal: Preserve the completed commercialization definition work as the foundation.
+    subphases:
+      - id: A1
+        name: Product Boundary and Positioning
+      - id: A2
+        name: Canonical Config Contract and Auth Posture
+      - id: A3
+        name: Governance Boundary and Certification Model
+      - id: A4
+        name: Packaging and Operator Model
+  - id: B
+    name: Runtime Hardening Implementation
+    goal: Convert the documented enterprise posture into real runtime behavior.
+    subphases:
+      - id: B1
+        name: Runtime Config Authority Remediation
+      - id: B2
+        name: Fail-Closed Governance and Approval Remediation
+      - id: B3
+        name: Admin Audit and Evidence-Surface Remediation
+  - id: C
+    name: Live-Tenant Certification
+    goal: Generate live enterprise evidence and close the release decision.
+    subphases:
+      - id: C1
+        name: Live-Tenant Certification Execution
+      - id: C2
+        name: Release Certification Packet and Decision
+  - id: D
+    name: Launch Readiness
+    goal: Finish collateral and handoff after runtime and certification closure.
+    subphases:
+      - id: D1
+        name: Enterprise Collateral Pack
+      - id: D2
+        name: Pilot Acceptance and Customer Handoff
+
+legacy_mapping:
+  P0A: A1
+  P0B: A1
+  P1A: A2
+  P1B: A2
+  P2A: A3
+  P2B: A3
+  P3A: A3
+  P3B: A3
+  P4A: A4
+  P4B: A4
+  P5A: D1
+  P5B: D2

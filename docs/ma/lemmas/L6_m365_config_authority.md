@@ -10,6 +10,7 @@ When `UCP_TENANT` is selected, runtime configuration authority for Graph credent
 
 ## Existing Proof Sources
 
+- `notebooks/m365/INV-M365-H-config-authority.ipynb`
 - `notebooks/lemma_proofs/L6_m365_config_authority.ipynb`
 - `src/smarthaus_common/tenant_config.py`
 - `docs/commercialization/m365-canonical-config-contract.md`

@@ -4,7 +4,6 @@ import os
 import uuid
 from pathlib import Path
 
-from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -13,10 +12,9 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-load_dotenv(_REPO_ROOT / ".env", override=False)
 
 from integrations import vercel as vercel_api
-from smarthaus_common.config import EnterpriseConfig
+from smarthaus_common.config import EnterpriseConfig, load_bootstrap_env
 from smarthaus_common.logging import configure_logging
 from smarthaus_graph.client import GraphClient
 
@@ -41,6 +39,8 @@ from provisioning_api.routers import (
 from provisioning_api.routers.agent_dashboard import router as agent_dashboard_router
 from provisioning_api.routers.email_dashboard import router as email_dashboard_router
 from provisioning_api.storage import JsonStore
+
+load_bootstrap_env(_REPO_ROOT / ".env")
 
 configure_logging()
 app = FastAPI(title="SMARTHAUS Provisioning API", version=os.getenv("APP_VERSION", "0.1.0"))

@@ -117,7 +117,15 @@ allowed_actions := {
 
 mandatory_approvals := {
   "m365-administrator": {
+    "users.create": true,
+    "users.update": true,
     "users.disable": true,
+    "groups.create": true,
+    "groups.add_member": true,
+    "teams.create": true,
+    "teams.add_channel": true,
+    "sites.provision": true,
+    "licenses.assign": true,
   },
   "website-manager": {
     "deployment.production": true,

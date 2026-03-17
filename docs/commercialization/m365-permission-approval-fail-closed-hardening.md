@@ -1,8 +1,8 @@
 # M365 Permission, Approval, and Fail-Closed Hardening
 
-**Status:** `P2B` complete
+**Status:** `A3` imported; runtime synchronized through `B2`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2B`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2B`, `plan:m365-enterprise-readiness-master-plan:B2`, `plan:m365-enterprise-readiness-master-plan:R7`
 
 This document defines the control-boundary posture required to describe standalone M365 v1 honestly to an enterprise buyer. It distinguishes currently implemented control surfaces from the hardening expectations required for enterprise acceptance.
 
@@ -35,17 +35,19 @@ The repository already contains a permission-tier model:
 2. Critical domains such as `admin.*`, `security.*`, `compliance.*`, `ca.*`, and `audit.*` should remain restricted to `global_admin` unless an explicit exception is approved later.
 3. Department or productivity tiers must not inherit org-wide mutation authority by convenience.
 
-### Current gaps in tier enforcement
+### Current runtime state after `B2`
 
-The tier model is present, but the current runtime posture is not fully fail-closed:
+The active ops-adapter and shared permission-enforcement path is now fail-closed for the core authorization prerequisites:
 
-1. If `permission_tiers.yaml` is missing, `check_user_permission()` falls back to permissive behavior.
-2. If `user_email` is missing, `check_user_permission()` currently allows the action instead of denying.
-3. If tenant config cannot be loaded, `check_user_permission()` currently allows the action instead of denying.
+1. If `registry/permission_tiers.yaml` is missing, `check_user_permission()` denies with `permission_tiers_missing` unless the explicit non-enterprise override `M365_PERMISSION_FAIL_OPEN=true` is enabled.
+2. If `user_email` is missing, `check_user_permission()` denies with `user_identity_missing` unless `M365_PERMISSION_FAIL_OPEN=true` is enabled.
+3. If `UCP_TENANT` is missing, `check_user_permission()` denies with `tenant_selection_missing` unless `M365_PERMISSION_FAIL_OPEN=true` is enabled.
+4. If tenant config cannot be loaded, `check_user_permission()` denies with `tenant_config_unavailable:*` unless `M365_PERMISSION_FAIL_OPEN=true` is enabled.
+5. The active ops-adapter request path now requires a resolved acting identity and tenant context before governed action execution.
 
 Commercial consequence:
 
-These permissive fallbacks are not acceptable as an enterprise-ready authorization claim. They must be treated as current hardening gaps, not as supported production behavior.
+For the ops-adapter and shared permission-enforcement surface, these prerequisites are now hardened runtime behavior rather than documentation-only expectations. Equivalent approval and fail-closed guarantees still do not automatically extend to every legacy instruction-API mutation path.
 
 ## Approval Boundaries
 
@@ -56,9 +58,17 @@ Approval behavior currently exists in the ops-adapter, but not every high-risk s
 Current OPA and registry-backed approval paths include:
 
 1. `m365-administrator.users.disable`
-2. `website-manager.deployment.production`
-3. `hr-generalist.employee.offboard`
-4. `outreach-coordinator.email.send_bulk` when recipients exceed `100`
+2. `m365-administrator.users.create`
+3. `m365-administrator.users.update`
+4. `m365-administrator.groups.create`
+5. `m365-administrator.groups.add_member`
+6. `m365-administrator.teams.create`
+7. `m365-administrator.teams.add_channel`
+8. `m365-administrator.sites.provision`
+9. `m365-administrator.licenses.assign`
+10. `website-manager.deployment.production`
+11. `hr-generalist.employee.offboard`
+12. `outreach-coordinator.email.send_bulk` when recipients exceed `100`
 
 Evidence sources:
 
@@ -72,7 +82,7 @@ Evidence sources:
 
 | Surface | Current control boundary | Enterprise interpretation |
 | --- | --- | --- |
-| Ops-adapter privileged actions | OPA allow/deny + approval queue where configured | Real approval surface, but must be paired with fail-closed OPA posture |
+| Ops-adapter privileged actions | Acting identity + tenant resolution + permission tier check + OPA allow/deny + approval queue where configured | Real approval surface with fail-closed prerequisite enforcement for the active request path |
 | Teams/Graph approval workflow | Approval records and status transitions via approvals store | Real control surface, but depends on configured backend and signatures where enabled |
 | Instruction API mutating actions (`create_site`, `create_team`, `add_channel`, `provision_service`, `reset_user_password`) | Auth plus `ALLOW_M365_MUTATIONS` gate, but no equivalent built-in approval queue | Mutation-gated, not approval-hardened |
 
@@ -90,26 +100,27 @@ Enterprise commercialization requires the following rules to be explicit.
 2. Missing required auth context for the instruction contract fails closed.
 3. Mutating instruction actions fail closed when `ALLOW_M365_MUTATIONS` is not enabled.
 4. Idempotency conflicts fail closed.
-5. Denied or rate-limited OPA decisions fail closed in the ops-adapter request path.
+5. Missing acting identity, missing tenant selection, missing tenant config, or missing permission-tier definitions fail closed in the active ops-adapter request path unless an explicit non-enterprise override is enabled.
+6. Denied or rate-limited OPA decisions fail closed in the ops-adapter request path.
+7. Approval-required actions without configured approval owners fail closed with `approval_configuration_missing`.
 
 ### Current fail-open or permissive exceptions
 
-The current repo also contains behavior that is not enterprise-grade fail-closed:
+The current repo still contains behavior that is not enterprise-grade fail-closed:
 
-1. `src/ops_adapter/policies.py` can return allow on OPA errors when `fail_open` is enabled or inferred from non-production environment.
-2. `src/ops_adapter/app.py` can return an `"ok"` stub result for Graph failures when `opa.fail_open` is active.
-3. `src/smarthaus_common/permission_enforcer.py` has permissive fallbacks when identity, tenant config, or tier definitions are unavailable.
-4. Audit forwarding in `src/ops_adapter/audit.py` is best-effort and does not fail the caller.
+1. `src/ops_adapter/policies.py` can still return allow on OPA errors if `OPA_FAIL_OPEN=true` is set explicitly as a non-enterprise override.
+2. `src/smarthaus_common/permission_enforcer.py` can still allow on missing identity, tenant context, or tier config if `M365_PERMISSION_FAIL_OPEN=true` is set explicitly as a non-enterprise override.
+3. Audit forwarding in `src/ops_adapter/audit.py` is best-effort and does not fail the caller.
+4. The instruction API mutating actions remain mutation-gated rather than approval-hardened.
 
 ### Enterprise commercialization rule
 
 For enterprise posture, the following must be treated as required hardening expectations:
 
-1. OPA unavailability in enterprise production must deny, not allow.
-2. Missing user identity for governed actions must deny, not allow.
-3. Missing tenant config or missing permission-tier definitions for governed actions must deny, not allow.
-4. Fail-open stub execution paths must be classified as non-enterprise behavior.
-5. Mutation-gated instruction actions without approval boundaries must be described as mutation-gated only, not as fully approval-hardened.
+1. OPA unavailability in enterprise production must deny, not allow, unless the repo is intentionally running under the explicit non-enterprise override `OPA_FAIL_OPEN=true`.
+2. Missing user identity for governed actions must deny, not allow, unless the repo is intentionally running under the explicit non-enterprise override `M365_PERMISSION_FAIL_OPEN=true`.
+3. Missing tenant config or missing permission-tier definitions for governed actions must deny, not allow, unless the repo is intentionally running under the explicit non-enterprise override `M365_PERMISSION_FAIL_OPEN=true`.
+4. Mutation-gated instruction actions without approval boundaries must be described as mutation-gated only, not as fully approval-hardened.
 
 ## Exceptions and Escalations
 
@@ -120,9 +131,10 @@ Exceptions must be explicit and narrow.
 The following may exist for local development, sandbox, or controlled pilot work, but are not part of the enterprise claim:
 
 1. `OPA_FAIL_OPEN=true`
-2. delegated-auth local operator flows
-3. local `.env`-driven bootstrap
-4. approval-less use of instruction-API mutations in a controlled operator environment
+2. `M365_PERMISSION_FAIL_OPEN=true`
+3. delegated-auth local operator flows
+4. local `.env`-driven bootstrap
+5. approval-less use of instruction-API mutations in a controlled operator environment
 
 ### Escalation rules
 
@@ -135,12 +147,12 @@ The following may exist for local development, sandbox, or controlled pilot work
 SmartHaus may claim:
 
 1. a defined permission-tier model exists
-2. a defined approval model exists for the ops-adapter surface
+2. a defined approval model exists for the ops-adapter surface, including explicit high-risk `m365-administrator` mutation approvals
 3. mutation gating exists for instruction-API mutating actions
-4. fail-closed expectations are now explicitly documented
+4. fail-closed expectations are now explicitly documented and substantially implemented for the active ops-adapter request path
 
 SmartHaus may not claim:
 
 1. fully fail-closed enterprise enforcement across every governed surface today
 2. equivalent approval hardening across both ops-adapter and instruction API today
-3. enterprise-ready permissive fallback behavior
+3. enterprise-ready use of the explicit non-enterprise fail-open overrides

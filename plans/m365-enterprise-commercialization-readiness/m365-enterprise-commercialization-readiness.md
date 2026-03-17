@@ -1,11 +1,14 @@
 # Plan: M365 Repo — Enterprise Commercialization Readiness
 
 **Plan ID:** `m365-enterprise-commercialization-readiness`
-**Status:** Active (`P0A`, `P0B`, `P1A`, `P1B`, `P2A`, `P2B`, `P3A`, `P3B`, `P4A`, and `P4B` complete 2026-03-17; `P5A` next)
+**Status:** Absorbed by `m365-enterprise-readiness-master-plan` on 2026-03-17
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — production-ready, policy-gated, auditable, self-service M365 orchestration.
+**Absorbed by:** `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
+
+**Execution note:** This plan remains in the repo for traceability of the commercialization-definition work only. Do not schedule new execution here. The active enterprise-readiness critical path now lives in `m365-enterprise-readiness-master-plan`.
 
 **MA process:** This plan is commercialization, configuration, governance, packaging, and validation work. MA phases are not required unless a phase introduces new algorithmic behavior, mathematical guarantees, or notebook-governed runtime logic beyond the current contract surface.
 
@@ -27,6 +30,9 @@ Define the minimum set of M365-only changes required to make the current M365 ca
 - `P3B` complete on 2026-03-17: defined the ordered release-gate sequence, explicit go/no-go rules, evidence-retention expectations, and current deterministic certification outcome in `docs/commercialization/m365-release-gates-and-certification.md`. The repo now has an explicit rule that enterprise certification is `NO-GO` until the live evidence packet exists and the release certification packet is assembled and signed.
 - `P4A` complete on 2026-03-17: defined the package variants, canonical standalone install path, bootstrap flow, environment setup split, and prerequisite set in `docs/commercialization/m365-packaging-install-bootstrap.md`. The repo now treats Python package install plus the `m365-server` launcher as the one canonical standalone path for the current repo state, while the TAI-hosted module form remains a compatible but non-canonical packaging variant.
 - `P4B` complete on 2026-03-17: defined the operator onboarding checklist, day-0 and day-1 runbooks, support boundary, escalation path, and ownership matrix in `docs/commercialization/m365-operator-onboarding-and-support-boundary.md`. The repo now has an explicit post-install operator model that keeps day-to-day runtime and tenant ownership with the customer while bounding SmartHaus support to the canonical standalone path and the supported 9-action v1 surface.
+- Remaining work from the original commercialization sequence is now re-homed into the integrated enterprise-readiness master plan:
+  - historical `P5A` -> master-plan `D1`
+  - historical `P5B` -> master-plan `D2`
 
 ---
 

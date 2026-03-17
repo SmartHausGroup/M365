@@ -236,8 +236,11 @@ def load_tenant_config(
     if repos_root:
         search_dirs.append(Path(repos_root) / "SMARTHAUS_MCPSERVER_core" / "tenants")
 
-    # Relative from this file: src/smarthaus_common/ -> src/ -> M365/ -> ../SMARTHAUS_MCPSERVER_core/tenants
+    # Relative from this file: src/smarthaus_common/ -> src/ -> M365/ -> ../UCP/tenants
     this_dir = Path(__file__).parent
+    search_dirs.append(this_dir / ".." / ".." / ".." / "UCP" / "tenants")
+
+    # Relative from this file: src/smarthaus_common/ -> src/ -> M365/ -> ../SMARTHAUS_MCPSERVER_core/tenants
     search_dirs.append(this_dir / ".." / ".." / ".." / "SMARTHAUS_MCPSERVER_core" / "tenants")
 
     yaml_path: Path | None = None

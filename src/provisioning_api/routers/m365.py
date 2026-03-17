@@ -10,8 +10,9 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
-from smarthaus_common.config import AppConfig
+from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
+from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
 from provisioning_api import auth as authn
@@ -249,10 +250,29 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
 
 
 def _graph_client() -> GraphClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        has_identity = bool(tenant_cfg.azure.tenant_id and tenant_cfg.azure.client_id)
+        has_credential = bool(
+            tenant_cfg.azure.client_secret or tenant_cfg.azure.client_certificate_path
+        )
+        if not has_identity:
+            raise SmarthausError(
+                "Graph not configured: set UCP_TENANT to a tenant with azure.tenant_id "
+                "and azure.client_id"
+            )
+        if tenant_cfg.auth.mode != "delegated" and not has_credential:
+            raise SmarthausError(
+                "Graph not configured: selected tenant is missing app-only credentials "
+                "(azure.client_secret or azure.client_certificate_path)"
+            )
+        return GraphClient(tenant_config=tenant_cfg)
+
     config = AppConfig()
     if not (config.graph.tenant_id and config.graph.client_id and config.graph.client_secret):
         raise SmarthausError(
-            "Graph not configured: set GRAPH_TENANT_ID, GRAPH_CLIENT_ID, GRAPH_CLIENT_SECRET"
+            "Graph not configured: either select UCP_TENANT or set "
+            "GRAPH_TENANT_ID, GRAPH_CLIENT_ID, and GRAPH_CLIENT_SECRET"
         )
     return GraphClient(config=config)
 

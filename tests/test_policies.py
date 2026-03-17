@@ -44,6 +44,28 @@ def test_website_prod_requires_approval():
     assert res.get("approval_required") is True
 
 
+def test_m365_sites_provision_requires_approval():
+    res = opa_eval({
+        "agent": "m365-administrator",
+        "action": "sites.provision",
+        "data": {"displayName": "Ops Site"},
+        "rate_allowed": True,
+    })
+    assert res["allow"] is True
+    assert res.get("approval_required") is True
+
+
+def test_m365_users_create_requires_approval():
+    res = opa_eval({
+        "agent": "m365-administrator",
+        "action": "users.create",
+        "data": {"userPrincipalName": "new.user@example.com"},
+        "rate_allowed": True,
+    })
+    assert res["allow"] is True
+    assert res.get("approval_required") is True
+
+
 def test_hr_offboard_requires_approval():
     res = opa_eval({
         "agent": "hr-generalist",
@@ -64,4 +86,3 @@ def test_outreach_bulk_over_100_requires_approval():
     })
     assert res["allow"] is True
     assert res.get("approval_required") is True
-

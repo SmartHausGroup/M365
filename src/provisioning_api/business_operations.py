@@ -6,17 +6,17 @@ Real business operations management for M365 and project delivery
 import os
 import json
 import asyncio
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 from fastapi import FastAPI, Request, HTTPException, Depends, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 import httpx
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
+from smarthaus_common.config import load_bootstrap_env
+
+load_bootstrap_env(Path(__file__).resolve().parents[2] / ".env")
 
 app = FastAPI(title="SmartHaus Business Operations", version="3.0.0")
 

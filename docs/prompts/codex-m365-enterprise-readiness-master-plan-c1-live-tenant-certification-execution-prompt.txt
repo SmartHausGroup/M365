@@ -1,0 +1,7 @@
+Execute C1 Live-Tenant Certification Execution
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-c1-live-tenant-certification-execution.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:C1
+
+Do not execute tenant-impacting work without explicit live-validation approval. Follow the master plan critical path.

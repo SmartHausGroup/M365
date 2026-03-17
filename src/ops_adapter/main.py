@@ -17,6 +17,9 @@ from .audit import Auditor
 from .models import ActionRequest, ActionResponse
 from .policies import OPAClient
 from .rate_limit import RateLimiter
+from smarthaus_common.config import has_selected_tenant
+from smarthaus_common.permission_enforcer import check_user_permission, get_confirmation_override
+from smarthaus_common.tenant_config import get_tenant_config
 import jwt
 import httpx as _httpx
 
@@ -183,6 +186,34 @@ def _validate_agent_action(agent: str, action: str) -> bool:
         return False
     allowed = set(agents[agent].get("allowed_actions", []) or [])
     return action in allowed
+
+
+def _resolve_user_identity(request: Request) -> str:
+    principal = getattr(request.state, "principal", {}) or {}
+    for candidate in (
+        principal.get("upn"),
+        request.headers.get("X-User-Email"),
+        request.headers.get("X-Principal-Email"),
+    ):
+        if candidate:
+            return str(candidate).strip().lower()
+    raise HTTPException(403, "user_identity_missing")
+
+
+def _require_tenant_context():
+    if not has_selected_tenant():
+        raise HTTPException(403, "tenant_selection_missing")
+    try:
+        return get_tenant_config()
+    except Exception as exc:
+        raise HTTPException(403, f"tenant_config_unavailable:{type(exc).__name__}") from exc
+
+
+def _approval_rule(agent: str, action: str) -> Dict[str, Any] | None:
+    for rule in REGISTRY.get("agents", {}).get(agent, {}).get("approval_rules", []) or []:
+        if rule.get("action") == action:
+            return rule
+    return None
 
 
 @app.get("/approvals/{approval_id}")
@@ -377,33 +408,91 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
     rk = f"{agent}:{action}"
     rate_allowed = RATE.allow(rk)
 
+    user_email = _resolve_user_identity(request)
+    tenant_config = _require_tenant_context()
+
+    allowed, deny_reason = check_user_permission(
+        user_email=user_email,
+        action=action,
+        tenant_config=tenant_config,
+    )
+    if not allowed:
+        REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
+        await AUDITOR.log(
+            "denied",
+            agent,
+            action,
+            {"reason": deny_reason, "actor": user_email},
+            corr,
+        )
+        raise HTTPException(403, deny_reason)
+
+    params = dict(req.params or {})
+    params.setdefault("requestor", user_email)
+
     # Policy check via OPA
-    policy = await OPA.check(agent, action, req.params, rate_allowed, corr)
+    policy = await OPA.check(agent, action, params, rate_allowed, corr)
     if not policy.get("allowed", False):
         REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
-        await AUDITOR.log("denied", agent, action, {"reason": policy.get("reason")}, corr)
+        await AUDITOR.log(
+            "denied",
+            agent,
+            action,
+            {"reason": policy.get("reason"), "actor": user_email},
+            corr,
+        )
         status_code = 429 if policy.get("reason") == "rate_limited" else 403
         raise HTTPException(status_code, policy.get("reason", "policy_denied"))
 
     # Approvals
-    if policy.get("approval_required"):
-        approval_id = APPROVALS.create(agent, action, req.params)
+    approval_required = bool(policy.get("approval_required"))
+    if get_confirmation_override(user_email, action, tenant_config) == "always":
+        approval_required = True
+
+    if approval_required:
+        rule = _approval_rule(agent, action)
+        approvers = (rule or {}).get("approvers", [])
+        if not approvers:
+            REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
+            await AUDITOR.log(
+                "denied",
+                agent,
+                action,
+                {"reason": "approval_configuration_missing", "actor": user_email},
+                corr,
+            )
+            raise HTTPException(500, "approval_configuration_missing")
+        approval_id = APPROVALS.create(agent, action, params)
         REQ_COUNT.labels(agent=agent, action=action, outcome="pending").inc()
-        await AUDITOR.log("pending_approval", agent, action, {"approval_id": approval_id}, corr)
+        await AUDITOR.log(
+            "pending_approval",
+            agent,
+            action,
+            {"approval_id": approval_id, "actor": user_email, "approvers": approvers},
+            corr,
+        )
         return ActionResponse(status="pending_approval", approval_id=approval_id)
 
     # Execute
     with REQ_LATENCY.labels(agent=agent, action=action).time():
         try:
-            result = await execute(agent, action, req.params, corr)
+            result = await execute(agent, action, params, corr)
             REQ_COUNT.labels(agent=agent, action=action, outcome="success").inc()
-            await AUDITOR.log("success", agent, action, result, corr)
+            audit_payload = dict(result or {})
+            audit_payload["actor"] = user_email
+            await AUDITOR.log("success", agent, action, audit_payload, corr)
             return ActionResponse(status="success", result=result)
         except GraphAPIError as ge:
             REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
-            await AUDITOR.log("failed", agent, action, {"error": ge.message, "code": ge.code, "status": ge.status}, corr)
+            await AUDITOR.log(
+                "failed",
+                agent,
+                action,
+                {"error": ge.message, "code": ge.code, "status": ge.status, "actor": user_email},
+                corr,
+            )
             raise HTTPException(ge.status, f"graph_error:{ge.code}: {ge.message}")
         except Exception as e:
             REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
-            await AUDITOR.log("failed", agent, action, {"error": str(e)}, corr)
+            await AUDITOR.log("failed", agent, action, {"error": str(e), "actor": user_email}, corr)
             raise HTTPException(500, f"action_failed: {e}")

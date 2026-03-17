@@ -1,0 +1,7 @@
+Execute C2 Release Certification Packet and Decision
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-c2-release-certification-packet-decision.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:C2
+
+Do not close enterprise readiness without an explicit certification packet and final decision.

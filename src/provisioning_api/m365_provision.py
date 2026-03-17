@@ -4,19 +4,23 @@ import os
 import time
 from collections.abc import Sequence
 
+from smarthaus_common.config import AppConfig, has_selected_tenant, resolve_sharepoint_hostname
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.logging import get_logger
+from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
 log = get_logger(__name__)
 
 
 def _hostname() -> str:
-    return (
-        os.getenv("SHAREPOINT_HOSTNAME")
-        or os.getenv("SP_HOSTNAME")
-        or "smarthausgroup.sharepoint.com"
-    )
+    return resolve_sharepoint_hostname()
+
+
+def _graph_client() -> GraphClient:
+    if has_selected_tenant():
+        return GraphClient(tenant_config=get_tenant_config())
+    return GraphClient(config=AppConfig())
 
 
 def provision_group_site(
@@ -31,7 +35,7 @@ def provision_group_site(
     Returns dict with site_id, site_url, created flags.
     Requires app permissions: Group.ReadWrite.All and Sites.ReadWrite.All (or FullControl).
     """
-    client = GraphClient()
+    client = _graph_client()
     created_group = False
 
     grp = client.find_group_by_mailnickname(mail_nickname)
@@ -88,7 +92,7 @@ def provision_teams_workspace(
 
     Requires application permissions: Team.ReadWrite.All, Channel.ReadWrite.All.
     """
-    client = GraphClient()
+    client = _graph_client()
     grp = client.find_group_by_mailnickname(mail_nickname)
     if not grp:
         raise SmarthausError(f"Group '{mail_nickname}' not found; create site/group first.")

@@ -403,6 +403,17 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
         def __init__(self):
             self.db: Dict[str, Dict[str, Any]] = {}
             self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
+            self.registry = registry or {}
+
+        def _default_approvers(self, agent: str, action: str) -> List[str]:
+            try:
+                agent_def = self.registry.get("agents", {}).get(agent, {})
+                for rule in agent_def.get("approval_rules", []) or []:
+                    if rule.get("action") == action:
+                        return rule.get("approvers", []) or []
+            except Exception:
+                pass
+            return []
 
         def create(self, agent: str, action: str, params: Dict[str, Any]) -> str:
             aid = str(uuid.uuid4())
@@ -411,6 +422,8 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
                 "agent": agent,
                 "action": action,
                 "params": params,
+                "requestor": params.get("requestor") or "system",
+                "approvers": self._default_approvers(agent, action),
                 "status": "pending",
                 "requested_at": datetime.now(timezone.utc).isoformat(),
             }

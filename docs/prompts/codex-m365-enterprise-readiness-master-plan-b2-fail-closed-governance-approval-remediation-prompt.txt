@@ -1,0 +1,7 @@
+Execute B2 Fail-Closed Governance and Approval Remediation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b2-fail-closed-governance-approval-remediation.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B2
+
+You are approved to implement only when this phase is explicitly authorized. Keep the enterprise posture fail-closed.

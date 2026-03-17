@@ -6,18 +6,20 @@ Professional-grade interface for SmartHaus M365 operations
 import os
 import json
 import asyncio
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import httpx
-from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv(Path(__file__).resolve().parents[2] / ".env", override=False)
+from smarthaus_common.config import AppConfig, has_selected_tenant, load_bootstrap_env
+from smarthaus_common.tenant_config import get_tenant_config
+from smarthaus_graph.client import GraphTokenProvider
+
+load_bootstrap_env(Path(__file__).resolve().parents[2] / ".env")
 
 app = FastAPI(title="SmartHaus M365 Enterprise Dashboard", version="2.0.0")
 
@@ -80,27 +82,24 @@ class ProjectStatus(BaseModel):
 
 async def get_graph_token() -> Optional[str]:
     """Get Microsoft Graph API token"""
-    tenant_id = os.getenv("AZURE_TENANT_ID") or os.getenv("GRAPH_TENANT_ID")
-    client_id = (
-        os.getenv("AZURE_CLIENT_ID")
-        or os.getenv("AZURE_APP_CLIENT_ID_TAI")
-        or os.getenv("MICROSOFT_CLIENT_ID")
-        or os.getenv("GRAPH_CLIENT_ID")
-    )
-    client_secret = (
-        os.getenv("AZURE_CLIENT_SECRET")
-        or os.getenv("AZURE_APP_CLIENT_SECRET_TAI")
-        or os.getenv("MICROSOFT_CLIENT_SECRET")
-        or os.getenv("GRAPH_CLIENT_SECRET")
-    )
-    
-    if not all([tenant_id, client_id, client_secret]):
-        return None
-        
     try:
+        if has_selected_tenant():
+            tenant_cfg = get_tenant_config()
+            provider = GraphTokenProvider(tenant_config=tenant_cfg)
+            return provider.get_app_token()
+
+        cfg = AppConfig().graph
+        if not all([cfg.tenant_id, cfg.client_id, cfg.client_secret]):
+            return None
+
         from azure.identity import ClientSecretCredential
-        cred = ClientSecretCredential(tenant_id=tenant_id, client_id=client_id, client_secret=client_secret)
-        token = cred.get_token("https://graph.microsoft.com/.default")
+
+        cred = ClientSecretCredential(
+            tenant_id=cfg.tenant_id,
+            client_id=cfg.client_id,
+            client_secret=cfg.client_secret,
+        )
+        token = cred.get_token(cfg.scope)
         return token.token
     except Exception:
         return None

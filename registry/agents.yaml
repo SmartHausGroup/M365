@@ -53,8 +53,24 @@ agents:
       - "teams.create"
       - "teams.add_channel"
     approval_rules:
+      - action: "users.create"
+        approvers: ["global_admin"]
+      - action: "users.update"
+        approvers: ["global_admin"]
       - action: "users.disable"
         approvers: ["hr-team", "security-team"]
+      - action: "groups.create"
+        approvers: ["global_admin"]
+      - action: "groups.add_member"
+        approvers: ["global_admin"]
+      - action: "teams.create"
+        approvers: ["global_admin"]
+      - action: "teams.add_channel"
+        approvers: ["global_admin"]
+      - action: "sites.provision"
+        approvers: ["global_admin"]
+      - action: "licenses.assign"
+        approvers: ["global_admin"]
 
   website-manager:
     name: "Website Manager"

@@ -148,17 +148,19 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 ---
 
-## Initiative: M365 Enterprise Commercialization Readiness (Standalone Module)
+## Initiative: M365 Enterprise Readiness Master Plan (Standalone Module)
 
-**Initiative:** Convert the current M365 capability into a commercially honest, enterprise-ready standalone deterministic module with a narrow supported v1 surface, canonical production configuration, explicit governance posture, live acceptance evidence, and buyer-ready packaging.
+**Initiative:** Run the full standalone M365 v1 enterprise-readiness critical path as one governed program: product-boundary lock, runtime hardening, live-tenant certification, and launch readiness.
 
-**Plan:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md`
+**Plan:** `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
 
-**Reference:** `plan:m365-enterprise-commercialization-readiness:R1`
+**Reference:** `plan:m365-enterprise-readiness-master-plan:R1`
 
-**Status:** 🟡 `P0A`, `P0B`, `P1A`, `P1B`, `P2A`, `P2B`, `P3A`, `P3B`, `P4A`, and `P4B` complete (2026-03-17); `P5A` next — Standalone M365 v1 commercialization is fail-closed to the 9 router-implemented actions documented in `docs/commercialization/m365-v1-supported-surface.md`, the buyer/operator/deployment model is defined in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`, the canonical production config target is defined in `docs/commercialization/m365-canonical-config-contract.md`, the migration/auth posture is defined in `docs/commercialization/m365-config-migration-and-auth-policy.md`, the audit/governance evidence boundary is defined in `docs/commercialization/m365-audit-and-governance-evidence-model.md`, the permission/approval/fail-closed boundary is defined in `docs/commercialization/m365-permission-approval-fail-closed-hardening.md`, the live-vs-mock release evidence split is defined in `docs/commercialization/m365-live-tenant-validation-matrix.md`, the ordered certification gate model is defined in `docs/commercialization/m365-release-gates-and-certification.md`, the canonical packaging/install/bootstrap path is defined in `docs/commercialization/m365-packaging-install-bootstrap.md`, and the post-install operator model is now defined in `docs/commercialization/m365-operator-onboarding-and-support-boundary.md`. The repo now has an explicit day-0/day-1 standalone operator path with a bounded support model. Remaining execution units are `P5A` enterprise collateral pack and `P5B` pilot acceptance/customer handoff.
+**Status:** 🟡 Imported foundation `A1` through `A4` and runtime hardening `B1` and `B2` complete (2026-03-17); `B3` next — The repo has already locked the narrow 9-action supported surface, buyer/operator boundary, canonical config contract, governance/evidence model, release-gate model, packaging path, and post-install operator model in `docs/commercialization/`. `B1` turned the config contract into real runtime behavior by establishing local MA phase resolution for governed edits, making `UCP_TENANT`-selected tenant YAML the shared config authority, extending tenant discovery to the sibling `UCP/tenants` directory, and demoting dotenv loading to bootstrap-only across the standalone server and legacy dashboards. `B2` then hardened the active ops-adapter and shared permission-enforcement path so missing identity, missing tenant selection, missing tenant config, missing permission tiers, denied OPA decisions, and missing approval-owner configuration fail closed by default, and expanded explicit approval coverage for high-risk `m365-administrator` mutations. The remaining enterprise blockers are admin audit remediation and live-tenant certification. Launch collateral and pilot handoff move after those blockers under the master plan as `D1` and `D2`.
 
-**Prompt artifacts:** umbrella prompt pair plus per-subphase MATHS prompt pairs under `docs/prompts/`
+**Historical lineage:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md` remains for traceability but is now absorbed and no longer the active execution plan.
+
+**Prompt artifacts:** master prompt pair plus open-phase prompt pairs under `docs/prompts/`
 
 ---
 
@@ -184,7 +186,7 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-repo-worktree-cleanup-separation:R1`
 
-**Status:** ✅ Complete (2026-03-17) — `R1` through `R5` are complete: the cleanup plan and prompt pair were created, the plaintext secret-bearing local docs were removed from the worktree, the formatter-only tracked fallout from the failed repo-wide pre-commit run was reverted, the remaining substantive payload was shipped under explicit user direction, the GitHub push-protection-blocked Azure secret in `create_teams_workspace.py` was replaced with env-driven secret loading, and the rewritten unpushed commit was successfully pushed to `origin/feature/m365-universe-batch2-identity-user-group`. The next active commercialization unit remains `P1B`.
+**Status:** ✅ Complete (2026-03-17) — `R1` through `R5` are complete: the cleanup plan and prompt pair were created, the plaintext secret-bearing local docs were removed from the worktree, the formatter-only tracked fallout from the failed repo-wide pre-commit run was reverted, the remaining substantive payload was shipped under explicit user direction, the GitHub push-protection-blocked Azure secret in `create_teams_workspace.py` was replaced with env-driven secret loading, and the rewritten unpushed commit was successfully pushed to `origin/feature/m365-universe-batch2-identity-user-group`. Active execution focus now returns to the integrated master plan at `B1`.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-repo-worktree-cleanup-separation.md`, `docs/prompts/codex-m365-repo-worktree-cleanup-separation-prompt.txt`
 

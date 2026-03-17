@@ -18,6 +18,8 @@ import sys
 import threading
 from pathlib import Path
 
+from smarthaus_common.config import load_bootstrap_env
+
 
 def _find_app_root() -> Path:
     """Resolve app root: M365_APP_ROOT env, or cwd with registry/, or cwd."""
@@ -36,17 +38,10 @@ def _find_app_root() -> Path:
 
 def _load_env(app_root: Path) -> None:
     """Load .env from app root or ~/.smarthaus/m365 if present."""
-    try:
-        from dotenv import load_dotenv
-    except ImportError:
-        return
-    for path in (
+    load_bootstrap_env(
         app_root / ".env",
         Path.home() / ".smarthaus" / "m365" / ".env",
-    ):
-        if path.exists():
-            load_dotenv(path, override=False)
-            break
+    )
 
 
 def _run_server(host: str, port: int, app_root: Path) -> None:
