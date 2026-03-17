@@ -10,6 +10,7 @@ Plan refs: `plan:m365-ma-scorecard-alignment:R2`, `plan:m365-ma-scorecard-alignm
 - `i` — idempotency key
 - `sigma` — tenant and runtime state
 - `g` — governance flags such as mutation gate and audit enablement
+- `kappa` — runtime configuration authority state
 - `r` — instruction response
 - `q` — emitted audit record set
 
@@ -21,6 +22,7 @@ Plan refs: `plan:m365-ma-scorecard-alignment:R2`, `plan:m365-ma-scorecard-alignm
 - `hash(a, p)` — idempotency request hash
 - `shape(r)` — response-shape check against the contract
 - `audit(q)` — one-record-per-request audit emission
+- `resolve_cfg(kappa)` — runtime config resolution under tenant selection and bootstrap inputs
 
 ## Boundary Conditions
 
@@ -29,6 +31,7 @@ Plan refs: `plan:m365-ma-scorecard-alignment:R2`, `plan:m365-ma-scorecard-alignm
 3. Mutating actions remain blocked when mutation gating is disabled.
 4. Idempotency replay returns the cached successful result for the same logical request.
 5. Successful and unsuccessful executions both produce audit evidence under the audit invariant.
+6. When `UCP_TENANT` is selected, production credential and org-mapping authority resolve from tenant config plus injected secret env fallback, not bootstrap dotenv values.
 
 ## Stability and Determinism
 
@@ -50,3 +53,4 @@ The determinism bridge for governance alignment is rooted in:
 - `L3` — authentication fail-closed behavior
 - `L4` — audit one-record-per-request behavior
 - `L5` — deterministic action-surface and contract replay stability
+- `L6` — tenant-selected runtime config authority precedence

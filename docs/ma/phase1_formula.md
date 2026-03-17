@@ -10,6 +10,7 @@ Let:
 - `P` be request parameters
 - `S` be tenant and runtime state
 - `G` be the active governance gates
+- `K` be the runtime configuration authority source
 - `R` be the instruction response
 - `Q` be the audit trace side effect
 
@@ -25,6 +26,7 @@ Subject to the existing contract constraints:
 4. `same(idempotency_key, a, P) and first_success => R_replay = R_first`
 5. `execution_completed => exactly_one_audit_record(Q)`
 6. `same(a, P, S, G) => same(R, Q)` for the current deterministic contract boundary
+7. `tenant_selected(K) => authority(K) = tenant_yaml + injected_secret_env`, and bootstrap dotenv inputs do not override tenant-selected production credentials or org mappings
 
 ## Source Mapping
 

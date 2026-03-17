@@ -27,6 +27,10 @@
     "L5": {
       "scorecard_path": "artifacts/scorecards/scorecard_l5.json",
       "status": "green"
+    },
+    "L6": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l6.json",
+      "status": "green"
     }
   },
   "module_scorecards": {

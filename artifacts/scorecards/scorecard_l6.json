@@ -1,0 +1,17 @@
+{
+  "item_id": "L6",
+  "item_kind": "lemma",
+  "lemma_id": "L6",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T23:14:32Z",
+  "notebook": "notebooks/lemma_proofs/L6_m365_config_authority.ipynb",
+  "notebook_hash": "d147d2004cee9b17a01ca5de5332c8cd80aec36abd2eced815732cc9b2eff02b",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "notebooks/lemma_proofs/L6_m365_config_authority.ipynb",
+    "src/smarthaus_common/tenant_config.py",
+    "docs/commercialization/m365-canonical-config-contract.md",
+    "docs/commercialization/m365-config-migration-and-auth-policy.md"
+  ]
+}
