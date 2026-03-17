@@ -1,0 +1,257 @@
+{
+  "plan_id": "m365-enterprise-commercialization-readiness",
+  "status": "Draft",
+  "date": "2026-03-17",
+  "owner": "SmartHaus",
+  "execution_plan_reference": "plan:m365-enterprise-commercialization-readiness:R1",
+  "north_star": "Operations/NORTHSTAR.md",
+  "ma_process_required": false,
+  "objective": "Define the minimum set of M365-only changes required to make the current M365 capability commercially honest, operationally supportable, and enterprise-ready as a standalone deterministic module ASAP.",
+  "commercial_gap_summary": [
+    "marketable capability boundary is not yet locked to the proven v1 surface",
+    "production configuration is split between tenant config and direct .env loading",
+    "some validation evidence can still pass in mock mode",
+    "enterprise audit posture is incomplete for governance review",
+    "packaging, onboarding, and collateral are not yet unified into one sellable path"
+  ],
+  "scope": {
+    "in_scope": [
+      "define and document the commercially supported M365 v1 action surface",
+      "establish one canonical production configuration and identity model",
+      "harden governance, audit, and fail-closed behavior",
+      "produce live-tenant validation evidence and release-gate criteria",
+      "define packaging, onboarding, runbooks, and support boundaries for a standalone M365 module",
+      "update Operations/NORTHSTAR.md if commercialization scope changes materially"
+    ],
+    "out_of_scope": [
+      "implementing the remaining planned capability universe purely to claim breadth",
+      "broad SAID or UCP rework outside direct M365 dependency requirements",
+      "new inference algorithms or unrelated mathematical systems",
+      "unapproved tenant-impacting provisioning beyond later approved validation scope"
+    ]
+  },
+  "requirements": [
+    { "id": "R1", "name": "Commercial boundary lock" },
+    { "id": "R2", "name": "Canonical production config" },
+    { "id": "R3", "name": "Enterprise governance and audit hardening" },
+    { "id": "R4", "name": "Live evidence and release gates" },
+    { "id": "R5", "name": "Packaging and onboarding" },
+    { "id": "R6", "name": "Commercial and governance synchronization" }
+  ],
+  "phases": [
+    {
+      "id": "P0",
+      "name": "Commercial Boundary Lock",
+      "goal": "Make the product claim commercially honest before broadening scope.",
+      "subphases": [
+        {
+          "id": "P0A",
+          "name": "Supported Surface and Non-Goals Lock",
+          "goal": "Lock the commercially supported M365 v1 surface to the actions that are currently proven and supportable.",
+          "outputs": [
+            "supported action matrix for M365 v1",
+            "explicit unsupported-action matrix",
+            "product-claim boundary language tied to current evidence",
+            "evidence-source map for each supported action"
+          ]
+        },
+        {
+          "id": "P0B",
+          "name": "Buyer and Operator Positioning and North Star Delta",
+          "goal": "Define who this standalone module is for, how it is positioned, and whether North Star requires synchronization.",
+          "outputs": [
+            "target buyer definition",
+            "target operator definition",
+            "standalone product positioning statement",
+            "deployment-model statement",
+            "North Star delta review and update decision"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P1",
+      "name": "Canonical Config and Identity Model",
+      "goal": "Eliminate production ambiguity around credentials, tenant selection, auth mode, and org mappings.",
+      "subphases": [
+        {
+          "id": "P1A",
+          "name": "Config Inventory and Canonical Target Contract",
+          "goal": "Inventory the current configuration and identity loading paths and define the one canonical production contract.",
+          "outputs": [
+            "current-state config inventory",
+            "canonical tenant-config target contract",
+            "production config source-precedence model",
+            "identity and tenancy model statement"
+          ]
+        },
+        {
+          "id": "P1B",
+          "name": "Config Migration and Auth and Secret Policy",
+          "goal": "Define how the repo moves from the current state to the canonical production contract without ambiguity.",
+          "outputs": [
+            "migration path away from direct production .env dependence",
+            "secret-management policy",
+            "auth-mode decision matrix",
+            "certificate-auth versus client-secret policy",
+            "deprecation map for legacy loading patterns"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "Governance and Audit Hardening",
+      "goal": "Bring the runtime to an enterprise-reviewable governance posture.",
+      "subphases": [
+        {
+          "id": "P2A",
+          "name": "Audit and Governance Evidence Model",
+          "goal": "Define the audit and governance evidence required for enterprise review of the M365 runtime.",
+          "outputs": [
+            "required audit-event model",
+            "governance evidence model",
+            "gap map for snapshot or partial audit surfaces",
+            "administrative traceability requirements"
+          ]
+        },
+        {
+          "id": "P2B",
+          "name": "Permission, Approval, and Fail-Closed Hardening",
+          "goal": "Define the hardening expectations for permission tiers, approvals, and fail-closed behavior.",
+          "outputs": [
+            "permission-tier hardening checklist",
+            "approval-boundary checklist",
+            "fail-closed behavior checklist",
+            "exception and escalation policy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "Live Tenant Evidence and Release Gates",
+      "goal": "Replace marketing ambiguity with real acceptance evidence.",
+      "subphases": [
+        {
+          "id": "P3A",
+          "name": "Live-Tenant Validation Matrix",
+          "goal": "Define exactly what must be validated against a live tenant to support enterprise release claims.",
+          "outputs": [
+            "live-tenant validation matrix",
+            "environment prerequisites",
+            "evidence artifact checklist",
+            "mock versus live validation separation"
+          ]
+        },
+        {
+          "id": "P3B",
+          "name": "Release Gates and Certification Decision Model",
+          "goal": "Convert evidence requirements into explicit release and certification decisions.",
+          "outputs": [
+            "release-gate checklist",
+            "enterprise go / no-go criteria",
+            "certification decision model",
+            "evidence retention requirements"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P4",
+      "name": "Packaging, Install, and Operator Onboarding",
+      "goal": "Make the module deployable and operable without SmartHaus hand-holding.",
+      "subphases": [
+        {
+          "id": "P4A",
+          "name": "Packaging, Install, and Bootstrap",
+          "goal": "Define how the standalone module is packaged, installed, and bootstrapped.",
+          "outputs": [
+            "canonical package variants",
+            "install path",
+            "bootstrap flow",
+            "environment setup runbook",
+            "dependency and prerequisite list"
+          ]
+        },
+        {
+          "id": "P4B",
+          "name": "Operator Onboarding, Runbooks, and Support Boundary",
+          "goal": "Define the operator experience after installation.",
+          "outputs": [
+            "operator onboarding checklist",
+            "day-0 and day-1 runbooks",
+            "support-boundary statement",
+            "escalation path",
+            "ownership matrix"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "P5",
+      "name": "Enterprise Collateral and Pilot Acceptance",
+      "goal": "Make the product sellable and reviewable.",
+      "subphases": [
+        {
+          "id": "P5A",
+          "name": "Enterprise Collateral Pack",
+          "goal": "Produce the buyer-facing and review-facing collateral for the standalone module.",
+          "outputs": [
+            "product one-pager",
+            "security and compliance posture brief",
+            "supported-action matrix for sales and delivery",
+            "architecture and operating-summary brief"
+          ]
+        },
+        {
+          "id": "P5B",
+          "name": "Pilot Acceptance and Customer Handoff",
+          "goal": "Define how SmartHaus and the customer determine a successful pilot and handoff.",
+          "outputs": [
+            "pilot acceptance checklist",
+            "pilot success criteria",
+            "customer handoff checklist",
+            "customer-responsibility matrix",
+            "sign-off and acceptance model"
+          ]
+        }
+      ]
+    }
+  ],
+  "validation": [
+    "Operations/EXECUTION_PLAN.md references this initiative and plan ID",
+    "the plan md, yaml, and json files remain consistent",
+    "the Codex prompt pair exists and points to this plan",
+    "future implementation phases define explicit validation and acceptance evidence before execution",
+    "enterprise readiness claims must separate mock evidence from live-tenant evidence"
+  ],
+  "success_criteria": [
+    "SmartHaus can describe exactly what the standalone M365 module v1 does and does not do",
+    "production configuration is defined by one canonical contract",
+    "enterprise governance and audit expectations are explicit and testable",
+    "release acceptance requires live-tenant evidence for enterprise-critical surfaces",
+    "packaging, onboarding, and collateral support a real pilot or enterprise buyer review"
+  ],
+  "dependencies": [
+    "existing M365 instruction contract and MA verification set in docs/contracts and configs/generated",
+    "existing TAI licensed module model in docs/TAI_LICENSED_MODULE_MODEL.md",
+    "UCP tenant configuration conventions where shared governance patterns apply"
+  ],
+  "execution_rule": {
+    "execute_against_subphases_only": [
+      "P0A",
+      "P0B",
+      "P1A",
+      "P1B",
+      "P2A",
+      "P2B",
+      "P3A",
+      "P3B",
+      "P4A",
+      "P4B",
+      "P5A",
+      "P5B"
+    ]
+  ]
+}
