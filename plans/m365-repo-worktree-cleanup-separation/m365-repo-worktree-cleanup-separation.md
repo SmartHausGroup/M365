@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Worktree Cleanup and Separation
 
 **Plan ID:** `m365-repo-worktree-cleanup-separation`
-**Status:** Active (`R1`, `R2`, and `R3` complete on 2026-03-17; `R4` next)
+**Status:** Complete (`R1` through `R5` complete on 2026-03-17)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-repo-worktree-cleanup-separation:R1`
@@ -38,7 +38,7 @@ This state is unsafe for review and unsafe for future commits unless it is separ
 
 ### Out of scope
 
-- committing the remaining substantive payload
+- committing the remaining substantive payload without explicit user authorization
 - implementing new runtime features as part of cleanup
 - changing commercialization scope or MA scorecard requirements
 - deleting substantive feature work without explicit classification
@@ -75,28 +75,29 @@ This state is unsafe for review and unsafe for future commits unless it is separ
 1. `R1` Create the cleanup plan and prompt pair.
 2. `R2` Remove the known secret-bearing local docs and record the need for credential rotation.
 3. `R3` Revert the tracked formatter-only fallout.
-4. `R4` Re-assess the reduced worktree and define the next split.
-5. `R5` Synchronize governance tracking.
+4. `R4` Re-assess the reduced worktree and define the next split or user-authorized ship path.
+5. `R5` Synchronize governance tracking and close the initiative.
 
 ## Execution Status
 
 - `R1` complete on 2026-03-17: created the cleanup plan triplet, prompt pair, and initiative entry in `Operations/EXECUTION_PLAN.md`.
 - `R2` complete on 2026-03-17: removed the plaintext secret-bearing local docs `CODEX_CONFIGURATION.md` and `AGENT_SYSTEM_DEEP_DIVE.md` from the worktree. These exposed credentials should be considered compromised and rotated.
 - `R3` complete on 2026-03-17: reverted the tracked formatter-only fallout introduced by the failed repo-wide `pre-commit run --all-files`. The formatter-noise bucket is now zero.
-- `R4` is in progress on 2026-03-17: by explicit user direction, treat the remaining substantive payload as intended keep-work for commit/push, with only the removed plaintext-secret docs and ignored cache artifacts excluded.
+- `R4` complete on 2026-03-17: by explicit user direction, treated the remaining substantive payload as intended keep-work, committed it, scrubbed the GitHub push-protection-blocked Azure secret in `create_teams_workspace.py` by switching to env-driven secret loading, and pushed the rewritten unpushed commit to `origin/feature/m365-universe-batch2-identity-user-group`.
+- `R5` complete on 2026-03-17: synchronized `Operations/EXECUTION_PLAN.md` and `Operations/ACTION_LOG.md` so the cleanup initiative reflects the completed ship state and hands execution back to the commercialization plan at `P1B`.
 
 ## Success Criteria
 
 - No plaintext credentials remain in untracked repo docs created by local workflow.
 - All tracked formatter-only fallout is reverted.
-- The remaining worktree is materially smaller and easier to separate.
-- Remaining dirty files are classified into explicit keep/split/delete buckets with rationale.
+- The remaining substantive payload is either explicitly excluded or committed and pushed under user direction.
+- The local worktree is clean after cleanup completion.
 
 ## Validation
 
 - `rg -n "GRAPH_CLIENT_SECRET|MICROSOFT_CLIENT_SECRET|AZURE_CLIENT_SECRET|CAIO_API_KEY" CODEX_CONFIGURATION.md AGENT_SYSTEM_DEEP_DIVE.md` returns no active secret-bearing artifacts because those files are removed or sanitized.
 - `git diff --name-only --diff-filter=M` no longer includes the formatter-only bucket identified during triage.
-- `git status --short` shows the reduced worktree after `R2` and `R3`.
+- `git status --short` is clean after `R4`.
 - `Operations/ACTION_LOG.md` records the cleanup actions with this plan reference.
 
 ## Rollback

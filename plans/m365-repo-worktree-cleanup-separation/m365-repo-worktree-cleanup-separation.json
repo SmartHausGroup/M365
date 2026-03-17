@@ -1,6 +1,6 @@
 {
   "plan_id": "m365-repo-worktree-cleanup-separation",
-  "status": "Active",
+  "status": "Complete",
   "date": "2026-03-17",
   "owner": "SmartHaus",
   "execution_plan_reference": "plan:m365-repo-worktree-cleanup-separation:R1",
@@ -15,7 +15,7 @@
       "synchronize Operations/EXECUTION_PLAN.md and Operations/ACTION_LOG.md"
     ],
     "out_of_scope": [
-      "committing the remaining substantive payload",
+      "committing the remaining substantive payload without explicit user authorization",
       "implementing new runtime features as part of cleanup",
       "changing commercialization scope or MA scorecard requirements",
       "deleting substantive feature work without explicit classification"
@@ -55,9 +55,15 @@
     },
     {
       "id": "R4",
-      "status": "in_progress",
+      "status": "complete",
       "date": "2026-03-17",
-      "note": "user directed treating the remaining substantive payload as intended keep-work for commit and push"
+      "note": "user directed treating the remaining substantive payload as intended keep-work; committed and pushed after scrubbing the push-protection-blocked Azure secret in create_teams_workspace.py"
+    },
+    {
+      "id": "R5",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "synchronized cleanup plan and governance trackers to reflect the completed ship and return focus to commercialization P1B"
     }
   ]
 }

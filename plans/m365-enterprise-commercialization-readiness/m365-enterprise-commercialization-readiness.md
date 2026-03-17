@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Commercialization Readiness
 
 **Plan ID:** `m365-enterprise-commercialization-readiness`
-**Status:** Active (`P0A`, `P0B`, and `P1A` complete 2026-03-17; `P1B` next)
+**Status:** Active (`P0A`, `P0B`, `P1A`, and `P1B` complete 2026-03-17; `P2A` next)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
@@ -20,7 +20,8 @@ Define the minimum set of M365-only changes required to make the current M365 ca
 - `P0A` complete on 2026-03-17: locked the standalone M365 v1 commercial boundary to the 9 implemented instruction actions in `docs/commercialization/m365-v1-supported-surface.md`, explicitly excluding the remaining 251 planned actions and the 5 notebook/spec-only group actions from launch claims.
 - `P0B` complete on 2026-03-17: defined the standalone buyer, operator, positioning, and deployment model in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`, and synchronized `Operations/NORTHSTAR.md` so the broader AI Workforce vision no longer overclaims the standalone M365 v1 commercial boundary.
 - `P1A` complete on 2026-03-17: inventoried the current config-loading surfaces, locked tenant YAML plus env-assisted secret fallback as the canonical production contract in `docs/commercialization/m365-canonical-config-contract.md`, and narrowed the env docs so `.env` is no longer described as the production authority.
-- `P1B` is the next execution unit.
+- `P1B` complete on 2026-03-17: defined the migration path, auth-mode decision matrix, secret policy, certificate guidance, and legacy-surface deprecation map in `docs/commercialization/m365-config-migration-and-auth-policy.md`. The supported posture is now singular: tenant YAML selected by `UCP_TENANT` is the production authority, `app_only` is the default production auth mode, certificate auth is the enterprise-preferred credential model, client secret is transitional only, and delegated auth is local/test/support only.
+- `P2A` is the next execution unit.
 
 ---
 

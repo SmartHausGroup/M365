@@ -34,7 +34,17 @@ execution_status:
         env-assisted secret fallback as the canonical production contract in
         docs/commercialization/m365-canonical-config-contract.md, and narrowed
         the env docs so .env is no longer described as the production authority.
-  next_phase: P1B
+    - phase: P1B
+      date: "2026-03-17"
+      summary: >
+        Defined the migration path, auth-mode decision matrix, secret policy,
+        certificate guidance, and legacy-surface deprecation map in
+        docs/commercialization/m365-config-migration-and-auth-policy.md. The
+        supported posture is now singular: tenant YAML selected by UCP_TENANT is
+        the production authority, app_only is the default production auth mode,
+        certificate auth is enterprise-preferred, client secret is transitional
+        only, and delegated auth is local and test only.
+  next_phase: P2A
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface
