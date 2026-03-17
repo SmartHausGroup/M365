@@ -176,6 +176,20 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 ---
 
+## Initiative: M365 Repo Worktree Cleanup and Separation
+
+**Initiative:** Reduce the current mixed dirty worktree into a safe, reviewable state by removing plaintext secret-bearing artifacts, reverting formatter-only fallout from the failed repo-wide pre-commit run, and separating the remaining substantive payload into explicit keep, split, and delete buckets.
+
+**Plan:** `plans/m365-repo-worktree-cleanup-separation/m365-repo-worktree-cleanup-separation.md`
+
+**Reference:** `plan:m365-repo-worktree-cleanup-separation:R1`
+
+**Status:** 🟡 Active (2026-03-17) — `R1` through `R3` are complete: the cleanup plan and prompt pair exist, the plaintext secret-bearing local docs have been removed from the worktree, and the formatter-only tracked fallout from the failed repo-wide pre-commit run has been reverted. `R4` is now in progress under explicit user direction to treat the remaining substantive payload as intended keep-work for commit/push, excluding only the removed secret docs and ignored cache artifacts.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-repo-worktree-cleanup-separation.md`, `docs/prompts/codex-m365-repo-worktree-cleanup-separation-prompt.txt`
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.

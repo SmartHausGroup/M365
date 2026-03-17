@@ -1,0 +1,401 @@
+{
+  "platform": {
+    "name": "SmartHaus M365 Project Management Platform",
+    "version": "1.0.0",
+    "description": "Complete project management platform using M365 E3 features",
+    "owner": "phil@smarthausgroup.com",
+    "tenant": "smarthausgroup.com"
+  },
+  "m365_services": {
+    "sharepoint": {
+      "enabled": true,
+      "project_sites": true,
+      "document_libraries": true,
+      "project_calendars": true,
+      "task_lists": true
+    },
+    "teams": {
+      "enabled": true,
+      "project_channels": true,
+      "team_collaboration": true,
+      "meeting_integration": true
+    },
+    "power_automate": {
+      "enabled": true,
+      "workflows": [
+        "project_status_updates",
+        "task_assignment_notifications",
+        "deadline_reminders",
+        "progress_reports",
+        "team_sync_notifications"
+      ]
+    },
+    "power_bi": {
+      "enabled": true,
+      "dashboards": [
+        "project_overview",
+        "resource_utilization",
+        "timeline_tracking",
+        "performance_metrics"
+      ]
+    },
+    "project_online": {
+      "enabled": true,
+      "license": "P2",
+      "features": [
+        "project_planning",
+        "resource_management",
+        "portfolio_management",
+        "reporting"
+      ]
+    }
+  },
+  "project_templates": {
+    "website_development": {
+      "name": "Website Development",
+      "description": "Standard template for website development projects",
+      "phases": [
+        {
+          "name": "Planning",
+          "duration": "1-2 weeks",
+          "tasks": [
+            "Requirements gathering",
+            "User research",
+            "Technical architecture",
+            "Project timeline"
+          ]
+        },
+        {
+          "name": "Design",
+          "duration": "2-3 weeks",
+          "tasks": [
+            "UI/UX design",
+            "Wireframes",
+            "Prototypes",
+            "Design system"
+          ]
+        },
+        {
+          "name": "Development",
+          "duration": "4-8 weeks",
+          "tasks": [
+            "Frontend development",
+            "Backend development",
+            "API integration",
+            "Testing"
+          ]
+        },
+        {
+          "name": "Testing",
+          "duration": "1-2 weeks",
+          "tasks": [
+            "Unit testing",
+            "Integration testing",
+            "User acceptance testing",
+            "Performance testing"
+          ]
+        },
+        {
+          "name": "Deployment",
+          "duration": "1 week",
+          "tasks": [
+            "Production deployment",
+            "Monitoring setup",
+            "Documentation",
+            "Training"
+          ]
+        }
+      ]
+    },
+    "ai_research": {
+      "name": "AI Research",
+      "description": "Template for AI research and development projects",
+      "phases": [
+        {
+          "name": "Research",
+          "duration": "2-4 weeks",
+          "tasks": [
+            "Literature review",
+            "State of the art analysis",
+            "Research questions",
+            "Methodology design"
+          ]
+        },
+        {
+          "name": "Prototyping",
+          "duration": "3-6 weeks",
+          "tasks": [
+            "Concept development",
+            "Initial prototypes",
+            "Feasibility testing",
+            "Iteration"
+          ]
+        },
+        {
+          "name": "Development",
+          "duration": "6-12 weeks",
+          "tasks": [
+            "Core implementation",
+            "Algorithm development",
+            "Integration",
+            "Testing"
+          ]
+        },
+        {
+          "name": "Validation",
+          "duration": "2-4 weeks",
+          "tasks": [
+            "Performance evaluation",
+            "Accuracy testing",
+            "Benchmarking",
+            "Validation studies"
+          ]
+        },
+        {
+          "name": "Documentation",
+          "duration": "1-2 weeks",
+          "tasks": [
+            "Technical documentation",
+            "Research papers",
+            "User guides",
+            "Knowledge transfer"
+          ]
+        }
+      ]
+    },
+    "platform_integration": {
+      "name": "Platform Integration",
+      "description": "Template for platform integration projects",
+      "phases": [
+        {
+          "name": "Analysis",
+          "duration": "1-2 weeks",
+          "tasks": [
+            "Current state analysis",
+            "Integration requirements",
+            "API documentation review",
+            "Technical feasibility"
+          ]
+        },
+        {
+          "name": "Design",
+          "duration": "2-3 weeks",
+          "tasks": [
+            "Integration architecture",
+            "Data flow design",
+            "API design",
+            "Security design"
+          ]
+        },
+        {
+          "name": "Implementation",
+          "duration": "4-8 weeks",
+          "tasks": [
+            "Core integration",
+            "API development",
+            "Data mapping",
+            "Testing"
+          ]
+        },
+        {
+          "name": "Testing",
+          "duration": "2-3 weeks",
+          "tasks": [
+            "Integration testing",
+            "End-to-end testing",
+            "Performance testing",
+            "Security testing"
+          ]
+        },
+        {
+          "name": "Deployment",
+          "duration": "1-2 weeks",
+          "tasks": [
+            "Production deployment",
+            "Monitoring",
+            "Documentation",
+            "Training"
+          ]
+        }
+      ]
+    }
+  },
+  "current_projects": [
+    {
+      "id": "proj-smarthaus-website-redesign-9359",
+      "name": "SmartHaus Website Redesign",
+      "description": "Modernizing the website with Next.js and improved UX",
+      "status": "active",
+      "progress": 85,
+      "owner": "phil@smarthausgroup.com",
+      "template": "website_development",
+      "start_date": "2025-01-01",
+      "target_date": "2025-03-31",
+      "team": [
+        "phil@smarthausgroup.com",
+        "frontend-team@smarthausgroup.com",
+        "design-team@smarthausgroup.com"
+      ]
+    },
+    {
+      "id": "proj-aiucp-implementation-6986",
+      "name": "AIUCP Implementation",
+      "description": "AI User Control Protocol integration for SmartHaus platforms",
+      "status": "planned",
+      "progress": 0,
+      "owner": "phil@smarthausgroup.com",
+      "template": "ai_research",
+      "start_date": "2025-04-01",
+      "target_date": "2025-08-31",
+      "team": [
+        "phil@smarthausgroup.com",
+        "ai-team@smarthausgroup.com",
+        "research-team@smarthausgroup.com"
+      ]
+    }
+  ],
+  "automation_workflows": {
+    "project_status_updates": {
+      "name": "Project Status Updates",
+      "description": "Automatically update project status and notify stakeholders",
+      "triggers": [
+        "project_milestone_completed",
+        "project_status_changed",
+        "weekly_status_report"
+      ],
+      "actions": [
+        "update_project_dashboard",
+        "send_email_notifications",
+        "update_sharepoint_lists",
+        "create_teams_notifications"
+      ]
+    },
+    "task_assignment_notifications": {
+      "name": "Task Assignment Notifications",
+      "description": "Notify team members when tasks are assigned",
+      "triggers": [
+        "task_assigned",
+        "task_deadline_approaching",
+        "task_completed"
+      ],
+      "actions": [
+        "send_email_notification",
+        "create_teams_message",
+        "update_task_status",
+        "log_activity"
+      ]
+    },
+    "deadline_reminders": {
+      "name": "Deadline Reminders",
+      "description": "Send reminders for approaching deadlines",
+      "triggers": [
+        "deadline_approaching",
+        "overdue_task",
+        "milestone_due"
+      ],
+      "actions": [
+        "send_reminder_email",
+        "create_teams_alert",
+        "escalate_to_manager",
+        "update_project_status"
+      ]
+    }
+  },
+  "reporting_dashboards": {
+    "project_overview": {
+      "name": "Project Overview Dashboard",
+      "description": "High-level view of all projects and their status",
+      "metrics": [
+        "total_projects",
+        "active_projects",
+        "completed_projects",
+        "overall_progress",
+        "resource_utilization"
+      ],
+      "visualizations": [
+        "project_status_chart",
+        "progress_timeline",
+        "resource_allocation",
+        "risk_heatmap"
+      ]
+    },
+    "resource_utilization": {
+      "name": "Resource Utilization Dashboard",
+      "description": "Track team member workload and capacity",
+      "metrics": [
+        "team_member_workload",
+        "project_allocation",
+        "capacity_planning",
+        "skill_gaps"
+      ],
+      "visualizations": [
+        "workload_chart",
+        "capacity_heatmap",
+        "skill_matrix",
+        "allocation_timeline"
+      ]
+    },
+    "performance_metrics": {
+      "name": "Performance Metrics Dashboard",
+      "description": "Track project performance and KPIs",
+      "metrics": [
+        "on_time_delivery",
+        "budget_variance",
+        "quality_metrics",
+        "customer_satisfaction"
+      ],
+      "visualizations": [
+        "performance_trends",
+        "kpi_scorecards",
+        "variance_analysis",
+        "quality_metrics"
+      ]
+    }
+  },
+  "integration_endpoints": {
+    "github": {
+      "enabled": true,
+      "webhooks": [
+        "pull_request_created",
+        "issue_assigned",
+        "milestone_completed",
+        "release_created"
+      ],
+      "sync_fields": [
+        "project_status",
+        "task_completion",
+        "milestone_progress",
+        "team_activity"
+      ]
+    },
+    "teams": {
+      "enabled": true,
+      "channels": [
+        "project-updates",
+        "team-coordination",
+        "status-reports",
+        "general-discussion"
+      ],
+      "integrations": [
+        "project_status_bot",
+        "task_assignment_bot",
+        "deadline_reminder_bot"
+      ]
+    },
+    "sharepoint": {
+      "enabled": true,
+      "libraries": [
+        "project_documents",
+        "project_templates",
+        "meeting_minutes",
+        "technical_documentation"
+      ],
+      "lists": [
+        "project_tasks",
+        "project_milestones",
+        "project_risks",
+        "project_resources"
+      ]
+    }
+  }
+}

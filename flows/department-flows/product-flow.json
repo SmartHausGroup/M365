@@ -1,0 +1,9 @@
+{
+  "name": "Product Automation",
+  "department": "product",
+  "trigger": { "type": "Manual", "description": "New feature intake" },
+  "steps": [
+    { "action": "CreateSharePointItem", "site": "Product Hub", "list": "Backlog" },
+    { "action": "PostTeamsMessage", "channel": "planning", "message": "New feature proposal" }
+  ]
+}

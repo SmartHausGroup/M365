@@ -1,0 +1,54 @@
+---
+description: Post-Work Enforcement Rule - Mandatory post-work checklist verification
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Post-Work Enforcement Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+## Enforcement
+
+**MANDATORY:** This checklist applies to ALL work, no exceptions.
+
+**Verification Before Completing Work (Step 8):**
+- [ ] Step 5: Action log updated? (MANDATORY - verify entry is at top of file)
+- [ ] Step 6: Execution plan updated? (if milestone-related - verify changes in file)
+- [ ] Step 6: Project status updated? (if milestone-related - verify changes in file)
+- [ ] Step 7: Task progress updated? (if task completed - verify checkbox marked)
+
+**CRITICAL:** If ANY applicable step is missing, the work is NOT complete. You MUST complete all missing steps before considering work finished.
+
+**How to Verify:**
+1. Read `Operations/ACTION_LOG.md` - confirm your entry is at the top with all required elements
+2. Read `Operations/EXECUTION_PLAN.md` - confirm updates if milestone-related
+3. Read `Operations/EXECUTION_PLAN.md` - confirm updates if milestone-related
+4. Confirm all applicable steps are actually done (not just "I should do this")
+
+---
+
+## Why This Matters
+
+These updates ensure:
+- **Traceability:** Every action is logged and tracked
+- **Visibility:** Progress is visible in execution plan and project status
+- **Accountability:** Clear record of what was done and when
+- **Coordination:** Other agents/users can see current state
+
+**Skipping these steps breaks the workflow and makes progress invisible.**
+
+---
+
+## Integration
+
+This rule enforces Steps 5-7 of `.cursor/rules/agent-workflow-mandatory.mdc`.
+
+**Reference:** `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.0

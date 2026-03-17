@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: SmartHaus M365 Ops Adapter — Execute Agent Action
+  description: |
+    Single operation for ChatGPT Custom GPT: execute an M365 agent action.
+    Configure the server URL in your Custom GPT to point at your deployed ops adapter (e.g. https://ops-adapter.example.com).
+  version: 1.0.0
+
+servers:
+  - url: https://your-ops-adapter.example.com
+    description: Replace with your ops adapter base URL (no trailing slash)
+
+paths:
+  /actions/{agent}/{action}:
+    post:
+      operationId: executeM365AgentAction
+      summary: Execute an M365 agent action
+      description: |
+        Runs the specified action for the given agent. Agent and action must be allowed in registry/agents.yaml.
+        Policy (OPA) and approvals apply; some actions may return pending_approval with an approval_id.
+      parameters:
+        - name: agent
+          in: path
+          required: true
+          description: Agent ID (e.g. m365-administrator, project-manager, teams-manager). See registry/agents.yaml.
+          schema:
+            type: string
+        - name: action
+          in: path
+          required: true
+          description: Action ID (e.g. users.read, create-project, create-workspace). See registry/agents.yaml per agent.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - params
+              properties:
+                params:
+                  type: object
+                  description: Key-value parameters for the action (e.g. userPrincipalName, name, to, subject). Varies by action.
+                  additionalProperties: true
+      responses:
+        '200':
+          description: Action executed or pending approval
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success, pending_approval]
+                  result:
+                    type: object
+                    description: Present when status is success; action-specific payload.
+                  approval_id:
+                    type: string
+                    description: Present when status is pending_approval; use to approve/deny via /approvals API.
+                  reason:
+                    type: string
+                    description: Optional message (e.g. error or denial reason).
+        '400':
+          description: Invalid agent or action
+        '403':
+          description: Policy denied
+        '429':
+          description: Rate limited
+        '500':
+          description: Action execution failed

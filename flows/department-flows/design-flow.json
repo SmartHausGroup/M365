@@ -1,0 +1,9 @@
+{
+  "name": "Design Automation",
+  "department": "design",
+  "trigger": { "type": "Manual", "description": "New design request" },
+  "steps": [
+    { "action": "CreateSharePointItem", "site": "Design Hub", "list": "Design Requests" },
+    { "action": "PostTeamsMessage", "channel": "reviews", "message": "Design review scheduled" }
+  ]
+}

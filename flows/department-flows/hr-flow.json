@@ -1,0 +1,9 @@
+{
+  "name": "HR Automation",
+  "department": "hr",
+  "trigger": { "type": "SharePointItemCreated", "site": "HR Hub", "list": "Employee Tasks" },
+  "steps": [
+    { "action": "CreateUser", "fields": ["userPrincipalName", "displayName"] },
+    { "action": "PostTeamsMessage", "channel": "onboarding", "message": "Onboarding ticket opened" }
+  ]
+}

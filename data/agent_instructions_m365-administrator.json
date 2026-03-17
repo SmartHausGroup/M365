@@ -1,0 +1,10 @@
+[
+  {
+    "id": "8e54d9f5-709e-45bc-8741-45884e54d605",
+    "ts": 1757767402,
+    "instruction": "Create user jdoe@example.com",
+    "mode": "immediate",
+    "priority": "normal",
+    "scheduled_at": null
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "name": "Communication Automation",
+  "department": "communication",
+  "trigger": { "type": "Manual", "description": "Create campaign" },
+  "steps": [
+    { "action": "CreateSharePointItem", "site": "Communication Hub", "list": "Campaign Tasks" },
+    { "action": "PostTeamsMessage", "channel": "campaign-management", "message": "Campaign created" }
+  ]
+}

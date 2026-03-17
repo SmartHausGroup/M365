@@ -18,9 +18,7 @@ from m365.eval.validity import is_valid
 SUCCESS = "Success"
 
 
-def eval_partial(
-    instruction: Any, tenant_state: Any
-) -> tuple[str, Any, list[Any]] | None:
+def eval_partial(instruction: Any, tenant_state: Any) -> tuple[str, Any, list[Any]] | None:
     """
     Partial function: same (instruction, tenant_state) -> same result or both undefined.
 

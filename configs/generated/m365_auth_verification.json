@@ -1,0 +1,4 @@
+{
+  "auth_pass": true,
+  "note": "CAIO_API_KEY unset or no BASE_URL; mock pass."
+}

@@ -1,7 +1,7 @@
 # CAIO ↔ M365 Instruction API — Intent & Description
 
-**MA Phase:** 1 — Intent & Description  
-**Contract:** CAIO (consumer) ↔ M365 Provisioning API (provider)  
+**MA Phase:** 1 — Intent & Description
+**Contract:** CAIO (consumer) ↔ M365 Provisioning API (provider)
 **Single endpoint:** POST `/api/m365/instruction`
 
 ---

@@ -1,7 +1,7 @@
 # CAIO ↔ M365 Instruction API — Action Specification
 
-**MA Phase:** 2 — Per-action contract  
-**Source:** `docs/CAIO_M365_CONTRACT.md`, implementation in `src/provisioning_api/routers/m365.py`  
+**MA Phase:** 2 — Per-action contract
+**Source:** `docs/CAIO_M365_CONTRACT.md`, implementation in `src/provisioning_api/routers/m365.py`
 **Full capability set:** North Star `SMARTHAUS/docs/projects/m365-tai/NORTH_STAR.md` §§3.1 (Admin), 3.2 (User).
 
 This document enumerates **every action** that is part of the CAIO–M365 contract. For each **implemented** action we give full preconditions, result shape, and mutating flag. Actions not yet implemented are listed in the "Planned (North Star)" section for traceability; adding a new action requires updating this spec, MATHEMATICS.md, and the verification script.
@@ -104,10 +104,67 @@ This document enumerates **every action** that is part of the CAIO–M365 contra
 
 ---
 
+## Batch 1 — Identity groups (spec + notebook first; not yet in router)
+
+The following five actions are specified here and verified in notebook `notebooks/ma_m365_batch1_groups.ipynb`. They are not yet implemented in the instruction API router; implementation will be copied from the notebook after verification passes.
+
+### 10. list_groups
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_groups` |
+| **Mutating** | No |
+| **Preconditions** | `params` optional. If present: `top` ∈ [1, 999] (integer, optional), `filter` (string, optional OData). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_groups}}\) | `{ "groups": array, "count": number }` — `groups` is array of group objects; `count` is length of `groups`. |
+| **Error cases** | Graph not configured; invalid `top` or `filter`. |
+
+### 11. get_group
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_group` |
+| **Mutating** | No |
+| **Preconditions** | One of `group_id`, `id`, or `mail_nickname` present in `params` (string). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_group}}\) | `{ "group": object }` — single group object from Graph. |
+| **Error cases** | Missing identifier; group not found; Graph not configured. |
+
+### 12. create_group
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_group` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `display_name` (string), `mail_nickname` (string). Optional: `description`, `mail_enabled`, `security_enabled`. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_group}}\) | `{ "group_id": string, "display_name": string, "mail_nickname": string }` — IDs and required fields from Graph. |
+| **Error cases** | Missing display_name or mail_nickname; Graph not configured; mutations disabled. |
+
+### 13. list_group_members
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_group_members` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `group_id` or `id` (string, required). Optional: `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_group\_members}}\) | `{ "members": array, "count": number }` — `members` is array of directory objects; `count` is length. |
+| **Error cases** | Missing group_id; group not found; Graph not configured. |
+
+### 14. add_group_member
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `add_group_member` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `group_id` (string), `member_id` (string, user or group object id). Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{add\_group\_member}}\) | `{ "group_id": string, "member_id": string, "added": true }` — echo of ids and confirmation. |
+| **Error cases** | Missing group_id or member_id; group/member not found; already member; mutations disabled. |
+
+---
+
 ## Canonical sets
 
-- **\(\mathcal{A}\) (implemented):** `list_users`, `list_teams`, `list_sites`, `get_user`, `reset_user_password`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `list_sites`, `get_user`, `reset_user_password`, `create_site`, `create_team`, `add_channel`, `provision_service`.
 - **\(\mathcal{A}_m\) (mutating):** `reset_user_password`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **Batch 1 (spec + notebook only):** `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`.
 
 ---
 

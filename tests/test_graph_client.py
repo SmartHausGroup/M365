@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import httpx
 import respx
-
 from smarthaus_common.config import AppConfig
 from smarthaus_graph.client import GraphClient, GraphTokenProvider
 

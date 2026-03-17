@@ -18,4 +18,3 @@ for name in $instances; do
 done
 
 echo "Backups written to $BACKUP_ROOT"
-

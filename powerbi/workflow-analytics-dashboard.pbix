@@ -1,0 +1,143 @@
+{
+  "version": "1.0.0",
+  "name": "SmartHaus Workflow Analytics Dashboard",
+  "description": "Power Automate workflow performance and automation analytics",
+  "data_sources": [
+    {
+      "name": "Power Automate Runs",
+      "url": "https://api.flow.microsoft.com/v1.0/me/environments/{environment}/flows/{flow_id}/runs",
+      "type": "Power Automate API",
+      "refresh_frequency": "5 minutes"
+    },
+    {
+      "name": "Workflow Triggers",
+      "url": "https://api.flow.microsoft.com/v1.0/me/environments/{environment}/flows/{flow_id}/triggers",
+      "type": "Power Automate API",
+      "refresh_frequency": "10 minutes"
+    },
+    {
+      "name": "SharePoint Lists",
+      "url": "https://smarthausgroup.sharepoint.com/_api/web/lists",
+      "type": "SharePoint REST API",
+      "refresh_frequency": "15 minutes"
+    }
+  ],
+  "visualizations": [
+    {
+      "name": "Workflow Execution Summary",
+      "type": "Card",
+      "data_source": "Power Automate Runs",
+      "metric": "total_runs",
+      "format": "Number",
+      "position": {"x": 0, "y": 0, "width": 150, "height": 100}
+    },
+    {
+      "name": "Success Rate",
+      "type": "Card",
+      "data_source": "Power Automate Runs",
+      "metric": "success_rate",
+      "format": "Percentage",
+      "position": {"x": 170, "y": 0, "width": 150, "height": 100}
+    },
+    {
+      "name": "Average Duration",
+      "type": "Card",
+      "data_source": "Power Automate Runs",
+      "metric": "avg_duration",
+      "format": "Duration",
+      "position": {"x": 340, "y": 0, "width": 150, "height": 100}
+    },
+    {
+      "name": "Failed Runs",
+      "type": "Card",
+      "data_source": "Power Automate Runs",
+      "metric": "failed_runs",
+      "format": "Number",
+      "position": {"x": 510, "y": 0, "width": 150, "height": 100}
+    },
+    {
+      "name": "Workflow Performance by Department",
+      "type": "Bar Chart",
+      "data_source": "Power Automate Runs",
+      "x_axis": "department",
+      "y_axis": "execution_count",
+      "position": {"x": 0, "y": 120, "width": 400, "height": 300}
+    },
+    {
+      "name": "Execution Trends",
+      "type": "Line Chart",
+      "data_source": "Power Automate Runs",
+      "x_axis": "date",
+      "y_axis": "runs_count",
+      "series": "workflow_name",
+      "position": {"x": 420, "y": 120, "width": 400, "height": 300}
+    },
+    {
+      "name": "Error Analysis",
+      "type": "Pie Chart",
+      "data_source": "Power Automate Runs",
+      "category": "error_type",
+      "value": "error_count",
+      "position": {"x": 0, "y": 440, "width": 300, "height": 250}
+    },
+    {
+      "name": "Trigger Performance",
+      "type": "Table",
+      "data_source": "Workflow Triggers",
+      "columns": ["trigger_name", "department", "success_rate", "avg_response_time"],
+      "position": {"x": 320, "y": 440, "width": 500, "height": 250}
+    },
+    {
+      "name": "SharePoint List Activity",
+      "type": "Area Chart",
+      "data_source": "SharePoint Lists",
+      "x_axis": "date",
+      "y_axis": "item_count",
+      "series": "list_name",
+      "position": {"x": 0, "y": 710, "width": 600, "height": 300}
+    }
+  ],
+  "alerts": [
+    {
+      "name": "Workflow Failure Alert",
+      "condition": "success_rate < 0.9",
+      "threshold": 0.9,
+      "notification": "Email to operations team"
+    },
+    {
+      "name": "High Execution Time Alert",
+      "condition": "avg_duration > 300",
+      "threshold": 300,
+      "notification": "Teams notification"
+    },
+    {
+      "name": "SharePoint List Growth Alert",
+      "condition": "item_count > 10000",
+      "threshold": 10000,
+      "notification": "Dashboard notification"
+    }
+  ],
+  "filters": [
+    {
+      "name": "Department Filter",
+      "type": "Slicer",
+      "data_source": "Power Automate Runs",
+      "column": "department",
+      "position": {"x": 0, "y": 1030, "width": 200, "height": 100}
+    },
+    {
+      "name": "Workflow Filter",
+      "type": "Slicer",
+      "data_source": "Power Automate Runs",
+      "column": "workflow_name",
+      "position": {"x": 220, "y": 1030, "width": 200, "height": 100}
+    },
+    {
+      "name": "Date Range Filter",
+      "type": "Date Slicer",
+      "data_source": "Power Automate Runs",
+      "column": "date",
+      "position": {"x": 440, "y": 1030, "width": 200, "height": 100}
+    }
+  ]
+}

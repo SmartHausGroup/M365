@@ -1,0 +1,9 @@
+{
+  "name": "Project Management Automation",
+  "department": "project-management",
+  "trigger": { "type": "Manual", "description": "New release" },
+  "steps": [
+    { "action": "CreatePlannerTask", "plan": "Project Management Board", "bucket": "Backlog" },
+    { "action": "PostTeamsMessage", "channel": "releases", "message": "Release pipeline started" }
+  ]
+}

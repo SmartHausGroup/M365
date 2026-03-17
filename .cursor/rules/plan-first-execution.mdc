@@ -1,0 +1,303 @@
+---
+description: Plan-First Execution Rule - All work must be associated with an execution plan
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Plan-First Execution Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Rule: ALL Work Must Be Plan-Associated
+
+**MANDATORY:** Before executing ANY work (code changes, investigations, implementations, etc.), you MUST:
+
+1. **Verify Plan Exists:** Check if an execution plan exists for the work
+2. **Check EXECUTION_PLAN.md:** Verify work is in main execution plan (PRIMARY - MANDATORY)
+3. **Check /plans/ Directory:** Verify detailed plan exists if needed (OPTIONAL - only for large initiatives explicitly authorized in Execution Plan)
+4. **Create Plan if Missing:** If no plan exists in EXECUTION_PLAN.md, STOP and ask user to add it (do NOT create /plans/ unless explicitly requested)
+5. **Reference Plan:** All work must reference a specific plan item
+6. **Document Work:** Update the plan with progress and completion status
+
+**This is Step 2 of the Mandatory Agent Workflow.** See `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow.
+
+---
+
+## Work Authorization Process
+
+### Step 1: Plan Verification
+
+Before starting ANY work, you MUST:
+
+1. **Check Operations/EXECUTION_PLAN.md FIRST (MANDATORY):**
+   - Search `Operations/EXECUTION_PLAN.md` for related tasks/requirements
+   - Verify the work aligns with an existing plan item
+   - Note the phase, task ID, and requirement
+   - If found: Reference as `plan:EXECUTION_PLAN:{phase}.{task-id}` (e.g., `plan:EXECUTION_PLAN:2.2.2`)
+
+2. **Check /plans/ Directory (OPTIONAL):**
+   - Search `/plans/` directory for detailed plans (only if explicitly authorized in Execution Plan)
+   - Check if detailed plan exists for the work
+   - If found: Reference as `plan:{plan-id}:{requirement-id}`
+   - **Note:** SmartHaus M365 AI Workforce uses `Operations/EXECUTION_PLAN.md` as the primary plan system. `/plans/` is only for large initiatives when explicitly requested.
+
+3. **If Plan Exists (in either location):**
+   - Reference the plan ID and specific requirement/item
+   - Verify you have authorization to work on that item
+   - Proceed with work against that plan item
+
+4. **If No Plan Exists:**
+   - **STOP** - Do not proceed with work
+   - **HUMAN-IN-THE-LOOP:** Explain: "This work is aligned with North Star but not in execution plan."
+   - **HUMAN-IN-THE-LOOP:** Ask: "Should we: (a) add this to execution plan, or (b) stop this work?"
+   - **DO NOT proceed** until user explicitly approves and plan is updated
+
+### Step 2: Plan Creation (When Required)
+
+**IMPORTANT:** SmartHaus M365 AI Workforce uses `Operations/EXECUTION_PLAN.md` as the primary plan system. Only create plans in `/plans/` if:
+- The work is a large initiative explicitly authorized in the Execution Plan
+- The user explicitly requests a detailed plan in `/plans/`
+
+If creating a new plan in `/plans/` (only when explicitly requested):
+
+1. **Create Plan in `/plans/` Directory:**
+   - Create subdirectory: `/plans/{plan-name}/`
+   - Create Markdown format file: `{plan-name}.md` (REQUIRED)
+   - Create YAML format file: `{plan-name}.yaml` (OPTIONAL - only if tooling requires it)
+   - Create JSON format file: `{plan-name}.json` (OPTIONAL - only if tooling requires it)
+
+2. **Plan Must Include:**
+   - Plan metadata (ID, version, status, owner, dates)
+   - Objective and scope
+   - Detailed requirements/checklist items
+   - Validation procedures
+   - Success criteria
+   - Dependencies
+   - Status update requirements
+
+3. **For Mathematical/Algorithmic Work: Plan Must Follow MA Process**
+
+   **MANDATORY:** If the plan involves mathematical operations, algorithms, or performance guarantees, the plan MUST explicitly follow the Mathematical Autopsy (MA) process. See `.cursor/rules/ma-process-mandatory.mdc` for complete MA process.
+
+   **The plan MUST include MA Phases 1-5 in order:**
+
+   - **Phase 1: Intent & Description**
+     - Problem statement (what, why, context, success criteria)
+     - Conceptual significance (plain-English, stakeholders)
+
+   - **Phase 2: Mathematical Foundation**
+     - Definitions & notation documented (`docs/algorithms/OPERATORS.md` or equivalent)
+     - Formal operators specified (equations, complexity, implementation notes)
+
+   - **Phase 3: Lemma Development**
+     - YAML Invariant created (`invariants/INV-XXXX.yaml` - if invariants system is used)
+     - Markdown Lemma written (`docs/algorithms/LEMMAS.md` or equivalent)
+     - Added to invariant index (if invariants system is used)
+
+   - **Phase 4: Verification Notebook**
+     - Verification notebook created (`notebooks/algorithms/<name>.ipynb` or `notebooks/math/<name>.ipynb`)
+     - Implementation code written directly in notebook (NOT imported from codebase)
+     - Functions separated and individually testable (one function per cell)
+     - Each function tested individually (function-level test cells)
+     - All debugging completed in notebook (no issues remain)
+     - VERIFY:L<N> cell with assertions
+     - Artifact JSON exported (`configs/generated/<name>.json` - if artifact system is used)
+     - Notebook runs successfully locally (ALL functions pass tests)
+     - **CRITICAL:** Notebook must be iterated upon until ALL tests pass before extraction
+
+   - **Phase 5: CI Enforcement**
+     - Artifact registered in documentation (if artifact system is used)
+     - Notebook added to plan
+     - Alignment guide updated (if applicable)
+     - ADR created (if invariant/threshold changed)
+     - Invariant status: `draft` → `accepted`
+     - Lemma status: `Draft` → `Rev X.Y`
+
+   - **After Phases 1-5 Complete: Code Implementation**
+     - Code extracted from Phase 4 notebook using extraction script (see `.cursor/rules/notebook-first-mandatory.mdc`)
+     - Extraction script creates/updates Python files automatically
+     - Tests validate against Phase 4 notebook
+     - Telemetry matches Phase 3 invariant
+
+   **The plan MUST NOT:**
+   - Skip to code implementation without completing MA Phases 1-5
+   - Allow code to be written directly in codebase (must originate in notebooks)
+   - Allow manual editing of codebase files (must use extraction script)
+   - Allow extraction before all notebook tests pass
+
+   **The plan MUST reference:**
+   - `.cursor/rules/ma-process-mandatory.mdc` - MA process requirements
+   - `.cursor/rules/notebook-first-mandatory.mdc` - Notebook-first requirements
+
+4. **Get Approval:**
+   - Present plan to user for approval
+   - Wait for explicit approval before executing
+   - Do not proceed until plan is approved
+
+### Step 3: Work Execution
+
+When executing work against a plan:
+
+1. **Reference Plan:**
+   - Always reference the plan ID and specific requirement/item
+   - Example: "Executing Phase 0.3 from plan phase-0-closure, requirement 0.3.1"
+
+2. **Follow Plan Structure:**
+   - Execute work in the order specified by the plan
+   - Complete validation steps as defined
+   - Update status as work progresses
+
+3. **For Mathematical/Algorithmic Work: Follow MA Process**
+
+   **MANDATORY:** If the plan involves mathematical operations, algorithms, or performance guarantees, you MUST:
+
+   - **Complete MA Phases 1-5 in order** (do not skip phases)
+   - **Phase 1-3:** Complete intent, math foundation, and lemmas/invariants before notebooks
+   - **Phase 4:** Write code in notebooks, separate functions, test each function individually, debug in notebooks, iterate until ALL tests pass
+   - **Phase 5:** Complete CI enforcement before code extraction
+   - **After Phases 1-5:** Extract code from notebook using extraction script (never manually edit codebase files)
+
+   **NEVER:**
+   - Skip to code implementation without completing MA Phases 1-5
+   - Write code directly in codebase (must originate in notebooks)
+   - Manually edit codebase files (must use extraction script)
+   - Extract code before all notebook tests pass
+   - Debug in codebase (fix in notebooks, then re-extract)
+
+   **If you find yourself writing code in codebase:**
+   - **STOP immediately**
+   - Complete MA Phases 1-5 in order
+   - Write code in notebooks first
+   - Test and debug in notebooks
+   - Extract only after all tests pass
+
+4. **Document Progress:**
+   - Update plan status (in-progress, complete, blocked)
+   - Update `Operations/ACTION_LOG.md` with plan reference
+   - Update `Operations/EXECUTION_PLAN.md` if applicable
+
+---
+
+## Forbidden Actions
+
+**NEVER:**
+- Execute work without a plan reference
+- Create plans without approval
+- Skip plan creation for new work
+- Work on items not in an execution plan
+- Create ad-hoc work outside of plans
+
+**EXCEPTIONS:**
+- Read-only operations (file reading, searching, investigation)
+- Emergency hotfixes (must create plan retroactively)
+- Explicit user override (document the override)
+
+---
+
+## Plan Location and Format
+
+**Plans Directory:** `/plans/`
+
+**Plan Structure:**
+```
+plans/
+├── README.md
+└── {plan-name}/
+    ├── {plan-name}.md
+    ├── {plan-name}.yaml
+    └── {plan-name}.json
+```
+
+**Plan Naming:**
+- Use kebab-case: `phase-0-closure`, `feature-x-implementation`
+- Be descriptive and specific
+- Reference related execution plan items when applicable
+
+---
+
+## Integration with Other Rules
+
+This rule is **Step 2** of the Mandatory Agent Workflow. See `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow.
+
+This rule works alongside:
+- **Mandatory Agent Workflow:** This is Step 2 (pre-work checklist, after North Star check)
+- **North Star Alignment:** Step 1 must be completed first (plans must align with North Star)
+- **MA Process Mandatory Rule:** Plans for mathematical/algorithmic work must follow MA Phases 1-5
+- **Notebook-First Mandatory Rule:** Code must originate in notebooks, tested and debugged before extraction
+- **Change-Approval Protocol:** Step 3 requires plan reference in approval request
+- **Action Log Requirement:** Step 5 requires logging plan reference
+- **Execution Plan Updates:** Step 6-7 requires updating `Operations/EXECUTION_PLAN.md` when milestones/tasks affected
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to:
+
+- All Codex agents (via `AGENTS.md` and `docs/codex/CODEX_OPERATING_RULE.mdc`)
+- All Cursor AI assistants (via `.cursor/rules/`)
+- All external agents accessing the repository
+- All automated systems performing work
+
+**Verification:**
+- Before any write operation, verify plan reference exists
+- If no plan reference, stop and create plan
+- Document plan reference in all action logs
+
+---
+
+## Examples
+
+### ✅ Good: Plan-Associated Work
+
+**Scenario:** Implementing Phase 0.3 requirement
+
+**Process:**
+1. Check `/plans/phase-0-closure/phase-0-closure.md`
+2. Reference requirement 0.3: "Development Environment Setup"
+3. Execute work: "Verifying Makefile targets per plan phase-0-closure requirement 0.3.1"
+4. Update plan status and action log
+
+### ❌ Bad: Work Without Plan
+
+**Scenario:** Adding a new feature
+
+**Process:**
+1. ❌ **WRONG:** Start implementing feature immediately
+2. ✅ **CORRECT:**
+   - Stop and check for plan
+   - If no plan exists, create plan in `/plans/`
+   - Get approval
+   - Then execute
+
+---
+
+## Plan Reference Format
+
+When referencing plans in logs, commits, or documentation:
+
+**Format:** `plan:{plan-id}:{requirement-id}`
+
+**Examples:**
+- `plan:phase-0-closure:0.3.1`
+- `plan:feature-auth:1.2`
+- `plan:bugfix-123:fix`
+
+---
+
+## Related Documents
+
+- `/plans/README.md` - Plans directory documentation
+- `Operations/EXECUTION_PLAN.md` - Main project execution plan
+- `AGENTS.md` - Agent specifications (references this rule)
+- `docs/codex/CODEX_OPERATING_RULE.mdc` - Codex operating rules (references this rule)
+- `.cursor/rules/ma-process-mandatory.mdc` - MA process requirements (MANDATORY for mathematical/algorithmic plans)
+- `.cursor/rules/notebook-first-mandatory.mdc` - Notebook-first requirements (MANDATORY for mathematical/algorithmic plans)
+
+---
+
+**Last Updated:** 2025-12-31
+**Version:** 2.0

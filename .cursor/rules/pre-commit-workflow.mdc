@@ -1,0 +1,149 @@
+---
+description: Pre-Commit Workflow Rule - MANDATORY for all commits
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Pre-Commit Workflow Rule
+
+**Status:** ✅ **MANDATORY**
+**Date:** 2025-01-XX
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: ALWAYS Run Pre-Commit Hooks Before Committing
+
+**MANDATORY:** Before committing ANY changes, you MUST run pre-commit hooks to catch issues locally and minimize GitHub Actions failures.
+
+**Note for AI Agents:** This rule requires providing the commands to run. Agents must provide the commands; humans run them unless explicitly instructed otherwise. See `.cursor/rules/no-unsolicited-execution.mdc` for execution permissions.
+
+---
+
+## Standard Commit Workflow
+
+### Step 1: Run Pre-Commit Hooks (Preferred)
+```bash
+pre-commit run --all-files
+```
+
+This will:
+- Check formatting (black, isort, ruff)
+- Validate YAML syntax
+- Check for secrets
+- Run linting
+- Validate invariants (if applicable)
+- Normalize notebook metadata
+- Check ADR requirements (if applicable)
+
+**Alternative Validation (if pre-commit not available):**
+```bash
+make lint-all    # Run all linting
+make test        # Run tests
+make ai-validate # Full validation (if available)
+```
+
+### Step 2: Fix Any Issues
+If hooks find issues:
+- Auto-fix issues (hooks will modify files automatically)
+- Or run `make ai-fix` for auto-fixes
+- Review changes
+- Re-run hooks: `pre-commit run --all-files`
+- Or re-run validation: `make lint-all && make test`
+- Repeat until all checks pass
+
+### Step 3: Stage Fixed Files
+```bash
+git add -A
+```
+
+### Step 4: Commit
+```bash
+git commit -m "feat: description"
+```
+
+### Step 5: Push (Pre-Push Hooks Run Automatically)
+```bash
+git push origin <branch>
+```
+
+Pre-push hooks will automatically run local validation before push.
+
+---
+
+## What This Prevents
+
+Running pre-commit hooks (or validation) before committing prevents:
+- ❌ Dependency conflicts (duplicate packages)
+- ❌ Missing required files (requirements.txt, pyproject.toml)
+- ❌ Broken documentation links
+- ❌ YAML syntax errors
+- ❌ Formatting inconsistencies
+- ❌ Linting errors
+- ❌ Invalid notebook metadata
+- ❌ Missing ADRs for guardrail changes
+- ❌ Failing tests
+- ❌ Broken imports
+- ❌ JSON validation errors
+
+---
+
+## Enforcement
+
+**MANDATORY:** This workflow MUST be followed for ALL commits.
+
+**Exception:** Only use `--no-verify` for:
+- Emergency hotfixes (document reason)
+- Documentation-only changes that don't affect guardrails
+- Trivial whitespace fixes
+
+**Never skip pre-commit hooks for:**
+- Code changes
+- Configuration changes
+- Dependency updates
+- Invariant changes
+- Math/documentation that affects guardrails
+
+---
+
+## Quick Reference
+
+**Standard workflow (pre-commit hooks):**
+```bash
+pre-commit run --all-files && git add -A && git commit -m "feat: description" && git push
+```
+
+**Alternative workflow (make commands):**
+```bash
+make lint-all && make test && git add -A && git commit -m "feat: description" && git push
+```
+
+**Or use make command (if available):**
+```bash
+make commit-and-push MSG="feat: description"
+```
+
+**Or use AI validation:**
+```bash
+make ai-validate && git add -A && git commit -m "feat: description" && git push
+```
+
+---
+
+## Integration with MA Process
+
+This workflow integrates with the Mathematical Autopsy (MA) process:
+
+1. **Before Phase 5 (CI Enforcement):** Run pre-commit hooks
+2. **After Phase 5:** Pre-push hooks run local validation automatically
+3. **Before Production:** All hooks must pass
+
+See `docs/operations/MA_PROCESS_MANDATORY_RULE.md` for full MA process.
+
+---
+
+## Reference
+
+- **Local Validation Setup:** `docs/operations/LOCAL_VALIDATION_SETUP.md`
+- **Git Workflow:** `docs/operations/GIT_WORKFLOW.md`
+- **MA Process:** `docs/operations/MA_PROCESS_MANDATORY_RULE.md`

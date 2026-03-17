@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from fastapi.testclient import TestClient
+import os
 
+from fastapi.testclient import TestClient
 from provisioning_api.main import app
 
 client = TestClient(app)
@@ -43,3 +44,20 @@ def test_marketing_patents_infra_clients():
     )
     _post("/api/infrastructure/cicd", {"pipeline": "api", "status": "pass", "change": "#42"})
     _post("/api/clients/projects", {"client": "Acme", "project": "AI", "description": "demo"})
+
+
+def test_m365_instruction_gated_idempotent():
+    os.environ["ALLOW_M365_MUTATIONS"] = "false"
+    payload = {
+        "action": "create_site",
+        "params": {"display_name": "Test Site", "mail_nickname": "test-site"},
+    }
+    headers = {"Idempotency-Key": "test-m365-instruction"}
+    r1 = client.post("/api/m365/instruction", json=payload, headers=headers)
+    assert r1.status_code == 200
+    data1 = r1.json()
+    assert data1["ok"] is False
+    assert data1["error"] == "m365_mutations_disabled"
+    r2 = client.post("/api/m365/instruction", json=payload, headers=headers)
+    assert r2.status_code == 200
+    assert r2.json() == data1

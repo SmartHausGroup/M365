@@ -6,9 +6,32 @@ from pydantic import BaseModel, Field
 
 
 class GraphAuthConfig(BaseModel):
-    tenant_id: str = Field(default_factory=lambda: os.getenv("GRAPH_TENANT_ID", ""))
-    client_id: str = Field(default_factory=lambda: os.getenv("GRAPH_CLIENT_ID", ""))
-    client_secret: str = Field(default_factory=lambda: os.getenv("GRAPH_CLIENT_SECRET", ""))
+    tenant_id: str = Field(
+        default_factory=lambda: (
+            os.getenv("GRAPH_TENANT_ID")
+            or os.getenv("AZURE_TENANT_ID")
+            or os.getenv("MICROSOFT_TENANT_ID")
+            or ""
+        )
+    )
+    client_id: str = Field(
+        default_factory=lambda: (
+            os.getenv("AZURE_APP_CLIENT_ID_TAI")
+            or os.getenv("GRAPH_CLIENT_ID")
+            or os.getenv("AZURE_CLIENT_ID")
+            or os.getenv("MICROSOFT_CLIENT_ID")
+            or ""
+        )
+    )
+    client_secret: str = Field(
+        default_factory=lambda: (
+            os.getenv("AZURE_APP_CLIENT_SECRET_TAI")
+            or os.getenv("GRAPH_CLIENT_SECRET")
+            or os.getenv("AZURE_CLIENT_SECRET")
+            or os.getenv("MICROSOFT_CLIENT_SECRET")
+            or ""
+        )
+    )
     scope: str = Field(default="https://graph.microsoft.com/.default")
 
 

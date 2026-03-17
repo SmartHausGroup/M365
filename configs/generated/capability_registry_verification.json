@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "implemented_expected": [
+    "list_teams",
+    "list_sites",
+    "get_user",
+    "create_site",
+    "add_channel",
+    "create_team",
+    "reset_user_password",
+    "provision_service",
+    "list_users"
+  ],
+  "implemented_in_registry": [
+    "list_users",
+    "get_user",
+    "reset_user_password",
+    "list_teams",
+    "list_sites",
+    "create_site",
+    "create_team",
+    "add_channel",
+    "provision_service"
+  ],
+  "missing_from_registry": [],
+  "wrong_status": [],
+  "planned_count": 251,
+  "total_in_registry": 260
+}

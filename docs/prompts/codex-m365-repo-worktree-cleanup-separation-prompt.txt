@@ -1,0 +1,9 @@
+Execute the M365 repo worktree cleanup and separation plan.
+
+Read:
+- `plans/m365-repo-worktree-cleanup-separation/m365-repo-worktree-cleanup-separation.md`
+- `docs/prompts/codex-m365-repo-worktree-cleanup-separation.md`
+
+Use plan ref `plan:m365-repo-worktree-cleanup-separation:R1`.
+
+Remove plaintext secret-bearing workflow docs, revert formatter-only fallout, reduce the dirty worktree, and classify the remaining substantive payload into keep, split, and delete buckets.

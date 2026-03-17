@@ -1,0 +1,52 @@
+[
+  {
+    "display_name": "Operations Hub",
+    "mail_nickname": "operations",
+    "group_id": "4cc86db4-d848-4f73-ada6-fa55f73e84e8"
+  },
+  {
+    "display_name": "HR Hub",
+    "mail_nickname": "hr",
+    "group_id": "8736ee00-3458-4fea-9e72-4f3e825a7b91"
+  },
+  {
+    "display_name": "Communication Hub",
+    "mail_nickname": "communication",
+    "group_id": "9da4c2e7-2df1-47ef-a43e-b1b1424bfb12"
+  },
+  {
+    "display_name": "Engineering Hub",
+    "mail_nickname": "engineering",
+    "group_id": "8129fe4a-7058-4654-a20b-2c74a549e607"
+  },
+  {
+    "display_name": "Marketing Hub",
+    "mail_nickname": "marketing",
+    "group_id": "fa4d9a94-357b-46b5-8366-d283c3feaf6a"
+  },
+  {
+    "display_name": "Product Hub",
+    "mail_nickname": "product",
+    "group_id": "904075d1-f762-49c3-941c-e5fbe316336e"
+  },
+  {
+    "display_name": "Project Management Hub",
+    "mail_nickname": "project-management",
+    "group_id": "52a93c66-c0ae-4165-8c4e-da801102c5bb"
+  },
+  {
+    "display_name": "Studio Operations Hub",
+    "mail_nickname": "studio-operations",
+    "group_id": "e3bcc817-485f-40ed-a9d8-451297024be8"
+  },
+  {
+    "display_name": "Testing Hub",
+    "mail_nickname": "testing",
+    "group_id": "e175108f-e41b-4efe-a4a8-82f5cbf1fe49"
+  },
+  {
+    "display_name": "Design Hub",
+    "mail_nickname": "design",
+    "group_id": "2fca9f5a-9e79-40fb-acf1-1c26a26188f8"
+  }
+]

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 NAME=${NAME:-${1:-m365-dashboard}}
-PORT=${PORT:-${2:-8000}}
+PORT=${PORT:-${2:-9000}}
 
 # Per-instance host dirs
 ROOT_DIR=${ROOT_DIR:-instances}
@@ -17,4 +17,3 @@ export NAME PORT HOST_DATA="$DATA_DIR" HOST_CONFIG="$CONFIG_DIR" HOST_LOGS="$LOG
 docker compose -p "$NAME" up -d --build
 
 echo "Started instance '$NAME' on port $PORT"
-

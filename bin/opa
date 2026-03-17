@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Minimal OPA wrapper: downloads a platform-appropriate OPA binary on first use.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+CACHE_DIR="$DIR/../.cache/opa"
+mkdir -p "$CACHE_DIR"
+
+OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+ARCH_RAW="$(uname -m)"
+case "$ARCH_RAW" in
+  x86_64|amd64) ARCH="amd64" ;;
+  arm64|aarch64) ARCH="arm64" ;;
+  *) ARCH="amd64" ;;
+esac
+
+case "$OS" in
+  linux) BIN_NAME="opa_linux_${ARCH}" ;;
+  darwin) BIN_NAME="opa_darwin_${ARCH}" ;;
+  *) echo "Unsupported OS: $OS" >&2; exit 1 ;;
+esac
+
+BIN_PATH="$CACHE_DIR/$BIN_NAME"
+
+if [ ! -x "$BIN_PATH" ]; then
+  URL="https://openpolicyagent.org/downloads/latest/${BIN_NAME}"
+  echo "Downloading OPA (latest) ($BIN_NAME) ..." >&2
+  if ! curl -fsSL "$URL" -o "$BIN_PATH"; then
+    # Fallback to _static build (notarized) if available
+    ALT_NAME="${BIN_NAME}_static"
+    ALT_PATH="$CACHE_DIR/$ALT_NAME"
+    ALT_URL="https://openpolicyagent.org/downloads/latest/${ALT_NAME}"
+    echo "Primary download failed; trying $ALT_NAME ..." >&2
+    curl -fsSL "$ALT_URL" -o "$ALT_PATH"
+    chmod +x "$ALT_PATH"
+    exec "$ALT_PATH" "$@"
+  fi
+  chmod +x "$BIN_PATH"
+fi
+
+exec "$BIN_PATH" "$@"

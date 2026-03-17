@@ -14,4 +14,3 @@ for i in $(seq 1 "$COUNT"); do
 done
 
 echo "Scaled to $COUNT instances with base name $BASE_NAME"
-

@@ -1,0 +1,40 @@
+{
+  "plan_id": "gpt-actions-m365-integration",
+  "status": "Approved",
+  "date": "2026-02-06",
+  "owner": "SmartHaus",
+  "execution_plan_reference": "plan:gpt-actions-m365-integration:1",
+  "north_star_alignment": "Operations/NORTHSTAR.md",
+  "objective": "Enable employees to control M365 agents via a ChatGPT Custom GPT by providing an OpenAPI schema and setup documentation. The Custom GPT uses one Action that calls the existing SmartHaus Ops Adapter (POST /actions/{agent}/{action}).",
+  "scope": {
+    "in_scope": [
+      "OpenAPI 3.0 schema for the ops adapter execute action endpoint",
+      "README with steps to add the Action to a Custom GPT, server URL, auth, and reference to registry/agents.yaml"
+    ],
+    "out_of_scope": [
+      "Changes to ops adapter behavior or new endpoints",
+      "CAIO/TAI/MAIA/VFE integration or code outside docs/gpt-actions/"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      { "id": "R1", "desc": "OpenAPI 3.0 schema for execute M365 agent action (POST /actions/{agent}/{action})" },
+      { "id": "R2", "desc": "README in docs/gpt-actions/ with setup, auth, pointer to registry" },
+      { "id": "R3", "desc": "No modification to ops adapter code or registry" }
+    ],
+    "non_functional": [
+      "Schema validates as OpenAPI 3.0",
+      "README sufficient for admin to configure GPT Action"
+    ]
+  },
+  "deliverables": [
+    "docs/gpt-actions/openapi.yaml",
+    "docs/gpt-actions/README.md"
+  ],
+  "success_criteria": [
+    "Plan in plans/gpt-actions-m365-integration/ and referenced in EXECUTION_PLAN.md",
+    "docs/gpt-actions/openapi.yaml exists and describes execute-action operation",
+    "docs/gpt-actions/README.md exists with setup and auth and pointer to registry",
+    "Action log updated with completion entry"
+  ]
+}

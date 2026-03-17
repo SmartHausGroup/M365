@@ -1,0 +1,117 @@
+---
+description: SmartHaus M365 AI Workforce Fix Problems, Don't Use Workarounds Rule
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Fix Problems, Don't Use Workarounds
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Core Principle: Build What We're Building, Fix What's Broken
+
+**MANDATORY:** When building services or encountering problems, **FIX THE ROOT CAUSE**. Never use fallbacks, workarounds, or alternative methods just to make tests pass or get something "working" temporarily.
+
+---
+
+## The Problem We're Solving
+
+We are building SmartHaus M365 AI Workforce - a hyper-local neighbor-to-neighbor help marketplace. We will encounter problems. The solution is **NOT** to:
+- Fall back to insecure methods
+- Use workarounds that bypass our governance model
+- Insert cheap fallbacks just to pass tests
+- Avoid fixing the actual problem
+- Implement v2+ features as workarounds
+
+The solution **IS** to:
+- **Fix the root cause** with deep analysis
+- **Understand why** something isn't working
+- **Build the correct solution** that aligns with our North Star goals
+- **Solve the actual problem**, not mask it
+
+---
+
+## Rule 1: No Fallbacks When Building Core Features
+
+**FORBIDDEN:**
+
+- Suggesting to "skip validation" when validation has issues
+- Inserting fallback code paths that bypass state machine rules
+- Using alternative approaches "just to get it working"
+- Recommending workarounds instead of fixes
+- Implementing v2+ features (payments, advanced matching) as workarounds
+
+**REQUIRED:**
+
+- **Deep analysis** of why something isn't working
+- **Root cause identification** with evidence
+- **Fix the actual problem** in the system
+- **Build the correct solution** that aligns with our goals
+
+---
+
+## Rule 2: Deep Analysis Before "Fixes"
+
+**REQUIRED:**
+
+When something breaks or doesn't work:
+
+1. **Understand the problem deeply:**
+   - What is actually happening?
+   - Why is it happening?
+   - What is the root cause?
+   - What evidence do we have?
+
+2. **Analyze the system:**
+   - How does the broken component work?
+   - What are its dependencies?
+   - What are the design goals?
+
+3. **Propose the correct fix:**
+   - Fix the root cause, not symptoms
+   - Align with North Star goals
+   - Build the proper solution
+
+---
+
+## Rule 3: No "Quick Wins" That Bypass Governance
+
+**FORBIDDEN:**
+
+- "Let's just skip the state machine validation" when state transitions have issues
+- "We can skip the contract gate" when validation fails
+- "This will make tests pass" when it doesn't solve the problem
+- "We can fix it later" when we should fix it now
+- "Let's use advanced matching" when v1 only allows location + category filtering
+
+**REQUIRED:**
+
+- Fix the problem in the system we're building
+- Understand why it's broken
+- Build the correct solution
+- Align with v1 scope and governance requirements
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL development work on SmartHaus M365 AI Workforce.
+
+**When encountering a problem:**
+
+1. **STOP** suggesting workarounds
+2. **ANALYZE** the root cause deeply
+3. **UNDERSTAND** why it's happening
+4. **FIX** the actual problem
+5. **BUILD** the correct solution
+
+**Code Review Checklist:**
+
+- [ ] Did we fix the root cause, or just work around it?
+- [ ] Does the solution align with North Star goals?
+- [ ] Did we do deep analysis, or just quick fixes?
+- [ ] Are we building what we're building, or falling back?
+- [ ] Does this violate v1 scope (advanced features)?

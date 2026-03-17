@@ -1,0 +1,230 @@
+---
+description: Project File Index Enforcement Rule - All files must be indexed and tied to North Star/Execution Plan
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Project File Index Enforcement Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Rule: ALL Files Must Be Indexed and Tied to North Star/Execution Plan
+
+**MANDATORY:** Every file in the SmartHaus M365 AI Workforce project MUST:
+1. **Be listed in `Operations/PROJECT_FILE_INDEX.md`** - If a file isn't in the index, it shouldn't be in the project
+2. **Be tied to North Star** - Each file must align with `Operations/NORTHSTAR.md` goals
+3. **Be tied to Execution Plan** - Each file must support work defined in `Operations/EXECUTION_PLAN.md` (if applicable)
+
+**This rule applies to ALL files in the repository, including:**
+- Source code files (TypeScript, Swift, Python)
+- Configuration files (JSON, YAML, Makefiles)
+- Documentation files (Markdown, MDC)
+- Infrastructure files (Firebase rules, Vercel config)
+- Test files
+- Notebooks
+- Scripts
+
+**Exceptions (automatically generated or external):**
+- `node_modules/` - External dependencies (gitignored)
+- `.next/`, `dist/`, `build/` - Build artifacts (gitignored)
+- `.venv/`, `venv*/` - Python virtual environments (gitignored)
+- `.git/` - Git internal files
+- `DerivedData/`, `.swiftpm/` - Xcode build artifacts (gitignored)
+- `__pycache__/`, `.pytest_cache/` - Python cache (gitignored)
+- `.DS_Store` - macOS system files (gitignored)
+- `artifacts/` - Generated artifacts (gitignored)
+
+---
+
+## Pre-Work Checklist (MANDATORY - Before Creating/Adding ANY File)
+
+**MANDATORY:** Before creating or adding ANY file to the project, you MUST:
+
+### Step 1: Verify File Should Exist
+- [ ] Does this file support North Star goals?
+- [ ] Is this file part of planned work in `Operations/EXECUTION_PLAN.md`?
+- [ ] Is this file necessary for the project structure defined in `Operations/NORTHSTAR.md`?
+
+### Step 2: Check Index
+- [ ] Check `Operations/PROJECT_FILE_INDEX.md` - Is this file already listed?
+- [ ] If listed: Verify the entry is accurate and up-to-date
+- [ ] If not listed: **STOP** - You must add it to the index before creating the file
+
+### Step 3: Add to Index (If New File)
+- [ ] Add entry to `Operations/PROJECT_FILE_INDEX.md` with:
+  - File path (relative to project root)
+  - Purpose description
+  - **North Star clause reference** (exact heading path in `Operations/NORTHSTAR.md`, e.g., "NORTHSTAR: v1 Scope Lock + Authorized Capabilities")
+  - **Execution Plan phase reference** (exact phase/task ID in `Operations/EXECUTION_PLAN.md`, e.g., "EXEC_PLAN: 2.2.1")
+- [ ] Use appropriate table section (Root, Operations, apps, services, etc.)
+- [ ] Ensure both North Star clause and Execution Plan phase are exact matches (not vague references)
+
+### Step 4: Verify Alignment
+- [ ] Verify file purpose aligns with North Star goals
+- [ ] Verify file supports execution plan work
+- [ ] Document alignment in index entry
+
+### Step 5: Create File
+- [ ] Only after index entry is complete, create the file
+- [ ] Follow project structure and conventions
+- [ ] Update `Operations/ACTION_LOG.md` with file creation
+
+---
+
+## Post-Work Checklist (MANDATORY - After Creating/Adding ANY File)
+
+**MANDATORY:** After creating or adding ANY file, you MUST:
+
+### Step 1: Verify Index Entry
+- [ ] Confirm file is listed in `Operations/PROJECT_FILE_INDEX.md`
+- [ ] Verify index entry is accurate and complete
+- [ ] Verify North Star and execution plan references are correct
+
+### Step 2: Update Action Log
+- [ ] Update `Operations/ACTION_LOG.md` with file creation
+- [ ] Include index update in action log entry
+- [ ] Reference North Star alignment and execution plan
+
+### Step 3: Update Execution Plan (If Applicable)
+- [ ] If file is part of a milestone, update `Operations/EXECUTION_PLAN.md`
+- [ ] Mark related tasks as in-progress or complete
+
+---
+
+## File Removal Process (MANDATORY)
+
+**MANDATORY:** Before removing ANY file from the project, you MUST:
+
+### Step 1: Verify Removal is Authorized
+- [ ] Check if file is referenced in execution plan
+- [ ] Verify removal aligns with North Star
+- [ ] Confirm file is no longer needed
+
+### Step 2: Remove from Index
+- [ ] Remove entry from `Operations/PROJECT_FILE_INDEX.md`
+- [ ] Document reason for removal in index
+- [ ] Update `Operations/ACTION_LOG.md` with removal
+
+### Step 3: Remove File
+- [ ] Only after index entry is removed, delete the file
+- [ ] Update `Operations/ACTION_LOG.md` with file removal
+- [ ] Update `Operations/EXECUTION_PLAN.md` if milestone-related
+
+---
+
+## Index Maintenance (MANDATORY)
+
+**MANDATORY:** The file index must be maintained:
+
+### When to Update Index:
+- ✅ When new files are added
+- ✅ When files are removed
+- ✅ When file purposes change
+- ✅ When North Star or execution plan references change
+- ✅ When file structure is reorganized
+
+### Index Update Format:
+Each entry must include:
+- **File path:** Relative to project root
+- **Purpose:** Clear description of what the file does
+- **North Star Clause:** Exact heading path in `Operations/NORTHSTAR.md` (e.g., "NORTHSTAR: v1 Scope Lock + Authorized Capabilities")
+- **Execution Plan Phase:** Exact phase/task ID in `Operations/EXECUTION_PLAN.md` (e.g., "EXEC_PLAN: 2.2.1")
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL AI assistants working on SmartHaus M365 AI Workforce.
+
+**Verification Checklist:**
+
+Before creating any file:
+- [ ] File purpose verified against North Star
+- [ ] File purpose verified against execution plan
+- [ ] Index entry created in `Operations/PROJECT_FILE_INDEX.md`
+- [ ] North Star alignment documented
+- [ ] Execution plan reference documented
+
+After creating any file:
+- [ ] Index entry verified (file is listed)
+- [ ] Action log updated
+- [ ] Execution plan updated (if milestone-related)
+
+Before removing any file:
+- [ ] Removal authorized (checked execution plan)
+- [ ] Index entry removed
+- [ ] Action log updated
+- [ ] Execution plan updated (if milestone-related)
+
+**CRITICAL:** Files that are not in the index should not exist in the project. Files that are in the index must be tied back to North Star and execution plan.
+
+---
+
+## Integration with Other Rules
+
+This rule integrates with:
+- **Mandatory Agent Workflow:** `.cursor/rules/agent-workflow-mandatory.mdc` - File creation is work that must follow workflow
+- **North Star Alignment:** `.cursor/rules/north-star-alignment.mdc` - Files must align with North Star
+- **Plan-First Execution:** `.cursor/rules/plan-first-execution.mdc` - Files must support execution plan work
+- **Action Log Requirement:** `.cursor/rules/action-log-requirement.mdc` - File creation/removal must be logged
+
+**Note:** The traceability manifest (`contracts/traceability_manifest.yml`) + traceability gate (`scripts/traceability_gate.py`) are the programmatic enforcement layer for this rule. This rule defines the policy; the traceability gate enforces it automatically.
+
+---
+
+## Examples
+
+### ✅ Good: File Creation with Index Entry
+
+**Process:**
+1. ✅ Verified file supports North Star (app-first iOS development)
+2. ✅ Verified file is in execution plan (iOS App Development)
+3. ✅ Added entry to `Operations/PROJECT_FILE_INDEX.md`:
+   - File: `apps/ios/LocalHelp/Features/Home/HomeView.swift`
+   - Purpose: Home screen view for iOS app
+   - North Star: App-First Priority
+   - Execution Plan: iOS App Development
+4. ✅ Created file
+5. ✅ Updated action log
+
+### ❌ Bad: File Creation Without Index Entry
+
+**Process:**
+1. ❌ Created file directly without checking index
+2. ❌ No index entry created
+3. ❌ File exists but not documented
+
+**Result:** File violates this rule and should be removed or indexed.
+
+### ✅ Good: File Removal with Index Update
+
+**Process:**
+1. ✅ Verified file is no longer needed (execution plan updated)
+2. ✅ Removed entry from `Operations/PROJECT_FILE_INDEX.md`
+3. ✅ Deleted file
+4. ✅ Updated action log
+
+### ❌ Bad: File Removal Without Index Update
+
+**Process:**
+1. ❌ Deleted file without removing index entry
+2. ❌ Index entry points to non-existent file
+
+**Result:** Index is inaccurate and violates this rule.
+
+---
+
+## Reference
+
+- **File Index:** `Operations/PROJECT_FILE_INDEX.md` ⭐ **SOURCE OF TRUTH**
+- **North Star:** `Operations/NORTHSTAR.md`
+- **Execution Plan:** `Operations/EXECUTION_PLAN.md`
+- **Action Log:** `Operations/ACTION_LOG.md`
+
+---
+
+**Last Updated:** 2025-01-06
+**Version:** 1.0

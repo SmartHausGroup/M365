@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE_PORT=${1:-8000}
+BASE_PORT=${1:-9000}
 MAX=${2:-20000}
 
 is_free() {
@@ -24,4 +24,3 @@ done
 
 echo "No free port found between $BASE_PORT and $MAX" >&2
 exit 1
-

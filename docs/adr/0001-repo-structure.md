@@ -14,4 +14,3 @@ Decision:
 Consequences:
 - Enables incremental addition of services.
 - Clear separation of concerns and reusable Graph client.
-

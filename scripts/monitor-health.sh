@@ -8,4 +8,3 @@ while IFS=$'\t' read -r cname ports proj; do
   health=$(docker inspect --format='{{json .State.Health.Status}}' "$cname" 2>/dev/null || echo '"unknown"')
   echo -e "$cname\t$ports\t$proj\t$health"
 done <<< "$instances"
-

@@ -1,7 +1,7 @@
 # Codex Detailed Prompt: M365 Enterprise Commercialization Readiness
 
-**Plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`  
-**Detailed plan:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md`  
+**Plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
+**Detailed plan:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md`
 **Approval status:** Planning artifact created. Do not implement the phases until explicit approval is given for execution.
 
 ---

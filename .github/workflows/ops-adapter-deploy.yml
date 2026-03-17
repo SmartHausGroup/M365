@@ -1,0 +1,25 @@
+name: Ops Adapter Canary Deploy
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/ops_adapter/**'
+      - 'policies/**'
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image (if needed)
+        run: |
+          echo "Build & push to registry here (placeholder)"
+      - name: Canary patch
+        run: |
+          echo "kubectl patch deployment ops-adapter ... (placeholder)"
+      - name: Monitor
+        run: ./scripts/monitor-canary.sh
+      - name: Promote or rollback
+        run: ./scripts/canary-decision.sh
+

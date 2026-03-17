@@ -1,75 +1,128 @@
-# 🚀 SmartHaus Group M365 SOA 🚀
+# SMARTHAUS M365 Ops Adapter (MVP)
 
-Enterprise-grade, service-oriented automation for Microsoft 365. This repo hosts:
-- Reusable libraries (Graph client, common utilities)
-- A provisioning API (FastAPI) to orchestrate M365 resources
-- A CLI for developer and operator workflows
-- CI, linting, tests, and contribution standards
+![Policy Validation](https://github.com/smarthaus/M365/workflows/Policy%20Validation/badge.svg)
 
-Quick start
-- Install deps: `make install-deps`
-- Run tests: `make test`
-- Serve API: `make serve-api` then visit http://localhost:8000/health
-- CLI: `python -m smarthaus_cli --help`
+Production-ready scaffold for the SMARTHAUS Enterprise Ops Adapter with OPA policy enforcement, approvals, and audit logging.
 
-Docker
-- Build: `make docker-build`
-- Run default: `make docker-run`
-- Run named/port: `make docker-run-instance NAME=tai-research PORT=9000`
-- List: `make docker-list`
-- Stop instance: `make docker-stop-instance NAME=tai-research`
-- Logs: `make docker-logs NAME=tai-research`
-- Stop all: `make docker-stop-all`
+## Stack
+- FastAPI service (ops-adapter)
+- Open Policy Agent (OPA) for runtime policy
+- Basic approvals queue with Teams webhook notification
+- Structured audit logs with correlation IDs
 
-Credentials
-- Set `GRAPH_TENANT_ID`, `GRAPH_CLIENT_ID`, `GRAPH_CLIENT_SECRET` to use Graph operations.
+## Running as an application (Python 3.13+)
 
-Environment (optional integrations)
-- `TAI_REPOSITORY`, `LATTICE_REPOSITORY`, `SMARTHAUS_WEBSITE_REPO`
-- `SIGMA_REPOSITORY`, `C2_CLOUD_ENDPOINT`, `MARKETING_AGENT_ENDPOINT`, `PATENT_MANAGEMENT_ENDPOINT`
-- `GITHUB_WEBHOOK_SECRET` (for future GitHub integrations)
-- Feature flags: `RESEARCH_COLLABORATION_ENABLED`, `CROSS_PROJECT_INTEGRATION`
+Install once, then launch the server like a normal app (no Makefile or dev steps):
 
-Docs
-- `docs/architecture.md` – architecture overview
-- `docs/adr/0001-repo-structure.md` – structure rationale
+```bash
+pip install -e .
+m365-server          # headless on port 9000
+m365-server --gui    # window with status and Quit
+```
 
-API Endpoints (POST)
-- TAI: `/api/tai/research`, `/api/tai/memory`, `/api/tai/orchestration`, `/api/tai/performance`
-- LATTICE: `/api/lattice/research`, `/api/lattice/aios`, `/api/lattice/lql`, `/api/lattice/lef`, `/api/lattice/architecture`
-- Website: `/api/website/updates`, `/api/website/deployments`, `/api/website/content`, `/api/website/business`
-- Research: `/api/research/collaboration`, `/api/research/resources`, `/api/research/synthesis`, `/api/research/performance`
-- SIGMA: `/api/sigma/performance`, `/api/sigma/signals`, `/api/sigma/backtesting`, `/api/sigma/risk`
-- C2: `/api/c2/security`, `/api/c2/infrastructure`, `/api/c2/compliance`, `/api/c2/documents`
-- Marketing: `/api/marketing/leads`, `/api/marketing/campaigns`, `/api/marketing/analytics`, `/api/marketing/business`
-- Patents: `/api/patents/applications`, `/api/patents/portfolio`, `/api/patents/autopsy`, `/api/patents/compliance`
-- Infrastructure: `/api/infrastructure/cicd`, `/api/infrastructure/deployments`, `/api/infrastructure/monitoring`, `/api/infrastructure/optimization`
-- Clients: `/api/clients/projects`, `/api/clients/showcase`, `/api/clients/automation`, `/api/clients/communication`
+See **[docs/M365_SERVER_APP.md](docs/M365_SERVER_APP.md)** for full app launcher details. Env vars: **[docs/ENV.md](docs/ENV.md)**. CAIO contract: **[docs/CAIO_M365_CONTRACT.md](docs/CAIO_M365_CONTRACT.md)**.
 
-Storage
-- By default, requests are recorded to `data/*.json` for easy verification.
+---
 
-Containers persist data under per-instance directories `./instances/<NAME>/` unless overridden by `HOST_DATA`, `HOST_CONFIG`, `HOST_LOGS`.
+## Quickstart (Docker / dev)
 
-Vercel (cloud frontend)
-- Build static dashboard: `make build-dashboard` → outputs to `dist/`
-- Deploy with `vercel` CLI or Git integration using `vercel.json`
-- Default behavior: frontend uses same-origin for API calls in production
-- Optional: set env `API_BASE_URL` in Vercel only if your API is on a different domain
-- Configure custom domain `m365.smarthaus.ai` in Vercel project settings
+1. Copy and configure environment:
+   - `cp instances/sandbox.env.example instances/sandbox.env`
+   - Fill in `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_CERTIFICATE_PATH`, and optional `VERCEL_API_TOKEN`.
 
-CORS for Cloud Frontend
-- Set `CORS_ORIGINS` on the API (comma-separated origins, e.g., `https://m365.smarthaus.ai,https://preview.m365.smarthaus.ai`)
+2. Start services:
+   - Local OPA + adapter: `docker compose --env-file instances/sandbox.env up -d --build`
+   - Or point to Enterprise policy-engine (recommended):
+     - Export `OPA_URL=http://localhost:8181` (or your gateway URL)
+     - Start only the adapter: `docker compose --env-file instances/sandbox.env up -d --build ops-adapter`
 
-Hybrid (cloud + local)
-- Local API (Docker):
-  - Start: `make docker-dev-up` → http://localhost:8000
-  - Logs: `make docker-dev-logs`
-  - Stop: `make docker-dev-down`
-- Smart routing in UI: the enterprise dashboard auto-detects environment
-  - If opened on localhost, it targets `http://localhost:9000` (dev)
-  - Otherwise, it defaults to same-origin; set `API_BASE_URL` only to override
-- Compose file: `docker-compose.local.yml` (editable for dev env)
+3. Health checks:
+   - `curl http://localhost:8080/health`
+   - `curl http://localhost:8181/health`
 
-Notes
-- Legacy helper scripts and setup guides were removed to keep this repo focused and modern.
+4. Try a policy-checked action (Graph users.read):
+   - `curl -s -X POST http://localhost:8080/actions/m365-administrator/users.read -H 'Content-Type: application/json' -d '{"params":{"userPrincipalName":"test@smarthaus.ai"}}' | jq`
+
+5. Trigger an approval-required action:
+   - `curl -s -X POST http://localhost:8080/actions/website-manager/deployment.production -H 'Content-Type: application/json' -d '{"params":{"env":"production"}}' | jq`
+   - `curl -s http://localhost:8080/approvals/<approval_id-returned>`
+
+Audit logs write to `logs/ops_audit.log`.
+
+## Layout
+
+```
+src/ops_adapter/
+  actions.py       # Graph/Vercel action executors
+  approvals.py     # Basic approvals queue + Teams webhook
+  audit.py         # Structured audit logger (+optional Log Analytics)
+  main.py          # FastAPI app and routes
+  models.py        # Pydantic request/response models
+  policies.py      # OPA client wrapper
+  rate_limit.py    # Token bucket rate limiter
+policies/
+  ops.rego
+  agents/
+    m365_administrator.rego
+    website_manager.rego
+    hr_generalist.rego
+    outreach_coordinator.rego
+registry/
+  agents.yaml
+Dockerfile.ops-adapter
+docker-compose.yml
+instances/
+  sandbox.env.example
+```
+
+## Approvals with SharePoint + Teams
+
+- Configure env:
+  - `APPROVALS_SITE_URL=https://<tenant>.sharepoint.com/sites/<site>`
+  - `APPROVALS_LIST_NAME=Approvals`
+  - `TEAMS_APPROVALS_WEBHOOK=<incoming webhook URL>`
+  - Optional public URL for card actions: `OPS_ADAPTER_PUBLIC_URL=https://ops-adapter.example.com`
+  - Optional HMAC signing: `TEAMS_CARD_SIGNING_SECRET=<strong-shared-secret>` and `TEAMS_CARD_MAX_SKEW=600`
+
+- Endpoints:
+  - `GET /approvals/{id}` → Get status
+  - `POST /approvals/{id}/approve` → Approve (body: `{ "params": {"reason": "..."} }`)
+  - `POST /approvals/{id}/deny` → Deny (body: `{ "params": {"reason": "..."} }`)
+  - `POST /approvals/bulk` → `{ "params": { "action": "approve|deny", "ids": ["..."], "reason": "..." } }`
+  - `GET /approvals/query?status=pending&agent=website-manager&limit=50` → Filtered list for dashboards
+
+- Optional bot webhook (authenticated):
+  - `POST /teams/webhook` with header `Authorization: Bearer $TEAMS_BOT_TOKEN`
+  - Body: `{ "params": { "approvalId": "...", "action": "approve|deny", "reason": "...", "user": { "upn": "..." } } }`
+  - Env: `TEAMS_BOT_TOKEN=<shared-bot-token>`
+
+## Policy Generation from Registry
+
+Keep OPA policies in sync with the registry by generating per-agent policy files:
+
+```
+python scripts/generate-policies.py --registry registry/agents.yaml --outdir policies/agents
+# Optionally run `opa fmt -w policies` and `opa check policies` if OPA is installed
+```
+
+
+## Example Runbook (Employee Lifecycle)
+
+Run a full CRUD lifecycle against Graph via the adapter:
+
+```
+./scripts/runbooks/employee-lifecycle.sh test.user@smarthaus.ai "Test User" E3
+
+# Assign multiple licenses
+./scripts/runbooks/employee-lifecycle.sh test.user@smarthaus.ai "Test User" E3,E5
+```
+
+## Licensed Module Model + Local Validation
+
+- Commercial plain-English model: `docs/TAI_LICENSED_MODULE_MODEL.md`
+- Local test runbook (M365 module + instruction API): `docs/LOCAL_TEST_LICENSED_RUNTIME.md`
+
+## Notes
+- OPA enforcement is active; if OPA is unreachable, the adapter fails open (configurable).
+- Graph integration uses certificate credentials if provided; otherwise calls are stubbed.
+- Approvals store uses SQLite; enable Teams webhook with `TEAMS_APPROVALS_WEBHOOK`.

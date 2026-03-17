@@ -1,0 +1,7 @@
+Execute M365 Voice Integration (Instruction API for CAIO)
+
+Read and execute the detailed plan at docs/prompts/codex-m365-voice-integration.md.
+
+Plan Reference: plan:tai-maia-caio-vfe-m365-integration:m365
+
+You are approved to implement. Execute immediately—do not propose, do not wait for approval. Follow all instructions in the detailed prompt document.

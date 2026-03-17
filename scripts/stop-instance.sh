@@ -5,4 +5,3 @@ NAME=${NAME:-${1:-m365-dashboard}}
 
 docker compose -p "$NAME" down || true
 echo "Stopped instance '$NAME'"
-

@@ -1,35 +1,172 @@
+version: '3.9'
+
 services:
-  dashboard:
+  opa:
+    image: openpolicyagent/opa:latest
+    command: ["run", "--server", "/policies"]
+    ports:
+      - "8182:8181"
+    volumes:
+      - ./policies:/policies:ro
+    healthcheck:
+      test: ["CMD", "/opa", "eval", "true"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  ops-adapter:
     build:
       context: .
-      dockerfile: Dockerfile
-    environment:
-      - PORT=${PORT:-8000}
-      - INSTANCE_NAME=${NAME:-m365-dashboard}
-      - INSTANCE_ENV=${INSTANCE_ENV:-production}
-      - GRAPH_TENANT_ID
-      - GRAPH_CLIENT_ID
-      - GRAPH_CLIENT_SECRET
-      - SP_HOSTNAME=${SP_HOSTNAME:-smarthausgroup.sharepoint.com}
+      dockerfile: Dockerfile.ops-adapter
     ports:
-      - "${PORT:-8000}:8000"
+      - "${OPS_ADAPTER_PORT:-18080}:8080"
+    env_file:
+      - instances/sandbox.env
+    environment:
+      # Allow overriding OPA URL to point at Enterprise policy-engine
+      - OPA_URL=${OPA_URL:-http://opa:8181}
+      - REGISTRY_FILE=/app/registry/agents.yaml
+      - LOG_DIR=/app/logs
     volumes:
-      - ${HOST_DATA:-./data}:/app/data:rw
-      - ${HOST_CONFIG:-./config}:/app/config:ro
-      - ${HOST_LOGS:-./logs}:/app/logs:rw
-      - ./templates:/app/templates:ro
-    restart: unless-stopped
-    labels:
-      - "com.smarthaus.m365=1"
-      - "com.smarthaus.instance=${NAME:-m365-dashboard}"
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+
+  m365-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${M365_DASHBOARD_PORT:-9000}:9000"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    depends_on:
+      - ops-adapter
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import os,sys,urllib.request,json; p=os.getenv(\"PORT\",\"8000\"); d=urllib.request.urlopen(f"http://127.0.0.1:{p}/health",timeout=2).read(); import json as _j; sys.exit(0 if _j.loads(d).get("status")=="ok" else 1)' || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
       interval: 30s
-      timeout: 3s
+      timeout: 10s
       retries: 3
-      start_period: 10s
 
-networks:
-  default:
-    name: ${NAME:-m365-dashboard}-net
+  enterprise-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${ENTERPRISE_DASHBOARD_PORT:-18001}:8001"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    command: python -m src.provisioning_api.enterprise_dashboard
+    depends_on:
+      - ops-adapter
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
+  business-operations:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${BUSINESS_OPERATIONS_PORT:-18002}:8002"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    command: python -m src.provisioning_api.business_operations
+    depends_on:
+      - ops-adapter
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  agent-workstation:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${AGENT_WORKSTATION_PORT:-18003}:8003"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    command: python -m src.provisioning_api.agent_workstation
+    depends_on:
+      - ops-adapter
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  agent-command-center:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${AGENT_COMMAND_CENTER_PORT:-18004}:8004"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    command: python -m src.provisioning_api.agent_command_center
+    depends_on:
+      - ops-adapter
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  unified-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "${UNIFIED_DASHBOARD_PORT:-18005}:8005"
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app/src
+      - LOG_DIR=/app/logs
+    volumes:
+      - ./registry:/app/registry:ro
+      - ./logs:/app/logs
+    command: python -m src.provisioning_api.unified_dashboard
+    depends_on:
+      - ops-adapter
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  data:

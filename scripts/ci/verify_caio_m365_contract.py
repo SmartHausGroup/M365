@@ -70,10 +70,43 @@ def verify_with_mock() -> dict:
         ("list_teams", {"ok": True, "result": {"teams": [], "count": 0}}),
         ("list_sites", {"ok": True, "result": {"sites": [], "count": 0}}),
         ("get_user", {"ok": True, "result": {"user": {}}}),
-        ("reset_user_password", {"ok": True, "result": {"user": "user@test", "password_reset": True}}),
-        ("create_site", {"ok": True, "result": {"site_id": "x", "site_url": "https://x", "group_created": True, "libraries_created": []}}),
-        ("create_team", {"ok": True, "result": {"team_id": "y", "team_url": "https://teams/y", "channels_created": []}}),
-        ("add_channel", {"ok": True, "result": {"team": {"team_id": "y", "team_url": "https://teams/y", "channels_created": ["ch"]}, "channel": "ch"}}),
+        (
+            "reset_user_password",
+            {"ok": True, "result": {"user": "user@test", "password_reset": True}},
+        ),
+        (
+            "create_site",
+            {
+                "ok": True,
+                "result": {
+                    "site_id": "x",
+                    "site_url": "https://x",
+                    "group_created": True,
+                    "libraries_created": [],
+                },
+            },
+        ),
+        (
+            "create_team",
+            {
+                "ok": True,
+                "result": {"team_id": "y", "team_url": "https://teams/y", "channels_created": []},
+            },
+        ),
+        (
+            "add_channel",
+            {
+                "ok": True,
+                "result": {
+                    "team": {
+                        "team_id": "y",
+                        "team_url": "https://teams/y",
+                        "channels_created": ["ch"],
+                    },
+                    "channel": "ch",
+                },
+            },
+        ),
         ("provision_service", {"ok": True, "result": {"status": "ok", "site": {}, "team": {}}}),
         ("list_users", {"ok": False, "error": "Graph not configured", "result": None}),
     ]
@@ -109,6 +142,7 @@ def main() -> int:
         # Optional: hit live API and verify real responses
         try:
             import urllib.request
+
             req = urllib.request.Request(
                 f"{base_url.rstrip('/')}/api/m365/instruction",
                 data=json.dumps({"action": "list_users", "params": {}}).encode(),

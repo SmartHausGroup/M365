@@ -10,7 +10,8 @@ Lemma: LEM-M365-E-001-01, LEM-M365-E-002-01, LEM-M365-E-003-01
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from m365.instruction.constants import A_mut, A_read
 
@@ -31,11 +32,7 @@ def verify_E001(
     if out is None:
         return
     r, _, audit = out
-    if (
-        instruction[0] == "Admin"
-        and instruction[2] in A_mut
-        and r == "Success"
-    ):
+    if instruction[0] == "Admin" and instruction[2] in A_mut and r == "Success":
         assert len(audit) == 1, "E-001: exactly one audit"
 
 

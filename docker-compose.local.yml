@@ -15,12 +15,11 @@ services:
       - GRAPH_CLIENT_ID=${GRAPH_CLIENT_ID}
       - GRAPH_CLIENT_SECRET=${GRAPH_CLIENT_SECRET}
       - SP_HOSTNAME=${SP_HOSTNAME:-smarthausgroup.sharepoint.com}
-      - CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:9000
     ports:
-      - "9000:8000"
+      - "9000:9000"
     volumes:
       - ./data:/app/data
       - ./config:/app/config
       - ./logs:/app/logs
     restart: unless-stopped
-

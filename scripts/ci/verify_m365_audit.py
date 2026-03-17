@@ -37,8 +37,16 @@ def verify_audit_writer() -> dict:
         jpath.parent.mkdir(parents=True, exist_ok=True)
         initial_lines = len(jpath.read_text().splitlines()) if jpath.exists() else 0
 
-        log_event("m365_instruction", {"action": "list_users", "params": {}, "ok": True, "result": {"users": [], "count": 0}}, user_info={"userPrincipalName": "test@test"})
-        log_event("m365_instruction", {"action": "get_user", "params": {}, "ok": False, "error": "not_found"}, user_info={})
+        log_event(
+            "m365_instruction",
+            {"action": "list_users", "params": {}, "ok": True, "result": {"users": [], "count": 0}},
+            user_info={"userPrincipalName": "test@test"},
+        )
+        log_event(
+            "m365_instruction",
+            {"action": "get_user", "params": {}, "ok": False, "error": "not_found"},
+            user_info={},
+        )
 
         if not jpath.exists():
             return {"audit_pass": False, "error": "audit file not created"}
@@ -55,7 +63,11 @@ def verify_audit_writer() -> dict:
             except json.JSONDecodeError as e:
                 return {"audit_pass": False, "line": i, "parse_error": str(e)}
             if not required_keys.issubset(rec.keys()):
-                return {"audit_pass": False, "line": i, "missing_keys": list(required_keys - rec.keys())}
+                return {
+                    "audit_pass": False,
+                    "line": i,
+                    "missing_keys": list(required_keys - rec.keys()),
+                }
 
         return {"audit_pass": True, "records_checked": 2, "schema": "ts, action, user, details"}
 

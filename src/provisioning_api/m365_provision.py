@@ -12,7 +12,11 @@ log = get_logger(__name__)
 
 
 def _hostname() -> str:
-    return os.getenv("SP_HOSTNAME", "smarthausgroup.sharepoint.com")
+    return (
+        os.getenv("SHAREPOINT_HOSTNAME")
+        or os.getenv("SP_HOSTNAME")
+        or "smarthausgroup.sharepoint.com"
+    )
 
 
 def provision_group_site(

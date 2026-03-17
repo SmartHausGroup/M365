@@ -1,0 +1,26 @@
+{
+  "postcondition_pass": true,
+  "response_schema_pass": true,
+  "idempotency_pass": true,
+  "auth_pass": true,
+  "details": {
+    "postcondition_list_users": "pass",
+    "schema_list_users": "pass",
+    "postcondition_list_teams": "pass",
+    "schema_list_teams": "pass",
+    "postcondition_list_sites": "pass",
+    "schema_list_sites": "pass",
+    "postcondition_get_user": "pass",
+    "schema_get_user": "pass",
+    "postcondition_reset_user_password": "pass",
+    "schema_reset_user_password": "pass",
+    "postcondition_create_site": "pass",
+    "schema_create_site": "pass",
+    "postcondition_create_team": "pass",
+    "schema_create_team": "pass",
+    "postcondition_add_channel": "pass",
+    "schema_add_channel": "pass",
+    "postcondition_provision_service": "pass",
+    "schema_provision_service": "pass"
+  }
+}

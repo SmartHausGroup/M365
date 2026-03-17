@@ -1,0 +1,149 @@
+---
+description: North Star and Execution Plan Gate Rule - Two-stage gate for all work
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# North Star and Execution Plan Gate Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: ALL Work Must Pass North Star → Execution Plan Gate
+
+**MANDATORY:** Before executing ANY work, you MUST pass this two-stage gate. No exceptions.
+
+---
+
+## Stage 1: North Star Gate (MANDATORY)
+
+**Question:** Is this work part of what we're building according to the North Star?
+
+**Process:**
+1. **Read `Operations/NORTHSTAR.md`**
+2. **Check if work aligns with:**
+   - Mission Statement
+   - Vision 2025
+   - Core Success Metrics
+   - Technical Excellence Goals
+   - Competitive Advantages
+
+**Decision Tree:**
+- ✅ **If YES (aligned with North Star):** Proceed to Stage 2
+- ❌ **If NO (not aligned):**
+  - **STOP immediately**
+  - **HUMAN-IN-THE-LOOP:** Explain misalignment to user
+  - **HUMAN-IN-THE-LOOP:** Ask: "This work is not aligned with North Star. Should we: (a) update North Star to include this, or (b) stop this work?"
+  - **DO NOT proceed** until user explicitly approves
+
+**Rationale:** If it's not in the North Star, we shouldn't be building it. Either the North Star needs updating (human decision) or we should stop.
+
+---
+
+## Stage 2: Execution Plan Gate (MANDATORY)
+
+**Question:** Is this work tied to something in the execution plan?
+
+**Process:**
+1. **Search `Operations/EXECUTION_PLAN.md`** for related tasks/requirements (PRIMARY - MANDATORY)
+2. **Search `/plans/` directory** for detailed plans (OPTIONAL - only for large initiatives explicitly authorized in Execution Plan)
+3. **Check if work is referenced in EXECUTION_PLAN.md (required) or /plans/ (optional)**
+
+**Decision Tree:**
+- ✅ **If YES (found in EXECUTION_PLAN.md or /plans/):**
+  - Reference plan item: `plan:EXECUTION_PLAN:{phase}.{task-id}` (e.g., `plan:EXECUTION_PLAN:2.2.2`)
+  - Proceed with work
+- ❌ **If NO (not found in EXECUTION_PLAN.md):**
+  - **STOP immediately**
+  - **HUMAN-IN-THE-LOOP:** Explain: "This work is aligned with North Star but not in execution plan."
+  - **HUMAN-IN-THE-LOOP:** Ask: "Should we: (a) add this to execution plan, or (b) stop this work?"
+  - **DO NOT proceed** until user explicitly approves and plan is updated
+
+**Rationale:** If it's in the North Star, it MUST be in the execution plan. If it's not, we need to add it (human decision) or stop.
+
+---
+
+## Complete Gate Process
+
+```
+Work Identified
+    ↓
+Stage 1: North Star Gate
+    ├─→ Aligned? → Stage 2: Execution Plan Gate
+    │                    ├─→ In Plan? → Proceed with work
+    │                    └─→ Not in Plan? → STOP, ask human: add to plan or stop?
+    └─→ Not Aligned? → STOP, ask human: update North Star or stop?
+```
+
+---
+
+## Examples
+
+### ✅ Good: Passes Both Gates
+
+**Work:** Implement request posting form
+
+**Stage 1 Check:**
+- ✅ Aligned with North Star (v1 Scope Lock: Task request creation)
+- ✅ Supports hyper-local neighbor-to-neighbor marketplace goals
+- **Result:** PASS → Proceed to Stage 2
+
+**Stage 2 Check:**
+- ✅ Found in execution plan Phase 2.2.2 (Request Service)
+- ✅ Reference: `plan:EXECUTION_PLAN:2.2.2`
+- **Result:** PASS → Proceed with work
+
+### ❌ Bad: Fails Stage 1 (Not in North Star)
+
+**Work:** Add in-app payment processing
+
+**Stage 1 Check:**
+- ❌ Not authorized in North Star v1 (see "Explicitly Unauthorized in v1")
+- ❌ Violates v1 scope lock (direct payments only)
+- **Result:** FAIL → STOP
+- **Action:** Ask user: "This work is not authorized in North Star v1. Should we update North Star for v2+ or stop?"
+
+### ❌ Bad: Fails Stage 2 (Not in Execution Plan)
+
+**Work:** Improve workflow enforcement
+
+**Stage 1 Check:**
+- ✅ Aligned with North Star Technical Excellence Goals
+- ✅ Supports governance and process requirements
+- **Result:** PASS → Proceed to Stage 2
+
+**Stage 2 Check:**
+- ❌ Not found in execution plan
+- **Result:** FAIL → STOP
+- **Action:** Ask user: "This work is in North Star but not in execution plan. Should we add it to the appropriate phase or stop?"
+
+---
+
+## Integration with Other Rules
+
+This rule enforces Steps 1-2 of `.cursor/rules/agent-workflow-mandatory.mdc` with explicit human-in-the-loop stops.
+
+**Workflow:**
+1. **Step 1 (North Star Alignment):** Use Stage 1 gate above
+2. **Step 2 (Execution Plan Verification):** Use Stage 2 gate above
+3. **If either gate fails:** STOP and ask human (do not proceed)
+
+---
+
+## Enforcement
+
+**MANDATORY:** This gate applies to ALL work, no exceptions.
+
+**Verification Checklist:**
+- [ ] Stage 1: Is work aligned with North Star? (If no, STOP and ask human)
+- [ ] Stage 2: Is work in execution plan? (If no, STOP and ask human)
+- [ ] Both gates passed? (If yes, proceed)
+
+**If either gate fails, work is FORBIDDEN until human approves.**
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.0

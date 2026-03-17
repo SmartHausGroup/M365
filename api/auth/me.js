@@ -7,26 +7,26 @@ export default async function handler(req, res) {
   try {
     // Get authorization header
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         error: 'Unauthorized',
         message: 'Valid access token required'
       });
     }
 
     const token = authHeader.substring(7);
-    
+
     // Check if this is a demo token or real token
     if (token.startsWith('demo_')) {
       console.log('Using demo user profile');
       return res.status(200).json(getDemoUserProfile());
     }
-    
+
     // Real Microsoft Graph API call
     try {
       console.log('Making Microsoft Graph API call for user profile...');
-      
+
       const graphResponse = await fetch('https://graph.microsoft.com/v1.0/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 
       const userData = await graphResponse.json();
       console.log('Successfully retrieved user profile from Microsoft Graph');
-      
+
       // Transform Microsoft Graph data to our format
       const userProfile = {
         user: {
@@ -69,18 +69,18 @@ export default async function handler(req, res) {
       };
 
       res.status(200).json(userProfile);
-      
+
     } catch (graphError) {
       console.error('Microsoft Graph API error:', graphError);
       console.log('Falling back to demo profile due to Graph API error');
-      
+
       // Fall back to demo profile
       res.status(200).json(getDemoUserProfile());
     }
-    
+
   } catch (error) {
     console.error('User profile endpoint error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to retrieve user profile',
       message: 'Please try again'
     });

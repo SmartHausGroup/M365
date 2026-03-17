@@ -1,0 +1,184 @@
+---
+description: Codex Prompt Creation Process - Two-file structure for Codex prompts
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Codex Prompt Creation Process
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: Codex Prompt Creation Must Follow Two-File Structure
+
+**MANDATORY:** When creating prompts for Codex to execute plans, you MUST create two separate files with distinct purposes:
+
+1. **Detailed Prompt Document** (`docs/prompts/codex-{plan-name}.md`) - Contains all implementation instructions
+2. **Short Kick-Off Text** (`docs/prompts/codex-{plan-name}-prompt.txt`) - Brief message that points Codex to the detailed prompt
+
+**NEVER duplicate the detailed instructions in the kick-off text. The kick-off text should only point Codex to read the detailed prompt.**
+
+---
+
+## Process
+
+### Step 1: Create Detailed Prompt Document
+
+**File:** `docs/prompts/codex-{plan-name}.md`
+
+**Purpose:** Complete implementation guide with all instructions, code examples, validation procedures, troubleshooting, etc.
+
+**Must Include:**
+- Executive summary
+- Context & background
+- Current state analysis
+- Target state
+- Step-by-step implementation instructions (with code examples)
+- Validation procedures
+- Troubleshooting guide
+- Success criteria
+- Notes and references
+
+**Format:** Full markdown document with sections, code blocks, examples, etc.
+
+**Example:** `docs/prompts/codex-embedding-device-standardization.md`
+
+---
+
+### Step 2: Create Short Kick-Off Text
+
+**File:** `docs/prompts/codex-{plan-name}-prompt.txt`
+
+**Purpose:** Brief message for user to copy-paste to Codex that tells Codex to read and execute the detailed prompt.
+
+**Must Include:**
+- Task name/description (one line)
+- Instruction to read the detailed prompt document
+- Plan reference
+- Approval statement (if approved)
+- Brief execution instruction
+
+**Must NOT Include:**
+- Detailed implementation steps
+- Code examples
+- Validation procedures
+- Troubleshooting information
+- Any content that duplicates the detailed prompt
+
+**Format:** Plain text, 5-10 lines maximum
+
+**Example:**
+```
+Execute Embedding Device Standardization Implementation
+
+Read and execute the detailed plan at docs/prompts/codex-embedding-device-standardization.md.
+
+Plan Reference: plan:embedding-device-standardization
+
+You are approved to implement. Execute immediately - do not propose, do not wait for approval. Follow all instructions in the detailed prompt document.
+```
+
+---
+
+## Why Two Files?
+
+1. **Detailed Prompt (`*.md`)**: Codex reads this for all implementation details
+2. **Kick-Off Text (`*-prompt.txt`)**: User copy-pastes this to Codex to start execution
+
+**Separation of Concerns:**
+- Detailed prompt = implementation guide (read by Codex)
+- Kick-off text = execution trigger (copy-pasted by user)
+
+**Benefits:**
+- User doesn't need to copy-paste long instructions
+- Detailed prompt can be comprehensive without cluttering the kick-off
+- Kick-off text is easy to find and use
+- Clear separation between "what to do" (detailed) and "go do it" (kick-off)
+
+---
+
+## Template for Kick-Off Text
+
+```
+Execute {Task Name}
+
+Read and execute the detailed plan at docs/prompts/codex-{plan-name}.md.
+
+Plan Reference: plan:{plan-id}
+
+You are approved to implement. Execute immediately - do not propose, do not wait for approval. Follow all instructions in the detailed prompt document.
+```
+
+**Optional additions (only if needed):**
+- Brief context (1-2 sentences max)
+- Critical constraint or note (1 sentence max)
+
+**Never include:**
+- Implementation steps
+- Code examples
+- File lists
+- Validation commands
+- Detailed explanations
+
+---
+
+## Enforcement
+
+**MANDATORY:** This two-file structure applies to ALL Codex prompts.
+
+**Verification Checklist:**
+- [ ] Detailed prompt document exists (`docs/prompts/codex-{plan-name}.md`)
+- [ ] Kick-off text file exists (`docs/prompts/codex-{plan-name}-prompt.txt`)
+- [ ] Kick-off text is brief (5-10 lines)
+- [ ] Kick-off text points to detailed prompt
+- [ ] Kick-off text does NOT duplicate detailed instructions
+- [ ] Detailed prompt contains all implementation details
+
+---
+
+## Examples
+
+### ✅ Good: Proper Two-File Structure
+
+**Detailed Prompt:** `docs/prompts/codex-embedding-device-standardization.md`
+- Contains: Full implementation guide, code examples, validation, troubleshooting
+
+**Kick-Off Text:** `docs/prompts/codex-embedding-device-standardization-prompt.txt`
+- Contains: "Execute... Read detailed plan at... Plan Reference... You are approved..."
+
+### ❌ Bad: Duplicated Content
+
+**Kick-Off Text (WRONG):**
+```
+Execute Embedding Device Standardization Implementation
+
+Phase 1: Add device field to EncoderConfig...
+Phase 2: Add CLI flag...
+[50+ lines of implementation details]
+```
+
+**Why Wrong:** Duplicates detailed prompt content. User has to copy-paste too much text.
+
+---
+
+## Integration with Other Rules
+
+This rule works alongside:
+- **Plan-First Execution:** Detailed prompt references plan ID
+- **Change Approval Protocol:** Kick-off text includes approval statement
+- **Action Log Requirement:** Prompt creation must be logged
+
+---
+
+## Reference
+
+- **Detailed Prompt Example:** `docs/prompts/codex-embedding-device-standardization.md`
+- **Kick-Off Text Example:** `docs/prompts/codex-embedding-device-standardization-prompt.txt`
+- **Plan Documents:** `docs/plans/{plan-name}/`
+
+---
+
+**Last Updated:** 2025-12-29
+**Version:** 1.0

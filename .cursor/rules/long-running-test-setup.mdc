@@ -1,0 +1,224 @@
+---
+description: Long-Running Test Setup Rule - Progress monitoring for tests over 30 seconds
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Long-Running Test Setup Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: ALL Long-Running Tests Must Include Progress Monitoring
+
+**MANDATORY:** Any test, script, or command that runs for more than 30 seconds MUST include:
+1. Progress monitoring instructions (what to look for)
+2. Progress bars with rate/ETA (using `tqdm`)
+3. Heartbeat indicators (spinner or activity indicator)
+4. Clear status indicators (working/progressing/hung)
+
+---
+
+## What Qualifies as "Long-Running"
+
+**MANDATORY progress monitoring required for:**
+- Tests/scripts that run > 30 seconds
+- Operations processing > 1,000 items
+- Any operation that could appear "hung" to a user
+- Field building, dataset encoding, large batch operations
+- End-to-end integration tests
+- Prototype gates and validation scripts
+
+**NOT required for:**
+- Unit tests (< 30 seconds)
+- Quick validation checks
+- Simple operations with immediate feedback
+
+---
+
+## Required Components
+
+### 1. Progress Monitoring Instructions
+
+**MANDATORY:** Display instructions before long-running operations explaining:
+- ✅ What indicates WORKING (normal operation)
+- ⚠️ What indicates PROGRESSING (slow but working)
+- ❌ What indicates HUNG (stopped working)
+- ⏱️ Expected timeframes
+- 💡 Tips for monitoring
+
+**Format:**
+```python
+def print_progress_instructions(operation_name: str, num_items: int, expected_time: str) -> None:
+    """Print instructions for monitoring progress."""
+    print("\n" + "=" * 80)
+    print(f"🚀 {operation_name} - Progress Monitoring Guide")
+    print("=" * 80)
+    print()
+    print("📋 What to Look For:")
+    print()
+    print("  ✅ WORKING (Normal Operation):")
+    print("     • Progress bar shows increasing percentage")
+    print("     • Rate shows positive items/sec")
+    print("     • ETA shows decreasing time remaining")
+    print("     • Heartbeat spinner is rotating")
+    print()
+    print("  ⚠️  PROGRESSING (Slow but Working):")
+    print("     • Progress bar is advancing (even if slowly)")
+    print("     • Rate is > 0 items/sec")
+    print("     • ETA exists (not infinite)")
+    print()
+    print("  ❌ HUNG (Stopped Working):")
+    print("     • Progress bar hasn't updated in > 30 seconds")
+    print("     • Rate drops to 0 or shows 'N/A'")
+    print("     • ETA becomes infinite (∞)")
+    print("     • No activity for > 60 seconds")
+    print()
+    print(f"  ⏱️  Expected Timeframe: {expected_time}")
+    print()
+    print("=" * 80)
+    print()
+```
+
+### 2. Progress Bars with tqdm
+
+**MANDATORY:** Use `tqdm` for progress bars with:
+- Rate (items/sec)
+- ETA (estimated time remaining)
+- Percentage complete
+- Elapsed time
+
+**Example:**
+```python
+from tqdm import tqdm
+
+with tqdm(
+    total=total_items,
+    desc="Processing items",
+    unit="item",
+    miniters=100,  # Update every 100 items
+    mininterval=1.0,  # Update at least once per second
+    smoothing=0.1,
+) as pbar:
+    for item in items:
+        # ... process item ...
+        pbar.update(1)
+        # Update postfix with rate/elapsed every 5 seconds
+        if idx % 500 == 0:
+            elapsed = time.time() - start_time
+            rate = (idx + 1) / elapsed if elapsed > 0 else 0
+            pbar.set_postfix({
+                'rate': f'{rate:.1f} items/s',
+                'elapsed': f'{elapsed:.0f}s'
+            })
+```
+
+### 3. Heartbeat Indicators
+
+**MANDATORY:** Show activity indicator (spinner) for long operations:
+
+**Example:**
+```python
+import threading
+import time
+
+def heartbeat_indicator(stop_event: threading.Event) -> None:
+    """Show heartbeat spinner while process is running."""
+    spinner = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+    i = 0
+    while not stop_event.is_set():
+        print(f'\r  {spinner[i % len(spinner)]} Working...', end='', flush=True)
+        i += 1
+        time.sleep(0.1)
+    print('\r  ✓ Complete!', flush=True)
+
+# Usage:
+stop_heartbeat = threading.Event()
+heartbeat_thread = threading.Thread(target=heartbeat_indicator, args=(stop_heartbeat,), daemon=True)
+heartbeat_thread.start()
+try:
+    # ... long-running operation ...
+finally:
+    stop_heartbeat.set()
+    heartbeat_thread.join(timeout=1.0)
+```
+
+### 4. Step Indicators
+
+**MANDATORY:** Show clear step progress for multi-step operations:
+
+```python
+print("Step 1/4: Loading dataset...")
+# ... operation ...
+print("✓ Dataset loaded")
+
+print("Step 2/4: Building field...")
+print_progress_instructions("Field Building", num_docs, "5-15 minutes")
+# ... operation with progress bars ...
+print("✓ Field built")
+```
+
+---
+
+## Integration with Existing Code
+
+**When adding to existing code:**
+1. Add `tqdm` to `requirements/development.txt` if not present
+2. Import `tqdm` and `threading`/`time` as needed
+3. Add instructions function before long operations
+4. Wrap loops with `tqdm` progress bars
+5. Add heartbeat indicator for operations > 2 minutes
+6. Add step indicators for multi-step processes
+
+---
+
+## Examples
+
+### ✅ Good: Prototype Gate with Progress Monitoring
+
+```python
+print("Step 2/4: Building superposed field...")
+print_prototype_gate_instructions(len(doc_vectors))
+
+stop_heartbeat = threading.Event()
+heartbeat_thread = threading.Thread(target=heartbeat_indicator, args=(stop_heartbeat,), daemon=True)
+heartbeat_thread.start()
+
+try:
+    retriever = build_retriever(...)  # Uses tqdm internally
+finally:
+    stop_heartbeat.set()
+    heartbeat_thread.join()
+```
+
+### ❌ Bad: No Progress Monitoring
+
+```python
+# Just starts operation with no feedback
+retriever = build_retriever(...)  # User has no idea if it's working
+```
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to:
+- All test scripts that run > 30 seconds
+- All validation/gate scripts
+- All batch processing operations
+- All field building operations
+- All dataset encoding operations
+
+**Code Review Checklist:**
+- [ ] Instructions displayed before long operations?
+- [ ] Progress bars with rate/ETA using tqdm?
+- [ ] Heartbeat indicator for operations > 2 minutes?
+- [ ] Step indicators for multi-step processes?
+- [ ] Clear status indicators (working/progressing/hung)?
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.0

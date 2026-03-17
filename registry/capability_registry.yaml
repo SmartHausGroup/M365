@@ -1,0 +1,1864 @@
+# M365 Capability Registry — full O (master calculus)
+# Generated from M365_CAPABILITIES_UNIVERSE.md. Do not edit by hand; run scripts/ci/build_capability_registry.py
+# Verification: scripts/ci/verify_capability_registry.py
+
+schema_version: '1.0'
+source:
+- docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+- docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+- docs/contracts/M365_MASTER_CALCULUS_FULL.md
+actions:
+- action: list_users
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - users
+  - count
+- action: get_user
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - user
+- action: reset_user_password
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - user
+  - password_reset
+- action: list_teams
+  resource: team
+  domain: teams
+  required_permissions:
+  - Team.ReadBasic.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - teams
+  - count
+- action: list_sites
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - Sites.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - sites
+  - count
+- action: create_site
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - Sites.ReadWrite.All
+  - Group.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - site_id
+  - site_url
+  - group_created
+  - libraries_created
+- action: create_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - Team.Create
+  - Group.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - team_id
+  - team_url
+  - channels_created
+- action: add_channel
+  resource: channel
+  domain: teams
+  required_permissions:
+  - Channel.Create.Group
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - team
+  - channel
+- action: provision_service
+  resource: composite
+  domain: sharepoint
+  required_permissions:
+  - Sites.ReadWrite.All
+  - Group.ReadWrite.All
+  - Team.Create
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - status
+  - site
+  - team
+- action: create_user
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.ReadWrite.All
+  mutating: true
+  status: planned
+- action: update_user
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.ReadWrite.All
+  mutating: true
+  status: planned
+- action: list_groups
+  resource: group
+  domain: identity
+  required_permissions:
+  - Group.Read.All
+  mutating: false
+  status: planned
+- action: get_group
+  resource: group
+  domain: identity
+  required_permissions:
+  - Group.Read.All
+  mutating: false
+  status: planned
+- action: create_group
+  resource: group
+  domain: identity
+  required_permissions:
+  - Group.ReadWrite.All
+  mutating: true
+  status: planned
+- action: list_messages
+  resource: message
+  domain: mail
+  required_permissions:
+  - Mail.Read
+  mutating: false
+  status: planned
+- action: get_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - Mail.Read
+  mutating: false
+  status: planned
+- action: send_mail
+  resource: message
+  domain: mail
+  required_permissions:
+  - Mail.Send
+  mutating: true
+  status: planned
+- action: list_mail_folders
+  resource: mailFolder
+  domain: mail
+  required_permissions:
+  - Mail.Read
+  mutating: false
+  status: planned
+- action: list_events
+  resource: event
+  domain: calendar
+  required_permissions:
+  - Calendars.Read
+  mutating: false
+  status: planned
+- action: get_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - Calendars.Read
+  mutating: false
+  status: planned
+- action: create_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - Calendars.ReadWrite
+  mutating: true
+  status: planned
+- action: update_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - Calendars.ReadWrite
+  mutating: true
+  status: planned
+- action: list_drive_items
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - Files.Read.All
+  mutating: false
+  status: planned
+- action: get_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - Files.Read.All
+  mutating: false
+  status: planned
+- action: upload_file
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: planned
+- action: create_folder
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: planned
+- action: list_channels
+  resource: channel
+  domain: teams
+  required_permissions:
+  - Channel.ReadBasic.All
+  mutating: false
+  status: planned
+- action: get_channel
+  resource: channel
+  domain: teams
+  required_permissions:
+  - Channel.ReadBasic.All
+  mutating: false
+  status: planned
+- action: send_channel_message
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - ChannelMessage.Send
+  mutating: true
+  status: planned
+- action: get_site
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - Sites.Read.All
+  mutating: false
+  status: planned
+- action: list_lists
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - Sites.Read.All
+  mutating: false
+  status: planned
+- action: create_list
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - Sites.ReadWrite.All
+  mutating: true
+  status: planned
+- action: list_list_items
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - Sites.Read.All
+  mutating: false
+  status: planned
+- action: delete_user
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_user_photo
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: set_user_photo
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_user_owned_objects
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_user_created_objects
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_user_member_of
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_user_license_details
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: assign_user_license
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_user_license
+  resource: user
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_group
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_group
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_group_members
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_group_member
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_group_member
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_group_owners
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_group_owner
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_group_owner
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_group_member_of
+  resource: group
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_devices
+  resource: device
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_device
+  resource: device
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_device
+  resource: device
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_device
+  resource: device
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_device
+  resource: device
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_applications
+  resource: application
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_application
+  resource: application
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_application
+  resource: application
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_application
+  resource: application
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_application
+  resource: application
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_service_principals
+  resource: servicePrincipal
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_service_principal
+  resource: servicePrincipal
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_service_principal
+  resource: servicePrincipal
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_service_principal
+  resource: servicePrincipal
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_service_principal
+  resource: servicePrincipal
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_directory_roles
+  resource: directoryRole
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_directory_role
+  resource: directoryRole
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: assign_directory_role
+  resource: directoryRole
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_directory_role
+  resource: directoryRole
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_directory_role_members
+  resource: directoryRole
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_administrative_units
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_administrative_unit
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_administrative_unit
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_administrative_unit
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_administrative_unit
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_administrative_unit_members
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_administrative_unit_member
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_administrative_unit_member
+  resource: administrativeUnit
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_contacts
+  resource: orgContact
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_org_contact
+  resource: orgContact
+  domain: identity
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: move_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: copy_message
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_mail_folder
+  resource: mailFolder
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_mail_folder
+  resource: mailFolder
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_mail_folder
+  resource: mailFolder
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_mail_folder
+  resource: mailFolder
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_mailbox_settings
+  resource: mailboxSettings
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: update_mailbox_settings
+  resource: mailboxSettings
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_message_attachments
+  resource: attachment
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_attachment
+  resource: attachment
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_attachment
+  resource: attachment
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: search_mail
+  resource: message
+  domain: mail
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_calendars
+  resource: calendar
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_calendar
+  resource: calendar
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_calendar
+  resource: calendar
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_calendar
+  resource: calendar
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_calendar
+  resource: calendar
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_calendar_groups
+  resource: calendarGroup
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_calendar_group
+  resource: calendarGroup
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: delete_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: cancel_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: accept_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: decline_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: tentatively_accept_event
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_schedule
+  resource: schedule
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_schedule_availability
+  resource: schedule
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_events_in_schedule
+  resource: event
+  domain: calendar
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_contact
+  resource: contact
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_contact
+  resource: contact
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_contact
+  resource: contact
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_contact
+  resource: contact
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_contact_folders
+  resource: contactFolder
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_contact_folder
+  resource: contactFolder
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_contact_folder
+  resource: contactFolder
+  domain: contacts
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_drive
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_drives
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: upload_file_content
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: update_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: copy_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: move_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: create_upload_session
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: download_file
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_drive_item_children
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_drive_item_thumbnails
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: share_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_sharing_link
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: revoke_sharing_link
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_drive_shared_with_me
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: follow_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: unfollow_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: check_out_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: check_in_drive_item
+  resource: driveItem
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_drive_changes
+  resource: drive
+  domain: files
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: update_site
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_site
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_site_lists
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_list
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: update_list
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_list
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_list_item
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_list_item
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_list_item
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_list_item
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_list_item_versions
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: restore_list_item_version
+  resource: listItem
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_site_pages
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_site_page
+  resource: sitePage
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_site_page
+  resource: sitePage
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_site_page
+  resource: sitePage
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_site_page
+  resource: sitePage
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: publish_site_page
+  resource: sitePage
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_site_analytics
+  resource: site
+  domain: sharepoint
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: update_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: archive_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: unarchive_team
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_team_members
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_team_member
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_team_member
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_team_member
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_team_owners
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_team_owner
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: create_channel
+  resource: channel
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_channel
+  resource: channel
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_channel
+  resource: channel
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_channel_messages
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_channel_message
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: reply_to_channel_message
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_channel_message
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_channel_message
+  resource: chatMessage
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_channel_tabs
+  resource: teamsTab
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_channel_tab
+  resource: teamsTab
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_channel_tab
+  resource: teamsTab
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_channel_tab
+  resource: teamsTab
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_channel_members
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_channel_member
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_channel_member
+  resource: teamMember
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_chats
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_chat
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_chat
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_chat_messages
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: send_chat_message
+  resource: team
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_chat_members
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: add_chat_member
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: remove_chat_member
+  resource: chat
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_teamwork_installed_apps
+  resource: teamsAppInstallation
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: install_team_app
+  resource: teamsAppInstallation
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: upgrade_team_app
+  resource: teamsAppInstallation
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: uninstall_team_app
+  resource: teamsAppInstallation
+  domain: teams
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_plans
+  resource: plan
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_plan
+  resource: plan
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_plan
+  resource: plan
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_plan
+  resource: plan
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_plan
+  resource: plan
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_plan_tasks
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_plan_task
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_plan_task
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_plan_task
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_plan_task
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: assign_plan_task
+  resource: plannerTask
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_plan_buckets
+  resource: plannerBucket
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_plan_bucket
+  resource: plannerBucket
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_plan_bucket
+  resource: plannerBucket
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_plan_bucket
+  resource: plannerBucket
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_plan_bucket
+  resource: plannerBucket
+  domain: planner
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_notebooks
+  resource: notebook
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_notebook
+  resource: notebook
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_notebook
+  resource: notebook
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_notebook
+  resource: notebook
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_notebook_sections
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_section
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_section
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_section
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_section
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_section_pages
+  resource: section
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_page
+  resource: page
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_page
+  resource: page
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_page
+  resource: page
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_page
+  resource: page
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: get_page_content
+  resource: page
+  domain: onenote
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_task_lists
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_task_list
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_task_list
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_task_list
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_task_list
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_tasks
+  resource: taskList
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_task
+  resource: task
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_task
+  resource: task
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_task
+  resource: task
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_task
+  resource: task
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: complete_task
+  resource: task
+  domain: todo
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_subscriptions
+  resource: subscription
+  domain: subscriptions
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_subscription
+  resource: subscription
+  domain: subscriptions
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: update_subscription
+  resource: subscription
+  domain: subscriptions
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: delete_subscription
+  resource: subscription
+  domain: subscriptions
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: renew_subscription
+  resource: subscription
+  domain: subscriptions
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: search_query
+  resource: search
+  domain: search
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: search_messages
+  resource: search
+  domain: search
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: search_drive_items
+  resource: search
+  domain: search
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: search_events
+  resource: search
+  domain: search
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: search_people
+  resource: search
+  domain: search
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_report
+  resource: report
+  domain: reports
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_usage_reports
+  resource: report
+  domain: reports
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_activity_reports
+  resource: report
+  domain: reports
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_access_reviews
+  resource: accessReview
+  domain: access_reviews
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_access_review
+  resource: accessReview
+  domain: access_reviews
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: create_access_review
+  resource: accessReview
+  domain: access_reviews
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_access_review_decisions
+  resource: accessReview
+  domain: access_reviews
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: record_access_review_decision
+  resource: accessReview
+  domain: access_reviews
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: list_risk_detections
+  resource: riskDetection
+  domain: security
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: list_secure_scores
+  resource: secureScore
+  domain: security
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: get_secure_score_profile
+  resource: secureScore
+  domain: security
+  required_permissions:
+  - See permissions reference
+  mutating: false
+  status: planned
+- action: provision_user_and_license
+  resource: composite
+  domain: provisioning
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned
+- action: offboard_user
+  resource: composite
+  domain: provisioning
+  required_permissions:
+  - See permissions reference
+  mutating: true
+  status: planned

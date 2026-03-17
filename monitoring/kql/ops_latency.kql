@@ -1,0 +1,6 @@
+// Ops Adapter latency distribution if emitting custom metrics
+customMetrics
+| where name == "ops_action_latency_ms"
+| summarize p50=percentile(value, 50), p95=percentile(value, 95), p99=percentile(value, 99) by bin(timestamp, 5m), agent=tostring(customDimensions.agent)
+| order by timestamp desc
+

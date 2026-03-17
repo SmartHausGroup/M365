@@ -1,0 +1,74 @@
+---
+description: SmartHaus M365 AI Workforce AI Agent Governance Rules
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# SmartHaus M365 AI Workforce AI Agent Governance Rules
+
+## Status
+
+Review document to check yourself
+
+## Quick Start
+
+```bash
+make ai-status || true
+make ai-health-check || true
+make ai-validate
+```
+
+## Validate (one command)
+
+```bash
+make ai-validate
+```
+
+Runs quality gate (lint + tests + docs) plus contract and traceability gates.
+
+## Quality Gates
+
+```bash
+make quality-gate
+make test-all
+make lint-all
+make contract-gate
+make traceability-gate
+```
+
+## SmartHaus M365 AI Workforce Services
+
+| Service | Purpose |
+|---------|---------|
+| user-service | User profiles, authentication, roles |
+| request-service | Task request creation and management |
+| messaging-service | Job-scoped messaging between users |
+| notification-service | Push notifications (acceptance, messaging) |
+| moderation-service | Block/report functionality, contractor detection |
+| api-gateway | Main API entry point and routing |
+
+## Required Reading
+
+**MANDATORY:** Before any work, read:
+
+1. `Operations/NORTHSTAR.md` - Vision and goals (source of truth - everything must align)
+2. `Operations/EXECUTION_PLAN.md` - Planned work (verify work is in plan)
+3. `.cursor/rules/agent-workflow-mandatory.mdc` - Unified workflow (MANDATORY)
+4. `Operations/EXECUTION_PLAN.md` - Current project state
+5. `AGENTS.md` - Agent specifications
+6. `contracts/traceability_manifest.yml` - Traceability enforcement
+
+## Mandatory Validation Rules
+
+- NEVER assume previous work is done; ALWAYS validate
+- ALWAYS run tests; failing tests = not done
+- VERIFY dependencies and functionality; docs ≠ working code
+- If you can't run it, it doesn't work
+
+## Forbidden Actions
+
+- Skipping validation or trusting claims
+- "Good enough" code, skipped tests, known bugs, partial features
+- Vague commits without rationale/decisions
+- Modifying contracts without updating dependent services
+- Implementing v2+ features in v1 (see Authorized Capabilities in NORTHSTAR.md)

@@ -1,0 +1,61 @@
+plan_id: m365-repo-plan
+parent_plan_id: tai-licensed-modular-runtime
+status: Completed
+date: "2026-02-06"
+owner: SmartHaus
+master_plan: plans/tai-licensed-modular-runtime/master-plan.md
+execution_plan_reference: plan:tai-licensed-modular-runtime:m365
+north_star: Operations/NORTHSTAR.md
+ma_process_required: false
+
+objective: >
+  Define M365 as a TAI-loadable connector module with preserved auth, mutation gates,
+  idempotency, and auditability.
+
+scope:
+  in_scope:
+    - connector module capability contract for m365 instruction execution
+    - module-facing execution entrypoint mapped to provisioning/orchestration
+    - auth + mutation gate + idempotency + audit preservation
+    - module contract and entitlement documentation
+  out_of_scope:
+    - TAI host implementation
+    - CAIO/MAIA/VFE internals
+    - new intent/inference algorithms
+
+requirements:
+  functional:
+    - define/confirm m365.instruction.execute capability contract
+    - keep action/params to ok/result/error/trace_id response compatibility
+    - preserve ALLOW_M365_MUTATIONS and caller auth checks
+    - preserve per-action audit trail fields
+  non_functional:
+    - no secrets in module metadata or logs
+    - backward compatibility with existing voice->M365 path
+    - clear entitlement/permission docs
+
+tasks:
+  - id: 1
+    name: Define connector module capability and manifest requirements
+  - id: 2
+    name: Expose/confirm module entrypoint mapped to existing instruction execution
+  - id: 3
+    name: Enforce auth, mutation gate, idempotency at module boundary
+  - id: 4
+    name: Add/extend module contract tests
+  - id: 5
+    name: Update docs for integration and entitlements
+
+validation:
+  - contract tests pass for module invocation shape
+  - mutation-gated behavior remains enforced
+  - audit and trace records remain complete
+
+success_criteria:
+  - M365 capability documented as loadable connector module
+  - CAIO/TAI compatibility preserved
+  - security and audit behavior preserved
+
+dependencies:
+  - TAI core module host and entitlement model
+  - CAIO core module orchestration contract

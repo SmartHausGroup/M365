@@ -1,0 +1,180 @@
+---
+description: Sequential Phase Enforcement Rule - Phases must be completed in order
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Sequential Phase Enforcement Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Rule: Phases Must Be Completed Sequentially
+
+**MANDATORY:** You MUST complete phases in order. You CANNOT jump ahead to later phases until earlier phases are complete.
+
+---
+
+## Core Principle
+
+**A phase is not complete until:**
+1. All checklist items are marked `[x]` (checked)
+2. All required tests pass
+3. Governance gates pass
+4. Phase status is marked "✅ Complete" in `Operations/EXECUTION_PLAN.md`
+5. Phase completion log entry exists in `Operations/ACTION_LOG.md`
+6. Phase attestation exists (if required)
+
+**Only after a phase is complete can you start the next phase.**
+
+---
+
+## Enforcement Rules
+
+### Before Starting ANY Phase Work
+
+**MANDATORY:** Before starting work on any phase, you MUST:
+
+1. **Check Prerequisite Phases:**
+   - Identify which phase you're about to start (e.g., Phase 0.2, Phase 0.3, Phase 1.1)
+   - Identify prerequisite phases (earlier phases in sequence)
+   - Verify all prerequisite phases are marked "✅ Complete" in `Operations/EXECUTION_PLAN.md`
+
+2. **Verify Phase Status:**
+   - Read phase status at top of phase section in `Operations/EXECUTION_PLAN.md`
+   - Status must be "✅ Complete" (not "⚠️ In Progress" or "❌ Not Started")
+   - If status is not "✅ Complete", prerequisite phase is NOT done
+
+3. **Verify All Checkboxes:**
+   - All task checkboxes in prerequisite phase must be marked `[x]`
+   - No unchecked `[ ]` boxes should remain in prerequisite phase
+   - If any checkboxes are unchecked, prerequisite phase is NOT complete
+
+4. **Verify Completion Log:**
+   - Check `Operations/ACTION_LOG.md` for phase completion entry
+   - Entry should say "Completed {phase}" or "PHASE {phase} COMPLETE"
+   - If no completion entry exists, prerequisite phase is NOT complete
+
+### If Prerequisites Are Incomplete
+
+**MANDATORY:** If any prerequisite phase is incomplete:
+
+- **STOP** immediately
+- **DO NOT** start work on the new phase
+- **HUMAN-IN-THE-LOOP:** Explain: "Phase {X} cannot start because prerequisite phase {Y} is not complete. Status: {status}. Missing: {list missing items}."
+- **HUMAN-IN-THE-LOOP:** Ask: "Should we: (a) complete prerequisite phase {Y} first, or (b) get explicit authorization to skip prerequisites?"
+- **DO NOT proceed** until prerequisites are complete or explicit authorization is given
+
+---
+
+## Phase Sequence Rules
+
+### Phase 0 Sequence
+- **Phase 0.1** must be "✅ Complete" before starting Phase 0.2
+- **Phase 0.2** must be "✅ Complete" before starting Phase 0.3
+- **Phase 0.3** must be "✅ Complete" before starting Phase 1.1
+
+### Phase 1 Sequence
+- **Phase 0.3** must be "✅ Complete" before starting Phase 1.1
+- **Phase 1.1** must be "✅ Complete" before starting Phase 1.2
+- And so on...
+
+### General Rule
+- **Phase X.Y** must be "✅ Complete" before starting Phase X.(Y+1)
+- **Phase X** must be "✅ Complete" before starting Phase (X+1).1
+
+---
+
+## Verification Checklist
+
+Before starting ANY phase work, verify:
+
+- [ ] Prerequisite phase exists in `Operations/EXECUTION_PLAN.md`
+- [ ] Prerequisite phase status is "✅ Complete" (not "⚠️ In Progress" or "❌ Not Started")
+- [ ] All checkboxes in prerequisite phase are marked `[x]` (no `[ ]` remaining)
+- [ ] Phase completion log entry exists in `Operations/ACTION_LOG.md`
+- [ ] Phase attestation exists (if required by phase completion contract)
+- [ ] Governance gates passed for prerequisite phase (contract-gate, traceability-gate, northstar-version-gate)
+
+**If ANY check fails → STOP and complete prerequisite phase first.**
+
+---
+
+## Examples
+
+### ✅ Good: Sequential Phase Completion
+
+**Scenario:** Starting Phase 0.2 work
+
+**Process:**
+1. ✅ Check Phase 0.1 status: "✅ Complete"
+2. ✅ Verify all Phase 0.1 checkboxes marked `[x]`
+3. ✅ Verify Phase 0.1 completion log entry exists
+4. ✅ Proceed with Phase 0.2 work
+
+**Result:** Sequential completion followed correctly
+
+### ❌ Bad: Jumping Ahead
+
+**Scenario:** Starting Phase 0.2 work
+
+**Process:**
+1. ❌ Did not check Phase 0.1 status
+2. ❌ Started Phase 0.2 work anyway
+3. ❌ Phase 0.1 still shows "⚠️ In Progress"
+
+**Result:** Workflow violation - phases not completed sequentially
+
+### ❌ Bad: Incomplete Prerequisites
+
+**Scenario:** Starting Phase 0.3 work
+
+**Process:**
+1. ❌ Checked Phase 0.2 status: "⚠️ In Progress" (not complete)
+2. ❌ Started Phase 0.3 work anyway
+3. ❌ Phase 0.2 not finished
+
+**Result:** Workflow violation - prerequisite phase incomplete
+
+---
+
+## Integration with Other Rules
+
+This rule integrates with:
+- **Mandatory Agent Workflow:** This is Step 2.5 (prerequisite phase verification)
+- **Plan-First Execution:** Step 2 requires checking prerequisites before starting work
+- **Phase Execution Protocol:** Enforces sequential completion per protocol
+- **Action Log Requirement:** Requires completion log entries for phase tracking
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL AI assistants working on SmartHaus M365 AI Workforce.
+
+**Verification:**
+- Before any phase work, verify prerequisites are complete
+- If prerequisites incomplete, STOP and request authorization
+- Do not proceed until prerequisites are complete or explicitly authorized
+
+**Code Review Checklist:**
+- [ ] Did agent check prerequisite phase status before starting work?
+- [ ] Are all prerequisite phases marked "✅ Complete"?
+- [ ] Did agent verify all prerequisite checkboxes are marked?
+- [ ] Did agent verify prerequisite completion log entry exists?
+
+---
+
+## Reference
+
+- **Mandatory Agent Workflow:** `.cursor/rules/agent-workflow-mandatory.mdc` - Step 2.5
+- **Phase Execution Protocol:** `Operations/PHASE_EXECUTION_AND_ITERATION_PROTOCOL.md`
+- **Execution Plan:** `Operations/EXECUTION_PLAN.md`
+- **Action Log:** `Operations/ACTION_LOG.md`
+
+---
+
+**Last Updated:** 2026-01-07
+**Version:** 1.0

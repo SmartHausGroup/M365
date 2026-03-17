@@ -51,11 +51,6 @@ class LatticeAIOS(BaseModel):
     notes: str | None = None
 
 
-class LatticeLQL(BaseModel):
-    change: str
-    tests: list[str] = Field(default_factory=list)
-
-
 class LatticeLEF(BaseModel):
     component: str
     update: str

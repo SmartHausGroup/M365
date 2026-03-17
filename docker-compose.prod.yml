@@ -1,0 +1,12 @@
+services:
+  opa:
+    command: ["run", "--server", "/policies"]
+    restart: unless-stopped
+
+  ops-adapter:
+    environment:
+      - OPS_DRY_RUN=${OPS_DRY_RUN:-false}
+      - OPA_FAIL_OPEN=${OPA_FAIL_OPEN:-false}
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+    restart: unless-stopped
+

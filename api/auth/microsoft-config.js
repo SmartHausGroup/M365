@@ -3,10 +3,10 @@ export const MICROSOFT_CONFIG = {
   // OAuth endpoints
   authUrl: 'https://login.microsoftonline.com',
   tokenUrl: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-  
+
   // API endpoints
   graphUrl: 'https://graph.microsoft.com/v1.0',
-  
+
   // Required scopes for M365 access
   scopes: [
     'User.Read',                    // Read user profile
@@ -15,25 +15,26 @@ export const MICROSOFT_CONFIG = {
     'Directory.Read.All',          // Read directory data
     'Calendars.Read',              // Read calendars
     'Mail.Read',                   // Read email
+    'Mail.Send',                   // Send email
     'Files.Read.All'               // Read OneDrive files
   ],
-  
+
   // Response types
   responseType: 'code',
   responseMode: 'query',
-  
+
   // PKCE for security
   codeChallengeMethod: 'S256',
-  
+
   // State parameter for security
   stateLength: 32,
-  
+
   // Token expiration
   tokenExpiryBuffer: 300, // 5 minutes
-  
+
   // Error handling
   errorRedirect: '/auth-error',
-  
+
   // Success redirect
   successRedirect: '/dashboard'
 };

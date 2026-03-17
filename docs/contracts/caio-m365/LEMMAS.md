@@ -1,6 +1,6 @@
 # CAIO-M365 Contract — Lemmas Index
 
-**MA Phase:** 3 — Lemmas linked to invariants  
+**MA Phase:** 3 — Lemmas linked to invariants
 **Source:** `docs/contracts/caio-m365/`; invariants in `invariants/INV-CAIO-M365-*.yaml`
 
 This index lists all lemmas that tie the CAIO-M365 instruction API contract to its mathematics and invariants. Each lemma is documented in its own file and referenced by the invariant acceptance criteria and verification.

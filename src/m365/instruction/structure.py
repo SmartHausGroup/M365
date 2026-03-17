@@ -15,9 +15,7 @@ from typing import Any
 from m365.instruction.constants import A_Admin, A_User, P
 
 
-def instruction_4tuple(
-    p: str, i: Any, a: str, params: Any
-) -> tuple[Any, Any, Any, Any]:
+def instruction_4tuple(p: str, i: Any, a: str, params: Any) -> tuple[Any, Any, Any, Any]:
     """
     Build instruction as 4-tuple (persona, identity, action, parameters).
 
@@ -98,7 +96,5 @@ def verify_A003(instruction: Any) -> None:
     Fail closed: raises AssertionError on violation.
     """
     p, a = instruction[0], instruction[2]
-    assert (p == "Admin" and a in A_Admin) or (
-        p == "User" and a in A_User
-    ), "syntactically valid"
+    assert (p == "Admin" and a in A_Admin) or (p == "User" and a in A_User), "syntactically valid"
     assert A_Admin & A_User == set(), "disjoint"

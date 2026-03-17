@@ -1,0 +1,442 @@
+---
+description: Notebook Error Fix Protocol - Formal process for fixing errors found in notebooks
+globs: ["**/*.ipynb"]
+alwaysApply: true
+---
+
+# Notebook Error Fix Protocol
+
+**Status:** MANDATORY (v2+ only)
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Applicability
+
+**This rule applies ONLY to notebooks under `notebooks/` when MA is authorized (v2+ algorithmic work).**
+
+**v1 Scope:** v1 does not use notebooks for matching algorithms (location + category filtering only). This protocol does not apply to v1 work.
+
+**v2+ Scope:** When working on v2+ algorithmic matching, pricing, or recommendation systems that require notebooks, this protocol is mandatory.
+
+---
+
+## Rule: ALL Notebook Errors Must Follow This Fix Protocol
+
+**MANDATORY (v2+ only):** When ANY error is found in a notebook (syntax errors, runtime errors, logic errors, test failures), you MUST follow this complete protocol:
+
+1. **Document the error** (what failed, where, why)
+2. **Create a fix plan** (root cause, fix approach, validation)
+3. **Create a formal prompt** (for Codex or assistant to execute)
+4. **Execute the fix** (following the prompt/plan)
+5. **Validate** (re-run notebook, verify fix)
+6. **Update documentation** (action log, plan status)
+
+**This integrates with:**
+- **Plan-First Execution:** `.cursor/rules/plan-first-execution.mdc` - All fixes must have a plan
+- **Notebook-First Mandatory:** `.cursor/rules/notebook-first-mandatory.mdc` - Fixes happen in notebooks
+- **Change Approval Protocol:** `.cursor/rules/rsf-change-approval.mdc` - Approval required for write operations
+- **Action Log Requirement:** `.cursor/rules/action-log-requirement.mdc` - All work must be logged
+
+---
+
+## Error Severity Classification
+
+Before creating a plan, classify the error severity:
+
+### Trivial Errors
+**Examples:**
+- Syntax errors (typos, missing commas, incorrect indentation)
+- Index errors (out-of-bounds, off-by-one)
+- Import errors (missing imports, wrong paths)
+- Type errors (obvious type mismatches)
+
+**Process:** Lightweight plan (minimal documentation, quick fix)
+
+### Moderate Errors
+**Examples:**
+- Logic errors (wrong algorithm, incorrect conditionals)
+- Missing validation (bounds checks, null checks)
+- Data structure mismatches (shape errors, key errors)
+- Configuration errors (wrong parameters, missing config)
+
+**Process:** Standard plan (document root cause, fix approach, validation)
+
+### Complex Errors
+**Examples:**
+- Algorithmic issues (incorrect math, wrong complexity)
+- Design problems (architectural issues, API mismatches)
+- Performance regressions (slow execution, memory issues)
+- Integration failures (component interactions, dependencies)
+
+**Process:** Full plan with investigation (deep analysis, alternatives, impact assessment)
+
+---
+
+## Step 1: Document the Error
+
+**MANDATORY:** Create an error log entry documenting:
+
+1. **Notebook path:** Full path to the notebook
+2. **Error type:** Syntax, runtime, logic, test failure, etc.
+3. **Error message:** Exact error message and stack trace
+4. **Location:** Cell number, line number, function name
+5. **Root cause:** Why the error occurred (if known)
+6. **Impact:** What functionality is blocked
+7. **Reproduction:** Steps to reproduce the error
+
+**Location:** `docs/notebooks/errors/{notebook-name}-{error-id}.md`
+
+**Format:**
+```markdown
+# Error: {Short Description}
+
+**Notebook:** `notebooks/{path}/{notebook-name}.ipynb`
+**Date:** YYYY-MM-DD
+**Severity:** Trivial | Moderate | Complex
+**Status:** Documented | Planned | In Progress | Fixed | Validated
+
+## Error Details
+
+**Type:** [Error type]
+**Message:** [Exact error message]
+**Location:** Cell {N}, Line {M}, Function: {function_name}
+**Stack Trace:**
+```
+[Full stack trace]
+```
+
+## Root Cause
+
+[Why the error occurred]
+
+## Impact
+
+[What functionality is blocked]
+
+## Reproduction Steps
+
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Fix Plan
+
+[Link to fix plan: `docs/plans/notebook-fixes/{plan-id}/`]
+```
+
+---
+
+## Step 2: Create Fix Plan
+
+**MANDATORY:** Create a fix plan in `docs/plans/notebook-fixes/{plan-id}/`
+
+**Plan must include:**
+- Plan ID and status
+- Error reference (link to error log)
+- Root cause analysis
+- Fix approach (specific changes needed)
+- Validation steps (how to verify the fix)
+- Success criteria (what "fixed" looks like)
+
+**Plan formats:** Create all three formats:
+- `{plan-id}.md` - Markdown format
+- `{plan-id}.yaml` - YAML format
+- `{plan-id}.json` - JSON format
+
+**For Trivial Errors:** Lightweight plan (minimal, quick)
+**For Moderate Errors:** Standard plan (documented, validated)
+**For Complex Errors:** Full plan (investigation, alternatives, impact)
+
+**Plan naming:** `notebook-fix-{notebook-name}-{error-type}-{date}`
+
+**Example:** `notebook-fix-phase1-recall-failure-indexerror-20260102`
+
+---
+
+## Step 3: Create Formal Prompt
+
+**MANDATORY:** Create execution prompt in `docs/prompts/codex-notebook-fix-{plan-id}.md`
+
+**Prompt must include:**
+- Plan reference
+- Error summary
+- Fix approach (specific steps)
+- Validation requirements
+- Success criteria
+
+**Also create:** Short kick-off text in `docs/prompts/codex-notebook-fix-{plan-id}-prompt.txt`
+
+**For Trivial Errors:** Brief prompt (quick fix instructions)
+**For Moderate/Complex Errors:** Detailed prompt (step-by-step, validation)
+
+---
+
+## Step 4: Execute the Fix
+
+**MANDATORY:** Follow the prompt/plan exactly:
+
+1. **Read the plan** - Understand the fix approach
+2. **Read the prompt** - Follow execution instructions
+3. **Fix in notebook** - Make changes in notebook cells (NEVER edit extracted code directly)
+4. **Test incrementally** - Run cells as you fix to verify
+5. **Re-run full notebook** - Ensure end-to-end execution succeeds
+6. **Validate success criteria** - Verify all requirements met
+
+**CRITICAL:** All fixes must happen in notebooks. Do NOT edit extracted Python files directly.
+
+---
+
+## Step 5: Validate the Fix
+
+**MANDATORY:** After fixing, validate:
+
+1. **Re-run the notebook** - Execute all cells end-to-end
+2. **Verify no errors** - All cells execute successfully
+3. **Check outputs** - Expected outputs are produced
+4. **Validate success criteria** - All plan success criteria met
+5. **Update error log** - Mark error as "Fixed" and "Validated"
+
+**If validation fails:**
+- Document what failed
+- Create new error log entry
+- Create new fix plan
+- Repeat process
+
+---
+
+## Step 6: Update Documentation
+
+**MANDATORY:** After fix is validated:
+
+1. **Update error log** - Mark status as "Fixed" and "Validated"
+2. **Update fix plan** - Mark status as "Complete"
+3. **Update action log** - Log the fix in `Operations/ACTION_LOG.md`
+4. **Update execution plan** - If milestone-related, update `Operations/EXECUTION_PLAN.md`
+
+**Action log entry format:**
+```
+YYYY-MM-DD HH:MM:SS TZ — Fixed notebook error: plan:{plan-id}:{requirement-id}; aligned with North Star [alignment]; fixed {error-type} in {notebook-path} by {fix-description}; validated by re-running notebook end-to-end.
+```
+
+---
+
+## Diagnostic Notebook Requirements
+
+**MANDATORY:** All diagnostic notebooks MUST include success criteria, evaluation, and iterative follow-on diagnostics. This ensures diagnostics stay in notebooks and create a clear path to resolution.
+
+### Required Cell Structure
+
+**1. Success Criteria Cell (Markdown)** - Must be first cell after overview:
+```markdown
+## Success Criteria
+
+**What success looks like:**
+- [Specific metric/threshold 1]
+- [Specific metric/threshold 2]
+- [Specific metric/threshold 3]
+
+**Failure conditions:**
+- [Condition that indicates failure]
+- [Condition that indicates failure]
+
+**Reference:** [Parent plan/requirement this diagnostic supports]
+```
+
+**2. Evaluation Cell (Code)** - Must be last execution cell:
+```python
+# Evaluate success criteria
+success_criteria = {
+    "criterion_1": actual_value_1 >= threshold_1,
+    "criterion_2": actual_value_2 >= threshold_2,
+    # ... more criteria
+}
+
+all_passed = all(success_criteria.values())
+evaluation = {
+    "all_passed": all_passed,
+    "criteria": success_criteria,
+    "actual_values": {
+        "criterion_1": actual_value_1,
+        "criterion_2": actual_value_2,
+    },
+    "thresholds": {
+        "criterion_1": threshold_1,
+        "criterion_2": threshold_2,
+    }
+}
+
+# Save evaluation artifact
+artifact_path = REPO_ROOT / "notebooks" / "diagnostics" / "configs" / f"{notebook_name}_evaluation.json"
+artifact_path.parent.mkdir(parents=True, exist_ok=True)
+artifact_path.write_text(json.dumps(evaluation, indent=2), encoding="utf-8")
+
+# Print clear status
+if all_passed:
+    print("✅ DIAGNOSTIC PASSED: All success criteria met.")
+else:
+    print("❌ DIAGNOSTIC FAILED: The following criteria were not met:")
+    for criterion, passed in success_criteria.items():
+        if not passed:
+            print(f"  - {criterion}: {evaluation['actual_values'][criterion]} (required: {evaluation['thresholds'][criterion]})")
+```
+
+**3. Next Steps Cell (Markdown)** - Must be final cell:
+```markdown
+## Next Steps
+
+**Evaluation Result:** [PASSED | FAILED]
+
+**If PASSED:**
+✅ All success criteria met. Diagnostic complete. Proceed with next phase or mark parent requirement as complete.
+
+**If FAILED:**
+❌ Diagnostic failed. Create follow-on diagnostic notebook to investigate:
+
+**Next Diagnostic:** `notebooks/diagnostics/{next-diagnostic-name}.ipynb`
+
+**Investigation Focus:**
+- [Specific issue 1 to investigate]
+- [Specific issue 2 to investigate]
+
+**Success Criteria for Next Diagnostic:**
+- [What the next diagnostic needs to achieve]
+
+**Link to Plan:** `docs/plans/{parent-plan-id}/`
+```
+
+### Iterative Diagnostic Process
+
+**MANDATORY:** When a diagnostic fails:
+
+1. **Create follow-on diagnostic notebook** - One notebook per specific issue
+2. **Link diagnostics in chain** - Each diagnostic references the previous one
+3. **Update parent plan** - Document findings from each diagnostic
+4. **Continue until success** - Iterate until all criteria met or blocker identified
+
+**Example Chain:**
+- `phase1_recall_failure_investigation.ipynb` (finds: fused path not used, low variance)
+- `phase1_fused_path_investigation.ipynb` (investigates: why fused path not used)
+- `phase1_score_variance_investigation.ipynb` (investigates: why scores collapsing)
+- Continue until root cause found and fixed
+
+**CRITICAL:** All diagnostics stay in notebooks. Code fixes are extracted from notebooks only after diagnostics identify the root cause and validate the fix.
+
+---
+
+## Integration with Existing Rules
+
+This protocol integrates with:
+
+1. **Plan-First Execution** (`.cursor/rules/plan-first-execution.mdc`):
+   - Step 2 requires creating a fix plan
+   - All fixes must reference a plan ID
+
+2. **Notebook-First Mandatory** (`.cursor/rules/notebook-first-mandatory.mdc`):
+   - Step 4 requires fixing in notebooks (never in extracted code)
+   - All fixes must be validated in notebooks before extraction
+
+3. **Change Approval Protocol** (`.cursor/rules/rsf-change-approval.mdc`):
+   - Step 3 requires approval for write operations
+   - Approval must include plan reference and fix approach
+
+4. **Action Log Requirement** (`.cursor/rules/action-log-requirement.mdc`):
+   - Step 6 requires updating action log
+   - Must include plan reference and North Star alignment
+
+5. **Mandatory Agent Workflow** (`.cursor/rules/agent-workflow-mandatory.mdc`):
+   - All steps must follow pre-work and post-work checklists
+   - North Star alignment check required
+   - Execution plan verification required
+
+---
+
+## Directory Structure
+
+```
+docs/
+├── notebooks/
+│   └── errors/
+│       └── {notebook-name}-{error-id}.md
+├── plans/
+│   └── notebook-fixes/
+│       └── {plan-id}/
+│           ├── {plan-id}.md
+│           ├── {plan-id}.yaml
+│           └── {plan-id}.json
+└── prompts/
+    ├── codex-notebook-fix-{plan-id}.md
+    └── codex-notebook-fix-{plan-id}-prompt.txt
+```
+
+---
+
+## Examples
+
+### ✅ Good: Trivial Error Fix
+
+**Error:** IndexError in `phase1_recall_failure_investigation.ipynb` - `query_positives` truncated to 100 but loop iterates to 200
+
+**Process:**
+1. ✅ Error documented: `docs/notebooks/errors/phase1-recall-failure-indexerror-20260102.md`
+2. ✅ Lightweight plan created: `docs/plans/notebook-fixes/notebook-fix-phase1-recall-failure-indexerror-20260102/`
+3. ✅ Brief prompt created: `docs/prompts/codex-notebook-fix-phase1-recall-failure-indexerror-20260102.md`
+4. ✅ Fix executed: Updated loop bounds in notebook
+5. ✅ Validated: Re-ran notebook, all cells pass
+6. ✅ Documentation updated: Error log, plan, action log updated
+
+### ❌ Bad: Skipping Protocol
+
+**Error:** Syntax error in notebook
+
+**Process:**
+1. ❌ Error not documented
+2. ❌ No plan created
+3. ❌ Fix applied directly without prompt
+4. ❌ No validation
+5. ❌ No documentation updates
+
+**Result:** Error fix is not traceable, not reproducible, not validated
+
+---
+
+## Enforcement
+
+**MANDATORY:** This protocol applies to ALL notebook errors found during:
+- Development (writing new notebooks)
+- Testing (running validation notebooks)
+- Debugging (investigating failures)
+- Maintenance (updating existing notebooks)
+
+**Verification Checklist:**
+
+Before fixing any notebook error:
+- [ ] Error documented in `docs/notebooks/errors/`
+- [ ] Fix plan created in `docs/plans/notebook-fixes/`
+- [ ] Execution prompt created in `docs/prompts/`
+- [ ] Plan reference obtained
+- [ ] Approval obtained (if write operations)
+
+After fixing:
+- [ ] Fix validated (notebook re-run successfully)
+- [ ] Error log updated (status: Fixed, Validated)
+- [ ] Plan updated (status: Complete)
+- [ ] Action log updated (with plan reference)
+- [ ] Execution plan updated (if milestone-related)
+
+**CRITICAL:** Work is NOT complete until all steps are verified.
+
+---
+
+## Related Documents
+
+- **Notebook-First Mandatory:** `.cursor/rules/notebook-first-mandatory.mdc`
+- **Plan-First Execution:** `.cursor/rules/plan-first-execution.mdc`
+- **Change Approval Protocol:** `.cursor/rules/rsf-change-approval.mdc`
+- **Action Log Requirement:** `.cursor/rules/action-log-requirement.mdc`
+- **Mandatory Agent Workflow:** `.cursor/rules/agent-workflow-mandatory.mdc`
+
+---
+
+**Last Updated:** 2026-01-02
+**Version:** 1.1

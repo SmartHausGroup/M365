@@ -47,7 +47,7 @@
   - `src/m365_server/__main__.py`
   - `docs/commercialization/m365-packaging-install-bootstrap.md`
 - Denylist:
-  - `src/**` 
+  - `src/**`
   - `tests/**`
   - `docs/prompts/**`
 
