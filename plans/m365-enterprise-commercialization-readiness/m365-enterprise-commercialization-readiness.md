@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Commercialization Readiness
 
 **Plan ID:** `m365-enterprise-commercialization-readiness`
-**Status:** Draft (Planning created 2026-03-17; refined into execution subphases 2026-03-17)
+**Status:** Active (`P0A` and `P0B` complete 2026-03-17; `P1A` next)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
@@ -14,6 +14,12 @@
 ## Objective
 
 Define the minimum set of M365-only changes required to make the current M365 capability commercially honest, operationally supportable, and enterprise-ready as a standalone deterministic module ASAP.
+
+## Execution Status
+
+- `P0A` complete on 2026-03-17: locked the standalone M365 v1 commercial boundary to the 9 implemented instruction actions in `docs/commercialization/m365-v1-supported-surface.md`, explicitly excluding the remaining 251 planned actions and the 5 notebook/spec-only group actions from launch claims.
+- `P0B` complete on 2026-03-17: defined the standalone buyer, operator, positioning, and deployment model in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`, and synchronized `Operations/NORTHSTAR.md` so the broader AI Workforce vision no longer overclaims the standalone M365 v1 commercial boundary.
+- `P1A` is the next execution unit.
 
 ---
 

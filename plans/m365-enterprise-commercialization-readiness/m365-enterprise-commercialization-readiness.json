@@ -1,12 +1,27 @@
 {
   "plan_id": "m365-enterprise-commercialization-readiness",
-  "status": "Draft",
+  "status": "Active",
   "date": "2026-03-17",
   "owner": "SmartHaus",
   "execution_plan_reference": "plan:m365-enterprise-commercialization-readiness:R1",
   "north_star": "Operations/NORTHSTAR.md",
   "ma_process_required": false,
   "objective": "Define the minimum set of M365-only changes required to make the current M365 capability commercially honest, operationally supportable, and enterprise-ready as a standalone deterministic module ASAP.",
+  "execution_status": {
+    "completed": [
+      {
+        "phase": "P0A",
+        "date": "2026-03-17",
+        "summary": "Locked the standalone M365 v1 commercial boundary to the 9 implemented instruction actions in docs/commercialization/m365-v1-supported-surface.md and explicitly excluded the remaining 251 planned actions plus the 5 notebook/spec-only group actions from launch claims."
+      },
+      {
+        "phase": "P0B",
+        "date": "2026-03-17",
+        "summary": "Defined the standalone buyer, operator, positioning, and deployment model in docs/commercialization/m365-v1-positioning-and-north-star-delta.md and synchronized Operations/NORTHSTAR.md so the broader AI Workforce vision no longer overclaims the standalone M365 v1 commercial boundary."
+      }
+    ],
+    "next_phase": "P1A"
+  },
   "commercial_gap_summary": [
     "marketable capability boundary is not yet locked to the proven v1 surface",
     "production configuration is split between tenant config and direct .env loading",
