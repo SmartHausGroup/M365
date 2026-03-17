@@ -44,7 +44,27 @@ execution_status:
         the production authority, app_only is the default production auth mode,
         certificate auth is enterprise-preferred, client secret is transitional
         only, and delegated auth is local and test only.
-  next_phase: P2A
+    - phase: P2A
+      date: "2026-03-17"
+      summary: >
+        Defined the audit-event model, governance-evidence model, current gap
+        map, and enterprise acceptance boundary in
+        docs/commercialization/m365-audit-and-governance-evidence-model.md. The
+        repo now explicitly distinguishes the formally evidenced instruction API
+        audit surface from the broader but only partially evidenced ops-adapter
+        and admin audit surfaces, and documents snapshot_mode admin audit as a
+        real commercialization gap.
+    - phase: P2B
+      date: "2026-03-17"
+      summary: >
+        Defined the permission-tier posture, approval-boundary model,
+        fail-closed rules, and exception and escalation boundary in
+        docs/commercialization/m365-permission-approval-fail-closed-hardening.md.
+        The repo now explicitly documents that permission tiers and
+        ops-adapter approvals exist, but permissive tier fallbacks, OPA
+        fail-open paths, and approval-less instruction-API mutations remain
+        hardening gaps rather than enterprise-ready claims.
+  next_phase: P3A
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface

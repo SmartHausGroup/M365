@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Commercialization Readiness
 
 **Plan ID:** `m365-enterprise-commercialization-readiness`
-**Status:** Active (`P0A`, `P0B`, `P1A`, and `P1B` complete 2026-03-17; `P2A` next)
+**Status:** Active (`P0A`, `P0B`, `P1A`, `P1B`, `P2A`, and `P2B` complete 2026-03-17; `P3A` next)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-commercialization-readiness:R1`
@@ -21,7 +21,9 @@ Define the minimum set of M365-only changes required to make the current M365 ca
 - `P0B` complete on 2026-03-17: defined the standalone buyer, operator, positioning, and deployment model in `docs/commercialization/m365-v1-positioning-and-north-star-delta.md`, and synchronized `Operations/NORTHSTAR.md` so the broader AI Workforce vision no longer overclaims the standalone M365 v1 commercial boundary.
 - `P1A` complete on 2026-03-17: inventoried the current config-loading surfaces, locked tenant YAML plus env-assisted secret fallback as the canonical production contract in `docs/commercialization/m365-canonical-config-contract.md`, and narrowed the env docs so `.env` is no longer described as the production authority.
 - `P1B` complete on 2026-03-17: defined the migration path, auth-mode decision matrix, secret policy, certificate guidance, and legacy-surface deprecation map in `docs/commercialization/m365-config-migration-and-auth-policy.md`. The supported posture is now singular: tenant YAML selected by `UCP_TENANT` is the production authority, `app_only` is the default production auth mode, certificate auth is the enterprise-preferred credential model, client secret is transitional only, and delegated auth is local/test/support only.
-- `P2A` is the next execution unit.
+- `P2A` complete on 2026-03-17: defined the audit-event model, governance-evidence model, current gap map, and enterprise acceptance boundary in `docs/commercialization/m365-audit-and-governance-evidence-model.md`. The repo now explicitly distinguishes the formally evidenced instruction API audit surface from the broader but only partially evidenced ops-adapter and admin audit surfaces, and it documents `snapshot_mode` admin audit as a real commercialization gap rather than an implied feature.
+- `P2B` complete on 2026-03-17: defined the permission-tier posture, approval-boundary model, fail-closed rules, and exception/escalation boundary in `docs/commercialization/m365-permission-approval-fail-closed-hardening.md`. The repo now explicitly documents that permission tiers and ops-adapter approvals exist, but permissive tier fallbacks, OPA fail-open paths, and approval-less instruction-API mutations remain hardening gaps rather than enterprise-ready claims.
+- `P3A` is the next execution unit.
 
 ---
 
