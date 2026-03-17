@@ -92,14 +92,24 @@ execution_status:
         canonical standalone path for the current repo state, while the
         TAI-hosted module form remains a compatible but non-canonical packaging
         variant.
-  next_phase: P4B
+    - phase: P4B
+      date: "2026-03-17"
+      summary: >
+        Defined the operator onboarding checklist, day-0 and day-1 runbooks,
+        support boundary, escalation path, and ownership matrix in
+        docs/commercialization/m365-operator-onboarding-and-support-boundary.md.
+        The repo now has an explicit post-install operator model that keeps
+        day-to-day runtime and tenant ownership with the customer while
+        bounding SmartHaus support to the canonical standalone path and the
+        supported 9-action v1 surface.
+  next_phase: P5A
 
 commercial_gap_summary:
   - marketable capability boundary is not yet locked to the proven v1 surface
   - production configuration is split between tenant config and direct .env loading
   - some validation evidence can still pass in mock mode
   - enterprise audit posture is incomplete for governance review
-  - packaging, onboarding, and collateral are not yet unified into one sellable path
+  - enterprise collateral and pilot handoff materials are not yet unified into one sellable path
 
 scope:
   in_scope:
