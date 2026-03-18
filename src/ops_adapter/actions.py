@@ -20,10 +20,10 @@ GRAPH_BASE = "https://graph.microsoft.com/v1.0"
 # Tenant-aware token provider (lazy-loaded singleton)
 # ---------------------------------------------------------------------------
 
-_token_provider = None
+_token_provider: Any | None = None
 
 
-def _get_token_provider():
+def _get_token_provider() -> Any | None:
     """Get or create the tenant-aware token provider."""
     global _token_provider
     if _token_provider is not None:
@@ -191,13 +191,14 @@ async def _graph_request(
                 msg = e.response.text
             if e.response.status_code in (429, 503, 502) and attempt < retries:
                 continue
-            raise GraphAPIError(e.response.status_code, code, msg)
+            raise GraphAPIError(e.response.status_code, code, msg) from e
         except httpx.RequestError as e:
             if attempt < retries:
                 time.sleep(backoff)
                 backoff = min(8.0, backoff * 2)
                 continue
-            raise GraphAPIError(503, "request_error", str(e))
+            raise GraphAPIError(503, "request_error", str(e)) from e
+    raise GraphAPIError(503, "request_error", "graph_request_exhausted_retries")
 
 
 async def _graph_request_raw(
@@ -243,13 +244,13 @@ async def _graph_request_raw(
                 msg = e.response.text
             if e.response.status_code in (429, 503, 502) and attempt < retries:
                 continue
-            raise GraphAPIError(e.response.status_code, code, msg)
+            raise GraphAPIError(e.response.status_code, code, msg) from e
         except httpx.RequestError as e:
             if attempt < retries:
                 time.sleep(backoff)
                 backoff = min(8.0, backoff * 2)
                 continue
-            raise GraphAPIError(503, "request_error", str(e))
+            raise GraphAPIError(503, "request_error", str(e)) from e
     return ""
 
 
@@ -422,14 +423,16 @@ async def _get_subscribed_skus(correlation_id: str) -> list[dict[str, Any]]:
     url = f"{GRAPH_BASE}/subscribedSkus"
     data = await _graph_request("GET", url, correlation_id)
     # Normalize availability and map structures we need
-    for sku in data.get("value", []):
+    for sku in (data or {}).get("value", []):
         prepaid = (sku.get("prepaidUnits") or {}).get("enabled") or 0
         consumed = sku.get("consumedUnits") or 0
         sku["availableUnits"] = max(0, prepaid - consumed)
-    return data.get("value", [])
+    return (data or {}).get("value", [])
 
 
-def _build_sku_maps(subscribed: list[dict[str, Any]]):
+def _build_sku_maps(
+    subscribed: list[dict[str, Any]],
+) -> tuple[dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     by_id = {str(s["skuId"]).lower(): s for s in subscribed}
     by_part = {str(s["skuPartNumber"]).upper(): s for s in subscribed}
     return by_id, by_part
@@ -469,7 +472,9 @@ async def _get_user_id(upn: str, correlation_id: str) -> str:
         return "22222222-2222-2222-2222-222222222222"
     url = f"{GRAPH_BASE}/users/{upn}?$select=id"
     data = await _graph_request("GET", url, correlation_id)
-    return data["id"]
+    if not data or "id" not in data:
+        raise GraphAPIError(404, "user_not_found", f"User '{upn}' not found")
+    return str(data["id"])
 
 
 async def _get_user_assigned_skus(user_id: str, correlation_id: str) -> list[str]:
@@ -477,7 +482,7 @@ async def _get_user_assigned_skus(user_id: str, correlation_id: str) -> list[str
         return []
     url = f"{GRAPH_BASE}/users/{user_id}/licenseDetails?$select=skuId"
     data = await _graph_request("GET", url, correlation_id)
-    return [str(v.get("skuId")).lower() for v in data.get("value", [])]
+    return [str(v.get("skuId")).lower() for v in (data or {}).get("value", [])]
 
 
 async def m365_licenses_assign(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
@@ -1682,12 +1687,12 @@ async def files_list(params: dict[str, Any], correlation_id: str) -> dict[str, A
                     "with app-only auth. Provide a siteId or configure org.primary_site_id "
                     "in your tenant config.",
                 )
-        except ImportError:
+        except ImportError as err:
             raise GraphAPIError(
                 400,
                 "no_drive_context",
                 "No driveId, siteId, or userId provided, and /me requires delegated auth.",
-            )
+            ) from err
     data = await _graph_request("GET", url, correlation_id)
     files = data.get("value", []) if data else []
     return {"files": files, "count": len(files)}
@@ -1736,12 +1741,12 @@ async def files_search(params: dict[str, Any], correlation_id: str) -> dict[str,
                     "no_drive_context",
                     "No driveId, siteId, or userId provided, and /me requires delegated auth.",
                 )
-        except ImportError:
+        except ImportError as err:
             raise GraphAPIError(
                 400,
                 "no_drive_context",
                 "No driveId, siteId, or userId provided, and /me requires delegated auth.",
-            )
+            ) from err
     data = await _graph_request("GET", url, correlation_id)
     files = data.get("value", []) if data else []
     return {"files": files, "count": len(files), "query": query}
@@ -1784,12 +1789,12 @@ async def files_create_folder(params: dict[str, Any], correlation_id: str) -> di
                     "no_drive_context",
                     "No driveId or siteId provided, and /me requires delegated auth.",
                 )
-        except ImportError:
+        except ImportError as err:
             raise GraphAPIError(
                 400,
                 "no_drive_context",
                 "No driveId or siteId provided, and /me requires delegated auth.",
-            )
+            ) from err
 
     if parent_id == "root":
         url = f"{base}/root/children"
@@ -1869,12 +1874,12 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
                     "No driveId or siteId provided, and /me requires delegated auth. "
                     "Provide a siteId or configure org.primary_site_id in your tenant config.",
                 )
-        except ImportError:
+        except ImportError as err:
             raise GraphAPIError(
                 400,
                 "no_drive_context",
                 "No driveId or siteId provided, and /me requires delegated auth.",
-            )
+            ) from err
 
     token = _graph_token()
     if not token:
@@ -1898,12 +1903,14 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
             if resp.status_code >= 400:
                 try:
                     body = resp.json()
-                    err = body.get("error", {})
-                    raise GraphAPIError(
-                        resp.status_code, err.get("code"), err.get("message", resp.text)
-                    )
-                except Exception:
-                    raise GraphAPIError(resp.status_code, "upload_failed", resp.text)
+                except Exception as exc:
+                    raise GraphAPIError(resp.status_code, "upload_failed", resp.text) from exc
+                error_details = body.get("error", {})
+                raise GraphAPIError(
+                    resp.status_code,
+                    error_details.get("code"),
+                    error_details.get("message", resp.text),
+                )
             data = resp.json() if resp.content else {}
             return {"file": data, "status": "uploaded"}
 
@@ -1928,12 +1935,14 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
         if resp.status_code >= 400:
             try:
                 body = resp.json()
-                err = body.get("error", {})
-                raise GraphAPIError(
-                    resp.status_code, err.get("code"), err.get("message", resp.text)
-                )
-            except Exception:
-                raise GraphAPIError(resp.status_code, "session_create_failed", resp.text)
+            except Exception as exc:
+                raise GraphAPIError(resp.status_code, "session_create_failed", resp.text) from exc
+            error_details = body.get("error", {})
+            raise GraphAPIError(
+                resp.status_code,
+                error_details.get("code"),
+                error_details.get("message", resp.text),
+            )
         upload_url = resp.json().get("uploadUrl")
 
     # Upload in 3.2MB chunks
@@ -2018,12 +2027,12 @@ async def drives_list(params: dict[str, Any], correlation_id: str) -> dict[str, 
                     "No groupId, siteId, or userId provided, and /me requires delegated auth. "
                     "Provide a siteId or configure org.primary_site_id in your tenant config.",
                 )
-        except ImportError:
+        except ImportError as err:
             raise GraphAPIError(
                 400,
                 "no_drive_context",
                 "No groupId, siteId, or userId provided, and /me requires delegated auth.",
-            )
+            ) from err
     data = await _graph_request("GET", url, correlation_id)
     drives = data.get("value", []) if data else []
     return {"drives": drives, "count": len(drives)}
@@ -3012,7 +3021,7 @@ async def admin_set_user_tier(params: dict[str, Any], correlation_id: str) -> di
             )
 
     # Load tenant config
-    tenant_slug = params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus")
+    tenant_slug = str(params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus"))
     path = _find_tenant_yaml(tenant_slug)
     if not path:
         raise GraphAPIError(
@@ -3053,6 +3062,9 @@ async def admin_set_user_tier(params: dict[str, Any], correlation_id: str) -> di
         action="admin.set_user_tier",
         correlation_id=correlation_id,
         actor=params.get("requestor"),
+        actor_tier=params.get("requestor_tier_info"),
+        actor_groups=params.get("requestor_groups"),
+        executor=params.get("executor_identity"),
         tenant=tenant_slug,
         status="updated",
         details={
@@ -3084,7 +3096,7 @@ async def admin_remove_user_tier(params: dict[str, Any], correlation_id: str) ->
     if not email:
         raise GraphAPIError(400, "missing_param", "Required param: email")
 
-    tenant_slug = params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus")
+    tenant_slug = str(params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus"))
     path = _find_tenant_yaml(tenant_slug)
     if not path:
         raise GraphAPIError(
@@ -3118,6 +3130,9 @@ async def admin_remove_user_tier(params: dict[str, Any], correlation_id: str) ->
             action="admin.remove_user_tier",
             correlation_id=correlation_id,
             actor=params.get("requestor"),
+            actor_tier=params.get("requestor_tier_info"),
+            actor_groups=params.get("requestor_groups"),
+            executor=params.get("executor_identity"),
             tenant=tenant_slug,
             status="not_found",
             details={
@@ -3150,6 +3165,9 @@ async def admin_remove_user_tier(params: dict[str, Any], correlation_id: str) ->
         action="admin.remove_user_tier",
         correlation_id=correlation_id,
         actor=params.get("requestor"),
+        actor_tier=params.get("requestor_tier_info"),
+        actor_groups=params.get("requestor_groups"),
+        executor=params.get("executor_identity"),
         tenant=tenant_slug,
         status="removed",
         details={
@@ -3172,7 +3190,7 @@ async def admin_remove_user_tier(params: dict[str, Any], correlation_id: str) ->
 
 async def admin_get_tenant_config(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Get the current tenant configuration (redacted secrets)."""
-    tenant_slug = params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus")
+    tenant_slug = str(params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus"))
     path = _find_tenant_yaml(tenant_slug)
     if not path:
         raise GraphAPIError(
@@ -3194,6 +3212,9 @@ async def admin_get_tenant_config(params: dict[str, Any], correlation_id: str) -
         action="admin.get_tenant_config",
         correlation_id=correlation_id,
         actor=params.get("requestor"),
+        actor_tier=params.get("requestor_tier_info"),
+        actor_groups=params.get("requestor_groups"),
+        executor=params.get("executor_identity"),
         tenant=tenant_slug,
         status="read",
         details={
@@ -3211,7 +3232,7 @@ async def admin_get_tenant_config(params: dict[str, Any], correlation_id: str) -
 
 async def admin_reload_config(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Force reload tenant config and permission tier definitions from disk."""
-    tenant_slug = params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus")
+    tenant_slug = str(params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus"))
     reloaded = []
 
     try:
@@ -3239,6 +3260,9 @@ async def admin_reload_config(params: dict[str, Any], correlation_id: str) -> di
         action="admin.reload_config",
         correlation_id=correlation_id,
         actor=params.get("requestor"),
+        actor_tier=params.get("requestor_tier_info"),
+        actor_groups=params.get("requestor_groups"),
+        executor=params.get("executor_identity"),
         tenant=tenant_slug,
         status="ok",
         details={"reloaded": reloaded},
@@ -3249,7 +3273,7 @@ async def admin_reload_config(params: dict[str, Any], correlation_id: str) -> di
 
 async def admin_audit_log(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Return recent UCP admin operations from the append-only audit trail."""
-    tenant_slug = params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus")
+    tenant_slug = str(params.get("tenant") or os.getenv("UCP_TENANT", "smarthaus"))
     limit = int(params.get("limit") or 50)
     action = params.get("action")
     event_class = params.get("event_class")

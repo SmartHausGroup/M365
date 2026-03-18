@@ -1,8 +1,8 @@
 # M365 Live-Tenant Validation Matrix
 
-**Status:** `P3A` complete
+**Status:** `P3A` complete; synchronized through `B5A`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3A`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3A`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R9`
 
 This document defines which validation evidence is sufficient only for development confidence, which evidence is required for enterprise release claims, and which capabilities require both mock and live-tenant validation.
 
@@ -23,6 +23,7 @@ If a supported enterprise-critical capability lacks a live-evidence requirement 
 | Mutation gate for mutating supported actions (`create_site`, `create_team`, `add_channel`, `provision_service`, `reset_user_password`) | Live required | live tenant, valid Graph app permissions, explicit `ALLOW_M365_MUTATIONS` off/on checks, non-production validation tenant | live execution transcript, request/response captures, audit evidence, operator checklist record | Required for enterprise claim because tenant state change behavior matters |
 | Read-only supported actions (`list_users`, `get_user`, `list_teams`, `list_sites`) | Both | live tenant with accessible objects and expected Graph permissions | contract artifact plus live request/response evidence | Mock/local contract proof is not enough for enterprise release; live tenant confirms permissions and shape against real data |
 | Tenant-config authority and auth-mode posture | Live required | live deployment configured via `UCP_TENANT`, tenant YAML present, secret material injected outside repo, chosen auth mode active | operator runbook evidence, config snapshot, live startup evidence | Required for enterprise release because configuration authority is part of the product claim |
+| Entra actor authentication and actor-versus-executor traceability | Live required | validated SmartHaus Entra user, expected issuer or audience config, active app-only execution contract, audit logging enabled | live request evidence, actor claim summary, approval or policy record where applicable, audit record showing both actor and executor | Runtime binding is now implemented on the governed ops-adapter path; live certification is still required because app-only execution alone does not prove who requested the action in a real tenant |
 | Ops-adapter approval path | Live required | OPA reachable, approval backend configured, approval target action available, approver identity path configured | approval record, audit record, policy decision record, operator evidence | Required for enterprise governance claim; not covered by current generated MA artifacts |
 | Ops-adapter admin audit/config inspection path | Live required | configured admin surface, tenant config available, admin actions exercised in controlled tenant | admin evidence packet, append-only admin audit records, snapshot supplement only if explicitly requested | Required before enterprise governance claims broaden beyond instruction API; runtime admin audit surface is now present, but live certification is still required |
 | Capability-universe registry integrity | Mock/local sufficient | generated registry artifacts available | `configs/generated/capability_registry_verification.json`, `docs/M365_MA_INDEX.md` | Supports claim that only 9 of 260 actions are implemented; not a live tenant requirement |
@@ -78,6 +79,7 @@ Live-tenant validation for standalone M365 v1 requires all of the following:
 8. operator-run validation log that records:
    - timestamp
    - tenant slug
+   - actor identity source
    - auth mode
    - action tested
    - outcome

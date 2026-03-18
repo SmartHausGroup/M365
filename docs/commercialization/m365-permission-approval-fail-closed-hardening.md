@@ -1,8 +1,8 @@
 # M365 Permission, Approval, and Fail-Closed Hardening
 
-**Status:** `A3` imported; runtime synchronized through `B2`
+**Status:** `A3` imported; runtime synchronized through `B2`; identity architecture synchronized through `B5A`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2B`, `plan:m365-enterprise-readiness-master-plan:B2`, `plan:m365-enterprise-readiness-master-plan:R7`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2B`, `plan:m365-enterprise-readiness-master-plan:B2`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R7`, `plan:m365-enterprise-readiness-master-plan:R9`
 
 This document defines the control-boundary posture required to describe standalone M365 v1 honestly to an enterprise buyer. It distinguishes currently implemented control surfaces from the hardening expectations required for enterprise acceptance.
 
@@ -34,8 +34,10 @@ The repository already contains a permission-tier model:
 1. Tier definitions are a real governance surface and should remain the primary user-level authorization model for the UCP/MCP side.
 2. Critical domains such as `admin.*`, `security.*`, `compliance.*`, `ca.*`, and `audit.*` should remain restricted to `global_admin` unless an explicit exception is approved later.
 3. Department or productivity tiers must not inherit org-wide mutation authority by convenience.
+4. Enterprise actor identity should come from validated Microsoft Entra ID claims, not from local synthetic user state.
+5. Tenant config now supports both direct user-to-tier mappings and Entra group-to-tier mappings; target enterprise posture should prefer Entra group-to-tier bindings where SmartHaus group hygiene is mature.
 
-### Current runtime state after `B2`
+### Current runtime state after `B2` and `B5C`
 
 The active ops-adapter and shared permission-enforcement path is now fail-closed for the core authorization prerequisites:
 
@@ -44,10 +46,18 @@ The active ops-adapter and shared permission-enforcement path is now fail-closed
 3. If `UCP_TENANT` is missing, `check_user_permission()` denies with `tenant_selection_missing` unless `M365_PERMISSION_FAIL_OPEN=true` is enabled.
 4. If tenant config cannot be loaded, `check_user_permission()` denies with `tenant_config_unavailable:*` unless `M365_PERMISSION_FAIL_OPEN=true` is enabled.
 5. The active ops-adapter request path now requires a resolved acting identity and tenant context before governed action execution.
+6. The active ops-adapter request path now resolves the effective permission tier from either an explicit SmartHaus user mapping or a configured Entra group mapping.
+7. Approval records created on the governed ops-adapter path now preserve actor, tier, groups, tenant, and executor identity metadata for later review.
 
 Commercial consequence:
 
 For the ops-adapter and shared permission-enforcement surface, these prerequisites are now hardened runtime behavior rather than documentation-only expectations. Equivalent approval and fail-closed guarantees still do not automatically extend to every legacy instruction-API mutation path.
+
+Identity consequence after `B5C`:
+
+1. The actor whose tier is enforced should be a validated SmartHaus Entra user.
+2. The app-only executor identity should not be treated as the permission-tier subject.
+3. Group-derived administrative authority is now supported on the governed runtime path when the tenant contract maps Entra groups to tiers.
 
 ## Approval Boundaries
 

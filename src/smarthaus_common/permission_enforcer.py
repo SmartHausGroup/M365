@@ -29,7 +29,6 @@ import yaml
 
 from smarthaus_common.config import has_selected_tenant
 
-
 # ---------------------------------------------------------------------------
 # Tier definitions loader (from permission_tiers.yaml)
 # ---------------------------------------------------------------------------
@@ -55,9 +54,7 @@ def _find_tiers_yaml() -> str | None:
 
     # Relative from this file: smarthaus_common/ -> src/ -> M365/
     this_dir = Path(__file__).parent
-    search_paths.append(
-        str(this_dir / ".." / ".." / "registry" / "permission_tiers.yaml")
-    )
+    search_paths.append(str(this_dir / ".." / ".." / "registry" / "permission_tiers.yaml"))
     # Also check from SMARTHAUS_MCPSERVER_core layout
     search_paths.append(
         str(this_dir / ".." / ".." / ".." / "M365" / "registry" / "permission_tiers.yaml")
@@ -87,7 +84,7 @@ def _load_tiers() -> dict[str, Any]:
     if path and os.path.isfile(path):
         with open(path, encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
-        _TIERS = data.get("tiers", {})
+        _TIERS = data.get("tiers") or {}
         _TIERS_PATH = path
         _TIERS_MTIME = os.path.getmtime(path)
         return _TIERS
@@ -150,6 +147,7 @@ def check_user_permission(
     user_email: str,
     action: str,
     tenant_config: Any | None = None,
+    actor_groups: list[str] | None = None,
 ) -> tuple[bool, str]:
     """Check whether a user is allowed to perform an action based on their tier.
 
@@ -182,13 +180,14 @@ def check_user_permission(
             return False, "tenant_selection_missing"
         try:
             from smarthaus_common.tenant_config import get_tenant_config
+
             tenant_config = get_tenant_config()
         except Exception as exc:
             if _fail_open_enabled():
                 return True, ""
             return False, f"tenant_config_unavailable:{type(exc).__name__}"
 
-    tier_name = tenant_config.permission_tiers.get_user_tier(user_email)
+    tier_name = tenant_config.permission_tiers.get_user_tier(user_email, actor_groups)
     tier_def = get_tier_definition(tier_name)
 
     if tier_def is None:
@@ -217,6 +216,7 @@ def get_confirmation_override(
     user_email: str,
     action: str,
     tenant_config: Any | None = None,
+    actor_groups: list[str] | None = None,
 ) -> str | None:
     """Check if a tier has a confirmation override for this action.
 
@@ -231,11 +231,12 @@ def get_confirmation_override(
     if tenant_config is None:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
+
             tenant_config = get_tenant_config()
         except Exception:
             return None
 
-    tier_name = tenant_config.permission_tiers.get_user_tier(user_email)
+    tier_name = tenant_config.permission_tiers.get_user_tier(user_email, actor_groups)
     tier_def = get_tier_definition(tier_name)
 
     if tier_def is None:
@@ -248,6 +249,7 @@ def get_confirmation_override(
 def get_user_tier_info(
     user_email: str,
     tenant_config: Any | None = None,
+    actor_groups: list[str] | None = None,
 ) -> dict[str, Any]:
     """Return summary info about a user's tier for display/audit.
 
@@ -256,11 +258,13 @@ def get_user_tier_info(
     if tenant_config is None:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
+
             tenant_config = get_tenant_config()
         except Exception:
             return {"tier_name": "unknown", "error": "tenant_config_unavailable"}
 
-    tier_name = tenant_config.permission_tiers.get_user_tier(user_email)
+    assignment = tenant_config.permission_tiers.resolve_tier_assignment(user_email, actor_groups)
+    tier_name = assignment["tier_name"]
     tier_def = get_tier_definition(tier_name)
 
     if tier_def is None:
@@ -272,4 +276,7 @@ def get_user_tier_info(
         "risk_tier": tier_def.get("risk_tier", "unknown"),
         "description": tier_def.get("description", ""),
         "user_email": user_email,
+        "assignment_source": assignment["assignment_source"],
+        "assignment_match": assignment["assignment_match"],
+        "actor_groups": list(actor_groups or []),
     }

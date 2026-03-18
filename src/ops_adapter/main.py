@@ -2,39 +2,45 @@ from __future__ import annotations
 
 import os
 import uuid
-from datetime import datetime, timezone
-from typing import Any, Dict
+from collections.abc import Awaitable, Callable
+from datetime import UTC, datetime
+from typing import Annotated, Any
 
+import httpx as _httpx
+import jwt
 import yaml
-from fastapi import Depends, FastAPI, HTTPException, Request, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.security import HTTPBearer
-from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
+from smarthaus_common.config import has_selected_tenant
+from smarthaus_common.permission_enforcer import (
+    check_user_permission,
+    get_confirmation_override,
+    get_user_tier_info,
+)
+from smarthaus_common.tenant_config import get_tenant_config
+from starlette.responses import Response
 
-from .actions import execute, GraphAPIError
+from .actions import GraphAPIError, execute
 from .approvals import ApprovalsStore, GraphApprovalsStore
 from .audit import Auditor
 from .models import ActionRequest, ActionResponse
 from .policies import OPAClient
 from .rate_limit import RateLimiter
-from smarthaus_common.config import has_selected_tenant
-from smarthaus_common.permission_enforcer import check_user_permission, get_confirmation_override
-from smarthaus_common.tenant_config import get_tenant_config
-import jwt
-import httpx as _httpx
-
 
 app = FastAPI(title="SMARTHAUS Ops Adapter", version="0.1.0")
 security = HTTPBearer(auto_error=False)
+SecurityDependency = Annotated[Any | None, Depends(security)]
 
 # Prometheus metrics
 REQ_COUNT = Counter("ops_requests_total", "Total requests", ["agent", "action", "outcome"])
 REQ_LATENCY = Histogram("ops_request_latency_seconds", "Request latency", ["agent", "action"])
 
 
-def load_registry() -> Dict[str, Any]:
+def load_registry() -> dict[str, Any]:
     path = os.getenv("REGISTRY_FILE", "./registry/agents.yaml")
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -46,9 +52,31 @@ RATE = RateLimiter(default_rps=5.0, burst=10)
 
 _JWKS_CACHE: dict[str, Any] = {}
 _JWKS_BY_URL: dict[str, Any] = {}
+RequestHandler = Callable[[Request], Awaitable[Response]]
 
 
-async def _get_jwks(tenant_id: str) -> dict:
+def _truthy_env(name: str, default: str = "0") -> bool:
+    return os.getenv(name, default).lower() in ("1", "true", "yes", "on")
+
+
+def _actor_header_fallback_enabled() -> bool:
+    """Non-enterprise override for legacy header-only actor identity."""
+    return _truthy_env("M365_ACTOR_HEADER_FALLBACK", "0")
+
+
+def _jwt_required_for_actions() -> bool:
+    """Require JWT-backed actor identity on governed action paths by default."""
+    raw = os.getenv("JWT_REQUIRED")
+    if raw is None:
+        return not _actor_header_fallback_enabled()
+    return _truthy_env("JWT_REQUIRED", "0")
+
+
+def _auth_error_response(status_code: int, detail: str) -> JSONResponse:
+    return JSONResponse(status_code=status_code, content={"detail": detail})
+
+
+async def _get_jwks(tenant_id: str) -> dict[str, Any]:
     if tenant_id in _JWKS_CACHE:
         return _JWKS_CACHE[tenant_id]
     # Fetch OpenID config then JWKS
@@ -61,7 +89,7 @@ async def _get_jwks(tenant_id: str) -> dict:
         return jwks
 
 
-async def _get_jwks_from_url(jwks_url: str) -> dict:
+async def _get_jwks_from_url(jwks_url: str) -> dict[str, Any]:
     if jwks_url in _JWKS_BY_URL:
         return _JWKS_BY_URL[jwks_url]
     async with _httpx.AsyncClient(timeout=10.0) as client:
@@ -97,7 +125,7 @@ async def _discover_jwks() -> dict | None:
 
 
 @app.middleware("http")
-async def add_correlation_id(request: Request, call_next):
+async def add_correlation_id(request: Request, call_next: RequestHandler) -> Response:
     correlation_id = request.headers.get("X-Correlation-ID", str(uuid.uuid4()))
     request.state.correlation_id = correlation_id
     response = await call_next(request)
@@ -106,16 +134,16 @@ async def add_correlation_id(request: Request, call_next):
 
 
 @app.middleware("http")
-async def jwt_validation_middleware(request: Request, call_next):
-    # Enforce JWT only for action execution endpoints when enabled
-    require = os.getenv("JWT_REQUIRED", "0").lower() in ("1", "true", "yes", "on")
+async def jwt_validation_middleware(request: Request, call_next: RequestHandler) -> Response:
+    # Governed action execution requires JWT-backed actor identity by default.
+    require = _jwt_required_for_actions()
     path = request.url.path or ""
     if not (require and path.startswith("/actions/")):
         return await call_next(request)
 
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
-        raise HTTPException(401, "missing_bearer_token")
+        return _auth_error_response(401, "missing_bearer_token")
     token = auth.split(" ", 1)[1].strip()
 
     # Accept HS256 with shared secret in dev, or RS* via JWKS in prod
@@ -126,7 +154,7 @@ async def jwt_validation_middleware(request: Request, call_next):
     try:
         header = jwt.get_unverified_header(token)
     except jwt.PyJWTError:
-        raise HTTPException(401, "invalid_token_header")
+        return _auth_error_response(401, "invalid_token_header")
 
     alg = header.get("alg", "RS256")
     options = {"verify_exp": True}
@@ -137,46 +165,60 @@ async def jwt_validation_middleware(request: Request, call_next):
 
     try:
         if alg.startswith("HS") and hs_secret:
-            claims = jwt.decode(token, key=hs_secret, algorithms=[alg], audience=audience if audience else None, issuer=issuer if issuer else None, options=options)
+            claims = jwt.decode(
+                token,
+                key=hs_secret,
+                algorithms=[alg],
+                audience=audience if audience else None,
+                issuer=issuer if issuer else None,
+                options=options,
+            )
         else:
             jwks = await _discover_jwks()
             if not jwks:
-                raise HTTPException(500, "jwks_unavailable")
+                return _auth_error_response(500, "jwks_unavailable")
             kid = header.get("kid")
             key = next((k for k in jwks.get("keys", []) if (not kid or k.get("kid") == kid)), None)
             if not key:
-                raise HTTPException(401, "jwks_key_not_found")
+                return _auth_error_response(401, "jwks_key_not_found")
             public_key = jwt.algorithms.RSAAlgorithm.from_jwk(key)
-            claims = jwt.decode(token, key=public_key, algorithms=[alg], audience=audience if audience else None, issuer=issuer if issuer else None, options=options)
-    except HTTPException:
-        raise
+            claims = jwt.decode(
+                token,
+                key=public_key,
+                algorithms=[alg],
+                audience=audience if audience else None,
+                issuer=issuer if issuer else None,
+                options=options,
+            )
     except jwt.ExpiredSignatureError:
-        raise HTTPException(401, "token_expired")
+        return _auth_error_response(401, "token_expired")
     except jwt.PyJWTError as e:
-        raise HTTPException(401, f"invalid_token:{e}")
+        return _auth_error_response(401, f"invalid_token:{e}")
 
     # Stash identity for auditing
     request.state.principal = {
         "sub": claims.get("sub"),
+        "oid": claims.get("oid"),
         "upn": claims.get("preferred_username") or claims.get("upn") or claims.get("email"),
         "iss": claims.get("iss"),
         "aud": claims.get("aud"),
         "scp": claims.get("scp") or claims.get("scope"),
+        "groups": claims.get("groups") if isinstance(claims.get("groups"), list) else [],
     }
     return await call_next(request)
 
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, str]:
     return {
         "status": "healthy",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "version": app.version,
     }
 
 
 @app.get("/metrics")
-async def metrics():
+async def metrics() -> PlainTextResponse:
     return PlainTextResponse(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
@@ -190,17 +232,40 @@ def _validate_agent_action(agent: str, action: str) -> bool:
 
 def _resolve_user_identity(request: Request) -> str:
     principal = getattr(request.state, "principal", {}) or {}
-    for candidate in (
-        principal.get("upn"),
-        request.headers.get("X-User-Email"),
-        request.headers.get("X-Principal-Email"),
-    ):
+    for candidate in (principal.get("upn"),):
         if candidate:
             return str(candidate).strip().lower()
-    raise HTTPException(403, "user_identity_missing")
+    if _actor_header_fallback_enabled():
+        for candidate in (
+            request.headers.get("X-User-Email"),
+            request.headers.get("X-Principal-Email"),
+        ):
+            if candidate:
+                return str(candidate).strip().lower()
+    raise HTTPException(403, "entra_actor_identity_required")
 
 
-def _require_tenant_context():
+def _resolve_actor_groups(request: Request) -> list[str]:
+    principal = getattr(request.state, "principal", {}) or {}
+    groups = principal.get("groups") or []
+    if isinstance(groups, list):
+        return [str(group) for group in groups if group]
+    if groups:
+        return [str(groups)]
+    return []
+
+
+def _build_executor_identity(tenant_config: Any) -> dict[str, Any]:
+    return {
+        "type": "service_principal",
+        "mode": tenant_config.auth.mode,
+        "tenant": tenant_config.tenant.id,
+        "azure_tenant_id": tenant_config.azure.tenant_id,
+        "client_id": tenant_config.azure.client_id,
+    }
+
+
+def _require_tenant_context() -> Any:
     if not has_selected_tenant():
         raise HTTPException(403, "tenant_selection_missing")
     try:
@@ -209,7 +274,7 @@ def _require_tenant_context():
         raise HTTPException(403, f"tenant_config_unavailable:{type(exc).__name__}") from exc
 
 
-def _approval_rule(agent: str, action: str) -> Dict[str, Any] | None:
+def _approval_rule(agent: str, action: str) -> dict[str, Any] | None:
     for rule in REGISTRY.get("agents", {}).get(agent, {}).get("approval_rules", []) or []:
         if rule.get("action") == action:
             return rule
@@ -217,7 +282,7 @@ def _approval_rule(agent: str, action: str) -> Dict[str, Any] | None:
 
 
 @app.get("/approvals/{approval_id}")
-async def get_approval(approval_id: str):
+async def get_approval(approval_id: str) -> dict[str, Any]:
     rec = APPROVALS.get(approval_id)
     if not rec:
         raise HTTPException(404, "approval_not_found")
@@ -229,27 +294,61 @@ class ApprovalUpdateBody(ActionRequest):
 
 
 @app.post("/approvals/{approval_id}/approve")
-async def approve(approval_id: str, request: Request, body: ApprovalUpdateBody | None = None, ts: str | None = Query(default=None), sig: str | None = Query(default=None)):
+async def approve(
+    approval_id: str,
+    request: Request,
+    body: ApprovalUpdateBody | None = None,
+    ts: str | None = Query(default=None),
+    sig: str | None = Query(default=None),
+) -> dict[str, str]:
     # Verify Teams HMAC if configured
-    if hasattr(APPROVALS, 'verify_signature') and not APPROVALS.verify_signature(approval_id, 'approve', ts, sig):
+    if hasattr(APPROVALS, "verify_signature") and not APPROVALS.verify_signature(
+        approval_id, "approve", ts, sig
+    ):
         raise HTTPException(401, "invalid_signature")
-    ok = APPROVALS.set_status(approval_id, "approved", (body.params.get("reason") if body else None))
+    ok = APPROVALS.set_status(
+        approval_id, "approved", (body.params.get("reason") if body else None)
+    )
     if not ok:
         raise HTTPException(404, "approval_not_found")
     approver = request.headers.get("X-Teams-User", None)
-    await AUDITOR.log("approved", "-", "-", {"approval_id": approval_id, "approver": approver}, request.state.correlation_id)
+    await AUDITOR.log(
+        "approved",
+        "-",
+        "-",
+        {"approval_id": approval_id, "approver": approver},
+        request.state.correlation_id,
+    )
     return {"status": "approved", "id": approval_id}
 
 
 @app.post("/approvals/{approval_id}/deny")
-async def deny(approval_id: str, request: Request, body: ApprovalUpdateBody | None = None, ts: str | None = Query(default=None), sig: str | None = Query(default=None)):
-    if hasattr(APPROVALS, 'verify_signature') and not APPROVALS.verify_signature(approval_id, 'deny', ts, sig):
+async def deny(
+    approval_id: str,
+    request: Request,
+    body: ApprovalUpdateBody | None = None,
+    ts: str | None = Query(default=None),
+    sig: str | None = Query(default=None),
+) -> dict[str, str]:
+    if hasattr(APPROVALS, "verify_signature") and not APPROVALS.verify_signature(
+        approval_id, "deny", ts, sig
+    ):
         raise HTTPException(401, "invalid_signature")
     ok = APPROVALS.set_status(approval_id, "denied", (body.params.get("reason") if body else None))
     if not ok:
         raise HTTPException(404, "approval_not_found")
     approver = request.headers.get("X-Teams-User", None)
-    await AUDITOR.log("denied", "-", "-", {"approval_id": approval_id, "reason": (body.params.get("reason") if body else None), "approver": approver}, request.state.correlation_id)
+    await AUDITOR.log(
+        "denied",
+        "-",
+        "-",
+        {
+            "approval_id": approval_id,
+            "reason": (body.params.get("reason") if body else None),
+            "approver": approver,
+        },
+        request.state.correlation_id,
+    )
     return {"status": "denied", "id": approval_id}
 
 
@@ -258,7 +357,7 @@ class BulkApprovalBody(ActionRequest):
 
 
 @app.post("/approvals/bulk")
-async def approvals_bulk(request: Request, body: BulkApprovalBody):
+async def approvals_bulk(request: Request, body: BulkApprovalBody) -> dict[str, Any]:
     action = body.params.get("action")
     ids = body.params.get("ids") or []
     reason = body.params.get("reason")
@@ -266,7 +365,9 @@ async def approvals_bulk(request: Request, body: BulkApprovalBody):
         raise HTTPException(400, "invalid_action")
     status = "approved" if action == "approve" else "denied"
     res = APPROVALS.bulk_set_status(ids, status, reason)
-    await AUDITOR.log("approvals_bulk", "-", action, {"ids": ids, "result": res}, request.state.correlation_id)
+    await AUDITOR.log(
+        "approvals_bulk", "-", action, {"ids": ids, "result": res}, request.state.correlation_id
+    )
     return res
 
 
@@ -278,14 +379,21 @@ async def approvals_query(
     start_date: datetime | None = None,
     end_date: datetime | None = None,
     limit: int = 50,
-):
+) -> dict[str, Any]:
     if not isinstance(APPROVALS, GraphApprovalsStore):
         # Fallback: list all from memory if available
-        if hasattr(APPROVALS, 'db'):
-            values = list(getattr(APPROVALS, 'db').values())[:limit]
+        if hasattr(APPROVALS, "db"):
+            values = list(APPROVALS.db.values())[:limit]
             return {"items": values}
         raise HTTPException(400, "approvals_backend_not_configured")
-    items = APPROVALS.query(agent=agent, action=action, status=status, start_date=start_date, end_date=end_date, limit=limit)
+    items = APPROVALS.query(
+        agent=agent,
+        action=action,
+        status=status,
+        start_date=start_date,
+        end_date=end_date,
+        limit=limit,
+    )
     return {"items": items}
 
 
@@ -295,7 +403,7 @@ class TeamsWebhookBody(ActionRequest):
 
 
 @app.post("/teams/webhook")
-async def teams_webhook(request: Request, body: TeamsWebhookBody):
+async def teams_webhook(request: Request, body: TeamsWebhookBody) -> dict[str, str]:
     # Simple shared-secret validation
     expected = os.getenv("TEAMS_BOT_TOKEN")
     auth = request.headers.get("Authorization", "")
@@ -317,7 +425,13 @@ async def teams_webhook(request: Request, body: TeamsWebhookBody):
     if not ok:
         raise HTTPException(404, "approval_not_found")
 
-    await AUDITOR.log(status, "-", "-", {"approval_id": approval_id, "approver": user}, request.state.correlation_id)
+    await AUDITOR.log(
+        status,
+        "-",
+        "-",
+        {"approval_id": approval_id, "approver": user},
+        request.state.correlation_id,
+    )
     return {"status": status, "id": approval_id}
 
 
@@ -326,7 +440,7 @@ class TeamsOAuthBody(ActionRequest):
 
 
 @app.post("/teams/oauth/callback")
-async def teams_oauth_callback(request: Request, body: TeamsOAuthBody):
+async def teams_oauth_callback(request: Request, body: TeamsOAuthBody) -> dict[str, Any]:
     # Body: { params: { approvalId, action: approve|deny, id_token } }
     p = body.params or {}
     approval_id = p.get("approvalId")
@@ -363,9 +477,14 @@ async def teams_oauth_callback(request: Request, body: TeamsOAuthBody):
             options={"verify_exp": True, "verify_aud": True},
         )
     except jwt.PyJWTError as e:
-        raise HTTPException(401, f"invalid_id_token: {e}")
+        raise HTTPException(401, f"invalid_id_token: {e}") from e
 
-    approver = claims.get("preferred_username") or claims.get("upn") or claims.get("email") or claims.get("oid")
+    approver = (
+        claims.get("preferred_username")
+        or claims.get("upn")
+        or claims.get("email")
+        or claims.get("oid")
+    )
     if not approver:
         raise HTTPException(401, "approver_identity_missing")
 
@@ -393,12 +512,24 @@ async def teams_oauth_callback(request: Request, body: TeamsOAuthBody):
     ok = APPROVALS.set_status(approval_id, status)
     if not ok:
         raise HTTPException(404, "approval_not_found")
-    await AUDITOR.log(status, "-", "-", {"approval_id": approval_id, "approver": approver, "method": "oauth"}, request.state.correlation_id)
+    await AUDITOR.log(
+        status,
+        "-",
+        "-",
+        {"approval_id": approval_id, "approver": approver, "method": "oauth"},
+        request.state.correlation_id,
+    )
     return {"status": status, "id": approval_id, "approver": approver}
 
 
 @app.post("/actions/{agent}/{action}")
-async def actions(agent: str, action: str, req: ActionRequest, request: Request, token=Depends(security)):
+async def actions(
+    agent: str,
+    action: str,
+    req: ActionRequest,
+    request: Request,
+    token: SecurityDependency = None,
+) -> ActionResponse:
     corr = request.state.correlation_id
     if not _validate_agent_action(agent, action):
         await AUDITOR.log("denied", agent, action, {"reason": "invalid_agent_or_action"}, corr)
@@ -409,12 +540,17 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
     rate_allowed = RATE.allow(rk)
 
     user_email = _resolve_user_identity(request)
+    request.state.actor = user_email
+    actor_groups = _resolve_actor_groups(request)
     tenant_config = _require_tenant_context()
+    actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
+    executor_identity = _build_executor_identity(tenant_config)
 
     allowed, deny_reason = check_user_permission(
         user_email=user_email,
         action=action,
         tenant_config=tenant_config,
+        actor_groups=actor_groups,
     )
     if not allowed:
         REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
@@ -422,13 +558,25 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
             "denied",
             agent,
             action,
-            {"reason": deny_reason, "actor": user_email},
+            {
+                "reason": deny_reason,
+                "actor": user_email,
+                "actor_tier": actor_tier,
+                "actor_groups": actor_groups,
+                "executor": executor_identity,
+                "tenant": tenant_config.tenant.id,
+            },
             corr,
         )
         raise HTTPException(403, deny_reason)
 
     params = dict(req.params or {})
     params.setdefault("requestor", user_email)
+    params.setdefault("requestor_tier", actor_tier.get("tier_name"))
+    params.setdefault("requestor_tier_info", actor_tier)
+    params.setdefault("requestor_groups", actor_groups)
+    params.setdefault("executor_identity", executor_identity)
+    params.setdefault("tenant", tenant_config.tenant.id)
 
     # Policy check via OPA
     policy = await OPA.check(agent, action, params, rate_allowed, corr)
@@ -438,7 +586,14 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
             "denied",
             agent,
             action,
-            {"reason": policy.get("reason"), "actor": user_email},
+            {
+                "reason": policy.get("reason"),
+                "actor": user_email,
+                "actor_tier": actor_tier,
+                "actor_groups": actor_groups,
+                "executor": executor_identity,
+                "tenant": tenant_config.tenant.id,
+            },
             corr,
         )
         status_code = 429 if policy.get("reason") == "rate_limited" else 403
@@ -446,7 +601,7 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
 
     # Approvals
     approval_required = bool(policy.get("approval_required"))
-    if get_confirmation_override(user_email, action, tenant_config) == "always":
+    if get_confirmation_override(user_email, action, tenant_config, actor_groups) == "always":
         approval_required = True
 
     if approval_required:
@@ -458,7 +613,14 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
                 "denied",
                 agent,
                 action,
-                {"reason": "approval_configuration_missing", "actor": user_email},
+                {
+                    "reason": "approval_configuration_missing",
+                    "actor": user_email,
+                    "actor_tier": actor_tier,
+                    "actor_groups": actor_groups,
+                    "executor": executor_identity,
+                    "tenant": tenant_config.tenant.id,
+                },
                 corr,
             )
             raise HTTPException(500, "approval_configuration_missing")
@@ -468,7 +630,15 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
             "pending_approval",
             agent,
             action,
-            {"approval_id": approval_id, "actor": user_email, "approvers": approvers},
+            {
+                "approval_id": approval_id,
+                "actor": user_email,
+                "actor_tier": actor_tier,
+                "actor_groups": actor_groups,
+                "executor": executor_identity,
+                "tenant": tenant_config.tenant.id,
+                "approvers": approvers,
+            },
             corr,
         )
         return ActionResponse(status="pending_approval", approval_id=approval_id)
@@ -480,6 +650,10 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
             REQ_COUNT.labels(agent=agent, action=action, outcome="success").inc()
             audit_payload = dict(result or {})
             audit_payload["actor"] = user_email
+            audit_payload["actor_tier"] = actor_tier
+            audit_payload["actor_groups"] = actor_groups
+            audit_payload["executor"] = executor_identity
+            audit_payload["tenant"] = tenant_config.tenant.id
             await AUDITOR.log("success", agent, action, audit_payload, corr)
             return ActionResponse(status="success", result=result)
         except GraphAPIError as ge:
@@ -488,11 +662,33 @@ async def actions(agent: str, action: str, req: ActionRequest, request: Request,
                 "failed",
                 agent,
                 action,
-                {"error": ge.message, "code": ge.code, "status": ge.status, "actor": user_email},
+                {
+                    "error": ge.message,
+                    "code": ge.code,
+                    "status": ge.status,
+                    "actor": user_email,
+                    "actor_tier": actor_tier,
+                    "actor_groups": actor_groups,
+                    "executor": executor_identity,
+                    "tenant": tenant_config.tenant.id,
+                },
                 corr,
             )
-            raise HTTPException(ge.status, f"graph_error:{ge.code}: {ge.message}")
+            raise HTTPException(ge.status, f"graph_error:{ge.code}: {ge.message}") from ge
         except Exception as e:
             REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
-            await AUDITOR.log("failed", agent, action, {"error": str(e), "actor": user_email}, corr)
-            raise HTTPException(500, f"action_failed: {e}")
+            await AUDITOR.log(
+                "failed",
+                agent,
+                action,
+                {
+                    "error": str(e),
+                    "actor": user_email,
+                    "actor_tier": actor_tier,
+                    "actor_groups": actor_groups,
+                    "executor": executor_identity,
+                    "tenant": tenant_config.tenant.id,
+                },
+                corr,
+            )
+            raise HTTPException(500, f"action_failed: {e}") from e

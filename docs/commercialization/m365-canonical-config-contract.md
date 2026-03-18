@@ -1,8 +1,8 @@
 # M365 Canonical Config Contract
 
-**Status:** `P1A` complete
+**Status:** `P1A` complete; synchronized through `B5A`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R2`, `plan:m365-enterprise-commercialization-readiness:P1A`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R2`, `plan:m365-enterprise-commercialization-readiness:P1A`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R9`
 
 This document defines the current configuration inventory for the M365 repo and locks the one canonical target production contract for standalone M365 commercialization.
 
@@ -106,16 +106,20 @@ Identity rules:
 
 1. `UCP_TENANT` selects which tenant contract is active.
 2. Tenant identity comes from tenant YAML under `tenant.*`.
-3. Auth mode comes from tenant YAML under `auth.mode`, with supported modes:
+3. Human operator identity is a separate production plane from Graph execution identity:
+   - human operator auth should come from Microsoft Entra ID
+   - Graph execution identity should come from tenant-scoped `auth.*` and `azure.*`
+4. Auth mode comes from tenant YAML under `auth.mode`, with supported modes:
    - `delegated`
    - `app_only`
    - `hybrid`
-4. Azure credential material may be supplied by YAML or env fallback, but credential values do not define the tenant model by themselves.
-5. SharePoint hostname, primary site, default user, and permission-tier semantics belong to the tenant contract, not ad hoc env overrides.
+5. Azure credential material may be supplied by YAML or env fallback, but credential values do not define the tenant model by themselves.
+6. The current `permission_tiers.users` mapping is a transitional authorization contract for authenticated SmartHaus users; target enterprise posture should add a distinct non-secret `identity.*` section for allowed domains, issuer or audience expectations, and group-to-tier bindings.
+7. SharePoint hostname, primary site, default user, and permission-tier semantics belong to the tenant contract, not ad hoc env overrides.
 
 Commercial consequence:
 
-Standalone M365 enterprise configuration can now be described honestly as a tenant-scoped contract with env-assisted secret injection, rather than a loose collection of interchangeable `.env` conventions.
+Standalone M365 enterprise configuration can now be described honestly as a tenant-scoped execution contract with env-assisted secret injection and a distinct Entra-backed human identity plane, rather than a loose collection of interchangeable `.env` conventions.
 
 Residual risk intentionally deferred to `P1B`:
 

@@ -2,20 +2,44 @@ from __future__ import annotations
 
 import os
 import uuid
-from typing import Any, Callable, Dict
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 from fastapi import FastAPI, Header, HTTPException, Request
-from fastapi.responses import JSONResponse
+from smarthaus_common.config import has_selected_tenant
+from smarthaus_common.permission_enforcer import (
+    check_user_permission,
+    get_confirmation_override,
+    get_user_tier_info,
+)
+from smarthaus_common.tenant_config import get_tenant_config
+from starlette.responses import Response
 
+from .actions import execute as execute_action
+from .approvals import ApprovalsStore
 from .audit import audit_log
+from .models import ActionRequest, ActionResponse
 from .policies import OPAClient
 from .rate_limit import RateLimiter
-from .approvals import ApprovalsStore
-from .models import ActionRequest, ActionResponse
-from .actions import execute as execute_action
-from smarthaus_common.config import has_selected_tenant
-from smarthaus_common.permission_enforcer import check_user_permission, get_confirmation_override
-from smarthaus_common.tenant_config import get_tenant_config
+
+
+def _truthy_env(name: str, default: str = "0") -> bool:
+    return os.getenv(name, default).lower() in ("1", "true", "yes", "on")
+
+
+def _actor_header_fallback_enabled() -> bool:
+    """Legacy app path is header-only and must fail closed unless explicitly enabled."""
+    return _truthy_env("M365_ACTOR_HEADER_FALLBACK", "0")
+
+
+def _build_executor_identity(tenant_config: Any) -> dict[str, Any]:
+    return {
+        "type": "service_principal",
+        "mode": tenant_config.auth.mode,
+        "tenant": tenant_config.tenant.id,
+        "azure_tenant_id": tenant_config.azure.tenant_id,
+        "client_id": tenant_config.azure.client_id,
+    }
 
 
 def create_app() -> FastAPI:
@@ -30,7 +54,9 @@ def create_app() -> FastAPI:
     )
 
     @app.middleware("http")
-    async def add_correlation_id(request: Request, call_next: Callable):
+    async def add_correlation_id(
+        request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         corr = request.headers.get("X-Request-ID") or str(uuid.uuid4())
         request.state.correlation_id = corr
         response = await call_next(request)
@@ -38,7 +64,7 @@ def create_app() -> FastAPI:
         return response
 
     @app.get("/health")
-    async def health() -> Dict[str, Any]:
+    async def health() -> dict[str, Any]:
         return {"status": "ok", "service": "ops-adapter", "version": app.version}
 
     @app.post("/actions/{agent}/{action}", response_model=ActionResponse)
@@ -50,7 +76,22 @@ def create_app() -> FastAPI:
         x_request_id: str | None = Header(default=None),
     ) -> ActionResponse:
         correlation_id = getattr(request.state, "correlation_id", x_request_id) or str(uuid.uuid4())
-        user_email = (request.headers.get("X-User-Email") or "").strip().lower()
+        if not _actor_header_fallback_enabled():
+            audit_log(
+                "policy_denied",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                actor="system",
+                reason="entra_actor_identity_required",
+            )
+            raise HTTPException(status_code=403, detail="entra_actor_identity_required")
+
+        user_email = (
+            (request.headers.get("X-User-Email") or request.headers.get("X-Principal-Email") or "")
+            .strip()
+            .lower()
+        )
 
         if not user_email:
             audit_log(
@@ -82,12 +123,17 @@ def create_app() -> FastAPI:
                 correlation_id=correlation_id,
                 reason=reason,
             )
-            raise HTTPException(status_code=403, detail=reason)
+            raise HTTPException(status_code=403, detail=reason) from exc
+
+        actor_groups: list[str] = []
+        actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
+        executor_identity = _build_executor_identity(tenant_config)
 
         allowed, reason = check_user_permission(
             user_email=user_email,
             action=action,
             tenant_config=tenant_config,
+            actor_groups=actor_groups,
         )
         if not allowed:
             audit_log(
@@ -96,6 +142,11 @@ def create_app() -> FastAPI:
                 action=action,
                 correlation_id=correlation_id,
                 reason=reason,
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                executor=executor_identity,
+                tenant=tenant_config.tenant.id,
             )
             raise HTTPException(status_code=403, detail=reason)
 
@@ -107,7 +158,18 @@ def create_app() -> FastAPI:
         # Pass rate_allowed=True since limiter already enforced
         params = payload.model_dump().get("params", {})
         params.setdefault("requestor", user_email)
-        decision = await opa.check(agent=agent, action=action, data=params, rate_allowed=True, correlation_id=correlation_id)
+        params.setdefault("requestor_tier", actor_tier.get("tier_name"))
+        params.setdefault("requestor_tier_info", actor_tier)
+        params.setdefault("requestor_groups", actor_groups)
+        params.setdefault("executor_identity", executor_identity)
+        params.setdefault("tenant", tenant_config.tenant.id)
+        decision = await opa.check(
+            agent=agent,
+            action=action,
+            data=params,
+            rate_allowed=True,
+            correlation_id=correlation_id,
+        )
         if not decision.get("allowed", False):
             audit_log(
                 "policy_denied",
@@ -115,12 +177,17 @@ def create_app() -> FastAPI:
                 action=action,
                 correlation_id=correlation_id,
                 reason=decision.get("reason") or "denied",
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                executor=executor_identity,
+                tenant=tenant_config.tenant.id,
             )
             raise HTTPException(status_code=403, detail="policy_denied")
 
         # Handle approval requirements
         approval_required = bool(decision.get("approval_required"))
-        if get_confirmation_override(user_email, action, tenant_config) == "always":
+        if get_confirmation_override(user_email, action, tenant_config, actor_groups) == "always":
             approval_required = True
 
         if approval_required:
@@ -137,6 +204,11 @@ def create_app() -> FastAPI:
                     action=action,
                     correlation_id=correlation_id,
                     reason="approval_configuration_missing",
+                    actor=user_email,
+                    actor_tier=actor_tier,
+                    actor_groups=actor_groups,
+                    executor=executor_identity,
+                    tenant=tenant_config.tenant.id,
                 )
                 raise HTTPException(status_code=500, detail="approval_configuration_missing")
             approval_id = approvals.create(agent=agent, action=action, params=params)
@@ -146,6 +218,11 @@ def create_app() -> FastAPI:
                 action=action,
                 correlation_id=correlation_id,
                 approval_id=approval_id,
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                executor=executor_identity,
+                tenant=tenant_config.tenant.id,
             )
             return ActionResponse(
                 status="pending_approval",
@@ -161,21 +238,34 @@ def create_app() -> FastAPI:
             mapped_action = action
 
         try:
-            result = await execute_action(agent=agent, action=mapped_action, params=params, correlation_id=correlation_id)
-            audit_log("action_executed", agent=agent, action=action, correlation_id=correlation_id, result=result)
+            result = await execute_action(
+                agent=agent, action=mapped_action, params=params, correlation_id=correlation_id
+            )
+            audit_log(
+                "action_executed",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                result=result,
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                executor=executor_identity,
+                tenant=tenant_config.tenant.id,
+            )
             return ActionResponse(status="ok", result=result)
-        except Exception as e:
+        except Exception:
             raise
 
     @app.get("/approvals/{approval_id}")
-    async def get_approval(approval_id: str):
+    async def get_approval(approval_id: str) -> dict[str, Any]:
         item = approvals.get(approval_id)
         if not item:
             raise HTTPException(status_code=404, detail="not_found")
         return item
 
     @app.post("/approvals/{approval_id}")
-    async def update_approval(approval_id: str, body: Dict[str, Any]):
+    async def update_approval(approval_id: str, body: dict[str, Any]) -> dict[str, Any]:
         decision = body.get("decision")
         if decision not in ("approved", "rejected"):
             raise HTTPException(status_code=400, detail="invalid_decision")

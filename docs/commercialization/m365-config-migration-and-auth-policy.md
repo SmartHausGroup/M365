@@ -1,14 +1,14 @@
 # M365 Config Migration and Auth Policy
 
-**Status:** `P1B` complete
+**Status:** `P1B` complete; synchronized through `B5A`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R2`, `plan:m365-enterprise-commercialization-readiness:P1B`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R2`, `plan:m365-enterprise-commercialization-readiness:P1B`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R9`
 
 This document defines the singular migration path from the current mixed config state to the canonical production contract established in `P1A`, and it locks the supported auth and secret posture for standalone M365 commercialization.
 
 Deterministic policy rule for this repository state:
 
-`ProdAuthority = TenantYaml(UCP_TENANT) ; ProdAuthDefault = AppOnly ; ProdCredentialPreference = Certificate ; ClientSecret = TransitionalFallback ; Dotenv = BootstrapOnly`
+`ProdAuthority = TenantYaml(UCP_TENANT) ; UserAuthProvider = EntraID ; ProdExecutionAuth = AppOnly ; ProdCredentialPreference = Certificate ; ClientSecret = TransitionalFallback ; Dotenv = BootstrapOnly`
 
 ## Migration Path
 
@@ -67,6 +67,22 @@ Policy consequences:
 1. Standalone M365 v1 launch claims must not depend on delegated auth as the standard enterprise path.
 2. `hybrid` is not a second default. It is an exception posture for specific user-context scenarios.
 3. New operator-facing guidance should assume `app_only` unless a specific documented action class requires user-context access.
+
+### Human user authentication policy
+
+Human user authentication is a separate production concern from Graph execution auth.
+
+1. SmartHaus operators should authenticate to governed user-facing paths with Microsoft Entra ID.
+2. `app_only` remains the execution posture for Microsoft Graph and does not replace user authentication.
+3. `delegated` mode is not the enterprise operator-auth strategy for this module. It remains local, support, and exception tooling.
+4. The enterprise target model is:
+   - human actor authenticated by Entra ID
+   - action executed by the SmartHaus service principal
+   - authorization, approval, and audit bound to the human actor
+
+Commercial consequence:
+
+Standalone M365 v1 should be described as Entra-authenticated for SmartHaus users while still using app-only Graph execution in production.
 
 ## Secret Policy
 

@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
 import json
 import os
 import uuid
-from datetime import datetime, timezone
-from typing import Any, Dict, Optional, List
-import hmac
-import hashlib
+from datetime import UTC, datetime
+from typing import Any
 from urllib.parse import urlencode
 
 import httpx
+
+ApprovalUpdateResult = dict[str, list[str]]
 
 
 def _parse_site_url(site_url: str) -> tuple[str, str]:
@@ -22,7 +24,7 @@ def _parse_site_url(site_url: str) -> tuple[str, str]:
 
 
 class GraphApprovalsStore:
-    def __init__(self, registry: Dict[str, Any] | None = None):
+    def __init__(self, registry: dict[str, Any] | None = None):
         self.registry = registry or {}
         self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
         self.site_url = os.getenv("APPROVALS_SITE_URL")
@@ -105,7 +107,7 @@ class GraphApprovalsStore:
                     return item["id"]
             raise RuntimeError(f"Approvals list '{list_name}' not found in site {site_id}")
 
-    def _default_approvers(self, agent: str, action: str) -> List[str]:
+    def _default_approvers(self, agent: str, action: str) -> list[str]:
         try:
             agent_def = (self.registry or {}).get("agents", {}).get(agent, {})
             for rule in agent_def.get("approval_rules", []) or []:
@@ -115,7 +117,7 @@ class GraphApprovalsStore:
             pass
         return []
 
-    def create(self, agent: str, action: str, params: Dict[str, Any]) -> str:
+    def create(self, agent: str, action: str, params: dict[str, Any]) -> str:
         approval_id = str(uuid.uuid4())
         fields = {
             "Title": f"{agent}/{action}",
@@ -140,7 +142,7 @@ class GraphApprovalsStore:
         self._notify_teams(approval_id, agent, action, params)
         return approval_id or sp_item_id
 
-    def get(self, approval_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, approval_id: str) -> dict[str, Any] | None:
         # Lookup by filtering on field ApprovalId eq approval_id
         with self._graph() as client:
             resp = client.get(
@@ -157,18 +159,24 @@ class GraphApprovalsStore:
                 return None
             item = val[0]
             f = item.get("fields", {})
+            params = json.loads(f.get("Params") or "{}")
             return {
                 "id": f.get("ApprovalId") or item.get("id"),
                 "agent": f.get("Agent"),
                 "action": f.get("Action"),
-                "params": json.loads(f.get("Params") or "{}"),
+                "params": params,
                 "status": (f.get("Status") or "").lower(),
                 "requested_at": f.get("Created"),
                 "updated_at": f.get("Modified"),
                 "approvers": (f.get("Approvers") or "").split(", ") if f.get("Approvers") else [],
+                "requestor": params.get("requestor") or f.get("Requestor"),
+                "requestor_tier": params.get("requestor_tier"),
+                "requestor_groups": params.get("requestor_groups") or [],
+                "executor": params.get("executor_identity"),
+                "tenant": params.get("tenant"),
             }
 
-    def set_status(self, approval_id: str, status: str, reason: Optional[str] = None) -> bool:
+    def set_status(self, approval_id: str, status: str, reason: str | None = None) -> bool:
         # Find list item id
         with self._graph() as client:
             resp = client.get(
@@ -194,8 +202,10 @@ class GraphApprovalsStore:
             resp2.raise_for_status()
             return True
 
-    def bulk_set_status(self, ids: List[str], status: str, reason: Optional[str] = None) -> Dict[str, Any]:
-        results = {"updated": [], "not_found": []}
+    def bulk_set_status(
+        self, ids: list[str], status: str, reason: str | None = None
+    ) -> ApprovalUpdateResult:
+        results: ApprovalUpdateResult = {"updated": [], "not_found": []}
         for i in ids:
             ok = self.set_status(i, status, reason)
             (results["updated"] if ok else results["not_found"]).append(i)
@@ -203,14 +213,14 @@ class GraphApprovalsStore:
 
     def query(
         self,
-        agent: Optional[str] = None,
-        action: Optional[str] = None,
-        status: Optional[str] = None,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
+        agent: str | None = None,
+        action: str | None = None,
+        status: str | None = None,
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
         limit: int = 50,
-    ) -> List[Dict[str, Any]]:
-        filters: List[str] = []
+    ) -> list[dict[str, Any]]:
+        filters: list[str] = []
         if agent:
             filters.append(f"fields/Agent eq '{agent}'")
         if action:
@@ -218,9 +228,9 @@ class GraphApprovalsStore:
         if status:
             filters.append(f"fields/Status eq '{status}'")
         if start_date:
-            filters.append(f"createdDateTime ge {start_date.astimezone(timezone.utc).isoformat()}")
+            filters.append(f"createdDateTime ge {start_date.astimezone(UTC).isoformat()}")
         if end_date:
-            filters.append(f"createdDateTime le {end_date.astimezone(timezone.utc).isoformat()}")
+            filters.append(f"createdDateTime le {end_date.astimezone(UTC).isoformat()}")
         odata_filter = " and ".join(filters) if filters else None
 
         params = {
@@ -241,31 +251,40 @@ class GraphApprovalsStore:
             items = []
             for it in resp.json().get("value", []):
                 f = it.get("fields", {})
+                params_json = json.loads(f.get("Params") or "{}")
                 items.append(
                     {
                         "id": f.get("ApprovalId") or it.get("id"),
                         "agent": f.get("Agent"),
                         "action": f.get("Action"),
                         "status": (f.get("Status") or "").lower(),
-                        "approvers": (f.get("Approvers") or "").split(", ") if f.get("Approvers") else [],
-                        "requestor": f.get("Requestor"),
+                        "approvers": (
+                            (f.get("Approvers") or "").split(", ") if f.get("Approvers") else []
+                        ),
+                        "requestor": params_json.get("requestor") or f.get("Requestor"),
+                        "requestor_tier": params_json.get("requestor_tier"),
+                        "requestor_groups": params_json.get("requestor_groups") or [],
+                        "executor": params_json.get("executor_identity"),
+                        "tenant": params_json.get("tenant"),
                         "requested_at": it.get("createdDateTime"),
                         "updated_at": it.get("lastModifiedDateTime"),
                     }
                 )
             return items
 
-    def _notify_teams(self, approval_id: str, agent: str, action: str, params: Dict[str, Any]):
+    def _notify_teams(
+        self, approval_id: str, agent: str, action: str, params: dict[str, Any]
+    ) -> None:
         if not self.teams_webhook:
             return
         persona = self.personas.get(agent, {"name": agent, "title": agent})
         title = f"Approval Required: {agent}/{action}"
         text_title = f"{persona['name']} ({persona['title']})"
         # Signed action URLs
-        base = os.getenv('OPS_ADAPTER_PUBLIC_URL', 'http://localhost:8080')
-        ts = str(int(datetime.now(timezone.utc).timestamp()))
-        approve_url = self._signed_action_url(base, approval_id, 'approve', ts)
-        deny_url = self._signed_action_url(base, approval_id, 'deny', ts)
+        base = os.getenv("OPS_ADAPTER_PUBLIC_URL", "http://localhost:8080")
+        ts = str(int(datetime.now(UTC).timestamp()))
+        approve_url = self._signed_action_url(base, approval_id, "approve", ts)
+        deny_url = self._signed_action_url(base, approval_id, "deny", ts)
         card = {
             "type": "message",
             "attachments": [
@@ -283,14 +302,21 @@ class GraphApprovalsStore:
                                 "facts": [
                                     {"title": "Agent", "value": text_title},
                                     {"title": "Action", "value": action},
-                                    {"title": "Requestor", "value": params.get("requestor", "system")},
+                                    {
+                                        "title": "Requestor",
+                                        "value": params.get("requestor", "system"),
+                                    },
+                                    {
+                                        "title": "Tier",
+                                        "value": params.get("requestor_tier", "unknown"),
+                                    },
                                 ],
                             },
                             {
                                 "type": "Input.Text",
                                 "id": "reason",
                                 "placeholder": "Optional reason",
-                                "isMultiline": True
+                                "isMultiline": True,
                             },
                         ],
                         "actions": [
@@ -299,14 +325,14 @@ class GraphApprovalsStore:
                                 "title": "Approve",
                                 "method": "POST",
                                 "url": approve_url,
-                                "body": "{\"params\":{\"reason\":\"{{reason.value}}\"}}",
+                                "body": '{"params":{"reason":"{{reason.value}}"}}',
                             },
                             {
                                 "type": "Action.Http",
                                 "title": "Deny",
                                 "method": "POST",
                                 "url": deny_url,
-                                "body": "{\"params\":{\"reason\":\"{{reason.value}}\"}}",
+                                "body": '{"params":{"reason":"{{reason.value}}"}}',
                             },
                         ],
                     },
@@ -323,13 +349,13 @@ class GraphApprovalsStore:
         secret = os.getenv("TEAMS_CARD_SIGNING_SECRET")
         if not secret:
             return f"{base}/approvals/{approval_id}/{verb}"
-        msg = f"{approval_id}|{verb}|{ts}".encode("utf-8")
+        msg = f"{approval_id}|{verb}|{ts}".encode()
         sig = hmac.new(secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()
         qs = urlencode({"ts": ts, "sig": sig})
         return f"{base}/approvals/{approval_id}/{verb}?{qs}"
 
     @staticmethod
-    def verify_signature(approval_id: str, verb: str, ts: Optional[str], sig: Optional[str]) -> bool:
+    def verify_signature(approval_id: str, verb: str, ts: str | None, sig: str | None) -> bool:
         secret = os.getenv("TEAMS_CARD_SIGNING_SECRET")
         if not secret:
             # Fail-open if not configured
@@ -342,10 +368,10 @@ class GraphApprovalsStore:
             ts_int = int(ts)
         except ValueError:
             return False
-        now = int(datetime.now(timezone.utc).timestamp())
+        now = int(datetime.now(UTC).timestamp())
         if abs(now - ts_int) > max_skew:
             return False
-        msg = f"{approval_id}|{verb}|{ts}".encode("utf-8")
+        msg = f"{approval_id}|{verb}|{ts}".encode()
         expected = hmac.new(secret.encode("utf-8"), msg, hashlib.sha256).hexdigest()
         return hmac.compare_digest(expected, sig)
 
@@ -354,19 +380,23 @@ class EnterpriseApprovalsProxy:
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
 
-    def create(self, agent: str, action: str, params: Dict[str, Any]) -> str:
+    def create(self, agent: str, action: str, params: dict[str, Any]) -> str:
         payload = {
             "agent": agent,
             "action": action,
             "params": params,
             "requester": params.get("requestor") or "system",
+            "requester_tier": params.get("requestor_tier"),
+            "requester_groups": params.get("requestor_groups") or [],
+            "executor": params.get("executor_identity"),
+            "tenant": params.get("tenant"),
         }
         with httpx.Client(timeout=10.0) as client:
             r = client.post(f"{self.base_url}/approvals", json=payload)
             r.raise_for_status()
             return r.json().get("id")
 
-    def get(self, approval_id: str) -> Optional[Dict[str, Any]]:
+    def get(self, approval_id: str) -> dict[str, Any] | None:
         with httpx.Client(timeout=10.0) as client:
             r = client.get(f"{self.base_url}/approvals/{approval_id}")
             if r.status_code == 404:
@@ -374,23 +404,27 @@ class EnterpriseApprovalsProxy:
             r.raise_for_status()
             return r.json()
 
-    def set_status(self, approval_id: str, status: str, reason: Optional[str] = None) -> bool:
+    def set_status(self, approval_id: str, status: str, reason: str | None = None) -> bool:
         verb = "approve" if status == "approved" else "deny"
         with httpx.Client(timeout=10.0) as client:
-            r = client.post(f"{self.base_url}/approvals/{approval_id}/{verb}", json={"reason": reason or ""})
+            r = client.post(
+                f"{self.base_url}/approvals/{approval_id}/{verb}", json={"reason": reason or ""}
+            )
             if r.status_code == 404:
                 return False
             r.raise_for_status()
             return True
 
-    def bulk_set_status(self, ids: List[str], status: str, reason: Optional[str] = None) -> Dict[str, Any]:
-        res = {"updated": [], "not_found": []}
+    def bulk_set_status(
+        self, ids: list[str], status: str, reason: str | None = None
+    ) -> ApprovalUpdateResult:
+        res: ApprovalUpdateResult = {"updated": [], "not_found": []}
         for i in ids:
             (res["updated"] if self.set_status(i, status, reason) else res["not_found"]).append(i)
         return res
 
 
-def ApprovalsStore(registry: Dict[str, Any] | None = None):
+def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
     # Prefer Enterprise approvals service when configured
     svc_url = os.getenv("APPROVAL_SERVICE_URL") or os.getenv("APPROVALS_SERVICE_URL")
     if svc_url:
@@ -398,14 +432,15 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
     # Otherwise choose Graph-backed store
     if os.getenv("APPROVALS_SITE_URL") or os.getenv("APPROVALS_SITE_ID"):
         return GraphApprovalsStore(registry=registry)
+
     # Fallback to in-memory (ephemeral) minimal store if Graph not configured
     class _Memory:
-        def __init__(self):
-            self.db: Dict[str, Dict[str, Any]] = {}
+        def __init__(self) -> None:
+            self.db: dict[str, dict[str, Any]] = {}
             self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
             self.registry = registry or {}
 
-        def _default_approvers(self, agent: str, action: str) -> List[str]:
+        def _default_approvers(self, agent: str, action: str) -> list[str]:
             try:
                 agent_def = self.registry.get("agents", {}).get(agent, {})
                 for rule in agent_def.get("approval_rules", []) or []:
@@ -415,7 +450,7 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
                 pass
             return []
 
-        def create(self, agent: str, action: str, params: Dict[str, Any]) -> str:
+        def create(self, agent: str, action: str, params: dict[str, Any]) -> str:
             aid = str(uuid.uuid4())
             self.db[aid] = {
                 "id": aid,
@@ -423,16 +458,20 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
                 "action": action,
                 "params": params,
                 "requestor": params.get("requestor") or "system",
+                "requestor_tier": params.get("requestor_tier"),
+                "requestor_groups": params.get("requestor_groups") or [],
+                "executor": params.get("executor_identity"),
+                "tenant": params.get("tenant"),
                 "approvers": self._default_approvers(agent, action),
                 "status": "pending",
-                "requested_at": datetime.now(timezone.utc).isoformat(),
+                "requested_at": datetime.now(UTC).isoformat(),
             }
             return aid
 
-        def get(self, approval_id: str):
+        def get(self, approval_id: str) -> dict[str, Any] | None:
             return self.db.get(approval_id)
 
-        def set_status(self, approval_id: str, status: str, reason: Optional[str] = None) -> bool:
+        def set_status(self, approval_id: str, status: str, reason: str | None = None) -> bool:
             if approval_id not in self.db:
                 return False
             self.db[approval_id]["status"] = status
@@ -440,8 +479,11 @@ def ApprovalsStore(registry: Dict[str, Any] | None = None):
                 self.db[approval_id]["reason"] = reason
             return True
 
-        def bulk_set_status(self, ids: List[str], status: str, reason: Optional[str] = None):
-            updated, not_found = [], []
+        def bulk_set_status(
+            self, ids: list[str], status: str, reason: str | None = None
+        ) -> ApprovalUpdateResult:
+            updated: list[str] = []
+            not_found: list[str] = []
             for i in ids:
                 (updated if self.set_status(i, status, reason) else not_found).append(i)
             return {"updated": updated, "not_found": not_found}

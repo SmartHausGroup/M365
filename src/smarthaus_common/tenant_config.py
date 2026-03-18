@@ -20,7 +20,6 @@ from typing import Any
 
 import yaml
 
-
 # ---------------------------------------------------------------------------
 # Data models
 # ---------------------------------------------------------------------------
@@ -36,19 +35,21 @@ class AzureConfig:
 
 @dataclass
 class DelegatedAuthConfig:
-    scopes: list[str] = field(default_factory=lambda: [
-        "User.Read",
-        "Mail.ReadWrite",
-        "Mail.Send",
-        "Calendars.ReadWrite",
-        "Files.ReadWrite.All",
-        "Sites.ReadWrite.All",
-        "Team.ReadBasic.All",
-        "Channel.ReadBasic.All",
-        "Group.Read.All",
-        "ChannelMessage.Send",
-        "Chat.ReadWrite",
-    ])
+    scopes: list[str] = field(
+        default_factory=lambda: [
+            "User.Read",
+            "Mail.ReadWrite",
+            "Mail.Send",
+            "Calendars.ReadWrite",
+            "Files.ReadWrite.All",
+            "Sites.ReadWrite.All",
+            "Team.ReadBasic.All",
+            "Channel.ReadBasic.All",
+            "Group.Read.All",
+            "ChannelMessage.Send",
+            "Chat.ReadWrite",
+        ]
+    )
     token_cache_path: str = ""
     auto_prompt: bool = True
 
@@ -109,17 +110,40 @@ class PermissionTiersConfig:
 
     default_tier: str = "standard_user"
     users: dict[str, str] = field(default_factory=dict)
+    groups: dict[str, str] = field(default_factory=dict)
 
-    def get_user_tier(self, user_email: str) -> str:
+    def resolve_tier_assignment(
+        self, user_email: str, actor_groups: list[str] | None = None
+    ) -> dict[str, Any]:
+        """Resolve the effective tier for an actor from explicit user or group mappings."""
+        if user_email:
+            lower_email = user_email.lower()
+            for email, tier in self.users.items():
+                if email.lower() == lower_email:
+                    return {
+                        "tier_name": tier,
+                        "assignment_source": "user",
+                        "assignment_match": email,
+                    }
+
+        normalized_groups = {str(group).lower() for group in (actor_groups or []) if group}
+        for group_id, tier in self.groups.items():
+            if group_id.lower() in normalized_groups:
+                return {
+                    "tier_name": tier,
+                    "assignment_source": "group",
+                    "assignment_match": group_id,
+                }
+
+        return {
+            "tier_name": self.default_tier,
+            "assignment_source": "default",
+            "assignment_match": self.default_tier,
+        }
+
+    def get_user_tier(self, user_email: str, actor_groups: list[str] | None = None) -> str:
         """Return the tier for a user, falling back to default_tier."""
-        if not user_email:
-            return self.default_tier
-        # Case-insensitive lookup
-        lower_email = user_email.lower()
-        for email, tier in self.users.items():
-            if email.lower() == lower_email:
-                return tier
-        return self.default_tier
+        return self.resolve_tier_assignment(user_email, actor_groups)["tier_name"]
 
 
 @dataclass
@@ -154,15 +178,21 @@ class TenantConfig:
 
 _ENV_FALLBACKS = {
     "azure.tenant_id": [
-        "AZURE_TENANT_ID", "GRAPH_TENANT_ID", "MICROSOFT_TENANT_ID",
+        "AZURE_TENANT_ID",
+        "GRAPH_TENANT_ID",
+        "MICROSOFT_TENANT_ID",
     ],
     "azure.client_id": [
-        "AZURE_CLIENT_ID", "AZURE_APP_CLIENT_ID_TAI",
-        "GRAPH_CLIENT_ID", "MICROSOFT_CLIENT_ID",
+        "AZURE_CLIENT_ID",
+        "AZURE_APP_CLIENT_ID_TAI",
+        "GRAPH_CLIENT_ID",
+        "MICROSOFT_CLIENT_ID",
     ],
     "azure.client_secret": [
-        "AZURE_CLIENT_SECRET", "AZURE_APP_CLIENT_SECRET_TAI",
-        "GRAPH_CLIENT_SECRET", "MICROSOFT_CLIENT_SECRET",
+        "AZURE_CLIENT_SECRET",
+        "AZURE_APP_CLIENT_SECRET_TAI",
+        "GRAPH_CLIENT_SECRET",
+        "MICROSOFT_CLIENT_SECRET",
     ],
     "azure.client_certificate_path": [
         "AZURE_CLIENT_CERTIFICATE_PATH",
@@ -181,12 +211,13 @@ def _resolve_env_fallback(yaml_value: str, env_keys: list[str]) -> str:
     return ""
 
 
-def _parse_section(raw: dict[str, Any] | None, cls: type, defaults: Any | None = None):
+def _parse_section(raw: dict[str, Any] | None, cls: type[Any], defaults: Any | None = None) -> Any:
     """Instantiate a dataclass from a dict, ignoring unknown keys."""
     if raw is None:
         return defaults or cls()
     # Filter to only keys the dataclass accepts
     import dataclasses
+
     valid_keys = {f.name for f in dataclasses.fields(cls)}
     filtered = {}
     for k, v in raw.items():
@@ -218,7 +249,9 @@ def load_tenant_config(
         cfg.azure.tenant_id = _resolve_env_fallback("", _ENV_FALLBACKS["azure.tenant_id"])
         cfg.azure.client_id = _resolve_env_fallback("", _ENV_FALLBACKS["azure.client_id"])
         cfg.azure.client_secret = _resolve_env_fallback("", _ENV_FALLBACKS["azure.client_secret"])
-        cfg.azure.client_certificate_path = _resolve_env_fallback("", _ENV_FALLBACKS["azure.client_certificate_path"])
+        cfg.azure.client_certificate_path = _resolve_env_fallback(
+            "", _ENV_FALLBACKS["azure.client_certificate_path"]
+        )
         return cfg
 
     # Search for the tenant file
@@ -270,11 +303,18 @@ def load_tenant_config(
     # Azure — with env fallbacks for secrets
     azure_raw = raw.get("azure") or {}
     cfg.azure = AzureConfig(
-        tenant_id=_resolve_env_fallback(azure_raw.get("tenant_id", ""), _ENV_FALLBACKS["azure.tenant_id"]),
-        client_id=_resolve_env_fallback(azure_raw.get("client_id", ""), _ENV_FALLBACKS["azure.client_id"]),
-        client_secret=_resolve_env_fallback(azure_raw.get("client_secret", ""), _ENV_FALLBACKS["azure.client_secret"]),
+        tenant_id=_resolve_env_fallback(
+            azure_raw.get("tenant_id", ""), _ENV_FALLBACKS["azure.tenant_id"]
+        ),
+        client_id=_resolve_env_fallback(
+            azure_raw.get("client_id", ""), _ENV_FALLBACKS["azure.client_id"]
+        ),
+        client_secret=_resolve_env_fallback(
+            azure_raw.get("client_secret", ""), _ENV_FALLBACKS["azure.client_secret"]
+        ),
         client_certificate_path=_resolve_env_fallback(
-            azure_raw.get("client_certificate_path", ""), _ENV_FALLBACKS["azure.client_certificate_path"]
+            azure_raw.get("client_certificate_path", ""),
+            _ENV_FALLBACKS["azure.client_certificate_path"],
         ),
     )
 
@@ -310,6 +350,7 @@ def load_tenant_config(
     cfg.permission_tiers = PermissionTiersConfig(
         default_tier=pt_raw.get("default_tier", "standard_user"),
         users=pt_raw.get("users") or {},
+        groups=pt_raw.get("groups") or {},
     )
 
     return cfg

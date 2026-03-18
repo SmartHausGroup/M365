@@ -1,8 +1,8 @@
 # M365 Audit and Governance Evidence Model
 
-**Status:** `A3` imported; runtime synchronized through `B3`
+**Status:** `A3` imported; runtime synchronized through `B3`; identity architecture synchronized through `B5A`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`, `plan:m365-enterprise-readiness-master-plan:B3`, `plan:m365-enterprise-readiness-master-plan:R7`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`, `plan:m365-enterprise-readiness-master-plan:B3`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R7`, `plan:m365-enterprise-readiness-master-plan:R9`
 
 This document defines the minimum audit and governance evidence model required to describe standalone M365 v1 honestly to an enterprise buyer. It does not claim that all requirements are already implemented. It defines what evidence is required, what evidence exists today, and which gaps remain open.
 
@@ -27,7 +27,7 @@ Standalone M365 v1 needs an explicit required-event model across both the instru
      - `src/provisioning_api/routers/m365.py`
 
 2. **Actor and auth-context event**
-   - Required fields: authenticated actor or service identity, auth mode, agent or caller context, user-context indicator when applicable
+   - Required fields: authenticated human actor identity, executor service identity, auth mode, agent or caller context, user-context indicator when applicable
    - Current evidence sources:
      - `src/provisioning_api/routers/m365.py`
      - `src/ops_adapter/main.py`
@@ -116,7 +116,8 @@ To support enterprise review, audit records alone are not enough. Governance evi
    - approver identity and method
 
 3. **Actor traceability evidence**
-   - calling service or user identity
+   - calling human actor identity
+   - executor service identity
    - tenant context
    - agent or role context where routing depends on persona registry
 
@@ -145,6 +146,7 @@ To support enterprise review, audit records alone are not enough. Governance evi
 | Local ops-adapter audit sink with redaction | `src/ops_adapter/audit.py` | Present |
 | Enterprise forwarding hook | `src/ops_adapter/audit.py` via `AUDIT_SERVICE_URL` | Present but best-effort |
 | Admin audit for tenant/permission operations | `src/ops_adapter/audit.py`, `src/ops_adapter/actions.py`, `tests/test_ops_adapter.py` | Present for active ops-adapter admin surface |
+| Formal actor-versus-executor enterprise model | `docs/commercialization/m365-entra-identity-and-app-execution-model.md`, `src/ops_adapter/main.py`, `src/ops_adapter/approvals.py`, `src/ops_adapter/audit.py`, `tests/test_ops_adapter.py` | Present on the governed ops-adapter path |
 
 ## Current Gaps
 
@@ -165,6 +167,9 @@ The current repository state is not yet sufficient to claim complete enterprise 
 
 4. **Retention, tamper-evidence, and evidence custody are not yet formalized**
    - The current docs do not yet define enterprise retention duration, immutable storage requirements, or evidence export procedure for audit review.
+5. **Actor-versus-executor live certification is still pending**
+   - The governed ops-adapter runtime now preserves actor identity, actor tier, actor groups, tenant, and executor identity in approval and audit artifacts.
+   - Enterprise release still requires live `C1` evidence proving that the same binding survives real SmartHaus Entra tokens, real approval backends, and real audit storage.
 
 ## Enterprise Acceptance Expectations
 

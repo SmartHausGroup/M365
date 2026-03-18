@@ -1,115 +1,391 @@
 {
   "plan_id": "m365-enterprise-readiness-master-plan",
   "status": "Active",
-  "date": "2026-03-17",
+  "date": "2026-03-18",
   "owner": "SmartHaus",
   "execution_plan_reference": "plan:m365-enterprise-readiness-master-plan:R1",
   "north_star": "Operations/NORTHSTAR.md",
   "historical_lineage": "m365-enterprise-commercialization-readiness",
   "ma_process_required": false,
-  "objective": "Define and execute the full critical path required to make the current M365 capability commercially honest, operationally supportable, technically hardened, and enterprise-ready as a standalone deterministic module.",
-  "decision_rule": "Enterprise readiness requires product boundary lock, runtime hardening, live-tenant certification, and launch readiness. Documentation alone is not sufficient.",
+  "objective": "Define and execute the full critical path required to make the current M365 capability commercially honest, operationally supportable, technically hardened, standards-compliant, and enterprise-ready as a standalone deterministic module.",
+  "decision_rule": "Enterprise readiness requires product boundary lock, runtime hardening, repo-validation closure, live-tenant certification, release decision closure, and launch readiness. Documentation alone is not sufficient.",
+  "prompt_discipline": "Every execution act in this plan must have one formal MATHS prompt pair under docs/prompts/. Historical commercialization prompts remain traceability artifacts only.",
   "execution_status": {
     "completed": [
       {
         "phase": "A1",
         "date": "2026-03-17",
-        "summary": "Imported the supported-surface and buyer/operator boundary work from P0A and P0B in docs/commercialization/m365-v1-supported-surface.md and docs/commercialization/m365-v1-positioning-and-north-star-delta.md."
+        "summary": "Imported the supported-surface and buyer/operator boundary work from P0A and P0B."
       },
       {
         "phase": "A2",
         "date": "2026-03-17",
-        "summary": "Imported the canonical config-contract and auth/secret posture work from P1A and P1B in docs/commercialization/m365-canonical-config-contract.md and docs/commercialization/m365-config-migration-and-auth-policy.md."
+        "summary": "Imported the canonical config-contract and auth/secret posture work from P1A and P1B."
       },
       {
         "phase": "A3",
         "date": "2026-03-17",
-        "summary": "Imported the governance, audit, live-validation, and release-gate definition work from P2A, P2B, P3A, and P3B in the commercialization document set."
+        "summary": "Imported the governance, audit, live-validation, and release-gate definition work from P2A, P2B, P3A, and P3B."
       },
       {
         "phase": "A4",
         "date": "2026-03-17",
-        "summary": "Imported the packaging, onboarding, runbooks, and support-boundary work from P4A and P4B in docs/commercialization/m365-packaging-install-bootstrap.md and docs/commercialization/m365-operator-onboarding-and-support-boundary.md."
+        "summary": "Imported the packaging, onboarding, runbooks, and support-boundary work from P4A and P4B."
       },
       {
         "phase": "B1",
         "date": "2026-03-17",
-        "summary": "Added the repo-local configs/ma_phases.yaml bridge required by UCP validate_action, made UCP_TENANT-selected tenant config the runtime authority in shared config resolution, extended tenant lookup to the sibling UCP/tenants directory, converted legacy entrypoints to bootstrap-only dotenv loading, updated M365 runtime paths to honor tenant-first authority, and added targeted tests in tests/test_env_loading.py."
+        "summary": "Made tenant-scoped config the runtime authority and added targeted config-authority verification."
       },
       {
         "phase": "B2",
         "date": "2026-03-17",
-        "summary": "Hardened the active ops-adapter and shared permission-enforcement path so missing acting identity, missing tenant selection, missing tenant config, missing permission tiers, denied OPA decisions, and missing approval-owner configuration fail closed by default, expanded high-risk m365-administrator approval requirements in policies/ops.rego and registry/agents.yaml, removed inferred non-production OPA fail-open behavior, and added targeted deny and approval coverage in tests/test_ops_adapter.py and tests/test_policies.py."
+        "summary": "Hardened fail-closed permission, approval, and policy behavior for the active ops-adapter path."
       },
       {
         "phase": "B3",
         "date": "2026-03-17",
-        "summary": "Replaced admin.audit_log snapshot-mode behavior with an append-only admin event trail in src/ops_adapter/audit.py and src/ops_adapter/actions.py, aligned m365-administrator admin-action dispatch with the registry contract, added targeted admin-audit coverage in tests/test_ops_adapter.py, and synchronized the enterprise audit and evidence model to the real runtime surface."
+        "summary": "Replaced snapshot-mode admin audit with append-only admin event evidence and aligned admin dispatch with the registry contract."
+      },
+      {
+        "phase": "B4A",
+        "date": "2026-03-18",
+        "summary": "Corrected the active master plan and governance template to match AGENTS.md, created the required project-file-index baseline, and made the active critical path explicit."
+      },
+      {
+        "phase": "B4B",
+        "date": "2026-03-18",
+        "summary": "Regenerated the active MATHS prompt inventory so the master plan and every execution act A1 through D2 now have one formal prompt pair."
+      },
+      {
+        "phase": "B4C",
+        "date": "2026-03-18",
+        "summary": "Removed the Black parse blocker in scripts/generate-policies.py, corrected the malformed governance invariants, and proved the narrow recovery surface with targeted parser, YAML, and formatter checks."
+      },
+    {
+      "phase": "B4D1",
+      "date": "2026-03-18",
+      "summary": "Restored the worktree to the approved post-B4C baseline, pinned the remaining Ruff/Black/Mypy inventory in artifacts/b4d1_failure_inventory.json, and sequenced B4D2 as the next bounded cleanup act."
+    },
+    {
+      "phase": "B4D2",
+      "date": "2026-03-18",
+      "summary": "Added notebook-backed L8 traceability for the scripts and CI tooling surface, eliminated the scoped Ruff debt under scripts/ and scripts/ci/, and validated the bounded cleanup with Ruff, py_compile, and diff checks before advancing to B4D3."
+    },
+    {
+      "phase": "B4D3",
+      "date": "2026-03-18",
+      "summary": "Added notebook-backed L9 traceability for the runtime, CLI, and notebook validation surface, eliminated the remaining targeted Ruff debt under src/ops_adapter/, src/provisioning_api/, src/smarthaus_cli/, and tests/test_policies.py, fixed the notebook formatter parse blocker in notebooks/ma_m365_batch1_groups.ipynb, stabilized targeted formatting, and validated the bounded cleanup with Ruff, ruff format --check, and git diff --check before advancing to B4D4."
+    },
+    {
+      "phase": "B4D4A",
+      "date": "2026-03-18",
+      "summary": "Added types-PyYAML to the governed mypy hook and the repo dev dependencies, removed duplicate module discovery for src/ops_adapter/actions.py, and converted the governed mypy path from environment blockers into a real actionable type inventory."
+    },
+    {
+      "phase": "B4D4B",
+      "date": "2026-03-18",
+      "summary": "Reduced the bounded core mypy surface from 90 errors across 11 files to green by tightening the runtime typing surfaces under src/ops_adapter/, src/smarthaus_common/, and src/smarthaus_graph/, correcting the duplicated CLI analyzer Path and signature issues under src/smarthaus_cli/, and validating the governed surface with targeted mypy, py_compile, and git diff --check."
+    },
+    {
+      "phase": "B4D4C",
+      "date": "2026-03-18",
+      "summary": "Reduced the remaining dashboard, script, and test mypy surface from 126 errors across 15 files to green by adding bounded annotations and type-shape corrections under src/provisioning_api/, fixing the dynamic GraphClient typing and nullable group-id flow in the standalone scripts under scripts/, and validating the full bounded surface with targeted mypy and git diff --check."
+    },
+    {
+      "phase": "B4D4D",
+      "date": "2026-03-18",
+      "summary": "Proved repo-wide mypy repeatability by running the governed pre-commit mypy all-files surface twice, confirming the same 67-error / 21-file remainder both times, and capturing the stable handoff inventory in artifacts/b4d4d_failure_inventory.json."
+    },
+    {
+      "phase": "B4D5",
+      "date": "2026-03-18",
+      "summary": "Closed the bounded B4D validation surface with green targeted Ruff, formatter, Mypy, and diff checks, then captured the current B4E handoff inventory in artifacts/b4d5_validation_handoff.json with repo-wide format green, repo-wide Ruff reduced to 26 issues, and repo-wide mypy reduced to 5 errors across 5 files."
+    },
+      {
+        "phase": "B4E",
+        "date": "2026-03-18",
+        "summary": "Cleared the repo-wide validation gate to green with passing Ruff, formatter, mypy, full pre-commit, and diff checks, and recorded the authoritative closure in artifacts/b4e_full_repo_validation_closure.json."
+      },
+      {
+        "phase": "B5A",
+        "date": "2026-03-18",
+        "summary": "Locked the enterprise production identity model as Entra-authenticated SmartHaus users plus app-only Graph execution through the SmartHaus service principal, documented the actor-versus-executor split, and synchronized the commercialization and certification docs to that architecture."
+      },
+      {
+        "phase": "B5B",
+        "date": "2026-03-18",
+        "summary": "Enforced JWT-backed actor identity on the governed ops-adapter execution path, aligned the legacy app path to deny raw header-only actor access unless the explicit non-enterprise override is enabled, propagated the validated actor identity through the action request path, fixed the middleware fail-closed response boundary to return deterministic auth errors instead of leaking ASGI exceptions, and validated the bounded identity-enforcement surface with py_compile, targeted pytest, and diff checks."
+      },
+      {
+        "phase": "B5C",
+        "date": "2026-03-18",
+        "summary": "Bound the authenticated SmartHaus Entra actor into tier resolution, approvals, and actor-versus-executor audit semantics by adding group-aware tier resolution, preserving actor tier, actor groups, tenant, and executor metadata in the governed runtime path, and validating the bounded binding surface with py_compile, targeted pytest, and diff checks."
       }
     ],
-    "in_progress": {
-      "phase": "C1",
+    "prepared_blocked": {
+      "act": "C1A",
       "date": "2026-03-18",
-      "status": "Blocked",
-      "summary": "Froze certification candidate 52ca494 and created the blocked evidence packet scaffold under artifacts/certification/m365-v1-candidate-52ca494/, but live execution cannot start until tenant selection, Graph or Azure credentials, mutation and audit toggles, approval storage inputs, and instruction API operator variables are available in the environment."
+      "summary": "Certification candidate 52ca494 and the blocked evidence packet already exist; B4E is now green, and the SmartHaus tenant YAML contract, runtime identity-enforcement boundary, and authorization-plus-audit binding are now in place, but live certification is still blocked by the remaining mutation, audit, approval-storage, and instruction-surface inputs."
     },
-    "next_phase": "C1"
+    "next_act": "C1A"
   },
   "open_enterprise_blockers": [
-    "C1 live-tenant certification is blocked until the non-production execution environment provides UCP_TENANT, a supported Graph or Azure app credential set, mutation and audit toggles, approval storage inputs, and instruction API operator variables if the CAIO surface is in scope.",
-    "C2 release certification cannot proceed until the C1 evidence packet is populated with live transcripts and pass/fail results for the supported v1 surface.",
-    "Launch collateral and pilot handoff remain downstream of the open runtime certification blockers."
+    "Live-tenant certification cannot begin until the non-production execution environment provides the remaining runtime toggles and external inputs: UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true, approval storage inputs, and instruction-surface inputs if CAIO is in scope. The SmartHaus tenant YAML and primary app-only credential contract are now in place.",
+    "C2, D1, and D2 remain downstream of the live-evidence blockers."
   ],
   "requirements": [
-    { "id": "R1", "name": "Integrated enterprise-readiness control plane" },
-    { "id": "R2", "name": "Runtime configuration authority remediation" },
-    { "id": "R3", "name": "Fail-closed governance and approval remediation" },
-    { "id": "R4", "name": "Admin audit and evidence-surface remediation" },
-    { "id": "R5", "name": "Live-tenant certification and release closure" },
-    { "id": "R6", "name": "Launch collateral and handoff" },
-    { "id": "R7", "name": "Governance synchronization" }
+    {
+      "id": "R1",
+      "name": "Integrated enterprise-readiness control plane"
+    },
+    {
+      "id": "R2",
+      "name": "Imported foundation and product-boundary traceability"
+    },
+    {
+      "id": "R3",
+      "name": "Runtime hardening implementation"
+    },
+    {
+      "id": "R4",
+      "name": "Repo standards and governance baseline closure"
+    },
+    {
+      "id": "R5",
+      "name": "Repo validation closure"
+    },
+    {
+      "id": "R6",
+      "name": "Live-tenant certification and release closure"
+    },
+    {
+      "id": "R7",
+      "name": "Launch collateral and handoff"
+    },
+    {
+      "id": "R8",
+      "name": "Governance synchronization and prompt regeneration"
+    },
+    {
+      "id": "R9",
+      "name": "Entra user identity plus app-only execution architecture"
+    }
   ],
-  "phases": [
+  "phase_groups": [
     {
       "id": "A",
       "name": "Imported Foundation and Product Boundary",
-      "goal": "Preserve the completed commercialization definition work as the foundation.",
-      "subphases": [
-        { "id": "A1", "name": "Product Boundary and Positioning" },
-        { "id": "A2", "name": "Canonical Config Contract and Auth Posture" },
-        { "id": "A3", "name": "Governance Boundary and Certification Model" },
-        { "id": "A4", "name": "Packaging and Operator Model" }
+      "acts": [
+        {
+          "id": "A1",
+          "name": "Product Boundary and Positioning",
+          "status": "complete"
+        },
+        {
+          "id": "A2",
+          "name": "Canonical Config Contract and Auth Posture",
+          "status": "complete"
+        },
+        {
+          "id": "A3",
+          "name": "Governance Boundary and Certification Model",
+          "status": "complete"
+        },
+        {
+          "id": "A4",
+          "name": "Packaging and Operator Model",
+          "status": "complete"
+        }
       ]
     },
     {
       "id": "B",
-      "name": "Runtime Hardening Implementation",
-      "goal": "Convert the documented enterprise posture into real runtime behavior.",
-      "subphases": [
-        { "id": "B1", "name": "Runtime Config Authority Remediation" },
-        { "id": "B2", "name": "Fail-Closed Governance and Approval Remediation" },
-        { "id": "B3", "name": "Admin Audit and Evidence-Surface Remediation" }
+      "name": "Runtime and Standards Hardening Implementation",
+      "acts": [
+        {
+          "id": "B1",
+          "name": "Runtime Config Authority Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B2",
+          "name": "Fail-Closed Governance and Approval Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B3",
+          "name": "Admin Audit and Evidence-Surface Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B4A",
+          "name": "Governance Baseline Alignment",
+          "status": "complete"
+        },
+        {
+          "id": "B4B",
+          "name": "Prompt System Regeneration",
+          "status": "complete"
+        },
+        {
+          "id": "B4C",
+          "name": "Validation Blockers and Syntax Recovery",
+          "status": "complete"
+        },
+        {
+          "id": "B4D1",
+          "name": "Spillover Reset and Failure Inventory Pin",
+          "status": "complete"
+        },
+      {
+        "id": "B4D2",
+        "name": "Scripts and CI Ruff Cleanup",
+        "status": "complete"
+      },
+      {
+        "id": "B4D3",
+        "name": "Runtime, CLI, and Notebook Ruff/Black Cleanup",
+        "status": "complete"
+      },
+        {
+          "id": "B4D4",
+          "name": "Mypy Stub and Module-Path Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B4D4A",
+          "name": "Typing Environment and Module-Path Unblock",
+          "status": "complete"
+        },
+        {
+          "id": "B4D4B",
+          "name": "Core Runtime and Governance Mypy Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B4D4C",
+          "name": "Dashboard, Script, and Test Mypy Remediation",
+          "status": "complete"
+        },
+        {
+          "id": "B4D4D",
+          "name": "Targeted Mypy Closure",
+          "status": "complete"
+        },
+        {
+          "id": "B4D5",
+          "name": "Targeted Validation Closure",
+          "status": "complete"
+        },
+        {
+          "id": "B4E",
+          "name": "Full Repo Validation Closure",
+          "status": "complete"
+        },
+        {
+          "id": "B5A",
+          "name": "Identity Architecture Lock",
+          "status": "complete"
+        },
+        {
+          "id": "B5B",
+          "name": "Runtime Identity Enforcement",
+          "status": "complete"
+        },
+        {
+          "id": "B5C",
+          "name": "Authorization and Audit Binding",
+          "status": "complete"
+        }
       ]
     },
     {
       "id": "C",
       "name": "Live-Tenant Certification",
-      "goal": "Generate live enterprise evidence and close the release decision.",
-      "subphases": [
-        { "id": "C1", "name": "Live-Tenant Certification Execution" },
-        { "id": "C2", "name": "Release Certification Packet and Decision" }
+      "acts": [
+        {
+          "id": "C1A",
+          "name": "Certification Environment Readiness",
+          "status": "next"
+        },
+        {
+          "id": "C1B",
+          "name": "Live Read-Only Certification",
+          "status": "blocked"
+        },
+        {
+          "id": "C1C",
+          "name": "Live Mutation and Governance Certification",
+          "status": "blocked"
+        },
+        {
+          "id": "C1D",
+          "name": "Evidence Packet Completion and Matrix Closure",
+          "status": "blocked"
+        },
+        {
+          "id": "C2",
+          "name": "Release Certification Packet and Decision",
+          "status": "blocked"
+        }
       ]
     },
     {
       "id": "D",
       "name": "Launch Readiness",
-      "goal": "Finish collateral and handoff after runtime and certification closure.",
-      "subphases": [
-        { "id": "D1", "name": "Enterprise Collateral Pack" },
-        { "id": "D2", "name": "Pilot Acceptance and Customer Handoff" }
+      "acts": [
+        {
+          "id": "D1",
+          "name": "Enterprise Collateral Pack",
+          "status": "blocked"
+        },
+        {
+          "id": "D2",
+          "name": "Pilot Acceptance and Customer Handoff",
+          "status": "blocked"
+        }
       ]
     }
   ],
+  "critical_path_rules": [
+    "No act after B4E may proceed while pre-commit run --all-files is red.",
+    "B5A may not start until B4E is complete.",
+    "C1A may not start until B5C is complete.",
+    "C1B and C1C require explicit live-execution approval.",
+    "Historical commercialization prompts may not be used as active execution authority."
+  ],
+  "prompt_inventory": {
+    "overview_prompt": "docs/prompts/codex-m365-enterprise-readiness-master-plan.md",
+    "required_acts": [
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "B1",
+      "B2",
+      "B3",
+      "B4A",
+      "B4B",
+      "B4C",
+      "B4D1",
+      "B4D2",
+      "B4D3",
+      "B4D4",
+      "B4D5",
+      "B4E",
+      "B5A",
+      "B5B",
+      "B5C",
+      "C1A",
+      "C1B",
+      "C1C",
+      "C1D",
+      "C2",
+      "D1",
+      "D2"
+    ]
+  },
   "legacy_mapping": {
     "P0A": "A1",
     "P0B": "A1",
