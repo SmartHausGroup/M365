@@ -1,0 +1,116 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1",
+  "candidate_sha": "52ca494",
+  "checked_at": "2026-03-18T06:13:28-04:00",
+  "status": "blocked",
+  "probe_mode": "presence_only",
+  "all_prerequisites_present": false,
+  "prerequisite_groups": [
+    {
+      "group": "tenant_selection",
+      "required": [
+        "UCP_TENANT"
+      ],
+      "present": {
+        "UCP_TENANT": false
+      },
+      "ready": false
+    },
+    {
+      "group": "graph_app_auth",
+      "required_any_of": [
+        [
+          "AZURE_TENANT_ID",
+          "AZURE_CLIENT_ID",
+          "AZURE_CLIENT_SECRET"
+        ],
+        [
+          "GRAPH_TENANT_ID",
+          "GRAPH_CLIENT_ID",
+          "GRAPH_CLIENT_SECRET"
+        ],
+        [
+          "AZURE_TENANT_ID",
+          "AZURE_CLIENT_ID",
+          "AZURE_CLIENT_CERTIFICATE_PATH"
+        ]
+      ],
+      "present": {
+        "AZURE_TENANT_ID": false,
+        "AZURE_CLIENT_ID": false,
+        "AZURE_CLIENT_SECRET": false,
+        "GRAPH_TENANT_ID": false,
+        "GRAPH_CLIENT_ID": false,
+        "GRAPH_CLIENT_SECRET": false,
+        "AZURE_CLIENT_CERTIFICATE_PATH": false
+      },
+      "ready": false
+    },
+    {
+      "group": "mutation_and_audit_controls",
+      "required": [
+        "ALLOW_M365_MUTATIONS",
+        "ENABLE_AUDIT_LOGGING"
+      ],
+      "present": {
+        "ALLOW_M365_MUTATIONS": false,
+        "ENABLE_AUDIT_LOGGING": false
+      },
+      "ready": false
+    },
+    {
+      "group": "approval_path",
+      "required_any_of": [
+        [
+          "APPROVALS_SITE_ID"
+        ],
+        [
+          "APPROVALS_SITE_URL"
+        ]
+      ],
+      "present": {
+        "APPROVALS_SITE_ID": false,
+        "APPROVALS_SITE_URL": false
+      },
+      "ready": false
+    },
+    {
+      "group": "instruction_api_operator",
+      "required": [
+        "CAIO_API_KEY",
+        "BASE_URL"
+      ],
+      "present": {
+        "CAIO_API_KEY": false,
+        "BASE_URL": false
+      },
+      "ready": false
+    },
+    {
+      "group": "external_policy_engine",
+      "required_optional": [
+        "OPA_URL"
+      ],
+      "present": {
+        "OPA_URL": false
+      },
+      "ready": false,
+      "note": "Only required if the live certification run is configured to use an external OPA service."
+    }
+  ],
+  "blocking_conditions": [
+    "No tenant is currently selected for live certification.",
+    "No live Graph or Azure application credential set is available in the execution environment.",
+    "Mutation and audit toggles are disabled, so controlled write-path certification cannot begin.",
+    "Approval-path storage inputs are absent, so approval workflow checks cannot run.",
+    "Instruction API operator inputs are absent, so CAIO-surface checks cannot run."
+  ],
+  "next_actions": [
+    "Set UCP_TENANT to a real non-production tenant with a valid tenant YAML configuration.",
+    "Load one supported Graph or Azure app credential set for that tenant, preferring certificate auth.",
+    "Enable ALLOW_M365_MUTATIONS and ENABLE_AUDIT_LOGGING for the approved certification window.",
+    "Provide approval storage configuration so approval-path checks can execute.",
+    "Provide CAIO_API_KEY and BASE_URL if the instruction API path is included in the certification run.",
+    "Re-run C1 once the prerequisite groups above are ready."
+  ]
+}

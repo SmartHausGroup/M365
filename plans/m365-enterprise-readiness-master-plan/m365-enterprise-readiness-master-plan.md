@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `C1` next)
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `C1` in progress and blocked on live prerequisites as of 2026-03-18)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
@@ -35,7 +35,7 @@ If any one of those factors is incomplete, the standalone module remains `NO-GO`
 - `B1` complete on 2026-03-17: added the repo-local `configs/ma_phases.yaml` bridge required by governed code-edit validation, made `UCP_TENANT`-selected tenant config the runtime authority in `src/smarthaus_common/config.py`, extended tenant lookup to the sibling `UCP/tenants` directory in `src/smarthaus_common/tenant_config.py`, converted the standalone server and legacy dashboard entrypoints to shared bootstrap-only dotenv loading, updated `src/provisioning_api/routers/m365.py`, `src/provisioning_api/m365_provision.py`, and `src/provisioning_api/enterprise_dashboard.py` to honor tenant-first authority, and added targeted precedence coverage in `tests/test_env_loading.py`.
 - `B2` complete on 2026-03-17: hardened the active ops-adapter and shared permission-enforcement path so missing acting identity, missing tenant selection, missing tenant config, missing permission tiers, denied OPA decisions, and missing approval-owner configuration fail closed by default, expanded high-risk `m365-administrator` approval requirements in `policies/ops.rego` and `registry/agents.yaml`, removed inferred non-production OPA fail-open behavior, and added targeted deny/approval coverage in `tests/test_ops_adapter.py` and `tests/test_policies.py`.
 - `B3` complete on 2026-03-17: replaced `admin.audit_log` snapshot-mode behavior with an append-only admin event trail in `src/ops_adapter/audit.py` and `src/ops_adapter/actions.py`, aligned `m365-administrator` admin-action dispatch with the registry contract, added targeted admin-audit coverage in `tests/test_ops_adapter.py`, and synchronized the enterprise audit/evidence model to the real runtime surface.
-- `C1` is the next execution unit.
+- `C1` is now in progress with certification candidate `52ca494`, but the live run is blocked until tenant selection, Graph or Azure credentials, mutation and audit toggles, approval storage inputs, and instruction API operator inputs are present in the execution environment.
 
 ## Open Enterprise Blockers
 
@@ -209,11 +209,19 @@ This phase is now the active critical path.
 
 **Goal:** Execute the supported v1 validation matrix against a controlled non-production tenant.
 
+**Status:** 🟡 In progress, blocked (2026-03-18)
+
 **Outputs:**
 - live validation transcript set
 - evidence packet for supported actions and governance surfaces
 - controlled-environment operator checklist
 - pass/fail summary tied to `A3`
+
+**Current execution notes:**
+- Candidate commit `52ca494` freezes the `B3` runtime surface for certification.
+- The blocked evidence packet now exists under `artifacts/certification/m365-v1-candidate-52ca494/`.
+- Live execution is blocked until the approved non-production environment provides `UCP_TENANT`, one supported Graph or Azure app credential set, `ALLOW_M365_MUTATIONS`, `ENABLE_AUDIT_LOGGING`, approval storage configuration, and the instruction API operator variables if the CAIO surface is in scope.
+- `C2`, `D1`, and `D2` remain blocked until this packet contains real live transcripts instead of placeholders.
 
 #### C2 — Release Certification Packet and Decision
 

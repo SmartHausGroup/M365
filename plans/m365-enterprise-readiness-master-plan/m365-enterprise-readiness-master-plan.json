@@ -47,11 +47,18 @@
         "summary": "Replaced admin.audit_log snapshot-mode behavior with an append-only admin event trail in src/ops_adapter/audit.py and src/ops_adapter/actions.py, aligned m365-administrator admin-action dispatch with the registry contract, added targeted admin-audit coverage in tests/test_ops_adapter.py, and synchronized the enterprise audit and evidence model to the real runtime surface."
       }
     ],
+    "in_progress": {
+      "phase": "C1",
+      "date": "2026-03-18",
+      "status": "Blocked",
+      "summary": "Froze certification candidate 52ca494 and created the blocked evidence packet scaffold under artifacts/certification/m365-v1-candidate-52ca494/, but live execution cannot start until tenant selection, Graph or Azure credentials, mutation and audit toggles, approval storage inputs, and instruction API operator variables are available in the environment."
+    },
     "next_phase": "C1"
   },
   "open_enterprise_blockers": [
-    "live-tenant certification evidence has not yet been executed",
-    "launch collateral and pilot handoff remain downstream of runtime and certification blockers"
+    "C1 live-tenant certification is blocked until the non-production execution environment provides UCP_TENANT, a supported Graph or Azure app credential set, mutation and audit toggles, approval storage inputs, and instruction API operator variables if the CAIO surface is in scope.",
+    "C2 release certification cannot proceed until the C1 evidence packet is populated with live transcripts and pass/fail results for the supported v1 surface.",
+    "Launch collateral and pilot handoff remain downstream of the open runtime certification blockers."
   ],
   "requirements": [
     { "id": "R1", "name": "Integrated enterprise-readiness control plane" },
