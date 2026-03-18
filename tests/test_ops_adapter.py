@@ -1,15 +1,12 @@
-import os
 from pathlib import Path
 
 import pytest
 from dotenv import load_dotenv
-
 from fastapi.testclient import TestClient
-
 from ops_adapter.approvals import ApprovalsStore
 from ops_adapter.main import app
-from smarthaus_common.permission_enforcer import check_user_permission
 from smarthaus_common import permission_enforcer as permission_enforcer_module
+from smarthaus_common.permission_enforcer import check_user_permission
 from smarthaus_common.tenant_config import reload_tenant_config
 
 # Load environment variables for testing
@@ -38,7 +35,9 @@ class _DummyOPA:
         self.allowed = allowed
         self.approval_required = approval_required
 
-    async def check(self, _agent: str, _action: str, _data: dict, _rate_allowed: bool, _corr: str) -> dict:
+    async def check(
+        self, _agent: str, _action: str, _data: dict, _rate_allowed: bool, _corr: str
+    ) -> dict:
         return {
             "allowed": self.allowed,
             "approval_required": self.approval_required,
@@ -66,6 +65,7 @@ permission_tiers:
 
     monkeypatch.setenv("UCP_ROOT", str(tenant_root))
     monkeypatch.setenv("UCP_TENANT", "tenant-alpha")
+    monkeypatch.setenv("LOG_DIR", str(tmp_path / "logs"))
     monkeypatch.delenv("M365_PERMISSION_FAIL_OPEN", raising=False)
     reload_tenant_config()
     yield
@@ -82,10 +82,15 @@ def patched_runtime(monkeypatch):
                 "allowed_actions": [
                     "users.disable",
                     "sites.provision",
+                    "admin.set_user_tier",
+                    "admin.get_tenant_config",
+                    "admin.reload_config",
+                    "admin.audit_log",
                 ],
                 "approval_rules": [
                     {"action": "users.disable", "approvers": ["global_admin"]},
                     {"action": "sites.provision", "approvers": ["global_admin"]},
+                    {"action": "admin.set_user_tier", "approvers": ["global_admin"]},
                 ],
             }
         }
@@ -141,7 +146,9 @@ def test_actions_denies_when_tier_not_allowed(tenant_env, patched_runtime, monke
     assert "users.disable" in r.json()["detail"]
 
 
-def test_actions_returns_pending_approval_for_high_risk_admin_action(tenant_env, patched_runtime, monkeypatch):
+def test_actions_returns_pending_approval_for_high_risk_admin_action(
+    tenant_env, patched_runtime, monkeypatch
+):
     monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=True))
 
     client = TestClient(app)
@@ -155,3 +162,73 @@ def test_actions_returns_pending_approval_for_high_risk_admin_action(tenant_env,
     data = r.json()
     assert data["status"] == "pending_approval"
     assert isinstance(data["approval_id"], str) and data["approval_id"]
+
+
+def test_admin_set_user_tier_records_append_only_audit_event(
+    tenant_env, patched_runtime, monkeypatch
+):
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/admin.set_user_tier",
+        headers={"X-User-Email": "admin@example.com"},
+        json={"params": {"email": "user@example.com", "tier": "power_user"}},
+    )
+
+    assert r.status_code == 200
+    payload = r.json()
+    assert payload["status"] == "success"
+    assert payload["result"]["status"] == "updated"
+
+    audit = client.post(
+        "/actions/m365-administrator/admin.audit_log",
+        headers={"X-User-Email": "admin@example.com"},
+        json={"params": {"action": "admin.set_user_tier", "limit": 5}},
+    )
+
+    assert audit.status_code == 200
+    audit_payload = audit.json()
+    assert audit_payload["status"] == "success"
+    audit_result = audit_payload["result"]
+    assert audit_result["status"] == "event_log"
+    assert audit_result["count"] >= 1
+
+    event = audit_result["events"][0]
+    assert event["surface"] == "ops_adapter_admin"
+    assert event["event_class"] == "permission_tier_update"
+    assert event["action"] == "admin.set_user_tier"
+    assert event["actor"] == "admin@example.com"
+    assert event["tenant"] == "tenant-alpha"
+    assert event["before"] == {"tier": "standard_user"}
+    assert event["after"] == {"tier": "power_user"}
+    assert event["details"]["email"] == "user@example.com"
+
+
+def test_admin_audit_log_can_return_snapshot_context(tenant_env, patched_runtime, monkeypatch):
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    client = TestClient(app)
+    client.post(
+        "/actions/m365-administrator/admin.get_tenant_config",
+        headers={"X-User-Email": "admin@example.com"},
+        json={"params": {}},
+    )
+
+    audit = client.post(
+        "/actions/m365-administrator/admin.audit_log",
+        headers={"X-User-Email": "admin@example.com"},
+        json={"params": {"event_class": "tenant_config_read", "include_snapshot": True}},
+    )
+
+    assert audit.status_code == 200
+    audit_payload = audit.json()
+    assert audit_payload["status"] == "success"
+    audit_result = audit_payload["result"]
+    assert audit_result["status"] == "event_log"
+    assert audit_result["count"] >= 1
+    assert audit_result["snapshot"]["default_tier"] == "standard_user"
+    assert audit_result["snapshot"]["user_count"] >= 1
+    event = audit_result["events"][0]
+    assert event["event_class"] == "tenant_config_read"
+    assert event["details"]["redacted"] is True

@@ -3,7 +3,7 @@
   "item_kind": "lemma",
   "lemma_id": "L4",
   "status": "green",
-  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "generated_at_utc": "2026-03-18T02:39:22Z",
   "notebook": "notebooks/ma_m365_audit.ipynb",
   "notebook_hash": "b95cc6594cf372f4b1a33bf317e37066f7c7ed4c2d12770b680d6868535e915f",
   "seed_lock_verified": true,
@@ -11,6 +11,10 @@
   "evidence_files": [
     "docs/contracts/caio-m365/LEMMA_L4.md",
     "invariants/INV-M365-AUDIT-001.yaml",
-    "configs/generated/m365_audit_verification.json"
+    "configs/generated/m365_audit_verification.json",
+    "src/ops_adapter/audit.py",
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py",
+    "docs/commercialization/m365-audit-and-governance-evidence-model.md"
   ]
 }

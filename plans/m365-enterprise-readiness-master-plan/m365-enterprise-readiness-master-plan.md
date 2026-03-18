@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, and `B2` complete on 2026-03-17; `B3` next)
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `C1` next)
 **Date:** 2026-03-17
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
@@ -34,15 +34,15 @@ If any one of those factors is incomplete, the standalone module remains `NO-GO`
 - `A4` complete on 2026-03-17: imported the packaging, onboarding, runbooks, and support-boundary work from `P4A` and `P4B` in `docs/commercialization/m365-packaging-install-bootstrap.md` and `docs/commercialization/m365-operator-onboarding-and-support-boundary.md`.
 - `B1` complete on 2026-03-17: added the repo-local `configs/ma_phases.yaml` bridge required by governed code-edit validation, made `UCP_TENANT`-selected tenant config the runtime authority in `src/smarthaus_common/config.py`, extended tenant lookup to the sibling `UCP/tenants` directory in `src/smarthaus_common/tenant_config.py`, converted the standalone server and legacy dashboard entrypoints to shared bootstrap-only dotenv loading, updated `src/provisioning_api/routers/m365.py`, `src/provisioning_api/m365_provision.py`, and `src/provisioning_api/enterprise_dashboard.py` to honor tenant-first authority, and added targeted precedence coverage in `tests/test_env_loading.py`.
 - `B2` complete on 2026-03-17: hardened the active ops-adapter and shared permission-enforcement path so missing acting identity, missing tenant selection, missing tenant config, missing permission tiers, denied OPA decisions, and missing approval-owner configuration fail closed by default, expanded high-risk `m365-administrator` approval requirements in `policies/ops.rego` and `registry/agents.yaml`, removed inferred non-production OPA fail-open behavior, and added targeted deny/approval coverage in `tests/test_ops_adapter.py` and `tests/test_policies.py`.
-- `B3` is the next execution unit.
+- `B3` complete on 2026-03-17: replaced `admin.audit_log` snapshot-mode behavior with an append-only admin event trail in `src/ops_adapter/audit.py` and `src/ops_adapter/actions.py`, aligned `m365-administrator` admin-action dispatch with the registry contract, added targeted admin-audit coverage in `tests/test_ops_adapter.py`, and synchronized the enterprise audit/evidence model to the real runtime surface.
+- `C1` is the next execution unit.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation and evidence blockers, not merely documentation blockers:
 
-1. Admin audit remains incomplete for enterprise review.
-2. Live-tenant certification evidence has not yet been executed and assembled.
-3. Launch collateral and pilot handoff remain downstream of the runtime and certification blockers.
+1. Live-tenant certification evidence has not yet been executed and assembled.
+2. Launch collateral and pilot handoff remain downstream of the runtime and certification blockers.
 
 ## Scope
 
@@ -189,11 +189,19 @@ This phase is now the active critical path.
 
 **Goal:** Close the current admin-audit gap so the runtime has an enterprise-reviewable audit surface.
 
+**Status:** ✅ Complete (2026-03-17)
+
 **Outputs:**
 - remediated admin audit behavior
 - normalized evidence map across instruction and admin surfaces
 - targeted audit tests or verification outputs
 - implementation notes mapped back to `A3`
+
+**Completion notes:**
+- `src/ops_adapter/audit.py` now provides a shared append-only audit envelope plus explicit admin-event recording and recent-event query helpers for the active ops-adapter surface.
+- `src/ops_adapter/actions.py` now records append-only admin/configuration events for tenant-config reads, reloads, and permission-tier mutations, and `admin.audit_log` now returns `event_log` records instead of `snapshot_mode`.
+- The admin/config action dispatcher now accepts the `m365-administrator` admin surface already defined in `registry/agents.yaml`, closing the runtime/registry mismatch that previously produced unsupported-action failures.
+- Targeted verification passed: `python3 -m py_compile src/ops_adapter/audit.py src/ops_adapter/actions.py tests/test_ops_adapter.py`, `PYTHONPATH=src pytest -q tests/test_ops_adapter.py`, and `git diff --check`.
 
 ### C — Live-Tenant Certification
 

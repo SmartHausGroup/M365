@@ -40,12 +40,16 @@
         "phase": "B2",
         "date": "2026-03-17",
         "summary": "Hardened the active ops-adapter and shared permission-enforcement path so missing acting identity, missing tenant selection, missing tenant config, missing permission tiers, denied OPA decisions, and missing approval-owner configuration fail closed by default, expanded high-risk m365-administrator approval requirements in policies/ops.rego and registry/agents.yaml, removed inferred non-production OPA fail-open behavior, and added targeted deny and approval coverage in tests/test_ops_adapter.py and tests/test_policies.py."
+      },
+      {
+        "phase": "B3",
+        "date": "2026-03-17",
+        "summary": "Replaced admin.audit_log snapshot-mode behavior with an append-only admin event trail in src/ops_adapter/audit.py and src/ops_adapter/actions.py, aligned m365-administrator admin-action dispatch with the registry contract, added targeted admin-audit coverage in tests/test_ops_adapter.py, and synchronized the enterprise audit and evidence model to the real runtime surface."
       }
     ],
-    "next_phase": "B3"
+    "next_phase": "C1"
   },
   "open_enterprise_blockers": [
-    "admin audit remains incomplete for enterprise review",
     "live-tenant certification evidence has not yet been executed",
     "launch collateral and pilot handoff remain downstream of runtime and certification blockers"
   ],

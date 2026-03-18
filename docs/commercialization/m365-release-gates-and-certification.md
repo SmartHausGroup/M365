@@ -86,7 +86,7 @@ Required:
 1. Any unresolved gap must be either:
    - closed before release, or
    - explicitly excluded from release claims
-2. `snapshot_mode` admin audit may not be silently carried into a “fully enterprise-governed” claim.
+2. append-only admin audit evidence for the active ops-adapter admin surface must be exercised and collected in the live validation packet before a “fully enterprise-governed” claim is made.
 3. Fail-open OPA or permissive permission fallback behavior may not be included in the enterprise release posture.
 
 Evidence:
@@ -126,7 +126,7 @@ The release decision is `NO-GO` if any of the following are true:
 1. A mock-passing auth or idempotency artifact is used as the only evidence for enterprise release.
 2. Any of the 9 supported actions lacks the required live evidence classification or packet.
 3. A governance or audit claim is made without mapped evidence or explicit gap disclosure.
-4. `snapshot_mode` admin audit is presented as enterprise-complete audit.
+4. admin audit is presented as enterprise-complete without the live admin evidence packet required by `C1`.
 5. Release materials imply approval hardening or fail-closed behavior that the current repo does not support.
 6. Evidence packet is incomplete, untraceable, or missing owner sign-off.
 7. Release scope drifts beyond the supported v1 boundary.

@@ -1,8 +1,8 @@
 # M365 Audit and Governance Evidence Model
 
-**Status:** `P2A` complete
+**Status:** `A3` imported; runtime synchronized through `B3`
 **Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`, `plan:m365-enterprise-readiness-master-plan:B3`, `plan:m365-enterprise-readiness-master-plan:R7`
 
 This document defines the minimum audit and governance evidence model required to describe standalone M365 v1 honestly to an enterprise buyer. It does not claim that all requirements are already implemented. It defines what evidence is required, what evidence exists today, and which gaps remain open.
 
@@ -71,8 +71,10 @@ Standalone M365 v1 needs an explicit required-event model across both the instru
 8. **Administrative configuration event**
    - Required fields: tenant config read, reload, permission-tier mutation, actor, target tenant, before/after or requested effect, correlation ID
    - Current evidence sources:
+     - `src/ops_adapter/audit.py`
      - `src/ops_adapter/actions.py`
      - `src/ops_adapter/main.py`
+     - `tests/test_ops_adapter.py`
 
 ### Current evidence split
 
@@ -88,13 +90,14 @@ The repository has two materially different audit surfaces:
      - `src/provisioning_api/audit.py`
 
 2. **Ops-adapter and admin governance audit**
-   - Implemented in runtime behavior and logs
-   - Not yet backed by an equally formal enterprise evidence model
+   - Implemented in runtime behavior and append-only local audit records
+   - Admin/configuration actions now emit explicit admin-event records instead of returning snapshot-only state
    - Evidence sources:
      - `src/ops_adapter/audit.py`
      - `src/ops_adapter/main.py`
      - `src/ops_adapter/app.py`
      - `src/ops_adapter/actions.py`
+     - `tests/test_ops_adapter.py`
 
 ## Governance Evidence
 
@@ -141,38 +144,26 @@ To support enterprise review, audit records alone are not enough. Governance evi
 | Instruction API formal audit guarantee | `docs/contracts/caio-m365/MATHEMATICS.md`, `docs/contracts/caio-m365/LEMMA_L4.md`, `configs/generated/m365_audit_verification.json` | Present but narrow |
 | Local ops-adapter audit sink with redaction | `src/ops_adapter/audit.py` | Present |
 | Enterprise forwarding hook | `src/ops_adapter/audit.py` via `AUDIT_SERVICE_URL` | Present but best-effort |
-| Admin audit for tenant/permission operations | `src/ops_adapter/actions.py` | Partial only |
+| Admin audit for tenant/permission operations | `src/ops_adapter/audit.py`, `src/ops_adapter/actions.py`, `tests/test_ops_adapter.py` | Present for active ops-adapter admin surface |
 
 ## Current Gaps
 
 The current repository state is not yet sufficient to claim complete enterprise audit posture.
 
-1. **Admin audit is explicitly snapshot mode**
-   - `src/ops_adapter/actions.py` states that `admin_audit_log` is not a full event log and currently returns state snapshot data.
-   - This is a commercialization gap, not a hidden implementation detail.
-
-2. **No unified audit schema across instruction API and ops-adapter**
+1. **No unified audit schema across instruction API and ops-adapter**
    - Instruction API records use `ts, action, user, details`.
-   - Ops-adapter records use `timestamp, correlation_id, agent, action, status, details`.
-   - Enterprise review needs the difference documented, not glossed over.
+   - Ops-adapter records now use `timestamp, correlation_id, surface, agent, action, status, details`, with admin-event extensions such as `event_class`, `actor`, `tenant`, `before`, and `after`.
+   - Enterprise review still needs the normalization boundary documented, not glossed over.
 
-3. **Generated audit verification is narrow**
+2. **Generated audit verification is narrow**
    - `configs/generated/m365_audit_verification.json` shows a passing result, but only for a limited schema check and a small record count.
-   - This is not evidence of full enterprise governance coverage.
+   - `B3` adds targeted runtime tests for the admin/config audit path, but the generated artifact is still narrower than full enterprise governance coverage.
 
-4. **Audit delivery is fail-open**
+3. **Audit delivery is fail-open**
    - `src/ops_adapter/audit.py` intentionally avoids raising on forwarding failures.
    - That is acceptable operationally, but enterprise acceptance needs a defined reliability and monitoring expectation for the audit pipeline.
 
-5. **Sync ops-adapter logger is weaker than the async auditor**
-   - `audit_log()` in `src/ops_adapter/audit.py` writes locally but does not mirror the richer sanitization and external forwarding behavior of `Auditor.log()`.
-   - This creates evidence inconsistency across entrypoints.
-
-6. **Administrative change evidence is incomplete**
-   - Tenant-config inspection and reload exist.
-   - Event-sourced before/after evidence for admin configuration changes is not yet documented as complete.
-
-7. **Retention, tamper-evidence, and evidence custody are not yet formalized**
+4. **Retention, tamper-evidence, and evidence custody are not yet formalized**
    - The current docs do not yet define enterprise retention duration, immutable storage requirements, or evidence export procedure for audit review.
 
 ## Enterprise Acceptance Expectations
@@ -190,11 +181,10 @@ Enterprise commercialization may proceed only with explicit acceptance boundarie
 
 ### Minimum evidence expectation for future enterprise release acceptance
 
-1. Full admin audit must move beyond `snapshot_mode`.
-2. Governance evidence must include reliable actor, tenant, action, decision, and approval linkage.
-3. Audit schemas across major surfaces should either converge or be explicitly normalized for review/export.
-4. Audit pipeline reliability, retention, and export expectations must be documented and tested.
-5. Live-tenant validation in `P3A` must distinguish:
+1. Governance evidence must include reliable actor, tenant, action, decision, and approval linkage.
+2. Audit schemas across major surfaces should either converge or be explicitly normalized for review/export.
+3. Audit pipeline reliability, retention, and export expectations must be documented and tested.
+4. Live-tenant validation in `P3A` must distinguish:
    - instruction API audit proof
    - ops-adapter governance proof
    - admin/configuration audit proof
@@ -204,11 +194,11 @@ Enterprise commercialization may proceed only with explicit acceptance boundarie
 Until the current gaps are closed or explicitly accepted as limited scope, SmartHaus may claim:
 
 1. formal audit guarantees for the instruction API surface only where contract docs and generated verification already exist
-2. runtime audit and governance behavior exists for ops-adapter and admin surfaces
-3. full enterprise governance evidence for admin and ops-adapter surfaces remains an open hardening track
+2. runtime audit and governance behavior exists for ops-adapter and admin surfaces, including append-only admin/configuration events on the active request path
+3. full live-certified enterprise governance evidence remains downstream of `C1` and `C2`
 
 SmartHaus may not claim:
 
-1. complete enterprise-grade event-sourced admin audit today
-2. unified fully verified audit evidence across every M365 runtime surface today
-3. live-certified governance evidence before `P3A` and `P3B`
+1. unified fully verified audit evidence across every M365 runtime surface today
+2. immutable or externally guaranteed enterprise evidence custody today
+3. live-certified governance evidence before `C1` and `C2`
