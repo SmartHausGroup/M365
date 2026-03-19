@@ -12,7 +12,7 @@ export default function IntakeLanding() {
 
   const handleServiceSelection = async (serviceId: string) => {
     setSelected(serviceId);
-    
+
     // Send Teams notification for service selection
     const service = services.find(s => s.id === serviceId);
     if (service) {
@@ -25,7 +25,7 @@ export default function IntakeLanding() {
           riskScore: 0,
           modules: service.modules.map(m => m.title)
         });
-        
+
         console.log('Teams notification sent for service selection');
       } catch (error) {
         console.error('Failed to send Teams notification:', error);
@@ -42,8 +42,8 @@ export default function IntakeLanding() {
             LEVEL-160 Consulting Intake
           </h1>
           <p className="hero-subtitle">
-            Enterprise-grade intake powered by AIDF mathematical validation. 
-            Choose a service to begin a tailored assessment that builds your client profile 
+            Enterprise-grade intake powered by AIDF mathematical validation.
+            Choose a service to begin a tailored assessment that builds your client profile
             and readiness assessment with mathematical precision.
           </p>
           <div className="proof" style={{ margin: '2rem auto', maxWidth: '48rem' }}>
@@ -96,7 +96,7 @@ export default function IntakeLanding() {
                   <span className="status">LEVEL-160 Ready</span>
                 </div>
               </div>
-              
+
               <div className="service-description">
                 <p>{svc.description}</p>
               </div>
@@ -129,14 +129,14 @@ export default function IntakeLanding() {
               </div>
 
               <div className="action-buttons">
-                <button 
-                  className="button" 
+                <button
+                  className="button"
                   onClick={() => router.push(`/advisory/intake/${svc.id}`)}
                 >
                   Start LEVEL-160 Intake
                 </button>
-                <button 
-                  className="button button-outline" 
+                <button
+                  className="button button-outline"
                   onClick={() => setSelected(null)}
                 >
                   ← Back to Services

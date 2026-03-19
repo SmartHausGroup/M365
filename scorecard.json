@@ -1,7 +1,7 @@
 {
   "status": "green",
   "decision": "green",
-  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "generated_at_utc": "2026-03-18T22:01:35Z",
   "seed_lock_verified": true,
   "determinism_certified": true,
   "notebook_hash": "eb9d3fb6a7a9ff3493402b214de05d8bd8d7d4657ad35fdcc00ba70e587a9280",
@@ -31,6 +31,34 @@
     "L6": {
       "scorecard_path": "artifacts/scorecards/scorecard_l6.json",
       "status": "green"
+    },
+    "L7": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l7.json",
+      "status": "green"
+    },
+    "L8": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l8.json",
+      "status": "green"
+    },
+    "L9": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l9.json",
+      "status": "green"
+    },
+    "L10": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l10.json",
+      "status": "green"
+    },
+    "L11": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l11.json",
+      "status": "green"
+    },
+    "L12": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l12.json",
+      "status": "green"
+    },
+    "L13": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l13.json",
+      "status": "green"
     }
   },
   "module_scorecards": {
@@ -39,5 +67,5 @@
       "status": "green"
     }
   },
-  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
+  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, and L13 Entra app-separation plus executor certificate-cutover linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
 }

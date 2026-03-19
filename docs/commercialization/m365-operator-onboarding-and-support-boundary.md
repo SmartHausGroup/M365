@@ -36,7 +36,7 @@ The onboarding checklist is complete only when every step below is satisfied:
 8. Set `ALLOW_M365_MUTATIONS=false` for the first startup and initial smoke validation.
 9. Configure governance dependencies required by the target deployment:
    - `OPA_URL` for policy enforcement
-   - approvals backend inputs such as `APPROVALS_SITE_URL` or `APPROVALS_SITE_ID`
+   - tenant-backed approvals target configuration, with `APPROVALS_SITE_URL` or `APPROVALS_SITE_ID` only as explicit compatibility overrides
    - optional `AUDIT_SERVICE_URL` when enterprise audit forwarding is expected
 10. Start `m365-server`.
 11. Confirm the launcher created `logs/` under the app root and that `logs/ops_audit.log` is writable after the first action or approval event.
@@ -83,7 +83,7 @@ Use this runbook before any approval-bearing or policy-gated use.
 
 1. Confirm the target deployment expects policy enforcement and approvals.
 2. Verify `OPA_URL` points to a reachable OPA instance if enterprise policy enforcement is required.
-3. Verify approvals backend inputs are configured if approval-required actions are in scope.
+3. Verify the approvals backend target resolves from the selected tenant contract if approval-required actions are in scope.
 4. Query the approval backend only after configuration is in place:
 
 ```bash

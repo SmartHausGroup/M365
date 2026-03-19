@@ -20,9 +20,9 @@ $groups = @(
 foreach ($g in $groups) {
   try {
     $existing = Get-Team -GroupId $g.GroupId -ErrorAction SilentlyContinue
-    if ($existing) { 
+    if ($existing) {
       Write-Host "✔ Team exists: $($g.DisplayName)"
-      continue 
+      continue
     }
 
     Write-Host "⏳ Creating Team for '$($g.DisplayName)' (GroupId: $($g.GroupId))..."

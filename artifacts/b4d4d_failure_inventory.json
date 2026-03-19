@@ -1,0 +1,131 @@
+{
+  "phase": "B4D4D",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:B4D4D",
+  "generated_at_local": "2026-03-18 15:20:01 EDT",
+  "command": "PYTHONPATH=src pre-commit run mypy --all-files",
+  "repeatability_confirmed": true,
+  "repeat_runs": 2,
+  "summary": {
+    "status": "failed",
+    "stable_error_count": 67,
+    "stable_file_count": 21,
+    "checked_file_count": 120,
+    "handoff_next_act": "B4D5"
+  },
+  "grouped_inventory": [
+    {
+      "group": "src/provisioning_api",
+      "error_count": 13,
+      "files": [
+        "src/provisioning_api/lattice_research.py",
+        "src/provisioning_api/orchestrator.py",
+        "src/provisioning_api/routers/lattice_documentation.py"
+      ]
+    },
+    {
+      "group": "src/ops_adapter-and-m365-server",
+      "error_count": 6,
+      "files": [
+        "src/ops_adapter/integrations/sharepoint.py",
+        "src/ops_adapter/app.py",
+        "src/m365_server/__main__.py"
+      ]
+    },
+    {
+      "group": "scripts-and-ci",
+      "error_count": 17,
+      "files": [
+        "scripts/generate-policies.py",
+        "scripts/ci/verify_caio_m365_contract.py",
+        "scripts/ci/ingest_graph_permissions.py",
+        "scripts/teamify_groups.py",
+        "scripts/create_teams_python.py",
+        "create_teams_workspace.py",
+        "scripts/test_send_email.py",
+        "scripts/bootstrap_m365_services.py"
+      ]
+    },
+    {
+      "group": "tests",
+      "error_count": 31,
+      "files": [
+        "tests/test_env_loading.py",
+        "tests/test_graph_client.py",
+        "tests/test_ops_adapter.py",
+        "tests/test_m365_module_entrypoint.py",
+        "tests/test_endpoints.py",
+        "tests/test_api_health.py",
+        "tests/test_agent_api.py"
+      ]
+    }
+  ],
+  "raw_output_lines": [
+    "src/provisioning_api/lattice_research.py:10: error: Module \"provisioning_api.schemas\" has no attribute \"LatticeLQL\"; maybe \"LatticeLEF\"?  [attr-defined]",
+    "scripts/generate-policies.py:107: error: Function is missing a return type annotation  [no-untyped-def]",
+    "scripts/ci/verify_caio_m365_contract.py:123: error: Argument 2 to \"check_result_shape\" has incompatible type \"object\"; expected \"dict[Any, Any]\"  [arg-type]",
+    "scripts/ci/ingest_graph_permissions.py:111: error: Need type annotation for \"app_roles\" (hint: \"app_roles: list[<type>] = ...\")  [var-annotated]",
+    "scripts/ci/ingest_graph_permissions.py:112: error: Need type annotation for \"delegated\" (hint: \"delegated: list[<type>] = ...\")  [var-annotated]",
+    "tests/test_env_loading.py:13: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:24: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:34: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:52: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:65: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:71: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_env_loading.py:104: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_graph_client.py:10: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_graph_client.py:17: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_graph_client.py:21: error: Unused \"type: ignore\" comment  [unused-ignore]",
+    "src/provisioning_api/orchestrator.py:250: error: Argument \"plan_id\" to \"create_task\" of \"GraphClient\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]",
+    "src/ops_adapter/integrations/sharepoint.py:22: error: Unused \"type: ignore\" comment  [unused-ignore]",
+    "scripts/teamify_groups.py:12: error: Function is missing a return type annotation  [no-untyped-def]",
+    "scripts/create_teams_python.py:13: error: Function is missing a type annotation  [no-untyped-def]",
+    "scripts/create_teams_python.py:25: error: Function is missing a type annotation  [no-untyped-def]",
+    "scripts/create_teams_python.py:45: error: Function is missing a type annotation  [no-untyped-def]",
+    "scripts/create_teams_python.py:66: error: Function is missing a return type annotation  [no-untyped-def]",
+    "create_teams_workspace.py:15: error: Function is missing a return type annotation  [no-untyped-def]",
+    "create_teams_workspace.py:36: error: Function is missing a type annotation  [no-untyped-def]",
+    "create_teams_workspace.py:69: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:35: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:59: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:92: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:125: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:149: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:186: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:215: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:246: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:320: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:361: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/provisioning_api/routers/lattice_documentation.py:409: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/ops_adapter/app.py:34: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/ops_adapter/app.py:186: error: Function is missing a return type annotation  [no-untyped-def]",
+    "src/ops_adapter/app.py:193: error: Function is missing a return type annotation  [no-untyped-def]",
+    "scripts/test_send_email.py:20: error: Function is missing a return type annotation  [no-untyped-def]",
+    "scripts/bootstrap_m365_services.py:48: error: Argument \"display_name\" to \"provision_group_site\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+    "scripts/bootstrap_m365_services.py:49: error: Argument \"mail_nickname\" to \"provision_group_site\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+    "scripts/bootstrap_m365_services.py:58: error: Argument 2 to \"_ensure_team_and_channels\" has incompatible type \"type\"; expected \"ServiceConfig\"  [arg-type]",
+    "scripts/bootstrap_m365_services.py:72: error: Argument 3 to \"_ensure_plan_and_buckets\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+    "tests/test_ops_adapter.py:16: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:29: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]",
+    "tests/test_ops_adapter.py:49: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:76: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:105: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:111: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:123: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:135: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:149: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:167: error: Function is missing a type annotation  [no-untyped-def]",
+    "tests/test_ops_adapter.py:208: error: Function is missing a type annotation  [no-untyped-def]",
+    "src/m365_server/__main__.py:102: error: \"clipboard_clear\" of \"Misc\" does not return a value (it only ever returns None)  [func-returns-value]",
+    "src/m365_server/__main__.py:102: error: \"clipboard_append\" of \"Misc\" does not return a value (it only ever returns None)  [func-returns-value]",
+    "tests/test_m365_module_entrypoint.py:25: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]",
+    "tests/test_m365_module_entrypoint.py:40: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]",
+    "tests/test_m365_module_entrypoint.py:58: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]",
+    "tests/test_endpoints.py:19: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_endpoints.py:26: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_endpoints.py:34: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_endpoints.py:39: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_endpoints.py:49: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_api_health.py:7: error: Function is missing a return type annotation  [no-untyped-def]",
+    "tests/test_agent_api.py:8: error: Function is missing a type annotation  [no-untyped-def]"
+  ]
+}

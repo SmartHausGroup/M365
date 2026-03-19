@@ -5,6 +5,8 @@ import os
 import re
 import subprocess
 from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 import typer
 from smarthaus_common.config import AppConfig
@@ -14,6 +16,7 @@ from smarthaus_graph.client import GraphClient
 
 app = typer.Typer(add_completion=False, no_args_is_help=True, help="SmartHaus M365 CLI")
 log = get_logger(__name__)
+PhaseMap = dict[str, dict[str, Any]]
 
 
 @app.callback()
@@ -57,7 +60,7 @@ def setup_platform() -> None:
     except Exception as e:
         log.error("Setup failed: %s", e)
         typer.echo(f"❌ Setup failed: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 @app.command()
@@ -81,7 +84,7 @@ def create_project(
     except Exception as e:
         log.error("Project creation failed: %s", e)
         typer.echo(f"❌ Project creation failed: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 @app.command()
@@ -105,7 +108,7 @@ def list_projects() -> None:
     except Exception as e:
         log.error("Failed to list projects: %s", e)
         typer.echo(f"❌ Failed to list projects: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 @app.command()
@@ -118,16 +121,14 @@ def analyze_repo(
     typer.echo(f"🔍 Analyzing repository: {repo_path}")
 
     try:
-        from pathlib import Path
-
         # Change to repository directory
-        repo_path = Path(repo_path).resolve()
-        if not (repo_path / ".git").exists():
-            typer.echo(f"❌ Error: {repo_path} is not a git repository")
+        resolved_repo_path = Path(repo_path).resolve()
+        if not (resolved_repo_path / ".git").exists():
+            typer.echo(f"❌ Error: {resolved_repo_path} is not a git repository")
             raise typer.Exit(code=1)
 
         # Analyze the repository
-        project_plan = analyze_git_repository(repo_path, months_back)
+        project_plan = analyze_git_repository(resolved_repo_path, months_back)
 
         # Save the project plan
         with open(output_file, "w") as f:
@@ -139,7 +140,7 @@ def analyze_repo(
 
     except Exception as e:
         typer.echo(f"❌ Analysis failed: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 @app.command()
@@ -151,15 +152,13 @@ def create_template(
     typer.echo(f"📋 Creating template from repository: {repo_path}")
 
     try:
-        from pathlib import Path
-
-        repo_path = Path(repo_path).resolve()
-        if not (repo_path / ".git").exists():
-            typer.echo(f"❌ Error: {repo_path} is not a git repository")
+        resolved_repo_path = Path(repo_path).resolve()
+        if not (resolved_repo_path / ".git").exists():
+            typer.echo(f"❌ Error: {resolved_repo_path} is not a git repository")
             raise typer.Exit(code=1)
 
         # Analyze and create template
-        project_plan = analyze_git_repository(repo_path, 6)
+        project_plan = analyze_git_repository(resolved_repo_path, 6)
         template = create_project_template(project_plan, template_name)
 
         # Save template
@@ -171,7 +170,7 @@ def create_template(
 
     except Exception as e:
         typer.echo(f"❌ Template creation failed: {e}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 def setup_project_structure(client: GraphClient) -> None:
@@ -272,7 +271,7 @@ def create_project_structure(client: GraphClient, name: str, description: str, o
     return project_id
 
 
-def list_all_projects(client: GraphClient) -> list:
+def list_all_projects(client: GraphClient) -> list[dict[str, Any]]:
     """List all projects in the platform."""
     # This would query the actual projects
     # For now, return sample data
@@ -298,7 +297,7 @@ def list_all_projects(client: GraphClient) -> list:
     ]
 
 
-def analyze_git_repository(repo_path, months_back):
+def analyze_git_repository(repo_path: Path, months_back: int) -> dict[str, Any]:
     """Analyze a git repository and extract development patterns."""
 
     # Change to repository directory
@@ -343,7 +342,7 @@ def analyze_git_repository(repo_path, months_back):
         }
 
         # Convert datetime objects to strings for JSON serialization
-        for phase_name, phase_data in phases.items():
+        for phase_data in phases.values():
             if "start_date" in phase_data and isinstance(phase_data["start_date"], datetime):
                 phase_data["start_date"] = phase_data["start_date"].isoformat()
             if "end_date" in phase_data and isinstance(phase_data["end_date"], datetime):
@@ -355,18 +354,18 @@ def analyze_git_repository(repo_path, months_back):
         os.chdir(original_cwd)
 
 
-def get_git_remote_url():
+def get_git_remote_url() -> str:
     """Get the git remote URL."""
     try:
         result = subprocess.run(
             ["git", "remote", "get-url", "origin"], capture_output=True, text=True, check=True
         )
         return result.stdout.strip()
-    except:
+    except (subprocess.CalledProcessError, OSError):
         return "Unknown"
 
 
-def get_git_commits(months_back):
+def get_git_commits(months_back: int) -> list[dict[str, Any]]:
     """Get git commit history for the specified time period."""
     since_date = (datetime.now() - timedelta(days=months_back * 30)).strftime("%Y-%m-%d")
 
@@ -399,26 +398,26 @@ def get_git_commits(months_back):
                     )
 
         return commits
-    except:
+    except (subprocess.CalledProcessError, OSError):
         return []
 
 
-def analyze_development_phases(commits):
+def analyze_development_phases(commits: list[dict[str, Any]]) -> PhaseMap:
     """Analyze commits to identify development phases."""
     if not commits:
         return {}
 
     # Group commits by time periods and themes
-    phases = {}
+    phases: PhaseMap = {}
     current_phase = None
-    phase_start = None
+    phase_start: datetime | None = None
 
     for i, commit in enumerate(commits):
         commit_date = datetime.strptime(commit["date"], "%Y-%m-%d")
 
         # Detect phase changes based on commit patterns
         if is_new_phase(commit, commits[max(0, i - 3) : i]):
-            if current_phase:
+            if current_phase and phase_start is not None:
                 phases[current_phase]["end_date"] = phase_start
                 phases[current_phase]["duration"] = calculate_duration(
                     phases[current_phase]["start_date"], phase_start
@@ -450,7 +449,7 @@ def analyze_development_phases(commits):
             phases[current_phase]["deliverables"].extend(deliverables)
 
     # Close the last phase
-    if current_phase and phases[current_phase]:
+    if current_phase and phases[current_phase] and phase_start is not None:
         phases[current_phase]["end_date"] = phase_start
         phases[current_phase]["duration"] = calculate_duration(
             phases[current_phase]["start_date"], phase_start
@@ -463,7 +462,7 @@ def analyze_development_phases(commits):
     return phases
 
 
-def is_new_phase(commit, recent_commits):
+def is_new_phase(commit: dict[str, Any], recent_commits: list[dict[str, Any]]) -> bool:
     """Determine if a commit starts a new development phase."""
     message = commit["message"].lower()
 
@@ -496,7 +495,7 @@ def is_new_phase(commit, recent_commits):
     return False
 
 
-def generate_phase_name(commit):
+def generate_phase_name(commit: dict[str, Any]) -> str:
     """Generate a descriptive name for a development phase."""
     message = commit["message"].lower()
 
@@ -514,7 +513,7 @@ def generate_phase_name(commit):
         return "Development Phase"
 
 
-def extract_tasks_from_commit(message):
+def extract_tasks_from_commit(message: str) -> list[str]:
     """Extract actual tasks from commit message."""
     tasks = []
 
@@ -536,7 +535,7 @@ def extract_tasks_from_commit(message):
     return tasks
 
 
-def extract_deliverables_from_commit(message):
+def extract_deliverables_from_commit(message: str) -> list[str]:
     """Extract deliverables from commit message."""
     deliverables = []
 
@@ -556,7 +555,7 @@ def extract_deliverables_from_commit(message):
     return deliverables
 
 
-def calculate_duration(start_date, end_date):
+def calculate_duration(start_date: datetime, end_date: datetime) -> str:
     """Calculate duration between two dates."""
     delta = end_date - start_date
     days = delta.days
@@ -573,12 +572,14 @@ def calculate_duration(start_date, end_date):
         return f"{months} months"
 
 
-def extract_team_members(commits):
+def extract_team_members(commits: list[dict[str, Any]]) -> list[str]:
     """Extract unique team members from commits."""
     return list(set(commit["author"] for commit in commits))
 
 
-def analyze_development_patterns(commits, phases):
+def analyze_development_patterns(
+    commits: list[dict[str, Any]], phases: dict[str, Any]
+) -> dict[str, Any]:
     """Analyze development patterns and workflows."""
     if not commits:
         return {}
@@ -619,7 +620,7 @@ def analyze_development_patterns(commits, phases):
     }
 
 
-def identify_integration_points(commits):
+def identify_integration_points(commits: list[dict[str, Any]]) -> list[str]:
     """Identify integration points from commit history."""
     integration_points = []
 
@@ -635,7 +636,7 @@ def identify_integration_points(commits):
     return list(set(integration_points))
 
 
-def generate_timeline(phases, months_back):
+def generate_timeline(phases: dict[str, Any], months_back: int) -> dict[str, Any]:
     """Generate timeline information from phases."""
     if not phases:
         return {}
@@ -645,14 +646,14 @@ def generate_timeline(phases, months_back):
     )
 
     development_cycles = []
-    for phase_name, phase_data in phases.items():
+    for phase_data in phases.values():
         if "start_date" in phase_data:
             start_date = phase_data["start_date"].strftime("%Y-%m-%d")
             duration = phase_data.get("duration", "Unknown")
             development_cycles.append(f"{start_date}: {phase_data['name']} ({duration})")
 
     key_milestones = []
-    for phase_name, phase_data in phases.items():
+    for phase_data in phases.values():
         if phase_data.get("status") == "completed":
             key_milestones.append(f"{phase_data['name']} completed")
 
@@ -663,24 +664,33 @@ def generate_timeline(phases, months_back):
     }
 
 
-def parse_duration(duration_str):
+def parse_duration(duration_str: str) -> int:
     """Parse duration string to days."""
     try:
         if "day" in duration_str:
-            return int(re.search(r"(\d+)", duration_str).group(1))
+            match = re.search(r"(\d+)", duration_str)
+            if not match:
+                return 1
+            return int(match.group(1))
         elif "week" in duration_str:
-            return int(re.search(r"(\d+)", duration_str).group(1)) * 7
+            match = re.search(r"(\d+)", duration_str)
+            if not match:
+                return 1
+            return int(match.group(1)) * 7
         elif "month" in duration_str:
-            return int(re.search(r"(\d+)", duration_str).group(1)) * 30
+            match = re.search(r"(\d+)", duration_str)
+            if not match:
+                return 1
+            return int(match.group(1)) * 30
         else:
             return 1
-    except:
+    except (AttributeError, TypeError, ValueError):
         return 1
 
 
-def extract_lessons_learned(phases, patterns):
+def extract_lessons_learned(phases: dict[str, Any], patterns: dict[str, Any]) -> dict[str, str]:
     """Extract lessons learned from development patterns."""
-    lessons = {}
+    lessons: dict[str, str] = {}
 
     # Analyze development approach
     if any("Mathematical Foundation" in phase["name"] for phase in phases.values()):
@@ -707,11 +717,11 @@ def extract_lessons_learned(phases, patterns):
     return lessons
 
 
-def create_template_structure(phases, patterns):
+def create_template_structure(phases: dict[str, Any], patterns: dict[str, Any]) -> dict[str, Any]:
     """Create a reusable project template based on analysis."""
     template_phases = []
 
-    for phase_name, phase_data in phases.items():
+    for phase_data in phases.values():
         template_phases.append(
             {
                 "name": phase_data["name"],
@@ -727,13 +737,13 @@ def create_template_structure(phases, patterns):
     }
 
 
-def create_project_template(project_plan, template_name):
+def create_project_template(project_plan: dict[str, Any], template_name: str) -> dict[str, Any]:
     """Create a project template from the analyzed project plan."""
     if not template_name:
         template_name = f"{project_plan['project']['name']} Template"
 
     template_phases = []
-    for phase_name, phase_data in project_plan["development_phases"].items():
+    for phase_data in project_plan["development_phases"].values():
         template_phases.append(
             {
                 "name": phase_data["name"],

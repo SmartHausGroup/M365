@@ -1,0 +1,52 @@
+{
+  "captured_at": "2026-03-18T09:02:22-04:00",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:B4D1",
+  "post_b4c_baseline_restored": true,
+  "inventory_sources": {
+    "ruff_statistics": "ruff check . --statistics",
+    "format_check": "ruff format --check .",
+    "mypy": "pre-commit run mypy --all-files"
+  },
+  "ruff": {
+    "total_errors": 417,
+    "top_codes": [
+      { "code": "F401", "count": 83 },
+      { "code": "UP006", "count": 81 },
+      { "code": "I001", "count": 56 },
+      { "code": "B904", "count": 42 },
+      { "code": "UP045", "count": 31 },
+      { "code": "UP035", "count": 27 },
+      { "code": "E402", "count": 19 },
+      { "code": "B007", "count": 16 },
+      { "code": "F841", "count": 14 },
+      { "code": "UP015", "count": 11 },
+      { "code": "E722", "count": 8 },
+      { "code": "invalid-syntax", "count": 7 }
+    ],
+    "notes": [
+      "The remaining Ruff debt spans scripts, src, tests, and notebooks.",
+      "The single largest categories are unused imports, non-PEP585 annotations, and unsorted imports."
+    ]
+  },
+  "format": {
+    "parse_blocker": {
+      "file": "notebooks/ma_m365_batch1_groups.ipynb",
+      "detail": "Expected a newline after line continuation character"
+    },
+    "would_reformat_count": 65,
+    "notes": [
+      "Notebook files are part of the repo-wide formatter surface and cannot be excluded if B4E is expected to pass.",
+      "B4D3 must include notebook formatting cleanup in addition to runtime and CLI formatting cleanup."
+    ]
+  },
+  "mypy": {
+    "error_count": 5,
+    "errors": [
+      "scripts/ci/build_capability_registry.py: missing stubs for yaml",
+      "scripts/ci/ingest_graph_permissions.py: missing stubs for yaml",
+      "scripts/ci/verify_capability_registry.py: missing stubs for yaml",
+      "scripts/generate-policies.py: missing stubs for yaml",
+      "src/ops_adapter/actions.py: duplicate module resolution as ops_adapter.actions and src.ops_adapter.actions"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+Execute B5D Entra App Registration Role Separation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b5d-entra-app-registration-role-separation.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B5D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

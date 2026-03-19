@@ -29,4 +29,3 @@ jobs:
             -H "X-Hub-Signature-256: sha256=$SIG" \
             -H "Content-Type: application/json" \
             --data-binary @"$EVENT_FILE" | sed -e 's/.*/[M365] &/'
-

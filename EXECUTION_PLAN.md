@@ -105,4 +105,3 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.
-

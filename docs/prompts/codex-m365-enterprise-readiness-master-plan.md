@@ -1,46 +1,93 @@
-# Codex Detailed Prompt: M365 Enterprise Readiness Master Plan
+# MATHS Prompt: M365 Enterprise Readiness Master Plan Overview
 
-**Plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
-**Detailed plan:** `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
-**Approval status:** Planning artifact created. Execute open phases only after explicit approval for the relevant phase.
+## Governance Ack
 
----
+- `GOVERNANCE_ACK: READ`
+- `GOVERNANCE_ACK: UNDERSTOOD`
+- `GOVERNANCE_ACK: WILL_FOLLOW`
+- `PLAN_REF_ACK: plan:m365-enterprise-readiness-master-plan:R1`
+- `NORTH_STAR_ACK: Operations/NORTHSTAR.md`
+- `RULES_ACK: .cursor/rules/**/*.mdc`
 
-## Executive summary
+## Execution Rules
 
-This is the one active enterprise-readiness program for standalone M365 v1. It absorbs the commercialization-definition work already completed and makes the real critical path explicit: runtime hardening first, live-tenant certification second, launch collateral and handoff last.
+- This overview prompt is the active control-plane map for the standalone M365 readiness program.
+- Every execution act must use its own act-specific MATHS prompt pair.
+- Stop on first `FAIL` or `BLOCKED`.
+- Do not use absorbed commercialization prompts as active execution authority.
 
-## Current state
+## Prompt Run Metadata
 
-- Historical foundation `A1` through `A4` is complete.
-- The old commercialization plan is now historical input, not the active execution path.
-- The next real blocker is `B1` runtime config authority remediation.
-- `D1` and `D2` are downstream launch phases and must not be used to imply readiness before `B` and `C` are green.
+- Prompt version: `2.0`
+- Task ID: `M365-READY-MASTER`
+- Run ID: `m365-enterprise-readiness-master-plan-overview`
+- Commit SHA: `WORKTREE`
+- Plan refs in scope:
+  - `plan:m365-enterprise-readiness-master-plan:R1`
+  - `plan:m365-enterprise-readiness-master-plan:R8`
+- Invariant IDs in scope: `N/A`
+- Lemma IDs in scope: `N/A`
+- Owners: `product`, `engineering`, `operations`
 
-## Required execution order
+## Context
 
-Execute in this order:
+- Task name: `M365 enterprise-readiness master control plane`
+- Domain: `governance`
+- Dependencies:
+  - `Operations/NORTHSTAR.md`
+  - `Operations/EXECUTION_PLAN.md`
+  - `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
+- Allowlist:
+  - `plans/m365-enterprise-readiness-master-plan/*`
+  - `Operations/NORTHSTAR.md`
+  - `Operations/EXECUTION_PLAN.md`
+  - `Operations/ACTION_LOG.md`
+  - `Operations/PROJECT_FILE_INDEX.md`
+  - `docs/prompts/*`
+  - `docs/governance/MATHS_PROMPT_TEMPLATE.md`
+- Denylist:
+  - `plans/m365-enterprise-commercialization-readiness/*` as active execution authority
 
-1. `B1` Runtime Config Authority Remediation
-2. `B2` Fail-Closed Governance and Approval Remediation
-3. `B3` Admin Audit and Evidence-Surface Remediation
-4. `C1` Live-Tenant Certification Execution
-5. `C2` Release Certification Packet and Decision
-6. `D1` Enterprise Collateral Pack
-7. `D2` Pilot Acceptance and Customer Handoff
+## M - Model
 
-## Execution rules
+- Problem: the repo needs one AGENTS-compliant active readiness program with explicit execution acts and prompt discipline.
+- Goal: keep one accurate critical path from foundation through standards closure, live certification, and launch handoff.
+- Success criteria:
+  - the master plan names the correct next act
+  - the prompt inventory covers every act in the plan
+  - downstream work cannot outrun validation or certification blockers
+- Out of scope:
+  - direct runtime implementation
+  - live tenant execution
 
-- Treat `docs/commercialization/` as completed foundation, not as proof of enterprise readiness by itself.
-- Do not claim enterprise readiness until `B`, `C`, and `D` are complete.
-- Any tenant-impacting work in `C1` requires explicit approval before execution.
-- Keep `Operations/EXECUTION_PLAN.md` and `Operations/ACTION_LOG.md` synchronized after every phase.
-- If a phase changes product definition, operator model, or success criteria, update `Operations/NORTHSTAR.md`.
+## Act Order
 
-## References
+1. `A1` Product Boundary and Positioning
+2. `A2` Canonical Config Contract and Auth Posture
+3. `A3` Governance Boundary and Certification Model
+4. `A4` Packaging and Operator Model
+5. `B1` Runtime Config Authority Remediation
+6. `B2` Fail-Closed Governance and Approval Remediation
+7. `B3` Admin Audit and Evidence-Surface Remediation
+8. `B4A` Governance Baseline Alignment
+9. `B4B` Prompt System Regeneration
+10. `B4C` Validation Blockers and Syntax Recovery
+11. `B4D` Ruff/Black/Mypy Remediation
+12. `B4E` Full Repo Validation Closure
+13. `B5A` Identity Architecture Lock
+14. `B5B` Runtime Identity Enforcement
+15. `B5C` Authorization and Audit Binding
+16. `C1A` Certification Environment Readiness
+17. `C1B` Live Read-Only Certification
+18. `C1C` Live Mutation and Governance Certification
+19. `C1D` Evidence Packet Completion and Matrix Closure
+20. `C2` Release Certification Packet and Decision
+21. `D1` Enterprise Collateral Pack
+22. `D2` Pilot Acceptance and Customer Handoff
 
-- `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
-- `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md`
-- `Operations/NORTHSTAR.md`
-- `Operations/EXECUTION_PLAN.md`
-- `docs/commercialization/`
+## Active-State Rules
+
+- `B5A` is the next executable act.
+- `C1A` is prepared but blocked until `B5C` is complete and the live environment prerequisites exist.
+- `C1B` and `C1C` require explicit live-execution approval.
+- `D1` and `D2` must not be used to imply readiness while `B4*`, `C1*`, or `C2` are incomplete.

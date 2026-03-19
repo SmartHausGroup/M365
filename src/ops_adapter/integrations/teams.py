@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import httpx
 from typing import Any
+
+import httpx
 
 
 def notify_approval(webhook_url: str, approval: dict[str, Any]) -> None:
@@ -13,4 +14,3 @@ def notify_approval(webhook_url: str, approval: dict[str, Any]) -> None:
     }
     with httpx.Client(timeout=5) as client:
         client.post(webhook_url, json=payload)
-

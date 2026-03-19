@@ -24,12 +24,12 @@ The **ops-adapter** (OPA, policy-checked actions) stays on port **8080** inside 
 
 **Yes.** You can run M365 locally in two main ways:
 
-1. **Python (no Docker)**  
-   - `make serve-api` → runs **provisioning_api.main:app** on port 9000.  
-   - Or `m365-server` / `m365-server --gui` → runs the **ops_adapter** app on port 9000 (with optional OPA).  
+1. **Python (no Docker)**
+   - `make serve-api` → runs **provisioning_api.main:app** on port 9000.
+   - Or `m365-server` / `m365-server --gui` → runs the **ops_adapter** app on port 9000 (with optional OPA).
    Both are “run on your machine” and listen on `0.0.0.0:9000` (or the port you set), so they’re reachable from other devices on your LAN if your firewall allows.
 
-2. **Docker (self-contained)**  
+2. **Docker (self-contained)**
    - `docker compose up` (or `docker-compose.yml`) runs:
      - **opa** (policy engine)
      - **ops-adapter** (actions, approvals, audit)

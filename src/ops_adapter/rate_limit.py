@@ -9,7 +9,7 @@ class TokenBucket:
     def __init__(self, rate_per_sec: float, burst: int):
         self.rate = rate_per_sec
         self.capacity = max(1, burst)
-        self.tokens = self.capacity
+        self.tokens: float = float(self.capacity)
         self.timestamp = time.monotonic()
         self._lock = threading.Lock()
 
@@ -33,4 +33,3 @@ class RateLimiter:
 
     def allow(self, key: str) -> bool:
         return self.buckets[key].allow()
-

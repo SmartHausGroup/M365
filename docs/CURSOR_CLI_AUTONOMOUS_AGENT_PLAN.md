@@ -319,5 +319,3 @@ curl https://cursor.com/install -fsS | bash
 ```
 
 - Start in PR-only mode, expand scope gradually, and keep guardrails strict.
-
-

@@ -19,6 +19,6 @@ pass_condition:
   action ∉ A_Admin and action ∉ A_mut).
 fail_condition:
   persona = User and action is in the Admin-allowed or mutating action set.
-notes:
+notes: >
   Equivalent to: no User-scoped instruction may invoke an Admin-only
   or mutating action.

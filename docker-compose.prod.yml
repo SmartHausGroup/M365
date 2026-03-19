@@ -9,4 +9,3 @@ services:
       - OPA_FAIL_OPEN=${OPA_FAIL_OPEN:-false}
       - ENVIRONMENT=${ENVIRONMENT:-production}
     restart: unless-stopped
-

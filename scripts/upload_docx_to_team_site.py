@@ -26,13 +26,26 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from smarthaus_graph.client import GraphClient
+else:
+    GraphClient = Any
 
 _REPO_ROOT = Path(__file__).resolve().parents[1]
 _SRC = _REPO_ROOT / "src"
 if _SRC.exists() and str(_SRC) not in sys.path:
     sys.path.insert(0, str(_SRC))
 
-from smarthaus_graph.client import GraphClient
+
+def _load_graph_client() -> type[GraphClient]:
+    from smarthaus_graph.client import GraphClient as RuntimeGraphClient
+
+    return RuntimeGraphClient
+
+
+GraphClientType = _load_graph_client()
 
 DOCX_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
@@ -57,12 +70,21 @@ def resolve_target(
         else:
             raise ValueError("For target-type group provide --team or --team-nickname.")
         if not grp or not grp.get("id"):
-            raise SystemExit(f"Group not found: display_name={display_name!r}, mail_nickname={mail_nickname!r}")
+            raise SystemExit(
+                f"Group not found: display_name={display_name!r}, mail_nickname={mail_nickname!r}"
+            )
         return grp["id"], grp.get("displayName", grp["id"])
     if target_type == "site":
         if not site_path or not site_path.strip():
-            raise ValueError("For target-type site provide --site-path (e.g. MySite or sites/MySite).")
-        hostname = (site_hostname or os.getenv("SHAREPOINT_HOSTNAME") or os.getenv("SP_HOSTNAME") or "smarthausgroup.sharepoint.com").strip()
+            raise ValueError(
+                "For target-type site provide --site-path (e.g. MySite or sites/MySite)."
+            )
+        hostname = (
+            site_hostname
+            or os.getenv("SHAREPOINT_HOSTNAME")
+            or os.getenv("SP_HOSTNAME")
+            or "smarthausgroup.sharepoint.com"
+        ).strip()
         path = site_path.strip().strip("/")
         if path.lower().startswith("sites/"):
             path = path[6:].strip("/")
@@ -149,7 +171,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    client = GraphClient()
+    client: GraphClient = GraphClientType()
     owner_id, label = resolve_target(
         client,
         args.target_type,
@@ -172,7 +194,9 @@ def main() -> None:
 
     print(f"Uploading {len(files)} file(s)...")
     for abs_path, rel_path in files:
-        drive_path = f"{folder_prefix}/{rel_path.as_posix()}" if folder_prefix else rel_path.as_posix()
+        drive_path = (
+            f"{folder_prefix}/{rel_path.as_posix()}" if folder_prefix else rel_path.as_posix()
+        )
         drive_path = drive_path.replace("\\", "/").lstrip("/")
         try:
             content = abs_path.read_bytes()

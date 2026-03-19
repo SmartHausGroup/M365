@@ -10,15 +10,16 @@ def load_env(path: str = ".env.local") -> None:
         return
     for line in p.read_text().splitlines():
         line = line.strip()
-        if not line or line.startswith('#') or '=' not in line:
+        if not line or line.startswith("#") or "=" not in line:
             continue
-        k, v = line.split('=', 1)
+        k, v = line.split("=", 1)
         v = v.strip().strip('"').strip("'")
         os.environ[k.strip()] = v
 
 
-async def main():
-    from src.ops_adapter.actions import outreach_email_send_individual
+async def main() -> None:
+    from ops_adapter.actions import outreach_email_send_individual
+
     sender = os.getenv("OUTREACH_SENDER") or "phil@smarthausgroup.com"
     params = {
         "from": sender,
@@ -32,7 +33,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    # Ensure project root on sys.path
-    sys.path.append(str(Path(__file__).resolve().parents[1]))
+    # Ensure the source tree is importable without introducing src.* package aliases.
+    sys.path.append(str(Path(__file__).resolve().parents[1] / "src"))
     load_env()
     asyncio.run(main())

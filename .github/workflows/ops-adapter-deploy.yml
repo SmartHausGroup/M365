@@ -22,4 +22,3 @@ jobs:
         run: ./scripts/monitor-canary.sh
       - name: Promote or rollback
         run: ./scripts/canary-decision.sh
-

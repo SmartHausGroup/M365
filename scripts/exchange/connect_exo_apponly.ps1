@@ -6,5 +6,3 @@ param(
 
 Import-Module ExchangeOnlineManagement -ErrorAction Stop
 Connect-ExchangeOnline -AppId $AppId -CertificateThumbprint $CertificateThumbprint -Organization $Organization
-
-

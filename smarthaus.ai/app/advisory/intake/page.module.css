@@ -239,21 +239,21 @@
   .service-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modules-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .service-header {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .selected-service-details {
     padding: 2rem;
   }

@@ -12,4 +12,3 @@ allow_actions = {
 }
 
 approval_required = {"employee.offboard"}
-

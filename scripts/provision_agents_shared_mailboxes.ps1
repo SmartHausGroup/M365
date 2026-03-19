@@ -109,5 +109,3 @@ if ($AppId -and $AppId -ne "00000000-0000-0000-0000-000000000000") {
 }
 
 Write-Host "Done. 39 shared mailboxes created/updated, aliases set, permissions delegated, and Graph mail access policy applied." -ForegroundColor Green
-
-

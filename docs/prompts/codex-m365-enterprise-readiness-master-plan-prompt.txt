@@ -1,7 +1,7 @@
-Execute M365 Enterprise Readiness Master Plan
+Execute M365 Enterprise Readiness Master Plan Overview
 
-Read and execute the detailed plan at docs/prompts/codex-m365-enterprise-readiness-master-plan.md.
+Read and use the active control-plane prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan.md.
 
 Plan Reference: plan:m365-enterprise-readiness-master-plan:R1
 
-You are approved to use this as the active readiness map. Execute only the explicitly approved open phase; do not fall back to the absorbed commercialization plan.
+Use the act-specific MATHS prompt for the explicitly approved act only. Do not use the absorbed commercialization plan or its prompts as active execution authority.

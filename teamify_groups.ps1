@@ -24,13 +24,13 @@ foreach ($g in $groups) {
   try {
     # Check if team already exists
     $existing = Get-Team -GroupId $g.GroupId -ErrorAction SilentlyContinue
-    if ($existing) { 
+    if ($existing) {
       Write-Host "✔ Team exists: $($g.DisplayName)"
-      continue 
+      continue
     }
 
     Write-Host "⏳ Teamifying group '$($g.DisplayName)' (GroupId: $($g.GroupId))..."
-    
+
     # Teamify the group using Graph API
     $body = @{
       "memberSettings" = @{
@@ -48,7 +48,7 @@ foreach ($g in $groups) {
     } | ConvertTo-Json -Depth 3
 
     Invoke-MgGraphRequest -Method PUT -Uri "https://graph.microsoft.com/v1.0/groups/$($g.GroupId)/team" -Body $body -ContentType "application/json"
-    
+
     Start-Sleep -Seconds 15
     Write-Host "✅ Team created: $($g.DisplayName)"
   } catch {

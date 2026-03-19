@@ -4,4 +4,3 @@ set -euo pipefail
 echo "[canary] Evaluating metrics..."
 sleep 1
 echo "[canary] Promote canary (stub)"
-

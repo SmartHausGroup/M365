@@ -42,4 +42,3 @@ for key, agent in agents.items():
 
 print('\nDone. Assign required app roles per registry/agents.yaml')
 PY
-

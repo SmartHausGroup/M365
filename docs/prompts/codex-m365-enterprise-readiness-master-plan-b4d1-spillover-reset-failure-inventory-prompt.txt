@@ -1,0 +1,7 @@
+Use `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d1-spillover-reset-failure-inventory.md`.
+
+Plan refs:
+- `plan:m365-enterprise-readiness-master-plan:R5`
+- `plan:m365-enterprise-readiness-master-plan:B4D1`
+
+Restore the worktree to the approved post-`B4C` baseline, pin the remaining failure inventory, and stop with `B4D2` as next.

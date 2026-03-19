@@ -1,0 +1,7 @@
+Execute B4A Governance Baseline Alignment
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b4a-governance-baseline-alignment.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B4A
+
+This is the next act in the active readiness plan. Follow the act in sequence.

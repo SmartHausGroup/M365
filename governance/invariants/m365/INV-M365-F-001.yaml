@@ -21,7 +21,7 @@ pass_condition:
 fail_condition:
   A rejected or invalid evaluation is followed by an observable change
   in tenant state attributable to that evaluation.
-notes:
+notes: >
   "Invalid" includes syntactically invalid instructions and
   semantically invalid (e.g. Valid(x, τ) false) when defined by Phase 1.
   Audit semantics for rejection are covered by INV-M365-E-002.

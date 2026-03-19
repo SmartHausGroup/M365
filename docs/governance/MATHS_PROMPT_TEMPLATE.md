@@ -27,11 +27,11 @@ You are an engineering agent operating under the Mathematical Autopsy methodolog
 
 Before any work:
 
-1. Read `docs/NORTH_STAR.md`.
-2. Read `docs/platform/EXECUTION_PLAN.md`.
+1. Read `Operations/NORTHSTAR.md`.
+2. Read `Operations/EXECUTION_PLAN.md`.
 3. Read `AGENTS.md`.
 4. Confirm all applicable rules in `.cursor/rules/**/*.mdc` are in force.
-5. Confirm plan refs exist in execution plan and/or formal plan artifacts.
+5. Confirm plan refs exist in `Operations/EXECUTION_PLAN.md` and/or formal plan artifacts under `plans/`.
 6. If work is write-effect, require explicit approval signal per repo protocol.
 
 During work:
@@ -43,14 +43,14 @@ During work:
 
 After work:
 
-1. Update `docs/platform/CODDEX_ACTION_LOG.md` (newest-first entry, local timezone).
-2. Update `docs/platform/PROJECT_STATUS.md` if state changed.
-3. Update `docs/platform/EXECUTION_PLAN.md` if state changed.
+1. Update `Operations/ACTION_LOG.md` (newest-first entry, local timezone).
+2. Update `Operations/EXECUTION_PLAN.md` if state changed.
+3. Update `Operations/PROJECT_FILE_INDEX.md` if files are created, removed, or reclassified.
 4. Update plan artifacts (`.md/.yaml/.json`) if status changed.
 
 ### Required governance gates to enforce in prompt
 
-- North Star gate: work must align with `docs/NORTH_STAR.md`.
+- North Star gate: work must align with `Operations/NORTHSTAR.md`.
 - Plan gate: work must map to explicit plan refs.
 - Sequential phase gate: do not skip prerequisite phases.
 - Change approval gate: no write-effect actions before explicit approval.
@@ -187,9 +187,9 @@ Required measurable evidence:
 
 `<TASK>-C9` Hard gates (strict order)
 
-1. `make lint`
-2. `make test`
-3. `make ma-validate`
+1. `<repo-wide validation command or approved equivalent>`
+2. `<targeted deterministic test command(s)>`
+3. `<MA or scorecard validation when applicable>`
 
 `<TASK>-C10` Governance synchronization and final decision
 
@@ -223,7 +223,7 @@ Required measurable evidence:
 - Missing required artifact(s) or required fields.
 - Missing plan ref, governance ack, or approval gate.
 - Scope drift outside allowlist.
-- Any hard-gate failure (`make lint`, `make test`, `make ma-validate`).
+- Any hard-gate failure in the act's declared repo-wide, targeted, or MA validation commands.
 - Determinism replay mismatch for fixed repository state.
 - Any unresolved BLOCKED condition.
 
@@ -235,5 +235,5 @@ Include this near the top of a run transcript:
 - `GOVERNANCE_ACK: UNDERSTOOD`
 - `GOVERNANCE_ACK: WILL_FOLLOW`
 - `PLAN_REF_ACK: <plan:...>`
-- `NORTH_STAR_ACK: docs/NORTH_STAR.md`
+- `NORTH_STAR_ACK: Operations/NORTHSTAR.md`
 - `RULES_ACK: .cursor/rules/**/*.mdc`

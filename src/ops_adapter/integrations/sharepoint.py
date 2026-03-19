@@ -19,6 +19,5 @@ def create_approval_item(site_id: str, list_id: str, data: dict[str, Any]) -> st
         }
     }
     # POST /sites/{site-id}/lists/{list-id}/items
-    r = gc._request("POST", f"/sites/{site_id}/lists/{list_id}/items", json=body)  # type: ignore[attr-defined]
+    r = gc._request("POST", f"/sites/{site_id}/lists/{list_id}/items", json=body)
     return r.json().get("id", "")
-

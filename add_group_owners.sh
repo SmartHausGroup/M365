@@ -24,7 +24,7 @@ for group_name in "${!GROUPS[@]}"; do
     echo ""
     echo "📋 Processing $group_name"
     echo "  Group ID: $group_id"
-    
+
     # Add user as owner
     if az ad group owner add --group "$group_id" --owner-object-id "$(az ad user show --id "$USER_EMAIL" --query id -o tsv)" 2>/dev/null; then
         echo "  ✅ Added $USER_EMAIL as owner"

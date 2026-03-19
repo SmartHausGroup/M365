@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-import os
-import time
 
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.logging import get_logger
@@ -32,7 +31,7 @@ class ServiceConfig:
     channel_ids: dict[str, str] | None = None
 
     @staticmethod
-    def from_dict(d: dict[str, Any]) -> "ServiceConfig":
+    def from_dict(d: dict[str, Any]) -> ServiceConfig:
         return ServiceConfig(
             key=d["key"],
             display_name=d["display_name"],
@@ -70,11 +69,15 @@ def _env_enabled() -> bool:
     return os.getenv("ENABLE_M365_AUTOMATION", "false").lower() in ("1", "true", "yes")
 
 
-def _ensure_team_and_channels(client: GraphClient, svc: ServiceConfig) -> tuple[str, dict[str, str]]:
+def _ensure_team_and_channels(
+    client: GraphClient, svc: ServiceConfig
+) -> tuple[str, dict[str, str]]:
     # Resolve group by mailNickname and ensure team exists; return teamId and channel name->id
     grp = client.find_group_by_mailnickname(svc.mail_nickname)
     if not grp or not grp.get("id"):
-        raise SmarthausError(f"Group not found for mailNickname={svc.mail_nickname}. Provision first.")
+        raise SmarthausError(
+            f"Group not found for mailNickname={svc.mail_nickname}. Provision first."
+        )
     group_id = grp["id"]
 
     try:
@@ -103,14 +106,18 @@ def _ensure_team_and_channels(client: GraphClient, svc: ServiceConfig) -> tuple[
         if ch in existing_names:
             continue
         try:
-            created = client.create_team_channel(group_id, ch, description=f"Channel for {svc.display_name} - {ch}")
+            created = client.create_team_channel(
+                group_id, ch, description=f"Channel for {svc.display_name} - {ch}"
+            )
             existing_names[ch] = created.get("id")
         except Exception as e:
             log.warning("Failed to create channel %s (will retry on next run): %s", ch, e)
     return group_id, {k: v for k, v in existing_names.items() if v}
 
 
-def _ensure_plan_and_buckets(client: GraphClient, group_id: str, plan_title: str) -> tuple[str | None, dict[str, str]]:
+def _ensure_plan_and_buckets(
+    client: GraphClient, group_id: str, plan_title: str
+) -> tuple[str | None, dict[str, str]]:
     # Find or create plan
     plan_id = None
     try:
@@ -236,7 +243,7 @@ def handle_github_event(project: str, payload: dict) -> dict:
     planner_result: dict[str, Any] | None = None
     bucket_name = _bucket_for_event(event_type)
     bucket_id = buckets.get(bucket_name)
-    if bucket_id and event_type in ("pull_request", "issues", "release", "milestone"):
+    if plan_id and bucket_id and event_type in ("pull_request", "issues", "release", "milestone"):
         task_title = title or f"GitHub {event_type}"
         description = f"Auto-created from GitHub event for {repo}."
         planner_result = client.create_task(
@@ -248,7 +255,11 @@ def handle_github_event(project: str, payload: dict) -> dict:
         )
 
     # Teams message to General (or Code Review for PR)
-    channel_name = "Code Review" if event_type == "pull_request" and "Code Review" in channel_map else "General"
+    channel_name = (
+        "Code Review"
+        if event_type == "pull_request" and "Code Review" in channel_map
+        else "General"
+    )
     ch_id = channel_map.get(channel_name) or channel_map.get("General")
     html = f"<div><b>{svc.display_name}</b> • GitHub <i>{event_type}</i><br/><a href='{ref_url or '#'}'>{title or 'Update'}</a></div>"
     teams_result: dict[str, Any] | None = None

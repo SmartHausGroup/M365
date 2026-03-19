@@ -36,6 +36,7 @@ IMPLEMENTED_ACTIONS = {
 def load_registry() -> dict:
     try:
         import yaml
+
         return yaml.safe_load(REGISTRY_PATH.read_text())
     except Exception as e:
         print(f"verify_capability_registry: failed to load registry: {e}", file=sys.stderr)
@@ -57,8 +58,12 @@ def verify() -> dict:
             not_implemented.append(name)
 
     passed = len(missing) == 0 and len(not_implemented) == 0
-    implemented_in_registry = [a for a in actions_list if isinstance(a, dict) and a.get("status") == "implemented"]
-    planned_count = sum(1 for a in actions_list if isinstance(a, dict) and a.get("status") == "planned")
+    implemented_in_registry = [
+        a for a in actions_list if isinstance(a, dict) and a.get("status") == "implemented"
+    ]
+    planned_count = sum(
+        1 for a in actions_list if isinstance(a, dict) and a.get("status") == "planned"
+    )
 
     artifact = {
         "passed": passed,
@@ -84,7 +89,13 @@ def main() -> int:
         if artifact["wrong_status"]:
             print("  wrong_status (not implemented):", artifact["wrong_status"], file=sys.stderr)
         return 1
-    print("verify_capability_registry: passed (implemented:", len(artifact["implemented_in_registry"]), "planned:", artifact["planned_count"], ")")
+    print(
+        "verify_capability_registry: passed (implemented:",
+        len(artifact["implemented_in_registry"]),
+        "planned:",
+        artifact["planned_count"],
+        ")",
+    )
     return 0
 
 

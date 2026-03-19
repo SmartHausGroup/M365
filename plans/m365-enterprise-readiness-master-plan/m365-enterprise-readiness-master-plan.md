@@ -1,9 +1,9 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `C1A` next but blocked on live-environment prerequisites)
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D` and `B5E` complete on 2026-03-19; `C1A` remains prepared but blocked until the approval backend is reachable and the exact standalone certification shell contract is active)
 **Date:** 2026-03-18
-**Owner:** SmartHaus
+**Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — production-ready, policy-gated, auditable, self-service M365 orchestration.
 **Historical lineage:** absorbs `m365-enterprise-commercialization-readiness` as the active enterprise-readiness critical path on 2026-03-17.
@@ -26,6 +26,8 @@ For this repository state:
 
 `EnterpriseReady = ProductBoundaryLocked ∧ RuntimeHardeningImplemented ∧ IdentityExecutionArchitectureImplemented ∧ RepoValidationGreen ∧ LiveTenantCertificationGreen ∧ ReleaseDecisionClosed ∧ LaunchReadinessComplete`
 
+`LiveTenantCertificationGreen => EntraAppRolesSeparated ∧ ExecutorCredentialContractFinalized ∧ ApprovalBackendReachable ∧ CertificationEvidenceClosed`
+
 `ExecutableAct = Planned ∧ Prompted ∧ Approved ∧ Logged ∧ Validated`
 
 If any term is false, the module remains `NO-GO`.
@@ -46,16 +48,18 @@ If any term is false, the module remains `NO-GO`.
 - `B4D4D` complete on 2026-03-18: proved the repo-wide mypy remainder is stable enough for handoff by running the governed `pre-commit run mypy --all-files` surface twice under UCP-approved `test_run` validation, confirming the same 67-error / 21-file remainder both times, and recording the deterministic inventory in `artifacts/b4d4d_failure_inventory.json`.
 - `B4D5` completed on 2026-03-18: the bounded `B4D` remediation surface is green under targeted Ruff, format, Mypy, and diff checks, and the current `B4E` blocker inventory is pinned in `artifacts/b4d5_validation_handoff.json`.
 - `B4E` complete on 2026-03-18: the repo-wide validation gate is green under `ruff check .`, `ruff format --check .`, `PYTHONPATH=src pre-commit run mypy --all-files`, `pre-commit run --all-files`, and `git diff --check`, with the full closeout recorded in `artifacts/b4e_full_repo_validation_closure.json`.
-- `B5A` complete on 2026-03-18: locked the enterprise production identity model in `docs/commercialization/m365-entra-identity-and-app-execution-model.md`, explicitly separated Entra-authenticated human actors from the app-only SmartHaus service-principal executor, updated the canonical config/auth, governance, audit, and live-certification docs to reflect that architecture, and confirmed that `C1A` remains blocked until `B5C` implements the runtime authorization and audit binding.
+- `B5A` complete on 2026-03-18: locked the enterprise production identity model in `docs/commercialization/m365-entra-identity-and-app-execution-model.md`, explicitly separated Entra-authenticated human actors from the app-only SMARTHAUS service-principal executor, updated the canonical config/auth, governance, audit, and live-certification docs to reflect that architecture, and confirmed that `C1A` remains blocked until `B5C` implements the runtime authorization and audit binding.
 - `B5B` complete on 2026-03-18: enforced JWT-backed actor identity on the governed ops-adapter execution path in `src/ops_adapter/main.py`, aligned the legacy `src/ops_adapter/app.py` path to deny raw header-only actor access unless the explicit non-enterprise override is enabled, propagated the validated actor identity through the action request path, fixed the middleware fail-closed response boundary to return deterministic auth errors instead of leaking ASGI exceptions, and validated the bounded identity-enforcement surface with `python3 -m py_compile`, `PYTHONPATH=src pytest -q tests/test_ops_adapter.py tests/test_policies.py`, and `git diff --check`.
-- `B5C` complete on 2026-03-18: bound the authenticated SmartHaus Entra actor into tier resolution, approvals, and actor-versus-executor audit semantics by adding group-aware tier resolution in `src/smarthaus_common/tenant_config.py` and `src/smarthaus_common/permission_enforcer.py`, preserving actor tier, actor groups, tenant, and executor metadata in `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, `src/ops_adapter/approvals.py`, `src/ops_adapter/audit.py`, and `src/ops_adapter/actions.py`, and validating the bounded binding surface with `python3 -m py_compile`, `PYTHONPATH=src pytest -q tests/test_ops_adapter.py tests/test_policies.py`, and `git diff --check`.
-- `C1A` still has a prepared certification candidate at commit `52ca494`, and it is now the next act. The SmartHaus tenant YAML contract, runtime identity-enforcement boundary, and authorization-plus-audit binding are now in place; only the remaining live-environment prerequisites block certification execution.
+- `B5C` complete on 2026-03-18: bound the authenticated SMARTHAUS Entra actor into tier resolution, approvals, and actor-versus-executor audit semantics by adding group-aware tier resolution in `src/smarthaus_common/tenant_config.py` and `src/smarthaus_common/permission_enforcer.py`, preserving actor tier, actor groups, tenant, and executor metadata in `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, `src/ops_adapter/approvals.py`, `src/ops_adapter/audit.py`, and `src/ops_adapter/actions.py`, and validating the bounded binding surface with `python3 -m py_compile`, `PYTHONPATH=src pytest -q tests/test_ops_adapter.py tests/test_policies.py`, and `git diff --check`.
+- `B5D` complete on 2026-03-19: the live Azure / Entra app-registration split is now locked in the SMARTHAUS tenant, with app `720788ac-1485-4073-b0c8-1a6294819a87` renamed to `SMARTHAUS M365 Executor`, app `e6fd71d3-4116-401e-a4f1-b2fda4318a8b` renamed to `SMARTHAUS M365 Operator Identity`, Graph application-role overlap removed from the operator-identity app, Graph delegated-scope overlap removed from the executor app, and `Application ID URI = api://e6fd71d3-4116-401e-a4f1-b2fda4318a8b` set on the operator-identity app.
+- `B5E` complete on 2026-03-19: the governed runtime now supports valid MSAL certificate credentials from the tenant-selected PEM path, the executor certificate lives at `/Users/smarthaus/.ucp/certs/smarthaus-m365-executor.pem`, app `720788ac-1485-4073-b0c8-1a6294819a87` now carries the certificate credential `SMARTHAUS M365 Executor Certificate 2026-03-19` and zero password credentials, `/Users/smarthaus/Projects/GitHub/UCP/tenants/smarthaus.yaml` now selects certificate auth with an empty `azure.client_secret`, and non-mutating Graph validation still returns `organization=200` after secret retirement.
+- `C1A` remains blocked on 2026-03-19: the SMARTHAUS tenant YAML contract now resolves deterministically through the tenant loader, carries the Operations approval target, and provides an app-only certificate-backed credential contract; the exact standalone shell contract is `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`; direct Graph probes under that contract return `organization=200` but `site_discovery=503 UnknownError` for the SMARTHAUS Operations site; and the readiness gate therefore remains `NO-GO` until the approval backend is reachable and the exact shell contract is active. CAIO is out of scope for this certification path.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
 
-1. Live-tenant certification cannot begin until the non-production environment provides the remaining runtime toggles and external inputs: `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`, approval-storage inputs, and instruction-surface inputs if the CAIO path is in scope.
+1. Live-tenant certification remains `NO-GO` until the non-production environment persists the exact launch contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`) and the tenant-backed approval target becomes reachable through Graph or is supplied via explicit site and list IDs.
 2. `C2`, `D1`, and `D2` remain downstream of the live-certification blockers.
 
 ## Scope
@@ -119,11 +123,13 @@ The repo is not enterprise-ready yet because the remaining critical-path blocker
 - Keep the old commercialization artifacts historically traceable while ensuring the master plan is the only active critical path.
 - Maintain one active MATHS prompt pair for every master-plan act.
 
-### R9 — Entra user identity plus app-only execution architecture
+### R9 — Entra user identity, app-registration role separation, and app-only execution architecture
 
-- Authenticate SmartHaus human operators through Microsoft Entra ID.
-- Execute Graph calls through the SmartHaus M365 app registration using app-only service identity.
+- Authenticate SMARTHAUS human operators through Microsoft Entra ID.
+- Execute Graph calls through the SMARTHAUS M365 app registration using app-only service identity.
 - Bind authorization, approvals, and audit to the authenticated actor while preserving the service executor identity.
+- Keep the operator-identity app and the executor app explicitly separate.
+- Finalize the executor app on a certificate-based production posture before standalone certification resumes.
 
 ## Execution Act Model
 
@@ -426,18 +432,20 @@ Validation:
 - `git diff --check` passed
 - closure artifact captured in `artifacts/b4e_full_repo_validation_closure.json`
 
-#### B5 — Entra Identity and App-Only Execution Binding
+#### B5 — Entra Identity, App Registration Separation, and Executor Hardening
 
-**Status:** ✅ Complete (`B5A`, `B5B`, and `B5C` complete on 2026-03-18)
+**Status:** ✅ Complete (`B5A`, `B5B`, `B5C`, `B5D`, and `B5E` complete on 2026-03-19)
 
-**Goal:** Lock and implement the enterprise production identity model where SmartHaus users authenticate with Microsoft Entra ID while the backend executes Microsoft Graph actions through the SmartHaus M365 app registration.
+**Goal:** Lock and implement the enterprise production identity model where SMARTHAUS users authenticate with Microsoft Entra ID, the backend executes Microsoft Graph actions through a dedicated SMARTHAUS executor app, and the executor app reaches the final certificate-based production posture before certification resumes.
 
 **Outputs:**
 - explicit actor-versus-executor identity model
 - runtime enforcement plan and implementation for Entra-authenticated users
 - authorization, approval, and audit binding between actor identity and app-only execution
+- explicit operator-identity-versus-executor app-registration role separation
+- executor certificate-cutover and tenant-contract finalization plan
 
-**Exit rule:** `B5C` must be complete before `C1A` may start.
+**Exit rule:** `B5E` is complete; `C1A` may proceed once the approval backend is reachable and the exact standalone shell contract is active.
 
 ##### B5A — Identity Architecture Lock
 
@@ -459,12 +467,41 @@ Validation:
 
 ##### B5C — Authorization and Audit Binding
 
-**Goal:** Bind authenticated SmartHaus users and groups to governed authorization and audit semantics.
+**Goal:** Bind authenticated SMARTHAUS users and groups to governed authorization and audit semantics.
 
 **Outputs:**
-- user or group to permission-tier mapping model for SmartHaus operators
+- user or group to permission-tier mapping model for SMARTHAUS operators
 - approval and audit model that records both actor identity and executor identity
 - targeted validation for actor-tier enforcement and actor/executor audit traceability
+
+##### B5D — Entra App Registration Role Separation
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Lock the Azure / Entra app-registration split so the operator-identity app and the backend executor app are no longer ambiguous before certification resumes.
+
+**Outputs:**
+- explicit executor-app lock for `720788ac-1485-4073-b0c8-1a6294819a87`
+- explicit operator-identity-app lock for `e6fd71d3-4116-401e-a4f1-b2fda4318a8b`
+- deterministic Azure cleanup specification for names, redirect-URI posture, Application ID URI posture, and permission separation
+
+Validation:
+- live Azure readback confirms `displayName = SMARTHAUS M365 Executor` for app `720788ac-1485-4073-b0c8-1a6294819a87`
+- live Azure readback confirms `displayName = SMARTHAUS M365 Operator Identity` and `identifierUris = [api://e6fd71d3-4116-401e-a4f1-b2fda4318a8b]` for app `e6fd71d3-4116-401e-a4f1-b2fda4318a8b`
+- executor app now carries Graph application-role posture only
+- operator-identity app now carries delegated-scope posture only
+
+##### B5E — Executor Certificate Cutover and Tenant Contract Finalization
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Move the SMARTHAUS executor app from the transitional client-secret posture to an explicit certificate-based production contract before `C1A` resumes.
+
+**Outputs:**
+- executor certificate material and runtime-path contract at `/Users/smarthaus/.ucp/certs/smarthaus-m365-executor.pem`
+- tenant contract updated to certificate-first executor auth with `azure.client_secret = ""`
+- live executor app now carries one certificate credential and zero password credentials
+- non-mutating Graph validation passed after certificate cutover and secret retirement
 
 ### C — Live-Tenant Certification
 
@@ -482,14 +519,13 @@ Validation:
 
 **Prerequisites:**
 - `B4E` complete and green
-- `B5C` complete
+- `B5E` complete
 - approved non-production environment ready
 - `UCP_TENANT` present
 - one supported Graph or Azure credential set present
 - `ALLOW_M365_MUTATIONS=true`
 - `ENABLE_AUDIT_LOGGING=true`
-- approval-storage configuration present
-- `CAIO_API_KEY` and `BASE_URL` present if the CAIO surface is in scope
+- tenant-backed approval target present and reachable
 
 ##### C1A — Certification Environment Readiness
 
@@ -556,7 +592,7 @@ Validation:
 
 **Status:** ⛔ Blocked by `D1` and `C2`
 
-**Goal:** Define how SmartHaus and the customer close the pilot and transfer operating ownership.
+**Goal:** Define how SMARTHAUS and the customer close the pilot and transfer operating ownership.
 
 **Outputs:**
 - pilot acceptance checklist
@@ -569,7 +605,7 @@ Validation:
 
 - Active MATHS prompt pairs must exist for:
   - overview: `m365-enterprise-readiness-master-plan`
-  - acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
+  - acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `B5D`, `B5E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
 - Historical commercialization prompt pairs remain for traceability only and are not active execution authority.
 - No new act may be added to the plan without a matching MATHS prompt pair.
 
@@ -577,10 +613,12 @@ Validation:
 
 1. No act after `B4E` may proceed while `pre-commit run --all-files` is red.
 2. `B5A` may not start until `B4E` is complete.
-3. `C1A` may not start until `B5C` is complete.
-4. `C1B` and `C1C` may not run without explicit live-execution approval.
-5. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B5*` or `C1*` act remains incomplete or blocked.
-6. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
+3. `B5D` may not start until `B5C` is complete.
+4. `B5E` may not start until `B5D` is complete.
+5. `C1A` may not start until `B5E` is complete.
+6. `C1B` and `C1C` may not run without explicit live-execution approval.
+7. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B5*` or `C1*` act remains incomplete or blocked.
+8. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
 
 ## Legacy Mapping
 
@@ -597,7 +635,7 @@ The absorbed plan remains in the repo for traceability, but no new execution sho
 
 ## Validation
 
-- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and names `C1A` as the next act.
+- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and records `B5E` complete with `C1A` prepared but blocked on approval-backend reachability plus exact-shell activation.
 - `plans/m365-enterprise-commercialization-readiness/` is explicitly marked as absorbed/historical.
 - `Operations/PROJECT_FILE_INDEX.md` exists and tracks the active governance artifacts.
 - The prompt pair for this master plan exists.

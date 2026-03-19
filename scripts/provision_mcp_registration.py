@@ -22,26 +22,45 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+from dotenv import load_dotenv
+
+if TYPE_CHECKING:
+    from smarthaus_common.config import AppConfig
+    from smarthaus_common.errors import GraphRequestError
+    from smarthaus_graph.client import GraphClient
+else:
+    AppConfig = Any
+    GraphClient = Any
+    GraphRequestError = Any
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SRC_ROOT = REPO_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from dotenv import load_dotenv
-
 load_dotenv(REPO_ROOT / ".env", override=False)
 
-from smarthaus_common.config import AppConfig
-from smarthaus_common.errors import GraphRequestError
-from smarthaus_graph.client import GraphClient
+
+def _load_runtime_dependencies() -> (
+    tuple[type[AppConfig], type[GraphRequestError], type[GraphClient]]
+):
+    from smarthaus_common.config import AppConfig as RuntimeAppConfig
+    from smarthaus_common.errors import GraphRequestError as RuntimeGraphRequestError
+    from smarthaus_graph.client import GraphClient as RuntimeGraphClient
+
+    return RuntimeAppConfig, RuntimeGraphRequestError, RuntimeGraphClient
+
+
+AppConfigType, GraphRequestErrorType, GraphClientType = _load_runtime_dependencies()
 
 
 MCP_REGISTRATIONS_DISPLAY_NAME = "MCP_Registrations"
 INVESTOR_LEADS_DISPLAY_NAME = "Investor_Leads"
 
 
-MCP_REGISTRATIONS_COLUMNS: list[dict] = [
+MCP_REGISTRATIONS_COLUMNS: list[dict[str, Any]] = [
     {"name": "FirstName", "text": {}},
     {"name": "LastName", "text": {}},
     {"name": "Email", "text": {}},
@@ -104,7 +123,7 @@ MCP_REGISTRATIONS_COLUMNS: list[dict] = [
 ]
 
 
-INVESTOR_LEADS_COLUMNS: list[dict] = [
+INVESTOR_LEADS_COLUMNS: list[dict[str, Any]] = [
     {"name": "FirstName", "text": {}},
     {"name": "LastName", "text": {}},
     {"name": "Email", "text": {}},
@@ -160,15 +179,10 @@ INVESTOR_LEADS_COLUMNS: list[dict] = [
 
 
 def _hostname() -> str:
-    hostname = (
-        os.getenv("SHAREPOINT_HOSTNAME")
-        or os.getenv("SP_HOSTNAME")
-        or ""
-    ).strip()
+    hostname = (os.getenv("SHAREPOINT_HOSTNAME") or os.getenv("SP_HOSTNAME") or "").strip()
     if not hostname:
         raise SystemExit(
-            "SHAREPOINT_HOSTNAME is required in .env "
-            "(e.g. smarthausgroup.sharepoint.com)"
+            "SHAREPOINT_HOSTNAME is required in .env (e.g. smarthausgroup.sharepoint.com)"
         )
     return hostname
 
@@ -191,7 +205,7 @@ def _resolve_site(client: GraphClient, hostname: str, site_path: str) -> tuple[s
     return site["id"], label
 
 
-def _find_list(lists: list[dict], display_name: str) -> dict | None:
+def _find_list(lists: list[dict[str, Any]], display_name: str) -> dict[str, Any] | None:
     target = display_name.lower()
     for item in lists:
         if item.get("displayName", "").lower() == target:
@@ -204,7 +218,7 @@ def _ensure_list(
     site_id: str,
     site_label: str,
     display_name: str,
-    columns: list[dict],
+    columns: list[dict[str, Any]],
     dry_run: bool,
 ) -> tuple[bool, str | None]:
     existing = _find_list(client.list_site_lists(site_id), display_name)
@@ -220,15 +234,12 @@ def _ensure_list(
         created = client.create_list(site_id, display_name, columns=columns)
         print(f"  [create] {display_name} on {site_label} (inline columns)")
         return True, created.get("id")
-    except GraphRequestError:
-        print(
-            f"  [fallback] inline columns failed for {display_name}; "
-            "adding columns sequentially"
-        )
+    except GraphRequestErrorType as err:
+        print(f"  [fallback] inline columns failed for {display_name}; adding columns sequentially")
         created = client.create_list(site_id, display_name)
         list_id = created.get("id")
         if not list_id:
-            raise SystemExit(f"Created list without id: {display_name}")
+            raise SystemExit(f"Created list without id: {display_name}") from err
 
         for column in columns:
             client.add_column_to_list(site_id, list_id, column)
@@ -295,16 +306,15 @@ def main() -> None:
         raise SystemExit("--seed-test-data is not available with --dry-run")
 
     hostname = _hostname()
-    config = AppConfig()
-    client = GraphClient(config)
+    config = AppConfigType()
+    client: GraphClient = GraphClientType(config)
 
     mcp_path = args.mcp_site_path or os.getenv("MCP_REGISTRATION_SITE_PATH", "").strip()
     investor_path = args.investor_site_path or os.getenv("INVESTOR_LEADS_SITE_PATH", "").strip()
 
     if not mcp_path:
         raise SystemExit(
-            "MCP site path required. Set MCP_REGISTRATION_SITE_PATH in .env "
-            "or pass --mcp-site-path"
+            "MCP site path required. Set MCP_REGISTRATION_SITE_PATH in .env or pass --mcp-site-path"
         )
     if not investor_path:
         raise SystemExit(
@@ -316,18 +326,26 @@ def main() -> None:
     investor_site_id, investor_label = _resolve_site(client, hostname, investor_path)
 
     print(f"MCP_Registrations  → {mcp_label} ({hostname}/sites/{_normalize_site_path(mcp_path)})")
-    print(f"Investor_Leads     → {investor_label} ({hostname}/sites/{_normalize_site_path(investor_path)})")
+    print(
+        f"Investor_Leads     → {investor_label} ({hostname}/sites/{_normalize_site_path(investor_path)})"
+    )
     print()
 
     mcp_created, mcp_list_id = _ensure_list(
-        client, mcp_site_id, mcp_label,
-        MCP_REGISTRATIONS_DISPLAY_NAME, MCP_REGISTRATIONS_COLUMNS,
+        client,
+        mcp_site_id,
+        mcp_label,
+        MCP_REGISTRATIONS_DISPLAY_NAME,
+        MCP_REGISTRATIONS_COLUMNS,
         args.dry_run,
     )
 
     inv_created, inv_list_id = _ensure_list(
-        client, investor_site_id, investor_label,
-        INVESTOR_LEADS_DISPLAY_NAME, INVESTOR_LEADS_COLUMNS,
+        client,
+        investor_site_id,
+        investor_label,
+        INVESTOR_LEADS_DISPLAY_NAME,
+        INVESTOR_LEADS_COLUMNS,
         args.dry_run,
     )
 

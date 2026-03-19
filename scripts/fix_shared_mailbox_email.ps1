@@ -46,7 +46,7 @@ if ($FixForwarding) {
   Write-Host "📬 Fixing forwarding settings..." -ForegroundColor Yellow
   $currentForwarding = Get-Mailbox -Identity $MailboxAddress | Select-Object -ExpandProperty ForwardingAddress
   $currentForwardingSMTP = Get-Mailbox -Identity $MailboxAddress | Select-Object -ExpandProperty ForwardingSmtpAddress
-  
+
   if ($currentForwarding -or $currentForwardingSMTP) {
     Write-Host "  ⚠️  Forwarding detected. Setting DeliverToMailboxAndForward to true..." -ForegroundColor Yellow
     Set-Mailbox -Identity $MailboxAddress -DeliverToMailboxAndForward $true

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 import argparse
-import os
 import re
 from pathlib import Path
 
 import yaml
-
 
 HEADER = """# Generated from registry/agents.yaml. Do not edit manually.
 package agents.{agent_key}
@@ -49,7 +47,8 @@ def parse_condition(expr: str) -> str:
         else:
             # quote string
             if not (value.startswith('"') and value.endswith('"')):
-                value = f'"{value.strip("\"\'")}"'
+                cleaned_value = value.strip("\"'")
+                value = f'"{cleaned_value}"'
         # Map field -> input.data.<field>
         field_path = ".".join([p for p in field.split(".") if p])
         if not field_path.startswith("input."):
@@ -70,7 +69,11 @@ def generate_agent_rego(agent_key: str, agent_def: dict) -> str:
         lines.append("}")
         lines.append("")
 
-    unconditional = [r.get("action") for r in approval_rules if not r.get("condition") and not r.get("conditions")]
+    unconditional = [
+        r.get("action")
+        for r in approval_rules
+        if not r.get("condition") and not r.get("conditions")
+    ]
     if unconditional:
         lines.append("approval_required = {")
         for a in unconditional:
@@ -101,7 +104,7 @@ approval_required[action] {{
     return "\n".join(lines) + "\n"
 
 
-def main():
+def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--registry", default="registry/agents.yaml")
     ap.add_argument("--outdir", default="policies/agents")
@@ -121,4 +124,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

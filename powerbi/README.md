@@ -7,7 +7,7 @@ This directory contains Power BI dashboard templates for the SmartHaus AI Workfo
 ### 1. Agent Performance Dashboard (`agent-performance-dashboard.pbix`)
 - **Purpose**: Real-time performance analytics for all 39 AI agents
 - **Data Sources**: Agent Status API, Task Management API, Performance Metrics API
-- **Key Metrics**: 
+- **Key Metrics**:
   - Total agents and departments
   - Performance by department
   - Task completion trends

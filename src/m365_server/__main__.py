@@ -99,7 +99,12 @@ def _run_gui(host: str, port: int, app_root: Path) -> None:
     url = f"http://{host}:{port}"
     url_label = tk.Label(frame, text=url, font=("Menlo", 12), fg="blue", cursor="hand2")
     url_label.pack(pady=(0, 8))
-    url_label.bind("<Button-1>", lambda e: root.clipboard_clear() or root.clipboard_append(url))
+
+    def copy_url(_event: object) -> None:
+        root.clipboard_clear()
+        root.clipboard_append(url)
+
+    url_label.bind("<Button-1>", copy_url)
 
     status_var = tk.StringVar(value="Starting…")
     tk.Label(frame, textvariable=status_var, fg="gray").pack(pady=(0, 20))

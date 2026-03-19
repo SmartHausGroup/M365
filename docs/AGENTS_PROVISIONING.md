@@ -41,5 +41,3 @@ Test-ApplicationAccessPolicy -AppId <APP_ID> -Identity elena.rodriguez@smarthaus
 - Multi-domain aliases can be added later; this baseline uses `@smarthaus.ai` only.
 - Teams presence is via Incoming Webhooks or a Teams bot (RSC) using app identity; no user licenses needed for personas.
 - For Graph app permissions (example minimal): Mail.Send, Sites.ReadWrite.All, Tasks.ReadWrite.All, ChannelMessage.Send. Grant tenant admin consent.
-
-

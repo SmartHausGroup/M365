@@ -15,6 +15,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 # Repo root
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -120,7 +121,8 @@ def verify_with_mock() -> dict:
         else:
             results[f"postcondition_{action}"] = "pass"
         if mock.get("ok") is True and mock.get("result"):
-            shape_ok, shape_msg = check_result_shape(action, mock["result"])
+            result = cast(dict[Any, Any], mock["result"])
+            shape_ok, shape_msg = check_result_shape(action, result)
             if not shape_ok:
                 response_schema_pass = False
                 results[f"schema_{action}"] = shape_msg
@@ -155,7 +157,8 @@ def main() -> int:
             pc_ok, _ = check_postcondition(body)
             shape_ok = True
             if body.get("ok") and body.get("result"):
-                shape_ok, _ = check_result_shape("list_users", body["result"])
+                result = cast(dict[Any, Any], body["result"])
+                shape_ok, _ = check_result_shape("list_users", result)
             artifact["postcondition_pass"] = artifact["postcondition_pass"] and pc_ok
             artifact["response_schema_pass"] = artifact["response_schema_pass"] and shape_ok
             artifact["live_check"] = "list_users"

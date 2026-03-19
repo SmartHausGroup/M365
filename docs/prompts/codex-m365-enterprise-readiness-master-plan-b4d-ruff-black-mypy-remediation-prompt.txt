@@ -1,0 +1,12 @@
+Execute B4D Ruff/Black/Mypy Remediation Overview
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d-ruff-black-mypy-remediation.md.
+
+Plan References:
+- plan:m365-enterprise-readiness-master-plan:B4D1
+- plan:m365-enterprise-readiness-master-plan:B4D2
+- plan:m365-enterprise-readiness-master-plan:B4D3
+- plan:m365-enterprise-readiness-master-plan:B4D4
+- plan:m365-enterprise-readiness-master-plan:B4D5
+
+Execute the bounded B4D subacts in order. Do not run B4D as one opaque pass.

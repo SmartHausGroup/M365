@@ -7,4 +7,3 @@ if __name__ == "__main__":
     for path in paths:
         r = c.get(path, headers={"accept": "text/html"})
         print(path, r.status_code, len(r.text))
-

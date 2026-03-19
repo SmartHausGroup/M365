@@ -22,4 +22,3 @@ Notes
 - Persistence uses local JSON store under `APP_DATA` (default `./data`).
 - HTML dashboard pages include a simple Quick Actions panel for assigning tasks, sending instructions, and viewing logs.
 - For production, enable auth and RBAC via Microsoft OAuth (see `MICROSOFT_OAUTH_SETUP.md`).
-

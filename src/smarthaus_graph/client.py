@@ -16,6 +16,7 @@ Auth modes:
 from __future__ import annotations
 
 import os
+import re
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -23,6 +24,8 @@ from typing import Any
 from urllib.parse import quote
 
 import httpx
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes
 from msal import ConfidentialClientApplication, PublicClientApplication, SerializableTokenCache
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import AuthConfigurationError, GraphRequestError
@@ -31,6 +34,38 @@ from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 log = get_logger(__name__)
+_PRIVATE_KEY_PATTERN = re.compile(
+    r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----.*?-----END [A-Z0-9 ]*PRIVATE KEY-----",
+    re.DOTALL,
+)
+_CERTIFICATE_PATTERN = re.compile(
+    r"-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----",
+    re.DOTALL,
+)
+
+
+def _load_client_certificate_credential(cert_path: str) -> dict[str, Any]:
+    """Build an MSAL-compatible certificate credential from a PEM or PFX file."""
+    path = Path(cert_path)
+    suffix = path.suffix.lower()
+
+    if suffix in {".pfx", ".p12"}:
+        return {"private_key_pfx_path": str(path)}
+
+    pem_text = path.read_text(encoding="utf-8")
+    key_match = _PRIVATE_KEY_PATTERN.search(pem_text)
+    cert_matches = _CERTIFICATE_PATTERN.findall(pem_text)
+    if not key_match or not cert_matches:
+        raise AuthConfigurationError(
+            "Certificate path must contain a private key and certificate in PEM format."
+        )
+
+    leaf_certificate = x509.load_pem_x509_certificate(cert_matches[0].encode("utf-8"))
+    return {
+        "private_key": key_match.group(0),
+        "thumbprint": leaf_certificate.fingerprint(hashes.SHA1()).hex().upper(),
+        "public_certificate": "\n".join(cert_matches),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -81,19 +116,22 @@ class PersistentTokenCache(SerializableTokenCache):
         # Restrict permissions on the cache file
         os.chmod(self._cache_path, 0o600)
 
-    def add(self, event: dict, **kwargs) -> None:
+    def add(self, event: dict[str, Any], **kwargs: Any) -> None:
         super().add(event, **kwargs)
         if self.has_state_changed:
             self._save()
 
     def modify(
-        self, credential_type: str, old_entry: dict, new_key_value_pairs: dict | None = None
+        self,
+        credential_type: str,
+        old_entry: dict[str, Any],
+        new_key_value_pairs: dict[str, Any] | None = None,
     ) -> None:
         super().modify(credential_type, old_entry, new_key_value_pairs)
         if self.has_state_changed:
             self._save()
 
-    def remove(self, credential_type: str, target: dict) -> None:
+    def remove(self, credential_type: str, target: dict[str, Any]) -> None:
         super().remove(credential_type, target)
         if self.has_state_changed:
             self._save()
@@ -140,8 +178,7 @@ class GraphTokenProvider:
 
         credential: str | dict[str, Any]
         if cfg.client_certificate_path and os.path.exists(cfg.client_certificate_path):
-            with open(cfg.client_certificate_path) as f:
-                credential = {"private_key": f.read(), "thumbprint": ""}
+            credential = _load_client_certificate_credential(cfg.client_certificate_path)
             log.info("Using certificate auth for tenant %s", cfg.tenant_id)
         elif cfg.client_secret:
             credential = cfg.client_secret
@@ -579,7 +616,7 @@ class GraphClient:
     def create_list(
         self, site_id: str, display_name: str, columns: list[dict] | None = None
     ) -> dict:
-        body = {
+        body: dict[str, Any] = {
             "displayName": display_name,
             "list": {"template": "genericList"},
         }

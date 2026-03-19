@@ -81,6 +81,10 @@ class GovernanceOverrides:
     require_confirmation_for: list[str] = field(default_factory=list)
     financial_threshold_auto: float = 5000.0
     financial_threshold_manager: float = 50000.0
+    approvals_site_url: str = ""
+    approvals_site_id: str = ""
+    approvals_list_id: str = ""
+    approvals_list_name: str = "Approvals"
 
 
 @dataclass

@@ -1,0 +1,38 @@
+{
+  "phase": "B4D4",
+  "generated_at_local": "2026-03-18T14:10:00-04:00",
+  "summary": {
+    "total_errors": 283,
+    "files_with_errors": 47,
+    "env_blockers_cleared": [
+      "types-PyYAML added to the governed mypy hook environment",
+      "duplicate module discovery for src/ops_adapter/actions.py removed"
+    ],
+    "top_error_codes": {
+      "no-untyped-def": 177,
+      "attr-defined": 24,
+      "arg-type": 22,
+      "var-annotated": 13,
+      "union-attr": 13,
+      "assignment": 7
+    },
+    "top_files": {
+      "src/provisioning_api/automation/lattice_repo_documentation_automation.py": 30,
+      "src/provisioning_api/simple_dashboard.py": 21,
+      "src/smarthaus_cli/__main__.py": 21,
+      "src/smarthaus_cli/repo_analyzer.py": 20,
+      "scripts/check_env_credentials.py": 18,
+      "src/ops_adapter/actions.py": 16,
+      "src/provisioning_api/routers/agent_dashboard.py": 15,
+      "src/ops_adapter/main.py": 15,
+      "scripts/provision_mcp_registration.py": 14,
+      "tests/test_policies.py": 12
+    }
+  },
+  "next_grouping": {
+    "b4d4a": "Typing environment and module-path unblock",
+    "b4d4b": "Core runtime and governance mypy remediation",
+    "b4d4c": "Dashboard, script, and test mypy remediation",
+    "b4d4d": "Targeted governed-path mypy closure"
+  }
+}

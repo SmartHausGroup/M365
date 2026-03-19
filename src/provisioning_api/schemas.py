@@ -51,6 +51,12 @@ class LatticeAIOS(BaseModel):
     notes: str | None = None
 
 
+class LatticeLQL(BaseModel):
+    query: str
+    description: str | None = None
+    status: str | None = None
+
+
 class LatticeLEF(BaseModel):
     component: str
     update: str

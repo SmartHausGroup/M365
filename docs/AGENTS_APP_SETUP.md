@@ -29,5 +29,3 @@ The provisioning script creates a security group `SH Agents Mail Access` and app
 - AppId: `<APP_ID>`
 - TenantId: `<TENANT_ID>`
 - Certificate: `scripts/azure/certs/agent_app.pfx` (no password) or upload to Key Vault and reference from your runtime.
-
-

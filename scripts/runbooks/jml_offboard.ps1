@@ -10,4 +10,3 @@ $body = @{ params = @{ userPrincipalName = $UserPrincipalName } } | ConvertTo-Js
 # Offboarding requires approval per policy
 $resp = Invoke-RestMethod -Method Post -Uri "$adapterUrl/actions/hr-generalist/employee.offboard" -ContentType 'application/json' -Body $body
 $resp | ConvertTo-Json -Depth 5
-

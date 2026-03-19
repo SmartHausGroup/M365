@@ -1,4 +1,3 @@
-import os
 from smarthaus_graph.client import GraphClient
 
 if __name__ == "__main__":
@@ -7,6 +6,5 @@ if __name__ == "__main__":
         data = client.get_organization()
         ok = bool(data.get("value"))
         print("m365_connectivity:", "ok" if ok else "unknown")
-    except Exception as e:
+    except Exception:
         print("m365_connectivity:", "not_configured_or_unreachable")
-

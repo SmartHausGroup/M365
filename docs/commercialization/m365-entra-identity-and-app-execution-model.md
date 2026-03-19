@@ -140,7 +140,7 @@ That means live certification must prove:
 3. Graph execution still occurs through the SmartHaus app registration
 4. actor and executor are both visible in the evidence packet
 
-`C1A` was blocked on identity work until `B5C` completed. Its remaining blockers are now live-environment prerequisites only.
+`C1A` was blocked on identity work until `B5C` completed. The active master plan now extends that auth-hardening track through `B5D` and `B5E` so live certification certifies the final SMARTHAUS app-registration split and executor credential posture instead of the transitional secret-based overlap.
 
 ## Historical B5A Non-Goals
 
@@ -165,4 +165,4 @@ The governed ops-adapter runtime now implements the production identity model on
 3. Approval records preserve the actor, tier, groups, tenant, and executor identity.
 4. Audit records preserve the actor, actor tier, actor groups, tenant, and executor identity on the governed runtime path.
 
-`C1A` remains blocked only on live-environment readiness, not on identity-model implementation.
+`C1A` no longer depends on missing runtime identity implementation, but it is still blocked on final auth-architecture closure through `B5D` and `B5E` plus the remaining live-environment readiness items.

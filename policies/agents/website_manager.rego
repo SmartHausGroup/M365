@@ -13,4 +13,3 @@ allow_actions = {
 }
 
 approval_required = {"deployment.production"}
-

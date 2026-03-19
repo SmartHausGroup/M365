@@ -1,0 +1,7 @@
+Execute B4B Prompt System Regeneration
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b4b-prompt-system-regeneration.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B4B
+
+Regenerate the active act prompt inventory only. Keep historical prompts for traceability.

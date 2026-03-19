@@ -18,4 +18,3 @@ if __name__ == "__main__":
     # Flag any unknown departments
     unknown = [aid for aid, info in agents.items() if (info.get("department") == "unknown")]
     print("unknown_department_count:", len(unknown))
-

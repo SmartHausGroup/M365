@@ -1,0 +1,7 @@
+Execute B4C Validation Blockers and Syntax Recovery
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b4c-validation-blockers-syntax-recovery.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B4C
+
+Clear the parse and YAML hard blockers first. Do not expand into general lint cleanup yet.

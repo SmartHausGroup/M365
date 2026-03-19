@@ -43,6 +43,7 @@ dev = [
     "mypy>=1.10.0",
     "ruff>=0.4.0",
     "black>=24.4.0",
+    "types-PyYAML>=6.0.12.20250915",
     "types-requests>=2.32.0.20240521",
     "respx>=0.21.1",
     "responses>=0.25.3",

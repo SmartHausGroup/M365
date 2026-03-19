@@ -1,0 +1,21 @@
+{
+  "item_id": "L13",
+  "item_kind": "lemma",
+  "lemma_id": "L13",
+  "status": "green",
+  "generated_at_utc": "2026-03-19T15:06:29Z",
+  "notebook": "notebooks/m365/INV-M365-O-entra-app-separation-certificate-cutover.ipynb",
+  "notebook_hash": "projected-l13-entra-app-separation-certificate-cutover",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "docs/commercialization/m365-entra-identity-and-app-execution-model.md",
+    "docs/commercialization/m365-entra-app-registration-separation-and-certificate-cutover.md",
+    "plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md",
+    "Operations/EXECUTION_PLAN.md",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b5d-entra-app-registration-role-separation.md",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b5e-executor-certificate-cutover-tenant-contract-finalization.md",
+    "notebooks/m365/INV-M365-O-entra-app-separation-certificate-cutover.ipynb",
+    "notebooks/lemma_proofs/L13_m365_entra_app_separation_certificate_cutover.ipynb"
+  ]
+}

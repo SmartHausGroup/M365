@@ -1,0 +1,17 @@
+lemma_id: L12
+name: M365 approval contract alignment
+source_notebook: notebooks/m365/INV-M365-N-approval-contract-alignment.ipynb
+evidence:
+  artifacts:
+    - artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json
+    - artifacts/certification/m365-v1-candidate-52ca494/README.md
+    - artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md
+    - docs/commercialization/m365-canonical-config-contract.md
+    - notebooks/lemma_proofs/L12_m365_approval_contract_alignment.ipynb
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness.md
+  checks:
+    - approval storage target resolves from tenant contract data for the selected tenant
+    - approval Graph authentication uses the tenant-selected app-only execution contract
+    - approval site and list resolution remain deterministic for the selected tenant
+    - C1A shell inputs are reduced to bounded runtime-selection and execution toggles once approval target config is present
+status: projected

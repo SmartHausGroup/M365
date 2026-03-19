@@ -1,41 +1,63 @@
 {
-  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1A",
   "candidate_sha": "52ca494",
-  "checked_at": "2026-03-18T06:13:28-04:00",
-  "status": "blocked",
-  "probe_mode": "presence_only",
+  "checked_at": "2026-03-19T11:41:17-04:00",
+  "status": "no_go",
+  "gate": "GATE:M365-READY-C1A STATUS:NO-GO",
+  "final_decision": "NO-GO",
+  "probe_mode": "presence_and_contract",
   "all_prerequisites_present": false,
+  "scope_decisions": {
+    "caio_surface_in_scope": false,
+    "external_opa_required": "optional"
+  },
   "prerequisite_groups": [
     {
-      "group": "tenant_selection",
+      "group": "tenant_contract",
+      "required": [
+        "tenant YAML exists for the selected certification tenant",
+        "tenant-config loader resolves the selected tenant",
+        "tenant identity and auth mode resolve without exposing secrets"
+      ],
+      "present": {
+        "tenant_yaml_present": true,
+        "tenant_loader_resolution": true,
+        "tenant_identity_present": true,
+        "auth_mode_app_only": true
+      },
+      "ready": true,
+      "note": "The SMARTHAUS tenant contract exists at the sibling UCP tenant path and resolves through smarthaus_common.tenant_config when selected."
+    },
+    {
+      "group": "tenant_selection_runtime",
       "required": [
         "UCP_TENANT"
       ],
       "present": {
         "UCP_TENANT": false
       },
-      "ready": false
+      "ready": false,
+      "note": "The default shell is not currently exporting UCP_TENANT, but the exact standalone certification shell contract is now defined and the certificate-backed auth path was validated separately."
     },
     {
-      "group": "graph_app_auth",
+      "group": "graph_app_auth_contract",
       "required_any_of": [
         [
-          "AZURE_TENANT_ID",
-          "AZURE_CLIENT_ID",
-          "AZURE_CLIENT_SECRET"
+          "tenant_yaml.azure.tenant_id",
+          "tenant_yaml.azure.client_id",
+          "tenant_yaml.azure.client_secret"
         ],
         [
-          "GRAPH_TENANT_ID",
-          "GRAPH_CLIENT_ID",
-          "GRAPH_CLIENT_SECRET"
-        ],
-        [
-          "AZURE_TENANT_ID",
-          "AZURE_CLIENT_ID",
-          "AZURE_CLIENT_CERTIFICATE_PATH"
+          "tenant_yaml.azure.tenant_id",
+          "tenant_yaml.azure.client_id",
+          "tenant_yaml.azure.client_certificate_path"
         ]
       ],
       "present": {
+        "tenant_yaml.azure.tenant_id": true,
+        "tenant_yaml.azure.client_id": true,
+        "tenant_yaml.azure.client_secret": false,
+        "tenant_yaml.azure.client_certificate_path": true,
         "AZURE_TENANT_ID": false,
         "AZURE_CLIENT_ID": false,
         "AZURE_CLIENT_SECRET": false,
@@ -44,7 +66,8 @@
         "GRAPH_CLIENT_SECRET": false,
         "AZURE_CLIENT_CERTIFICATE_PATH": false
       },
-      "ready": false
+      "ready": true,
+      "note": "The SMARTHAUS tenant YAML now provides an app-only certificate-backed credential contract, and the executor app has validated Graph access after secret retirement."
     },
     {
       "group": "mutation_and_audit_controls",
@@ -56,35 +79,32 @@
         "ALLOW_M365_MUTATIONS": false,
         "ENABLE_AUDIT_LOGGING": false
       },
-      "ready": false
+      "ready": false,
+      "note": "The default shell does not currently export the mutation and audit toggles, but the exact standalone certification shell contract is now defined and only awaits operator activation."
     },
     {
       "group": "approval_path",
-      "required_any_of": [
-        [
-          "APPROVALS_SITE_ID"
-        ],
-        [
-          "APPROVALS_SITE_URL"
-        ]
+      "required": [
+        "tenant-backed or approved compatibility approval target",
+        "approval site/list resolution reachable for the selected tenant"
       ],
       "present": {
+        "tenant_yaml.governance.approvals_site_url": true,
+        "tenant_yaml.governance.approvals_list_name": true,
         "APPROVALS_SITE_ID": false,
-        "APPROVALS_SITE_URL": false
+        "APPROVALS_SITE_URL": false,
+        "approval_backend_reachable": false
       },
-      "ready": false
+      "ready": false,
+      "note": "The SMARTHAUS tenant contract now pins the Operations approvals target. Under the exact standalone shell contract, Graph organization auth succeeds with HTTP 200 and certificate-backed executor auth is healthy, but Graph /sites discovery for the Operations site still returns 503 UnknownError."
     },
     {
       "group": "instruction_api_operator",
-      "required": [
-        "CAIO_API_KEY",
-        "BASE_URL"
-      ],
-      "present": {
-        "CAIO_API_KEY": false,
-        "BASE_URL": false
-      },
-      "ready": false
+      "required": [],
+      "present": {},
+      "ready": true,
+      "out_of_scope": true,
+      "note": "CAIO and instruction-API operator inputs are out of scope for standalone M365 C1 certification."
     },
     {
       "group": "external_policy_engine",
@@ -94,23 +114,28 @@
       "present": {
         "OPA_URL": false
       },
-      "ready": false,
+      "ready": true,
       "note": "Only required if the live certification run is configured to use an external OPA service."
     }
   ],
   "blocking_conditions": [
-    "No tenant is currently selected for live certification.",
-    "No live Graph or Azure application credential set is available in the execution environment.",
-    "Mutation and audit toggles are disabled, so controlled write-path certification cannot begin.",
-    "Approval-path storage inputs are absent, so approval workflow checks cannot run.",
-    "Instruction API operator inputs are absent, so CAIO-surface checks cannot run."
+    "The exact standalone shell contract is now known (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`), but the active shell has not been made persistent yet.",
+    "Under that exact shell contract, the tenant-backed approval probe against the SMARTHAUS Operations site still returns Graph 503 UnknownError on /sites resolution, so governed approval checks cannot run yet."
   ],
   "next_actions": [
-    "Set UCP_TENANT to a real non-production tenant with a valid tenant YAML configuration.",
-    "Load one supported Graph or Azure app credential set for that tenant, preferring certificate auth.",
-    "Enable ALLOW_M365_MUTATIONS and ENABLE_AUDIT_LOGGING for the approved certification window.",
-    "Provide approval storage configuration so approval-path checks can execute.",
-    "Provide CAIO_API_KEY and BASE_URL if the instruction API path is included in the certification run.",
-    "Re-run C1 once the prerequisite groups above are ready."
-  ]
+    "Persist the exact standalone shell contract for the approved certification window: UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true.",
+    "Re-run the approval-path probe once Graph /sites endpoints recover, or provide explicit approvals site and list IDs to bypass discovery.",
+    "Re-run C1A after the shell inputs above are present."
+  ],
+  "exact_shell_probe": {
+    "contract": {
+      "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+      "UCP_TENANT": "smarthaus",
+      "ALLOW_M365_MUTATIONS": "true",
+      "ENABLE_AUDIT_LOGGING": "true"
+    },
+    "organization_status": 200,
+    "site_discovery_status": 503,
+    "site_discovery_error_code": "UnknownError"
+  }
 }

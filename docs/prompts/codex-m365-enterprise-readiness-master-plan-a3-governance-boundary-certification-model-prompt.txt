@@ -1,0 +1,7 @@
+Execute A3 Governance Boundary and Certification Model
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-a3-governance-boundary-certification-model.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:A3
+
+This is a historical imported act. Use it only if A3 is explicitly reopened.

@@ -1,0 +1,37 @@
+{
+  "captured_at": "2026-03-18T13:38:00-04:00",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:B4D3",
+  "post_b4d2_baseline_restored": true,
+  "inventory_sources": {
+    "ruff_targeted": "ruff check src/m365 src/ops_adapter src/provisioning_api src/smarthaus_cli src/smarthaus_common tests/test_policies.py --output-format concise",
+    "format_targeted": "ruff format --check notebooks src/m365 src/ops_adapter src/provisioning_api src/smarthaus_cli src/smarthaus_common tests/test_policies.py"
+  },
+  "ruff": {
+    "error_count": 348,
+    "dominant_codes": [
+      { "code": "UP006", "count": 81 },
+      { "code": "F401", "count": 78 },
+      { "code": "I001", "count": 44 },
+      { "code": "B904", "count": 41 },
+      { "code": "UP045", "count": 31 },
+      { "code": "UP035", "count": 27 },
+      { "code": "B007", "count": 16 },
+      { "code": "E402", "count": 14 }
+    ],
+    "notes": [
+      "The remaining B4D3 Ruff debt is concentrated in runtime, CLI, and governed-test files.",
+      "The pinned surface includes src/ops_adapter, src/provisioning_api, src/smarthaus_cli, src/smarthaus_common, and tests/test_policies.py."
+    ]
+  },
+  "format": {
+    "parse_blocker": {
+      "file": "notebooks/ma_m365_batch1_groups.ipynb",
+      "detail": "Expected a newline after line continuation character"
+    },
+    "would_reformat_count": 46,
+    "notes": [
+      "The governed notebook surface remains part of B4D3 because formatter closure is impossible while the notebook parse blocker persists.",
+      "Touched runtime and CLI files also still require formatter stabilization."
+    ]
+  }
+}

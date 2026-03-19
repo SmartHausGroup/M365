@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import uuid
 
+import pytest
 from m365.module.entrypoint import M365ConnectorModule
 from m365.module.manifest import m365_connector_module_manifest
 
@@ -22,7 +23,9 @@ def test_m365_module_rejects_unsupported_capability() -> None:
     assert result["trace_id"] == "trace-unsupported"
 
 
-def test_m365_module_requires_user_context_when_configured(monkeypatch) -> None:
+def test_m365_module_requires_user_context_when_configured(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setenv("ALLOW_M365_MUTATIONS", "true")
     module = M365ConnectorModule(require_user_context=True)
     result = module.execute(
@@ -37,7 +40,9 @@ def test_m365_module_requires_user_context_when_configured(monkeypatch) -> None:
     assert result["trace_id"] == "trace-auth-required"
 
 
-def test_m365_module_enforces_mutation_gate_and_idempotency(monkeypatch) -> None:
+def test_m365_module_enforces_mutation_gate_and_idempotency(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setenv("ALLOW_M365_MUTATIONS", "false")
     module = M365ConnectorModule(require_user_context=True)
     idem_key = f"mod-idem-{uuid.uuid4()}"
@@ -55,7 +60,9 @@ def test_m365_module_enforces_mutation_gate_and_idempotency(monkeypatch) -> None
     assert second == first
 
 
-def test_m365_module_executes_instruction_contract_with_mocked_action(monkeypatch) -> None:
+def test_m365_module_executes_instruction_contract_with_mocked_action(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setenv("ALLOW_M365_MUTATIONS", "true")
 
     def _fake_execute_action(action: str, params: dict[str, object]) -> dict[str, object]:

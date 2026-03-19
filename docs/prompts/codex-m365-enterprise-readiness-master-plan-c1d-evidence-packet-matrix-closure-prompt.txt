@@ -1,0 +1,7 @@
+Execute C1D Evidence Packet and Matrix Closure
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-c1d-evidence-packet-matrix-closure.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:C1D
+
+This act closes the live evidence packet before C2 may begin.

@@ -1,7 +1,7 @@
 # Codex Detailed Prompt: M365 Voice Integration (Instruction API)
 
-**Plan reference:** `plan:tai-maia-caio-vfe-m365-integration:m365`  
-**Detailed plan:** `plans/tai-maia-caio-vfe-m365-integration/m365-repo-plan.md`  
+**Plan reference:** `plan:tai-maia-caio-vfe-m365-integration:m365`
+**Detailed plan:** `plans/tai-maia-caio-vfe-m365-integration/m365-repo-plan.md`
 **Master plan:** `plans/tai-maia-caio-vfe-m365-integration/master-plan.md`
 
 ---

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import os
+from typing import Any
+
 import httpx
-from typing import Any, Dict
 
 
 class OPAClient:
@@ -17,9 +18,11 @@ class OPAClient:
                 self.fail_open = os.getenv("OPA_FAIL_OPEN", "false").lower() in ("1", "true", "yes")
         else:
             self.fail_open = False
-        self.dev_mode = (os.getenv("OPS_ADAPTER_ENV", "").lower() in ("dev", "sandbox", "local"))
+        self.dev_mode = os.getenv("OPS_ADAPTER_ENV", "").lower() in ("dev", "sandbox", "local")
 
-    async def check(self, agent: str, action: str, data: Dict[str, Any], rate_allowed: bool, correlation_id: str) -> Dict[str, Any]:
+    async def check(
+        self, agent: str, action: str, data: dict[str, Any], rate_allowed: bool, correlation_id: str
+    ) -> dict[str, Any]:
         payload = {
             "input": {
                 "agent": agent,
@@ -45,5 +48,9 @@ class OPAClient:
                 }
         except Exception as e:
             if self.fail_open:
-                return {"allowed": True, "approval_required": False, "reason": f"opa_unreachable_fallback: {e}"}
+                return {
+                    "allowed": True,
+                    "approval_required": False,
+                    "reason": f"opa_unreachable_fallback: {e}",
+                }
             return {"allowed": False, "approval_required": False, "reason": f"opa_error: {e}"}

@@ -39,7 +39,7 @@
 
 ## 2. M365 agents — what/who they are and whether we use them
 
-**What they are:**  
+**What they are:**
 M365 “agents” in this repo are **personas/roles** defined in `registry/agents.yaml`. Each has a **name**, **department**, **risk_tier**, **allowed_actions** (list of action names), and optional **approval_rules**. They are **not** conversational AI agents; they are **identity/role definitions** used for:
 
 1. **Ops-adapter:** When a request hits `/actions/<agent_id>/<action>`, the adapter loads the registry, checks that the agent has that action in `allowed_actions`, and (optionally) consults OPA and approval rules. So the **ops-adapter uses the registry** for policy and routing.
@@ -57,8 +57,8 @@ M365 “agents” in this repo are **personas/roles** defined in `registry/agent
 - **Engineering:** ai-engineer, backend-architect, devops-automator, frontend-developer, etc. (many with empty allowed_actions).
 - **Marketing, design, etc.** — More roles, some with empty allowed_actions.
 
-**Summary:**  
+**Summary:**
 We **are** using the agents in the **ops-adapter** (policy + approvals). We **expose** them via **GET /api/m365/agents** for the provisioning/dashboard side. The **instruction API** used by CAIO does **not** require an agent_id; it is a single API that executes actions. So “M365 agents” = registry of personas/roles used for policy and visibility; the instruction API is agent-agnostic.
 
-**Design note (personas as real roles, edge contract for VFE):**  
+**Design note (personas as real roles, edge contract for VFE):**
 See **`docs/PERSONAS_AGENTS_AND_CAIO_EDGE.md`**. Personas should map to real subsets of the M365 capability set \(\mathcal{O}\); the contract on the edge (agent ↔ CAIO) is the **entire response** so it can be handed off to VFE and the person is “talking back” to the user. Not yet implemented — captured for when we do it.

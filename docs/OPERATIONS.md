@@ -70,4 +70,3 @@ OPA returns a decision object:
 2. Register under `action_registry` for the agent.
 3. Allow it in the appropriate Rego under `policies/agents/`.
 4. Add tests in `tests/test_ops_adapter.py`.
-

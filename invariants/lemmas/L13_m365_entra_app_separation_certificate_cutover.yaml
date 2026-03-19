@@ -1,0 +1,18 @@
+lemma_id: L13
+name: M365 Entra app separation and executor certificate cutover
+source_notebook: notebooks/m365/INV-M365-O-entra-app-separation-certificate-cutover.ipynb
+evidence:
+  artifacts:
+    - docs/commercialization/m365-entra-identity-and-app-execution-model.md
+    - docs/commercialization/m365-entra-app-registration-separation-and-certificate-cutover.md
+    - plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md
+    - Operations/EXECUTION_PLAN.md
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b5d-entra-app-registration-role-separation.md
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b5e-executor-certificate-cutover-tenant-contract-finalization.md
+    - notebooks/lemma_proofs/L13_m365_entra_app_separation_certificate_cutover.ipynb
+  checks:
+    - executor app registration and operator-identity app registration remain distinct and explicitly documented
+    - the runtime tenant contract keeps the executor app as the only app-only Graph executor
+    - the long-term production posture for the executor app is certificate-based auth
+    - C1A remains blocked behind B5D and B5E in the active plan
+status: projected

@@ -18,8 +18,8 @@ $departments = @(
 function Resolve-GroupId {
   param($MailNickname, $DisplayName)
   $g = Get-MgGroup -Filter "mailNickname eq '$MailNickname'" -ConsistencyLevel eventual -All
-  if (-not $g) { 
-    $g = Get-MgGroup -Filter "displayName eq '$DisplayName'" -ConsistencyLevel eventual -All 
+  if (-not $g) {
+    $g = Get-MgGroup -Filter "displayName eq '$DisplayName'" -ConsistencyLevel eventual -All
   }
   if (-not $g) { throw "Group not found: $DisplayName ($MailNickname)" }
   return $g[0].Id
@@ -41,9 +41,9 @@ foreach ($d in $departments) {
   try {
     $gid = Resolve-GroupId -MailNickname $d.MailNickname -DisplayName $d.DisplayName
     $existing = Get-Team -GroupId $gid -ErrorAction SilentlyContinue
-    if ($existing) { 
+    if ($existing) {
       Write-Host "✔ Team exists: $($d.DisplayName)"
-      continue 
+      continue
     }
 
     Write-Host "⏳ Ensuring owner for group $($d.DisplayName) ..."

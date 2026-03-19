@@ -20,4 +20,3 @@ Modeling Tips
 Publishing
 - Publish datasets to your Fabric/Power BI workspace
 - Create Executive dashboards with cards for total velocity, on-time delivery, top risks
-

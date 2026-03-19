@@ -92,23 +92,23 @@ From the [Graph API overview](https://learn.microsoft.com/en-us/graph/api/overvi
 
 To make \(\mathcal{O}\) **literal and complete**:
 
-1. **Graph permissions (canonical list)**  
+1. **Graph permissions (canonical list)**
    Call Microsoft Graph (with an app that has `Application.Read.All` or equivalent):
    ```http
    GET https://graph.microsoft.com/v1.0/servicePrincipals(appId='00000003-0000-0000-c000-000000000000')?$select=id,appId,displayName,appRoles,oauth2PermissionScopes,resourceSpecificApplicationPermissions
    ```
    Parse `appRoles` (application permissions) and `oauth2PermissionScopes` (delegated). Each permission has a **value** (e.g. `Files.ReadWrite.All`) that maps to a **resource** and **operation**. Use the [permissions reference](https://learn.microsoft.com/en-us/graph/permissions-reference) as the human-readable source; the API gives the same list programmatically. Enumerate every permission and map it to one or more **commands** (e.g. `Files.ReadWrite.All` → upload, create, update, delete on driveItem).
 
-2. **Graph API reference (resource + method)**  
+2. **Graph API reference (resource + method)**
    For each resource (user, group, team, site, drive, driveItem, message, event, etc.), the [Graph API reference](https://learn.microsoft.com/en-us/graph/api/overview?view=graph-rest-1.0) lists HTTP methods (GET, POST, PUT, PATCH, DELETE). Cross-map: (resource, method) → required permission(s). That yields the full set of **API operations**; our \(\mathcal{O}\) is the set of (action name, params, result shape) we expose, each backed by one or more Graph (or Teams/SharePoint) calls.
 
-3. **Teams RSC and platform**  
+3. **Teams RSC and platform**
    Add [RSC permissions](https://learn.microsoft.com/en-us/microsoftteams/platform/graph-api/rsc/resource-specific-consent) and any Teams-specific APIs (e.g. [Agents in Teams](https://learn.microsoft.com/en-us/microsoftteams/platform/agents-in-teams/overview)) so \(\mathcal{O}_{\mathrm{Teams}}\) is complete.
 
-4. **SharePoint**  
+4. **SharePoint**
    [SharePoint sites and content](https://learn.microsoft.com/en-us/graph/sharepoint-concept-overview) in Graph (sites, lists, drive) are already covered by Graph permissions (Sites.*, Files.*). Add SharePoint REST or SPFx operations only if we expose them as agent commands.
 
-5. **Single master list**  
+5. **Single master list**
    Produce a **registry** (e.g. YAML or JSON): for each operation in \(\mathcal{O}\), store action name, resource, required permissions, parameter schema, result shape, and mutating flag. The CAIO-M365 [ACTION_SPECIFICATION](caio-m365/ACTION_SPECIFICATION.md) and [MATHEMATICS](caio-m365/MATHEMATICS.md) then reference this registry so that every implemented action is part of the master equation.
 
    **Implemented:** The canonical registry is **`registry/capability_registry.yaml`**. It lists every action in \(\mathcal{O}\) with `status: implemented` or `status: planned`. Ingest script: **`scripts/ci/ingest_graph_permissions.py`** (run with `--live` when Graph auth env is set to fetch full permissions; without auth it emits a static subset). Verification: **`scripts/ci/verify_capability_registry.py`** asserts that every implemented action in the contract appears in the registry with `status: implemented` and writes `configs/generated/capability_registry_verification.json`.

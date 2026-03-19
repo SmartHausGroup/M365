@@ -41,4 +41,3 @@ echo "-- Read user (post-licenses)"
 curl -s -X POST "$ADAPTER_URL/actions/m365-administrator/users.read" \
   -H 'Content-Type: application/json' \
   -d "{\"params\":{\"userPrincipalName\":\"$UPN\"}}" | jq
-

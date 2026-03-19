@@ -10,14 +10,14 @@ from smarthaus_graph.client import GraphClient
 
 
 def load_services(path: str = "config/services.json") -> list[dict[str, Any]]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
     return data.get("services", [])
 
 
 def _get_user_id(client: GraphClient, upn: str) -> str | None:
     try:
-        r = client._request("GET", f"/users/{upn}", params={"$select": "id"})  # type: ignore[attr-defined]
+        r = client._request("GET", f"/users/{upn}", params={"$select": "id"})
         data = r.json()
         return data.get("id")
     except Exception:
@@ -26,7 +26,7 @@ def _get_user_id(client: GraphClient, upn: str) -> str | None:
 
 def _list_group_owners(client: GraphClient, group_id: str) -> list[str]:
     try:
-        r = client._request("GET", f"/groups/{group_id}/owners", params={"$select": "id"})  # type: ignore[attr-defined]
+        r = client._request("GET", f"/groups/{group_id}/owners", params={"$select": "id"})
         data = r.json()
         return [o.get("id") for o in data.get("value", []) if o.get("id")]
     except Exception:
@@ -36,7 +36,7 @@ def _list_group_owners(client: GraphClient, group_id: str) -> list[str]:
 def _add_group_owner(client: GraphClient, group_id: str, user_id: str) -> bool:
     body = {"@odata.id": f"https://graph.microsoft.com/v1.0/users/{user_id}"}
     try:
-        client._request("POST", f"/groups/{group_id}/owners/$ref", json=body)  # type: ignore[attr-defined]
+        client._request("POST", f"/groups/{group_id}/owners/$ref", json=body)
         return True
     except Exception:
         return False
@@ -56,7 +56,7 @@ def ensure_team_and_channels(client: GraphClient, svc: dict[str, Any]) -> dict[s
         if not grp or not grp.get("id"):
             result["error"] = "group_not_found"
             return result
-        group_id = grp.get("id")
+        group_id = str(grp["id"])
         # Check if team exists
         try:
             _ = client.get_team(group_id)
@@ -93,7 +93,9 @@ def ensure_team_and_channels(client: GraphClient, svc: dict[str, Any]) -> dict[s
             if ch in existing_names:
                 continue
             try:
-                client.create_team_channel(group_id, ch, description=f"Channel for {svc.get('display_name')} - {ch}")
+                client.create_team_channel(
+                    group_id, ch, description=f"Channel for {svc.get('display_name')} - {ch}"
+                )
                 result["channels_created"].append(ch)
             except Exception as e:
                 # Collect but continue
@@ -107,7 +109,9 @@ def ensure_team_and_channels(client: GraphClient, svc: dict[str, Any]) -> dict[s
 
 def main() -> int:
     # Guard: ensure Graph creds exist
-    missing = [k for k in ("GRAPH_TENANT_ID", "GRAPH_CLIENT_ID", "GRAPH_CLIENT_SECRET") if not os.getenv(k)]
+    missing = [
+        k for k in ("GRAPH_TENANT_ID", "GRAPH_CLIENT_ID", "GRAPH_CLIENT_SECRET") if not os.getenv(k)
+    ]
     if missing:
         print(f"Missing env vars: {', '.join(missing)}", file=sys.stderr)
         return 2

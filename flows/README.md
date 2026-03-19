@@ -28,4 +28,3 @@ Deployment Tips
 - Package into a Power Platform Solution for ALM
 - Parameterize: API key or secret, Plan IDs, Team/Channel IDs via Environment Variables
 - For GitHub origin, either: set organization webhooks to the Flow HTTP endpoint or use GitHub connector triggers
-

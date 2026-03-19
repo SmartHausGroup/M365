@@ -34,7 +34,7 @@ def lemma_A001_holds(instruction: Any) -> bool:
     Cell: Lemma Execution (LEM-M365-A-001-01).
     Invariant: INV-M365-A-001
     """
-    if not isinstance(instruction, (tuple, list)) or len(instruction) != 4:
+    if not isinstance(instruction, tuple | list) or len(instruction) != 4:
         return False
     return True
 
@@ -71,7 +71,7 @@ def verify_A001(instruction: Any) -> None:
     Cell: Invariant Verification.
     Fail closed: raises AssertionError on violation.
     """
-    assert isinstance(instruction, (tuple, list)), "instruction must be tuple/list"
+    assert isinstance(instruction, tuple | list), "instruction must be tuple/list"
     assert len(instruction) == 4, "exactly four components"
     assert all(c is not None for c in instruction), "no component missing"
 

@@ -10,6 +10,7 @@ from typing import Any
 from urllib.parse import urlencode
 
 import httpx
+from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 
 ApprovalUpdateResult = dict[str, list[str]]
 
@@ -23,14 +24,51 @@ def _parse_site_url(site_url: str) -> tuple[str, str]:
     return p.netloc, p.path
 
 
+def _selected_tenant_config() -> TenantConfig | None:
+    try:
+        return get_tenant_config()
+    except Exception:
+        return None
+
+
+def _resolve_approval_setting(
+    tenant_field: str,
+    env_keys: tuple[str, ...],
+    *,
+    default: str = "",
+) -> str:
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is not None:
+        tenant_value = getattr(tenant_cfg.governance, tenant_field, "")
+        if isinstance(tenant_value, str) and tenant_value.strip():
+            return tenant_value.strip()
+
+    for key in env_keys:
+        value = os.getenv(key)
+        if value:
+            return value
+
+    return default
+
+
+def _build_graph_token_provider() -> Any:
+    from smarthaus_graph.client import GraphTokenProvider
+
+    return GraphTokenProvider(tenant_config=_selected_tenant_config())
+
+
 class GraphApprovalsStore:
     def __init__(self, registry: dict[str, Any] | None = None):
         self.registry = registry or {}
         self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
-        self.site_url = os.getenv("APPROVALS_SITE_URL")
-        self.site_id = os.getenv("APPROVALS_SITE_ID")
-        self.list_id = os.getenv("APPROVALS_LIST_ID")
-        self.list_name = os.getenv("APPROVALS_LIST_NAME", "Approvals")
+        self.site_url = _resolve_approval_setting("approvals_site_url", ("APPROVALS_SITE_URL",))
+        self.site_id = _resolve_approval_setting("approvals_site_id", ("APPROVALS_SITE_ID",))
+        self.list_id = _resolve_approval_setting("approvals_list_id", ("APPROVALS_LIST_ID",))
+        self.list_name = _resolve_approval_setting(
+            "approvals_list_name",
+            ("APPROVALS_LIST_NAME",),
+            default="Approvals",
+        )
         if not self.site_id:
             if not self.site_url:
                 raise RuntimeError("Set APPROVALS_SITE_URL or APPROVALS_SITE_ID for approvals")
@@ -47,41 +85,8 @@ class GraphApprovalsStore:
         }
 
     def _graph_token(self) -> str:
-        from azure.identity import ClientCertificateCredential, ClientSecretCredential
-
-        tenant_id = os.getenv("AZURE_TENANT_ID") or os.getenv("GRAPH_TENANT_ID")
-        client_id = (
-            os.getenv("AZURE_CLIENT_ID")
-            or os.getenv("AZURE_APP_CLIENT_ID_TAI")
-            or os.getenv("MICROSOFT_CLIENT_ID")
-            or os.getenv("GRAPH_CLIENT_ID")
-        )
-        cert_path = os.getenv("AZURE_CLIENT_CERTIFICATE_PATH")
-        if tenant_id and client_id and cert_path and os.path.exists(cert_path):
-            cred = ClientCertificateCredential(
-                tenant_id=tenant_id,
-                client_id=client_id,
-                certificate_path=cert_path,
-            )
-            token = cred.get_token("https://graph.microsoft.com/.default")
-            return token.token
-
-        client_secret = (
-            os.getenv("AZURE_CLIENT_SECRET")
-            or os.getenv("AZURE_APP_CLIENT_SECRET_TAI")
-            or os.getenv("MICROSOFT_CLIENT_SECRET")
-            or os.getenv("GRAPH_CLIENT_SECRET")
-        )
-        if tenant_id and client_id and client_secret:
-            cred = ClientSecretCredential(
-                tenant_id=tenant_id,
-                client_id=client_id,
-                client_secret=client_secret,
-            )
-            token = cred.get_token("https://graph.microsoft.com/.default")
-            return token.token
-
-        raise RuntimeError("Graph credentials not configured for approvals")
+        provider = _build_graph_token_provider()
+        return provider.get_app_token()
 
     def _graph(self) -> httpx.Client:
         token = self._graph_token()
@@ -430,6 +435,11 @@ def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
     if svc_url:
         return EnterpriseApprovalsProxy(svc_url)
     # Otherwise choose Graph-backed store
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is not None and (
+        tenant_cfg.governance.approvals_site_url or tenant_cfg.governance.approvals_site_id
+    ):
+        return GraphApprovalsStore(registry=registry)
     if os.getenv("APPROVALS_SITE_URL") or os.getenv("APPROVALS_SITE_ID"):
         return GraphApprovalsStore(registry=registry)
 

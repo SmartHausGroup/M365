@@ -1,16 +1,19 @@
 """Verify bootstrap env loading and tenant-first config authority."""
+
 from __future__ import annotations
 
 import os
+from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
-
 from smarthaus_common.config import AppConfig, load_bootstrap_env, resolve_sharepoint_hostname
 from smarthaus_common.tenant_config import reload_tenant_config
 
 
-def test_load_bootstrap_env_loads_existing_file(tmp_path, monkeypatch):
+def test_load_bootstrap_env_loads_existing_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     env_path = tmp_path / ".env"
     env_path.write_text("B1_BOOTSTRAP_TOKEN=from_file\n", encoding="utf-8")
 
@@ -21,7 +24,9 @@ def test_load_bootstrap_env_loads_existing_file(tmp_path, monkeypatch):
     assert os.getenv("B1_BOOTSTRAP_TOKEN") == "from_file"
 
 
-def test_load_bootstrap_env_does_not_override_existing_env(tmp_path, monkeypatch):
+def test_load_bootstrap_env_does_not_override_existing_env(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     env_path = tmp_path / ".env"
     env_path.write_text("B1_BOOTSTRAP_TOKEN=from_file\n", encoding="utf-8")
 
@@ -31,7 +36,7 @@ def test_load_bootstrap_env_does_not_override_existing_env(tmp_path, monkeypatch
     assert os.getenv("B1_BOOTSTRAP_TOKEN") == "from_env"
 
 
-def test_env_fallbacks_after_load():
+def test_env_fallbacks_after_load() -> None:
     """After loading .env, key fallbacks work (no secrets asserted)."""
     repo_root = Path(__file__).resolve().parents[1]
     load_bootstrap_env(repo_root / ".env")
@@ -49,7 +54,7 @@ def test_env_fallbacks_after_load():
         assert isinstance(val, str)
 
 
-def test_config_resolves_graph_fallbacks():
+def test_config_resolves_graph_fallbacks() -> None:
     """smarthaus_common.config GraphAuthConfig reads Graph/Azure fallbacks."""
     repo_root = Path(__file__).resolve().parents[1]
     load_bootstrap_env(repo_root / ".env")
@@ -62,13 +67,15 @@ def test_config_resolves_graph_fallbacks():
 
 
 @pytest.fixture(autouse=True)
-def _reset_tenant_cache():
+def _reset_tenant_cache() -> Iterator[None]:
     reload_tenant_config()
     yield
     reload_tenant_config()
 
 
-def test_app_config_prefers_selected_tenant_yaml(tmp_path, monkeypatch):
+def test_app_config_prefers_selected_tenant_yaml(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     tenant_root = tmp_path / "ucp"
     tenants_dir = tenant_root / "tenants"
     tenants_dir.mkdir(parents=True)
@@ -101,7 +108,9 @@ auth:
     assert cfg.client_secret == "secret-from-env"
 
 
-def test_sharepoint_hostname_prefers_selected_tenant_org_mapping(tmp_path, monkeypatch):
+def test_sharepoint_hostname_prefers_selected_tenant_org_mapping(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     tenant_root = tmp_path / "ucp"
     tenants_dir = tenant_root / "tenants"
     tenants_dir.mkdir(parents=True)

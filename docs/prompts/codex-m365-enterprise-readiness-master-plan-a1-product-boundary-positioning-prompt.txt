@@ -1,0 +1,7 @@
+Execute A1 Product Boundary and Positioning
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-a1-product-boundary-positioning.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:A1
+
+This is a historical imported act. Use it only if A1 is explicitly reopened.

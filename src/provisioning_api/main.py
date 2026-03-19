@@ -9,11 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
-
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-
 from integrations import vercel as vercel_api
+from pydantic import BaseModel
 from smarthaus_common.config import EnterpriseConfig, load_bootstrap_env
 from smarthaus_common.logging import configure_logging
 from smarthaus_graph.client import GraphClient
@@ -40,6 +37,7 @@ from provisioning_api.routers.agent_dashboard import router as agent_dashboard_r
 from provisioning_api.routers.email_dashboard import router as email_dashboard_router
 from provisioning_api.storage import JsonStore
 
+_REPO_ROOT = Path(__file__).resolve().parents[2]
 load_bootstrap_env(_REPO_ROOT / ".env")
 
 configure_logging()
@@ -239,8 +237,8 @@ async def github_webhook(project: str, request: Request) -> dict:
         payload = await request.json()
     except HTTPException:
         raise
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid payload")
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid payload") from exc
     return process_github_update(project, team_name, payload)
 
 

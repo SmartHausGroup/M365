@@ -343,6 +343,6 @@
 
 ---
 
-**Count (this document):** ~220+ capability names.  
-**Implemented today:** 9.  
+**Count (this document):** ~220+ capability names.
+**Implemented today:** 9.
 **Universe:** this list. Close the gap by implementing from here.

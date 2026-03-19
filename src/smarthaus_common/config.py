@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -25,7 +26,7 @@ def load_bootstrap_env(*paths: str | Path) -> str | None:
     return None
 
 
-def _selected_tenant_config():
+def _selected_tenant_config() -> Any | None:
     if not has_selected_tenant():
         return None
     try:

@@ -42,7 +42,7 @@ mkdir -p certs
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/CN=$APP_NAME" \
   -keyout certs/agent_app.key -out certs/agent_app.crt 1>/dev/null
-openssl pkcs12 -export -out certs/agent_app.pfx -inkey certs/agent_app.key -in certs/agent_app.crt -passout pass: 
+openssl pkcs12 -export -out certs/agent_app.pfx -inkey certs/agent_app.key -in certs/agent_app.crt -passout pass:
 
 THUMBPRINT=$(openssl x509 -in certs/agent_app.crt -noout -fingerprint | sed 's/.*=//;s/://g')
 echo "Cert thumbprint: $THUMBPRINT"
@@ -56,5 +56,3 @@ echo "APP_ID=$APP_ID"
 echo "TENANT_ID=$TENANT_ID"
 echo "CERT_THUMBPRINT=$THUMBPRINT"
 echo "PFX=./certs/agent_app.pfx (no password)"
-
-

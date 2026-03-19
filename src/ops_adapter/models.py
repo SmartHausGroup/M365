@@ -1,18 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 
 class ActionRequest(BaseModel):
-    params: Dict[str, Any] = Field(default_factory=dict)
+    params: dict[str, Any] = Field(default_factory=dict)
 
 
 class ActionResponse(BaseModel):
     status: str
-    result: Optional[Dict[str, Any]] = None
-    approval_id: Optional[str] = None
-    reason: Optional[str] = None
+    result: dict[str, Any] | None = None
+    approval_id: str | None = None
+    reason: str | None = None
 
 
 class UsersReadParams(BaseModel):
@@ -43,21 +44,23 @@ class UsersDisableParams(BaseModel):
 
 class DeploymentParams(BaseModel):
     env: str = Field(pattern=r"^(preview|production)$")
-    commit: Optional[str] = None
+    commit: str | None = None
 
 
 class EmployeeOnboardParams(BaseModel):
     userPrincipalName: str
-    displayName: Optional[str] = None
+    displayName: str | None = None
 
 
 class EmailSendIndividualParams(BaseModel):
     to: str
-    subject: Optional[str] = None
-    body: Optional[str] = None
+    subject: str | None = None
+    body: str | None = None
 
 
 class LicensesAssignParams(BaseModel):
     userPrincipalName: str
     licenses: list[str]  # license aliases, skuPartNumbers, or skuIds
-    disabledPlans: Optional[dict[str, list[str]]] = None  # map license key -> list of servicePlanIds to disable
+    disabledPlans: dict[str, list[str]] | None = (
+        None  # map license key -> list of servicePlanIds to disable
+    )

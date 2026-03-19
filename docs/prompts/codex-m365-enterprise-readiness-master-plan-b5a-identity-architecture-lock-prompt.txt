@@ -1,0 +1,7 @@
+Execute B5A Identity Architecture Lock
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b5a-identity-architecture-lock.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B5A
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

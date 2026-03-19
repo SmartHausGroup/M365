@@ -27,6 +27,12 @@ Subject to the existing contract constraints:
 5. `execution_completed => exactly_one_audit_record(Q)`
 6. `same(a, P, S, G) => same(R, Q)` for the current deterministic contract boundary
 7. `tenant_selected(K) => authority(K) = tenant_yaml + injected_secret_env`, and bootstrap dotenv inputs do not override tenant-selected production credentials or org mappings
+8. `validation_blockers_cleared => parse(scripts/generate-policies.py) = ok ∧ yaml(governance/invariants/m365/*.yaml) = ok` before broader repo validation may be trusted
+9. `scripts_ci_validation_stable => ruff(scripts ∪ scripts/ci) = ok ∧ delta ⊆ (scripts ∪ scripts/ci ∪ MA_traceability_artifacts)` before runtime/tooling validation closure may advance
+10. `runtime_cli_notebook_validation_stable => ruff(runtime ∪ cli ∪ governed_tests) = ok ∧ format(runtime ∪ cli ∪ notebooks) = ok ∧ delta ⊆ (runtime ∪ cli ∪ notebooks ∪ governed_tests ∪ MA_traceability_artifacts)` before repo-wide validation may advance to Mypy and final closure
+11. `mypy_blockers_remediated => stub_env(yaml) = ok ∧ unique_module(actions_py) = ok ∧ actionable_mypy(governed_path)` before targeted validation closure may advance
+12. `approval_contract_aligned => approval_target(selected_tenant) = tenant_contract ∨ env_compat_fallback ∧ approval_auth = tenant_selected_app_only_executor ∧ shell_inputs(C1A) ⊆ {UCP_TENANT, ALLOW_M365_MUTATIONS, ENABLE_AUDIT_LOGGING}` before standalone approval-path readiness may return `GO`
+13. `entra_app_roles_finalized => executor_app ≠ operator_identity_app ∧ graph_executor = app_only_executor_app ∧ operator_auth = entra_operator_identity_app ∧ executor_credential_mode ∈ {certificate, certificate_cutover_blocked} ∧ C1A_prereq ⊇ {B5D, B5E}` before standalone enterprise certification may rely on the final SMARTHAUS auth architecture
 
 ## Source Mapping
 

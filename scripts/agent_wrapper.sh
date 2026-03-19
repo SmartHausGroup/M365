@@ -238,4 +238,3 @@ if [[ $gh_status -ne 0 ]]; then
 fi
 
 log "Done. PR: $(cat pr_url.txt | tail -n1)"
-

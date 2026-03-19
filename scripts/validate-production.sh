@@ -47,4 +47,3 @@ if [[ "$MODE" == "full" ]]; then
 fi
 
 echo "[validate] OK"
-

@@ -1,0 +1,4 @@
+Execute `plan:m365-enterprise-readiness-master-plan:B4D4B`.
+Read `/Users/smarthaus/Projects/GitHub/M365/docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d4b-core-runtime-governance-mypy-remediation.md`.
+Limit edits to the bounded core runtime and governance typing surface.
+Validate with targeted governed mypy runs and `git diff --check`.

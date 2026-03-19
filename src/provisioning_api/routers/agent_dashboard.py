@@ -1,51 +1,56 @@
 """
 Agent Dashboard Router - Integrated dashboard with agent-specific pages
 """
+
 import json
 import os
-from typing import Dict, List, Any
-import time
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
-from fastapi.templating import Jinja2Templates
+from collections.abc import AsyncIterator
+from typing import Any
 
-router = APIRouter(prefix="/api/agents", tags=["agent-dashboard"])
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import HTMLResponse, StreamingResponse
+
 from provisioning_api.storage import JsonStore
 
+router = APIRouter(prefix="/api/agents", tags=["agent-dashboard"])
+
+
 # Load agent data
-def load_agent_data() -> Dict[str, Any]:
+def load_agent_data() -> dict[str, Any]:
     """Load agent configuration and team data"""
     try:
         # Load agent definitions
-        with open("registry/agents.yaml", "r") as f:
+        with open("registry/agents.yaml") as f:
             import yaml
+
             agents_config = yaml.safe_load(f)
-        
+
         # Load team data with real names
-        with open("registry/ai_team.json", "r") as f:
+        with open("registry/ai_team.json") as f:
             team_data = json.load(f)
-        
+
         return {
             "agents": agents_config.get("agents", {}),
             "team": team_data.get("departments", {}),
-            "total_agents": team_data.get("total_agents", 0)
+            "total_agents": team_data.get("total_agents", 0),
         }
     except Exception as e:
         print(f"Error loading agent data: {e}")
         return {"agents": {}, "team": {}, "total_agents": 0}
 
+
 @router.get("/dashboard", response_class=HTMLResponse)
-async def agent_dashboard(request: Request):
+async def agent_dashboard(request: Request) -> HTMLResponse:
     """Main agent dashboard with navigation to individual agents"""
     agent_data = load_agent_data()
-    
+
     # Create agent cards with real names
-    agent_cards = []
+    agent_cards: list[dict[str, Any]] = []
     for dept_name, dept_agents in agent_data["team"].items():
         for agent_info in dept_agents:
             agent_id = agent_info["agent"]
             agent_config = agent_data["agents"].get(agent_id, {})
-            
+
             card = {
                 "id": agent_id,
                 "name": agent_info["name"],
@@ -54,13 +59,13 @@ async def agent_dashboard(request: Request):
                 "title": agent_config.get("name", agent_id.replace("-", " ").title()),
                 "risk_tier": agent_config.get("risk_tier", "medium"),
                 "allowed_actions": len(agent_config.get("allowed_actions", [])),
-                "approval_rules": len(agent_config.get("approval_rules", []))
+                "approval_rules": len(agent_config.get("approval_rules", [])),
             }
             agent_cards.append(card)
-    
+
     # Sort by department
     agent_cards.sort(key=lambda x: x["department"])
-    
+
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -70,15 +75,15 @@ async def agent_dashboard(request: Request):
         <title>SmartHaus AI Team Dashboard</title>
         <style>
             * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{ 
+            body {{
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 min-height: 100vh;
                 padding: 20px;
             }}
-            .container {{ 
-                max-width: 1400px; 
-                margin: 0 auto; 
+            .container {{
+                max-width: 1400px;
+                margin: 0 auto;
                 background: white;
                 border-radius: 20px;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -136,14 +141,14 @@ async def agent_dashboard(request: Request):
                 box-shadow: 0 10px 25px rgba(0,0,0,0.15);
                 border-color: #3498db;
             }}
-            .agent-name {{ 
-                font-size: 1.2em; 
-                font-weight: bold; 
+            .agent-name {{
+                font-size: 1.2em;
+                font-weight: bold;
                 color: #2c3e50;
                 margin-bottom: 5px;
             }}
-            .agent-role {{ 
-                color: #7f8c8d; 
+            .agent-role {{
+                color: #7f8c8d;
                 font-size: 0.9em;
                 margin-bottom: 10px;
             }}
@@ -195,11 +200,11 @@ async def agent_dashboard(request: Request):
                 <p>Your Integrated AI Workforce Dashboard</p>
                 <div class="stats">
                     <div class="stat">
-                        <div class="stat-number">{agent_data['total_agents']}</div>
+                        <div class="stat-number">{agent_data["total_agents"]}</div>
                         <div class="stat-label">AI Agents</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-number">{len(agent_data['team'])}</div>
+                        <div class="stat-number">{len(agent_data["team"])}</div>
                         <div class="stat-label">Departments</div>
                     </div>
                     <div class="stat">
@@ -208,60 +213,60 @@ async def agent_dashboard(request: Request):
                     </div>
                 </div>
             </div>
-            
+
             <div class="nav-bar">
                 <a href="/api/agents/dashboard" class="nav-link active">🏠 Team Overview</a>
                 <a href="/api/email/dashboard" class="nav-link">📧 Email Management</a>
                 <a href="/api/m365/empire-overview" class="nav-link">🏢 M365 Empire</a>
                 <a href="/health" class="nav-link">💚 System Health</a>
             </div>
-            
+
             <div class="content">
                 <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center;">
                     Meet Your AI Team
                 </h2>
-                
+
                 <div class="departments">
     """
-    
+
     # Group agents by department
-    departments = {}
+    departments: dict[str, list[dict[str, Any]]] = {}
     for card in agent_cards:
         dept = card["department"]
         if dept not in departments:
             departments[dept] = []
         departments[dept].append(card)
-    
+
     # Generate department sections
     for dept_name, agents in departments.items():
         html_content += f"""
                     <div class="department">
                         <h3>{dept_name}</h3>
         """
-        
+
         for agent in agents:
             risk_class = f"risk-{agent['risk_tier']}"
             html_content += f"""
-                        <div class="agent-card" onclick="openAgentPage('{agent['id']}')">
-                            <div class="agent-name">{agent['name']}</div>
-                            <div class="agent-role">{agent['role']}</div>
+                        <div class="agent-card" onclick="openAgentPage('{agent["id"]}')">
+                            <div class="agent-name">{agent["name"]}</div>
+                            <div class="agent-role">{agent["role"]}</div>
                             <div class="agent-meta">
-                                <span class="actions-count">⚡ {agent['allowed_actions']} actions</span>
-                                <span class="approvals-count">🔒 {agent['approval_rules']} approvals</span>
-                                <span class="risk-badge {risk_class}">{agent['risk_tier']}</span>
+                                <span class="actions-count">⚡ {agent["allowed_actions"]} actions</span>
+                                <span class="approvals-count">🔒 {agent["approval_rules"]} approvals</span>
+                                <span class="risk-badge {risk_class}">{agent["risk_tier"]}</span>
                             </div>
                         </div>
             """
-        
+
         html_content += """
                     </div>
         """
-    
+
     html_content += """
                 </div>
             </div>
         </div>
-        
+
         <script>
             function openAgentPage(agentId) {
                 window.location.href = `/api/agents/${agentId}`;
@@ -270,15 +275,16 @@ async def agent_dashboard(request: Request):
     </body>
     </html>
     """
-    
+
     return HTMLResponse(content=html_content)
+
 
 # Place the status route before dynamic /{agent_id} routes to avoid conflicts
 @router.get("/status")
-async def agents_status_root():
+async def agents_status_root() -> dict[str, Any]:
     """Get status of all agents (top-level to avoid /{agent_id} catch-all)."""
     agent_data = load_agent_data()
-    agents_status: Dict[str, Any] = {}
+    agents_status: dict[str, Any] = {}
     for dept, members in agent_data.get("team", {}).items():
         for a in members:
             aid = a.get("agent")
@@ -297,16 +303,17 @@ async def agents_status_root():
         "agents": agents_status,
     }
 
+
 @router.get("/{agent_id}", response_class=HTMLResponse)
-async def agent_detail_page(request: Request, agent_id: str):
+async def agent_detail_page(request: Request, agent_id: str) -> HTMLResponse:
     """Individual agent detail page"""
     agent_data = load_agent_data()
-    
+
     # Find agent info
-    agent_info = None
-    agent_config = None
-    
-    for dept_name, dept_agents in agent_data["team"].items():
+    agent_info: dict[str, Any] | None = None
+    agent_config: dict[str, Any] = {}
+
+    for _, dept_agents in agent_data["team"].items():
         for agent in dept_agents:
             if agent["agent"] == agent_id:
                 agent_info = agent
@@ -314,41 +321,41 @@ async def agent_detail_page(request: Request, agent_id: str):
                 break
         if agent_info:
             break
-    
+
     if not agent_info:
         raise HTTPException(status_code=404, detail="Agent not found")
-    
+
     # Get agent capabilities
     allowed_actions = agent_config.get("allowed_actions", [])
     approval_rules = agent_config.get("approval_rules", [])
     risk_tier = agent_config.get("risk_tier", "medium")
-    
+
     # Generate action categories
-    action_categories = {}
+    action_categories: dict[str, list[str]] = {}
     for action in allowed_actions:
         category = action.split(".")[0] if "." in action else "general"
         if category not in action_categories:
             action_categories[category] = []
         action_categories[category].append(action)
-    
+
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{agent_info['name']} - SmartHaus AI Team</title>
+        <title>{agent_info["name"]} - SmartHaus AI Team</title>
         <style>
             * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{ 
+            body {{
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 min-height: 100vh;
                 padding: 20px;
             }}
-            .container {{ 
-                max-width: 1200px; 
-                margin: 0 auto; 
+            .container {{
+                max-width: 1200px;
+                margin: 0 auto;
                 background: white;
                 border-radius: 20px;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -389,7 +396,7 @@ async def agent_detail_page(request: Request, agent_id: str):
             }}
             .agent-name {{ font-size: 2.5em; margin-bottom: 10px; }}
             .agent-role {{ font-size: 1.3em; opacity: 0.9; margin-bottom: 20px; }}
-            .agent-dept {{ 
+            .agent-dept {{
                 background: rgba(255,255,255,0.2);
                 padding: 8px 20px;
                 border-radius: 20px;
@@ -472,10 +479,15 @@ async def agent_detail_page(request: Request, agent_id: str):
                 margin-top: 10px;
             }}
             .risk-{risk_tier} {{
-                background: {'#d5f4e6; color: #27ae60;' if risk_tier == 'low' else 
-                           '#fef9e7; color: #f39c12;' if risk_tier == 'medium' else
-                           '#fadbd8; color: #e74c3c;' if risk_tier == 'high' else
-                           '#f8d7da; color: #c0392b;'}
+                background: {
+        "#d5f4e6; color: #27ae60;"
+        if risk_tier == "low"
+        else "#fef9e7; color: #f39c12;"
+        if risk_tier == "medium"
+        else "#fadbd8; color: #e74c3c;"
+        if risk_tier == "high"
+        else "#f8d7da; color: #c0392b;"
+    }
             }}
             .nav-bar {{
                 background: #34495e;
@@ -501,21 +513,21 @@ async def agent_detail_page(request: Request, agent_id: str):
             <div class="header" style="position: relative;">
                 <a href="/api/agents/dashboard" class="back-btn">← Back to Team</a>
                 <div class="agent-avatar">
-                    {agent_info['name'][0].upper()}
+                    {agent_info["name"][0].upper()}
                 </div>
-                <h1 class="agent-name">{agent_info['name']}</h1>
-                <p class="agent-role">{agent_info['role']}</p>
-                <div class="agent-dept">{agent_info['department'].replace('_', ' ').title()}</div>
+                <h1 class="agent-name">{agent_info["name"]}</h1>
+                <p class="agent-role">{agent_info["role"]}</p>
+                <div class="agent-dept">{agent_info["department"].replace("_", " ").title()}</div>
                 <div class="risk-badge risk-{risk_tier}">Risk: {risk_tier}</div>
             </div>
-            
+
             <div class="nav-bar">
                 <a href="/api/agents/dashboard" class="nav-link">🏠 Team Overview</a>
                 <a href="/api/email/dashboard" class="nav-link">📧 Email Management</a>
                 <a href="/api/m365/empire-overview" class="nav-link">🏢 M365 Empire</a>
                 <a href="/health" class="nav-link">💚 System Health</a>
             </div>
-            
+
             <div class="content">
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -535,17 +547,17 @@ async def agent_detail_page(request: Request, agent_id: str):
                         <div class="stat-label">Risk Level</div>
                     </div>
                 </div>
-                
+
                 <div class="section">
                     <h3>🎯 Capabilities & Actions</h3>
                     <div class="action-grid">
     """
-    
+
     # Generate action categories
     for category, actions in action_categories.items():
         html_content += f"""
                         <div class="action-category">
-                            <div class="category-title">{category.replace('_', ' ').title()}</div>
+                            <div class="category-title">{category.replace("_", " ").title()}</div>
         """
         for action in actions:
             html_content += f"""
@@ -554,12 +566,12 @@ async def agent_detail_page(request: Request, agent_id: str):
         html_content += """
                         </div>
         """
-    
+
     html_content += """
                     </div>
                 </div>
     """
-    
+
     # Add approval rules if any
     if approval_rules:
         html_content += """
@@ -571,20 +583,20 @@ async def agent_detail_page(request: Request, agent_id: str):
             action = rule.get("action", "Unknown")
             approvers = rule.get("approvers", [])
             condition = rule.get("condition", "")
-            
+
             html_content += f"""
                         <div class="approval-rule">
                             <strong>Action:</strong> {action}<br>
-                            <strong>Approvers:</strong> {', '.join(approvers)}<br>
-                            {f'<strong>Condition:</strong> {condition}<br>' if condition else ''}
+                            <strong>Approvers:</strong> {", ".join(approvers)}<br>
+                            {f"<strong>Condition:</strong> {condition}<br>" if condition else ""}
                         </div>
             """
-        
+
         html_content += """
                     </div>
                 </div>
         """
-    
+
     quick_actions_html = """
                 <div class=\"section\">
                     <h3>⚡ Quick Actions</h3>
@@ -663,16 +675,17 @@ async def agent_detail_page(request: Request, agent_id: str):
     </html>
     """
     html_content += quick_actions_html.replace("__AGENT__", agent_id)
-    
+
     return HTMLResponse(content=html_content)
 
+
 @router.get("/status_legacy")
-async def agents_status():
+async def agents_status() -> dict[str, Any]:
     """Get status of all agents"""
     agent_data = load_agent_data()
-    
+
     # Build status map based on team listing to ensure department mapping for all agents
-    agents_status: Dict[str, Any] = {}
+    agents_status: dict[str, Any] = {}
     for dept, members in agent_data.get("team", {}).items():
         for a in members:
             aid = a.get("agent")
@@ -705,7 +718,7 @@ def _instructions_collection(agent_id: str) -> str:
     return f"agent_instructions_{agent_id}"
 
 
-def _find_agent(agent_id: str) -> dict:
+def _find_agent(agent_id: str) -> dict[str, Any]:
     data = load_agent_data()
     for dept, agents in data.get("team", {}).items():
         for a in agents:
@@ -719,7 +732,7 @@ def _find_agent(agent_id: str) -> dict:
 
 @router.get("/{agent_id}/status")
 async def agent_status(agent_id: str) -> dict:
-    agent = _find_agent(agent_id)
+    agent_record = _find_agent(agent_id)
     tasks = JsonStore().list(_tasks_collection(agent_id))
     total = len(tasks)
     in_progress = len([t for t in tasks if t.get("status") == "in_progress"])
@@ -729,23 +742,28 @@ async def agent_status(agent_id: str) -> dict:
     state = "active" if in_progress else ("idle" if total else "idle")
     return {
         "agent": agent_id,
-        "name": agent.get("name"),
-        "department": agent.get("department"),
+        "name": agent_record.get("name"),
+        "department": agent_record.get("department"),
         "status": state,
-        "tasks": {"total": total, "in_progress": in_progress, "completed": completed, "failed": failed},
+        "tasks": {
+            "total": total,
+            "in_progress": in_progress,
+            "completed": completed,
+            "failed": failed,
+        },
         "last_activity": last_ts or None,
     }
 
 
 @router.get("/{agent_id}/tasks")
-async def list_tasks(agent_id: str) -> list[dict]:
+async def list_tasks(agent_id: str) -> list[dict[str, Any]]:
     _find_agent(agent_id)
     return JsonStore().list(_tasks_collection(agent_id))
 
 
 @router.post("/{agent_id}/tasks")
-async def create_task(agent_id: str, body: dict) -> dict:
-    agent = _find_agent(agent_id)
+async def create_task(agent_id: str, body: dict[str, Any]) -> dict[str, Any]:
+    _find_agent(agent_id)
     task = {
         "agent": agent_id,
         "title": body.get("title") or body.get("description") or "Task",
@@ -756,12 +774,15 @@ async def create_task(agent_id: str, body: dict) -> dict:
         "created_by": body.get("created_by", "system"),
     }
     rec = JsonStore().append(_tasks_collection(agent_id), task)
-    JsonStore().append(_logs_collection(agent_id), {"type": "task_created", "task_id": rec["id"], "title": task["title"]})
+    JsonStore().append(
+        _logs_collection(agent_id),
+        {"type": "task_created", "task_id": rec["id"], "title": task["title"]},
+    )
     return {"status": "accepted", "id": rec["id"], "task": rec}
 
 
 @router.put("/{agent_id}/tasks/{task_id}")
-async def update_task(agent_id: str, task_id: str, body: dict) -> dict:
+async def update_task(agent_id: str, task_id: str, body: dict[str, Any]) -> dict[str, Any]:
     _find_agent(agent_id)
     # naive update: append a new record with same id as event
     update = {
@@ -775,7 +796,7 @@ async def update_task(agent_id: str, task_id: str, body: dict) -> dict:
 
 
 @router.post("/{agent_id}/instructions")
-async def send_instructions(agent_id: str, body: dict) -> dict:
+async def send_instructions(agent_id: str, body: dict[str, Any]) -> dict[str, Any]:
     _find_agent(agent_id)
     inst = {
         "instruction": body.get("instruction") or body.get("command"),
@@ -784,12 +805,14 @@ async def send_instructions(agent_id: str, body: dict) -> dict:
         "scheduled_at": body.get("scheduled_at"),
     }
     rec = JsonStore().append(_instructions_collection(agent_id), inst)
-    JsonStore().append(_logs_collection(agent_id), {"type": "instruction", "instruction_id": rec["id"]})
+    JsonStore().append(
+        _logs_collection(agent_id), {"type": "instruction", "instruction_id": rec["id"]}
+    )
     return {"status": "accepted", "id": rec["id"]}
 
 
 @router.get("/{agent_id}/performance")
-async def get_performance(agent_id: str) -> dict:
+async def get_performance(agent_id: str) -> dict[str, Any]:
     _find_agent(agent_id)
     tasks = JsonStore().list(_tasks_collection(agent_id))
     total = len(tasks)
@@ -808,13 +831,13 @@ async def get_performance(agent_id: str) -> dict:
 
 
 @router.get("/{agent_id}/logs")
-async def get_logs(agent_id: str) -> list[dict]:
+async def get_logs(agent_id: str) -> list[dict[str, Any]]:
     _find_agent(agent_id)
     return JsonStore().list(_logs_collection(agent_id))
 
 
 @router.post("/{agent_id}/execute")
-async def execute_action(agent_id: str, body: dict) -> dict:
+async def execute_action(agent_id: str, body: dict[str, Any]) -> dict[str, Any]:
     agent = _find_agent(agent_id)
     action = body.get("action") or ""
     params = body.get("params") or {}
@@ -823,7 +846,7 @@ async def execute_action(agent_id: str, body: dict) -> dict:
         raise HTTPException(status_code=403, detail=f"Action not allowed: {action}")
 
     # Safety gate: by default do not mutate; simulate execution unless explicitly enabled
-    allow_mut = (os.getenv("ALLOW_M365_MUTATIONS", "false").lower() in ("1", "true", "yes"))
+    allow_mut = os.getenv("ALLOW_M365_MUTATIONS", "false").lower() in ("1", "true", "yes")
     adapter_url = os.getenv("OPS_ADAPTER_URL") or os.getenv("ADAPTER_URL")
 
     if allow_mut and adapter_url:
@@ -832,23 +855,30 @@ async def execute_action(agent_id: str, body: dict) -> dict:
 
             gc = GraphClient()
             result = gc.invoke_adapter_action(adapter_url, agent_id, action, params)
-            JsonStore().append(_logs_collection(agent_id), {"type": "execute", "action": action, "mode": "adapter"})
+            JsonStore().append(
+                _logs_collection(agent_id), {"type": "execute", "action": action, "mode": "adapter"}
+            )
             return {"status": "ok", "result": result}
         except Exception as e:
             # Fall back to queued if adapter fails
-            JsonStore().append(_logs_collection(agent_id), {"type": "execute_error", "action": action, "error": str(e)})
+            JsonStore().append(
+                _logs_collection(agent_id),
+                {"type": "execute_error", "action": action, "error": str(e)},
+            )
             return {"status": "queued", "message": "Adapter error; queued for review"}
     else:
-        JsonStore().append(_logs_collection(agent_id), {"type": "execute", "action": action, "mode": "dry_run"})
+        JsonStore().append(
+            _logs_collection(agent_id), {"type": "execute", "action": action, "mode": "dry_run"}
+        )
         return {"status": "queued", "message": "Dry-run mode; execution queued"}
 
 
 @router.get("/{agent_id}/events")
-async def agent_events(agent_id: str):
+async def agent_events(agent_id: str) -> StreamingResponse:
     """Server-Sent Events stream of agent log updates (simple polling)."""
     _find_agent(agent_id)
 
-    async def eventgen():  # type: ignore[no-redef]
+    async def eventgen() -> AsyncIterator[str]:
         last_len = 0
         while True:
             logs = JsonStore().list(_logs_collection(agent_id))
@@ -860,6 +890,7 @@ async def agent_events(agent_id: str):
             # heartbeat every 2s
             yield "event: ping\ndata: {}\n\n"
             import asyncio
+
             await asyncio.sleep(2)
 
     return StreamingResponse(eventgen(), media_type="text/event-stream")

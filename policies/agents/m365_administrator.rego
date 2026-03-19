@@ -17,4 +17,3 @@ allow_actions = {
 }
 
 approval_required = {"users.disable"}
-

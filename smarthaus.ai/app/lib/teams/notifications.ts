@@ -55,7 +55,7 @@ class TeamsNotificationService {
     // Get Teams webhook URL from environment
     this.webhookUrl = process.env.TEAMS_WEBHOOK_URL || '';
     this.isEnabled = !!this.webhookUrl;
-    
+
     if (!this.isEnabled) {
       console.warn('Teams notifications disabled - TEAMS_WEBHOOK_URL not configured');
     }
@@ -72,7 +72,7 @@ class TeamsNotificationService {
 
     try {
       const card = this.buildTeamsCard(notification);
-      
+
       const response = await fetch(this.webhookUrl, {
         method: 'POST',
         headers: {
@@ -131,7 +131,7 @@ class TeamsNotificationService {
    */
   private buildIntakeStartedCard(notification: TeamsNotification) {
     const data = notification.data as IntakeNotification;
-    
+
     return {
       type: 'message',
       attachments: [{
@@ -185,7 +185,7 @@ class TeamsNotificationService {
    */
   private buildIntakeCompletedCard(notification: TeamsNotification) {
     const data = notification.data as IntakeNotification;
-    
+
     return {
       type: 'message',
       attachments: [{
@@ -233,9 +233,9 @@ class TeamsNotificationService {
    */
   private buildRiskAssessmentCard(notification: TeamsNotification) {
     const data = notification.data as RiskAssessmentNotification;
-    
+
     const riskColor = data.riskScore > 70 ? 'Warning' : data.riskScore > 40 ? 'Attention' : 'Good';
-    
+
     return {
       type: 'message',
       attachments: [{

@@ -13,14 +13,14 @@ So it’s a single **upload-to-drive** capability that works across Teams, Share
 ## What was added
 
 1. **Graph client** (`src/smarthaus_graph/client.py`):
-   - **`upload_file_to_drive(drive_owner, owner_id, path_in_drive, file_bytes, content_type)`**  
+   - **`upload_file_to_drive(drive_owner, owner_id, path_in_drive, file_bytes, content_type)`**
      Generic upload. `drive_owner` is `"group"` | `"site"` | `"user"`; `owner_id` is the group id, site id, or user id (or `"me"` where applicable).
    - **`upload_file_to_group_drive(...)`** — convenience for Teams (group drive).
    - **`upload_file_to_site_drive(...)`** — convenience for SharePoint (including communications sites).
    - **`upload_file_to_user_drive(...)`** — convenience for OneDrive.
    - **`find_group_by_display_name(...)`** — resolve group by display name for script/API use.
 
-2. **Script** (`scripts/upload_docx_to_team_site.py`):  
+2. **Script** (`scripts/upload_docx_to_team_site.py`):
    Batch-uploads all `.docx` from given directories to a chosen target. Requires **`--target-type`** and the matching target id/name.
 
 ---
@@ -79,7 +79,7 @@ python scripts/upload_docx_to_team_site.py --target-type group --team "Investor 
 To make “upload file” a first-class M365 instruction (e.g. for CAIO or a dashboard):
 
 1. In `provisioning_api/routers/m365.py`, add an action such as **`upload_to_drive`**.
-2. **Params:**  
+2. **Params:**
    `drive_owner` (`group` | `site` | `user`), `owner_id` (or resolvers: e.g. `group_display_name`, `site_path`, `user_upn`), `path_in_drive`, and file content (e.g. base64 or URL).
 3. Call **`GraphClient.upload_file_to_drive(drive_owner, owner_id, path_in_drive, content_bytes, content_type)`** (and resolve owner_id from name/path/UPN if you pass those instead of raw id).
 

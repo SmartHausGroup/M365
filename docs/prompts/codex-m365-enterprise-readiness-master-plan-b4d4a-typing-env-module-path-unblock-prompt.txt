@@ -1,0 +1,5 @@
+Execute `plan:m365-enterprise-readiness-master-plan:B4D4A`.
+Read `/Users/smarthaus/Projects/GitHub/M365/docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d4a-typing-env-module-path-unblock.md`.
+Apply only the bounded typing-environment and module-path unblock changes.
+Validate with the governed mypy hook and `git diff --check`.
+Stop on first blocker and log the exact failure surface.

@@ -28,7 +28,7 @@ This directory provides the **OpenAPI schema and setup guide** for using a **Cha
 2. **Configure → Actions → Create new action**.
 3. **Import schema:**
    - **Option A:** Paste the contents of `openapi.yaml` into the schema editor.
-   - **Option B:** If the schema is hosted at a URL (e.g. your docs site), paste that URL.  
+   - **Option B:** If the schema is hosted at a URL (e.g. your docs site), paste that URL.
    Update the **server URL** in the schema (or in the GPT UI if it overrides) to your **ops adapter base URL** (e.g. `https://ops-adapter.yourcompany.com`), with **no trailing slash**.
 4. **Authentication (if required):**
    - If your ops adapter has `JWT_REQUIRED=1`, use **Bearer** auth in the GPT and supply a valid JWT (e.g. from Azure AD).

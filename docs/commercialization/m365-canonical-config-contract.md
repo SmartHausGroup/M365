@@ -51,7 +51,7 @@ The tenant YAML contract is authoritative for:
 1. `tenant.id`, `tenant.display_name`, `tenant.domain`
 2. `auth.mode` and auth sub-configuration
 3. `graph` settings
-4. `governance` overrides
+4. `governance` overrides, including approval-backend target references
 5. `data_residency`
 6. `org` mappings such as SharePoint host/site references
 7. `permission_tiers`
@@ -61,7 +61,8 @@ Environment variables are not the production contract authority. They are allowe
 1. Filling secret-bearing Azure fields when the YAML intentionally omits secret values
 2. Selecting the tenant or locating the tenant directory
 3. Local launcher/bootstrap behavior
-4. Local test and developer convenience flows
+4. Explicit compatibility overrides where a governed runtime surface has not yet been migrated fully off shell inputs
+5. Local test and developer convenience flows
 
 Canonical production rule:
 
@@ -86,6 +87,7 @@ Exactly one target production source-precedence model is allowed after `P1A`.
    - `azure.client_secret`
    - `azure.client_certificate_path`
 5. App-root `.env`, repo-root `.env`, and `~/.smarthaus/m365/.env` are bootstrap compatibility surfaces only. They are not canonical production identity authority.
+6. Approval target fields may be overridden by explicit shell inputs only as a compatibility surface; the preferred production source is the selected tenant YAML `governance.approvals_*` block.
 
 ### Explicit non-authorities for production
 

@@ -69,4 +69,3 @@ for s in $services; do
 done
 
 echo "All webhooks configured."
-

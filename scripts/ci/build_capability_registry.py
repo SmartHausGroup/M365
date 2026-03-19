@@ -36,11 +36,37 @@ SECTION_TO_DOMAIN = {
 
 # Action name prefix/suffix -> mutating
 MUTATING_VERBS = (
-    "create", "update", "delete", "add", "remove", "send", "assign", "set",
-    "copy", "move", "archive", "unarchive", "install", "uninstall", "upgrade",
-    "restore", "publish", "reply", "cancel", "accept", "decline", "tentatively_accept",
-    "revoke", "follow", "unfollow", "check_out", "check_in", "complete",
-    "record", "provision", "offboard",
+    "create",
+    "update",
+    "delete",
+    "add",
+    "remove",
+    "send",
+    "assign",
+    "set",
+    "copy",
+    "move",
+    "archive",
+    "unarchive",
+    "install",
+    "uninstall",
+    "upgrade",
+    "restore",
+    "publish",
+    "reply",
+    "cancel",
+    "accept",
+    "decline",
+    "tentatively_accept",
+    "revoke",
+    "follow",
+    "unfollow",
+    "check_out",
+    "check_in",
+    "complete",
+    "record",
+    "provision",
+    "offboard",
 )
 
 
@@ -88,7 +114,11 @@ def action_to_resource(action: str, domain: str) -> str:
     if domain == "contacts":
         return "contactFolder" if "folder" in action else "contact"
     if domain == "files":
-        return "driveItem" if "drive_item" in action or "file" in action or "folder" in action else "drive"
+        return (
+            "driveItem"
+            if "drive_item" in action or "file" in action or "folder" in action
+            else "drive"
+        )
     if domain == "sharepoint":
         if "site" in action and "page" not in action and "list" not in action:
             return "site"
@@ -100,7 +130,12 @@ def action_to_resource(action: str, domain: str) -> str:
             return "sitePage"
         return "site"
     if domain == "teams":
-        if "channel" in action and "message" not in action and "tab" not in action and "member" not in action:
+        if (
+            "channel" in action
+            and "message" not in action
+            and "tab" not in action
+            and "member" not in action
+        ):
             return "channel"
         if "channel_message" in action or "channel_message" in action:
             return "chatMessage"
@@ -163,8 +198,8 @@ def main() -> None:
     universe_actions = parse_universe(UNIVERSE_PATH)
     # Load existing registry to preserve implemented + result_shape_keys
     import yaml
+
     existing = yaml.safe_load(REGISTRY_PATH.read_text())
-    existing_actions = {a["action"]: a for a in existing["actions"]}
 
     actions = []
     seen = set()

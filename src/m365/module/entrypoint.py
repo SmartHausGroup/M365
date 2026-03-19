@@ -6,8 +6,9 @@ import os
 import uuid
 from typing import Any
 
-from m365.module.manifest import m365_connector_module_manifest
 from provisioning_api.routers.m365 import execute_instruction_contract
+
+from m365.module.manifest import m365_connector_module_manifest
 
 
 class M365ConnectorModule:

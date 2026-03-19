@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from fastapi.testclient import TestClient
+from pathlib import Path
 
+import pytest
+from fastapi.testclient import TestClient
 from provisioning_api.main import app
 
 
-def test_agent_task_and_instruction_flow(tmp_path, monkeypatch):
+def test_agent_task_and_instruction_flow(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     # Isolate data dir
     monkeypatch.setenv("APP_DATA", str(tmp_path))
     client = TestClient(app)
@@ -66,4 +68,3 @@ def test_agent_task_and_instruction_flow(tmp_path, monkeypatch):
     exec_body = r.json()
     # default dry-run without OPS_ADAPTER_URL
     assert exec_body["status"] in ("queued", "ok")
-

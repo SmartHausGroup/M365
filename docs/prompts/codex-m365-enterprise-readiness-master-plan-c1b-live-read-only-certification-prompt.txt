@@ -1,0 +1,7 @@
+Execute C1B Live Read-Only Certification
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-c1b-live-read-only-certification.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:C1B
+
+Run only read-only live checks in this act.

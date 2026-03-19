@@ -3,22 +3,19 @@ SmartHaus Business Operations Dashboard
 Real business operations management for M365 and project delivery
 """
 
-import os
-import json
-import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
-from fastapi import FastAPI, Request, HTTPException, Depends, Form
-from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel
-import httpx
+from typing import Any
 
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 from smarthaus_common.config import load_bootstrap_env
 
 load_bootstrap_env(Path(__file__).resolve().parents[2] / ".env")
 
 app = FastAPI(title="SmartHaus Business Operations", version="3.0.0")
+
 
 # Business Operations Data Models
 class BusinessTask(BaseModel):
@@ -30,10 +27,11 @@ class BusinessTask(BaseModel):
     priority: str
     status: str
     due_date: datetime
-    client: Optional[str] = None
-    budget: Optional[float] = None
+    client: str | None = None
+    budget: float | None = None
     created_by: str
     created_at: datetime
+
 
 class Project(BaseModel):
     id: str
@@ -47,7 +45,8 @@ class Project(BaseModel):
     start_date: datetime
     end_date: datetime
     team_lead: str
-    deliverables: List[str]
+    deliverables: list[str]
+
 
 class M365Operation(BaseModel):
     id: str
@@ -56,9 +55,10 @@ class M365Operation(BaseModel):
     target: str
     status: str
     requested_by: str
-    approved_by: Optional[str] = None
-    completed_at: Optional[datetime] = None
+    approved_by: str | None = None
+    completed_at: datetime | None = None
     cost_impact: float
+
 
 class ClientWork(BaseModel):
     id: str
@@ -68,10 +68,11 @@ class ClientWork(BaseModel):
     value: float
     start_date: datetime
     delivery_date: datetime
-    team_assigned: List[str]
+    team_assigned: list[str]
+
 
 # Mock business data - in production this would come from real systems
-BUSINESS_DATA = {
+BUSINESS_DATA: dict[str, list[dict[str, Any]]] = {
     "active_projects": [
         {
             "id": "PROJ-001",
@@ -85,10 +86,15 @@ BUSINESS_DATA = {
             "start_date": "2024-01-15",
             "end_date": "2024-12-31",
             "team_lead": "Marcus Chen",
-            "deliverables": ["Quantum Core", "Holographic Memory", "macOS Client", "Orchestration Engine"]
+            "deliverables": [
+                "Quantum Core",
+                "Holographic Memory",
+                "macOS Client",
+                "Orchestration Engine",
+            ],
         },
         {
-            "id": "PROJ-002", 
+            "id": "PROJ-002",
             "name": "SmartHaus Website v2.0",
             "client": "SmartHaus Group",
             "business_unit": "Website",
@@ -99,7 +105,12 @@ BUSINESS_DATA = {
             "start_date": "2024-03-01",
             "end_date": "2024-11-30",
             "team_lead": "Sarah Williams",
-            "deliverables": ["Next.js Frontend", "Content Management", "Analytics Dashboard", "SEO Optimization"]
+            "deliverables": [
+                "Next.js Frontend",
+                "Content Management",
+                "Analytics Dashboard",
+                "SEO Optimization",
+            ],
         },
         {
             "id": "PROJ-003",
@@ -113,8 +124,8 @@ BUSINESS_DATA = {
             "start_date": "2024-06-01",
             "end_date": "2025-06-30",
             "team_lead": "Alex Rodriguez",
-            "deliverables": ["LQL Engine", "LEF Framework", "AIOS Integration", "Research Tools"]
-        }
+            "deliverables": ["LQL Engine", "LEF Framework", "AIOS Integration", "Research Tools"],
+        },
     ],
     "pending_tasks": [
         {
@@ -129,7 +140,7 @@ BUSINESS_DATA = {
             "client": "Internal",
             "budget": 0,
             "created_by": "Sarah Williams",
-            "created_at": "2024-09-15T10:30:00Z"
+            "created_at": "2024-09-15T10:30:00Z",
         },
         {
             "id": "TASK-002",
@@ -143,7 +154,7 @@ BUSINESS_DATA = {
             "client": "TAI Team",
             "budget": 0,
             "created_by": "Alex Rodriguez",
-            "created_at": "2024-09-14T14:20:00Z"
+            "created_at": "2024-09-14T14:20:00Z",
         },
         {
             "id": "TASK-003",
@@ -157,8 +168,8 @@ BUSINESS_DATA = {
             "client": "SmartHaus Group",
             "budget": 0,
             "created_by": "Phil Smart",
-            "created_at": "2024-09-15T09:15:00Z"
-        }
+            "created_at": "2024-09-15T09:15:00Z",
+        },
     ],
     "m365_operations": [
         {
@@ -170,7 +181,7 @@ BUSINESS_DATA = {
             "requested_by": "HR Team",
             "approved_by": "Marcus Chen",
             "completed_at": "2024-09-14T16:45:00Z",
-            "cost_impact": 12.50
+            "cost_impact": 12.50,
         },
         {
             "id": "M365-002",
@@ -181,8 +192,8 @@ BUSINESS_DATA = {
             "requested_by": "Project Manager",
             "approved_by": None,
             "completed_at": None,
-            "cost_impact": 0
-        }
+            "cost_impact": 0,
+        },
     ],
     "client_work": [
         {
@@ -193,7 +204,7 @@ BUSINESS_DATA = {
             "value": 45000,
             "start_date": "2024-08-01",
             "delivery_date": "2024-10-31",
-            "team_assigned": ["Marcus Chen", "Sarah Williams"]
+            "team_assigned": ["Marcus Chen", "Sarah Williams"],
         },
         {
             "id": "CLIENT-002",
@@ -203,15 +214,16 @@ BUSINESS_DATA = {
             "value": 125000,
             "start_date": "2024-10-01",
             "delivery_date": "2025-03-31",
-            "team_assigned": ["Alex Rodriguez", "Marcus Chen"]
-        }
-    ]
+            "team_assigned": ["Alex Rodriguez", "Marcus Chen"],
+        },
+    ],
 }
 
+
 @app.get("/", response_class=HTMLResponse)
-async def business_dashboard(request: Request):
+async def business_dashboard(request: Request) -> HTMLResponse:
     """Main business operations dashboard"""
-    
+
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -221,112 +233,112 @@ async def business_dashboard(request: Request):
         <title>SmartHaus Business Operations</title>
         <style>
             * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-            body {{ 
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                background: #f8f9fa; 
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: #f8f9fa;
                 color: #333;
                 line-height: 1.6;
             }}
-            .header {{ 
+            .header {{
                 background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-                color: white; 
-                padding: 1.5rem 2rem; 
+                color: white;
+                padding: 1.5rem 2rem;
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }}
             .header h1 {{ font-size: 2rem; font-weight: 600; }}
             .header p {{ opacity: 0.9; margin-top: 0.5rem; }}
-            .nav {{ 
-                background: white; 
-                padding: 1rem 2rem; 
+            .nav {{
+                background: white;
+                padding: 1rem 2rem;
                 border-bottom: 1px solid #e9ecef;
                 display: flex;
                 gap: 2rem;
             }}
-            .nav a {{ 
-                color: #495057; 
-                text-decoration: none; 
+            .nav a {{
+                color: #495057;
+                text-decoration: none;
                 font-weight: 500;
                 padding: 0.5rem 1rem;
                 border-radius: 4px;
                 transition: all 0.2s;
             }}
-            .nav a:hover, .nav a.active {{ 
-                background: #e3f2fd; 
-                color: #1976d2; 
+            .nav a:hover, .nav a.active {{
+                background: #e3f2fd;
+                color: #1976d2;
             }}
             .container {{ max-width: 1400px; margin: 0 auto; padding: 2rem; }}
-            .dashboard-grid {{ 
-                display: grid; 
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
-                gap: 1.5rem; 
+            .dashboard-grid {{
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 1.5rem;
                 margin-bottom: 2rem;
             }}
-            .card {{ 
-                background: white; 
-                border-radius: 8px; 
-                padding: 1.5rem; 
+            .card {{
+                background: white;
+                border-radius: 8px;
+                padding: 1.5rem;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 border-left: 4px solid #1976d2;
             }}
-            .card h3 {{ 
-                color: #1976d2; 
-                margin-bottom: 1rem; 
+            .card h3 {{
+                color: #1976d2;
+                margin-bottom: 1rem;
                 font-size: 1.2rem;
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
             }}
-            .project-item {{ 
-                padding: 1rem; 
-                border: 1px solid #e9ecef; 
-                border-radius: 6px; 
+            .project-item {{
+                padding: 1rem;
+                border: 1px solid #e9ecef;
+                border-radius: 6px;
                 margin-bottom: 1rem;
                 background: #f8f9fa;
             }}
-            .project-header {{ 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: start; 
+            .project-header {{
+                display: flex;
+                justify-content: space-between;
+                align-items: start;
                 margin-bottom: 0.5rem;
             }}
             .project-title {{ font-weight: 600; color: #2c3e50; }}
             .project-client {{ color: #6c757d; font-size: 0.9rem; }}
-            .progress-bar {{ 
-                width: 100%; 
-                height: 8px; 
-                background: #e9ecef; 
-                border-radius: 4px; 
+            .progress-bar {{
+                width: 100%;
+                height: 8px;
+                background: #e9ecef;
+                border-radius: 4px;
                 overflow: hidden;
                 margin: 0.5rem 0;
             }}
-            .progress-fill {{ 
-                height: 100%; 
+            .progress-fill {{
+                height: 100%;
                 background: linear-gradient(90deg, #28a745, #20c997);
                 transition: width 0.3s ease;
             }}
-            .task-item {{ 
-                padding: 1rem; 
-                border-left: 4px solid #ffc107; 
-                background: #fff3cd; 
+            .task-item {{
+                padding: 1rem;
+                border-left: 4px solid #ffc107;
+                background: #fff3cd;
                 margin-bottom: 0.5rem;
                 border-radius: 4px;
             }}
             .task-high {{ border-left-color: #dc3545; background: #f8d7da; }}
             .task-medium {{ border-left-color: #ffc107; background: #fff3cd; }}
             .task-low {{ border-left-color: #28a745; background: #d4edda; }}
-            .task-header {{ 
-                display: flex; 
-                justify-content: space-between; 
+            .task-header {{
+                display: flex;
+                justify-content: space-between;
                 align-items: center;
                 margin-bottom: 0.5rem;
             }}
             .task-title {{ font-weight: 600; }}
             .task-assignee {{ color: #6c757d; font-size: 0.9rem; }}
-            .btn {{ 
-                padding: 0.5rem 1rem; 
-                border: none; 
-                border-radius: 4px; 
-                cursor: pointer; 
+            .btn {{
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
                 font-size: 0.9rem;
                 transition: all 0.2s;
                 margin: 0.25rem;
@@ -336,19 +348,19 @@ async def business_dashboard(request: Request):
             .btn-warning {{ background: #ffc107; color: #212529; }}
             .btn-danger {{ background: #dc3545; color: white; }}
             .btn:hover {{ opacity: 0.9; transform: translateY(-1px); }}
-            .status-badge {{ 
-                padding: 0.25rem 0.75rem; 
-                border-radius: 12px; 
-                font-size: 0.8rem; 
+            .status-badge {{
+                padding: 0.25rem 0.75rem;
+                border-radius: 12px;
+                font-size: 0.8rem;
                 font-weight: 500;
             }}
             .status-active {{ background: #d4edda; color: #155724; }}
             .status-pending {{ background: #fff3cd; color: #856404; }}
             .status-completed {{ background: #d1ecf1; color: #0c5460; }}
-            .quick-actions {{ 
-                background: #e3f2fd; 
-                padding: 1rem; 
-                border-radius: 8px; 
+            .quick-actions {{
+                background: #e3f2fd;
+                padding: 1rem;
+                border-radius: 8px;
                 margin-bottom: 1rem;
             }}
             .quick-actions h4 {{ color: #1976d2; margin-bottom: 0.5rem; }}
@@ -360,7 +372,7 @@ async def business_dashboard(request: Request):
             <h1>🏢 SmartHaus Business Operations</h1>
             <p>Manage projects, tasks, M365 operations, and client work</p>
         </div>
-        
+
         <div class="nav">
             <a href="/" class="active">📊 Dashboard</a>
             <a href="/projects">📋 Projects</a>
@@ -369,7 +381,7 @@ async def business_dashboard(request: Request):
             <a href="/clients">👥 Clients</a>
             <a href="/agents">🤖 Agents</a>
         </div>
-        
+
         <div class="container">
             <!-- Quick Actions -->
             <div class="quick-actions">
@@ -381,13 +393,16 @@ async def business_dashboard(request: Request):
                     <button class="btn btn-primary" onclick="assignAgent()">🤖 Assign Agent</button>
                 </div>
             </div>
-            
+
             <!-- Dashboard Grid -->
             <div class="dashboard-grid">
                 <!-- Active Projects -->
                 <div class="card">
                     <h3>📋 Active Projects</h3>
-                    {"".join([f'''
+                    {
+        "".join(
+            [
+                f'''
                     <div class="project-item">
                         <div class="project-header">
                             <div>
@@ -408,13 +423,20 @@ async def business_dashboard(request: Request):
                             <button class="btn btn-success" onclick="updateProgress('{project["id"]}')">Update Progress</button>
                         </div>
                     </div>
-                    ''' for project in BUSINESS_DATA["active_projects"]])}
+                    '''
+                for project in BUSINESS_DATA["active_projects"]
+            ]
+        )
+    }
                 </div>
-                
+
                 <!-- Pending Tasks -->
                 <div class="card">
                     <h3>✅ Pending Tasks</h3>
-                    {"".join([f'''
+                    {
+        "".join(
+            [
+                f'''
                     <div class="task-item task-{task["priority"].lower()}">
                         <div class="task-header">
                             <div class="task-title">{task["title"]}</div>
@@ -429,17 +451,24 @@ async def business_dashboard(request: Request):
                             <button class="btn btn-warning" onclick="reassignTask('{task["id"]}')">🔄 Reassign</button>
                         </div>
                     </div>
-                    ''' for task in BUSINESS_DATA["pending_tasks"]])}
+                    '''
+                for task in BUSINESS_DATA["pending_tasks"]
+            ]
+        )
+    }
                 </div>
-                
+
                 <!-- M365 Operations -->
                 <div class="card">
                     <h3>🔧 M365 Operations</h3>
-                    {"".join([f'''
+                    {
+        "".join(
+            [
+                f'''
                     <div class="task-item">
                         <div class="task-header">
                             <div class="task-title">{op["operation_type"]}</div>
-                            <span class="status-badge status-{op["status"].lower().replace(' ', '')}">{op["status"]}</span>
+                            <span class="status-badge status-{op["status"].lower().replace(" ", "")}">{op["status"]}</span>
                         </div>
                         <div class="task-assignee">{op["description"]}</div>
                         <div style="font-size: 0.9rem; color: #6c757d; margin: 0.5rem 0;">
@@ -450,20 +479,27 @@ async def business_dashboard(request: Request):
                             <button class="btn btn-primary" onclick="executeOperation('{op["id"]}')">🚀 Execute</button>
                         </div>
                     </div>
-                    ''' for op in BUSINESS_DATA["m365_operations"]])}
+                    '''
+                for op in BUSINESS_DATA["m365_operations"]
+            ]
+        )
+    }
                 </div>
-                
+
                 <!-- Client Work -->
                 <div class="card">
                     <h3>👥 Client Work</h3>
-                    {"".join([f'''
+                    {
+        "".join(
+            [
+                f'''
                     <div class="project-item">
                         <div class="project-header">
                             <div>
                                 <div class="project-title">{client["client_name"]}</div>
                                 <div class="project-client">{client["project_type"]}</div>
                             </div>
-                            <span class="status-badge status-{client["status"].lower().replace(' ', '')}">{client["status"]}</span>
+                            <span class="status-badge status-{client["status"].lower().replace(" ", "")}">{client["status"]}</span>
                         </div>
                         <div style="font-size: 0.9rem; color: #6c757d; margin: 0.5rem 0;">
                             Value: ${client["value"]:,.0f} • Delivery: {client["delivery_date"]}
@@ -473,11 +509,15 @@ async def business_dashboard(request: Request):
                             <button class="btn btn-success" onclick="updateClient('{client["id"]}')">Update Status</button>
                         </div>
                     </div>
-                    ''' for client in BUSINESS_DATA["client_work"]])}
+                    '''
+                for client in BUSINESS_DATA["client_work"]
+            ]
+        )
+    }
                 </div>
             </div>
         </div>
-        
+
         <script>
             // Quick Action Functions
             function createTask() {{
@@ -488,7 +528,7 @@ async def business_dashboard(request: Request):
                     alert(`Task created: ${{title}}\\nAssigned to: ${{assignee}}\\nPriority: ${{priority}}\\n\\nTask will be added to the system.`);
                 }}
             }}
-            
+
             function createProject() {{
                 const name = prompt('Project Name:');
                 const client = prompt('Client:');
@@ -497,7 +537,7 @@ async def business_dashboard(request: Request):
                     alert(`Project created: ${{name}}\\nClient: ${{client}}\\nBudget: ${{budget}}\\n\\nProject will be added to the system.`);
                 }}
             }}
-            
+
             function m365Operation() {{
                 const operation = prompt('M365 Operation (e.g., "Create User", "Add to Team"):');
                 const target = prompt('Target (email, team name, etc.):');
@@ -505,7 +545,7 @@ async def business_dashboard(request: Request):
                     alert(`M365 Operation requested: ${{operation}}\\nTarget: ${{target}}\\n\\nRequest will be sent to Marcus Chen for approval.`);
                 }}
             }}
-            
+
             function assignAgent() {{
                 const agent = prompt('Agent to assign (Marcus Chen, Sarah Williams, Alex Rodriguez):');
                 const task = prompt('Task description:');
@@ -513,71 +553,74 @@ async def business_dashboard(request: Request):
                     alert(`Task assigned to ${{agent}}: ${{task}}\\n\\nAgent will be notified via Teams.`);
                 }}
             }}
-            
+
             // Project Functions
             function viewProject(projectId) {{
                 alert(`Opening project details for ${{projectId}}\\n\\nThis would show full project timeline, deliverables, team members, and progress tracking.`);
             }}
-            
+
             function updateProgress(projectId) {{
                 const progress = prompt('Update progress percentage:');
                 if (progress) {{
                     alert(`Progress updated for ${{projectId}}: ${{progress}}%\\n\\nTeam will be notified of progress update.`);
                 }}
             }}
-            
+
             // Task Functions
             function completeTask(taskId) {{
                 alert(`Task ${{taskId}} marked as completed!\\n\\nStakeholders will be notified and project progress will be updated.`);
             }}
-            
+
             function reassignTask(taskId) {{
                 const newAssignee = prompt('Reassign to:');
                 if (newAssignee) {{
                     alert(`Task ${{taskId}} reassigned to ${{newAssignee}}\\n\\nNew assignee will be notified via Teams.`);
                 }}
             }}
-            
+
             // M365 Functions
             function approveOperation(opId) {{
                 alert(`M365 Operation ${{opId}} approved!\\n\\nOperation will be executed by Marcus Chen.`);
             }}
-            
+
             function executeOperation(opId) {{
                 alert(`M365 Operation ${{opId}} executed!\\n\\nOperation completed successfully.`);
             }}
-            
+
             // Client Functions
             function viewClient(clientId) {{
                 alert(`Opening client details for ${{clientId}}\\n\\nThis would show full client project details, timeline, deliverables, and communication history.`);
             }}
-            
+
             function updateClient(clientId) {{
                 const status = prompt('Update client status:');
                 if (status) {{
                     alert(`Client ${{clientId}} status updated to: ${{status}}\\n\\nClient will be notified of status change.`);
                 }}
             }}
-            
+
             // Auto-refresh every 5 minutes
             setTimeout(() => location.reload(), 300000);
         </script>
     </body>
     </html>
     """
-    
+
     return HTMLResponse(content=html_content)
 
+
 @app.get("/api/health")
-async def health_check():
+async def health_check() -> dict[str, str]:
     """Health check endpoint"""
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
         "version": "3.0.0",
-        "business_operations": "active"
+        "business_operations": "active",
     }
+
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8002)

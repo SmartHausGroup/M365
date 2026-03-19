@@ -1,0 +1,17 @@
+lemma_id: L7
+name: M365 validation-blocker syntax recovery
+source_notebook: notebooks/m365/INV-M365-I-validation-blocker-recovery.ipynb
+evidence:
+  artifacts:
+    - notebooks/lemma_proofs/L7_m365_validation_blocker_recovery.ipynb
+    - scripts/generate-policies.py
+    - governance/invariants/m365/INV-M365-B-001.yaml
+    - governance/invariants/m365/INV-M365-E-001.yaml
+    - governance/invariants/m365/INV-M365-F-001.yaml
+    - governance/invariants/m365/INV-M365-G-001.yaml
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b4c-validation-blockers-syntax-recovery.md
+  checks:
+    - scripts/generate-policies.py parses under Python
+    - corrected invariant YAML files load successfully
+    - blocker-recovery diff remains scoped
+status: projected

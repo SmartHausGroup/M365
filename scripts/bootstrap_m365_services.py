@@ -3,19 +3,18 @@ from __future__ import annotations
 
 import json
 import os
-from pathlib import Path
 from typing import Any
 
+from provisioning_api.m365_provision import provision_group_site
 from provisioning_api.orchestrator import (
     CONFIG_PATH,
+    ServiceConfig,
     _ensure_plan_and_buckets,
     _ensure_team_and_channels,
 )
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.logging import configure_logging, get_logger
 from smarthaus_graph.client import GraphClient
-from provisioning_api.m365_provision import provision_group_site
-
 
 log = get_logger(__name__)
 configure_logging()
@@ -36,39 +35,34 @@ def main() -> None:
         log.warning("ALLOW_M365_MUTATIONS not enabled. Running in dry-run mode.")
 
     for svc in services:
-        key = svc.get("key")
-        display = svc.get("display_name")
-        nickname = svc.get("mail_nickname")
-        channels = svc.get("channels", [])
-        plan_title = svc.get("plan_title")
-        log.info("\n=== Provisioning service: %s (%s) ===", key, display)
+        service_config = ServiceConfig.from_dict(svc)
+        key = service_config.key
+        log.info("\n=== Provisioning service: %s (%s) ===", key, service_config.display_name)
 
         try:
             if _enabled():
                 # Ensure group-connected site exists (and libraries) – use default doc library creation only
                 provision_group_site(
-                    display_name=display,
-                    mail_nickname=nickname,
+                    display_name=service_config.display_name,
+                    mail_nickname=service_config.mail_nickname,
                     libraries=["Documents"],
-                    description=f"Service workspace for {display}",
+                    description=f"Service workspace for {service_config.display_name}",
                     wait_secs=60,
                 )
 
             # Ensure Team + Channels
-            team_id, channel_map = _ensure_team_and_channels(client, type("S", (), {
-                "display_name": display,
-                "mail_nickname": nickname,
-                "channels": channels,
-            }))
+            team_id, channel_map = _ensure_team_and_channels(client, service_config)
             svc["team_id"] = team_id
             svc["channel_ids"] = channel_map
 
             # Ensure Planner Plan + Buckets
-            plan_id, buckets = _ensure_plan_and_buckets(client, team_id, plan_title)
+            plan_id, buckets = _ensure_plan_and_buckets(client, team_id, service_config.plan_title)
             svc["plan_id"] = plan_id
             # Buckets are standard; we don't persist here beyond plan
 
-            log.info("Provisioned: team_id=%s plan_id=%s channels=%d", team_id, plan_id, len(channel_map))
+            log.info(
+                "Provisioned: team_id=%s plan_id=%s channels=%d", team_id, plan_id, len(channel_map)
+            )
         except SmarthausError as e:
             log.error("Service %s failed: %s", key, e)
 
@@ -79,4 +73,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

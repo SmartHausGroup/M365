@@ -7,4 +7,3 @@ if [[ -n "${SUBSCRIPTION_ID:-}" ]]; then
   az account set --subscription "$SUBSCRIPTION_ID"
 fi
 echo "[azure] OK"
-
