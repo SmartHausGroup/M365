@@ -126,6 +126,8 @@ def patched_runtime(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
             "m365-administrator": {
                 "allowed_actions": [
                     "users.disable",
+                    "groups.list",
+                    "sites.get",
                     "sites.provision",
                     "admin.set_user_tier",
                     "admin.get_tenant_config",
@@ -145,6 +147,64 @@ def patched_runtime(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
     monkeypatch.setattr(ops_main, "AUDITOR", _DummyAuditor())
     monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry))
     return ops_main
+
+
+@pytest.fixture
+def multi_executor_tenant_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-multi.yaml").write_text(
+        """
+tenant:
+  id: tenant-multi
+azure:
+  tenant_id: root-tenant
+  client_id: root-client
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    domain: collaboration
+    azure:
+      tenant_id: collab-tenant
+      client_id: collab-client
+  directory:
+    domain: directory
+    azure:
+      tenant_id: directory-tenant
+      client_id: directory-client
+  sharepoint:
+    domain: sharepoint
+    azure:
+      tenant_id: sharepoint-tenant
+      client_id: sharepoint-client
+executor_registry:
+  default_executor: directory
+  routes:
+    approvals: sharepoint
+    collaboration: collaboration
+    directory: directory
+    sharepoint: sharepoint
+permission_tiers:
+  default_tier: standard_user
+  users:
+    admin@example.com: global_admin
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("UCP_TENANT", "tenant-multi")
+    monkeypatch.setenv("LOG_DIR", str(tmp_path / "logs"))
+    monkeypatch.setenv("JWT_REQUIRED", "1")
+    monkeypatch.setenv("JWT_HS256_SECRET", "test-secret")
+    monkeypatch.delenv("M365_PERMISSION_FAIL_OPEN", raising=False)
+    monkeypatch.delenv("M365_ACTOR_HEADER_FALLBACK", raising=False)
+    reload_tenant_config()
+    yield
+    reload_tenant_config()
 
 
 def test_check_user_permission_denies_without_identity(tenant_env: None) -> None:
@@ -263,6 +323,158 @@ def test_group_mapped_actor_binding_is_preserved_in_pending_approval(
     assert approval["tenant"] == "tenant-alpha"
     assert approval["executor"]["mode"] == "app_only"
     assert approval["executor"]["client_id"] == "client-alpha"
+
+
+def test_b7b_routes_sharepoint_actions_to_sharepoint_executor(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    async def _capture_execute(
+        _agent: str,
+        _action: str,
+        params: dict[str, Any],
+        _correlation_id: str,
+        executor_name: str | None = None,
+    ) -> dict[str, Any]:
+        return {
+            "executor_name": executor_name,
+            "executor_identity": params["executor_identity"],
+        }
+
+    monkeypatch.setattr(patched_runtime, "execute", _capture_execute)
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/sites.get",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"siteId": "site-123"}},
+    )
+
+    assert r.status_code == 200
+    payload = r.json()
+    assert payload["status"] == "success"
+    assert payload["result"]["executor_name"] == "sharepoint"
+    assert payload["result"]["executor_identity"]["domain"] == "sharepoint"
+    assert payload["result"]["executor_identity"]["client_id"] == "sharepoint-client"
+
+
+def test_b7b_routes_directory_actions_to_directory_executor(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    async def _capture_execute(
+        _agent: str,
+        _action: str,
+        params: dict[str, Any],
+        _correlation_id: str,
+        executor_name: str | None = None,
+    ) -> dict[str, Any]:
+        return {
+            "executor_name": executor_name,
+            "executor_identity": params["executor_identity"],
+        }
+
+    monkeypatch.setattr(patched_runtime, "execute", _capture_execute)
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/users.disable",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"userPrincipalName": "jdoe@example.com"}},
+    )
+
+    assert r.status_code == 200
+    payload = r.json()
+    assert payload["result"]["executor_name"] == "directory"
+    assert payload["result"]["executor_identity"]["domain"] == "directory"
+    assert payload["result"]["executor_identity"]["client_id"] == "directory-client"
+
+
+def test_b7b_preserves_routed_executor_identity_in_pending_approval(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=True))
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/sites.provision",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"displayName": "Operations Site"}},
+    )
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data["status"] == "pending_approval"
+    approval = patched_runtime.APPROVALS.get(data["approval_id"])
+    assert approval is not None
+    assert approval["executor"]["domain"] == "sharepoint"
+    assert approval["executor"]["client_id"] == "sharepoint-client"
+
+
+def test_b7b_fails_closed_when_multi_executor_route_is_unmapped(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-unmapped.yaml").write_text(
+        """
+tenant:
+  id: tenant-unmapped
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    domain: collaboration
+  directory:
+    domain: directory
+executor_registry:
+  default_executor: directory
+  routes:
+    collaboration: collaboration
+    directory: directory
+permission_tiers:
+  default_tier: standard_user
+  users:
+    admin@example.com: global_admin
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("UCP_TENANT", "tenant-unmapped")
+    monkeypatch.setenv("JWT_REQUIRED", "1")
+    monkeypatch.setenv("JWT_HS256_SECRET", "test-secret")
+    reload_tenant_config()
+
+    import ops_adapter.main as ops_main
+
+    registry = {
+        "agents": {
+            "m365-administrator": {
+                "allowed_actions": ["sites.get"],
+                "approval_rules": [],
+            }
+        }
+    }
+    monkeypatch.setattr(ops_main, "REGISTRY", registry)
+    monkeypatch.setattr(ops_main, "RATE", _DummyRate())
+    monkeypatch.setattr(ops_main, "AUDITOR", _DummyAuditor())
+    monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry))
+    monkeypatch.setattr(ops_main, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/sites.get",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"siteId": "site-123"}},
+    )
+
+    assert r.status_code == 500
+    assert r.json()["detail"] == "executor_route_unmapped:sharepoint"
 
 
 def test_admin_set_user_tier_records_append_only_audit_event(

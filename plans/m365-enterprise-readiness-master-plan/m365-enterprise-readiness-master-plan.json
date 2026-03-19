@@ -1,14 +1,14 @@
 {
   "plan_id": "m365-enterprise-readiness-master-plan",
   "status": "Active",
-  "date": "2026-03-18",
+  "date": "2026-03-19",
   "owner": "SMARTHAUS",
   "execution_plan_reference": "plan:m365-enterprise-readiness-master-plan:R1",
   "north_star": "Operations/NORTHSTAR.md",
   "historical_lineage": "m365-enterprise-commercialization-readiness",
   "ma_process_required": false,
   "objective": "Define and execute the full critical path required to make the current M365 capability commercially honest, operationally supportable, technically hardened, standards-compliant, and enterprise-ready as a standalone deterministic module.\n",
-  "decision_rule": "Enterprise readiness requires product boundary lock, runtime hardening, repo-validation closure, app-registration role separation, executor credential finalization, live-tenant certification, release decision closure, and launch readiness. Documentation alone is not sufficient.\n",
+  "decision_rule": "Enterprise readiness requires product boundary lock, runtime hardening, identity-execution architecture, digital-employee operating-model lock, multi-executor runtime implementation, repo-validation closure, app-registration role separation, executor credential finalization, live-tenant certification, release decision closure, and launch readiness. Documentation alone is not sufficient.\n",
   "prompt_discipline": "Every execution act in this plan must have one formal MATHS prompt pair under docs/prompts/. Historical commercialization prompts remain traceability artifacts only.\n",
   "execution_status": {
     "completed": [
@@ -131,17 +131,53 @@
         "phase": "B5E",
         "date": "2026-03-19",
         "summary": "Completed the governed executor certificate-cutover act by fixing valid MSAL certificate-path handling in src/smarthaus_graph/client.py, generating the executor PEM under /Users/smarthaus/.ucp/certs/, appending the public certificate to app 720788ac-1485-4073-b0c8-1a6294819a87, updating the SMARTHAUS tenant contract to certificate-first auth with an empty client_secret, validating non-mutating Graph execution through the certificate path, and retiring the executor password credentials.\n"
+      },
+      {
+        "phase": "B6A",
+        "date": "2026-03-19",
+        "summary": "Locked the operator-facing digital-employee model in docs/commercialization/m365-digital-employee-operating-model.md and explicitly separated named SMARTHAUS personas from Microsoft executor identities.\n"
+      },
+      {
+        "phase": "B6B",
+        "date": "2026-03-19",
+        "summary": "Defined the capability, API, license, and auth matrix in docs/commercialization/m365-capability-api-license-auth-matrix.md so licensing scope, automation surface, and delegated-versus-app-only posture are no longer conflated.\n"
+      },
+      {
+        "phase": "B6C",
+        "date": "2026-03-19",
+        "summary": "Defined the bounded executor-domain split and minimum-permission model in docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md, replacing the single over-broad executor posture with explicit domain executors.\n"
+      },
+      {
+        "phase": "B6D",
+        "date": "2026-03-19",
+        "summary": "Locked the persona-registry and humanized delegation contract in docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md, defining how named digital employees route through responsibilities, approvals, executor domains, and audit attribution.\n"
+      },
+      {
+        "phase": "B6E",
+        "date": "2026-03-19",
+        "summary": "Rebased certification in docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md so C1A no longer attempts to certify the legacy single-executor posture and now remains blocked until the multi-executor runtime exists.\n"
+      },
+      {
+        "phase": "B7A",
+        "date": "2026-03-19",
+        "summary": "Extended src/smarthaus_common/tenant_config.py so the tenant contract can represent bounded executors, executor-registry metadata, deterministic default projection, and fail-closed multi-executor default resolution.\n"
+      },
+      {
+        "phase": "B7B",
+        "date": "2026-03-19",
+        "summary": "Implemented deterministic action-to-executor routing in src/ops_adapter/actions.py, src/ops_adapter/main.py, src/ops_adapter/app.py, and src/ops_adapter/approvals.py, and validated the bounded SharePoint, directory, and approval-routing surface in tests/test_ops_adapter.py and tests/test_approvals.py.\n"
       }
     ],
     "prepared_blocked": {
       "act": "C1A",
       "date": "2026-03-19",
-      "summary": "Certification candidate 52ca494 and the refreshed evidence packet now prove that the SMARTHAUS tenant YAML contract resolves, carries the Operations approval target, and provides an app-only certificate-backed credential contract; the exact standalone shell contract is now defined as UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, and ENABLE_AUDIT_LOGGING=true; direct Graph probes under that contract return organization=200 but site_discovery=503 UnknownError for the SMARTHAUS Operations site, so the standalone M365 C1A gate remains NO-GO until the approval backend is reachable and the exact shell contract is active. CAIO is out of scope for this certification path.\n"
+      "summary": "Certification candidate 52ca494 and the refreshed evidence packet prove that the SMARTHAUS tenant YAML contract resolves, carries the approval target, and provides an app-only certificate-backed credential contract; after B7B the runtime now routes governed actions through bounded executors and points approvals at the SharePoint executor path, so C1A remains NO-GO until B7E proves live approval reachability through that path and the exact standalone shell contract (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true) is active. CAIO is out of scope for this certification path.\n"
     },
-    "next_act": "C1A"
+    "next_act": "B7C"
   },
   "open_enterprise_blockers": [
-    "Live-tenant certification remains NO-GO until the non-production execution environment persists the exact launch contract (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true) and the tenant-backed approval target becomes reachable through Graph or is supplied via explicit site and list IDs. The SMARTHAUS tenant YAML, approval target, and primary app-only certificate-backed credential contract are already in place. CAIO is out of scope for this standalone M365 certification path.\n",
+    "The rebased digital-employee and bounded-executor target is now partially implemented, but persona-registry integration, executor permission minimization, and approval re-proof are not yet complete.\n",
+    "Live-tenant certification remains NO-GO until the non-production execution environment persists the exact launch contract (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true), the rebased multi-executor runtime exists, and the tenant-backed approval target becomes reachable through the bounded SharePoint executor path.\n",
     "C2, D1, and D2 remain downstream of the live-evidence blockers.\n"
   ],
   "requirements": [
@@ -180,6 +216,14 @@
     {
       "id": "R9",
       "name": "Entra user identity, app-registration role separation, and app-only execution architecture"
+    },
+    {
+      "id": "R10",
+      "name": "Digital-employee operating model and executor-domain architecture"
+    },
+    {
+      "id": "R11",
+      "name": "Multi-executor runtime and persona integration"
     }
   ],
   "phase_groups": [
@@ -316,7 +360,57 @@
         {
           "id": "B5E",
           "name": "Executor Certificate Cutover and Tenant Contract Finalization",
+          "status": "complete"
+        },
+        {
+          "id": "B6A",
+          "name": "Digital Employee Operating Model",
+          "status": "complete"
+        },
+        {
+          "id": "B6B",
+          "name": "Capability, API, License, and Auth Matrix",
+          "status": "complete"
+        },
+        {
+          "id": "B6C",
+          "name": "Executor-Domain Partitioning and Minimum-Permission Model",
+          "status": "complete"
+        },
+        {
+          "id": "B6D",
+          "name": "Persona Registry and Humanized Delegation Routing",
+          "status": "complete"
+        },
+        {
+          "id": "B6E",
+          "name": "Certification Rebase to the Digital-Employee Multi-Executor Target",
+          "status": "complete"
+        },
+        {
+          "id": "B7A",
+          "name": "Tenant Contract and Executor Registry Extension",
+          "status": "complete"
+        },
+        {
+          "id": "B7B",
+          "name": "Runtime Executor Routing and Domain Selection",
+          "status": "complete"
+        },
+        {
+          "id": "B7C",
+          "name": "Persona Registry and Humanized Delegation Integration",
           "status": "next"
+        },
+        {
+          "id": "B7D",
+          "name": "Executor Permission Minimization and Azure Cleanup",
+          "status": "blocked"
+        },
+        {
+          "id": "B7E",
+          "name": "Approval Backend Reproof and Certification Re-Readiness",
+          "status": "blocked"
         }
       ]
     },
@@ -373,7 +467,9 @@
     "B5A may not start until B4E is complete.",
     "B5D may not start until B5C is complete.",
     "B5E may not start until B5D is complete.",
-    "C1A may not start until B5E is complete.",
+    "B6A may not start until B5E is complete.",
+    "B7A may not start until B6E is complete.",
+    "C1A may not start until B7E is complete.",
     "C1B and C1C require explicit live-execution approval.",
     "Historical commercialization prompts may not be used as active execution authority."
   ],
@@ -401,6 +497,18 @@
       "B5C",
       "B5D",
       "B5E",
+      "B6",
+      "B6A",
+      "B6B",
+      "B6C",
+      "B6D",
+      "B6E",
+      "B7",
+      "B7A",
+      "B7B",
+      "B7C",
+      "B7D",
+      "B7E",
       "C1A",
       "C1B",
       "C1C",

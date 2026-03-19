@@ -1,0 +1,7 @@
+Execute B7D Executor Permission Minimization and Azure Cleanup
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b7d-executor-permission-minimization-azure-cleanup.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B7D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

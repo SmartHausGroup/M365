@@ -13,6 +13,7 @@ the YAML file safe for version control when secrets are omitted.
 
 from __future__ import annotations
 
+import copy
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -151,6 +152,26 @@ class PermissionTiersConfig:
 
 
 @dataclass
+class ExecutorConfig:
+    """Bounded executor configuration for one runtime domain."""
+
+    name: str = ""
+    display_name: str = ""
+    domain: str = ""
+    capabilities: list[str] = field(default_factory=list)
+    azure: AzureConfig = field(default_factory=AzureConfig)
+    auth: AuthConfig = field(default_factory=AuthConfig)
+
+
+@dataclass
+class ExecutorRegistryConfig:
+    """Registry metadata for bounded executors and future routing."""
+
+    default_executor: str = ""
+    routes: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
 class TenantConfig:
     """Complete tenant configuration."""
 
@@ -162,6 +183,8 @@ class TenantConfig:
     data_residency: DataResidency = field(default_factory=DataResidency)
     org: OrgMappings = field(default_factory=OrgMappings)
     permission_tiers: PermissionTiersConfig = field(default_factory=PermissionTiersConfig)
+    executors: dict[str, ExecutorConfig] = field(default_factory=dict)
+    executor_registry: ExecutorRegistryConfig = field(default_factory=ExecutorRegistryConfig)
 
     @property
     def is_delegated(self) -> bool:
@@ -174,6 +197,53 @@ class TenantConfig:
     @property
     def is_hybrid(self) -> bool:
         return self.auth.mode == "hybrid"
+
+    @property
+    def default_executor_name(self) -> str:
+        return self.executor_registry.default_executor
+
+    @property
+    def default_executor(self) -> ExecutorConfig | None:
+        return self.executors.get(self.default_executor_name)
+
+    def resolve_executor_name(
+        self,
+        route_key: str,
+        *,
+        action_name: str | None = None,
+        fallback_keys: list[str] | None = None,
+    ) -> str:
+        candidates: list[str] = []
+        if action_name:
+            candidates.append(action_name)
+        if route_key:
+            candidates.append(route_key)
+        candidates.extend([str(key) for key in (fallback_keys or []) if str(key).strip()])
+
+        for candidate in candidates:
+            target = self.executor_registry.routes.get(candidate)
+            if target:
+                if target not in self.executors:
+                    raise ValueError(f"executor_route_target_missing:{candidate}:{target}")
+                return target
+            if candidate in self.executors:
+                return candidate
+
+        if len(self.executors) == 1:
+            return self.default_executor_name
+
+        raise ValueError(f"executor_route_unmapped:{route_key}")
+
+    def project_executor(self, executor_name: str) -> TenantConfig:
+        if executor_name not in self.executors:
+            raise ValueError(f"executor_not_defined:{executor_name}")
+
+        projected = copy.deepcopy(self)
+        executor = projected.executors[executor_name]
+        projected.azure = _clone_azure_config(executor.azure)
+        projected.auth = _clone_auth_config(executor.auth)
+        projected.executor_registry.default_executor = executor_name
+        return projected
 
 
 # ---------------------------------------------------------------------------
@@ -228,6 +298,162 @@ def _parse_section(raw: dict[str, Any] | None, cls: type[Any], defaults: Any | N
         if k in valid_keys:
             filtered[k] = v
     return cls(**filtered)
+
+
+def _parse_string_list(raw: Any, default: list[str] | None = None) -> list[str]:
+    if not isinstance(raw, list):
+        return list(default or [])
+    return [str(item) for item in raw if str(item).strip()]
+
+
+def _clone_azure_config(source: AzureConfig) -> AzureConfig:
+    return AzureConfig(
+        tenant_id=source.tenant_id,
+        client_id=source.client_id,
+        client_secret=source.client_secret,
+        client_certificate_path=source.client_certificate_path,
+    )
+
+
+def _clone_auth_config(source: AuthConfig) -> AuthConfig:
+    return AuthConfig(
+        mode=source.mode,
+        delegated=DelegatedAuthConfig(
+            scopes=list(source.delegated.scopes),
+            token_cache_path=source.delegated.token_cache_path,
+            auto_prompt=source.delegated.auto_prompt,
+        ),
+        app_only=AppOnlyAuthConfig(scope=source.app_only.scope),
+    )
+
+
+def _build_azure_config(
+    raw: dict[str, Any] | None, fallback: AzureConfig | None = None
+) -> AzureConfig:
+    base = fallback or AzureConfig()
+    data = raw or {}
+    return AzureConfig(
+        tenant_id=_resolve_env_fallback(
+            str(data.get("tenant_id", base.tenant_id) or ""),
+            _ENV_FALLBACKS["azure.tenant_id"],
+        ),
+        client_id=_resolve_env_fallback(
+            str(data.get("client_id", base.client_id) or ""),
+            _ENV_FALLBACKS["azure.client_id"],
+        ),
+        client_secret=_resolve_env_fallback(
+            str(data.get("client_secret", base.client_secret) or ""),
+            _ENV_FALLBACKS["azure.client_secret"],
+        ),
+        client_certificate_path=_resolve_env_fallback(
+            str(data.get("client_certificate_path", base.client_certificate_path) or ""),
+            _ENV_FALLBACKS["azure.client_certificate_path"],
+        ),
+    )
+
+
+def _build_auth_config(
+    raw: dict[str, Any] | None, fallback: AuthConfig | None = None
+) -> AuthConfig:
+    base = fallback or AuthConfig()
+    data = raw or {}
+    delegated_raw = data.get("delegated") or {}
+    app_only_raw = data.get("app_only") or {}
+    delegated = DelegatedAuthConfig(
+        scopes=_parse_string_list(delegated_raw.get("scopes"), base.delegated.scopes),
+        token_cache_path=str(
+            delegated_raw.get("token_cache_path", base.delegated.token_cache_path) or ""
+        ),
+        auto_prompt=bool(delegated_raw.get("auto_prompt", base.delegated.auto_prompt)),
+    )
+    app_only = AppOnlyAuthConfig(
+        scope=str(app_only_raw.get("scope", base.app_only.scope) or base.app_only.scope)
+    )
+    return AuthConfig(
+        mode=str(data.get("mode", base.mode) or base.mode),
+        delegated=delegated,
+        app_only=app_only,
+    )
+
+
+def _apply_auth_defaults(auth_cfg: AuthConfig, tenant_id: str) -> None:
+    if not auth_cfg.delegated.token_cache_path:
+        cache_dir = Path.home() / ".ucp" / "tokens"
+        auth_cfg.delegated.token_cache_path = str(cache_dir / f"{tenant_id}.cache")
+
+
+def _build_executor_configs(
+    raw: Any,
+    *,
+    fallback_azure: AzureConfig,
+    fallback_auth: AuthConfig,
+) -> dict[str, ExecutorConfig]:
+    if raw is None:
+        return {}
+    if not isinstance(raw, dict):
+        raise ValueError("executors must be a mapping of executor names to configuration")
+
+    executors: dict[str, ExecutorConfig] = {}
+    for name in sorted(raw):
+        executor_raw = raw.get(name) or {}
+        if not isinstance(executor_raw, dict):
+            raise ValueError(f"Executor '{name}' must be a mapping")
+
+        azure_cfg = _build_azure_config(executor_raw.get("azure"), fallback=fallback_azure)
+        auth_cfg = _build_auth_config(executor_raw.get("auth"), fallback=fallback_auth)
+        _apply_auth_defaults(auth_cfg, azure_cfg.tenant_id)
+
+        executors[name] = ExecutorConfig(
+            name=name,
+            display_name=str(executor_raw.get("display_name", name) or name),
+            domain=str(executor_raw.get("domain", name) or name),
+            capabilities=_parse_string_list(executor_raw.get("capabilities")),
+            azure=azure_cfg,
+            auth=auth_cfg,
+        )
+
+    return executors
+
+
+def _build_executor_registry(
+    raw: Any,
+    *,
+    executors: dict[str, ExecutorConfig],
+) -> ExecutorRegistryConfig:
+    if not executors:
+        return ExecutorRegistryConfig()
+
+    if raw is None:
+        registry_raw: dict[str, Any] = {}
+    elif isinstance(raw, dict):
+        registry_raw = raw
+    else:
+        raise ValueError("executor_registry must be a mapping")
+
+    default_executor = str(registry_raw.get("default_executor", "") or "")
+    routes_raw = registry_raw.get("routes")
+    if routes_raw is None:
+        routes_raw = registry_raw.get("routing") or {}
+    if not isinstance(routes_raw, dict):
+        raise ValueError("executor_registry.routes must be a mapping")
+
+    if not default_executor:
+        if len(executors) == 1:
+            default_executor = next(iter(executors))
+        else:
+            raise ValueError("Multiple executors require executor_registry.default_executor")
+
+    if default_executor not in executors:
+        raise ValueError(f"executor_registry.default_executor '{default_executor}' is not defined")
+
+    routes = {str(route): str(target) for route, target in routes_raw.items()}
+    for route, target in routes.items():
+        if target not in executors:
+            raise ValueError(
+                f"executor_registry route '{route}' targets unknown executor '{target}'"
+            )
+
+    return ExecutorRegistryConfig(default_executor=default_executor, routes=routes)
 
 
 def load_tenant_config(
@@ -304,38 +530,12 @@ def load_tenant_config(
     # Tenant identity
     cfg.tenant = _parse_section(raw.get("tenant"), TenantIdentity)
 
-    # Azure — with env fallbacks for secrets
+    # Root executor values remain the backward-compatible runtime contract.
     azure_raw = raw.get("azure") or {}
-    cfg.azure = AzureConfig(
-        tenant_id=_resolve_env_fallback(
-            azure_raw.get("tenant_id", ""), _ENV_FALLBACKS["azure.tenant_id"]
-        ),
-        client_id=_resolve_env_fallback(
-            azure_raw.get("client_id", ""), _ENV_FALLBACKS["azure.client_id"]
-        ),
-        client_secret=_resolve_env_fallback(
-            azure_raw.get("client_secret", ""), _ENV_FALLBACKS["azure.client_secret"]
-        ),
-        client_certificate_path=_resolve_env_fallback(
-            azure_raw.get("client_certificate_path", ""),
-            _ENV_FALLBACKS["azure.client_certificate_path"],
-        ),
-    )
-
-    # Auth
     auth_raw = raw.get("auth") or {}
-    delegated_raw = auth_raw.get("delegated") or {}
-    app_only_raw = auth_raw.get("app_only") or {}
-    cfg.auth = AuthConfig(
-        mode=auth_raw.get("mode", "delegated"),
-        delegated=_parse_section(delegated_raw, DelegatedAuthConfig),
-        app_only=_parse_section(app_only_raw, AppOnlyAuthConfig),
-    )
-
-    # Token cache path default
-    if not cfg.auth.delegated.token_cache_path:
-        cache_dir = Path.home() / ".ucp" / "tokens"
-        cfg.auth.delegated.token_cache_path = str(cache_dir / f"{cfg.azure.tenant_id}.cache")
+    cfg.azure = _build_azure_config(azure_raw)
+    cfg.auth = _build_auth_config(auth_raw)
+    _apply_auth_defaults(cfg.auth, cfg.azure.tenant_id)
 
     # Graph settings
     cfg.graph = _parse_section(raw.get("graph"), GraphSettings)
@@ -356,6 +556,39 @@ def load_tenant_config(
         users=pt_raw.get("users") or {},
         groups=pt_raw.get("groups") or {},
     )
+
+    # Executors and registry metadata. Legacy single-executor tenants get a
+    # synthesized "default" executor so downstream runtime code can migrate
+    # without splitting configuration authority.
+    cfg.executors = _build_executor_configs(
+        raw.get("executors"),
+        fallback_azure=cfg.azure,
+        fallback_auth=cfg.auth,
+    )
+    if cfg.executors:
+        cfg.executor_registry = _build_executor_registry(
+            raw.get("executor_registry"),
+            executors=cfg.executors,
+        )
+    else:
+        cfg.executors = {
+            "default": ExecutorConfig(
+                name="default",
+                display_name="Default Executor",
+                domain="default",
+                capabilities=["legacy"],
+                azure=_clone_azure_config(cfg.azure),
+                auth=_clone_auth_config(cfg.auth),
+            )
+        }
+        cfg.executor_registry = ExecutorRegistryConfig(default_executor="default")
+
+    default_executor = cfg.default_executor
+    if default_executor is None:
+        raise ValueError("No deterministic default executor is available")
+
+    cfg.azure = _clone_azure_config(default_executor.azure)
+    cfg.auth = _clone_auth_config(default_executor.auth)
 
     return cfg
 

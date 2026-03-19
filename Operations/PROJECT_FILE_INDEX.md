@@ -29,6 +29,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | --- | --- | --- | --- |
 | `docs/commercialization/m365-entra-identity-and-app-execution-model.md` | Canonical enterprise identity architecture lock for Entra-authenticated SmartHaus users plus app-only Graph execution. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5A` |
 
+## Active B6 Digital-Employee and Executor-Domain Architecture Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/commercialization/m365-digital-employee-operating-model.md` | Canonical operating-model lock for named SMARTHAUS digital employees as the operator-facing delegation surface. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6A` |
+| `docs/commercialization/m365-capability-api-license-auth-matrix.md` | Capability matrix separating licensed M365 scope from the actual automation and auth surfaces the platform can govern. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6B` |
+| `docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md` | Canonical bounded-executor architecture replacing the legacy single giant executor posture. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6C` |
+| `docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md` | Persona-registry and humanized delegation contract for named digital employees such as Elena Rodriguez. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6D` |
+| `docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md` | Certification rebase document preventing `C1A` from certifying the stale single-executor posture. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6E` |
+
 ## Active B5B Runtime Identity Enforcement Surface
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
@@ -73,7 +83,10 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `artifacts/scorecards/scorecard_l10.json` | Per-lemma scorecard for mypy stub and module-path remediation. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4A` |
 | `artifacts/scorecards/scorecard_l11.json` | Per-lemma scorecard for certification-environment readiness. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `artifacts/scorecards/scorecard_l13.json` | Per-lemma scorecard for SMARTHAUS Entra app separation and executor certificate-cutover linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5D` |
-| `scorecard.json` | Aggregate MA scorecard including `L7` through `L13` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5D` |
+| `artifacts/scorecards/scorecard_l14.json` | Per-lemma scorecard for digital-employee plus executor-domain architecture linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6` |
+| `artifacts/scorecards/scorecard_l15.json` | Per-lemma scorecard for tenant-contract and executor-registry extension linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `artifacts/scorecards/scorecard_l16.json` | Per-lemma scorecard for runtime executor-routing and domain-selection linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `scorecard.json` | Aggregate MA scorecard including `L7` through `L16` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `artifacts/b4d1_failure_inventory.json` | Pinned clean-baseline validation inventory for `B4D2` through `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D1` |
 | `artifacts/b4d3_failure_inventory.json` | Pinned post-runtime-cleanup failure inventory showing the remaining handoff into `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D3` |
 | `artifacts/b4d4_failure_inventory.json` | Pinned actionable mypy inventory after the environment and duplicate-module blockers were removed. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4A` |
@@ -85,6 +98,9 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/ma/lemmas/L11_m365_certification_environment_readiness.md` | Formal lemma narrative for the `C1A` certification-environment readiness gate. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `docs/ma/lemmas/L12_m365_approval_contract_alignment.md` | Formal lemma narrative for tenant-backed approval contract alignment and exact-shell approval reachability. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `docs/ma/lemmas/L13_m365_entra_app_separation_certificate_cutover.md` | Formal lemma narrative for SMARTHAUS operator-versus-executor app separation and executor certificate-cutover gating. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5E` |
+| `docs/ma/lemmas/L14_m365_digital_employee_executor_architecture.md` | Formal lemma narrative for the digital-employee, executor-domain, and certification-rebase architecture linkage. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6` |
+| `docs/ma/lemmas/L15_m365_tenant_contract_executor_registry_extension.md` | Formal lemma narrative for bounded executor representation, deterministic default projection, and single-executor migration semantics. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `docs/ma/lemmas/L16_m365_runtime_executor_routing_domain_selection.md` | Formal lemma narrative for deterministic action-to-executor routing, approval-domain projection, and fail-closed multi-executor selection. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 
 ## Active B5D/B5E App Registration Hardening Artifacts
 
@@ -94,6 +110,26 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `invariants/lemmas/L13_m365_entra_app_separation_certificate_cutover.yaml` | Machine-enforced invariant metadata for `L13`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5E` |
 | `notebooks/m365/INV-M365-O-entra-app-separation-certificate-cutover.ipynb` | Primary source notebook for the SMARTHAUS app-registration separation and executor certificate-cutover proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5E` |
 | `notebooks/lemma_proofs/L13_m365_entra_app_separation_certificate_cutover.ipynb` | Projected lemma-proof notebook for `L13`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5E` |
+| `invariants/lemmas/L14_m365_digital_employee_executor_architecture.yaml` | Machine-enforced invariant metadata for `L14`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6` |
+| `notebooks/m365/INV-M365-P-digital-employee-executor-architecture.ipynb` | Primary source notebook for the digital-employee and executor-domain architecture proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6` |
+| `notebooks/lemma_proofs/L14_m365_digital_employee_executor_architecture.ipynb` | Projected lemma-proof notebook for `L14`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6` |
+| `invariants/lemmas/L15_m365_tenant_contract_executor_registry_extension.yaml` | Machine-enforced invariant metadata for `L15`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `notebooks/m365/INV-M365-Q-tenant-contract-executor-registry-extension.ipynb` | Primary source notebook for the bounded-executor tenant-contract extension proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb` | Projected lemma-proof notebook for `L15`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `invariants/lemmas/L16_m365_runtime_executor_routing_domain_selection.yaml` | Machine-enforced invariant metadata for `L16`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `notebooks/m365/INV-M365-R-runtime-executor-routing-domain-selection.ipynb` | Primary source notebook for the bounded runtime executor-routing and domain-selection proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `notebooks/lemma_proofs/L16_m365_runtime_executor_routing_domain_selection.ipynb` | Projected lemma-proof notebook for `L16`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+
+## Active B7B Multi-Executor Routing Surface
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `src/ops_adapter/actions.py` | Core governed dispatcher now resolving deterministic action-to-executor routes and projecting executor-specific token-provider selection. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `src/ops_adapter/main.py` | Active ops-adapter execution boundary now resolving bounded executor identity before policy, approval, and audit. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `src/ops_adapter/app.py` | Legacy app-factory action path aligned to the same bounded executor-routing contract as the primary runtime. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `src/ops_adapter/approvals.py` | Approval backend now projecting the SharePoint executor path from the selected multi-executor tenant contract. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `tests/test_ops_adapter.py` | Bounded routing coverage proving SharePoint and directory executor selection, approval-path executor preservation, and fail-closed unmapped-route behavior. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `tests/test_approvals.py` | Approval-store contract tests proving the SharePoint executor is projected for approval Graph access even when another executor is the runtime default. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 
 ## Active C1A Certification Readiness Artifacts
 
@@ -109,7 +145,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `notebooks/lemma_proofs/L11_m365_certification_environment_readiness.ipynb` | Projected lemma-proof notebook for `L11`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `notebooks/lemma_proofs/L12_m365_approval_contract_alignment.ipynb` | Projected lemma-proof notebook for `L12`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `artifacts/scorecards/scorecard_l12.json` | Per-lemma scorecard for approval-contract alignment and exact-shell reachability. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
-| `tests/test_approvals.py` | Focused approval-store contract tests proving tenant-backed backend selection and Graph token-provider binding. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
+| `tests/test_approvals.py` | Focused approval-store contract tests proving tenant-backed backend selection, Graph token-provider binding, and bounded default-executor projection for the SharePoint approval path. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 
 ## Active B4D4B Runtime Surface
 
@@ -120,11 +156,12 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `src/ops_adapter/audit.py` | Append-only audit envelope and admin-event evidence surface. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
 | `src/ops_adapter/approvals.py` | Approval-backend abstraction used by the governed mutation path. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
 | `src/ops_adapter/rate_limit.py` | Deterministic rate-limit primitive for the governed execution path. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
-| `src/smarthaus_common/config.py` | Shared config authority helpers for tenant-selected runtime state. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
-| `src/smarthaus_common/tenant_config.py` | Tenant-scoped configuration loader used by the governed runtime path. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
+| `src/smarthaus_common/config.py` | Shared config authority helpers for tenant-selected runtime state, now consuming the deterministic default-executor projection during the B7 runtime transition. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `src/smarthaus_common/tenant_config.py` | Tenant-scoped configuration loader now supporting explicit bounded executors, executor-registry metadata, and deterministic default-executor projection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `src/smarthaus_common/permission_enforcer.py` | Fail-closed user-tier enforcement boundary. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
 | `src/smarthaus_graph/client.py` | Typed Graph client bridge for the governed M365 execution path, now carrying valid PEM certificate-auth support for the executor cutover. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B5E` |
 | `tests/test_graph_client.py` | Bounded graph-client validation for organization reads and PEM certificate-credential parsing. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5E` |
+| `tests/test_env_loading.py` | Tenant-first config tests now proving legacy single-executor synthesis, explicit default-executor projection, and fail-closed multi-executor default resolution. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `src/smarthaus_cli/repo_analyzer.py` | Typed repository analyzer used by the bounded CLI analyzer surface in `B4D4B`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
 | `src/smarthaus_cli/__main__.py` | CLI entrypoint carrying the duplicated analyzer surface remediated in `B4D4B`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4B` |
 
@@ -158,6 +195,10 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-c1-live-tenant-certification-execution-prompt.txt` | Kick-off pointer for the historical `C1` coordination overview prompt. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R8` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d-ruff-black-mypy-remediation.md` | Coordination overview for grouped phase `B4D`, retained to point execution to `B4D1` through `B4D5`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:R8` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d-ruff-black-mypy-remediation-prompt.txt` | Kick-off pointer for the `B4D` coordination overview prompt. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:R8` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6-digital-employee-executor-domain-architecture.md` | Coordination overview for grouped phase `B6`, retained to point execution to `B6A` through `B6E`. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:R8` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6-digital-employee-executor-domain-architecture-prompt.txt` | Kick-off pointer for the `B6` coordination overview prompt. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:R8` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7-multi-executor-runtime-persona-integration.md` | Coordination overview for grouped phase `B7`, retained to point execution to `B7A` through `B7E`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R8` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7-multi-executor-runtime-persona-integration-prompt.txt` | Kick-off pointer for the `B7` coordination overview prompt. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R8` |
 
 ## Active Act Prompt Artifacts
 
@@ -213,6 +254,26 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b5d-entra-app-registration-role-separation-prompt.txt` | Kick-off pointer for act `B5D`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5D` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b5e-executor-certificate-cutover-tenant-contract-finalization.md` | Active MATHS prompt for act `B5E`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5E` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b5e-executor-certificate-cutover-tenant-contract-finalization-prompt.txt` | Kick-off pointer for act `B5E`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B5E` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6a-digital-employee-operating-model.md` | Active MATHS prompt for act `B6A`. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6A` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6a-digital-employee-operating-model-prompt.txt` | Kick-off pointer for act `B6A`. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6A` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6b-capability-api-license-auth-matrix.md` | Active MATHS prompt for act `B6B`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6B` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6b-capability-api-license-auth-matrix-prompt.txt` | Kick-off pointer for act `B6B`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6B` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6c-executor-domain-partitioning-minimum-permissions.md` | Active MATHS prompt for act `B6C`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6C` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6c-executor-domain-partitioning-minimum-permissions-prompt.txt` | Kick-off pointer for act `B6C`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6C` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6d-persona-registry-humanized-delegation-routing.md` | Active MATHS prompt for act `B6D`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6D` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6d-persona-registry-humanized-delegation-routing-prompt.txt` | Kick-off pointer for act `B6D`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6D` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6e-certification-rebase-multi-executor-model.md` | Active MATHS prompt for act `B6E`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6E` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b6e-certification-rebase-multi-executor-model-prompt.txt` | Kick-off pointer for act `B6E`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6E` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7a-tenant-contract-executor-registry-extension.md` | Active MATHS prompt for act `B7A`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7a-tenant-contract-executor-registry-extension-prompt.txt` | Kick-off pointer for act `B7A`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7b-runtime-executor-routing-domain-selection.md` | Active MATHS prompt for act `B7B`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7b-runtime-executor-routing-domain-selection-prompt.txt` | Kick-off pointer for act `B7B`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c-persona-registry-humanized-delegation-integration.md` | Active MATHS prompt for act `B7C`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c-persona-registry-humanized-delegation-integration-prompt.txt` | Kick-off pointer for act `B7C`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7d-executor-permission-minimization-azure-cleanup.md` | Active MATHS prompt for act `B7D`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7d-executor-permission-minimization-azure-cleanup-prompt.txt` | Kick-off pointer for act `B7D`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7e-approval-backend-reproof-certification-rereadiness.md` | Active MATHS prompt for act `B7E`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7E` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7e-approval-backend-reproof-certification-rereadiness-prompt.txt` | Kick-off pointer for act `B7E`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7E` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness.md` | Active MATHS prompt for act `C1A`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness-prompt.txt` | Kick-off pointer for act `C1A`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-c1b-live-read-only-certification.md` | Active MATHS prompt for act `C1B`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1B` |

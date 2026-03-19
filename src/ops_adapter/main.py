@@ -22,7 +22,12 @@ from smarthaus_common.permission_enforcer import (
 from smarthaus_common.tenant_config import get_tenant_config
 from starlette.responses import Response
 
-from .actions import GraphAPIError, execute
+from .actions import (
+    GraphAPIError,
+    build_executor_identity,
+    execute,
+    resolve_executor_name_for_action,
+)
 from .approvals import ApprovalsStore, GraphApprovalsStore
 from .audit import Auditor
 from .models import ActionRequest, ActionResponse
@@ -253,16 +258,6 @@ def _resolve_actor_groups(request: Request) -> list[str]:
     if groups:
         return [str(groups)]
     return []
-
-
-def _build_executor_identity(tenant_config: Any) -> dict[str, Any]:
-    return {
-        "type": "service_principal",
-        "mode": tenant_config.auth.mode,
-        "tenant": tenant_config.tenant.id,
-        "azure_tenant_id": tenant_config.azure.tenant_id,
-        "client_id": tenant_config.azure.client_id,
-    }
 
 
 def _require_tenant_context() -> Any:
@@ -544,7 +539,25 @@ async def actions(
     actor_groups = _resolve_actor_groups(request)
     tenant_config = _require_tenant_context()
     actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
-    executor_identity = _build_executor_identity(tenant_config)
+    try:
+        executor_name = resolve_executor_name_for_action(agent, action, tenant_config)
+    except ValueError as exc:
+        REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
+        await AUDITOR.log(
+            "failed",
+            agent,
+            action,
+            {
+                "reason": str(exc),
+                "actor": user_email,
+                "actor_tier": actor_tier,
+                "actor_groups": actor_groups,
+                "tenant": tenant_config.tenant.id,
+            },
+            corr,
+        )
+        raise HTTPException(500, str(exc)) from exc
+    executor_identity = build_executor_identity(tenant_config, executor_name)
 
     allowed, deny_reason = check_user_permission(
         user_email=user_email,
@@ -575,6 +588,8 @@ async def actions(
     params.setdefault("requestor_tier", actor_tier.get("tier_name"))
     params.setdefault("requestor_tier_info", actor_tier)
     params.setdefault("requestor_groups", actor_groups)
+    params.setdefault("executor_name", executor_name)
+    params.setdefault("executor_domain", executor_identity.get("domain"))
     params.setdefault("executor_identity", executor_identity)
     params.setdefault("tenant", tenant_config.tenant.id)
 
@@ -646,7 +661,7 @@ async def actions(
     # Execute
     with REQ_LATENCY.labels(agent=agent, action=action).time():
         try:
-            result = await execute(agent, action, params, corr)
+            result = await execute(agent, action, params, corr, executor_name=executor_name)
             REQ_COUNT.labels(agent=agent, action=action, outcome="success").inc()
             audit_payload = dict(result or {})
             audit_payload["actor"] = user_email

@@ -31,6 +31,20 @@ def _selected_tenant_config() -> TenantConfig | None:
         return None
 
 
+def _approval_tenant_config() -> TenantConfig | None:
+    tenant_cfg = _selected_tenant_config()
+    if tenant_cfg is None:
+        return None
+    try:
+        executor_name = tenant_cfg.resolve_executor_name(
+            "approvals",
+            fallback_keys=["sharepoint"],
+        )
+        return tenant_cfg.project_executor(executor_name)
+    except ValueError:
+        return tenant_cfg
+
+
 def _resolve_approval_setting(
     tenant_field: str,
     env_keys: tuple[str, ...],
@@ -54,7 +68,7 @@ def _resolve_approval_setting(
 def _build_graph_token_provider() -> Any:
     from smarthaus_graph.client import GraphTokenProvider
 
-    return GraphTokenProvider(tenant_config=_selected_tenant_config())
+    return GraphTokenProvider(tenant_config=_approval_tenant_config())
 
 
 class GraphApprovalsStore:

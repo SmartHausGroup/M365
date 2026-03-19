@@ -1,0 +1,7 @@
+Execute B6B Capability, API, License, and Auth Matrix
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b6b-capability-api-license-auth-matrix.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B6B
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

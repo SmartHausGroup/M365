@@ -4,9 +4,8 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
-import pytest
-
 import ops_adapter.approvals as approvals_module
+import pytest
 from smarthaus_common.tenant_config import reload_tenant_config
 
 
@@ -91,7 +90,9 @@ def test_graph_approvals_store_uses_graph_token_provider(
             return "token-alpha"
 
     def _provider_factory() -> _DummyProvider:
-        captured["tenant_id"] = approvals_module._selected_tenant_config().tenant.id
+        tenant_cfg = approvals_module._selected_tenant_config()
+        assert tenant_cfg is not None
+        captured["tenant_id"] = tenant_cfg.tenant.id
         return _DummyProvider()
 
     monkeypatch.setattr(approvals_module, "_build_graph_token_provider", _provider_factory)
@@ -123,3 +124,83 @@ def test_approvals_store_promotes_tenant_contract_target(
     store = approvals_module.ApprovalsStore({})
 
     assert isinstance(store, approvals_module.GraphApprovalsStore)
+
+
+def test_approvals_store_uses_projected_default_executor_from_registry(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-beta.yaml").write_text(
+        """
+tenant:
+  id: tenant-beta
+  display_name: SMARTHAUS
+azure:
+  tenant_id: root-tenant
+  client_id: root-client
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    display_name: SMARTHAUS Collaboration Executor
+    domain: collaboration
+    azure:
+      tenant_id: collab-tenant
+      client_id: collab-client
+      client_secret: collab-secret
+  sharepoint:
+    display_name: SMARTHAUS SharePoint Executor
+    domain: sharepoint
+    capabilities:
+      - approvals
+      - sharepoint
+    azure:
+      tenant_id: sharepoint-tenant
+      client_id: sharepoint-client
+      client_secret: sharepoint-secret
+executor_registry:
+  default_executor: collaboration
+  routes:
+    approvals: sharepoint
+    sharepoint: sharepoint
+    collaboration: collaboration
+governance:
+  approvals_site_id: site-123
+  approvals_list_id: list-456
+  approvals_list_name: Approvals
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("UCP_TENANT", "tenant-beta")
+    reload_tenant_config()
+
+    captured: dict[str, Any] = {}
+
+    class _DummyProvider:
+        def get_app_token(self) -> str:
+            return "token-beta"
+
+    def _provider_factory() -> _DummyProvider:
+        tenant_cfg = approvals_module._selected_tenant_config()
+        approval_cfg = approvals_module._approval_tenant_config()
+        assert tenant_cfg is not None
+        assert approval_cfg is not None
+        captured["default_executor"] = tenant_cfg.default_executor_name
+        captured["client_id"] = approval_cfg.azure.client_id
+        return _DummyProvider()
+
+    monkeypatch.setattr(approvals_module, "_build_graph_token_provider", _provider_factory)
+
+    store = approvals_module.GraphApprovalsStore()
+    client = store._graph()
+    client.close()
+
+    assert store.site_id == "site-123"
+    assert store.list_id == "list-456"
+    assert captured["default_executor"] == "collaboration"
+    assert captured["client_id"] == "sharepoint-client"

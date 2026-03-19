@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 from smarthaus_common.config import AppConfig, load_bootstrap_env, resolve_sharepoint_hostname
-from smarthaus_common.tenant_config import reload_tenant_config
+from smarthaus_common.tenant_config import load_tenant_config, reload_tenant_config
 
 
 def test_load_bootstrap_env_loads_existing_file(
@@ -130,3 +130,125 @@ org:
     monkeypatch.setenv("SHAREPOINT_HOSTNAME", "env.sharepoint.example.com")
 
     assert resolve_sharepoint_hostname() == "tenant.sharepoint.example.com"
+
+
+def test_tenant_config_synthesizes_default_executor_for_legacy_contract(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-legacy.yaml").write_text(
+        """
+tenant:
+  id: tenant-legacy
+azure:
+  tenant_id: legacy-tenant
+  client_id: legacy-client
+auth:
+  mode: app_only
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-legacy")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+
+    cfg = load_tenant_config()
+
+    assert cfg.default_executor_name == "default"
+    assert set(cfg.executors) == {"default"}
+    assert cfg.default_executor is not None
+    assert cfg.default_executor.azure.client_id == "legacy-client"
+    assert cfg.azure.client_id == "legacy-client"
+    assert cfg.auth.mode == "app_only"
+
+
+def test_app_config_projects_explicit_default_executor_from_registry(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-gamma.yaml").write_text(
+        """
+tenant:
+  id: tenant-gamma
+azure:
+  tenant_id: root-tenant
+  client_id: root-client
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    display_name: SMARTHAUS Collaboration Executor
+    domain: collaboration
+    capabilities:
+      - teams
+      - groups
+    azure:
+      tenant_id: collab-tenant
+      client_id: collab-client
+  sharepoint:
+    display_name: SMARTHAUS SharePoint Executor
+    domain: sharepoint
+    capabilities:
+      - approvals
+      - sharepoint
+    azure:
+      tenant_id: sharepoint-tenant
+      client_id: sharepoint-client
+executor_registry:
+  default_executor: sharepoint
+  routes:
+    approvals: sharepoint
+    teams: collaboration
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-gamma")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("AZURE_CLIENT_SECRET", "fallback-secret")
+
+    cfg = load_tenant_config()
+    graph = AppConfig().graph
+
+    assert cfg.default_executor_name == "sharepoint"
+    assert cfg.executor_registry.routes["teams"] == "collaboration"
+    assert cfg.default_executor is not None
+    assert cfg.default_executor.domain == "sharepoint"
+    assert graph.tenant_id == "sharepoint-tenant"
+    assert graph.client_id == "sharepoint-client"
+    assert graph.client_secret == "fallback-secret"
+
+
+def test_multi_executor_contract_fails_closed_without_default_executor(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-delta.yaml").write_text(
+        """
+tenant:
+  id: tenant-delta
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    domain: collaboration
+  sharepoint:
+    domain: sharepoint
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-delta")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+
+    with pytest.raises(ValueError, match="default_executor"):
+        load_tenant_config()

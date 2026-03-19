@@ -1,8 +1,8 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D` and `B5E` complete on 2026-03-19; `C1A` remains prepared but blocked until the approval backend is reachable and the exact standalone certification shell contract is active)
-**Date:** 2026-03-18
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, and `B7B` complete on 2026-03-19; `B7C` is next; `C1A` remains prepared but blocked until persona integration, executor permission minimization, and approval reachability are re-proven on the rebased multi-executor runtime)
+**Date:** 2026-03-19
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — production-ready, policy-gated, auditable, self-service M365 orchestration.
@@ -24,9 +24,9 @@ Enterprise readiness for standalone M365 v1 is not satisfied by documentation al
 
 For this repository state:
 
-`EnterpriseReady = ProductBoundaryLocked ∧ RuntimeHardeningImplemented ∧ IdentityExecutionArchitectureImplemented ∧ RepoValidationGreen ∧ LiveTenantCertificationGreen ∧ ReleaseDecisionClosed ∧ LaunchReadinessComplete`
+`EnterpriseReady = ProductBoundaryLocked ∧ RuntimeHardeningImplemented ∧ IdentityExecutionArchitectureImplemented ∧ DigitalEmployeeOperatingModelLocked ∧ MultiExecutorRuntimeImplemented ∧ RepoValidationGreen ∧ LiveTenantCertificationGreen ∧ ReleaseDecisionClosed ∧ LaunchReadinessComplete`
 
-`LiveTenantCertificationGreen => EntraAppRolesSeparated ∧ ExecutorCredentialContractFinalized ∧ ApprovalBackendReachable ∧ CertificationEvidenceClosed`
+`LiveTenantCertificationGreen => EntraAppRolesSeparated ∧ ExecutorCredentialContractFinalized ∧ MultiExecutorRoutingBounded ∧ ApprovalBackendReachable ∧ CertificationTargetRebased ∧ CertificationEvidenceClosed`
 
 `ExecutableAct = Planned ∧ Prompted ∧ Approved ∧ Logged ∧ Validated`
 
@@ -53,14 +53,22 @@ If any term is false, the module remains `NO-GO`.
 - `B5C` complete on 2026-03-18: bound the authenticated SMARTHAUS Entra actor into tier resolution, approvals, and actor-versus-executor audit semantics by adding group-aware tier resolution in `src/smarthaus_common/tenant_config.py` and `src/smarthaus_common/permission_enforcer.py`, preserving actor tier, actor groups, tenant, and executor metadata in `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, `src/ops_adapter/approvals.py`, `src/ops_adapter/audit.py`, and `src/ops_adapter/actions.py`, and validating the bounded binding surface with `python3 -m py_compile`, `PYTHONPATH=src pytest -q tests/test_ops_adapter.py tests/test_policies.py`, and `git diff --check`.
 - `B5D` complete on 2026-03-19: the live Azure / Entra app-registration split is now locked in the SMARTHAUS tenant, with app `720788ac-1485-4073-b0c8-1a6294819a87` renamed to `SMARTHAUS M365 Executor`, app `e6fd71d3-4116-401e-a4f1-b2fda4318a8b` renamed to `SMARTHAUS M365 Operator Identity`, Graph application-role overlap removed from the operator-identity app, Graph delegated-scope overlap removed from the executor app, and `Application ID URI = api://e6fd71d3-4116-401e-a4f1-b2fda4318a8b` set on the operator-identity app.
 - `B5E` complete on 2026-03-19: the governed runtime now supports valid MSAL certificate credentials from the tenant-selected PEM path, the executor certificate lives at `/Users/smarthaus/.ucp/certs/smarthaus-m365-executor.pem`, app `720788ac-1485-4073-b0c8-1a6294819a87` now carries the certificate credential `SMARTHAUS M365 Executor Certificate 2026-03-19` and zero password credentials, `/Users/smarthaus/Projects/GitHub/UCP/tenants/smarthaus.yaml` now selects certificate auth with an empty `azure.client_secret`, and non-mutating Graph validation still returns `organization=200` after secret retirement.
-- `C1A` remains blocked on 2026-03-19: the SMARTHAUS tenant YAML contract now resolves deterministically through the tenant loader, carries the Operations approval target, and provides an app-only certificate-backed credential contract; the exact standalone shell contract is `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`; direct Graph probes under that contract return `organization=200` but `site_discovery=503 UnknownError` for the SMARTHAUS Operations site; and the readiness gate therefore remains `NO-GO` until the approval backend is reachable and the exact shell contract is active. CAIO is out of scope for this certification path.
+- `B6A` complete on 2026-03-19: locked the operator-facing digital-employee model in `docs/commercialization/m365-digital-employee-operating-model.md`, explicitly separating named SMARTHAUS personas from Microsoft executor identities and defining the minimum persona contract required for humanized delegation, KPI ownership, escalation, approval posture, and audit traceability.
+- `B6B` complete on 2026-03-19: defined the capability, API, license, and auth matrix in `docs/commercialization/m365-capability-api-license-auth-matrix.md`, clarifying the difference between licensed surface area, exposed automation surface, delegated-versus-app-only execution, and the boundary between Graph and non-Graph M365 workloads.
+- `B6C` complete on 2026-03-19: defined the bounded executor-domain split and minimum-permission model in `docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md`, replacing the single over-broad executor posture with explicit SharePoint/files, collaboration, messaging/calendar, directory/admin, and Power Platform/analytics execution domains beneath the operator-identity plane.
+- `B6D` complete on 2026-03-19: locked the persona-registry and humanized delegation contract in `docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md`, defining how requests such as "talk to Elena Rodriguez" resolve through persona responsibility, approval posture, executor-domain routing, and audit attribution without exposing raw agent implementation details to operators.
+- `B6E` complete on 2026-03-19: rebased the certification target in `docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md` so `C1A` no longer attempts to certify the old single-executor posture and instead remains blocked until the multi-executor runtime and persona-integration track is implemented.
+- `B7A` complete on 2026-03-19: extended `src/smarthaus_common/tenant_config.py` so the tenant contract can represent bounded executors plus `executor_registry` metadata, synthesize a deterministic legacy default when only one executor surface exists, fail closed when multiple executors exist without an explicit default, and project the resolved default executor back into the legacy root auth fields; validated that contract in `tests/test_env_loading.py` and `tests/test_approvals.py`.
+- `B7B` complete on 2026-03-19: implemented deterministic action-to-executor routing in `src/ops_adapter/actions.py`, `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, and `src/ops_adapter/approvals.py` so governed runtime actions now resolve the bounded executor domain before policy, approval, and audit, and added bounded routing and fail-closed coverage in `tests/test_ops_adapter.py` and `tests/test_approvals.py`.
+- `C1A` remains blocked on 2026-03-19: the SMARTHAUS tenant YAML contract now resolves deterministically through the tenant loader, carries the approval target, provides an app-only certificate-backed credential contract, and routes governed actions through bounded executors; the exact standalone shell contract is `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`; but live approval reachability still has not been re-proven through the bounded SharePoint executor path, and the readiness gate therefore remains `NO-GO` until persona integration, executor permission minimization, approval re-proof, and the exact shell contract are all satisfied. CAIO is out of scope for this certification path.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
 
-1. Live-tenant certification remains `NO-GO` until the non-production environment persists the exact launch contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`) and the tenant-backed approval target becomes reachable through Graph or is supplied via explicit site and list IDs.
-2. `C2`, `D1`, and `D2` remain downstream of the live-certification blockers.
+1. The rebased digital-employee and bounded-executor target is now partially implemented, but persona-registry integration, executor permission minimization, and approval re-proof are not yet complete.
+2. Live-tenant certification remains `NO-GO` until the non-production environment persists the exact launch contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`), the rebased multi-executor runtime exists, and the tenant-backed approval target becomes reachable through the bounded SharePoint executor path.
+3. `C2`, `D1`, and `D2` remain downstream of the live-certification blockers.
 
 ## Scope
 
@@ -130,6 +138,19 @@ The repo is not enterprise-ready yet because the remaining critical-path blocker
 - Bind authorization, approvals, and audit to the authenticated actor while preserving the service executor identity.
 - Keep the operator-identity app and the executor app explicitly separate.
 - Finalize the executor app on a certificate-based production posture before standalone certification resumes.
+
+### R10 — Digital-employee operating model and executor-domain architecture
+
+- Make named digital employees the primary delegation interface for SMARTHAUS operators.
+- Keep persona identity explicitly separate from Microsoft executor identity.
+- Define the bounded executor-domain split required to replace the single giant executor posture.
+- Rebase certification and release claims away from the legacy single-executor target.
+
+### R11 — Multi-executor runtime and persona integration
+
+- Extend the tenant contract, runtime routing, and Azure setup to support bounded executor domains.
+- Bind named personas to allowed domains, responsibilities, approvals, and audit semantics.
+- Reopen standalone certification only after the rebased multi-executor runtime exists and the approval backend is reachable through the bounded SharePoint executor path.
 
 ## Execution Act Model
 
@@ -445,7 +466,7 @@ Validation:
 - explicit operator-identity-versus-executor app-registration role separation
 - executor certificate-cutover and tenant-contract finalization plan
 
-**Exit rule:** `B5E` is complete; `C1A` may proceed once the approval backend is reachable and the exact standalone shell contract is active.
+**Exit rule:** `B5E` is complete; the identity and executor posture is ready for the digital-employee and bounded-executor architecture track, but `C1A` may not resume until `B6E` and `B7E` are complete and the approval backend is reachable through the bounded SharePoint executor path.
 
 ##### B5A — Identity Architecture Lock
 
@@ -503,6 +524,140 @@ Validation:
 - live executor app now carries one certificate credential and zero password credentials
 - non-mutating Graph validation passed after certificate cutover and secret retirement
 
+#### B6 — Digital Employee Operating Model and Executor-Domain Architecture
+
+**Status:** ✅ Complete (`B6A`, `B6B`, `B6C`, `B6D`, and `B6E` complete on 2026-03-19)
+
+**Goal:** Lock the real SMARTHAUS product architecture where operators delegate to named digital employees, those personas are routed through bounded executor domains, and certification is rebased away from the legacy single-executor target.
+
+**Outputs:**
+- canonical digital-employee operating model
+- capability, API, license, and auth matrix for the intended M365 universe
+- bounded executor-domain and minimum-permission architecture
+- persona-registry and humanized delegation contract
+- certification rebase away from the single-executor posture
+
+**Exit rule:** `B6E` is complete; `B7A` must begin before `C1A` resumes.
+
+##### B6A — Digital Employee Operating Model
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Define the named persona layer that humanizes delegation without collapsing governance, permissions, or audit boundaries.
+
+**Outputs:**
+- named digital-employee contract
+- minimum persona fields for role, responsibility, KPI ownership, escalation, and approval posture
+- explicit separation between persona identity and executor identity
+
+##### B6B — Capability, API, License, and Auth Matrix
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Map what “anything in M365” means for SMARTHAUS across licensing, automation surface, and auth mode.
+
+**Outputs:**
+- workload-by-workload matrix of Graph versus non-Graph execution
+- delegated-versus-app-only posture mapping
+- license-surface versus automation-surface distinction
+- bounded scope for v1 executor-domain implementation
+
+##### B6C — Executor-Domain Partitioning and Minimum-Permission Model
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Replace the single giant executor posture with a bounded domain split that can be implemented and certified deterministically.
+
+**Outputs:**
+- SharePoint/files executor domain
+- collaboration executor domain
+- messaging/calendar executor domain
+- directory/admin executor domain
+- Power Platform/analytics executor domain
+
+##### B6D — Persona Registry and Humanized Delegation Routing
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Define how named digital employees bind to responsibilities, approvals, executor domains, and audit semantics.
+
+**Outputs:**
+- persona-registry contract
+- humanized delegation language contract
+- responsibility and escalation binding
+- audit semantics covering human requester, digital employee, and executor domain
+
+##### B6E — Certification Rebase to the Digital-Employee Multi-Executor Target
+
+**Status:** ✅ Complete (2026-03-19)
+
+**Goal:** Rebase the live-certification program away from the legacy single-executor posture so release claims remain honest.
+
+**Outputs:**
+- rebased certification target
+- explicit declaration that `C1A` cannot resume on the legacy single-executor runtime
+- blocker list tying certification to the multi-executor implementation track
+
+#### B7 — Multi-Executor Runtime and Persona Integration
+
+**Status:** 🟡 Active (`B7A` and `B7B` complete; `B7C` next; `B7D` and `B7E` blocked by predecessor acts)
+
+**Goal:** Implement the rebased production target: bounded executor domains, persona-aware routing, minimized permission envelopes, and certification-ready approval-path reachability.
+
+**Outputs:**
+- tenant-contract support for multiple executor domains
+- runtime routing from persona and action to bounded executor
+- executor permission minimization and Azure cleanup
+- approval backend reachability through the SharePoint executor path
+- certification-ready multi-executor runtime evidence
+
+**Exit rule:** `B7E` must be complete before `C1A` may resume.
+
+##### B7A — Tenant Contract and Executor Registry Extension
+
+**Goal:** Extend the SMARTHAUS tenant contract and runtime config authority to represent bounded executor domains instead of one giant executor.
+
+**Outputs:**
+- multi-executor tenant-contract schema
+- executor registry and routing metadata
+- migration plan from single executor to bounded domains
+
+##### B7B — Runtime Executor Routing and Domain Selection
+
+**Goal:** Route governed actions through the correct bounded executor domain while preserving actor-based approvals and audit.
+
+**Outputs:**
+- deterministic action-to-executor routing
+- runtime executor selection enforcement
+- bounded tests for executor routing and fail-closed behavior
+
+##### B7C — Persona Registry and Humanized Delegation Integration
+
+**Goal:** Bind named digital employees into the runtime delegation surface without exposing raw agent implementation details.
+
+**Outputs:**
+- persona registry integration
+- humanized delegation resolution path
+- persona-aware policy, approval, and audit bindings
+
+##### B7D — Executor Permission Minimization and Azure Cleanup
+
+**Goal:** Reduce each bounded executor domain to the minimum permission envelope required for its supported surface.
+
+**Outputs:**
+- per-domain permission matrix
+- Azure cleanup plan and execution evidence
+- bounded app-only validation per executor domain
+
+##### B7E — Approval Backend Reproof and Certification Re-Readiness
+
+**Goal:** Re-prove approval reachability and re-open `C1A` only on the rebased multi-executor runtime.
+
+**Outputs:**
+- approval backend proof through the SharePoint executor domain
+- updated `C1A` readiness packet against the rebased target
+- explicit `GO/NO-GO` on whether live certification may resume
+
 ### C — Live-Tenant Certification
 
 #### C1 — Live Certification Execution
@@ -520,16 +675,17 @@ Validation:
 **Prerequisites:**
 - `B4E` complete and green
 - `B5E` complete
+- `B7E` complete
 - approved non-production environment ready
 - `UCP_TENANT` present
 - one supported Graph or Azure credential set present
 - `ALLOW_M365_MUTATIONS=true`
 - `ENABLE_AUDIT_LOGGING=true`
-- tenant-backed approval target present and reachable
+- tenant-backed approval target present and reachable through the bounded SharePoint executor path
 
 ##### C1A — Certification Environment Readiness
 
-**Goal:** Close the environment and operator prerequisites for the certification run.
+**Goal:** Close the environment and operator prerequisites for the rebased multi-executor certification run.
 
 **Outputs:**
 - environment readiness checklist
@@ -605,7 +761,7 @@ Validation:
 
 - Active MATHS prompt pairs must exist for:
   - overview: `m365-enterprise-readiness-master-plan`
-  - acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `B5D`, `B5E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
+  - acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `B5D`, `B5E`, `B6`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7`, `B7A`, `B7B`, `B7C`, `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
 - Historical commercialization prompt pairs remain for traceability only and are not active execution authority.
 - No new act may be added to the plan without a matching MATHS prompt pair.
 
@@ -615,10 +771,12 @@ Validation:
 2. `B5A` may not start until `B4E` is complete.
 3. `B5D` may not start until `B5C` is complete.
 4. `B5E` may not start until `B5D` is complete.
-5. `C1A` may not start until `B5E` is complete.
-6. `C1B` and `C1C` may not run without explicit live-execution approval.
-7. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B5*` or `C1*` act remains incomplete or blocked.
-8. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
+5. `B6A` may not start until `B5E` is complete.
+6. `B7A` may not start until `B6E` is complete.
+7. `C1A` may not start until `B7E` is complete.
+8. `C1B` and `C1C` may not run without explicit live-execution approval.
+9. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B7*` or `C1*` act remains incomplete or blocked.
+10. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
 
 ## Legacy Mapping
 
@@ -635,7 +793,7 @@ The absorbed plan remains in the repo for traceability, but no new execution sho
 
 ## Validation
 
-- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and records `B5E` complete with `C1A` prepared but blocked on approval-backend reachability plus exact-shell activation.
+- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and records `B6A` through `B6E` plus `B7A` and `B7B` complete, `B7C` next, and `C1A` rebased and blocked behind persona integration, executor permission minimization, and bounded SharePoint-executor approval re-proof.
 - `plans/m365-enterprise-commercialization-readiness/` is explicitly marked as absorbed/historical.
 - `Operations/PROJECT_FILE_INDEX.md` exists and tracks the active governance artifacts.
 - The prompt pair for this master plan exists.
@@ -650,5 +808,6 @@ The absorbed plan remains in the repo for traceability, but no new execution sho
 - Governance and approval behavior is fail-closed in the enterprise posture.
 - Admin audit is enterprise-reviewable and traceable.
 - Repo-wide validation is green before live certification resumes.
+- Digital employees are the operator-facing delegation surface before live certification resumes.
 - Live-tenant certification evidence exists and the release decision is explicit.
 - Launch collateral and pilot handoff are produced only after the true blockers are addressed.

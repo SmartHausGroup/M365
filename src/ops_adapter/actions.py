@@ -6,6 +6,7 @@ import os
 import random
 import string
 import time
+from contextvars import ContextVar
 from typing import Any
 
 import httpx
@@ -20,21 +21,98 @@ GRAPH_BASE = "https://graph.microsoft.com/v1.0"
 # Tenant-aware token provider (lazy-loaded singleton)
 # ---------------------------------------------------------------------------
 
-_token_provider: Any | None = None
+_token_providers: dict[str, Any] = {}
+_current_executor_name: ContextVar[str | None] = ContextVar(
+    "ops_adapter_executor_name",
+    default=None,
+)
+
+_ACTION_ROUTE_BY_PREFIX: tuple[tuple[str, str], ...] = (
+    ("sites.", "sharepoint"),
+    ("lists.", "sharepoint"),
+    ("files.", "sharepoint"),
+    ("drives.", "sharepoint"),
+    ("teams.", "collaboration"),
+    ("channels.", "collaboration"),
+    ("chat.", "collaboration"),
+    ("groups.", "collaboration"),
+    ("planner.", "collaboration"),
+    ("mail.", "messaging"),
+    ("calendar.", "messaging"),
+    ("users.", "directory"),
+    ("licenses.", "directory"),
+    ("directory.", "directory"),
+    ("apps.", "directory"),
+    ("service_principals.", "directory"),
+    ("admin.", "directory"),
+)
+
+_ACTION_ROUTE_OVERRIDES: dict[tuple[str, str], str] = {
+    ("website-manager", "deployment.preview"): "sharepoint",
+    ("hr-generalist", "employee.onboard"): "directory",
+    ("outreach-coordinator", "email.send_individual"): "messaging",
+    ("outreach-coordinator", "mail.send"): "messaging",
+    ("email-processing-agent", "email.send_individual"): "messaging",
+    ("calendar-management-agent", "meeting.organize"): "messaging",
+}
 
 
-def _get_token_provider() -> Any | None:
+def executor_route_for_action(agent: str, action: str) -> str:
+    override = _ACTION_ROUTE_OVERRIDES.get((agent, action))
+    if override:
+        return override
+    for prefix, route_key in _ACTION_ROUTE_BY_PREFIX:
+        if action.startswith(prefix):
+            return route_key
+    raise ValueError(f"executor_route_unknown:{agent}:{action}")
+
+
+def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
+    route_key = executor_route_for_action(agent, action)
+    fallback_keys = ["sharepoint"] if route_key == "approvals" else []
+    return tenant_config.resolve_executor_name(
+        route_key,
+        action_name=action,
+        fallback_keys=fallback_keys,
+    )
+
+
+def build_executor_identity(tenant_config: Any, executor_name: str) -> dict[str, Any]:
+    projected_config = tenant_config.project_executor(executor_name)
+    executor_cfg = tenant_config.executors[executor_name]
+    return {
+        "type": "service_principal",
+        "name": executor_name,
+        "domain": executor_cfg.domain,
+        "mode": projected_config.auth.mode,
+        "tenant": projected_config.tenant.id,
+        "azure_tenant_id": projected_config.azure.tenant_id,
+        "client_id": projected_config.azure.client_id,
+    }
+
+
+def _get_token_provider(executor_name: str | None = None) -> Any | None:
     """Get or create the tenant-aware token provider."""
-    global _token_provider
-    if _token_provider is not None:
-        return _token_provider
     try:
         from smarthaus_common.tenant_config import get_tenant_config
         from smarthaus_graph.client import GraphTokenProvider
 
         tenant_cfg = get_tenant_config()
-        _token_provider = GraphTokenProvider(tenant_config=tenant_cfg)
-        return _token_provider
+        selected_executor = executor_name or _current_executor_name.get()
+        projected_cfg = (
+            tenant_cfg.project_executor(selected_executor) if selected_executor else tenant_cfg
+        )
+        cache_key = (
+            f"{projected_cfg.tenant.id}:"
+            f"{selected_executor or projected_cfg.default_executor_name}:"
+            f"{projected_cfg.azure.client_id}:"
+            f"{projected_cfg.auth.mode}"
+        )
+        provider = _token_providers.get(cache_key)
+        if provider is None:
+            provider = GraphTokenProvider(tenant_config=projected_cfg)
+            _token_providers[cache_key] = provider
+        return provider
     except Exception:
         return None
 
@@ -3316,212 +3394,231 @@ async def admin_audit_log(params: dict[str, Any], correlation_id: str) -> dict[s
 
 
 async def execute(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+    correlation_id: str,
+    executor_name: str | None = None,
+) -> dict[str, Any]:
+    context_token = _current_executor_name.set(executor_name)
+    try:
+        return await _execute_impl(agent, action, params, correlation_id)
+    finally:
+        _current_executor_name.reset(context_token)
+
+
+async def _execute_impl(
     agent: str, action: str, params: dict[str, Any], correlation_id: str
 ) -> dict[str, Any]:
-    # ---- M365 Administrator ----
-    if agent == "m365-administrator":
-        # Users
-        if action in ("users.read", "users.list"):
-            return await m365_users_read(params, correlation_id)
-        if action == "users.create":
-            return await m365_users_create(params, correlation_id)
-        if action == "users.update":
-            return await m365_users_update(params, correlation_id)
-        if action == "users.disable":
-            return await m365_users_disable(params, correlation_id)
-        # Licenses
-        if action == "licenses.assign":
-            return await m365_licenses_assign(params, correlation_id)
-        # Groups
-        if action == "groups.list":
-            return await groups_list(params, correlation_id)
-        if action == "groups.create":
-            return await groups_create(params, correlation_id)
-        if action == "groups.get":
-            return await groups_get(params, correlation_id)
-        if action == "groups.add_member":
-            return await groups_add_member(params, correlation_id)
-        if action == "groups.remove_member":
-            return await groups_remove_member(params, correlation_id)
-        if action == "groups.list_members":
-            return await groups_list_members(params, correlation_id)
-        # SharePoint / Sites
-        if action == "sites.list":
-            return await sites_list(params, correlation_id)
-        if action == "sites.get":
-            return await sites_get(params, correlation_id)
-        if action == "sites.root":
-            return await sites_root(params, correlation_id)
-        if action == "lists.list":
-            return await lists_list(params, correlation_id)
-        if action == "lists.get":
-            return await lists_get(params, correlation_id)
-        if action == "lists.items":
-            return await lists_items(params, correlation_id)
-        if action == "lists.create_item":
-            return await lists_create_item(params, correlation_id)
-        # Files / OneDrive
-        if action == "files.list":
-            return await files_list(params, correlation_id)
-        if action == "files.get":
-            return await files_get(params, correlation_id)
-        if action == "files.search":
-            return await files_search(params, correlation_id)
-        if action == "files.create_folder":
-            return await files_create_folder(params, correlation_id)
-        if action == "files.upload":
-            return await files_upload(params, correlation_id)
-        if action == "files.share":
-            return await files_share(params, correlation_id)
-        if action == "drives.list":
-            return await drives_list(params, correlation_id)
-        # Directory / Identity
-        if action == "directory.roles":
-            return await directory_roles(params, correlation_id)
-        if action == "directory.role_members":
-            return await directory_role_members(params, correlation_id)
-        if action == "directory.domains":
-            return await directory_domains(params, correlation_id)
-        if action == "directory.org":
-            return await directory_org(params, correlation_id)
-        if action == "apps.list":
-            return await apps_list(params, correlation_id)
-        if action == "apps.get":
-            return await apps_get(params, correlation_id)
-        if action == "service_principals.list":
-            return await service_principals_list(params, correlation_id)
-        if action == "apps.update":
-            return await apps_update(params, correlation_id)
+    if True:
+        # ---- M365 Administrator ----
+        if agent == "m365-administrator":
+            # Users
+            if action in ("users.read", "users.list"):
+                return await m365_users_read(params, correlation_id)
+            if action == "users.create":
+                return await m365_users_create(params, correlation_id)
+            if action == "users.update":
+                return await m365_users_update(params, correlation_id)
+            if action == "users.disable":
+                return await m365_users_disable(params, correlation_id)
+            # Licenses
+            if action == "licenses.assign":
+                return await m365_licenses_assign(params, correlation_id)
+            # Groups
+            if action == "groups.list":
+                return await groups_list(params, correlation_id)
+            if action == "groups.create":
+                return await groups_create(params, correlation_id)
+            if action == "groups.get":
+                return await groups_get(params, correlation_id)
+            if action == "groups.add_member":
+                return await groups_add_member(params, correlation_id)
+            if action == "groups.remove_member":
+                return await groups_remove_member(params, correlation_id)
+            if action == "groups.list_members":
+                return await groups_list_members(params, correlation_id)
+            # SharePoint / Sites
+            if action == "sites.list":
+                return await sites_list(params, correlation_id)
+            if action == "sites.get":
+                return await sites_get(params, correlation_id)
+            if action == "sites.root":
+                return await sites_root(params, correlation_id)
+            if action == "lists.list":
+                return await lists_list(params, correlation_id)
+            if action == "lists.get":
+                return await lists_get(params, correlation_id)
+            if action == "lists.items":
+                return await lists_items(params, correlation_id)
+            if action == "lists.create_item":
+                return await lists_create_item(params, correlation_id)
+            # Files / OneDrive
+            if action == "files.list":
+                return await files_list(params, correlation_id)
+            if action == "files.get":
+                return await files_get(params, correlation_id)
+            if action == "files.search":
+                return await files_search(params, correlation_id)
+            if action == "files.create_folder":
+                return await files_create_folder(params, correlation_id)
+            if action == "files.upload":
+                return await files_upload(params, correlation_id)
+            if action == "files.share":
+                return await files_share(params, correlation_id)
+            if action == "drives.list":
+                return await drives_list(params, correlation_id)
+            # Directory / Identity
+            if action == "directory.roles":
+                return await directory_roles(params, correlation_id)
+            if action == "directory.role_members":
+                return await directory_role_members(params, correlation_id)
+            if action == "directory.domains":
+                return await directory_domains(params, correlation_id)
+            if action == "directory.org":
+                return await directory_org(params, correlation_id)
+            if action == "apps.list":
+                return await apps_list(params, correlation_id)
+            if action == "apps.get":
+                return await apps_get(params, correlation_id)
+            if action == "service_principals.list":
+                return await service_principals_list(params, correlation_id)
+            if action == "apps.update":
+                return await apps_update(params, correlation_id)
 
-    # ---- Teams Manager ----
-    if agent == "teams-manager":
-        # New dotted names
-        if action == "teams.list":
-            return await teams_list(params, correlation_id)
-        if action == "teams.get":
-            return await teams_get(params, correlation_id)
-        if action == "teams.create":
-            return await teams_create(params, correlation_id)
-        if action == "teams.archive":
-            return await teams_archive(params, correlation_id)
-        if action == "teams.add_member":
-            return await teams_add_member(params, correlation_id)
-        if action == "teams.remove_member":
-            return await teams_remove_member(params, correlation_id)
-        if action == "channels.list":
-            return await channels_list(params, correlation_id)
-        if action == "channels.create":
-            return await channels_create(params, correlation_id)
-        if action == "channels.send_message":
-            return await channels_send_message(params, correlation_id)
-        if action == "chat.create":
-            return await chat_create(params, correlation_id)
-        if action == "chat.send_message":
-            return await chat_send_message(params, correlation_id)
-        if action == "chat.send":
-            return await chat_send(params, correlation_id)
-        if action == "chat.list":
-            return await chat_list(params, correlation_id)
-        # Legacy action names
-        if action == "create-workspace":
-            return await create_workspace(params, correlation_id)
-        if action == "add-workspace-members":
-            members = params.get("members") or []
-            team_id = params.get("teamId") or params.get("workspaceId")
-            results = []
-            for m in members:
-                r = await teams_add_member({"teamId": team_id, "userId": m}, correlation_id)
-                results.append(r)
-            return {"status": "added", "members": members, "results": results}
-        if action == "create-channels":
-            team_id = params.get("teamId") or params.get("workspaceId")
-            channel_names = params.get("channels") or []
-            results = []
-            for ch in channel_names:
-                r = await channels_create({"teamId": team_id, "displayName": ch}, correlation_id)
-                results.append(r)
-            return {"status": "created", "channels": channel_names, "results": results}
-        if action == "get-team-status":
-            team_id = params.get("teamId") or params.get("id")
-            if team_id:
-                return await teams_get({"teamId": team_id}, correlation_id)
-            return {"status": "ok", "members": (params.get("members") or [])}
+        # ---- Teams Manager ----
+        if agent == "teams-manager":
+            # New dotted names
+            if action == "teams.list":
+                return await teams_list(params, correlation_id)
+            if action == "teams.get":
+                return await teams_get(params, correlation_id)
+            if action == "teams.create":
+                return await teams_create(params, correlation_id)
+            if action == "teams.archive":
+                return await teams_archive(params, correlation_id)
+            if action == "teams.add_member":
+                return await teams_add_member(params, correlation_id)
+            if action == "teams.remove_member":
+                return await teams_remove_member(params, correlation_id)
+            if action == "channels.list":
+                return await channels_list(params, correlation_id)
+            if action == "channels.create":
+                return await channels_create(params, correlation_id)
+            if action == "channels.send_message":
+                return await channels_send_message(params, correlation_id)
+            if action == "chat.create":
+                return await chat_create(params, correlation_id)
+            if action == "chat.send_message":
+                return await chat_send_message(params, correlation_id)
+            if action == "chat.send":
+                return await chat_send(params, correlation_id)
+            if action == "chat.list":
+                return await chat_list(params, correlation_id)
+            # Legacy action names
+            if action == "create-workspace":
+                return await create_workspace(params, correlation_id)
+            if action == "add-workspace-members":
+                members = params.get("members") or []
+                team_id = params.get("teamId") or params.get("workspaceId")
+                results = []
+                for m in members:
+                    r = await teams_add_member({"teamId": team_id, "userId": m}, correlation_id)
+                    results.append(r)
+                return {"status": "added", "members": members, "results": results}
+            if action == "create-channels":
+                team_id = params.get("teamId") or params.get("workspaceId")
+                channel_names = params.get("channels") or []
+                results = []
+                for ch in channel_names:
+                    r = await channels_create(
+                        {"teamId": team_id, "displayName": ch}, correlation_id
+                    )
+                    results.append(r)
+                return {"status": "created", "channels": channel_names, "results": results}
+            if action == "get-team-status":
+                team_id = params.get("teamId") or params.get("id")
+                if team_id:
+                    return await teams_get({"teamId": team_id}, correlation_id)
+                return {"status": "ok", "members": (params.get("members") or [])}
 
-    # ---- Website ----
-    if agent == "website-manager" and action == "deployment.preview":
-        return await website_deployment_preview(params, correlation_id)
+        # ---- Website ----
+        if agent == "website-manager" and action == "deployment.preview":
+            return await website_deployment_preview(params, correlation_id)
 
-    # ---- HR ----
-    if agent == "hr-generalist" and action == "employee.onboard":
-        return await hr_employee_onboard(params, correlation_id)
+        # ---- HR ----
+        if agent == "hr-generalist" and action == "employee.onboard":
+            return await hr_employee_onboard(params, correlation_id)
 
-    # ---- Outreach Coordinator ----
-    if agent == "outreach-coordinator":
-        if action == "email.send_individual":
-            return await outreach_email_send_individual(params, correlation_id)
-        if action == "mail.send":
-            return await mail_send(params, correlation_id)
+        # ---- Outreach Coordinator ----
+        if agent == "outreach-coordinator":
+            if action == "email.send_individual":
+                return await outreach_email_send_individual(params, correlation_id)
+            if action == "mail.send":
+                return await mail_send(params, correlation_id)
 
-    # ---- Email Processing Agent ----
-    if agent == "email-processing-agent":
-        if action == "mail.list":
-            return await mail_list(params, correlation_id)
-        if action == "mail.read":
-            return await mail_read(params, correlation_id)
-        if action == "mail.send":
-            return await mail_send(params, correlation_id)
-        if action == "mail.reply":
-            return await mail_reply(params, correlation_id)
-        if action == "mail.forward":
-            return await mail_forward(params, correlation_id)
-        if action == "mail.move":
-            return await mail_move(params, correlation_id)
-        if action == "mail.delete":
-            return await mail_delete(params, correlation_id)
-        if action == "mail.folders":
-            return await mail_folders(params, correlation_id)
-        if action == "mailbox.settings":
-            return await mailbox_settings(params, correlation_id)
-        # Legacy action names
-        if action == "email.classify":
-            return {"classification": "inquiry", "priority": "medium", "category": "general"}
-        if action == "email.respond":
-            return await mail_reply(params, correlation_id)
-        if action == "email.forward":
-            return await mail_forward(params, correlation_id)
-        if action == "email.archive":
-            return await mail_move({**params, "destinationId": "archive"}, correlation_id)
-        if action == "follow-up.schedule":
-            return {"scheduled": True, "follow_up_date": params.get("date", "2024-02-01")}
-        if action == "email.send_individual":
-            return await outreach_email_send_individual(params, correlation_id)
+        # ---- Email Processing Agent ----
+        if agent == "email-processing-agent":
+            if action == "mail.list":
+                return await mail_list(params, correlation_id)
+            if action == "mail.read":
+                return await mail_read(params, correlation_id)
+            if action == "mail.send":
+                return await mail_send(params, correlation_id)
+            if action == "mail.reply":
+                return await mail_reply(params, correlation_id)
+            if action == "mail.forward":
+                return await mail_forward(params, correlation_id)
+            if action == "mail.move":
+                return await mail_move(params, correlation_id)
+            if action == "mail.delete":
+                return await mail_delete(params, correlation_id)
+            if action == "mail.folders":
+                return await mail_folders(params, correlation_id)
+            if action == "mailbox.settings":
+                return await mailbox_settings(params, correlation_id)
+            # Legacy action names
+            if action == "email.classify":
+                return {"classification": "inquiry", "priority": "medium", "category": "general"}
+            if action == "email.respond":
+                return await mail_reply(params, correlation_id)
+            if action == "email.forward":
+                return await mail_forward(params, correlation_id)
+            if action == "email.archive":
+                return await mail_move({**params, "destinationId": "archive"}, correlation_id)
+            if action == "follow-up.schedule":
+                return {"scheduled": True, "follow_up_date": params.get("date", "2024-02-01")}
+            if action == "email.send_individual":
+                return await outreach_email_send_individual(params, correlation_id)
 
-    # ---- Calendar Management Agent ----
-    if agent == "calendar-management-agent":
-        if action == "calendar.list":
-            return await calendar_list(params, correlation_id)
-        if action == "calendar.create":
-            return await calendar_create(params, correlation_id)
-        if action == "calendar.get":
-            return await calendar_get(params, correlation_id)
-        if action == "calendar.update":
-            return await calendar_update(params, correlation_id)
-        if action == "calendar.delete":
-            return await calendar_delete(params, correlation_id)
-        if action == "calendar.availability":
-            return await calendar_availability(params, correlation_id)
-        # Legacy aliases
-        if action == "calendar.schedule":
-            return await calendar_create(params, correlation_id)
-        if action == "meeting.organize":
-            return await calendar_create(params, correlation_id)
-        if action == "availability.check":
-            return await calendar_availability(params, correlation_id)
-        if action == "reminder.send":
-            return {"reminder_sent": True, "recipient": params.get("recipient")}
-        if action == "conflict.resolve":
-            return {"resolved": True, "new_time": params.get("newTime", "2024-01-20T15:00:00Z")}
-
+        # ---- Calendar Management Agent ----
+        if agent == "calendar-management-agent":
+            if action == "calendar.list":
+                return await calendar_list(params, correlation_id)
+            if action == "calendar.create":
+                return await calendar_create(params, correlation_id)
+            if action == "calendar.get":
+                return await calendar_get(params, correlation_id)
+            if action == "calendar.update":
+                return await calendar_update(params, correlation_id)
+            if action == "calendar.delete":
+                return await calendar_delete(params, correlation_id)
+            if action == "calendar.availability":
+                return await calendar_availability(params, correlation_id)
+            # Legacy aliases
+            if action == "calendar.schedule":
+                return await calendar_create(params, correlation_id)
+            if action == "meeting.organize":
+                return await calendar_create(params, correlation_id)
+            if action == "availability.check":
+                return await calendar_availability(params, correlation_id)
+            if action == "reminder.send":
+                return {"reminder_sent": True, "recipient": params.get("recipient")}
+            if action == "conflict.resolve":
+                return {
+                    "resolved": True,
+                    "new_time": params.get("newTime", "2024-01-20T15:00:00Z"),
+                }
     # ---- Project Manager ----
     if agent == "project-manager":
         if action == "create-project":

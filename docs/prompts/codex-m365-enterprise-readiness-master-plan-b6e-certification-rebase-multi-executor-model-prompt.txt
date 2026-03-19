@@ -1,0 +1,7 @@
+Execute B6E Certification Rebase to the Digital-Employee Multi-Executor Target
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b6e-certification-rebase-multi-executor-model.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B6E
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

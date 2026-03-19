@@ -15,7 +15,13 @@ from smarthaus_common.permission_enforcer import (
 from smarthaus_common.tenant_config import get_tenant_config
 from starlette.responses import Response
 
-from .actions import execute as execute_action
+from .actions import (
+    build_executor_identity,
+    resolve_executor_name_for_action,
+)
+from .actions import (
+    execute as execute_action,
+)
 from .approvals import ApprovalsStore
 from .audit import audit_log
 from .models import ActionRequest, ActionResponse
@@ -30,16 +36,6 @@ def _truthy_env(name: str, default: str = "0") -> bool:
 def _actor_header_fallback_enabled() -> bool:
     """Legacy app path is header-only and must fail closed unless explicitly enabled."""
     return _truthy_env("M365_ACTOR_HEADER_FALLBACK", "0")
-
-
-def _build_executor_identity(tenant_config: Any) -> dict[str, Any]:
-    return {
-        "type": "service_principal",
-        "mode": tenant_config.auth.mode,
-        "tenant": tenant_config.tenant.id,
-        "azure_tenant_id": tenant_config.azure.tenant_id,
-        "client_id": tenant_config.azure.client_id,
-    }
 
 
 def create_app() -> FastAPI:
@@ -127,7 +123,22 @@ def create_app() -> FastAPI:
 
         actor_groups: list[str] = []
         actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
-        executor_identity = _build_executor_identity(tenant_config)
+        try:
+            executor_name = resolve_executor_name_for_action(agent, action, tenant_config)
+        except ValueError as exc:
+            audit_log(
+                "action_failed",
+                agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=str(exc),
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                tenant=tenant_config.tenant.id,
+            )
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+        executor_identity = build_executor_identity(tenant_config, executor_name)
 
         allowed, reason = check_user_permission(
             user_email=user_email,
@@ -161,6 +172,8 @@ def create_app() -> FastAPI:
         params.setdefault("requestor_tier", actor_tier.get("tier_name"))
         params.setdefault("requestor_tier_info", actor_tier)
         params.setdefault("requestor_groups", actor_groups)
+        params.setdefault("executor_name", executor_name)
+        params.setdefault("executor_domain", executor_identity.get("domain"))
         params.setdefault("executor_identity", executor_identity)
         params.setdefault("tenant", tenant_config.tenant.id)
         decision = await opa.check(
@@ -239,7 +252,11 @@ def create_app() -> FastAPI:
 
         try:
             result = await execute_action(
-                agent=agent, action=mapped_action, params=params, correlation_id=correlation_id
+                agent=agent,
+                action=mapped_action,
+                params=params,
+                correlation_id=correlation_id,
+                executor_name=executor_name,
             )
             audit_log(
                 "action_executed",

@@ -77,17 +77,31 @@
 13. `B5A` Identity Architecture Lock
 14. `B5B` Runtime Identity Enforcement
 15. `B5C` Authorization and Audit Binding
-16. `C1A` Certification Environment Readiness
-17. `C1B` Live Read-Only Certification
-18. `C1C` Live Mutation and Governance Certification
-19. `C1D` Evidence Packet Completion and Matrix Closure
-20. `C2` Release Certification Packet and Decision
-21. `D1` Enterprise Collateral Pack
-22. `D2` Pilot Acceptance and Customer Handoff
+16. `B5D` Entra App Registration Role Separation
+17. `B5E` Executor Certificate Cutover and Tenant Contract Finalization
+18. `B6` Digital Employee and Executor-Domain Architecture
+19. `B6A` Digital Employee Operating Model
+20. `B6B` Capability, API, License, and Auth Matrix
+21. `B6C` Executor-Domain Partitioning and Minimum-Permission Model
+22. `B6D` Persona Registry and Humanized Delegation Routing
+23. `B6E` Certification Rebase to the Digital-Employee Multi-Executor Target
+24. `B7` Multi-Executor Runtime and Persona Integration
+25. `B7A` Tenant Contract and Executor Registry Extension
+26. `B7B` Runtime Executor Routing and Domain Selection
+27. `B7C` Persona Registry and Humanized Delegation Integration
+28. `B7D` Executor Permission Minimization and Azure Cleanup
+29. `B7E` Approval Backend Reproof and Certification Re-Readiness
+30. `C1A` Certification Environment Readiness
+31. `C1B` Live Read-Only Certification
+32. `C1C` Live Mutation and Governance Certification
+33. `C1D` Evidence Packet Completion and Matrix Closure
+34. `C2` Release Certification Packet and Decision
+35. `D1` Enterprise Collateral Pack
+36. `D2` Pilot Acceptance and Customer Handoff
 
 ## Active-State Rules
 
-- `B5A` is the next executable act.
-- `C1A` is prepared but blocked until `B5C` is complete and the live environment prerequisites exist.
+- `B7C` is the next executable act.
+- `C1A` is prepared but blocked until `B7E` is complete, the bounded SharePoint executor path is re-proven for approval reachability, and the live environment prerequisites exist.
 - `C1B` and `C1C` require explicit live-execution approval.
 - `D1` and `D2` must not be used to imply readiness while `B4*`, `C1*`, or `C2` are incomplete.
