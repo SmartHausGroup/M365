@@ -1,8 +1,8 @@
 # M365 Live-Tenant Validation Matrix
 
-**Status:** `P3A` complete; synchronized through `B5A`
-**Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3A`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R9`
+**Status:** `P3A` complete; synchronized through `C1D`
+**Date:** 2026-03-20
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3A`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:C1D`
 
 This document defines which validation evidence is sufficient only for development confidence, which evidence is required for enterprise release claims, and which capabilities require both mock and live-tenant validation.
 
@@ -29,6 +29,29 @@ If a supported enterprise-critical capability lacks a live-evidence requirement 
 | Ops-adapter approval path | Live required | OPA reachable, approval backend target resolved from tenant contract or approved compatibility override, approval target action available, approver identity path configured | approval record, audit record, policy decision record, operator evidence | Required for enterprise governance claim; not covered by current generated MA artifacts |
 | Ops-adapter admin audit/config inspection path | Live required | configured admin surface, tenant config available, admin actions exercised in controlled tenant | admin evidence packet, append-only admin audit records, snapshot supplement only if explicitly requested | Required before enterprise governance claims broaden beyond instruction API; runtime admin audit surface is now present, but live certification is still required |
 | Capability-universe registry integrity | Mock/local sufficient | generated registry artifacts available | `configs/generated/capability_registry_verification.json`, `docs/M365_MA_INDEX.md` | Supports claim that only 9 of 260 actions are implemented; not a live tenant requirement |
+
+## Current Standalone C1 Packet Status (2026-03-20)
+
+The active standalone packet for candidate `52ca494` now maps to this matrix as follows:
+
+1. In-scope and green for the bounded standalone M365 v1 claim:
+   - `Mutation gate for mutating supported actions`
+     - evidence: `artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json`, `provision_service_reproof.json`, `reset_user_password_reproof.json`
+   - `Read-only supported actions`
+     - evidence: `artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json`
+   - `Tenant-config authority and auth-mode posture`
+     - evidence: `artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json`, `README.md`
+   - `Entra actor authentication and actor-versus-executor traceability`
+     - evidence: `artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json`
+   - `Ops-adapter approval path`
+     - evidence: `artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json`, `transcripts/operator_notes.md`
+2. Explicitly excluded from the current standalone M365 `C1` / `C2` release claim:
+   - instruction-API auth, idempotency, and instruction-audit rows
+   - the broader ops-adapter admin audit/config inspection row
+3. Structural-only rows remain unchanged:
+   - `Capability-universe registry integrity` remains satisfied by mock/local evidence only
+
+The authoritative packet-side mapping is retained in `artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json`.
 
 ## Validation Mode Definitions
 
@@ -126,5 +149,5 @@ The following commercialization rules apply now:
 Current commercialization consequence:
 
 1. The repo has credible structural MA evidence.
-2. The repo does not yet have a complete live-tenant release evidence packet for standalone M365 v1.
-3. `P3B` must turn this matrix into explicit go/no-go release gates.
+2. The repo now has a complete live-tenant evidence packet for the bounded standalone M365 v1 supported surface.
+3. `C2` must turn this synchronized packet into the formal go/no-go release decision.

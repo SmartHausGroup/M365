@@ -1,0 +1,58 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1C",
+  "gate": "GATE:M365-READY-C1C STATUS:GO",
+  "shell_contract": {
+    "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+    "UCP_TENANT": "smarthaus",
+    "ALLOW_M365_MUTATIONS": "true",
+    "ENABLE_AUDIT_LOGGING": "true",
+    "OPA_URL": "http://localhost:8181",
+    "JWT_REQUIRED": "1",
+    "JWT_AUDIENCE": "e6fd71d3-4116-401e-a4f1-b2fda4318a8b",
+    "JWT_ISSUER": "https://login.microsoftonline.com/6c4cb441-342c-430f-9a9d-79c3cdb18b75/v2.0",
+    "AZURE_TENANT_ID": "6c4cb441-342c-430f-9a9d-79c3cdb18b75"
+  },
+  "actor": "phil@smarthausgroup.com",
+  "operator_identity_app": {
+    "client_id": "e6fd71d3-4116-401e-a4f1-b2fda4318a8b",
+    "scope": "access_as_user"
+  },
+  "supported_rows": [
+    {
+      "id": "governed_users_read",
+      "action": "m365-administrator/users.read",
+      "status": "pass",
+      "http_status": 200,
+      "result_status": "success"
+    },
+    {
+      "id": "approval_create",
+      "action": "m365-administrator/teams.create",
+      "status": "pass",
+      "http_status": 200,
+      "result_status": "pending_approval",
+      "approval_id": "cb8f8523-3338-4dd0-8ae8-6d80685f584f"
+    },
+    {
+      "id": "approval_readback",
+      "path": "/approvals/cb8f8523-3338-4dd0-8ae8-6d80685f584f",
+      "status": "pass",
+      "http_status": 200,
+      "approval_status": "pending"
+    },
+    {
+      "id": "audit_evidence",
+      "path": "logs/ops_audit.log",
+      "status": "pass",
+      "match": {
+        "approval_id": "cb8f8523-3338-4dd0-8ae8-6d80685f584f",
+        "surface": "ops_adapter",
+        "status": "pending_approval",
+        "actor": "phil@smarthausgroup.com",
+        "persona": "Marcus Chen",
+        "tenant": "smarthaus"
+      }
+    }
+  ],
+  "scoping_note": "The live reproof used the active OPA-allowed governed surface. Historical admin.* and directory.org exploratory probes remain out of scope for the bounded C1C certification contract."
+}

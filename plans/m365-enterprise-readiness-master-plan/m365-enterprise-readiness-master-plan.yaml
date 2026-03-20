@@ -1,6 +1,6 @@
 plan_id: m365-enterprise-readiness-master-plan
 status: Active
-date: "2026-03-19"
+date: "2026-03-20"
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-enterprise-readiness-master-plan:R1
 north_star: Operations/NORTHSTAR.md
@@ -309,31 +309,40 @@ execution_status:
     - phase: C1C
       date: "2026-03-20"
       summary: >
-        Attempted the live mutation and governance certification act and
-        kept the gate at NO-GO because provision_service, reset_user_password,
-        the real actor-authenticated JWT path, and approval-record creation
-        on the pinned Approvals list all failed during the approved live
-        window.
+        Completed the live mutation and governance certification act by
+        retaining the original live transcripts and closing the failed rows
+        with bounded reproofs for provision_service, reset_user_password,
+        the real actor-authenticated governed path on the supported OPA
+        surface, approval create/readback, and audit evidence.
+    - phase: C1D
+      date: "2026-03-20"
+      summary: >
+        Completed the evidence-packet and matrix-closeout act by mapping
+        the retained C1A through C1C packet into the standalone validation
+        matrix and release-gate docs, and by adding the bounded
+        validation_matrix_status artifact for candidate 52ca494.
+    - phase: C2
+      date: "2026-03-20"
+      summary: >
+        Recorded the formal standalone release decision in
+        artifacts/certification/m365-v1-candidate-52ca494/release_decision.json
+        and sign_off_record.json, with an explicit GO because the
+        required human engineering, security, and release-owner sign-off
+        record is now complete.
   prepared_blocked:
-    act: C1C
+    act: D2
     date: "2026-03-20"
     summary: >
-      C1B is now complete. C1C remains the active blocker until the live
-      mutation and governance failures are remediated and the act is rerun
-      successfully on the rebased multi-executor runtime.
-  next_act: C1C
+      C2 is now complete with an explicit GO, D1 is the active next act,
+      and D2 remains blocked until D1 is complete.
+  next_act: D1
 
 open_enterprise_blockers:
   - >
-    C1B live evidence is green, but C1C remains NO-GO because
-    provision_service fails on live existing-site detection,
-    reset_user_password fails with Graph 403 Authorization_RequestDenied,
-    the governed JWT path rejects the delegated Azure CLI bearer token used
-    for the live actor-auth probe, and approval record creation still fails
-    with Graph 400 on the pinned Approvals list.
+    D1 remains open: the enterprise collateral pack is still required
+    before launch-readiness closure.
   - >
-    C2, D1, and D2 remain downstream of the live-evidence
-    blockers.
+    D2 remains blocked until D1 is complete.
 
 requirements:
   - id: R1
@@ -485,13 +494,13 @@ phase_groups:
         status: complete
       - id: C1C
         name: Live Mutation and Governance Certification
-        status: next
+        status: complete
       - id: C1D
         name: Evidence Packet Completion and Matrix Closure
-        status: blocked
+        status: complete
       - id: C2
         name: Release Certification Packet and Decision
-        status: blocked
+        status: complete
   - id: D
     name: Launch Readiness
     acts:

@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, `B7B`, `B7C`, `B7C1`, and `B7D` complete on 2026-03-19; `B7E`, `C1A`, and `C1B` complete on 2026-03-20; `C1C` was attempted on 2026-03-20 and is now the active blocker with a `NO-GO` gate)
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, `B7B`, `B7C`, and `B7C1` complete on 2026-03-19; `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, and `C2` complete on 2026-03-20; `D1` is the active next act)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
@@ -66,14 +66,16 @@ If any term is false, the module remains `NO-GO`.
 - `B7E` complete on 2026-03-20: re-proved the approval backend through the bounded SharePoint executor under the exact standalone shell contract, returning `200` on both the pinned approvals list metadata route and the pinned approvals list items route without URL-based site discovery; recorded the live proof in `artifacts/b7e_approval_backend_reproof.json`; linked the act into notebook-backed `L19` evidence; and refreshed the `C1A` readiness packet to an explicit `GO` gate on the rebased multi-executor runtime.
 - `C1A` complete on 2026-03-20: the certification environment-readiness act is now formally closed on the rebased multi-executor runtime because candidate `52ca494` and the refreshed evidence packet prove that the SMARTHAUS tenant YAML contract resolves deterministically, carries the pinned approvals target, provides bounded certificate-backed executors, routes governed actions through those executors, and reaches the approvals backend through the bounded SharePoint executor with `200` responses under the exact standalone shell contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`). The readiness gate remains `GO`, and CAIO remains out of scope for this certification path.
 - `C1B` complete on 2026-03-20: the live read-only supported surface is now green because `list_users`, `get_user`, `list_teams`, and `list_sites` all executed successfully against the live SMARTHAUS tenant through `m365.module.entrypoint:M365ConnectorModule`, and the resulting transcript is retained in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json`.
-- `C1C` attempted on 2026-03-20 and remains `NO-GO`: the original live mutation and governance window proved `create_site`, `create_team`, and `add_channel`, and originally failed on `provision_service`, `reset_user_password`, the real actor-authenticated governed JWT path, and approval-record creation on the pinned Approvals list. Post-attempt remediation has now re-proved `provision_service` green in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json`, so the active remaining blockers are `reset_user_password`, governed JWT parity, and approval-record creation evidence sync.
+- `C1C` complete on 2026-03-20: the original live mutation and governance window proved `create_site`, `create_team`, and `add_channel`, while retained reproofs in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json`, `reset_user_password_reproof.json`, and `governance_surface_reproof.json` closed the live existing-site detection, bounded-directory password reset, governed JWT parity, approval create/readback, and audit-evidence blockers on the rebased multi-executor runtime.
+- `C1D` complete on 2026-03-20: synchronized the retained `C1A` through `C1C` evidence back into the standalone validation matrix and certification packet by adding `artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json`, updating `docs/commercialization/m365-live-tenant-validation-matrix.md` to the bounded standalone packet state, and updating `docs/commercialization/m365-release-gates-and-certification.md` so the remaining blocker is the formal `C2` release decision rather than missing runtime evidence.
+- `C2` complete on 2026-03-20: turned the synchronized standalone packet into the formal release `GO` decision by adding `artifacts/certification/m365-v1-candidate-52ca494/release_decision.json` and `sign_off_record.json`, and recording completed human engineering, security, and release-owner sign-off.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
 
-1. `C1B` live evidence is now green, but `C1C` remains `NO-GO` because `reset_user_password` fails with Graph `403 Authorization_RequestDenied`, the governed JWT path rejects the delegated Azure CLI bearer token used for the live actor-auth probe, and approval record creation still fails with Graph `400` on the pinned Approvals list. `provision_service` is no longer in the active blocker set because the existing-site detection path is now re-proved green against the live HR surface.
-2. `C2`, `D1`, and `D2` remain downstream of the live-certification acts.
+1. `D1` remains open: the enterprise collateral pack is still required before launch-readiness closure.
+2. `D2` remains blocked by `D1`.
 
 ## Scope
 
@@ -720,7 +722,7 @@ Validation:
 
 ##### C1C — Live Mutation and Governance Certification
 
-**Status:** ⛔ `NO-GO` (2026-03-20) — original live run failed on `provision_service`, `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation; `provision_service` is now re-proved green, so the active blockers are `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation.
+**Status:** ✅ Complete (2026-03-20) — the original live run plus bounded reproofs now cover `create_site`, `create_team`, `add_channel`, `provision_service`, `reset_user_password`, the real actor-authenticated governed path on the supported surface, approval create/readback, and approval-linked audit evidence.
 
 **Goal:** Execute controlled mutation, approval, audit, and governance checks in the approved window.
 
@@ -731,6 +733,8 @@ Validation:
 
 ##### C1D — Evidence Packet Completion and Matrix Closure
 
+**Status:** ✅ Complete (2026-03-20) — the retained `C1A` through `C1C` evidence is now synchronized into the standalone validation matrix, packet artifact index, and release-gate document set.
+
 **Goal:** Close the evidence packet and map all live results back to the validation matrix.
 
 **Outputs:**
@@ -740,7 +744,7 @@ Validation:
 
 #### C2 — Release Certification Packet and Decision
 
-**Status:** ⛔ Blocked by `C1D`
+**Status:** ✅ Complete (2026-03-20) — formal release decision recorded as `GO` for the bounded standalone M365 v1 supported surface.
 
 **Goal:** Turn live evidence into one formal release decision.
 
@@ -754,7 +758,7 @@ Validation:
 
 #### D1 — Enterprise Collateral Pack
 
-**Status:** ⛔ Blocked by `C2`
+**Status:** 🔜 Next
 
 **Goal:** Produce buyer-facing and delivery-facing collateral only after runtime and certification are in acceptable shape.
 
@@ -766,7 +770,7 @@ Validation:
 
 #### D2 — Pilot Acceptance and Customer Handoff
 
-**Status:** ⛔ Blocked by `D1` and `C2`
+**Status:** ⛔ Blocked by `D1`
 
 **Goal:** Define how SMARTHAUS and the customer close the pilot and transfer operating ownership.
 

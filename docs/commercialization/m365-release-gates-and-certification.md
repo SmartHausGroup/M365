@@ -1,8 +1,8 @@
 # M365 Release Gates and Certification
 
-**Status:** `P3B` complete
-**Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3B`
+**Status:** `P3B` complete; synchronized through `C2`
+**Date:** 2026-03-20
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R4`, `plan:m365-enterprise-commercialization-readiness:P3B`, `plan:m365-enterprise-readiness-master-plan:C2`
 
 This document converts the live-tenant validation matrix into an explicit release-decision model for standalone M365 v1. It defines what must be true before SmartHaus can call the product enterprise-release ready, and it blocks release when required evidence is missing or when only mock confidence exists.
 
@@ -156,13 +156,13 @@ Retention rules:
 
 If evaluated today against these gates, the certification state is:
 
-1. `Gate 1` structurally passable
-2. `Gate 2` structurally passable
-3. `Gate 3` structurally passable with documented gaps
-4. `Gate 4` not yet passable because the required live evidence packet has not been produced
-5. `Gate 5` partially passable only if unresolved gaps remain excluded from claims
-6. `Gate 6` not yet passable because no release certification packet exists
+1. `Gate 1` passable for the bounded 9-action standalone v1 scope
+2. `Gate 2` passable
+3. `Gate 3` passable with the bounded standalone claim and documented exclusions
+4. `Gate 4` passable for the bounded standalone M365 v1 supported surface because the live packet now contains `C1A` through `C1D` evidence
+5. `Gate 5` passable only within the explicitly bounded release claim that excludes historical instruction-API rows and the broader admin/config inspection surface
+6. `Gate 6` passable because `C2` now includes the formal release decision packet and the completed human engineering, security, and release-owner sign-off record
 
 Current deterministic outcome:
 
-`NO-GO` for enterprise certification today, until `P3A` live-evidence execution is actually performed and a release packet exists.
+`GO` for the bounded standalone M365 v1 release gate today. The runtime evidence gate is closed and the completed human engineering, security, and release-owner sign-off record now satisfies Gate 6. Launch-readiness work in `D1` and `D2` remains downstream of this release decision.

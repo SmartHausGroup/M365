@@ -1,10 +1,10 @@
 {
-  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C2",
   "candidate_sha": "52ca494",
   "candidate_date": "2026-03-18",
-  "status": "c1c_no_go_live_evidence_partial",
-  "current_plan_ref": "plan:m365-enterprise-readiness-master-plan:C1C",
-  "current_gate": "GATE:M365-READY-C1C STATUS:NO-GO",
+  "status": "c2_release_decision_go",
+  "current_plan_ref": "plan:m365-enterprise-readiness-master-plan:D1",
+  "current_gate": "GATE:M365-READY-C2 STATUS:GO",
   "frozen_runtime_evidence": [
     {
       "id": "candidate_commit",
@@ -49,12 +49,29 @@
       "artifact": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json"
     },
     "c1c": {
-      "status": "no-go",
+      "status": "go",
       "artifacts": [
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/reset_user_password_reproof.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json",
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md",
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json"
+      ]
+    },
+    "c1d": {
+      "status": "go",
+      "artifacts": [
+        "artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json",
+        "docs/commercialization/m365-live-tenant-validation-matrix.md",
+        "docs/commercialization/m365-release-gates-and-certification.md"
+      ]
+    },
+    "c2": {
+      "status": "go",
+      "artifacts": [
+        "artifacts/certification/m365-v1-candidate-52ca494/release_decision.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/sign_off_record.json"
       ]
     }
   },
@@ -67,7 +84,7 @@
     {
       "id": "mutation_surface_transcript",
       "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
-      "status": "fail"
+      "status": "historical_fail_retained"
     },
     {
       "id": "provision_service_reproof",
@@ -75,25 +92,45 @@
       "status": "pass"
     },
     {
+      "id": "reset_user_password_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/reset_user_password_reproof.json",
+      "status": "pass"
+    },
+    {
       "id": "governance_surface_transcript",
       "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
-      "status": "fail"
+      "status": "historical_fail_retained"
+    },
+    {
+      "id": "governance_surface_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json",
+      "status": "pass"
     },
     {
       "id": "operator_notes",
       "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md",
       "status": "present"
+    },
+    {
+      "id": "validation_matrix_status",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json",
+      "status": "pass"
+    },
+    {
+      "id": "release_decision",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/release_decision.json",
+      "status": "pass"
+    },
+    {
+      "id": "sign_off_record",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/sign_off_record.json",
+      "status": "pass"
     }
   ],
-  "blocking_conditions": [
-    "reset_user_password fails with Graph 403 Authorization_RequestDenied under the bounded directory executor",
-    "the governed JWT path rejects the delegated Azure CLI bearer token used for the live actor-auth probe",
-    "approval record creation still fails with Graph HTTP 400 on the pinned Approvals list"
-  ],
+  "blocking_conditions": [],
   "next_actions": [
-    "Align the bounded directory executor privilege set with the supported reset_user_password surface and rerun that row.",
-    "Repair the governed JWT validation parity for the real actor-authenticated path and rerun the governance checks.",
-    "Fix the Graph approvals-list item-create path so approval and audit evidence can be retained, then rerun C1C."
+    "Execute D1 and prepare the enterprise collateral pack.",
+    "Execute D2 and complete pilot acceptance and customer handoff."
   ],
   "blocker_report": "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json"
 }

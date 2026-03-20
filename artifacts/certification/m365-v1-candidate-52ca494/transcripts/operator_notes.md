@@ -21,31 +21,45 @@ export ENABLE_AUDIT_LOGGING=true
 
 ## C1C Result
 
-- `GATE:M365-READY-C1C STATUS:NO-GO`
+- `GATE:M365-READY-C1C STATUS:GO`
 - Mutation surface:
   - pass: `create_site`
   - pass: `create_team`
   - pass: `add_channel`
-  - fail in original run: `provision_service`
-  - fail: `reset_user_password`
+  - pass after reproof: `provision_service`
+  - pass after reproof: `reset_user_password`
 - Governance surface:
   - pass: missing-bearer fail-closed
   - pass: OPA health and approval-required decision path
-  - fail: real actor-authenticated governed path (`401 invalid_token:Signature verification failed`)
-  - fail: approval record creation compatibility probe (`400` on SharePoint-backed list-item create)
-  - blocked: approval-linked audit evidence
-
-## Live Blockers
-
-1. `reset_user_password` fails because the bounded directory executor lacks the required privilege.
-2. The current JWT validation contract does not accept the delegated Azure CLI bearer token used for the real-actor governed-path probe.
-3. Approval record creation still fails with Graph HTTP `400` when writing to the pinned `Approvals` list, so approval and audit evidence is incomplete.
+  - pass after reproof: real actor-authenticated governed path (`m365-administrator/users.read` with JWT-backed actor identity)
+  - pass after reproof: approval record creation and readback on the pinned `Approvals` list
+  - pass after reproof: approval-linked audit evidence in `logs/ops_audit.log`
 
 ## Post-Attempt Remediation
 
 - `provision_service` is now green under `transcripts/provision_service_reproof.json`.
+- `reset_user_password` is now green under `transcripts/reset_user_password_reproof.json`.
+- Governed JWT parity, approval create/readback, and audit evidence are now green under `transcripts/governance_surface_reproof.json`.
 - Root cause: existing-site detection was guessing `/sites/hr` from `mail_nickname=hr`, while the live HR group resolves to `https://smarthausgroup.sharepoint.com/sites/hr2`.
 - The runtime now resolves the existing group root site first and only uses path lookup as bounded fallback.
+
+## Scope Note
+
+- The green governance reproof is intentionally bounded to the active OPA-allowed certification surface.
+- Historical exploratory `admin.*` and `directory.org` probes remain outside the supported `C1C` contract and are not treated as release blockers.
+
+## C1D Closeout
+
+- `GATE:M365-READY-C1D STATUS:GO`
+- The retained `C1B` and `C1C` evidence is now mapped into `validation_matrix_status.json`.
+- `docs/commercialization/m365-live-tenant-validation-matrix.md` is synchronized to the standalone packet.
+- `docs/commercialization/m365-release-gates-and-certification.md` now reflects that Gate 4 is passable for the bounded standalone v1 claim, while Gate 6 still awaits the formal `C2` decision packet.
+
+## C2 Decision
+
+- `GATE:M365-READY-C2 STATUS:GO`
+- Runtime evidence is green for the bounded standalone M365 v1 release claim.
+- Final release decision is `GO` because `sign_off_record.json` is complete for engineering, security, and release-owner sign-off.
 
 ## Additional Observation
 

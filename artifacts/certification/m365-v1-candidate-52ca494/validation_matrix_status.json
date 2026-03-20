@@ -1,0 +1,85 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1D",
+  "gate": "GATE:M365-READY-C1D STATUS:GO",
+  "candidate_sha": "52ca494",
+  "candidate_date": "2026-03-18",
+  "scope": "pure standalone M365 v1 supported surface",
+  "in_scope_rows": [
+    {
+      "capability": "Mutation gate for mutating supported actions",
+      "status": "go",
+      "evidence": [
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/reset_user_password_reproof.json"
+      ]
+    },
+    {
+      "capability": "Read-only supported actions",
+      "status": "go",
+      "evidence": [
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json"
+      ]
+    },
+    {
+      "capability": "Tenant-config authority and auth-mode posture",
+      "status": "go",
+      "evidence": [
+        "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/README.md"
+      ]
+    },
+    {
+      "capability": "Entra actor authentication and actor-versus-executor traceability",
+      "status": "go",
+      "evidence": [
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json"
+      ]
+    },
+    {
+      "capability": "Ops-adapter approval path",
+      "status": "go",
+      "evidence": [
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md"
+      ]
+    }
+  ],
+  "excluded_rows": [
+    {
+      "capability": "Instruction response schema and postcondition for the 9 supported actions",
+      "status": "excluded_from_standalone_m365_c1_scope",
+      "reason": "Historical instruction-API and CAIO evidence remains traceability-only for the standalone M365 certification path."
+    },
+    {
+      "capability": "Auth gate for instruction API",
+      "status": "excluded_from_standalone_m365_c1_scope",
+      "reason": "Standalone C1 does not certify the CAIO instruction API surface."
+    },
+    {
+      "capability": "Idempotency behavior for supported actions",
+      "status": "excluded_from_standalone_m365_c1_scope",
+      "reason": "No standalone v1 idempotency release claim is being made in C1/C2."
+    },
+    {
+      "capability": "Instruction audit for supported actions",
+      "status": "excluded_from_standalone_m365_c1_scope",
+      "reason": "Standalone C1 is scoped to the M365 module and governed ops-adapter path, not the historical instruction API runtime."
+    },
+    {
+      "capability": "Ops-adapter admin audit/config inspection path",
+      "status": "excluded_from_standalone_v1_release_claim",
+      "reason": "The current release claim is bounded to the supported v1 surface and approval-governed path, not the broader admin/config inspection surface."
+    },
+    {
+      "capability": "Capability-universe registry integrity",
+      "status": "structural_pass",
+      "reason": "This row remains mock/local sufficient and is already covered by the generated registry verification artifacts."
+    }
+  ],
+  "blocked_rows": [],
+  "next_actions": [
+    "Execute C2 and record the formal release decision against the synchronized packet.",
+    "If C2 is GO, advance to D1 and D2."
+  ]
+}

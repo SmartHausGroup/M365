@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import pytest
-
-from smarthaus_common.errors import SmarthausError
 from provisioning_api import m365_provision
+from smarthaus_common.errors import SmarthausError
 
 
 class _FakeProvisionClient:
