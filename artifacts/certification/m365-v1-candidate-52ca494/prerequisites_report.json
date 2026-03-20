@@ -3,6 +3,7 @@
   "candidate_sha": "52ca494",
   "checked_at": "2026-03-20T06:51:24-04:00",
   "status": "go",
+  "next_act": "C1B",
   "gate": "GATE:M365-READY-C1A STATUS:GO",
   "final_decision": "GO",
   "probe_mode": "exact_shell_contract_reproof",

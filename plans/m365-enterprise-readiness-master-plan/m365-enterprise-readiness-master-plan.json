@@ -186,17 +186,22 @@
         "phase": "B7E",
         "date": "2026-03-20",
         "summary": "Re-proved the approval backend through the bounded SharePoint executor under the exact standalone shell contract, returning 200 on both the pinned approvals list metadata route and the pinned approvals list items route without URL-based site discovery, and refreshed the C1A readiness packet to GO.\n"
+      },
+      {
+        "phase": "C1A",
+        "date": "2026-03-20",
+        "summary": "Closed the certification environment-readiness act because candidate 52ca494 and the refreshed evidence packet prove the SMARTHAUS tenant contract, bounded certificate-backed executors, pinned approvals target, and exact standalone shell contract are ready for live certification, and advanced the next act to C1B pending explicit live-execution approval.\n"
       }
     ],
     "prepared_blocked": {
-      "act": "C1A",
+      "act": "C1B",
       "date": "2026-03-20",
-      "summary": "Certification candidate 52ca494 and the refreshed evidence packet now prove that the SMARTHAUS tenant YAML contract resolves, carries the pinned approvals target, provides bounded certificate-backed executor contracts, routes governed actions through bounded executors, and reaches the approvals backend through the bounded SharePoint executor with 200 responses under the exact standalone shell contract (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true). C1A now carries a GO readiness gate on the rebased multi-executor runtime. CAIO is out of scope for this certification path.\n"
+      "summary": "C1A is now complete. The next live act is C1B, and it remains blocked only by the requirement for explicit live-execution approval before read-only certification begins on the rebased multi-executor runtime.\n"
     },
-    "next_act": "C1A"
+    "next_act": "C1B"
   },
   "open_enterprise_blockers": [
-    "The rebased digital-employee and bounded-executor target is now materially implemented and C1A is green, but C1B and C1C live execution evidence does not exist yet.\n",
+    "The rebased digital-employee and bounded-executor target is now materially implemented and C1A is complete, but C1B and C1C live execution evidence does not exist yet.\n",
     "C2, D1, and D2 remain downstream of the live-evidence blockers.\n"
   ],
   "requirements": [
@@ -442,16 +447,16 @@
       "id": "C",
       "name": "Live-Tenant Certification",
       "acts": [
-        {
-          "id": "C1A",
-          "name": "Certification Environment Readiness",
-          "status": "next"
-        },
-        {
-          "id": "C1B",
-          "name": "Live Read-Only Certification",
-          "status": "blocked"
-        },
+      {
+        "id": "C1A",
+        "name": "Certification Environment Readiness",
+        "status": "complete"
+      },
+      {
+        "id": "C1B",
+        "name": "Live Read-Only Certification",
+        "status": "next"
+      },
         {
           "id": "C1C",
           "name": "Live Mutation and Governance Certification",

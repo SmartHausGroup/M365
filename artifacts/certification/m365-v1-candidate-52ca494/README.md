@@ -9,7 +9,8 @@ Candidate `52ca494` freezes the `B3` admin audit and evidence-surface remediatio
 ## Current Status
 
 - `STATUS: GO`
-- `PHASE: C1A`
+- `PHASE: C1A COMPLETE`
+- `NEXT_PHASE: C1B`
 - `PLAN_REF: plan:m365-enterprise-readiness-master-plan:C1A`
 - `GATE: GATE:M365-READY-C1A STATUS:GO`
 - `FINAL_DECISION: GO`
@@ -59,4 +60,4 @@ export ENABLE_AUDIT_LOGGING=true
 - `approval_list_metadata`: `200`
 - `approval_list_items`: `200`
 
-That means the exact standalone shell contract is now sufficient for tenant selection, certificate-backed bounded executor auth, and the governed approval backend. The next live act is `C1B`.
+That means the exact standalone shell contract is now sufficient for tenant selection, certificate-backed bounded executor auth, and the governed approval backend. `C1A` is complete, and the next live act is `C1B`, which still requires explicit live-execution approval.
