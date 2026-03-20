@@ -156,8 +156,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
 
-**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A`, `E0B`, and `E0C` are complete, `E0D` is the active next act, and `E0E` through `E9E` remain planned and blocked by predecessor work.
-**Current next act:** `E0D` — bind the locked roster and the canonical capability taxonomy into one department/persona-to-capability map with explicit risk and approval posture.
+**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A`, `E0B`, `E0C`, and `E0D` are complete, `E0E` is the active next act, and `E1A` through `E9E` remain planned and blocked by predecessor work.
+**Current next act:** `E0E` — convert the locked roster, workload universe, taxonomy, and persona/risk map into the executable release-wave and workforce-completion structure for the rest of the program.
 
 **Status update (2026-03-20 16:11 EDT):** Created `plans/m365-ai-workforce-expansion-master-plan/` as the new active program with a full phase/child-phase stack `E0` through `E9`, explicit department and workload universe targets, and a complete MATHS prompt pair inventory under `docs/prompts/` for the overview, each grouped phase, and each child act. This new plan follows the now-closed enterprise-readiness master plan and becomes the active critical path for the broader SMARTHAUS AI workforce vision.
 
@@ -166,6 +166,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 **Status update (2026-03-20 16:11 EDT):** `E0B` is complete. The workload universe is now locked at the family level in `docs/commercialization/m365-workload-universe-inventory.md`, grounded in official Microsoft workload references plus the repo's current `184`-action registry surface. `E0C` is now the active next act.
 
 **Status update (2026-03-20 16:11 EDT):** `E0C` is complete. The canonical capability taxonomy now exists at `docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md`, explicitly separating implementation status, feasibility class, auth class, and licensing class across the locked workload families. `E0D` is now the active next act.
+
+**Status update (2026-03-20 16:53 EDT):** `E0D` is complete. The workforce now has an explicit structured persona-to-capability map at `registry/persona_capability_map.yaml`, a human-readable risk and approval artifact at `docs/commercialization/m365-persona-capability-and-risk-map.md`, and notebook-backed MA evidence under `L21` proving that the authoritative `39`-persona roster is mapped without silently promoting the extra `20` non-authoritative registry agents. `E0E` is now the active next act.
 
 **Prompt artifacts:** master prompt pair plus grouped-phase and child-act MATHS prompt pairs under `docs/prompts/`
 

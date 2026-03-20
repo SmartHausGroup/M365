@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A`, `E0B`, and `E0C` are complete; `E0D` is the active next act; `E0E` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A`, `E0B`, `E0C`, and `E0D` are complete; `E0E` is the active next act; `E1A` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -60,15 +60,16 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E0A` is complete.
 - `E0B` is complete.
 - `E0C` is complete.
-- `E0D` is the active next act.
-- `E0E` through `E9E` are prepared but blocked by prerequisite work.
+- `E0D` is complete.
+- `E0E` is the active next act.
+- `E1A` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
 - The control-plane, executor, and certification layers are still bounded to the previously shipped v1 slice.
 - No department pack beyond the standalone v1 surface has been certified or released.
-- Persona-to-capability, approval, and risk bindings are not yet normalized against the locked roster and taxonomy.
+- Release-wave sequencing and full-workforce completion criteria are not yet locked.
 
 ## Scope
 
@@ -147,13 +148,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E0D — Persona-to-Capability and Risk Mapping
 
-**Status:** 🟢 Ready
+**Status:** ✅ Complete
 
 **Goal:** Bind personas and departments to required capabilities, risk classes, and approval posture.
 
 #### E0E — Release-Wave and Completion Map
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Ready
 
 **Goal:** Define the executable wave structure and completion criteria for the full workforce program.
 
@@ -593,4 +594,4 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ## Next Act
 
-`E0D` is the active next act. `E0C` normalized the workload-family inventory into the canonical taxonomy at `docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md`, separating implementation status, feasibility, auth, and licensing classes so later phases stop conflating them. `E0D` must now bind that taxonomy to the locked department and persona census with explicit risk and approval posture.
+`E0E` is the active next act. `E0D` bound the authoritative `39`-persona roster to explicit workload families, capability families, coverage status, and approval posture through `registry/persona_capability_map.yaml` and `docs/commercialization/m365-persona-capability-and-risk-map.md`, while explicitly separating the `20` non-authoritative overflow registry agents from the workforce authority surface. `E0E` must now convert that locked roster, workload, taxonomy, and persona map into the executable release-wave structure and workforce-completion criteria for the rest of the program.

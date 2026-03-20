@@ -1,0 +1,20 @@
+lemma_id: L21
+name: M365 persona-to-capability and risk mapping
+source_notebook: notebooks/m365/INV-M365-W-persona-capability-risk-mapping.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - registry/ai_team.json
+    - registry/agents.yaml
+    - registry/persona_capability_map.yaml
+    - docs/commercialization/m365-department-persona-census.md
+    - docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+    - docs/commercialization/m365-persona-capability-and-risk-map.md
+    - notebooks/lemma_proofs/L21_m365_persona_capability_risk_mapping.ipynb
+  checks:
+    - all 39 authoritative personas are present in the structured map
+    - all mapped personas have workload families, capability families, risk tier, approval profile, and coverage status
+    - overflow registry agents are documented as non-authoritative inventory
+    - E0D advances the active next act from E0D to E0E
+status: projected

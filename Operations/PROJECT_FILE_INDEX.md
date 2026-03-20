@@ -46,6 +46,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | --- | --- | --- | --- |
 | `docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md` | Canonical capability taxonomy separating implementation status, feasibility, auth class, and licensing class across the locked workload families. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0C` |
 
+## Active E0D Persona-Capability and Risk Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/persona_capability_map.yaml` | Machine-readable authority surface binding all `39` locked personas to workload families, capability families, risk tiers, approval profiles, and coverage status while keeping the extra runtime-only registry agents out of the authoritative workforce map. | `Mission Statement`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `docs/commercialization/m365-persona-capability-and-risk-map.md` | Human-readable workforce contract explaining approval profiles, department-level coverage, persona capability families, and the current split between registry-backed and contract-only personas. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `docs/ma/lemmas/L21_m365_persona_capability_risk_mapping.md` | Lemma doc asserting that persona coverage is only locked when every authoritative persona is mapped to capability and approval boundaries and overflow registry agents remain explicitly non-authoritative. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `invariants/lemmas/L21_m365_persona_capability_risk_mapping.yaml` | Machine-enforced invariant metadata for `L21`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `notebooks/m365/INV-M365-W-persona-capability-risk-mapping.ipynb` | Primary notebook-backed governance source for `E0D` persona capability, risk, and approval binding. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `notebooks/lemma_proofs/L21_m365_persona_capability_risk_mapping.ipynb` | Projected lemma-proof notebook for `L21`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+| `artifacts/scorecards/scorecard_l21.json` | Determinism and notebook-backing scorecard for the `L21` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+
 ## Closed Enterprise-Readiness Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

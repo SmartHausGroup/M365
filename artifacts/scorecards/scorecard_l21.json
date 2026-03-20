@@ -1,0 +1,22 @@
+{
+  "item_id": "L21",
+  "item_kind": "lemma",
+  "lemma_id": "L21",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T20:53:52Z",
+  "notebook": "notebooks/m365/INV-M365-W-persona-capability-risk-mapping.ipynb",
+  "notebook_hash": "projected-l21-persona-capability-risk-mapping",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md",
+    "registry/ai_team.json",
+    "registry/agents.yaml",
+    "registry/persona_capability_map.yaml",
+    "docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md",
+    "docs/commercialization/m365-persona-capability-and-risk-map.md",
+    "notebooks/m365/INV-M365-W-persona-capability-risk-mapping.ipynb",
+    "notebooks/lemma_proofs/L21_m365_persona_capability_risk_mapping.ipynb"
+  ]
+}

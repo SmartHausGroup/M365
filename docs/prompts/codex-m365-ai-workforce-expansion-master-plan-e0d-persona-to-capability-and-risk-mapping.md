@@ -45,6 +45,14 @@
   - `Operations/PROJECT_FILE_INDEX.md`
   - `docs/prompts/codex-m365-ai-workforce-expansion-master-plan*`
   - `docs/commercialization/*`
+  - `docs/ma/lemmas/*`
+  - `invariants/lemmas/*`
+  - `notebooks/m365/*`
+  - `notebooks/lemma_proofs/*`
+  - `artifacts/scorecards/*`
+  - `registry/ai_team.json`
+  - `registry/agents.yaml`
+  - `registry/persona_capability_map.yaml`
   - `docs/prompts/*`
   - `plans/*`
 - Denylist:

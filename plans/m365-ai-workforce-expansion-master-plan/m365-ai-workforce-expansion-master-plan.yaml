@@ -68,15 +68,20 @@ execution_status:
         docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md by
         defining canonical implementation-status, feasibility, auth, and licensing
         classes that downstream persona, routing, and certification phases must use.
+    - phase: E0D
+      date: "2026-03-20"
+      summary: >
+        Bound the authoritative 39-persona roster to explicit workload families,
+        capability families, risk tiers, approval profiles, and coverage statuses in
+        registry/persona_capability_map.yaml and
+        docs/commercialization/m365-persona-capability-and-risk-map.md, while
+        explicitly documenting the 20 non-authoritative overflow registry agents as
+        inventory rather than workforce authority.
   prepared_blocked:
     - phase: E0
       blocked_by: "Closed `m365-enterprise-readiness-master-plan`"
       summary: >
         Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
-    - phase: E0D
-      blocked_by: "E0"
-      summary: >
-        Bind personas and departments to required capabilities, risk classes, and approval posture.
     - phase: E0E
       blocked_by: "E0"
       summary: >
@@ -317,12 +322,12 @@ execution_status:
       blocked_by: "E9"
       summary: >
         Issue the final release decision for the full workforce program.
-  next_act: E0D
+  next_act: E0E
 
 open_blockers:
   - "The control-plane, executor, and certification layers are still bounded to the previously shipped v1 slice."
   - "No department pack beyond the standalone v1 surface has been certified or released."
-  - "Persona-to-capability, approval, and risk bindings are not yet normalized against the locked roster and taxonomy."
+  - "Release-wave sequencing and full-workforce completion criteria are not yet locked."
 
 requirements:
   - id: R1
@@ -389,13 +394,13 @@ phase_stack:
       - code: E0D
         slug: persona-to-capability-and-risk-mapping
         title: "Persona-to-Capability and Risk Mapping"
-        status: Ready
+        status: Complete
         goal: >
           Bind personas and departments to required capabilities, risk classes, and approval posture.
       - code: E0E
         slug: release-wave-and-completion-map
         title: "Release-Wave and Completion Map"
-        status: Pending
+        status: Ready
         goal: >
           Define the executable wave structure and completion criteria for the full workforce program.
   - code: E1
