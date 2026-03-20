@@ -25,6 +25,14 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-ai-workforce-expansion-master-plan.md` | Overview MATHS prompt for the active workforce-expansion program; paired with the generated grouped-phase and child-act prompt inventory under the same prefix. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
 | `docs/prompts/codex-m365-ai-workforce-expansion-master-plan-prompt.txt` | Kick-off text for the active workforce-expansion master prompt, following the repo two-file prompt rule. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
 
+## Internal UCP Onboarding Automation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `flows/README.md` | Canonical Power Automate blueprint index, now including the SmartHaus-internal UCP setup-token delivery flow entry. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:EXECUTION_PLAN:UCP-TD1` |
+| `flows/internal-ops/ucp-setup-token-delivery-flow.json` | Internal-only Power Automate blueprint defining the HTTP trigger, header/secret validation, Teams delivery step, and exact success/failure contract for UCP-managed setup-token delivery. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:EXECUTION_PLAN:UCP-TD1` |
+| `flows/internal-ops/UCP_SETUP_TOKEN_DELIVERY_FLOW_RUNBOOK.md` | Operator runbook for building and wiring the internal-only UCP setup-token delivery flow in the SmartHaus tenant. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:EXECUTION_PLAN:UCP-TD1` |
+
 ## Active E0A Census-Lock Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
@@ -57,6 +65,97 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `notebooks/m365/INV-M365-W-persona-capability-risk-mapping.ipynb` | Primary notebook-backed governance source for `E0D` persona capability, risk, and approval binding. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
 | `notebooks/lemma_proofs/L21_m365_persona_capability_risk_mapping.ipynb` | Projected lemma-proof notebook for `L21`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
 | `artifacts/scorecards/scorecard_l21.json` | Determinism and notebook-backing scorecard for the `L21` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0D` |
+
+## Active E0E Release-Wave and Completion Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/workforce_release_wave_map.yaml` | Machine-readable authority for the bounded workforce release sequence from `W0` through `W10`, including wave acts, dependencies, exit criteria, unlocks, and claim boundaries. | `Mission Statement`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `docs/commercialization/m365-workforce-release-wave-and-completion-map.md` | Human-readable release sequence and completion contract explaining what each workforce wave unlocks and what it still cannot justify claiming. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `docs/ma/lemmas/L22_m365_workforce_release_wave_completion_map.md` | Lemma doc asserting that the workforce is only complete when all bounded program waves are complete and their claim boundaries are respected. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `invariants/lemmas/L22_m365_workforce_release_wave_completion_map.yaml` | Machine-enforced invariant metadata for `L22`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `notebooks/m365/INV-M365-X-workforce-release-wave-completion-map.ipynb` | Primary notebook-backed governance source for `E0E` release-wave sequencing and workforce completion semantics. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `notebooks/lemma_proofs/L22_m365_workforce_release_wave_completion_map.ipynb` | Projected lemma-proof notebook for `L22`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+| `artifacts/scorecards/scorecard_l22.json` | Determinism and notebook-backing scorecard for the `L22` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0E` |
+
+## Active E1A Universal Action Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/universal_action_contract_v2.yaml` | Machine-readable authority for the canonical v2 action contract spanning action identity, semantics, execution, governance, evidence, alias projection, and example actions across the workforce-expansion surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `docs/commercialization/m365-universal-action-contract-v2.md` | Human-readable contract describing the canonical v2 action key, request and response envelopes, alias projection rules, and the three legacy action dialects it normalizes. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `docs/ma/lemmas/L23_m365_universal_action_contract_v2.md` | Lemma doc asserting that workforce expansion can only proceed when the existing CAIO, capability-registry, and agent-registry action surfaces project deterministically into one canonical contract. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `invariants/lemmas/L23_m365_universal_action_contract_v2.yaml` | Machine-enforced invariant metadata for `L23`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `notebooks/m365/INV-M365-Y-universal-action-contract-v2.ipynb` | Primary notebook-backed governance source for `E1A` universal action-contract normalization and v2 envelope definition. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `notebooks/lemma_proofs/L23_m365_universal_action_contract_v2.ipynb` | Projected lemma-proof notebook for `L23`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+| `artifacts/scorecards/scorecard_l23.json` | Determinism and notebook-backing scorecard for the `L23` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1A` |
+
+## Active E1B Executor Routing v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/executor_routing_v2.yaml` | Machine-readable routing authority defining canonical executor domains, exact legacy aliases, dotted-prefix routes, and agent-specific overrides for bounded executor selection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `docs/commercialization/m365-executor-routing-v2.md` | Human-readable routing contract describing resolution order, fail-closed routing semantics, runtime consumers, and the relationship to the universal action contract from `E1A`. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `docs/ma/lemmas/L24_m365_executor_routing_v2.md` | Lemma doc asserting that canonical v2 actions, legacy aliases, and all runtime routing consumers must share one deterministic executor-routing authority. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `invariants/lemmas/L24_m365_executor_routing_v2.yaml` | Machine-enforced invariant metadata for `L24`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `notebooks/m365/INV-M365-Z-executor-routing-v2.ipynb` | Primary notebook-backed governance source for `E1B` executor-routing normalization and shared runtime projection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `notebooks/lemma_proofs/L24_m365_executor_routing_v2.ipynb` | Projected lemma-proof notebook for `L24`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `artifacts/scorecards/scorecard_l24.json` | Determinism and notebook-backing scorecard for the `L24` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `src/smarthaus_common/executor_routing.py` | Shared runtime resolver for canonical v2 actions and current legacy aliases, now used as the single bounded executor-routing authority. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `src/ops_adapter/actions.py` | Ops-adapter routing surface now delegating executor-domain selection to the shared routing authority instead of a local hardcoded table. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `src/ops_adapter/personas.py` | Persona-domain derivation surface now consuming the shared routing authority so persona allowed-domain inference stays aligned with runtime routing. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `src/provisioning_api/routers/m365.py` | v1 instruction-router executor projection now using the shared routing authority instead of its own static per-action map. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+| `tests/test_executor_routing_v2.py` | Targeted regression coverage for canonical v2 keys, current legacy aliases, and fail-closed unknown routing. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1B` |
+
+## Active E1C Auth Model v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/auth_model_v2.yaml` | Machine-readable auth authority defining canonical `app_only`, `delegated`, and `hybrid` classes, runtime decision rules, identity-context triggers, and workload-family defaults for the workforce control plane. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `docs/commercialization/m365-auth-model-v2.md` | Human-readable auth contract describing auth-class semantics, self-context rules, explicit-identity overrides, and how the runtime must project auth decisions through the shared routing surface. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `docs/ma/lemmas/L25_m365_auth_model_v2.md` | Lemma doc asserting that workforce expansion can only proceed when capability families resolve deterministically to app_only, delegated, or hybrid execution without per-handler auth drift. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `invariants/lemmas/L25_m365_auth_model_v2.yaml` | Machine-enforced invariant metadata for `L25`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `notebooks/m365/INV-M365-AA-auth-model-v2.ipynb` | Primary notebook-backed governance source for `E1C` auth classification, self-context semantics, and runtime auth projection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `notebooks/lemma_proofs/L25_m365_auth_model_v2.ipynb` | Projected lemma-proof notebook for `L25`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `artifacts/scorecards/scorecard_l25.json` | Determinism and notebook-backing scorecard for the `L25` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `src/smarthaus_common/auth_model.py` | Shared runtime resolver for canonical auth-class decisions and user-context projection across the expanding workforce action surface. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `src/ops_adapter/actions.py` | Ops-adapter action runtime now carrying explicit auth preferences through token acquisition, URL selection, and user-context behavior for messaging, calendar, chat, files, and drive actions. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+| `tests/test_auth_model_v2.py` | Targeted regression coverage for auth-class resolution and runtime projection on user-context action families. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1C` |
+
+## Active E1D Approval and Risk Matrix v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/approval_risk_matrix_v2.yaml` | Machine-readable approval and risk authority defining canonical risk classes, approval profiles, executor-domain defaults, and exact or prefix action policies for the expanding workforce control plane. | `Policy & Security`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `docs/commercialization/m365-approval-risk-matrix-v2.md` | Human-readable contract describing deterministic approval classification, risk semantics, profile inheritance, and fail-closed matrix enforcement across the governed runtime. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `docs/ma/lemmas/L26_m365_approval_risk_matrix_v2.md` | Lemma doc asserting that workforce expansion can only proceed when approval-bearing actions resolve deterministically to one shared risk and approval authority instead of capability-local heuristics. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `invariants/lemmas/L26_m365_approval_risk_matrix_v2.yaml` | Machine-enforced invariant metadata for `L26`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `notebooks/m365/INV-M365-AB-approval-risk-matrix-v2.ipynb` | Primary notebook-backed governance source for `E1D` approval and risk classification, exact or prefix policy resolution, and fail-closed runtime projection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `notebooks/lemma_proofs/L26_m365_approval_risk_matrix_v2.ipynb` | Projected lemma-proof notebook for `L26`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `artifacts/scorecards/scorecard_l26.json` | Determinism and notebook-backing scorecard for the `L26` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `src/smarthaus_common/approval_risk.py` | Shared runtime resolver for canonical risk and approval decisions, including persona-profile fallback, threshold checks, and executor-domain-aware policy projection. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `src/ops_adapter/main.py` | Governed action runtime now projecting matrix-derived `risk_class`, `approval_profile`, approvers, and fail-closed approval requirements before policy and approval execution. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `src/ops_adapter/approvals.py` | Approval-store runtime now persisting matrix-derived approver lists instead of falling back only to legacy hardcoded defaults. | `Policy & Security`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `tests/test_approval_risk_v2.py` | Targeted regression coverage for risk-class, approval-profile, threshold, and persona-profile resolution across the v2 approval matrix. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+| `tests/test_ops_adapter.py` | Governed runtime regression coverage proving the approval matrix can still force pending approval when legacy OPA approval coverage is incomplete. | `Core Success Metrics`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1D` |
+
+## Active E1E Unified Audit Schema v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/unified_audit_schema_v2.yaml` | Machine-readable audit authority defining the canonical top-level envelope and normalized actor, persona, executor, approval, and result contexts across runtime surfaces. | `Policy & Security`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `docs/commercialization/m365-unified-audit-schema-v2.md` | Human-readable contract describing the shared audit envelope, canonical contexts, runtime projection, and remaining post-control-plane work. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `docs/ma/lemmas/L27_m365_unified_audit_schema_v2.md` | Lemma doc asserting that workforce expansion can only proceed when instruction-api and ops-adapter audit writers emit one deterministic shared schema. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `invariants/lemmas/L27_m365_unified_audit_schema_v2.yaml` | Machine-enforced invariant metadata for `L27`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `notebooks/m365/INV-M365-AC-unified-audit-schema-v2.ipynb` | Primary notebook-backed governance source for `E1E` unified audit schema authority and cross-surface evidence normalization. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `notebooks/lemma_proofs/L27_m365_unified_audit_schema_v2.ipynb` | Projected lemma-proof notebook for `L27`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `artifacts/scorecards/scorecard_l27.json` | Determinism and notebook-backing scorecard for the `L27` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `src/smarthaus_common/audit_schema.py` | Shared runtime builder enforcing the canonical audit schema across instruction-api and ops-adapter audit writers. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `src/ops_adapter/audit.py` | Governed ops-adapter audit sink now projecting actor, persona, executor, approval, and result evidence through the shared v2 audit schema. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `src/provisioning_api/audit.py` | Instruction-api audit sink now emitting the same canonical v2 envelope while preserving bounded backward-compatible aliases. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `scripts/ci/verify_m365_audit.py` | Bounded verifier for the shared instruction-api audit writer, now checking the unified v2 schema instead of the legacy narrow dialect. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `configs/generated/m365_audit_verification.json` | Generated bounded proof artifact showing the instruction-api audit writer passes the unified v2 schema check. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
+| `tests/test_audit_schema_v2.py` | Targeted regression coverage for shared audit record construction and instruction-api audit persistence under the unified v2 schema. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E1E` |
 
 ## Closed Enterprise-Readiness Master Plan Artifacts
 

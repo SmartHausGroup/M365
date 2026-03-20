@@ -1,0 +1,77 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T21:25:00Z"
+source_contracts:
+  - registry/universal_action_contract_v2.yaml
+  - registry/capability_registry.yaml
+  - registry/agents.yaml
+deterministic_rule: >
+  ExecutorRouteV2(agent, action) = exactly_one_executor_domain or fail_closed.
+canonical_executor_domains:
+  - directory
+  - collaboration
+  - sharepoint
+  - messaging
+  - workmanagement
+  - knowledge
+  - powerplatform
+  - security
+  - devices
+  - publishing
+  - composite
+exact_action_routes:
+  list_users: directory
+  get_user: directory
+  reset_user_password: directory
+  create_user: directory
+  update_user: directory
+  list_groups: collaboration
+  get_group: collaboration
+  create_group: collaboration
+  list_teams: collaboration
+  create_team: collaboration
+  add_channel: collaboration
+  list_sites: sharepoint
+  create_site: sharepoint
+  provision_service: sharepoint
+  list_messages: messaging
+  get_message: messaging
+  send_mail: messaging
+  list_mail_folders: messaging
+  list_events: messaging
+  get_event: messaging
+  create_event: messaging
+  update_event: messaging
+  list_drive_items: sharepoint
+  get_drive_item: sharepoint
+  upload_file: sharepoint
+  create_folder: sharepoint
+prefix_routes:
+  "sites.": sharepoint
+  "lists.": sharepoint
+  "files.": sharepoint
+  "drives.": sharepoint
+  "teams.": collaboration
+  "channels.": collaboration
+  "chat.": collaboration
+  "groups.": collaboration
+  "planner.": collaboration
+  "mail.": messaging
+  "calendar.": messaging
+  "users.": directory
+  "licenses.": directory
+  "directory.": directory
+  "apps.": directory
+  "service_principals.": directory
+  "admin.": directory
+agent_action_overrides:
+  website-manager:
+    deployment.preview: sharepoint
+  hr-generalist:
+    employee.onboard: directory
+  outreach-coordinator:
+    email.send_individual: messaging
+    mail.send: messaging
+  email-processing-agent:
+    email.send_individual: messaging
+  calendar-management-agent:
+    meeting.organize: messaging

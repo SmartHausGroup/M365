@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
+from smarthaus_common.executor_routing import executor_route_for_action
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -42,13 +43,6 @@ _MUTATING_ACTIONS = {
     "add_channel",
     "provision_service",
     "reset_user_password",
-}
-_ACTION_EXECUTOR_ROUTE = {
-    "list_users": "directory",
-    "get_user": "directory",
-    "reset_user_password": "directory",
-    "list_teams": "collaboration",
-    "list_sites": "sharepoint",
 }
 
 
@@ -260,7 +254,7 @@ def _graph_client(action: str | None = None) -> GraphClient:
     if has_selected_tenant():
         tenant_cfg = get_tenant_config()
         if action:
-            route_key = _ACTION_EXECUTOR_ROUTE.get(action)
+            route_key = executor_route_for_action(None, action)
             if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
                 executor_name = tenant_cfg.resolve_executor_name(
                     route_key,

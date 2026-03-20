@@ -1,0 +1,112 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T22:05:00Z"
+authority_inputs:
+  universal_action_contract: registry/universal_action_contract_v2.yaml
+  executor_routing: registry/executor_routing_v2.yaml
+  capability_taxonomy: docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+deterministic_rule: >
+  AuthModeV2(agent, action, params, delegated_state) -> exactly_one_auth_class
+  and one deterministic delegated-preference decision for the current request.
+auth_classes:
+  - app_only
+  - delegated
+  - hybrid
+  - mixed
+required_registry_keys:
+  - executor_domain_defaults
+  - exact_action_policies
+  - prefix_action_policies
+executor_domain_defaults:
+  directory:
+    auth_class: app_only
+    delegated_preference: never
+  collaboration:
+    auth_class: app_only
+    delegated_preference: never
+  sharepoint:
+    auth_class: app_only
+    delegated_preference: never
+  messaging:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, from]
+  workmanagement:
+    auth_class: hybrid
+    delegated_preference: never
+  knowledge:
+    auth_class: mixed
+    delegated_preference: never
+  powerplatform:
+    auth_class: mixed
+    delegated_preference: never
+  security:
+    auth_class: mixed
+    delegated_preference: never
+  devices:
+    auth_class: mixed
+    delegated_preference: never
+  publishing:
+    auth_class: mixed
+    delegated_preference: never
+  composite:
+    auth_class: app_only
+    delegated_preference: never
+exact_action_policies:
+  list_users:
+    auth_class: app_only
+  get_user:
+    auth_class: app_only
+  reset_user_password:
+    auth_class: app_only
+  list_sites:
+    auth_class: app_only
+  create_site:
+    auth_class: app_only
+  create_team:
+    auth_class: app_only
+  add_channel:
+    auth_class: app_only
+  provision_service:
+    auth_class: app_only
+  email.send_individual:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [from, userId, userPrincipalName]
+  mail.send:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [from, userId, userPrincipalName]
+  meeting.organize:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName]
+  availability.check:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName]
+prefix_action_policies:
+  mail.:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, from]
+  calendar.:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName]
+  chat.:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName]
+  files.:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, siteId, userId, userPrincipalName]
+  drives.:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+policy_notes:
+  - "app_only is the deterministic default for bounded service and admin actions."
+  - "delegated is reserved for actions that must execute as the signed-in operator."
+  - "hybrid allows delegated self-context when the request omits an explicit resource owner."
+  - "mixed is reserved for future multi-surface workloads that cannot yet be normalized to one runtime shape."

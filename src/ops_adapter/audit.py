@@ -7,8 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import httpx
-
-SENSITIVE_KEYS = {"password", "temporaryPassword", "Authorization", "token", "secret"}
+from smarthaus_common.audit_schema import build_audit_record_v2, sanitize_audit_payload
 
 
 def _log_dir(log_dir: str | None = None) -> Path:
@@ -23,14 +22,72 @@ def _log_file(log_dir: str | None = None) -> Path:
 
 
 def _sanitize(obj: Any) -> Any:
-    try:
-        if isinstance(obj, dict):
-            return {k: ("***" if k in SENSITIVE_KEYS else _sanitize(v)) for k, v in obj.items()}
-        if isinstance(obj, list):
-            return [_sanitize(v) for v in obj]
-        return obj
-    except Exception:
-        return obj
+    return sanitize_audit_payload(obj)
+
+
+def _approval_context_from_details(status: str, details: dict[str, Any]) -> dict[str, Any] | None:
+    approval: dict[str, Any] = {}
+    if details.get("approval_id"):
+        approval["approval_id"] = details.get("approval_id")
+    if details.get("approval_profile"):
+        approval["approval_profile"] = details.get("approval_profile")
+    if details.get("risk_class"):
+        approval["risk_class"] = details.get("risk_class")
+    if details.get("approval_rule_source"):
+        approval["rule_source"] = details.get("approval_rule_source")
+    if details.get("approvers"):
+        approval["approvers"] = details.get("approvers")
+    if details.get("approval_required_by_matrix") is not None or status == "approval_pending":
+        approval["required"] = (
+            bool(details.get("approval_required_by_matrix")) or status == "approval_pending"
+        )
+    if status == "approval_pending":
+        approval["decision"] = "pending"
+    if details.get("reason"):
+        approval["reason"] = details.get("reason")
+    return approval or None
+
+
+def _result_context_from_details(status: str, details: dict[str, Any]) -> dict[str, Any]:
+    context: dict[str, Any] = {"outcome": status}
+    payload = details.get("result")
+    if payload is None and status == "success":
+        payload = {
+            key: value
+            for key, value in details.items()
+            if key
+            not in {
+                "actor",
+                "actor_tier",
+                "actor_groups",
+                "persona",
+                "persona_target",
+                "executor",
+                "tenant",
+                "approval_id",
+                "approval_profile",
+                "risk_class",
+                "approval_required_by_matrix",
+                "approvers",
+                "approval_rule_source",
+            }
+        }
+        if not payload:
+            payload = None
+    if payload is not None:
+        context["payload"] = payload
+    error = details.get("error")
+    if error is None and status not in {"success", "approval_pending"} and details.get("reason"):
+        error = details.get("reason")
+    if error is not None:
+        context["error"] = str(error)
+    if details.get("trace_id"):
+        context["trace_id"] = details.get("trace_id")
+    if details.get("blocked") is not None:
+        context["blocked"] = bool(details.get("blocked"))
+    if details.get("idempotent_replay") is not None:
+        context["idempotent_replay"] = bool(details.get("idempotent_replay"))
+    return context
 
 
 def _write_entry(entry: dict[str, Any], log_dir: str | None = None) -> None:
@@ -55,32 +112,28 @@ def _base_entry(
     before: dict[str, Any] | None = None,
     after: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    entry: dict[str, Any] = {
-        "timestamp": datetime.now(UTC).isoformat(),
-        "correlation_id": correlation_id,
-        "surface": surface,
-        "agent": agent,
-        "action": action,
-        "status": status,
-        "details": _sanitize(details),
-    }
-    if event_class:
-        entry["event_class"] = event_class
-    if actor:
-        entry["actor"] = actor
-    if actor_tier:
-        entry["actor_tier"] = _sanitize(actor_tier)
-    if actor_groups:
-        entry["actor_groups"] = _sanitize(actor_groups)
-    if executor:
-        entry["executor"] = _sanitize(executor)
-    if tenant:
-        entry["tenant"] = tenant
-    if before is not None:
-        entry["before"] = _sanitize(before)
-    if after is not None:
-        entry["after"] = _sanitize(after)
-    return entry
+    detail_map = details if isinstance(details, dict) else {}
+    return build_audit_record_v2(
+        surface=surface,
+        action=action,
+        status=status,
+        correlation_id=correlation_id,
+        agent=agent,
+        event_class=event_class,
+        actor=actor,
+        actor_tier=actor_tier,
+        actor_groups=actor_groups,
+        persona=detail_map.get("persona"),
+        persona_target=detail_map.get("persona_target"),
+        executor=executor,
+        tenant=tenant,
+        approval=_approval_context_from_details(status, detail_map),
+        result=_result_context_from_details(status, detail_map),
+        details=details,
+        before=before,
+        after=after,
+        timestamp=datetime.now(UTC).isoformat(),
+    )
 
 
 class Auditor:
@@ -141,8 +194,11 @@ class Auditor:
         if not enterprise_audit:
             return
         payload = {
+            "schema_version": entry.get("schema_version"),
             "correlation_id": entry.get("correlation_id"),
+            "surface": entry.get("surface"),
             "service": "ops-adapter",
+            "event_class": entry.get("event_class"),
             "action": entry.get("action"),
             "agent": entry.get("agent"),
             "status": entry.get("status"),
@@ -150,8 +206,14 @@ class Auditor:
             "actor": entry.get("actor"),
             "actor_tier": entry.get("actor_tier"),
             "actor_groups": entry.get("actor_groups"),
+            "persona": entry.get("persona"),
+            "persona_target": entry.get("persona_target"),
             "executor": entry.get("executor"),
             "tenant": entry.get("tenant"),
+            "approval": entry.get("approval"),
+            "result": entry.get("result"),
+            "before": entry.get("before"),
+            "after": entry.get("after"),
             "timestamp": entry.get("timestamp"),
         }
         async with httpx.AsyncClient(timeout=5.0) as client:

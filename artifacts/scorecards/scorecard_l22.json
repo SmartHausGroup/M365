@@ -1,0 +1,19 @@
+{
+  "item_id": "L22",
+  "item_kind": "lemma",
+  "lemma_id": "L22",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T21:03:00Z",
+  "notebook": "notebooks/m365/INV-M365-X-workforce-release-wave-completion-map.ipynb",
+  "notebook_hash": "projected-l22-workforce-release-wave-completion-map",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md",
+    "registry/workforce_release_wave_map.yaml",
+    "docs/commercialization/m365-workforce-release-wave-and-completion-map.md",
+    "notebooks/m365/INV-M365-X-workforce-release-wave-completion-map.ipynb",
+    "notebooks/lemma_proofs/L22_m365_workforce_release_wave_completion_map.ipynb"
+  ]
+}

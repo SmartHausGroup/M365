@@ -77,43 +77,66 @@ execution_status:
         docs/commercialization/m365-persona-capability-and-risk-map.md, while
         explicitly documenting the 20 non-authoritative overflow registry agents as
         inventory rather than workforce authority.
+    - phase: E0E
+      date: "2026-03-20"
+      summary: >
+        Converted the authority wave into an explicit execution sequence through
+        registry/workforce_release_wave_map.yaml and
+        docs/commercialization/m365-workforce-release-wave-and-completion-map.md,
+        defining bounded program waves, exit criteria, unlocks, and claim limits so
+        the remaining workforce build-out proceeds in deterministic increments.
+    - phase: E1A
+      date: "2026-03-20"
+      summary: >
+        Defined the canonical workforce action contract in
+        registry/universal_action_contract_v2.yaml and
+        docs/commercialization/m365-universal-action-contract-v2.md, proving through
+        the notebook-backed L23 chain that the repo's CAIO, capability-registry, and
+        agent-registry action dialects can project deterministically into one v2
+        identity, semantics, execution, governance, and evidence envelope.
+    - phase: E1B
+      date: "2026-03-20"
+      summary: >
+        Replaced the scattered hardcoded executor tables with
+        registry/executor_routing_v2.yaml and the shared
+        src/smarthaus_common/executor_routing.py resolver, then projected that
+        authority into ops-adapter routing, persona-domain derivation, and the
+        instruction router so canonical v2 actions and current legacy aliases all
+        resolve deterministically to one bounded executor domain.
+    - phase: E1C
+      date: "2026-03-20"
+      summary: >
+        Defined the machine-readable auth authority in registry/auth_model_v2.yaml,
+        added the shared src/smarthaus_common/auth_model.py resolver, extended
+        src/ops_adapter/actions.py so delegated, app_only, and hybrid execution
+        preferences are projected through the shared routing surface for user-context
+        actions, and proved the resulting contract through the notebook-backed L25
+        chain plus targeted auth-model regressions.
+    - phase: E1D
+      date: "2026-03-20"
+      summary: >
+        Defined the machine-readable approval and risk authority in
+        registry/approval_risk_matrix_v2.yaml, added the shared
+        src/smarthaus_common/approval_risk.py resolver, projected deterministic
+        risk_class, approval_profile, approvers, and matrix-enforced approval
+        metadata into src/ops_adapter/main.py and src/ops_adapter/approvals.py,
+        and proved the resulting fail-closed governance contract through the
+        notebook-backed L26 chain plus targeted approval-risk regressions.
+    - phase: E1E
+      date: "2026-03-20"
+      summary: >
+        Defined the machine-readable unified audit authority in
+        registry/unified_audit_schema_v2.yaml, added the shared
+        src/smarthaus_common/audit_schema.py builder, projected the canonical audit
+        envelope into src/ops_adapter/audit.py and src/provisioning_api/audit.py,
+        updated the bounded instruction-audit verifier to the v2 schema, and
+        proved the shared evidence contract through the notebook-backed L27 chain
+        plus targeted audit-schema regressions.
   prepared_blocked:
     - phase: E0
       blocked_by: "Closed `m365-enterprise-readiness-master-plan`"
       summary: >
         Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
-    - phase: E0E
-      blocked_by: "E0"
-      summary: >
-        Define the executable wave structure and completion criteria for the full workforce program.
-    - phase: E1
-      blocked_by: "E0E"
-      summary: >
-        Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
-    - phase: E1A
-      blocked_by: "E1"
-      summary: >
-        Define the canonical action contract that can represent the expanded workforce action surface.
-    - phase: E1B
-      blocked_by: "E1"
-      summary: >
-        Route actions by workload and domain through bounded executors instead of monolithic identities.
-    - phase: E1C
-      blocked_by: "E1"
-      summary: >
-        Define app-only, delegated, and hybrid execution rules per capability and workload.
-    - phase: E1D
-      blocked_by: "E1"
-      summary: >
-        Classify the expanded action universe into deterministic approval and risk classes.
-    - phase: E1E
-      blocked_by: "E1"
-      summary: >
-        Normalize actor, persona, executor, approval, and result evidence across the expanded workforce.
-    - phase: E2
-      blocked_by: "E1E"
-      summary: >
-        Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
     - phase: E2A
       blocked_by: "E2"
       summary: >
@@ -322,12 +345,11 @@ execution_status:
       blocked_by: "E9"
       summary: >
         Issue the final release decision for the full workforce program.
-  next_act: E0E
+  next_act: E2A
 
 open_blockers:
-  - "The control-plane, executor, and certification layers are still bounded to the previously shipped v1 slice."
+  - "The implemented action surface and live certification layers are still bounded to the previously shipped v1 slice."
   - "No department pack beyond the standalone v1 surface has been certified or released."
-  - "Release-wave sequencing and full-workforce completion criteria are not yet locked."
 
 requirements:
   - id: R1
@@ -361,7 +383,7 @@ phase_stack:
   - code: E0
     title: "Universe Definition and Boundary Lock"
     slug: universe-definition-boundary-lock
-    status: Active
+    status: Complete
     goal: >
       Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
     outputs:
@@ -400,13 +422,13 @@ phase_stack:
       - code: E0E
         slug: release-wave-and-completion-map
         title: "Release-Wave and Completion Map"
-        status: Ready
+        status: Complete
         goal: >
           Define the executable wave structure and completion criteria for the full workforce program.
   - code: E1
     title: "Universal M365 Control Plane"
     slug: universal-m365-control-plane
-    status: Pending
+    status: Active
     goal: >
       Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
     outputs:
@@ -421,25 +443,25 @@ phase_stack:
       - code: E1A
         slug: universal-action-contract-v2
         title: "Universal Action Contract v2"
-        status: Pending
+        status: Complete
         goal: >
           Define the canonical action contract that can represent the expanded workforce action surface.
       - code: E1B
         slug: executor-routing-v2
         title: "Executor Routing v2"
-        status: Pending
+        status: Complete
         goal: >
           Route actions by workload and domain through bounded executors instead of monolithic identities.
       - code: E1C
         slug: auth-model-v2
         title: "Auth Model v2"
-        status: Pending
+        status: Complete
         goal: >
           Define app-only, delegated, and hybrid execution rules per capability and workload.
       - code: E1D
         slug: approval-risk-matrix-v2
         title: "Approval and Risk Matrix v2"
-        status: Pending
+        status: Ready
         goal: >
           Classify the expanded action universe into deterministic approval and risk classes.
       - code: E1E

@@ -1,0 +1,16 @@
+lemma_id: L22
+name: M365 workforce release-wave and completion map
+source_notebook: notebooks/m365/INV-M365-X-workforce-release-wave-completion-map.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - registry/workforce_release_wave_map.yaml
+    - docs/commercialization/m365-workforce-release-wave-and-completion-map.md
+    - notebooks/lemma_proofs/L22_m365_workforce_release_wave_completion_map.ipynb
+  checks:
+    - the release-wave map spans W0 through W10 with explicit act bindings
+    - every wave defines exit criteria and claim boundaries
+    - the plan advances from E0E to E1A
+    - E0 becomes complete before E1 is marked active
+status: projected

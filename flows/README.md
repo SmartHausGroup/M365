@@ -24,6 +24,17 @@ These blueprints mirror the GitHub → Teams/Planner automations implemented in 
 - Action: Create/Update task (Planner) with `percentComplete=100` in `Done`
 - Action: Post message (Teams) with release notes link
 
+5) UCP → Teams (Setup Token Delivery, SmartHaus Internal Only)
+- Trigger: When an HTTP request is received
+- Scope: SmartHaus internal UCP administration only
+- Validate: `X-UCP-Flow-Event`, `X-UCP-Flow-Schema-Version`, `X-UCP-Flow-Secret`, `X-UCP-Request-Id`
+- Parse JSON: the `ucp_setup_token_delivery` contract from UCP
+- Action: Post setup token to the intended teammate in Teams
+- Action: Return the exact success or failure JSON contract expected by UCP
+- Artifacts:
+  - `flows/internal-ops/ucp-setup-token-delivery-flow.json`
+  - `flows/internal-ops/UCP_SETUP_TOKEN_DELIVERY_FLOW_RUNBOOK.md`
+
 Deployment Tips
 - Package into a Power Platform Solution for ALM
 - Parameterize: API key or secret, Plan IDs, Team/Channel IDs via Environment Variables

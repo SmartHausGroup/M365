@@ -97,7 +97,7 @@ If provider requires API key (e.g. `CAIO_API_KEY` set):
 
 ### Audit (one record per execution)
 
-When audit logging is enabled (`ENABLE_AUDIT_LOGGING` true): for every instruction execution (success, error, or blocked), the system writes **exactly one** audit record. Record schema: identity/user, action, params, response (ok, result/error), timestamp, and optional flags (blocked, idempotent_replay).
+When audit logging is enabled (`ENABLE_AUDIT_LOGGING` true): for every instruction execution (success, error, or blocked), the system writes **exactly one** audit record. Record schema: unified audit schema v2 with `schema_version`, `timestamp`, `ts`, `correlation_id`, `surface`, `action`, `status`, `user`, `details`, and `result`, where `details` carries the request or execution inputs and `result` carries the outcome, trace, and replay flags.
 
 \[
 \mathtt{auditEnabled}() \wedge \text{execution completed} \;\Rightarrow\; \exists \text{ exactly one audit record for this request}.

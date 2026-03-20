@@ -166,13 +166,17 @@ class GraphApprovalsStore:
 
     def create(self, agent: str, action: str, params: dict[str, Any]) -> str:
         approval_id = str(uuid.uuid4())
+        approvers = [
+            str(item)
+            for item in (params.get("approvers") or self._default_approvers(agent, action))
+        ]
         fields = {
             "Title": f"{agent}/{action}",
             "Agent": agent,
             "Action": action,
             "Requestor": params.get("requestor") or "system",
             "Status": "pending",
-            "Approvers": ", ".join(self._default_approvers(agent, action)),
+            "Approvers": ", ".join(approvers),
             "Params": json.dumps(params),
             "ApprovalId": approval_id,
         }

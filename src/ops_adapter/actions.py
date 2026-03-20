@@ -11,6 +11,8 @@ from typing import Any
 
 import httpx
 import yaml
+from smarthaus_common.auth_model import AuthResolution, resolve_action_auth
+from smarthaus_common.executor_routing import executor_route_for_action as resolve_route_for_action
 
 from .audit import recent_admin_events, record_admin_event
 
@@ -26,45 +28,14 @@ _current_executor_name: ContextVar[str | None] = ContextVar(
     "ops_adapter_executor_name",
     default=None,
 )
-
-_ACTION_ROUTE_BY_PREFIX: tuple[tuple[str, str], ...] = (
-    ("sites.", "sharepoint"),
-    ("lists.", "sharepoint"),
-    ("files.", "sharepoint"),
-    ("drives.", "sharepoint"),
-    ("teams.", "collaboration"),
-    ("channels.", "collaboration"),
-    ("chat.", "collaboration"),
-    ("groups.", "collaboration"),
-    ("planner.", "collaboration"),
-    ("mail.", "messaging"),
-    ("calendar.", "messaging"),
-    ("users.", "directory"),
-    ("licenses.", "directory"),
-    ("directory.", "directory"),
-    ("apps.", "directory"),
-    ("service_principals.", "directory"),
-    ("admin.", "directory"),
+_current_auth_resolution: ContextVar[AuthResolution | None] = ContextVar(
+    "ops_adapter_auth_resolution",
+    default=None,
 )
 
-_ACTION_ROUTE_OVERRIDES: dict[tuple[str, str], str] = {
-    ("website-manager", "deployment.preview"): "sharepoint",
-    ("hr-generalist", "employee.onboard"): "directory",
-    ("outreach-coordinator", "email.send_individual"): "messaging",
-    ("outreach-coordinator", "mail.send"): "messaging",
-    ("email-processing-agent", "email.send_individual"): "messaging",
-    ("calendar-management-agent", "meeting.organize"): "messaging",
-}
 
-
-def executor_route_for_action(agent: str, action: str) -> str:
-    override = _ACTION_ROUTE_OVERRIDES.get((agent, action))
-    if override:
-        return override
-    for prefix, route_key in _ACTION_ROUTE_BY_PREFIX:
-        if action.startswith(prefix):
-            return route_key
-    raise ValueError(f"executor_route_unknown:{agent}:{action}")
+def executor_route_for_action(agent: str | None, action: str) -> str:
+    return resolve_route_for_action(agent, action)
 
 
 def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
@@ -129,7 +100,14 @@ def _stub_mode() -> bool:
     return os.getenv("GRAPH_STUB_MODE", "0").lower() in ("1", "true", "yes", "on")
 
 
-def _graph_token(prefer_delegated: bool = False) -> str | None:
+def _effective_prefer_delegated(prefer_delegated: bool | None = None) -> bool:
+    if prefer_delegated is not None:
+        return prefer_delegated
+    resolution = _current_auth_resolution.get()
+    return bool(resolution and resolution.prefer_delegated)
+
+
+def _graph_token(prefer_delegated: bool | None = None) -> str | None:
     """Acquire a Graph API token.
 
     Uses the tenant-aware token provider when available (supports both
@@ -140,10 +118,12 @@ def _graph_token(prefer_delegated: bool = False) -> str | None:
         prefer_delegated: If True and tenant is in hybrid mode, use delegated auth.
     """
     # Try tenant-aware provider first
+    effective_preference = _effective_prefer_delegated(prefer_delegated)
+
     provider = _get_token_provider()
     if provider is not None:
         try:
-            return provider.get_token(prefer_delegated=prefer_delegated)
+            return provider.get_token(prefer_delegated=effective_preference)
         except Exception:
             pass  # Fall through to legacy
 
@@ -210,6 +190,38 @@ def _can_use_me_endpoint() -> bool:
         return False
 
 
+def _first_explicit_identity(params: dict[str, Any], *keys: str) -> str | None:
+    for key in keys:
+        raw = params.get(key)
+        if raw is None:
+            continue
+        text = str(raw).strip()
+        if text and text.lower() not in {"me", "self", "current"}:
+            return text
+    return None
+
+
+def _resolve_user_scoped_url(
+    action_name: str,
+    params: dict[str, Any],
+    *,
+    me_suffix: str,
+    user_suffix: str,
+    identity_keys: tuple[str, ...],
+    error_message: str,
+) -> tuple[str, bool]:
+    resolution = resolve_action_auth(None, action_name, params)
+    explicit_identity = _first_explicit_identity(params, *identity_keys)
+    if resolution.prefer_delegated and _can_use_me_endpoint():
+        return f"{GRAPH_BASE}/me/{me_suffix.lstrip('/')}", True
+    if explicit_identity:
+        return (
+            f"{GRAPH_BASE}/users/{explicit_identity}/{user_suffix.lstrip('/')}",
+            False,
+        )
+    raise GraphAPIError(400, "no_user_context", error_message)
+
+
 def _gen_password(length: int = 24) -> str:
     chars = string.ascii_letters + string.digits + "!@#%^*()-_=+"
     return "".join(random.choice(chars) for _ in range(length))
@@ -221,8 +233,9 @@ async def _graph_request(
     correlation_id: str,
     json_body: dict[str, Any] | None = None,
     params: dict[str, Any] | None = None,
+    prefer_delegated: bool | None = None,
 ) -> dict[str, Any] | None:
-    token = _graph_token()
+    token = _graph_token(prefer_delegated=prefer_delegated)
     if not token:
         if _stub_mode():
             return {"stub": True, "url": url, "method": method, "params": params, "body": json_body}
@@ -280,10 +293,14 @@ async def _graph_request(
 
 
 async def _graph_request_raw(
-    method: str, url: str, correlation_id: str, params: dict[str, Any] | None = None
+    method: str,
+    url: str,
+    correlation_id: str,
+    params: dict[str, Any] | None = None,
+    prefer_delegated: bool | None = None,
 ) -> str:
     """Like _graph_request but returns raw text (for CSV report endpoints)."""
-    token = _graph_token()
+    token = _graph_token(prefer_delegated=prefer_delegated)
     if not token:
         if _stub_mode():
             return ""
@@ -689,8 +706,10 @@ async def outreach_email_send_individual(
         or os.getenv("MAIL_SENDER")
     )
 
+    resolution = resolve_action_auth(None, "email.send_individual", params)
+
     # In stub mode or without Graph credentials, accept but do not send
-    token = _graph_token()
+    token = _graph_token(prefer_delegated=resolution.prefer_delegated)
     if _stub_mode() or not token:
         return {
             "email": "accepted",
@@ -704,7 +723,24 @@ async def outreach_email_send_individual(
             },
         }
 
-    if not sender:
+    delegated_self_send = (
+        resolution.prefer_delegated
+        and _can_use_me_endpoint()
+        and not _first_explicit_identity(params, "from", "userId", "userPrincipalName")
+    )
+
+    if delegated_self_send:
+        url = f"{GRAPH_BASE}/me/sendMail"
+    elif (
+        sender
+        and str(sender).strip().lower() in {"me", "self", "current"}
+        and _can_use_me_endpoint()
+    ):
+        url = f"{GRAPH_BASE}/me/sendMail"
+        delegated_self_send = True
+    elif sender:
+        url = f"{GRAPH_BASE}/users/{sender}/sendMail"
+    else:
         # For app-only tokens, /me is not supported; require an explicit sender
         return {
             "email": "rejected",
@@ -722,23 +758,25 @@ async def outreach_email_send_individual(
         "toRecipients": [{"emailAddress": {"address": addr}} for addr in recipients],
     }
 
-    url = f"{GRAPH_BASE}/users/{sender}/sendMail"
     await _graph_request(
-        "POST", url, correlation_id, json_body={"message": msg, "saveToSentItems": save_to_sent}
+        "POST",
+        url,
+        correlation_id,
+        json_body={"message": msg, "saveToSentItems": save_to_sent},
+        prefer_delegated=delegated_self_send,
     )
 
     return {
         "email": "sent",
         "to": recipients,
         "subject": subject,
-        "from": sender,
+        "from": sender or ("me" if delegated_self_send else None),
         "saveToSent": save_to_sent,
     }
 
 
 async def mail_list(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """List messages in a user's mailbox."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or params.get("from") or "me"
     limit = int(params.get("limit", 25))
     if _stub_mode():
         return {
@@ -753,7 +791,14 @@ async def mail_list(params: dict[str, Any], correlation_id: str) -> dict[str, An
             ],
             "count": 1,
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/messages"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.list",
+        params,
+        me_suffix="messages",
+        user_suffix="messages",
+        identity_keys=("userId", "userPrincipalName", "from"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
     data = await _graph_request(
         "GET",
         url,
@@ -763,6 +808,7 @@ async def mail_list(params: dict[str, Any], correlation_id: str) -> dict[str, An
             "$top": str(limit),
             "$orderby": "receivedDateTime desc",
         },
+        prefer_delegated=prefer_delegated,
     )
     messages = data.get("value", []) if data else []
     return {"messages": messages, "count": len(messages)}
@@ -770,7 +816,6 @@ async def mail_list(params: dict[str, Any], correlation_id: str) -> dict[str, An
 
 async def mail_read(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Read a specific message."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     message_id = params["messageId"]
     if _stub_mode():
         return {
@@ -781,8 +826,15 @@ async def mail_read(params: dict[str, Any], correlation_id: str) -> dict[str, An
                 "from": {"emailAddress": {"address": "stub@example.com"}},
             }
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/messages/{message_id}"
-    data = await _graph_request("GET", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.read",
+        params,
+        me_suffix=f"messages/{message_id}",
+        user_suffix=f"messages/{message_id}",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     return {"message": data}
 
 
@@ -796,20 +848,31 @@ async def mail_send(params: dict[str, Any], correlation_id: str) -> dict[str, An
 
 async def mail_reply(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Reply to a message."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     message_id = params["messageId"]
     comment = params.get("comment") or params.get("body") or ""
     if _stub_mode():
-        return {"replied": True, "messageId": message_id, "userId": user_id}
-    url = f"{GRAPH_BASE}/users/{user_id}/messages/{message_id}/reply"
+        return {"replied": True, "messageId": message_id}
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.reply",
+        params,
+        me_suffix=f"messages/{message_id}/reply",
+        user_suffix=f"messages/{message_id}/reply",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
     body: dict[str, Any] = {"comment": comment}
-    await _graph_request("POST", url, correlation_id, json_body=body)
-    return {"replied": True, "messageId": message_id, "userId": user_id}
+    await _graph_request(
+        "POST",
+        url,
+        correlation_id,
+        json_body=body,
+        prefer_delegated=prefer_delegated,
+    )
+    return {"replied": True, "messageId": message_id}
 
 
 async def mail_forward(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Forward a message."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     message_id = params["messageId"]
     to_recipients = params.get("to") or params.get("toRecipients") or []
     comment = params.get("comment") or ""
@@ -817,25 +880,48 @@ async def mail_forward(params: dict[str, Any], correlation_id: str) -> dict[str,
         to_recipients = [r.strip() for r in to_recipients.replace(";", ",").split(",") if r.strip()]
     if _stub_mode():
         return {"forwarded": True, "messageId": message_id, "to": to_recipients}
-    url = f"{GRAPH_BASE}/users/{user_id}/messages/{message_id}/forward"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.forward",
+        params,
+        me_suffix=f"messages/{message_id}/forward",
+        user_suffix=f"messages/{message_id}/forward",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
     body: dict[str, Any] = {
         "comment": comment,
         "toRecipients": [{"emailAddress": {"address": addr}} for addr in to_recipients],
     }
-    await _graph_request("POST", url, correlation_id, json_body=body)
+    await _graph_request(
+        "POST",
+        url,
+        correlation_id,
+        json_body=body,
+        prefer_delegated=prefer_delegated,
+    )
     return {"forwarded": True, "messageId": message_id, "to": to_recipients}
 
 
 async def mail_move(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Move a message to a different folder."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     message_id = params["messageId"]
     destination_id = params.get("destinationId") or params.get("folderId")
     if _stub_mode():
         return {"moved": True, "messageId": message_id, "destinationId": destination_id}
-    url = f"{GRAPH_BASE}/users/{user_id}/messages/{message_id}/move"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.move",
+        params,
+        me_suffix=f"messages/{message_id}/move",
+        user_suffix=f"messages/{message_id}/move",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
     data = await _graph_request(
-        "POST", url, correlation_id, json_body={"destinationId": destination_id}
+        "POST",
+        url,
+        correlation_id,
+        json_body={"destinationId": destination_id},
+        prefer_delegated=prefer_delegated,
     )
     return {
         "moved": True,
@@ -847,18 +933,23 @@ async def mail_move(params: dict[str, Any], correlation_id: str) -> dict[str, An
 
 async def mail_delete(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Delete a message."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     message_id = params["messageId"]
     if _stub_mode():
         return {"deleted": True, "messageId": message_id}
-    url = f"{GRAPH_BASE}/users/{user_id}/messages/{message_id}"
-    await _graph_request("DELETE", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.delete",
+        params,
+        me_suffix=f"messages/{message_id}",
+        user_suffix=f"messages/{message_id}",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
+    await _graph_request("DELETE", url, correlation_id, prefer_delegated=prefer_delegated)
     return {"deleted": True, "messageId": message_id}
 
 
 async def mail_folders(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """List mail folders."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     if _stub_mode():
         return {
             "folders": [
@@ -871,15 +962,21 @@ async def mail_folders(params: dict[str, Any], correlation_id: str) -> dict[str,
                 },
             ]
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/mailFolders"
-    data = await _graph_request("GET", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mail.folders",
+        params,
+        me_suffix="mailFolders",
+        user_suffix="mailFolders",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     folders = data.get("value", []) if data else []
     return {"folders": folders}
 
 
 async def mailbox_settings(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Get mailbox settings."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     if _stub_mode():
         return {
             "settings": {
@@ -888,8 +985,15 @@ async def mailbox_settings(params: dict[str, Any], correlation_id: str) -> dict[
                 "timeZone": "UTC",
             }
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/mailboxSettings"
-    data = await _graph_request("GET", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "mailbox.settings",
+        params,
+        me_suffix="mailboxSettings",
+        user_suffix="mailboxSettings",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me mailbox).",
+    )
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     return {"settings": data}
 
 
@@ -1160,15 +1264,24 @@ async def chat_list(params: dict[str, Any], correlation_id: str) -> dict[str, An
     top = params.get("top", 50)
     if _stub_mode():
         return {"chats": [], "count": 0}
+    resolution = resolve_action_auth(None, "chat.list", params)
     if user_id:
         url = f"{GRAPH_BASE}/users/{user_id}/chats"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         url = f"{GRAPH_BASE}/me/chats"
+        prefer_delegated = True
     else:
         raise GraphAPIError(
             400, "no_user_context", "userId is required for app-only auth (cannot use /me)."
         )
-    data = await _graph_request("GET", url, correlation_id, params={"$top": top})
+    data = await _graph_request(
+        "GET",
+        url,
+        correlation_id,
+        params={"$top": top},
+        prefer_delegated=prefer_delegated,
+    )
     chats = data.get("value", []) if data else []
     return {"chats": chats, "count": len(chats)}
 
@@ -1420,7 +1533,6 @@ async def groups_list_members(params: dict[str, Any], correlation_id: str) -> di
 
 async def calendar_list(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """List events on a user's calendar."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     limit = int(params.get("limit", 25))
     if _stub_mode():
         return {
@@ -1435,7 +1547,14 @@ async def calendar_list(params: dict[str, Any], correlation_id: str) -> dict[str
             ],
             "count": 1,
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/events"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.list",
+        params,
+        me_suffix="events",
+        user_suffix="events",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
     data = await _graph_request(
         "GET",
         url,
@@ -1445,6 +1564,7 @@ async def calendar_list(params: dict[str, Any], correlation_id: str) -> dict[str
             "$top": str(limit),
             "$orderby": "start/dateTime",
         },
+        prefer_delegated=prefer_delegated,
     )
     events = data.get("value", []) if data else []
     return {"events": events, "count": len(events)}
@@ -1452,7 +1572,6 @@ async def calendar_list(params: dict[str, Any], correlation_id: str) -> dict[str
 
 async def calendar_create(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Create a calendar event."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     if _stub_mode():
         import uuid as _uuid
 
@@ -1464,7 +1583,14 @@ async def calendar_create(params: dict[str, Any], correlation_id: str) -> dict[s
             },
             "status": "created",
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/events"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.create",
+        params,
+        me_suffix="events",
+        user_suffix="events",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
     body: dict[str, Any] = {}
     for field in (
         "subject",
@@ -1478,28 +1604,46 @@ async def calendar_create(params: dict[str, Any], correlation_id: str) -> dict[s
     ):
         if field in params:
             body[field] = params[field]
-    data = await _graph_request("POST", url, correlation_id, json_body=body)
+    data = await _graph_request(
+        "POST",
+        url,
+        correlation_id,
+        json_body=body,
+        prefer_delegated=prefer_delegated,
+    )
     return {"event": data, "status": "created"}
 
 
 async def calendar_get(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Get a specific event."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     event_id = params["eventId"]
     if _stub_mode():
         return {"event": {"id": event_id, "subject": "Stub Event"}}
-    url = f"{GRAPH_BASE}/users/{user_id}/events/{event_id}"
-    data = await _graph_request("GET", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.get",
+        params,
+        me_suffix=f"events/{event_id}",
+        user_suffix=f"events/{event_id}",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     return {"event": data}
 
 
 async def calendar_update(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Update a calendar event."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     event_id = params["eventId"]
     if _stub_mode():
         return {"updated": True, "eventId": event_id}
-    url = f"{GRAPH_BASE}/users/{user_id}/events/{event_id}"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.update",
+        params,
+        me_suffix=f"events/{event_id}",
+        user_suffix=f"events/{event_id}",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
     patch: dict[str, Any] = {}
     for field in (
         "subject",
@@ -1513,25 +1657,37 @@ async def calendar_update(params: dict[str, Any], correlation_id: str) -> dict[s
     ):
         if field in params:
             patch[field] = params[field]
-    await _graph_request("PATCH", url, correlation_id, json_body=patch)
+    await _graph_request(
+        "PATCH",
+        url,
+        correlation_id,
+        json_body=patch,
+        prefer_delegated=prefer_delegated,
+    )
     return {"updated": True, "eventId": event_id}
 
 
 async def calendar_delete(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Delete a calendar event."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
     event_id = params["eventId"]
     if _stub_mode():
         return {"deleted": True, "eventId": event_id}
-    url = f"{GRAPH_BASE}/users/{user_id}/events/{event_id}"
-    await _graph_request("DELETE", url, correlation_id)
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.delete",
+        params,
+        me_suffix=f"events/{event_id}",
+        user_suffix=f"events/{event_id}",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
+    await _graph_request("DELETE", url, correlation_id, prefer_delegated=prefer_delegated)
     return {"deleted": True, "eventId": event_id}
 
 
 async def calendar_availability(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     """Check availability / get schedule."""
-    user_id = params.get("userId") or params.get("userPrincipalName") or "me"
-    schedules = params.get("schedules") or [user_id]
+    user_id = _first_explicit_identity(params, "userId", "userPrincipalName")
+    schedules = params.get("schedules") or ([user_id] if user_id else [])
     start_time = params.get("startTime") or params.get("start")
     end_time = params.get("endTime") or params.get("end")
     if _stub_mode():
@@ -1541,9 +1697,16 @@ async def calendar_availability(params: dict[str, Any], correlation_id: str) -> 
                 for s in schedules
             ]
         }
-    url = f"{GRAPH_BASE}/users/{user_id}/calendar/getSchedule"
+    url, prefer_delegated = _resolve_user_scoped_url(
+        "calendar.availability",
+        params,
+        me_suffix="calendar/getSchedule",
+        user_suffix="calendar/getSchedule",
+        identity_keys=("userId", "userPrincipalName"),
+        error_message="userId is required for app-only auth (cannot use /me calendar).",
+    )
     body: dict[str, Any] = {
-        "schedules": schedules,
+        "schedules": schedules or ["me"],
         "startTime": (
             start_time
             if isinstance(start_time, dict)
@@ -1554,7 +1717,13 @@ async def calendar_availability(params: dict[str, Any], correlation_id: str) -> 
         ),
         "availabilityViewInterval": int(params.get("interval", 30)),
     }
-    data = await _graph_request("POST", url, correlation_id, json_body=body)
+    data = await _graph_request(
+        "POST",
+        url,
+        correlation_id,
+        json_body=body,
+        prefer_delegated=prefer_delegated,
+    )
     return {"schedules": data.get("value", []) if data else []}
 
 
@@ -1727,6 +1896,7 @@ async def files_list(params: dict[str, Any], correlation_id: str) -> dict[str, A
             ],
             "count": 1,
         }
+    resolution = resolve_action_auth(None, "files.list", params)
     if drive_id:
         if folder_id and folder_id != "root":
             url = f"{GRAPH_BASE}/drives/{drive_id}/items/{folder_id}/children"
@@ -1734,21 +1904,25 @@ async def files_list(params: dict[str, Any], correlation_id: str) -> dict[str, A
             url = f"{GRAPH_BASE}/drives/{drive_id}/root:/{folder_path}:/children"
         else:
             url = f"{GRAPH_BASE}/drives/{drive_id}/root/children"
+        prefer_delegated = False
     elif site_id:
         if folder_path:
             url = f"{GRAPH_BASE}/sites/{site_id}/drive/root:/{folder_path}:/children"
         else:
             url = f"{GRAPH_BASE}/sites/{site_id}/drive/root/children"
+        prefer_delegated = False
     elif user_id:
         if folder_path:
             url = f"{GRAPH_BASE}/users/{user_id}/drive/root:/{folder_path}:/children"
         else:
             url = f"{GRAPH_BASE}/users/{user_id}/drive/root/children"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         if folder_path:
             url = f"{GRAPH_BASE}/me/drive/root:/{folder_path}:/children"
         else:
             url = f"{GRAPH_BASE}/me/drive/root/children"
+        prefer_delegated = True
     else:
         # No /me available — try tenant's primary site from config
         try:
@@ -1757,6 +1931,7 @@ async def files_list(params: dict[str, Any], correlation_id: str) -> dict[str, A
             cfg = get_tenant_config()
             if cfg.org.primary_site_id:
                 url = f"{GRAPH_BASE}/sites/{cfg.org.primary_site_id}/drive/root/children"
+                prefer_delegated = False
             else:
                 raise GraphAPIError(
                     400,
@@ -1771,7 +1946,7 @@ async def files_list(params: dict[str, Any], correlation_id: str) -> dict[str, A
                 "no_drive_context",
                 "No driveId, siteId, or userId provided, and /me requires delegated auth.",
             ) from err
-    data = await _graph_request("GET", url, correlation_id)
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     files = data.get("value", []) if data else []
     return {"files": files, "count": len(files)}
 
@@ -1798,14 +1973,19 @@ async def files_search(params: dict[str, Any], correlation_id: str) -> dict[str,
     query = params.get("query") or params.get("q") or ""
     if _stub_mode():
         return {"files": [], "count": 0, "query": query}
+    resolution = resolve_action_auth(None, "files.search", params)
     if drive_id:
         url = f"{GRAPH_BASE}/drives/{drive_id}/root/search(q='{query}')"
+        prefer_delegated = False
     elif site_id:
         url = f"{GRAPH_BASE}/sites/{site_id}/drive/root/search(q='{query}')"
+        prefer_delegated = False
     elif user_id:
         url = f"{GRAPH_BASE}/users/{user_id}/drive/root/search(q='{query}')"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         url = f"{GRAPH_BASE}/me/drive/root/search(q='{query}')"
+        prefer_delegated = True
     else:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
@@ -1813,6 +1993,7 @@ async def files_search(params: dict[str, Any], correlation_id: str) -> dict[str,
             cfg = get_tenant_config()
             if cfg.org.primary_site_id:
                 url = f"{GRAPH_BASE}/sites/{cfg.org.primary_site_id}/drive/root/search(q='{query}')"
+                prefer_delegated = False
             else:
                 raise GraphAPIError(
                     400,
@@ -1825,7 +2006,7 @@ async def files_search(params: dict[str, Any], correlation_id: str) -> dict[str,
                 "no_drive_context",
                 "No driveId, siteId, or userId provided, and /me requires delegated auth.",
             ) from err
-    data = await _graph_request("GET", url, correlation_id)
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     files = data.get("value", []) if data else []
     return {"files": files, "count": len(files), "query": query}
 
@@ -1848,12 +2029,16 @@ async def files_create_folder(params: dict[str, Any], correlation_id: str) -> di
         }
 
     # Resolve the base path
+    resolution = resolve_action_auth(None, "files.create_folder", params)
     if drive_id:
         base = f"{GRAPH_BASE}/drives/{drive_id}"
+        prefer_delegated = False
     elif site_id:
         base = f"{GRAPH_BASE}/sites/{site_id}/drive"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         base = f"{GRAPH_BASE}/me/drive"
+        prefer_delegated = True
     else:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
@@ -1861,6 +2046,7 @@ async def files_create_folder(params: dict[str, Any], correlation_id: str) -> di
             cfg = get_tenant_config()
             if cfg.org.primary_site_id:
                 base = f"{GRAPH_BASE}/sites/{cfg.org.primary_site_id}/drive"
+                prefer_delegated = False
             else:
                 raise GraphAPIError(
                     400,
@@ -1884,7 +2070,13 @@ async def files_create_folder(params: dict[str, Any], correlation_id: str) -> di
         "folder": {},
         "@microsoft.graph.conflictBehavior": params.get("conflictBehavior", "rename"),
     }
-    data = await _graph_request("POST", url, correlation_id, json_body=body)
+    data = await _graph_request(
+        "POST",
+        url,
+        correlation_id,
+        json_body=body,
+        prefer_delegated=prefer_delegated,
+    )
     return {"folder": data, "status": "created"}
 
 
@@ -1932,12 +2124,16 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
         }
 
     # Resolve drive base path
+    resolution = resolve_action_auth(None, "files.upload", params)
     if drive_id:
         base = f"{GRAPH_BASE}/drives/{drive_id}"
+        prefer_delegated = False
     elif site_id:
         base = f"{GRAPH_BASE}/sites/{site_id}/drive"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         base = f"{GRAPH_BASE}/me/drive"
+        prefer_delegated = True
     else:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
@@ -1945,6 +2141,7 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
             cfg = get_tenant_config()
             if cfg.org.primary_site_id:
                 base = f"{GRAPH_BASE}/sites/{cfg.org.primary_site_id}/drive"
+                prefer_delegated = False
             else:
                 raise GraphAPIError(
                     400,
@@ -1959,7 +2156,7 @@ async def files_upload(params: dict[str, Any], correlation_id: str) -> dict[str,
                 "No driveId or siteId provided, and /me requires delegated auth.",
             ) from err
 
-    token = _graph_token()
+    token = _graph_token(prefer_delegated=prefer_delegated)
     if not token:
         raise GraphAPIError(500, "credentials_missing", "Graph credentials not configured")
 
@@ -2083,14 +2280,19 @@ async def drives_list(params: dict[str, Any], correlation_id: str) -> dict[str, 
             "drives": [{"id": "drive-stub-001", "name": "OneDrive", "driveType": "personal"}],
             "count": 1,
         }
+    resolution = resolve_action_auth(None, "drives.list", params)
     if group_id:
         url = f"{GRAPH_BASE}/groups/{group_id}/drives"
+        prefer_delegated = False
     elif site_id:
         url = f"{GRAPH_BASE}/sites/{site_id}/drives"
+        prefer_delegated = False
     elif user_id:
         url = f"{GRAPH_BASE}/users/{user_id}/drives"
-    elif _can_use_me_endpoint():
+        prefer_delegated = False
+    elif resolution.prefer_delegated and _can_use_me_endpoint():
         url = f"{GRAPH_BASE}/me/drives"
+        prefer_delegated = True
     else:
         try:
             from smarthaus_common.tenant_config import get_tenant_config
@@ -2098,6 +2300,7 @@ async def drives_list(params: dict[str, Any], correlation_id: str) -> dict[str, 
             cfg = get_tenant_config()
             if cfg.org.primary_site_id:
                 url = f"{GRAPH_BASE}/sites/{cfg.org.primary_site_id}/drives"
+                prefer_delegated = False
             else:
                 raise GraphAPIError(
                     400,
@@ -2111,7 +2314,7 @@ async def drives_list(params: dict[str, Any], correlation_id: str) -> dict[str, 
                 "no_drive_context",
                 "No groupId, siteId, or userId provided, and /me requires delegated auth.",
             ) from err
-    data = await _graph_request("GET", url, correlation_id)
+    data = await _graph_request("GET", url, correlation_id, prefer_delegated=prefer_delegated)
     drives = data.get("value", []) if data else []
     return {"drives": drives, "count": len(drives)}
 
@@ -3400,10 +3603,13 @@ async def execute(
     correlation_id: str,
     executor_name: str | None = None,
 ) -> dict[str, Any]:
+    auth_resolution = resolve_action_auth(agent, action, params)
     context_token = _current_executor_name.set(executor_name)
+    auth_token = _current_auth_resolution.set(auth_resolution)
     try:
         return await _execute_impl(agent, action, params, correlation_id)
     finally:
+        _current_auth_resolution.reset(auth_token)
         _current_executor_name.reset(context_token)
 
 

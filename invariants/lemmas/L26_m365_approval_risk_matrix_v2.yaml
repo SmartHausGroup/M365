@@ -1,0 +1,23 @@
+lemma_id: L26
+name: M365 approval and risk matrix v2
+source_notebook: notebooks/m365/INV-M365-AB-approval-risk-matrix-v2.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - registry/universal_action_contract_v2.yaml
+    - registry/persona_capability_map.yaml
+    - registry/approval_risk_matrix_v2.yaml
+    - docs/commercialization/m365-approval-risk-matrix-v2.md
+    - src/smarthaus_common/approval_risk.py
+    - src/ops_adapter/main.py
+    - src/ops_adapter/approvals.py
+    - tests/test_approval_risk_v2.py
+    - tests/test_ops_adapter.py
+    - notebooks/lemma_proofs/L26_m365_approval_risk_matrix_v2.ipynb
+  checks:
+    - each action resolves to exactly one risk class and one approval profile through the shared authority
+    - approval-bearing actions can force pending approval on the governed ops-adapter path even when older OPA rules are incomplete
+    - approval metadata is preserved in approval params
+    - E1D advances the active next act to E1E
+status: projected

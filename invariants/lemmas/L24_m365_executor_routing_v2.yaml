@@ -1,0 +1,24 @@
+lemma_id: L24
+name: M365 executor routing v2
+source_notebook: notebooks/m365/INV-M365-Z-executor-routing-v2.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - registry/universal_action_contract_v2.yaml
+    - registry/executor_routing_v2.yaml
+    - docs/commercialization/m365-executor-routing-v2.md
+    - src/smarthaus_common/executor_routing.py
+    - src/ops_adapter/actions.py
+    - src/ops_adapter/personas.py
+    - src/provisioning_api/routers/m365.py
+    - tests/test_executor_routing_v2.py
+    - tests/test_env_loading.py
+    - notebooks/lemma_proofs/L24_m365_executor_routing_v2.ipynb
+  checks:
+    - canonical v2 actions route from the first segment when the domain is bounded
+    - legacy exact and dotted aliases resolve through the routing registry
+    - ops-adapter, personas, and instruction router share one routing resolver
+    - unknown actions fail closed
+    - E1B advances the active next act to E1C
+status: projected

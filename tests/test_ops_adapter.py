@@ -325,6 +325,28 @@ def test_actions_returns_pending_approval_for_high_risk_admin_action(
     assert isinstance(data["approval_id"], str) and data["approval_id"]
 
 
+def test_e1d_matrix_forces_pending_approval_when_opa_surface_is_incomplete(
+    tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/m365-administrator/sites.provision",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"displayName": "Operations Site"}},
+    )
+
+    assert r.status_code == 200
+    data = r.json()
+    assert data["status"] == "pending_approval"
+    approval = patched_runtime.APPROVALS.get(data["approval_id"])
+    assert approval is not None
+    assert approval["params"]["risk_class"] == "high"
+    assert approval["params"]["approval_profile"] == "high-impact"
+    assert approval["approvers"] == ["global_admin"]
+
+
 def test_group_mapped_actor_binding_is_preserved_in_pending_approval(
     tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -715,6 +737,7 @@ def test_success_audit_log_captures_actor_and_executor_identity(
     ]
     assert success_entries
     entry = success_entries[-1]
+    assert entry["schema_version"] == "2.0"
     assert entry["actor"] == "group-admin@example.com"
     assert entry["actor_tier"]["tier_name"] == "global_admin"
     assert entry["actor_tier"]["assignment_source"] == "group"
@@ -722,3 +745,5 @@ def test_success_audit_log_captures_actor_and_executor_identity(
     assert entry["executor"]["mode"] == "app_only"
     assert entry["executor"]["client_id"] == "client-alpha"
     assert entry["tenant"] == "tenant-alpha"
+    assert entry["result"]["outcome"] == "success"
+    assert isinstance(entry["result"]["payload"], dict)

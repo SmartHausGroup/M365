@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 from typing import Any
 
-from .actions import executor_route_for_action
+from smarthaus_common.executor_routing import executor_route_for_action
 
 
 def _normalize_alias(value: str) -> str:

@@ -44,6 +44,9 @@
   - `Operations/ACTION_LOG.md`
   - `Operations/PROJECT_FILE_INDEX.md`
   - `docs/prompts/codex-m365-ai-workforce-expansion-master-plan*`
+  - `docs/commercialization/*`
+  - `docs/ma/lemmas/*`
+  - `artifacts/scorecards/*`
   - `src/*`
   - `tests/*`
   - `registry/*`

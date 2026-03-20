@@ -156,8 +156,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
 
-**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A`, `E0B`, `E0C`, and `E0D` are complete, `E0E` is the active next act, and `E1A` through `E9E` remain planned and blocked by predecessor work.
-**Current next act:** `E0E` — convert the locked roster, workload universe, taxonomy, and persona/risk map into the executable release-wave and workforce-completion structure for the rest of the program.
+**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A` through `E1E` are complete, `E2A` is the active next act, and `E2B` through `E9E` remain planned and blocked by predecessor work.
+**Current next act:** `E2A` — expand identity, group, license, and directory administration capabilities on top of the completed v2 control plane.
 
 **Status update (2026-03-20 16:11 EDT):** Created `plans/m365-ai-workforce-expansion-master-plan/` as the new active program with a full phase/child-phase stack `E0` through `E9`, explicit department and workload universe targets, and a complete MATHS prompt pair inventory under `docs/prompts/` for the overview, each grouped phase, and each child act. This new plan follows the now-closed enterprise-readiness master plan and becomes the active critical path for the broader SMARTHAUS AI workforce vision.
 
@@ -169,7 +169,41 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-03-20 16:53 EDT):** `E0D` is complete. The workforce now has an explicit structured persona-to-capability map at `registry/persona_capability_map.yaml`, a human-readable risk and approval artifact at `docs/commercialization/m365-persona-capability-and-risk-map.md`, and notebook-backed MA evidence under `L21` proving that the authoritative `39`-persona roster is mapped without silently promoting the extra `20` non-authoritative registry agents. `E0E` is now the active next act.
 
+**Status update (2026-03-20 17:03 EDT):** `E0E` is complete. The program now has a machine-readable release-wave authority at `registry/workforce_release_wave_map.yaml`, a human-readable completion map at `docs/commercialization/m365-workforce-release-wave-and-completion-map.md`, and notebook-backed MA evidence under `L22` proving the workforce can only be claimed complete when all bounded waves `W0` through `W10` are green. `E1A` is now the active next act.
+
+**Status update (2026-03-20 17:12 EDT):** `E1A` is complete. The program now has a machine-readable universal action authority at `registry/universal_action_contract_v2.yaml`, a human-readable canonical contract at `docs/commercialization/m365-universal-action-contract-v2.md`, and notebook-backed `L23` evidence proving the repo's three current action dialects can be projected deterministically into one v2 identity/semantics/execution/governance/evidence envelope. `E1B` is now the active next act.
+
+**Status update (2026-03-20 17:21 EDT):** `E1B` is complete. The program now has a machine-readable routing authority at `registry/executor_routing_v2.yaml`, a shared resolver at `src/smarthaus_common/executor_routing.py`, and notebook-backed `L24` evidence proving canonical v2 keys, legacy exact aliases, and legacy dotted aliases all project deterministically to one bounded executor domain across ops-adapter routing, persona-domain derivation, and instruction-router executor projection. `E1C` is now the active next act.
+
+**Status update (2026-03-20 17:42 EDT):** `E1C` is complete. The program now has a machine-readable auth authority at `registry/auth_model_v2.yaml`, a shared auth resolver at `src/smarthaus_common/auth_model.py`, notebook-backed `L25` evidence, and runtime extraction in `src/ops_adapter/actions.py` so delegated, app-only, and hybrid execution preferences now project deterministically through the shared v2 routing surface for user-context action families. Validation passed with `python3 -m py_compile src/smarthaus_common/auth_model.py src/ops_adapter/actions.py tests/test_auth_model_v2.py`, `PYTHONPATH=src /Users/smarthaus/Projects/GitHub/M365/.venv/bin/pytest -q tests/test_auth_model_v2.py tests/test_executor_routing_v2.py tests/test_env_loading.py` (`23 passed` across the bounded E1C suite and deterministic replay), and `git diff --check`. `E1D` is now the active next act.
+
+**Status update (2026-03-20 17:58 EDT):** `E1D` is complete. The program now has a machine-readable approval and risk authority at `registry/approval_risk_matrix_v2.yaml`, a shared resolver at `src/smarthaus_common/approval_risk.py`, notebook-backed `L26` evidence, and runtime extraction in `src/ops_adapter/main.py` plus `src/ops_adapter/approvals.py` so deterministic `risk_class`, `approval_profile`, approvers, and matrix-enforced fail-closed approval behavior now project through the governed runtime even when legacy OPA approval coverage is incomplete. Validation passed with `python3 -m py_compile src/smarthaus_common/approval_risk.py src/ops_adapter/main.py src/ops_adapter/approvals.py tests/test_approval_risk_v2.py tests/test_ops_adapter.py`, `PYTHONPATH=src pytest -q tests/test_approval_risk_v2.py tests/test_ops_adapter.py -k 'e1d_matrix_forces_pending_approval_when_opa_surface_is_incomplete or actions_returns_pending_approval_for_high_risk_admin_action or group_mapped_actor_binding_is_preserved_in_pending_approval or b7b_preserves_routed_executor_identity_in_pending_approval or sites_provision_is_high_impact_and_requires_approval or groups_list_is_low_risk_without_approval or email_send_bulk_only_requires_approval_above_threshold or security_domain_default_is_critical_and_approval_bearing or persona_profile_fallback_uses_authoritative_persona_map'` (`9 passed`), and `git diff --check`. `E1E` is now the active next act.
+
+**Status update (2026-03-20 18:00 EDT):** `E1E` is complete. The program now has a machine-readable audit authority at `registry/unified_audit_schema_v2.yaml`, a shared runtime builder at `src/smarthaus_common/audit_schema.py`, notebook-backed `L27` evidence, runtime extraction in `src/ops_adapter/audit.py` and `src/provisioning_api/audit.py`, and a refreshed bounded instruction-audit verifier in `scripts/ci/verify_m365_audit.py` with regenerated proof at `configs/generated/m365_audit_verification.json`. Validation passed with `python3 -m py_compile src/smarthaus_common/audit_schema.py src/ops_adapter/audit.py src/provisioning_api/audit.py scripts/ci/verify_m365_audit.py tests/test_audit_schema_v2.py tests/test_ops_adapter.py`, `PYTHONPATH=src pytest -q tests/test_audit_schema_v2.py tests/test_ops_adapter.py -k 'test_build_audit_record_v2_projects_canonical_contexts or test_provisioning_api_log_event_writes_unified_schema or test_admin_audit_log_captures_actor_executor_and_before_after or test_admin_audit_log_can_return_snapshot_context or test_success_audit_log_captures_actor_and_executor_identity'` (`4 passed`), `PYTHONPATH=src python3 scripts/ci/verify_m365_audit.py` (`Audit verification PASSED`), and `git diff --check`. `E2A` is now the active next act.
+
 **Prompt artifacts:** master prompt pair plus grouped-phase and child-act MATHS prompt pairs under `docs/prompts/`
+
+---
+
+## Internal Ops: SmartHaus UCP Setup-Token Delivery Flow
+
+**Reference:** `plan:EXECUTION_PLAN:UCP-TD1`
+
+**Status:** 🟢 Active — bounded internal-only support for UCP Phase 4 cross-repo build and assembly.
+
+**Scope:** Provide the sibling-M365 flow blueprint and runbook that the local
+SmartHaus-admin UCP runtime needs for Teams-based setup-token delivery. This is
+not public/customer-facing M365 pack work.
+
+**Deliverables:**
+- `flows/internal-ops/ucp-setup-token-delivery-flow.json`
+- `flows/internal-ops/UCP_SETUP_TOKEN_DELIVERY_FLOW_RUNBOOK.md`
+- `flows/README.md` internal-ops flow entry
+- `Operations/PROJECT_FILE_INDEX.md` and `Operations/ACTION_LOG.md` support
+
+**Exit boundary:** The artifact and runbook surface exists and UCP docs can
+point to it truthfully; live tenant deployment and operator acceptance remain
+outside this repo slice.
 
 ---
 

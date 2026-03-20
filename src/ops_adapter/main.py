@@ -13,6 +13,7 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.security import HTTPBearer
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
+from smarthaus_common.approval_risk import resolve_action_approval_risk
 from smarthaus_common.config import has_selected_tenant
 from smarthaus_common.permission_enforcer import (
     check_user_permission,
@@ -658,6 +659,11 @@ async def actions(
     params.setdefault("executor_domain", executor_identity.get("domain"))
     params.setdefault("executor_identity", executor_identity)
     params.setdefault("tenant", tenant_config.tenant.id)
+    governance_resolution = resolve_action_approval_risk(canonical_agent, action, params)
+    params.setdefault("risk_class", governance_resolution.risk_class)
+    params.setdefault("approval_profile", governance_resolution.approval_profile)
+    params.setdefault("approval_required_by_matrix", governance_resolution.approval_required)
+    params.setdefault("approval_rule_source", governance_resolution.rule_source)
 
     # Policy check via OPA
     policy = await OPA.check(canonical_agent, action, params, rate_allowed, corr)
@@ -675,6 +681,9 @@ async def actions(
                 "persona": persona,
                 "executor": executor_identity,
                 "tenant": tenant_config.tenant.id,
+                "risk_class": governance_resolution.risk_class,
+                "approval_profile": governance_resolution.approval_profile,
+                "approval_rule_source": governance_resolution.rule_source,
             },
             corr,
         )
@@ -682,13 +691,18 @@ async def actions(
         raise HTTPException(status_code, policy.get("reason", "policy_denied"))
 
     # Approvals
-    approval_required = bool(policy.get("approval_required"))
+    approval_required = (
+        bool(policy.get("approval_required")) or governance_resolution.approval_required
+    )
     if get_confirmation_override(user_email, action, tenant_config, actor_groups) == "always":
         approval_required = True
 
     if approval_required:
         rule = _approval_rule(canonical_agent, action)
+        if rule is None and governance_resolution.approvers:
+            rule = {"action": action, "approvers": list(governance_resolution.approvers)}
         approvers = (rule or {}).get("approvers", [])
+        params.setdefault("approvers", approvers)
         if not approvers:
             REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="denied").inc()
             await AUDITOR.log(
@@ -703,6 +717,9 @@ async def actions(
                     "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
+                    "risk_class": governance_resolution.risk_class,
+                    "approval_profile": governance_resolution.approval_profile,
+                    "approval_rule_source": governance_resolution.rule_source,
                 },
                 corr,
             )
@@ -722,6 +739,9 @@ async def actions(
                 "executor": executor_identity,
                 "tenant": tenant_config.tenant.id,
                 "approvers": approvers,
+                "risk_class": governance_resolution.risk_class,
+                "approval_profile": governance_resolution.approval_profile,
+                "approval_rule_source": governance_resolution.rule_source,
             },
             corr,
         )
@@ -741,6 +761,9 @@ async def actions(
             audit_payload["persona"] = persona
             audit_payload["executor"] = executor_identity
             audit_payload["tenant"] = tenant_config.tenant.id
+            audit_payload["risk_class"] = governance_resolution.risk_class
+            audit_payload["approval_profile"] = governance_resolution.approval_profile
+            audit_payload["approval_rule_source"] = governance_resolution.rule_source
             await AUDITOR.log("success", canonical_agent, action, audit_payload, corr)
             return ActionResponse(status="success", result=result)
         except GraphAPIError as ge:
@@ -759,6 +782,9 @@ async def actions(
                     "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
+                    "risk_class": governance_resolution.risk_class,
+                    "approval_profile": governance_resolution.approval_profile,
+                    "approval_rule_source": governance_resolution.rule_source,
                 },
                 corr,
             )
@@ -777,6 +803,9 @@ async def actions(
                     "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
+                    "risk_class": governance_resolution.risk_class,
+                    "approval_profile": governance_resolution.approval_profile,
+                    "approval_rule_source": governance_resolution.rule_source,
                 },
                 corr,
             )

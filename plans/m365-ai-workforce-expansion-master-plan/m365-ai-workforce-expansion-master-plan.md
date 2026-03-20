@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A`, `E0B`, `E0C`, and `E0D` are complete; `E0E` is the active next act; `E1A` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E1E` are complete; `E2A` is the active next act; `E2B` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -61,15 +61,20 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E0B` is complete.
 - `E0C` is complete.
 - `E0D` is complete.
-- `E0E` is the active next act.
-- `E1A` through `E9E` are prepared but blocked by prerequisite work.
+- `E0E` is complete.
+- `E1A` is complete.
+- `E1B` is complete.
+- `E1C` is complete.
+- `E1D` is complete.
+- `E1E` is complete.
+- `E2A` is the active next act.
+- `E2B` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
-- The control-plane, executor, and certification layers are still bounded to the previously shipped v1 slice.
+- The implemented action surface and live certification layers are still bounded to the previously shipped v1 slice.
 - No department pack beyond the standalone v1 surface has been certified or released.
-- Release-wave sequencing and full-workforce completion criteria are not yet locked.
 
 ## Scope
 
@@ -115,7 +120,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ### E0 — Universe Definition and Boundary Lock
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
 
@@ -154,13 +159,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E0E — Release-Wave and Completion Map
 
-**Status:** 🟢 Ready
+**Status:** ✅ Complete
 
 **Goal:** Define the executable wave structure and completion criteria for the full workforce program.
 
 ### E1 — Universal M365 Control Plane
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
 
@@ -175,37 +180,37 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E1A — Universal Action Contract v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Define the canonical action contract that can represent the expanded workforce action surface.
 
 #### E1B — Executor Routing v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Route actions by workload and domain through bounded executors instead of monolithic identities.
 
 #### E1C — Auth Model v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Define app-only, delegated, and hybrid execution rules per capability and workload.
 
 #### E1D — Approval and Risk Matrix v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Classify the expanded action universe into deterministic approval and risk classes.
 
 #### E1E — Unified Audit Schema v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Normalize actor, persona, executor, approval, and result evidence across the expanded workforce.
 
 ### E2 — Core M365 Workload Expansion
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
 
@@ -220,7 +225,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E2A — Entra / Directory Expansion
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Ready
 
 **Goal:** Expand identity, group, license, and directory administration capabilities.
 
@@ -594,4 +599,4 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ## Next Act
 
-`E0E` is the active next act. `E0D` bound the authoritative `39`-persona roster to explicit workload families, capability families, coverage status, and approval posture through `registry/persona_capability_map.yaml` and `docs/commercialization/m365-persona-capability-and-risk-map.md`, while explicitly separating the `20` non-authoritative overflow registry agents from the workforce authority surface. `E0E` must now convert that locked roster, workload, taxonomy, and persona map into the executable release-wave structure and workforce-completion criteria for the rest of the program.
+`E2A` is the active next act. `E1E` completed the machine-readable audit authority at `registry/unified_audit_schema_v2.yaml`, the shared runtime builder at `src/smarthaus_common/audit_schema.py`, the notebook-backed `L27` evidence chain, and the runtime extraction in `src/ops_adapter/audit.py` plus `src/provisioning_api/audit.py` so instruction-api and ops-adapter audit writers now emit one canonical top-level envelope with normalized actor, persona, executor, approval, and result contexts. `E2A` must now begin the first real workload-expansion implementation wave by expanding identity, group, license, and directory administration capabilities on top of the completed v2 control plane.

@@ -44,12 +44,18 @@
   - `Operations/ACTION_LOG.md`
   - `Operations/PROJECT_FILE_INDEX.md`
   - `docs/prompts/codex-m365-ai-workforce-expansion-master-plan*`
+  - `docs/commercialization/*`
+  - `docs/ma/lemmas/*`
+  - `docs/contracts/*`
   - `src/*`
   - `tests/*`
   - `registry/*`
+  - `scripts/ci/*`
   - `config/*`
+  - `configs/generated/*`
   - `notebooks/*`
   - `invariants/*`
+  - `artifacts/scorecards/*`
 - Denylist:
   - `artifacts/certification/m365-v1-candidate-52ca494/* unless explicitly in scope`
   - `UCP/tenants/* unless the act explicitly targets tenant-contract changes`

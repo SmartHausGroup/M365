@@ -4,7 +4,7 @@ M365 audit verification (INV-M365-AUDIT-001, Eq. 5).
 
 Produces configs/generated/m365_audit_verification.json.
 Verifies that when audit is enabled, each log_event call produces exactly one record
-with required schema (ts, action, user, details). Uses in-process log_event; no server.
+with the unified audit schema v2. Uses in-process log_event; no server.
 
 Run: python scripts/ci/verify_m365_audit.py
   Optional: ENABLE_AUDIT_LOGGING=1 (default for this script); APP_DATA for audit path.
@@ -23,7 +23,7 @@ ARTIFACT_PATH = REPO_ROOT / "configs" / "generated" / "m365_audit_verification.j
 
 
 def verify_audit_writer() -> dict:
-    """Enable audit, call log_event twice, assert two new lines with required schema."""
+    """Enable audit, call log_event twice, assert two new lines with unified schema."""
     # Set env before importing so audit module sees it
     with tempfile.TemporaryDirectory() as tmp:
         os.environ["ENABLE_AUDIT_LOGGING"] = "1"
@@ -39,12 +39,24 @@ def verify_audit_writer() -> dict:
 
         log_event(
             "m365_instruction",
-            {"action": "list_users", "params": {}, "ok": True, "result": {"users": [], "count": 0}},
+            {
+                "action": "list_users",
+                "params": {},
+                "ok": True,
+                "result": {"users": [], "count": 0},
+                "trace_id": "trace-1",
+            },
             user_info={"userPrincipalName": "test@test"},
         )
         log_event(
             "m365_instruction",
-            {"action": "get_user", "params": {}, "ok": False, "error": "not_found"},
+            {
+                "action": "get_user",
+                "params": {},
+                "ok": False,
+                "error": "not_found",
+                "trace_id": "trace-2",
+            },
             user_info={},
         )
 
@@ -56,7 +68,18 @@ def verify_audit_writer() -> dict:
         if len(new_lines) != 2:
             return {"audit_pass": False, "expected": 2, "got": len(new_lines)}
 
-        required_keys = {"ts", "action", "user", "details"}
+        required_keys = {
+            "schema_version",
+            "timestamp",
+            "ts",
+            "correlation_id",
+            "surface",
+            "action",
+            "status",
+            "user",
+            "details",
+            "result",
+        }
         for i, line in enumerate(new_lines):
             try:
                 rec = json.loads(line)
@@ -69,7 +92,11 @@ def verify_audit_writer() -> dict:
                     "missing_keys": list(required_keys - rec.keys()),
                 }
 
-        return {"audit_pass": True, "records_checked": 2, "schema": "ts, action, user, details"}
+        return {
+            "audit_pass": True,
+            "records_checked": 2,
+            "schema": "schema_version, timestamp, ts, correlation_id, surface, action, status, user, details, result",
+        }
 
 
 def main() -> int:

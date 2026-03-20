@@ -1,0 +1,130 @@
+{
+  "name": "UCP Setup Token Delivery",
+  "scope": "smarthaus_internal_ops",
+  "category": "managed_team_onboarding",
+  "trigger": {
+    "type": "HttpRequest",
+    "method": "POST",
+    "event": "ucp_setup_token_delivery",
+    "schema_version": "2026-03-20"
+  },
+  "security": {
+    "transport": "https",
+    "header_secret": {
+      "header": "X-UCP-Flow-Secret",
+      "env": "UCP_INTERNAL_TEAMS_TOKEN_FLOW_SHARED_SECRET"
+    },
+    "required_headers": [
+      "Content-Type",
+      "Accept",
+      "X-UCP-Flow-Event",
+      "X-UCP-Flow-Schema-Version",
+      "X-UCP-Flow-Secret",
+      "X-UCP-Request-Id"
+    ]
+  },
+  "request_contract": {
+    "required_fields": [
+      "event",
+      "schema_version",
+      "request_id",
+      "recipient_upn",
+      "recipient_name",
+      "tenant_id",
+      "issued_by",
+      "ttl_seconds",
+      "expires_at",
+      "token",
+      "setup_url",
+      "instructions"
+    ],
+    "recipient_field": "recipient_upn",
+    "token_prefix": "shst_",
+    "setup_url": "http://127.0.0.1:8765/setup"
+  },
+  "steps": [
+    {
+      "name": "ValidateHeadersAndSecret",
+      "action": "GuardRequest",
+      "checks": [
+        "X-UCP-Flow-Event == ucp_setup_token_delivery",
+        "X-UCP-Flow-Schema-Version == 2026-03-20",
+        "X-UCP-Flow-Secret matches configured secret",
+        "X-UCP-Request-Id is not empty"
+      ]
+    },
+    {
+      "name": "ParseAndValidateJson",
+      "action": "ParseJson",
+      "checks": [
+        "Body is a JSON object",
+        "All required fields exist",
+        "token starts with shst_",
+        "recipient_upn is not empty"
+      ]
+    },
+    {
+      "name": "ComposeTeamsMessage",
+      "action": "Compose",
+      "template": [
+        "SmartHaus managed-team onboarding",
+        "Recipient: @{triggerBody()?['recipient_upn']}",
+        "Tenant: @{triggerBody()?['tenant_id']}",
+        "Issued by: @{triggerBody()?['issued_by']}",
+        "Paste this setup token into UCP on first run:",
+        "@{triggerBody()?['token']}"
+      ]
+    },
+    {
+      "name": "DeliverToTeamsChat",
+      "action": "PostTeamsMessage",
+      "delivery_channel": "teams",
+      "mode": "chat",
+      "recipient_upn": "@{triggerBody()?['recipient_upn']}"
+    },
+    {
+      "name": "ReturnSuccess",
+      "action": "Response",
+      "status_code": 200,
+      "body": {
+        "status": "delivered",
+        "delivery_backend": "power_automate",
+        "delivery_channel": "teams",
+        "delivery_target": "@{triggerBody()?['recipient_upn']}",
+        "recipient_upn": "@{triggerBody()?['recipient_upn']}",
+        "provider_run_id": "@{workflow()?['run']['name']}",
+        "provider_message_id": "@{outputs('DeliverToTeamsChat')?['body/id']}",
+        "delivered_at": "@{utcNow()}",
+        "token_echoed": false
+      }
+    }
+  ],
+  "failure_contract": {
+    "status": "error",
+    "allowed_error_codes": [
+      "unauthorized",
+      "invalid_request",
+      "configuration_missing",
+      "recipient_not_found",
+      "delivery_failed",
+      "rate_limited",
+      "timeout"
+    ],
+    "required_fields": [
+      "status",
+      "error_code",
+      "message",
+      "retryable",
+      "delivery_backend",
+      "delivery_target",
+      "provider_run_id",
+      "token_echoed"
+    ],
+    "token_echoed": false
+  },
+  "notes": [
+    "This is a SmartHaus internal UCP management flow, not a public M365 pack feature.",
+    "The flow must never echo the raw token back in any HTTP response.",
+    "Live tenant deployment and acceptance are handled in UCP Phase 5."
+  ]
+}

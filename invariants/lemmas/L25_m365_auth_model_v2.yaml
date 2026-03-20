@@ -1,0 +1,21 @@
+lemma_id: L25
+name: M365 auth model v2
+source_notebook: notebooks/m365/INV-M365-AA-auth-model-v2.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - registry/universal_action_contract_v2.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/auth_model_v2.yaml
+    - docs/commercialization/m365-auth-model-v2.md
+    - src/smarthaus_common/auth_model.py
+    - src/ops_adapter/actions.py
+    - tests/test_auth_model_v2.py
+    - notebooks/lemma_proofs/L25_m365_auth_model_v2.ipynb
+  checks:
+    - each action resolves to exactly one auth class through the shared auth authority
+    - hybrid user-context actions prefer delegated self-context only when explicit owner context is absent
+    - current admin and provisioning certified-core actions remain app_only
+    - E1C advances the active next act to E1D
+status: projected

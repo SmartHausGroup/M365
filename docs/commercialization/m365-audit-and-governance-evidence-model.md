@@ -1,8 +1,8 @@
 # M365 Audit and Governance Evidence Model
 
-**Status:** `A3` imported; runtime synchronized through `B3`; identity architecture synchronized through `B5A`
-**Date:** 2026-03-17
-**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`, `plan:m365-enterprise-readiness-master-plan:B3`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R7`, `plan:m365-enterprise-readiness-master-plan:R9`
+**Status:** `A3` imported; runtime synchronized through `B3`; identity architecture synchronized through `B5A`; unified audit schema synchronized through `E1E`
+**Date:** 2026-03-20
+**Plan refs:** `plan:m365-enterprise-commercialization-readiness:R3`, `plan:m365-enterprise-commercialization-readiness:P2A`, `plan:m365-enterprise-readiness-master-plan:B3`, `plan:m365-enterprise-readiness-master-plan:B5A`, `plan:m365-enterprise-readiness-master-plan:R7`, `plan:m365-enterprise-readiness-master-plan:R9`, `plan:m365-ai-workforce-expansion-master-plan:E1E`
 
 This document defines the minimum audit and governance evidence model required to describe standalone M365 v1 honestly to an enterprise buyer. It does not claim that all requirements are already implemented. It defines what evidence is required, what evidence exists today, and which gaps remain open.
 
@@ -147,29 +147,25 @@ To support enterprise review, audit records alone are not enough. Governance evi
 | Enterprise forwarding hook | `src/ops_adapter/audit.py` via `AUDIT_SERVICE_URL` | Present but best-effort |
 | Admin audit for tenant/permission operations | `src/ops_adapter/audit.py`, `src/ops_adapter/actions.py`, `tests/test_ops_adapter.py` | Present for active ops-adapter admin surface |
 | Formal actor-versus-executor enterprise model | `docs/commercialization/m365-entra-identity-and-app-execution-model.md`, `src/ops_adapter/main.py`, `src/ops_adapter/approvals.py`, `src/ops_adapter/audit.py`, `tests/test_ops_adapter.py` | Present on the governed ops-adapter path |
+| Unified audit schema v2 across instruction-api and ops-adapter | `registry/unified_audit_schema_v2.yaml`, `docs/commercialization/m365-unified-audit-schema-v2.md`, `src/smarthaus_common/audit_schema.py`, `src/provisioning_api/audit.py`, `src/ops_adapter/audit.py`, `tests/test_audit_schema_v2.py` | Present |
 
 ## Current Gaps
 
 The current repository state is not yet sufficient to claim complete enterprise audit posture.
 
-1. **No unified audit schema across instruction API and ops-adapter**
-   - Instruction API records use `ts, action, user, details`.
-   - Ops-adapter records now use `timestamp, correlation_id, surface, agent, action, status, details`, with admin-event extensions such as `event_class`, `actor`, `tenant`, `before`, and `after`.
-   - Enterprise review still needs the normalization boundary documented, not glossed over.
-
-2. **Generated audit verification is narrow**
+1. **Generated audit verification is still narrow**
    - `configs/generated/m365_audit_verification.json` shows a passing result, but only for a limited schema check and a small record count.
-   - `B3` adds targeted runtime tests for the admin/config audit path, but the generated artifact is still narrower than full enterprise governance coverage.
+   - `E1E` updates that artifact to the unified schema, but it is still only a bounded instruction-api verifier rather than a full workforce audit certification suite.
 
-3. **Audit delivery is fail-open**
+2. **Audit delivery is fail-open**
    - `src/ops_adapter/audit.py` intentionally avoids raising on forwarding failures.
    - That is acceptable operationally, but enterprise acceptance needs a defined reliability and monitoring expectation for the audit pipeline.
 
-4. **Retention, tamper-evidence, and evidence custody are not yet formalized**
+3. **Retention, tamper-evidence, and evidence custody are not yet formalized**
    - The current docs do not yet define enterprise retention duration, immutable storage requirements, or evidence export procedure for audit review.
-5. **Actor-versus-executor live certification is still pending**
-   - The governed ops-adapter runtime now preserves actor identity, actor tier, actor groups, tenant, and executor identity in approval and audit artifacts.
-   - Enterprise release still requires live `C1` evidence proving that the same binding survives real SmartHaus Entra tokens, real approval backends, and real audit storage.
+4. **Expanded workforce live certification is still pending**
+   - The governed runtime now has a unified audit schema and live-certified standalone v1 evidence.
+   - The broader workforce still requires later `E8` certification to prove the unified schema survives the expanded workload universe and department-pack runtime.
 
 ## Enterprise Acceptance Expectations
 
