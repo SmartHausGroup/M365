@@ -165,4 +165,4 @@ If evaluated today against these gates, the certification state is:
 
 Current deterministic outcome:
 
-`GO` for the bounded standalone M365 v1 release gate today. The runtime evidence gate is closed and the completed human engineering, security, and release-owner sign-off record now satisfies Gate 6. Launch-readiness work in `D1` and `D2` remains downstream of this release decision.
+`GO` for the bounded standalone M365 v1 release gate today. The runtime evidence gate is closed, the completed human engineering, security, and release-owner sign-off record satisfies Gate 6, and the downstream launch-readiness collateral and handoff work are now complete for this repository state.

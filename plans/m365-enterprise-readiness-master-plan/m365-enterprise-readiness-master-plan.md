@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, `B7B`, `B7C`, and `B7C1` complete on 2026-03-19; `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, and `C2` complete on 2026-03-20; `D1` is the active next act)
+**Status:** Complete (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, `B7B`, `B7C`, and `B7C1` complete on 2026-03-19; `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, and `D2` complete on 2026-03-20)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
@@ -69,13 +69,12 @@ If any term is false, the module remains `NO-GO`.
 - `C1C` complete on 2026-03-20: the original live mutation and governance window proved `create_site`, `create_team`, and `add_channel`, while retained reproofs in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json`, `reset_user_password_reproof.json`, and `governance_surface_reproof.json` closed the live existing-site detection, bounded-directory password reset, governed JWT parity, approval create/readback, and audit-evidence blockers on the rebased multi-executor runtime.
 - `C1D` complete on 2026-03-20: synchronized the retained `C1A` through `C1C` evidence back into the standalone validation matrix and certification packet by adding `artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json`, updating `docs/commercialization/m365-live-tenant-validation-matrix.md` to the bounded standalone packet state, and updating `docs/commercialization/m365-release-gates-and-certification.md` so the remaining blocker is the formal `C2` release decision rather than missing runtime evidence.
 - `C2` complete on 2026-03-20: turned the synchronized standalone packet into the formal release `GO` decision by adding `artifacts/certification/m365-v1-candidate-52ca494/release_decision.json` and `sign_off_record.json`, and recording completed human engineering, security, and release-owner sign-off.
+- `D1` complete on 2026-03-20: created `docs/commercialization/m365-enterprise-collateral-pack.md` as the bounded buyer-facing and delivery-facing collateral pack, keeping product claims, security posture, supported-action commitments, and operating-model language inside the certified standalone `9`-action boundary and the existing `C2 GO` release decision.
+- `D2` complete on 2026-03-20: created `docs/commercialization/m365-pilot-acceptance-and-customer-handoff.md` as the bounded pilot acceptance and ownership-transfer pack, keeping pilot success criteria, acceptance, customer responsibilities, handoff steps, and sign-off language inside the certified standalone `9`-action boundary and the existing operator/support model.
 
 ## Open Enterprise Blockers
 
-The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
-
-1. `D1` remains open: the enterprise collateral pack is still required before launch-readiness closure.
-2. `D2` remains blocked by `D1`.
+No open enterprise blockers remain in this master plan for the current repository state.
 
 ## Scope
 
@@ -758,7 +757,7 @@ Validation:
 
 #### D1 — Enterprise Collateral Pack
 
-**Status:** 🔜 Next
+**Status:** ✅ Complete (2026-03-20)
 
 **Goal:** Produce buyer-facing and delivery-facing collateral only after runtime and certification are in acceptable shape.
 
@@ -770,7 +769,7 @@ Validation:
 
 #### D2 — Pilot Acceptance and Customer Handoff
 
-**Status:** ⛔ Blocked by `D1`
+**Status:** ✅ Complete (2026-03-20)
 
 **Goal:** Define how SMARTHAUS and the customer close the pilot and transfer operating ownership.
 

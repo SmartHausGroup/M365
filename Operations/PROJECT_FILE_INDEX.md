@@ -39,6 +39,13 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md` | Persona-registry and humanized delegation contract for named digital employees such as Elena Rodriguez. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6D` |
 | `docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md` | Certification rebase document preventing `C1A` from certifying the stale single-executor posture. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6E` |
 
+## Active D1 Launch-Readiness Collateral Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/commercialization/m365-enterprise-collateral-pack.md` | Unified buyer-facing and delivery-facing collateral pack for the certified standalone `9`-action M365 v1 product boundary. | `Commercialization Scope Clarification`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:D1` |
+| `docs/commercialization/m365-pilot-acceptance-and-customer-handoff.md` | Pilot success, acceptance, handoff, customer-ownership, and sign-off pack for the certified standalone `9`-action M365 v1 product boundary. | `Operational Model: Self-Service & Self-Sufficient`, `Commercialization Scope Clarification` | `plan:m365-enterprise-readiness-master-plan:D2` |
+
 ## Active B5B Runtime Identity Enforcement Surface
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

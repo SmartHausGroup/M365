@@ -1,5 +1,5 @@
 plan_id: m365-enterprise-readiness-master-plan
-status: Active
+status: Complete
 date: "2026-03-20"
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-enterprise-readiness-master-plan:R1
@@ -329,20 +329,28 @@ execution_status:
         and sign_off_record.json, with an explicit GO because the
         required human engineering, security, and release-owner sign-off
         record is now complete.
-  prepared_blocked:
-    act: D2
-    date: "2026-03-20"
-    summary: >
-      C2 is now complete with an explicit GO, D1 is the active next act,
-      and D2 remains blocked until D1 is complete.
-  next_act: D1
+    - phase: D1
+      date: "2026-03-20"
+      summary: >
+        Created docs/commercialization/m365-enterprise-collateral-pack.md
+        as the bounded buyer-facing and delivery-facing collateral pack,
+        keeping product claims, security posture, supported-action
+        commitments, and operating-model language inside the certified
+        standalone 9-action boundary and the existing C2 GO release
+        decision.
+    - phase: D2
+      date: "2026-03-20"
+      summary: >
+        Created docs/commercialization/m365-pilot-acceptance-and-customer-handoff.md
+        as the bounded pilot acceptance and ownership-transfer pack,
+        keeping pilot success criteria, acceptance, customer
+        responsibilities, handoff steps, and sign-off language inside the
+        certified standalone 9-action boundary and the existing
+        operator/support model.
+  prepared_blocked: null
+  next_act: null
 
-open_enterprise_blockers:
-  - >
-    D1 remains open: the enterprise collateral pack is still required
-    before launch-readiness closure.
-  - >
-    D2 remains blocked until D1 is complete.
+open_enterprise_blockers: []
 
 requirements:
   - id: R1
@@ -506,10 +514,10 @@ phase_groups:
     acts:
       - id: D1
         name: Enterprise Collateral Pack
-        status: blocked
+        status: complete
       - id: D2
         name: Pilot Acceptance and Customer Handoff
-        status: blocked
+        status: complete
 
 critical_path_rules:
   - No act after B4E may proceed while pre-commit run --all-files is red.
