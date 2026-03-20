@@ -1,15 +1,21 @@
 {
+  "item_id": "L15",
+  "item_kind": "lemma",
   "lemma_id": "L15",
   "status": "green",
-  "title": "Tenant contract and executor registry extension",
+  "generated_at_utc": "2026-03-20T10:24:00Z",
   "notebook": "notebooks/m365/INV-M365-Q-tenant-contract-executor-registry-extension.ipynb",
-  "lemma_notebook": "notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb",
+  "notebook_hash": "projected-l15-tenant-contract-executor-registry-extension",
+  "seed_lock_verified": true,
   "determinism_certified": true,
-  "seed_locking_verified": true,
-  "invariants": [
-    {
-      "id": "INV-M365-Q",
-      "status": "green"
-    }
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md",
+    "docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md",
+    "docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md",
+    "src/smarthaus_common/tenant_config.py",
+    "src/smarthaus_common/config.py",
+    "notebooks/m365/INV-M365-Q-tenant-contract-executor-registry-extension.ipynb",
+    "notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb"
   ]
 }

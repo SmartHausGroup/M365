@@ -87,13 +87,17 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `artifacts/scorecards/scorecard_l15.json` | Per-lemma scorecard for tenant-contract and executor-registry extension linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `artifacts/scorecards/scorecard_l16.json` | Per-lemma scorecard for runtime executor-routing and domain-selection linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `artifacts/scorecards/scorecard_l17.json` | Per-lemma scorecard for persona-registry and humanized delegation integration linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
-| `scorecard.json` | Aggregate MA scorecard including `L7` through `L17` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `artifacts/scorecards/scorecard_l18.json` | Per-lemma scorecard for executor permission minimization and Azure cleanup linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `artifacts/scorecards/scorecard_l19.json` | Per-lemma scorecard for approval-backend reproof and certification re-readiness linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7E` |
+| `scorecard.json` | Aggregate MA scorecard including `L7` through `L19` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7E` |
 | `artifacts/b4d1_failure_inventory.json` | Pinned clean-baseline validation inventory for `B4D2` through `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D1` |
 | `artifacts/b4d3_failure_inventory.json` | Pinned post-runtime-cleanup failure inventory showing the remaining handoff into `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D3` |
 | `artifacts/b4d4_failure_inventory.json` | Pinned actionable mypy inventory after the environment and duplicate-module blockers were removed. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4A` |
 | `artifacts/b4d4d_failure_inventory.json` | Stable repo-wide mypy handoff inventory after repeated governed `B4D4D` runs. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4D` |
 | `artifacts/b4d5_validation_handoff.json` | Bounded `B4D5` validation closeout and explicit `B4E` blocker inventory after targeted closure. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D5` |
 | `artifacts/b4e_full_repo_validation_closure.json` | Authoritative green repo-validation closure for `B4E` after full Ruff, format, Mypy, and pre-commit success. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4E` |
+| `artifacts/b7d_executor_permission_matrix.json` | Bounded per-domain executor permission matrix, certificate posture, and legacy-executor demotion evidence for `B7D`. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `artifacts/b7d_live_executor_validation.json` | Live bounded app-only SharePoint, collaboration, and directory executor proof for `B7D`. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7D` |
 | `docs/ma/lemmas/L9_m365_runtime_cli_notebook_validation_cleanup.md` | Formal lemma narrative for the bounded runtime, CLI, and notebook validation cleanup proof surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B4D3` |
 | `docs/ma/lemmas/L10_m365_mypy_stub_module_path_remediation.md` | Formal lemma narrative for the bounded mypy stub and module-path remediation proof surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B4D4A` |
 | `docs/ma/lemmas/L11_m365_certification_environment_readiness.md` | Formal lemma narrative for the `C1A` certification-environment readiness gate. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
@@ -103,6 +107,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/ma/lemmas/L15_m365_tenant_contract_executor_registry_extension.md` | Formal lemma narrative for bounded executor representation, deterministic default projection, and single-executor migration semantics. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `docs/ma/lemmas/L16_m365_runtime_executor_routing_domain_selection.md` | Formal lemma narrative for deterministic action-to-executor routing, approval-domain projection, and fail-closed multi-executor selection. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `docs/ma/lemmas/L17_m365_persona_registry_humanized_delegation_integration.md` | Formal lemma narrative for deterministic persona resolution, canonical-agent projection, and persona-aware approval/audit preservation. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `docs/ma/lemmas/L18_m365_executor_permission_minimization_azure_cleanup.md` | Formal lemma narrative for bounded executor permission envelopes, Azure cleanup, and live app-only proof across the supported v1 domains. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `docs/ma/lemmas/L19_m365_approval_backend_reproof_certification_rereadiness.md` | Formal lemma narrative for bounded SharePoint-executor approval re-proof and `C1A` certification re-readiness. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7E` |
 
 ## Active B5D/B5E App Registration Hardening Artifacts
 
@@ -124,6 +130,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `invariants/lemmas/L17_m365_persona_registry_humanized_delegation_integration.yaml` | Machine-enforced invariant metadata for `L17`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 | `notebooks/m365/INV-M365-S-persona-registry-humanized-delegation-integration.ipynb` | Primary source notebook for the persona-registry and humanized delegation integration proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 | `notebooks/lemma_proofs/L17_m365_persona_registry_humanized_delegation_integration.ipynb` | Projected lemma-proof notebook for `L17`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `invariants/lemmas/L18_m365_executor_permission_minimization_azure_cleanup.yaml` | Machine-enforced invariant metadata for `L18`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `notebooks/m365/INV-M365-T-executor-permission-minimization-azure-cleanup.ipynb` | Primary source notebook for the bounded executor permission-minimization and Azure-cleanup proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `notebooks/lemma_proofs/L18_m365_executor_permission_minimization_azure_cleanup.ipynb` | Projected lemma-proof notebook for `L18`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `invariants/lemmas/L19_m365_approval_backend_reproof_certification_rereadiness.yaml` | Machine-enforced invariant metadata for `L19`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7E` |
+| `notebooks/m365/INV-M365-U-approval-backend-reproof-certification-rereadiness.ipynb` | Primary source notebook for bounded SharePoint-executor approval re-proof and certification re-readiness. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7E` |
+| `notebooks/lemma_proofs/L19_m365_approval_backend_reproof_certification_rereadiness.ipynb` | Projected lemma-proof notebook for `L19`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7E` |
+
+## Active B7E Approval-Reproof Surface
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `artifacts/b7e_approval_backend_reproof.json` | Exact-shell live proof showing the pinned SMARTHAUS approvals list returns `200` on metadata and items routes through the bounded SharePoint executor. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7E` |
 
 ## Active B7B Multi-Executor Routing Surface
 
@@ -134,6 +152,14 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `src/ops_adapter/app.py` | Legacy app-factory action path aligned to the same bounded executor-routing contract as the primary runtime. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `src/ops_adapter/approvals.py` | Approval backend now projecting the SharePoint executor path from the selected multi-executor tenant contract. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `tests/test_ops_adapter.py` | Bounded routing coverage proving SharePoint and directory executor selection, approval-path executor preservation, and fail-closed unmapped-route behavior. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+
+## Active B7D Executor-Minimization Surface
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `src/provisioning_api/routers/m365.py` | Supported v1 instruction router now projects bounded directory, collaboration, and SharePoint executors before Graph client construction. | `Technical Architecture`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `src/provisioning_api/m365_provision.py` | Provisioning surface now projects the SharePoint executor for site/group creation and the collaboration executor for Teams workspace creation. | `Technical Architecture`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7D` |
+| `tests/test_env_loading.py` | Tenant-first config tests now prove bounded executor projection into the supported v1 router and provisioning surfaces. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
 | `tests/test_approvals.py` | Approval-store contract tests proving the SharePoint executor is projected for approval Graph access even when another executor is the runtime default. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 
 ## Active B7C Persona Integration Surface
@@ -159,9 +185,9 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `artifacts/certification/m365-v1-candidate-52ca494/README.md` | Certification packet status for candidate `52ca494`, now carrying the explicit `C1A` `NO-GO` gate and exact standalone shell contract. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:C1A` |
-| `artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json` | Deterministic `C1A` readiness report separating tenant/app-contract readiness from the remaining SMARTHAUS Operations site-discovery blocker. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
-| `artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md` | Operator checklist for the approved certification window, exact shell contract, and stop conditions. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
+| `artifacts/certification/m365-v1-candidate-52ca494/README.md` | Certification packet status for candidate `52ca494`, now carrying the explicit `C1A` `GO` gate on the rebased bounded-executor runtime. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:C1A` |
+| `artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json` | Deterministic `C1A` readiness report proving the exact-shell contract and bounded SharePoint-executor approval path are green. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1A` |
+| `artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md` | Operator checklist for the approved certification window, exact shell contract, and bounded SharePoint-executor approval stop conditions. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `invariants/lemmas/L11_m365_certification_environment_readiness.yaml` | Machine-enforced invariant metadata for `L11`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `invariants/lemmas/L12_m365_approval_contract_alignment.yaml` | Machine-enforced invariant metadata for `L12`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `notebooks/m365/INV-M365-M-certification-environment-readiness.ipynb` | Primary source notebook for the `C1A` readiness proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |

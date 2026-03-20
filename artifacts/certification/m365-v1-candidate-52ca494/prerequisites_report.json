@@ -1,12 +1,12 @@
 {
   "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1A",
   "candidate_sha": "52ca494",
-  "checked_at": "2026-03-19T11:41:17-04:00",
-  "status": "no_go",
-  "gate": "GATE:M365-READY-C1A STATUS:NO-GO",
-  "final_decision": "NO-GO",
-  "probe_mode": "presence_and_contract",
-  "all_prerequisites_present": false,
+  "checked_at": "2026-03-20T06:51:24-04:00",
+  "status": "go",
+  "gate": "GATE:M365-READY-C1A STATUS:GO",
+  "final_decision": "GO",
+  "probe_mode": "exact_shell_contract_reproof",
+  "all_prerequisites_present": true,
   "scope_decisions": {
     "caio_surface_in_scope": false,
     "external_opa_required": "optional"
@@ -34,10 +34,10 @@
         "UCP_TENANT"
       ],
       "present": {
-        "UCP_TENANT": false
+        "UCP_TENANT": true
       },
-      "ready": false,
-      "note": "The default shell is not currently exporting UCP_TENANT, but the exact standalone certification shell contract is now defined and the certificate-backed auth path was validated separately."
+      "ready": true,
+      "note": "The exact standalone certification shell contract was activated for the B7E re-proof, so tenant selection is now proven on the rebased multi-executor runtime."
     },
     {
       "group": "graph_app_auth_contract",
@@ -76,11 +76,11 @@
         "ENABLE_AUDIT_LOGGING"
       ],
       "present": {
-        "ALLOW_M365_MUTATIONS": false,
-        "ENABLE_AUDIT_LOGGING": false
+        "ALLOW_M365_MUTATIONS": true,
+        "ENABLE_AUDIT_LOGGING": true
       },
-      "ready": false,
-      "note": "The default shell does not currently export the mutation and audit toggles, but the exact standalone certification shell contract is now defined and only awaits operator activation."
+      "ready": true,
+      "note": "The exact standalone certification shell contract activates the mutation and audit toggles required for the approved non-production certification window."
     },
     {
       "group": "approval_path",
@@ -90,13 +90,15 @@
       ],
       "present": {
         "tenant_yaml.governance.approvals_site_url": true,
+        "tenant_yaml.governance.approvals_site_id": true,
+        "tenant_yaml.governance.approvals_list_id": true,
         "tenant_yaml.governance.approvals_list_name": true,
         "APPROVALS_SITE_ID": false,
         "APPROVALS_SITE_URL": false,
-        "approval_backend_reachable": false
+        "approval_backend_reachable": true
       },
-      "ready": false,
-      "note": "The SMARTHAUS tenant contract now pins the Operations approvals target. Under the exact standalone shell contract, Graph organization auth succeeds with HTTP 200 and certificate-backed executor auth is healthy, but Graph /sites discovery for the Operations site still returns 503 UnknownError."
+      "ready": true,
+      "note": "The SMARTHAUS tenant contract now pins the real SMARTHAUS M365 Operations approvals target by explicit site and list IDs. Under the exact standalone shell contract, the bounded SharePoint executor returns HTTP 200 on both the approvals list metadata route and the approvals list items route."
     },
     {
       "group": "instruction_api_operator",
@@ -118,14 +120,11 @@
       "note": "Only required if the live certification run is configured to use an external OPA service."
     }
   ],
-  "blocking_conditions": [
-    "The exact standalone shell contract is now known (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`), but the active shell has not been made persistent yet.",
-    "Under that exact shell contract, the tenant-backed approval probe against the SMARTHAUS Operations site still returns Graph 503 UnknownError on /sites resolution, so governed approval checks cannot run yet."
-  ],
+  "blocking_conditions": [],
   "next_actions": [
-    "Persist the exact standalone shell contract for the approved certification window: UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true.",
-    "Re-run the approval-path probe once Graph /sites endpoints recover, or provide explicit approvals site and list IDs to bypass discovery.",
-    "Re-run C1A after the shell inputs above are present."
+    "Use the exact standalone shell contract for the approved C1 live-certification window: UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true.",
+    "Execute C1B read-only certification and save transcripts under artifacts/certification/m365-v1-candidate-52ca494/transcripts/.",
+    "Execute C1C controlled mutation, approval, and audit checks only after C1B is green."
   ],
   "exact_shell_probe": {
     "contract": {
@@ -134,8 +133,14 @@
       "ALLOW_M365_MUTATIONS": "true",
       "ENABLE_AUDIT_LOGGING": "true"
     },
-    "organization_status": 200,
-    "site_discovery_status": 503,
-    "site_discovery_error_code": "UnknownError"
+    "default_executor": "sharepoint",
+    "sharepoint_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "approval_site_url": "https://smarthausgroup.sharepoint.com/sites/SMARTHAUSM365Operations",
+    "approval_site_id": "smarthausgroup.sharepoint.com,f30b4c3c-de67-4faf-954d-fd0037c9e01b,bb8840b4-db36-4818-8cbd-0adfd17c0bc0",
+    "approval_list_id": "4d7c74f4-b3a5-4bc1-9530-5c612f55209f",
+    "approval_list_display_name": "Approvals",
+    "list_metadata_status": 200,
+    "list_items_status": 200,
+    "item_count_observed": 0
   }
 }

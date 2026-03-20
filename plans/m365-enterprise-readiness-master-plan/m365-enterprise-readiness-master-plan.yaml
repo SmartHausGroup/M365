@@ -270,37 +270,48 @@ execution_status:
         test_run shape plus one governance_edit shape with live
         validate_action so B7D can resume without undocumented gate
         behavior.
+    - phase: B7D
+      date: "2026-03-19"
+      summary: >
+        Created bounded SharePoint, collaboration, and directory executor
+        apps with certificate-backed credentials, repaired the missing Graph
+        app-role assignments for the SharePoint and directory service
+        principals, demoted the old monolithic executor to SMARTHAUS Legacy
+        M365 Executor, cut the active tenant contract over to the bounded
+        SharePoint default, projected bounded executors into the supported
+        v1 router and provisioning runtime surfaces, and re-proved live
+        app-only SharePoint, collaboration, and directory access with exact
+        bounded role sets and success responses.
+    - phase: B7E
+      date: "2026-03-20"
+      summary: >
+        Re-proved the approval backend through the bounded SharePoint
+        executor under the exact standalone shell contract, returning 200 on
+        both the pinned approvals list metadata route and the pinned
+        approvals list items route without URL-based site discovery, and
+        refreshed the C1A readiness packet to GO.
   prepared_blocked:
     act: C1A
-    date: "2026-03-19"
+    date: "2026-03-20"
     summary: >
-      Certification candidate 52ca494 and the refreshed evidence packet prove
-      that the SMARTHAUS tenant YAML contract resolves, carries the approval
-      target, and provides an app-only certificate-backed credential contract;
-      after B7C1 the runtime now routes governed actions through bounded
-      executors, resolves named digital employees deterministically, points
-      approvals at the SharePoint executor path, and has a documented live
-      governance metadata contract, so C1A remains NO-GO until B7D minimizes
-      executor permissions and B7E proves live approval reachability through that
-      path and the exact standalone shell contract
+      Certification candidate 52ca494 and the refreshed evidence packet now
+      prove that the SMARTHAUS tenant YAML contract resolves, carries the
+      pinned approvals target, provides bounded certificate-backed executor
+      contracts, routes governed actions through bounded executors, and
+      reaches the approvals backend through the bounded SharePoint executor
+      with 200 responses under the exact standalone shell contract
       (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP,
       UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true,
-      ENABLE_AUDIT_LOGGING=true) is active. CAIO is out of scope for this
+      ENABLE_AUDIT_LOGGING=true). C1A now carries a GO readiness gate on the
+      rebased multi-executor runtime. CAIO is out of scope for this
       certification path.
-  next_act: B7D
+  next_act: C1A
 
 open_enterprise_blockers:
   - >
     The rebased digital-employee and bounded-executor target is now
-    materially implemented, but executor permission minimization and approval
-    re-proof are not yet complete.
-  - >
-    Live-tenant certification remains NO-GO until the non-production
-    execution environment persists the exact launch contract
-    (UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus,
-    ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true), the
-    executor-permission cleanup is complete, and the tenant-backed approval
-    target becomes reachable through the bounded SharePoint executor path.
+    materially implemented and C1A is green, but C1B and C1C live
+    execution evidence does not exist yet.
   - >
     C2, D1, and D2 remain downstream of the live-evidence
     blockers.
@@ -440,16 +451,16 @@ phase_groups:
         status: complete
       - id: B7D
         name: Executor Permission Minimization and Azure Cleanup
-        status: next
+        status: complete
       - id: B7E
         name: Approval Backend Reproof and Certification Re-Readiness
-        status: blocked
+        status: complete
   - id: C
     name: Live-Tenant Certification
     acts:
       - id: C1A
         name: Certification Environment Readiness
-        status: blocked
+        status: next
       - id: C1B
         name: Live Read-Only Certification
         status: blocked

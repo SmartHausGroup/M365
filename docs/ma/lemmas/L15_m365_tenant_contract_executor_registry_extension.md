@@ -1,48 +1,38 @@
-# Lemma L15 — Tenant Contract and Executor Registry Extension
+# L15 — M365 Tenant Contract and Executor Registry Extension
 
 ## Claim
 
-The tenant-selected configuration authority can be extended from a single implicit executor to an explicit executor registry without breaking the current runtime contract if:
+For the rebased SMARTHAUS multi-executor runtime to be implementable deterministically, the tenant contract is admissible iff:
 
-1. bounded executor identities are represented in the tenant contract;
-2. one deterministic default executor is projected back into the legacy root auth fields; and
-3. the migration path from single-executor to bounded-executor posture is explicit.
+1. the tenant schema can represent multiple bounded executor domains
+2. one default executor remains derivable for backward compatibility with the current single-executor contract
+3. executor registry metadata is explicit enough to support later routing and permission minimization
+4. loader behavior remains fail-closed for unknown or incomplete executor definitions
 
-## Why This Matters
+If any of those conditions fails, `B7B` cannot implement routing without ambiguity and `C1A` remains blocked on the stale single-executor model.
 
-`B7A` is the first runtime act after the `B6` certification rebase. The repo cannot honestly resume certification until the tenant contract can represent the rebased multi-executor target.
+## Existing Proof Sources
 
-## Inputs
-
-- tenant YAML with legacy root `azure` and `auth`
-- optional executor registry metadata
-- optional bounded executor definitions
-
-## Outputs
-
-- deterministic multi-executor tenant schema
-- default-executor projection for backward compatibility
-- explicit migration semantics from single executor to bounded executors
-
-## Proof Sketch
-
-If the loader parses bounded executors first, chooses exactly one default executor, and mirrors that executor into the existing root runtime fields, then:
-
-- old runtime readers remain stable;
-- new runtime readers can consume the registry directly; and
-- the config authority can evolve without split sources of truth.
-
-## Runtime Bindings
-
+- `Operations/NORTHSTAR.md`
+- `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md`
+- `docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md`
+- `docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md`
 - `src/smarthaus_common/tenant_config.py`
 - `src/smarthaus_common/config.py`
-- `tests/test_env_loading.py`
-- `tests/test_approvals.py`
+- `notebooks/m365/INV-M365-Q-tenant-contract-executor-registry-extension.ipynb`
+- `notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb`
 
-## Failure Boundary
+## Acceptance Evidence
 
-`B7A` fails closed if:
+- the tenant loader supports bounded executor-domain definitions
+- the existing root `azure` contract still resolves as the default executor when no registry is present
+- config helpers can resolve executor data without bypassing the selected-tenant authority
+- bounded tests prove both backward compatibility and multi-executor loading semantics
 
-- multiple executors exist but no deterministic default is resolved;
-- executor metadata is parsed but not exposed through the tenant config;
-- the loader still assumes one executor only.
+## Deterministic Surface
+
+`ExecutorRegistryReady = MultiExecutorSchema ∧ BackwardCompatibleDefault ∧ ExplicitRegistryMetadata ∧ FailClosedLoaderSemantics`
+
+`BackwardCompatibleDefault = LegacyAzureContract -> DefaultExecutorResolved`
+
+`ExplicitRegistryMetadata = DomainId ∧ CredentialBinding ∧ RoutingHints ∧ EnabledState`

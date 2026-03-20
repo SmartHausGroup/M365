@@ -8,22 +8,22 @@ Candidate `52ca494` freezes the `B3` admin audit and evidence-surface remediatio
 
 ## Current Status
 
-- `STATUS: NO-GO`
+- `STATUS: GO`
 - `PHASE: C1A`
 - `PLAN_REF: plan:m365-enterprise-readiness-master-plan:C1A`
-- `GATE: GATE:M365-READY-C1A STATUS:NO-GO`
-- `FINAL_DECISION: NO-GO`
-- `BLOCKER: under the exact standalone SMARTHAUS launch contract, Graph auth is healthy and executor auth is now certificate-backed, but SharePoint site discovery for the Operations approval target still returns Graph /sites 503`
+- `GATE: GATE:M365-READY-C1A STATUS:GO`
+- `FINAL_DECISION: GO`
+- `READINESS: under the exact standalone SMARTHAUS launch contract, the bounded SharePoint executor now returns `200` on both the pinned approvals list metadata route and the pinned approvals list items route`
 
 ## Candidate Boundary
 
-The candidate includes:
+The original candidate includes:
 
 - `B1` runtime config authority remediation
 - `B2` fail-closed governance and approval remediation
 - `B3` append-only admin audit and evidence-surface remediation
 
-The candidate does not include live-tenant execution evidence yet, and `C1A` has now explicitly classified the environment as `NO-GO` for live execution.
+The active readiness packet is now rebased to the bounded multi-executor runtime through `B7E`. The packet still does not include `C1B` through `C1D` live execution evidence yet, but it now classifies the environment as `GO` for live certification to begin under the exact standalone shell contract.
 
 ## Packet Contents
 
@@ -34,14 +34,14 @@ The candidate does not include live-tenant execution evidence yet, and `C1A` has
 
 ## Gate Interpretation
 
-`C1A` remains `NO-GO` until:
+`C1A` is now `GO` because:
 
 1. the certification shell exports the exact standalone M365 launch contract:
    - `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`
    - `UCP_TENANT=smarthaus`
    - `ALLOW_M365_MUTATIONS=true`
    - `ENABLE_AUDIT_LOGGING=true`
-2. under that exact shell contract, the tenant-backed approval target for `https://smarthausgroup.sharepoint.com/sites/operations` and list `Approvals` still has to become reachable through Graph, or explicit site and list IDs must be provided to bypass discovery.
+2. under that exact shell contract, the tenant-backed approval target for `https://smarthausgroup.sharepoint.com/sites/SMARTHAUSM365Operations` and list `Approvals` is now reachable through the bounded SharePoint executor by pinned `site_id` and `list_id`.
 
 ## Exact Standalone Shell Contract
 
@@ -54,7 +54,9 @@ export ENABLE_AUDIT_LOGGING=true
 
 ## Latest Exact-Shell Probe
 
-- `organization`: `200`
-- `site_discovery (https://graph.microsoft.com/v1.0/sites/smarthausgroup.sharepoint.com:/sites/operations)`: `503 UnknownError`
+- `default_executor`: `sharepoint`
+- `approval_site_url`: `https://smarthausgroup.sharepoint.com/sites/SMARTHAUSM365Operations`
+- `approval_list_metadata`: `200`
+- `approval_list_items`: `200`
 
-That means the exact standalone shell contract is now known and sufficient for tenant selection plus certificate-backed app-only Graph auth. The remaining live blocker is SharePoint site discovery for the SMARTHAUS Operations approval target.
+That means the exact standalone shell contract is now sufficient for tenant selection, certificate-backed bounded executor auth, and the governed approval backend. The next live act is `C1B`.

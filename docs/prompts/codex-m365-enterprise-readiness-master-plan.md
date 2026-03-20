@@ -103,7 +103,8 @@
 ## Active-State Rules
 
 - `B7C1` is complete.
-- `B7D` is the next executable act.
-- `C1A` is prepared but blocked until `B7E` is complete, the bounded SharePoint executor path is re-proven for approval reachability, and the live environment prerequisites exist.
+- `B7D` is complete.
+- `B7E` is complete.
+- `C1A` is the next executable act, and its readiness gate is now `GO` under the exact standalone shell contract on the rebased multi-executor runtime.
 - `C1B` and `C1C` require explicit live-execution approval.
 - `D1` and `D2` must not be used to imply readiness while `B4*`, `C1*`, or `C2` are incomplete.

@@ -1,20 +1,18 @@
-id: L15
-title: Tenant contract and executor registry extension
-phase: B7A
-plan_ref: plan:m365-enterprise-readiness-master-plan:B7A
-lemma_doc: docs/ma/lemmas/L15_m365_tenant_contract_executor_registry_extension.md
+lemma_id: L15
+name: M365 tenant contract and executor registry extension
 source_notebook: notebooks/m365/INV-M365-Q-tenant-contract-executor-registry-extension.ipynb
-lemma_notebook: notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb
-scorecard: artifacts/scorecards/scorecard_l15.json
-proof_obligations:
-  - tenant config accepts explicit bounded executors
-  - executor registry resolves one deterministic default executor
-  - backward-compatible projection preserves legacy runtime fields
-failure_boundaries:
-  - no deterministic default executor is available
-  - explicit executors are ignored by the runtime loader
-  - migration path from single executor is undefined
-test_bindings:
-  - tests/test_env_loading.py
-  - tests/test_approvals.py
-ci_gate: pre-commit
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md
+    - docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md
+    - docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md
+    - src/smarthaus_common/tenant_config.py
+    - src/smarthaus_common/config.py
+    - notebooks/lemma_proofs/L15_m365_tenant_contract_executor_registry_extension.ipynb
+  checks:
+    - tenant config supports bounded executor-domain definitions
+    - legacy single-executor contract still resolves deterministically as default
+    - executor registry metadata is explicit enough for later routing
+    - incomplete executor definitions fail closed
+status: projected

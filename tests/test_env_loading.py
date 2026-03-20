@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 import pytest
 from smarthaus_common.config import AppConfig, load_bootstrap_env, resolve_sharepoint_hostname
@@ -252,3 +253,123 @@ executors:
 
     with pytest.raises(ValueError, match="default_executor"):
         load_tenant_config()
+
+
+def test_m365_router_projects_directory_executor_for_user_actions(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-router.yaml").write_text(
+        """
+tenant:
+  id: tenant-router
+azure:
+  tenant_id: root-tenant
+  client_id: root-client
+auth:
+  mode: app_only
+executors:
+  sharepoint:
+    domain: sharepoint
+    azure:
+      tenant_id: sharepoint-tenant
+      client_id: sharepoint-client
+  collaboration:
+    domain: collaboration
+    azure:
+      tenant_id: collaboration-tenant
+      client_id: collaboration-client
+  directory:
+    domain: directory
+    azure:
+      tenant_id: directory-tenant
+      client_id: directory-client
+executor_registry:
+  default_executor: sharepoint
+  routes:
+    sharepoint: sharepoint
+    collaboration: collaboration
+    directory: directory
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-router")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+
+    from provisioning_api.routers import m365 as m365_router
+
+    captured: dict[str, str] = {}
+
+    class _DummyGraphClient:
+        def __init__(self, tenant_config: Any | None = None, config: Any | None = None):
+            if tenant_config is not None:
+                captured["client_id"] = tenant_config.azure.client_id
+                captured["tenant_id"] = tenant_config.azure.tenant_id
+
+    monkeypatch.setattr(m365_router, "GraphClient", _DummyGraphClient)
+
+    m365_router._graph_client("list_users")
+
+    assert captured["client_id"] == "directory-client"
+    assert captured["tenant_id"] == "directory-tenant"
+
+
+def test_m365_provision_projects_bounded_executor_by_route(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-provision.yaml").write_text(
+        """
+tenant:
+  id: tenant-provision
+azure:
+  tenant_id: root-tenant
+  client_id: root-client
+auth:
+  mode: app_only
+executors:
+  sharepoint:
+    domain: sharepoint
+    azure:
+      tenant_id: sharepoint-tenant
+      client_id: sharepoint-client
+  collaboration:
+    domain: collaboration
+    azure:
+      tenant_id: collaboration-tenant
+      client_id: collaboration-client
+executor_registry:
+  default_executor: sharepoint
+  routes:
+    sharepoint: sharepoint
+    collaboration: collaboration
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-provision")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+
+    from provisioning_api import m365_provision
+
+    captured: dict[str, str] = {}
+
+    class _DummyGraphClient:
+        def __init__(self, tenant_config: Any | None = None, config: Any | None = None):
+            if tenant_config is not None:
+                captured["client_id"] = tenant_config.azure.client_id
+                captured["tenant_id"] = tenant_config.azure.tenant_id
+
+    monkeypatch.setattr(m365_provision, "GraphClient", _DummyGraphClient)
+
+    m365_provision._graph_client("collaboration")
+
+    assert captured["client_id"] == "collaboration-client"
+    assert captured["tenant_id"] == "collaboration-tenant"

@@ -43,6 +43,13 @@ _MUTATING_ACTIONS = {
     "provision_service",
     "reset_user_password",
 }
+_ACTION_EXECUTOR_ROUTE = {
+    "list_users": "directory",
+    "get_user": "directory",
+    "reset_user_password": "directory",
+    "list_teams": "collaboration",
+    "list_sites": "sharepoint",
+}
 
 
 class M365InstructionRequest(BaseModel):
@@ -249,9 +256,17 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
     raise HTTPException(status_code=400, detail=f"Unknown action: {action}")
 
 
-def _graph_client() -> GraphClient:
+def _graph_client(action: str | None = None) -> GraphClient:
     if has_selected_tenant():
         tenant_cfg = get_tenant_config()
+        if action:
+            route_key = _ACTION_EXECUTOR_ROUTE.get(action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
         has_identity = bool(tenant_cfg.azure.tenant_id and tenant_cfg.azure.client_id)
         has_credential = bool(
             tenant_cfg.azure.client_secret or tenant_cfg.azure.client_certificate_path
@@ -299,25 +314,25 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if action == "provision_service":
         return provision_service(params["key"])
     if action == "list_users":
-        client = _graph_client()
+        client = _graph_client(action)
         data = client.list_users(top=params["top"], select=params.get("select"))
         return {"users": data.get("value", []), "count": len(data.get("value", []))}
     if action == "list_teams":
-        client = _graph_client()
+        client = _graph_client(action)
         data = client.list_teams()
         value = data.get("value", [])[: params.get("top", 100)]
         return {"teams": value, "count": len(value)}
     if action == "list_sites":
-        client = _graph_client()
+        client = _graph_client(action)
         data = client.list_sites(top=params["top"])
         value = data.get("value", [])
         return {"sites": value, "count": len(value)}
     if action == "get_user":
-        client = _graph_client()
+        client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
         return {"user": user}
     if action == "reset_user_password":
-        client = _graph_client()
+        client = _graph_client(action)
         return client.reset_user_password(
             params["user_id_or_upn"],
             params["temporary_password"],

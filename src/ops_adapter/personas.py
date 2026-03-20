@@ -104,7 +104,9 @@ def build_persona_registry(
     alias_candidates: dict[str, set[str]] = {}
 
     for canonical_agent, agent_definition in agent_definitions.items():
-        responsibilities = [str(action) for action in (agent_definition.get("allowed_actions") or [])]
+        responsibilities = [
+            str(action) for action in (agent_definition.get("allowed_actions") or [])
+        ]
         team_entry = team_entries.get(canonical_agent, {})
         display_name = str(team_entry.get("display_name") or _humanize_identifier(canonical_agent))
         persona = {

@@ -1,0 +1,54 @@
+{
+  "status": "green",
+  "phase": "B7D",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:B7D",
+  "tenant_id": "smarthaus",
+  "default_executor": "sharepoint",
+  "default_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+  "routes": {
+    "approvals": "sharepoint",
+    "sharepoint": "sharepoint",
+    "collaboration": "collaboration",
+    "directory": "directory"
+  },
+  "approval_target": {
+    "site_id": "smarthausgroup.sharepoint.com,f30b4c3c-de67-4faf-954d-fd0037c9e01b,bb8840b4-db36-4818-8cbd-0adfd17c0bc0",
+    "list_id": "4d7c74f4-b3a5-4bc1-9530-5c612f55209f"
+  },
+  "validations": [
+    {
+      "domain": "sharepoint",
+      "client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+      "token_roles": [
+        "Group.ReadWrite.All",
+        "Sites.Read.All",
+        "Sites.ReadWrite.All"
+      ],
+      "probe": "GET /sites/{approvals_site_id}/lists/{approvals_list_id}?$select=id,displayName",
+      "status_code": 200
+    },
+    {
+      "domain": "collaboration",
+      "client_id": "98826c42-1dd6-47c8-8353-7f1e539f89bc",
+      "token_roles": [
+        "Channel.Create",
+        "Group.ReadWrite.All",
+        "Team.Create",
+        "Team.ReadBasic.All"
+      ],
+      "probe": "GET /teams?$top=1&$select=id,displayName",
+      "status_code": 200
+    },
+    {
+      "domain": "directory",
+      "client_id": "f1aba812-90b1-4d5f-9204-c7d61e7680bb",
+      "token_roles": [
+        "User.Read.All",
+        "User.ReadWrite.All"
+      ],
+      "probe": "GET /users?$top=1&$select=id,displayName,userPrincipalName",
+      "status_code": 200
+    }
+  ],
+  "note": "This artifact records the bounded live app-only executor proof after repairing the missing Graph app-role assignments for the SharePoint and directory service principals and cutting the active tenant default over to the SharePoint executor."
+}

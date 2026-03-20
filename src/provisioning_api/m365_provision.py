@@ -16,9 +16,13 @@ def _hostname() -> str:
     return resolve_sharepoint_hostname()
 
 
-def _graph_client() -> GraphClient:
+def _graph_client(route_key: str | None = None) -> GraphClient:
     if has_selected_tenant():
-        return GraphClient(tenant_config=get_tenant_config())
+        tenant_cfg = get_tenant_config()
+        if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            executor_name = tenant_cfg.resolve_executor_name(route_key, fallback_keys=[route_key])
+            tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return GraphClient(tenant_config=tenant_cfg)
     return GraphClient(config=AppConfig())
 
 
@@ -34,7 +38,7 @@ def provision_group_site(
     Returns dict with site_id, site_url, created flags.
     Requires app permissions: Group.ReadWrite.All and Sites.ReadWrite.All (or FullControl).
     """
-    client = _graph_client()
+    client = _graph_client("sharepoint")
     created_group = False
 
     grp = client.find_group_by_mailnickname(mail_nickname)
@@ -91,7 +95,7 @@ def provision_teams_workspace(
 
     Requires application permissions: Team.ReadWrite.All, Channel.ReadWrite.All.
     """
-    client = _graph_client()
+    client = _graph_client("collaboration")
     grp = client.find_group_by_mailnickname(mail_nickname)
     if not grp:
         raise SmarthausError(f"Group '{mail_nickname}' not found; create site/group first.")
