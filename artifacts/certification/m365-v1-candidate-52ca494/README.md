@@ -61,7 +61,8 @@ export ENABLE_AUDIT_LOGGING=true
   - `list_users`, `get_user`, `list_teams`, and `list_sites` all passed against the live SMARTHAUS tenant through `M365ConnectorModule`
 - `C1C`: `NO-GO`
   - passed: `create_site`, `create_team`, `add_channel`
-  - failed: `provision_service`, `reset_user_password`
+  - original failed rows: `provision_service`, `reset_user_password`
+  - post-attempt remediation: `provision_service` now passes under `transcripts/provision_service_reproof.json`
   - failed governance rows: real actor-authenticated governed path and approval-record creation
 
 ## Latest Exact-Shell Probe
@@ -75,7 +76,6 @@ That means the exact standalone shell contract remains sufficient for tenant sel
 
 ## Current Live Blockers
 
-1. `provision_service` fails on live existing-site detection for the HR service surface.
-2. `reset_user_password` fails with Graph `403 Authorization_RequestDenied` under the bounded directory executor.
-3. The governed JWT path rejects the delegated Azure CLI bearer token used for the real actor-authenticated probe.
-4. Approval record creation still fails with Graph `400` on the pinned `Approvals` list, so approval and audit evidence remain incomplete.
+1. `reset_user_password` fails with Graph `403 Authorization_RequestDenied` under the bounded directory executor.
+2. The governed JWT path rejects the delegated Azure CLI bearer token used for the real actor-authenticated probe.
+3. Approval record creation still fails with Graph `400` on the pinned `Approvals` list, so approval and audit evidence remain incomplete.

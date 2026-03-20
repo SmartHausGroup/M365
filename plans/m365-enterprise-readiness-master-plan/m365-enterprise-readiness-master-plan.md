@@ -66,13 +66,13 @@ If any term is false, the module remains `NO-GO`.
 - `B7E` complete on 2026-03-20: re-proved the approval backend through the bounded SharePoint executor under the exact standalone shell contract, returning `200` on both the pinned approvals list metadata route and the pinned approvals list items route without URL-based site discovery; recorded the live proof in `artifacts/b7e_approval_backend_reproof.json`; linked the act into notebook-backed `L19` evidence; and refreshed the `C1A` readiness packet to an explicit `GO` gate on the rebased multi-executor runtime.
 - `C1A` complete on 2026-03-20: the certification environment-readiness act is now formally closed on the rebased multi-executor runtime because candidate `52ca494` and the refreshed evidence packet prove that the SMARTHAUS tenant YAML contract resolves deterministically, carries the pinned approvals target, provides bounded certificate-backed executors, routes governed actions through those executors, and reaches the approvals backend through the bounded SharePoint executor with `200` responses under the exact standalone shell contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`). The readiness gate remains `GO`, and CAIO remains out of scope for this certification path.
 - `C1B` complete on 2026-03-20: the live read-only supported surface is now green because `list_users`, `get_user`, `list_teams`, and `list_sites` all executed successfully against the live SMARTHAUS tenant through `m365.module.entrypoint:M365ConnectorModule`, and the resulting transcript is retained in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json`.
-- `C1C` attempted on 2026-03-20 and kept at `NO-GO`: the live mutation and governance window proved `create_site`, `create_team`, and `add_channel`, but failed on `provision_service`, `reset_user_password`, the real actor-authenticated governed JWT path, and approval-record creation on the pinned Approvals list; the failure evidence is retained in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json`, `artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json`, and `artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md`.
+- `C1C` attempted on 2026-03-20 and remains `NO-GO`: the original live mutation and governance window proved `create_site`, `create_team`, and `add_channel`, and originally failed on `provision_service`, `reset_user_password`, the real actor-authenticated governed JWT path, and approval-record creation on the pinned Approvals list. Post-attempt remediation has now re-proved `provision_service` green in `artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json`, so the active remaining blockers are `reset_user_password`, governed JWT parity, and approval-record creation evidence sync.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
 
-1. `C1B` live evidence is now green, but `C1C` remains `NO-GO` because `provision_service` fails on live existing-site detection, `reset_user_password` fails with Graph `403 Authorization_RequestDenied`, the governed JWT path rejects the delegated Azure CLI bearer token used for the live actor-auth probe, and approval record creation still fails with Graph `400` on the pinned Approvals list.
+1. `C1B` live evidence is now green, but `C1C` remains `NO-GO` because `reset_user_password` fails with Graph `403 Authorization_RequestDenied`, the governed JWT path rejects the delegated Azure CLI bearer token used for the live actor-auth probe, and approval record creation still fails with Graph `400` on the pinned Approvals list. `provision_service` is no longer in the active blocker set because the existing-site detection path is now re-proved green against the live HR surface.
 2. `C2`, `D1`, and `D2` remain downstream of the live-certification acts.
 
 ## Scope
@@ -720,7 +720,7 @@ Validation:
 
 ##### C1C — Live Mutation and Governance Certification
 
-**Status:** ⛔ `NO-GO` (2026-03-20) — blocked by live mutation and governance failures on `provision_service`, `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation.
+**Status:** ⛔ `NO-GO` (2026-03-20) — original live run failed on `provision_service`, `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation; `provision_service` is now re-proved green, so the active blockers are `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation.
 
 **Goal:** Execute controlled mutation, approval, audit, and governance checks in the approved window.
 

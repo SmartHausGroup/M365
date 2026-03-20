@@ -125,6 +125,35 @@ class GraphApprovalsStore:
                     return item["id"]
             raise RuntimeError(f"Approvals list '{list_name}' not found in site {site_id}")
 
+    def _iter_list_items(
+        self, select: str = "id,createdDateTime,lastModifiedDateTime"
+    ) -> list[dict[str, Any]]:
+        items: list[dict[str, Any]] = []
+        next_url = (
+            f"https://graph.microsoft.com/v1.0/sites/{self.site_id}/lists/{self.list_id}/items"
+        )
+        params: dict[str, str] | None = {
+            "$expand": "fields",
+            "$select": select,
+            "$top": "200",
+        }
+        with self._graph() as client:
+            while next_url:
+                resp = client.get(next_url, params=params)
+                resp.raise_for_status()
+                payload = resp.json()
+                items.extend(payload.get("value", []))
+                next_url = payload.get("@odata.nextLink")
+                params = None
+        return items
+
+    def _find_item_by_approval_id(self, approval_id: str) -> dict[str, Any] | None:
+        for item in self._iter_list_items():
+            fields = item.get("fields", {})
+            if (fields.get("ApprovalId") or item.get("id")) == approval_id:
+                return item
+        return None
+
     def _default_approvers(self, agent: str, action: str) -> list[str]:
         try:
             agent_def = (self.registry or {}).get("agents", {}).get(agent, {})
@@ -161,57 +190,37 @@ class GraphApprovalsStore:
         return approval_id or sp_item_id
 
     def get(self, approval_id: str) -> dict[str, Any] | None:
-        # Lookup by filtering on field ApprovalId eq approval_id
-        with self._graph() as client:
-            resp = client.get(
-                f"https://graph.microsoft.com/v1.0/sites/{self.site_id}/lists/{self.list_id}/items",
-                params={
-                    "$expand": "fields",
-                    "$filter": f"fields/ApprovalId eq '{approval_id}'",
-                    "$select": "id,fields",
-                },
-            )
-            resp.raise_for_status()
-            val = resp.json().get("value", [])
-            if not val:
-                return None
-            item = val[0]
-            f = item.get("fields", {})
-            params = json.loads(f.get("Params") or "{}")
-            return {
-                "id": f.get("ApprovalId") or item.get("id"),
-                "agent": f.get("Agent"),
-                "action": f.get("Action"),
-                "params": params,
-                "persona": params.get("persona"),
-                "persona_target": params.get("persona_target"),
-                "status": (f.get("Status") or "").lower(),
-                "requested_at": f.get("Created"),
-                "updated_at": f.get("Modified"),
-                "approvers": (f.get("Approvers") or "").split(", ") if f.get("Approvers") else [],
-                "requestor": params.get("requestor") or f.get("Requestor"),
-                "requestor_tier": params.get("requestor_tier"),
-                "requestor_groups": params.get("requestor_groups") or [],
-                "executor": params.get("executor_identity"),
-                "tenant": params.get("tenant"),
-            }
+        item = self._find_item_by_approval_id(approval_id)
+        if item is None:
+            return None
+        f = item.get("fields", {})
+        params = json.loads(f.get("Params") or "{}")
+        return {
+            "id": f.get("ApprovalId") or item.get("id"),
+            "agent": f.get("Agent"),
+            "action": f.get("Action"),
+            "params": params,
+            "persona": params.get("persona"),
+            "persona_target": params.get("persona_target"),
+            "status": (f.get("Status") or "").lower(),
+            "requested_at": item.get("createdDateTime") or f.get("Created"),
+            "updated_at": item.get("lastModifiedDateTime") or f.get("Modified"),
+            "approvers": (f.get("Approvers") or "").split(", ") if f.get("Approvers") else [],
+            "requestor": params.get("requestor") or f.get("Requestor"),
+            "requestor_tier": params.get("requestor_tier"),
+            "requestor_groups": params.get("requestor_groups") or [],
+            "executor": params.get("executor_identity"),
+            "tenant": params.get("tenant"),
+        }
 
     def set_status(self, approval_id: str, status: str, reason: str | None = None) -> bool:
-        # Find list item id
+        item = self._find_item_by_approval_id(approval_id)
+        if item is None:
+            return False
+        item_id = item.get("id")
+        if not item_id:
+            return False
         with self._graph() as client:
-            resp = client.get(
-                f"https://graph.microsoft.com/v1.0/sites/{self.site_id}/lists/{self.list_id}/items",
-                params={
-                    "$expand": "fields",
-                    "$filter": f"fields/ApprovalId eq '{approval_id}'",
-                    "$select": "id",
-                },
-            )
-            resp.raise_for_status()
-            val = resp.json().get("value", [])
-            if not val:
-                return False
-            item_id = val[0].get("id")
             patch_fields = {"Status": status}
             if reason:
                 patch_fields["Reason"] = reason

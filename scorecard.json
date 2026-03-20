@@ -83,6 +83,10 @@
     "L19": {
       "scorecard_path": "artifacts/scorecards/scorecard_l19.json",
       "status": "green"
+    },
+    "L20": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l20.json",
+      "status": "green"
     }
   },
   "module_scorecards": {
@@ -91,5 +95,5 @@
       "status": "green"
     }
   },
-  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, L13 Entra app-separation plus executor certificate-cutover linkage, L14 digital-employee plus executor-domain architecture linkage, L15 tenant-contract plus executor-registry extension linkage, L16 runtime executor-routing plus domain-selection linkage, L17 persona-registry plus humanized delegation integration linkage, L18 executor-permission minimization plus Azure-cleanup linkage, and L19 approval-backend reproof plus certification re-readiness linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
+  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, L13 Entra app-separation plus executor certificate-cutover linkage, L14 digital-employee plus executor-domain architecture linkage, L15 tenant-contract plus executor-registry extension linkage, L16 runtime executor-routing plus domain-selection linkage, L17 persona-registry plus humanized delegation integration linkage, L18 executor-permission minimization plus Azure-cleanup linkage, L19 approval-backend reproof plus certification re-readiness linkage, and L20 service-provisioning site-detection alignment linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
 }

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from pathlib import Path
+from types import TracebackType
 from typing import Any
 
 import ops_adapter.approvals as approvals_module
@@ -259,3 +260,154 @@ def test_memory_approvals_store_preserves_persona_context(
     assert approval["persona"]["display_name"] == "Elena Rodriguez"
     assert approval["persona"]["canonical_agent"] == "website-manager"
     assert approval["persona_target"] == "Elena Rodriguez"
+
+
+def test_graph_approvals_store_get_scans_items_without_field_filter(
+    tenant_env: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        approvals_module.GraphApprovalsStore,
+        "_resolve_site_id",
+        lambda self, site_url: "site-123",
+    )
+    monkeypatch.setattr(
+        approvals_module.GraphApprovalsStore,
+        "_resolve_list_id",
+        lambda self, site_id, list_name: "list-456",
+    )
+
+    class _DummyProvider:
+        def get_app_token(self) -> str:
+            return "token-gamma"
+
+    monkeypatch.setattr(approvals_module, "_build_graph_token_provider", lambda: _DummyProvider())
+
+    class _Response:
+        def __init__(self, payload: dict[str, Any]) -> None:
+            self._payload = payload
+
+        def json(self) -> dict[str, Any]:
+            return self._payload
+
+        def raise_for_status(self) -> None:
+            return None
+
+    class _Client:
+        def __enter__(self) -> _Client:
+            return self
+
+        def __exit__(
+            self,
+            exc_type: type[BaseException] | None,
+            exc: BaseException | None,
+            tb: TracebackType | None,
+        ) -> None:
+            return None
+
+        def get(self, url: str, params: dict[str, str] | None = None) -> _Response:
+            assert params is None or "$filter" not in params
+            return _Response(
+                {
+                    "value": [
+                        {
+                            "id": "11",
+                            "createdDateTime": "2026-03-20T12:00:00Z",
+                            "lastModifiedDateTime": "2026-03-20T12:01:00Z",
+                            "fields": {
+                                "ApprovalId": "approval-123",
+                                "Agent": "m365-administrator",
+                                "Action": "teams.add_channel",
+                                "Status": "pending",
+                                "Approvers": "global_admin",
+                                "Requestor": "phil@smarthausgroup.com",
+                                "Params": '{"tenant": "smarthaus", "executor_identity": "sharepoint"}',
+                            },
+                        }
+                    ]
+                }
+            )
+
+    store = approvals_module.GraphApprovalsStore()
+    monkeypatch.setattr(store, "_graph", lambda: _Client())
+
+    approval = store.get("approval-123")
+
+    assert approval is not None
+    assert approval["id"] == "approval-123"
+    assert approval["status"] == "pending"
+    assert approval["requested_at"] == "2026-03-20T12:00:00Z"
+    assert approval["updated_at"] == "2026-03-20T12:01:00Z"
+
+
+def test_graph_approvals_store_set_status_scans_then_patches(
+    tenant_env: None, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        approvals_module.GraphApprovalsStore,
+        "_resolve_site_id",
+        lambda self, site_url: "site-123",
+    )
+    monkeypatch.setattr(
+        approvals_module.GraphApprovalsStore,
+        "_resolve_list_id",
+        lambda self, site_id, list_name: "list-456",
+    )
+
+    class _DummyProvider:
+        def get_app_token(self) -> str:
+            return "token-delta"
+
+    monkeypatch.setattr(approvals_module, "_build_graph_token_provider", lambda: _DummyProvider())
+
+    patched: dict[str, Any] = {}
+
+    class _Response:
+        def __init__(self, payload: dict[str, Any] | None = None) -> None:
+            self._payload = payload or {}
+
+        def json(self) -> dict[str, Any]:
+            return self._payload
+
+        def raise_for_status(self) -> None:
+            return None
+
+    class _Client:
+        def __enter__(self) -> _Client:
+            return self
+
+        def __exit__(
+            self,
+            exc_type: type[BaseException] | None,
+            exc: BaseException | None,
+            tb: TracebackType | None,
+        ) -> None:
+            return None
+
+        def get(self, url: str, params: dict[str, str] | None = None) -> _Response:
+            assert params is None or "$filter" not in params
+            return _Response(
+                {
+                    "value": [
+                        {
+                            "id": "42",
+                            "fields": {
+                                "ApprovalId": "approval-456",
+                            },
+                        }
+                    ]
+                }
+            )
+
+        def patch(self, url: str, json: dict[str, Any]) -> _Response:
+            patched["url"] = url
+            patched["json"] = json
+            return _Response()
+
+    store = approvals_module.GraphApprovalsStore()
+    monkeypatch.setattr(store, "_graph", lambda: _Client())
+
+    updated = store.set_status("approval-456", "approved", "manual schema rerun")
+
+    assert updated is True
+    assert patched["url"].endswith("/items/42/fields")
+    assert patched["json"] == {"Status": "approved", "Reason": "manual schema rerun"}

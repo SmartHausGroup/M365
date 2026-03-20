@@ -26,7 +26,7 @@ export ENABLE_AUDIT_LOGGING=true
   - pass: `create_site`
   - pass: `create_team`
   - pass: `add_channel`
-  - fail: `provision_service`
+  - fail in original run: `provision_service`
   - fail: `reset_user_password`
 - Governance surface:
   - pass: missing-bearer fail-closed
@@ -37,10 +37,15 @@ export ENABLE_AUDIT_LOGGING=true
 
 ## Live Blockers
 
-1. `provision_service` fails because existing-site detection does not match the live HR service-site shape.
-2. `reset_user_password` fails because the bounded directory executor lacks the required privilege.
-3. The current JWT validation contract does not accept the delegated Azure CLI bearer token used for the real-actor governed-path probe.
-4. Approval record creation still fails with Graph HTTP `400` when writing to the pinned `Approvals` list, so approval and audit evidence is incomplete.
+1. `reset_user_password` fails because the bounded directory executor lacks the required privilege.
+2. The current JWT validation contract does not accept the delegated Azure CLI bearer token used for the real-actor governed-path probe.
+3. Approval record creation still fails with Graph HTTP `400` when writing to the pinned `Approvals` list, so approval and audit evidence is incomplete.
+
+## Post-Attempt Remediation
+
+- `provision_service` is now green under `transcripts/provision_service_reproof.json`.
+- Root cause: existing-site detection was guessing `/sites/hr` from `mail_nickname=hr`, while the live HR group resolves to `https://smarthausgroup.sharepoint.com/sites/hr2`.
+- The runtime now resolves the existing group root site first and only uses path lookup as bounded fallback.
 
 ## Additional Observation
 

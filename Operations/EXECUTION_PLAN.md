@@ -168,6 +168,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-03-20 08:05 EDT):** `C1B` is complete and green with retained live transcripts for `list_users`, `get_user`, `list_teams`, and `list_sites`. `C1C` was then executed in the approved live window and is `NO-GO`: `create_site`, `create_team`, and `add_channel` passed, but `provision_service`, `reset_user_password`, the real actor-authenticated JWT path, and approval-record creation failed, so `C1C` is now the active blocker and `C1D` remains blocked.
 
+**Status update (2026-03-20 10:35 EDT):** `provision_service` is re-proved green after notebook-backed service-site detection remediation. The live HR service surface now resolves through the group root site at `/sites/hr2`, so the active remaining `C1C` blockers are `reset_user_password`, the real actor-authenticated JWT path, and the approval-record creation evidence sync.
+
 **Historical lineage:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md` remains for traceability but is now absorbed and no longer the active execution plan.
 
 **Prompt artifacts:** master prompt pair plus full act-level MATHS prompt inventory under `docs/prompts/`

@@ -13,5 +13,6 @@ evidence:
     - approval storage target resolves from tenant contract data for the selected tenant
     - approval Graph authentication uses the tenant-selected app-only execution contract
     - approval site and list resolution remain deterministic for the selected tenant
+    - approval item lookup remains deterministic through expanded field scans when SharePoint-backed OData field filters are rejected
     - C1A shell inputs are reduced to bounded runtime-selection and execution toggles once approval target config is present
 status: projected

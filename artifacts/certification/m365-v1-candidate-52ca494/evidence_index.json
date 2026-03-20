@@ -53,7 +53,8 @@
       "artifacts": [
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
         "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
-        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md"
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json"
       ]
     }
   },
@@ -69,6 +70,11 @@
       "status": "fail"
     },
     {
+      "id": "provision_service_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json",
+      "status": "pass"
+    },
+    {
       "id": "governance_surface_transcript",
       "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
       "status": "fail"
@@ -80,13 +86,11 @@
     }
   ],
   "blocking_conditions": [
-    "provision_service existing-site detection fails on the live HR service surface",
     "reset_user_password fails with Graph 403 Authorization_RequestDenied under the bounded directory executor",
     "the governed JWT path rejects the delegated Azure CLI bearer token used for the live actor-auth probe",
     "approval record creation still fails with Graph HTTP 400 on the pinned Approvals list"
   ],
   "next_actions": [
-    "Fix the live existing-site detection path behind provision_service and rerun the controlled service-provisioning row.",
     "Align the bounded directory executor privilege set with the supported reset_user_password surface and rerun that row.",
     "Repair the governed JWT validation parity for the real actor-authenticated path and rerun the governance checks.",
     "Fix the Graph approvals-list item-create path so approval and audit evidence can be retained, then rerun C1C."

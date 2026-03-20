@@ -8,6 +8,7 @@ For standalone M365 `C1A`, the approval-path readiness gate is admissible iff:
 2. approval Graph authentication resolves through the tenant-selected app-only execution contract instead of a parallel env-only credential path
 3. approval site and list resolution are deterministic for the selected tenant
 4. the live certification shell only needs runtime-selection and controlled execution toggles once the approval target is present in the tenant contract
+5. approval item lookup and status update remain deterministic even when the SharePoint-backed Graph route rejects the current OData field filter for `ApprovalId`
 
 If any of those conditions fails, approval-path readiness remains `NO-GO`.
 
@@ -26,8 +27,9 @@ If any of those conditions fails, approval-path readiness remains `NO-GO`.
 - approval storage target resolves from the selected tenant contract with env fallback only as a compatibility surface
 - approval Graph auth resolves through the tenant-selected app-only executor path
 - the approval target for SMARTHAUS is explicitly bound to the Operations site
+- approval item read-back and status mutation can fall back to a deterministic expanded-fields scan instead of a SharePoint-backed OData field filter
 - touched-file diff remains bounded to approval-path runtime/config, `C1A` evidence, MA traceability, and tracker synchronization
 
 ## Deterministic Surface
 
-`ApprovalGate(C1A) = ApprovalTargetResolved(tenant_contract, env_fallback) ∧ ApprovalAuthBounded(app_only_executor) ∧ ApprovalSiteListDeterministic(selected_tenant) ∧ ShellInputsBounded(UCP_TENANT, ALLOW_M365_MUTATIONS, ENABLE_AUDIT_LOGGING)`
+`ApprovalGate(C1A,C1C) = ApprovalTargetResolved(tenant_contract, env_fallback) ∧ ApprovalAuthBounded(app_only_executor) ∧ ApprovalSiteListDeterministic(selected_tenant) ∧ ApprovalLookupDeterministic(expanded_fields_scan) ∧ ShellInputsBounded(UCP_TENANT, ALLOW_M365_MUTATIONS, ENABLE_AUDIT_LOGGING)`

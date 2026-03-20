@@ -596,6 +596,10 @@ class GraphClient:
         r = self._request("GET", p)
         return r.json()
 
+    def get_group_root_site(self, group_id: str) -> dict:
+        r = self._request("GET", f"/groups/{group_id}/sites/root")
+        return r.json()
+
     def get_root_site(self) -> dict:
         r = self._request("GET", "/sites/root")
         return r.json()

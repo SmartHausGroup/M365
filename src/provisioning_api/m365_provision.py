@@ -47,6 +47,10 @@ def provision_group_site(
         grp = client.create_group(display_name, mail_nickname, description)
         created_group = True
 
+    group_id = grp.get("id")
+    if not group_id:
+        raise SmarthausError("Group missing id")
+
     hostname = _hostname()
     site_path = mail_nickname
 
@@ -54,11 +58,17 @@ def provision_group_site(
     site = None
     for attempt in range(max(1, wait_secs // 3)):
         try:
+            site = client.get_group_root_site(group_id)
+            if site and site.get("id"):
+                break
+        except SmarthausError as e:
+            log.warning("Group root site not ready yet (%s): %s", attempt, e)
+        try:
             site = client.get_site_by_path(hostname, site_path)
             if site and site.get("id"):
                 break
         except SmarthausError as e:
-            log.warning("Site not ready yet (%s): %s", attempt, e)
+            log.warning("Site path not ready yet (%s): %s", attempt, e)
         time.sleep(3)
 
     if not site or not site.get("id"):
