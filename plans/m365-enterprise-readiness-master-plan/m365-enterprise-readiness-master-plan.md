@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Enterprise Readiness Master Plan
 
 **Plan ID:** `m365-enterprise-readiness-master-plan`
-**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, and `B7B` complete on 2026-03-19; `B7C` is next; `C1A` remains prepared but blocked until persona integration, executor permission minimization, and approval reachability are re-proven on the rebased multi-executor runtime)
+**Status:** Active (`A1`, `A2`, `A3`, `A4`, `B1`, `B2`, and `B3` complete on 2026-03-17; `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4A`, `B4D4B`, `B4D4C`, `B4D4D`, `B4D5`, `B4E`, `B5A`, `B5B`, and `B5C` complete on 2026-03-18; `B5D`, `B5E`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7A`, `B7B`, `B7C`, and `B7C1` complete on 2026-03-19; `B7D` is next; `B7E` is blocked by predecessor acts; `C1A` remains prepared but blocked until executor permission minimization and approval reachability are re-proven on the rebased multi-executor runtime)
 **Date:** 2026-03-19
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-enterprise-readiness-master-plan:R1`
@@ -60,14 +60,16 @@ If any term is false, the module remains `NO-GO`.
 - `B6E` complete on 2026-03-19: rebased the certification target in `docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md` so `C1A` no longer attempts to certify the old single-executor posture and instead remains blocked until the multi-executor runtime and persona-integration track is implemented.
 - `B7A` complete on 2026-03-19: extended `src/smarthaus_common/tenant_config.py` so the tenant contract can represent bounded executors plus `executor_registry` metadata, synthesize a deterministic legacy default when only one executor surface exists, fail closed when multiple executors exist without an explicit default, and project the resolved default executor back into the legacy root auth fields; validated that contract in `tests/test_env_loading.py` and `tests/test_approvals.py`.
 - `B7B` complete on 2026-03-19: implemented deterministic action-to-executor routing in `src/ops_adapter/actions.py`, `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, and `src/ops_adapter/approvals.py` so governed runtime actions now resolve the bounded executor domain before policy, approval, and audit, and added bounded routing and fail-closed coverage in `tests/test_ops_adapter.py` and `tests/test_approvals.py`.
-- `C1A` remains blocked on 2026-03-19: the SMARTHAUS tenant YAML contract now resolves deterministically through the tenant loader, carries the approval target, provides an app-only certificate-backed credential contract, and routes governed actions through bounded executors; the exact standalone shell contract is `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`; but live approval reachability still has not been re-proven through the bounded SharePoint executor path, and the readiness gate therefore remains `NO-GO` until persona integration, executor permission minimization, approval re-proof, and the exact shell contract are all satisfied. CAIO is out of scope for this certification path.
+- `B7C` complete on 2026-03-19: integrated a deterministic persona registry derived from `registry/ai_team.json` and `registry/agents.yaml` into `src/ops_adapter/personas.py`, `src/ops_adapter/main.py`, `src/ops_adapter/app.py`, and `src/ops_adapter/approvals.py` so named digital employees now resolve to one canonical runtime agent, fail closed on inactive persona targets or bounded-domain mismatches, and preserve persona context through policy, approval, and audit payloads; added bounded persona-resolution and approval-context coverage in `tests/test_ops_adapter.py` and `tests/test_approvals.py`; and linked the act into notebook-backed `L17` evidence.
+- `B7C1` complete on 2026-03-19: read the live UCP constraint YAML and evaluator in the sibling UCP repo, documented the exact accepted metadata contract in `docs/governance/m365-mcp-constraint-contract-repair.md`, and proved one bounded `test_run` shape plus one `governance_edit` shape with live `validate_action`, closing the governance blocker without requiring an upstream UCP mutation.
+- `C1A` remains blocked on 2026-03-19: the SMARTHAUS tenant YAML contract now resolves deterministically through the tenant loader, carries the approval target, provides an app-only certificate-backed credential contract, routes governed actions through bounded executors, and resolves named digital employees through the persona registry; the exact standalone shell contract is `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, and `ENABLE_AUDIT_LOGGING=true`; but live approval reachability still has not been re-proven through the bounded SharePoint executor path, and the readiness gate therefore remains `NO-GO` until executor permission minimization is complete, approval re-proof succeeds, and the exact shell contract is active. CAIO is out of scope for this certification path.
 
 ## Open Enterprise Blockers
 
 The repo is not enterprise-ready yet because the remaining critical-path blockers are implementation, governance, and evidence blockers:
 
-1. The rebased digital-employee and bounded-executor target is now partially implemented, but persona-registry integration, executor permission minimization, and approval re-proof are not yet complete.
-2. Live-tenant certification remains `NO-GO` until the non-production environment persists the exact launch contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`), the rebased multi-executor runtime exists, and the tenant-backed approval target becomes reachable through the bounded SharePoint executor path.
+1. The rebased digital-employee and bounded-executor target is now materially implemented, but executor permission minimization and approval re-proof are not yet complete.
+2. Live-tenant certification remains `NO-GO` until the non-production environment persists the exact launch contract (`UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`, `UCP_TENANT=smarthaus`, `ALLOW_M365_MUTATIONS=true`, `ENABLE_AUDIT_LOGGING=true`), the executor-permission cleanup is complete, and the tenant-backed approval target becomes reachable through the bounded SharePoint executor path.
 3. `C2`, `D1`, and `D2` remain downstream of the live-certification blockers.
 
 ## Scope
@@ -597,16 +599,18 @@ Validation:
 - rebased certification target
 - explicit declaration that `C1A` cannot resume on the legacy single-executor runtime
 - blocker list tying certification to the multi-executor implementation track
+- explicit declaration that `B7D` may not start until `B7C1` closes the governance constraint-contract mismatch
 
 #### B7 — Multi-Executor Runtime and Persona Integration
 
-**Status:** 🟡 Active (`B7A` and `B7B` complete; `B7C` next; `B7D` and `B7E` blocked by predecessor acts)
+**Status:** 🟡 Active (`B7A`, `B7B`, `B7C`, and `B7C1` complete; `B7D` next; `B7E` blocked by predecessor acts)
 
-**Goal:** Implement the rebased production target: bounded executor domains, persona-aware routing, minimized permission envelopes, and certification-ready approval-path reachability.
+**Goal:** Implement the rebased production target: bounded executor domains, persona-aware routing, deterministic governance-gate behavior for bounded validation and closeout, minimized permission envelopes, and certification-ready approval-path reachability.
 
 **Outputs:**
 - tenant-contract support for multiple executor domains
 - runtime routing from persona and action to bounded executor
+- deterministic governance validation semantics for bounded read-only and governance-closeout execution
 - executor permission minimization and Azure cleanup
 - approval backend reachability through the SharePoint executor path
 - certification-ready multi-executor runtime evidence
@@ -639,6 +643,15 @@ Validation:
 - persona registry integration
 - humanized delegation resolution path
 - persona-aware policy, approval, and audit bindings
+
+##### B7C1 — MCP Constraint Contract Repair
+
+**Goal:** Repair the governance constraint contract for bounded read-only validation and governance-closeout execution so the governed control plane behaves deterministically before executor permission minimization resumes.
+
+**Outputs:**
+- explicit contract for accepted metadata on bounded `test_run`, `command_exec`, and governance-closeout validation shapes
+- clear ownership boundary between repo-local governance artifacts and upstream UCP constraint definitions
+- validated unblock criteria for `B7D`
 
 ##### B7D — Executor Permission Minimization and Azure Cleanup
 
@@ -761,7 +774,7 @@ Validation:
 
 - Active MATHS prompt pairs must exist for:
   - overview: `m365-enterprise-readiness-master-plan`
-  - acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `B5D`, `B5E`, `B6`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7`, `B7A`, `B7B`, `B7C`, `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
+- acts: `A1`, `A2`, `A3`, `A4`, `B1`, `B2`, `B3`, `B4A`, `B4B`, `B4C`, `B4D1`, `B4D2`, `B4D3`, `B4D4`, `B4D5`, `B4E`, `B5A`, `B5B`, `B5C`, `B5D`, `B5E`, `B6`, `B6A`, `B6B`, `B6C`, `B6D`, `B6E`, `B7`, `B7A`, `B7B`, `B7C`, `B7C1`, `B7D`, `B7E`, `C1A`, `C1B`, `C1C`, `C1D`, `C2`, `D1`, `D2`
 - Historical commercialization prompt pairs remain for traceability only and are not active execution authority.
 - No new act may be added to the plan without a matching MATHS prompt pair.
 
@@ -773,10 +786,11 @@ Validation:
 4. `B5E` may not start until `B5D` is complete.
 5. `B6A` may not start until `B5E` is complete.
 6. `B7A` may not start until `B6E` is complete.
-7. `C1A` may not start until `B7E` is complete.
-8. `C1B` and `C1C` may not run without explicit live-execution approval.
-9. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B7*` or `C1*` act remains incomplete or blocked.
-10. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
+7. `B7D` may not start until `B7C1` is complete.
+8. `C1A` may not start until `B7E` is complete.
+9. `C1B` and `C1C` may not run without explicit live-execution approval.
+10. `C2`, `D1`, and `D2` may not imply enterprise readiness while any `B7*` or `C1*` act remains incomplete or blocked.
+11. Historical commercialization prompts and historical absorbed-plan references may not be used as active execution authority.
 
 ## Legacy Mapping
 
@@ -793,7 +807,7 @@ The absorbed plan remains in the repo for traceability, but no new execution sho
 
 ## Validation
 
-- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and records `B6A` through `B6E` plus `B7A` and `B7B` complete, `B7C` next, and `C1A` rebased and blocked behind persona integration, executor permission minimization, and bounded SharePoint-executor approval re-proof.
+- `Operations/EXECUTION_PLAN.md` lists this master plan as the active enterprise-readiness initiative and records `B6A` through `B6E` plus `B7A`, `B7B`, `B7C`, and `B7C1` complete, `B7D` next, and `C1A` rebased and blocked behind executor permission minimization and bounded SharePoint-executor approval re-proof.
 - `plans/m365-enterprise-commercialization-readiness/` is explicitly marked as absorbed/historical.
 - `Operations/PROJECT_FILE_INDEX.md` exists and tracks the active governance artifacts.
 - The prompt pair for this master plan exists.

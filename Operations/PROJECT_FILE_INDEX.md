@@ -86,7 +86,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `artifacts/scorecards/scorecard_l14.json` | Per-lemma scorecard for digital-employee plus executor-domain architecture linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B6` |
 | `artifacts/scorecards/scorecard_l15.json` | Per-lemma scorecard for tenant-contract and executor-registry extension linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `artifacts/scorecards/scorecard_l16.json` | Per-lemma scorecard for runtime executor-routing and domain-selection linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
-| `scorecard.json` | Aggregate MA scorecard including `L7` through `L16` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `artifacts/scorecards/scorecard_l17.json` | Per-lemma scorecard for persona-registry and humanized delegation integration linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `scorecard.json` | Aggregate MA scorecard including `L7` through `L17` linkage. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 | `artifacts/b4d1_failure_inventory.json` | Pinned clean-baseline validation inventory for `B4D2` through `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D1` |
 | `artifacts/b4d3_failure_inventory.json` | Pinned post-runtime-cleanup failure inventory showing the remaining handoff into `B4D4`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D3` |
 | `artifacts/b4d4_failure_inventory.json` | Pinned actionable mypy inventory after the environment and duplicate-module blockers were removed. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4D4A` |
@@ -101,6 +102,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/ma/lemmas/L14_m365_digital_employee_executor_architecture.md` | Formal lemma narrative for the digital-employee, executor-domain, and certification-rebase architecture linkage. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B6` |
 | `docs/ma/lemmas/L15_m365_tenant_contract_executor_registry_extension.md` | Formal lemma narrative for bounded executor representation, deterministic default projection, and single-executor migration semantics. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 | `docs/ma/lemmas/L16_m365_runtime_executor_routing_domain_selection.md` | Formal lemma narrative for deterministic action-to-executor routing, approval-domain projection, and fail-closed multi-executor selection. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `docs/ma/lemmas/L17_m365_persona_registry_humanized_delegation_integration.md` | Formal lemma narrative for deterministic persona resolution, canonical-agent projection, and persona-aware approval/audit preservation. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 
 ## Active B5D/B5E App Registration Hardening Artifacts
 
@@ -119,6 +121,9 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `invariants/lemmas/L16_m365_runtime_executor_routing_domain_selection.yaml` | Machine-enforced invariant metadata for `L16`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `notebooks/m365/INV-M365-R-runtime-executor-routing-domain-selection.ipynb` | Primary source notebook for the bounded runtime executor-routing and domain-selection proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `notebooks/lemma_proofs/L16_m365_runtime_executor_routing_domain_selection.ipynb` | Projected lemma-proof notebook for `L16`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+| `invariants/lemmas/L17_m365_persona_registry_humanized_delegation_integration.yaml` | Machine-enforced invariant metadata for `L17`. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `notebooks/m365/INV-M365-S-persona-registry-humanized-delegation-integration.ipynb` | Primary source notebook for the persona-registry and humanized delegation integration proof surface. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `notebooks/lemma_proofs/L17_m365_persona_registry_humanized_delegation_integration.ipynb` | Projected lemma-proof notebook for `L17`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 
 ## Active B7B Multi-Executor Routing Surface
 
@@ -130,6 +135,25 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `src/ops_adapter/approvals.py` | Approval backend now projecting the SharePoint executor path from the selected multi-executor tenant contract. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `tests/test_ops_adapter.py` | Bounded routing coverage proving SharePoint and directory executor selection, approval-path executor preservation, and fail-closed unmapped-route behavior. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `tests/test_approvals.py` | Approval-store contract tests proving the SharePoint executor is projected for approval Graph access even when another executor is the runtime default. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7B` |
+
+## Active B7C Persona Integration Surface
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/ai_team.json` | Humanized digital-employee roster supplying canonical display names and department mapping for runtime persona projection. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `registry/agents.yaml` | Canonical runtime-agent registry supplying allowed actions and approval rules that the persona layer projects underneath humanized delegation. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `src/ops_adapter/personas.py` | Deterministic persona-registry projection and humanized-target resolution layer over the existing registry sources. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `src/ops_adapter/main.py` | Primary governed runtime boundary now resolving named persona targets to one canonical agent and preserving persona context through policy, approvals, and audit. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `src/ops_adapter/app.py` | Legacy app-factory execution boundary aligned to the same persona-aware delegation and fail-closed contract as the primary runtime. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `src/ops_adapter/approvals.py` | Approval backend now preserving runtime persona context and using the projected persona registry for Teams-card display instead of a hardcoded map. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `tests/test_ops_adapter.py` | Bounded persona-resolution coverage proving humanized delegation, inactive-persona denial, bounded-domain mismatch denial, and approval-context preservation. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `tests/test_approvals.py` | Approval-store tests proving persona context persists through the approvals backend even when the Graph-backed store is unavailable. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+
+## B7C1 Governance Constraint-Repair Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/governance/m365-mcp-constraint-contract-repair.md` | Canonical repair spec for the inconsistent MCP metadata contract observed on bounded read-only validation and governance-closeout command shapes. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C1` |
 
 ## Active C1A Certification Readiness Artifacts
 
@@ -270,6 +294,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7b-runtime-executor-routing-domain-selection-prompt.txt` | Kick-off pointer for act `B7B`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7B` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c-persona-registry-humanized-delegation-integration.md` | Active MATHS prompt for act `B7C`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c-persona-registry-humanized-delegation-integration-prompt.txt` | Kick-off pointer for act `B7C`. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c1-mcp-constraint-contract-repair.md` | Active MATHS prompt for act `B7C1`. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C1` |
+| `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7c1-mcp-constraint-contract-repair-prompt.txt` | Kick-off pointer for act `B7C1`. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7C1` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7d-executor-permission-minimization-azure-cleanup.md` | Active MATHS prompt for act `B7D`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7d-executor-permission-minimization-azure-cleanup-prompt.txt` | Kick-off pointer for act `B7D`. | `Policy & Security`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7D` |
 | `docs/prompts/codex-m365-enterprise-readiness-master-plan-b7e-approval-backend-reproof-certification-rereadiness.md` | Active MATHS prompt for act `B7E`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:B7E` |

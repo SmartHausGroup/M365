@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from ops_adapter.approvals import ApprovalsStore
 from ops_adapter.audit import Auditor
 from ops_adapter.main import app
+from ops_adapter.personas import build_persona_registry
 from smarthaus_common import permission_enforcer as permission_enforcer_module
 from smarthaus_common.permission_enforcer import check_user_permission
 from smarthaus_common.tenant_config import reload_tenant_config
@@ -139,13 +140,37 @@ def patched_runtime(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
                     {"action": "sites.provision", "approvers": ["global_admin"]},
                     {"action": "admin.set_user_tier", "approvers": ["global_admin"]},
                 ],
-            }
+            },
+            "website-manager": {
+                "allowed_actions": ["sites.get"],
+                "approval_rules": [],
+            },
         }
     }
+    personas = build_persona_registry(
+        registry,
+        {
+            "departments": {
+                "operations": [
+                    {
+                        "agent": "m365-administrator",
+                        "name": "Marcus Chen",
+                        "role": "Senior IT Administrator",
+                    },
+                    {
+                        "agent": "website-manager",
+                        "name": "Elena Rodriguez",
+                        "role": "Website Manager",
+                    },
+                ]
+            }
+        },
+    )
     monkeypatch.setattr(ops_main, "REGISTRY", registry)
+    monkeypatch.setattr(ops_main, "PERSONAS", personas)
     monkeypatch.setattr(ops_main, "RATE", _DummyRate())
     monkeypatch.setattr(ops_main, "AUDITOR", _DummyAuditor())
-    monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry))
+    monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry, personas))
     return ops_main
 
 
@@ -323,6 +348,109 @@ def test_group_mapped_actor_binding_is_preserved_in_pending_approval(
     assert approval["tenant"] == "tenant-alpha"
     assert approval["executor"]["mode"] == "app_only"
     assert approval["executor"]["client_id"] == "client-alpha"
+    assert approval["persona"]["canonical_agent"] == "m365-administrator"
+    assert approval["persona"]["display_name"] == "Marcus Chen"
+    assert approval["persona_target"] == "m365-administrator"
+
+
+def test_b7c_resolves_humanized_persona_target_to_canonical_agent(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    async def _capture_execute(
+        agent: str,
+        _action: str,
+        params: dict[str, Any],
+        _correlation_id: str,
+        executor_name: str | None = None,
+    ) -> dict[str, Any]:
+        return {
+            "canonical_agent": agent,
+            "executor_name": executor_name,
+            "persona": params["persona"],
+            "persona_target": params["persona_target"],
+        }
+
+    monkeypatch.setattr(patched_runtime, "execute", _capture_execute)
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/Elena%20Rodriguez/sites.get",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"siteId": "site-123"}},
+    )
+
+    assert r.status_code == 200
+    payload = r.json()
+    assert payload["status"] == "success"
+    assert payload["result"]["canonical_agent"] == "website-manager"
+    assert payload["result"]["executor_name"] == "sharepoint"
+    assert payload["result"]["persona"]["display_name"] == "Elena Rodriguez"
+    assert payload["result"]["persona"]["canonical_agent"] == "website-manager"
+    assert payload["result"]["persona_target"] == "Elena Rodriguez"
+
+
+def test_b7c_denies_inactive_persona_targets(
+    tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(
+        patched_runtime,
+        "PERSONAS",
+        {
+            **patched_runtime.PERSONAS,
+            "legacy-analyst": {
+                "persona_id": "legacy-analyst",
+                "canonical_agent": "legacy-analyst",
+                "display_name": "Legacy Analyst",
+                "slug": "legacy-analyst",
+                "department": "operations",
+                "title": "Legacy Analyst",
+                "manager": "unassigned",
+                "responsibilities": [],
+                "allowed_domains": [],
+                "approval_owner": "unassigned",
+                "status": "inactive",
+                "external_presence_policy": "internal_only",
+                "aliases": ["legacy-analyst", "legacy analyst"],
+            },
+        },
+    )
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/legacy-analyst/sites.get",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"siteId": "site-123"}},
+    )
+
+    assert r.status_code == 403
+    assert r.json()["detail"] == "persona_inactive:legacy-analyst"
+
+
+def test_b7c_fails_closed_on_persona_domain_mismatch(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+    mismatched = {
+        **patched_runtime.PERSONAS,
+        "website-manager": {
+            **patched_runtime.PERSONAS["website-manager"],
+            "allowed_domains": ["directory"],
+        },
+    }
+    monkeypatch.setattr(patched_runtime, "PERSONAS", mismatched)
+
+    client = TestClient(app)
+    r = client.post(
+        "/actions/website-manager/sites.get",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"siteId": "site-123"}},
+    )
+
+    assert r.status_code == 403
+    assert r.json()["detail"] == "persona_domain_mismatch:website-manager:sharepoint"
 
 
 def test_b7b_routes_sharepoint_actions_to_sharepoint_executor(
@@ -460,10 +588,12 @@ permission_tiers:
             }
         }
     }
+    personas = build_persona_registry(registry)
     monkeypatch.setattr(ops_main, "REGISTRY", registry)
+    monkeypatch.setattr(ops_main, "PERSONAS", personas)
     monkeypatch.setattr(ops_main, "RATE", _DummyRate())
     monkeypatch.setattr(ops_main, "AUDITOR", _DummyAuditor())
-    monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry))
+    monkeypatch.setattr(ops_main, "APPROVALS", ApprovalsStore(registry, personas))
     monkeypatch.setattr(ops_main, "OPA", _DummyOPA(allowed=True, approval_required=False))
 
     client = TestClient(app)

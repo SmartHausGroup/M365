@@ -1,7 +1,7 @@
 {
   "status": "green",
   "decision": "green",
-  "generated_at_utc": "2026-03-18T22:01:35Z",
+  "generated_at_utc": "2026-03-19T23:08:14Z",
   "seed_lock_verified": true,
   "determinism_certified": true,
   "notebook_hash": "eb9d3fb6a7a9ff3493402b214de05d8bd8d7d4657ad35fdcc00ba70e587a9280",
@@ -71,6 +71,10 @@
     "L16": {
       "scorecard_path": "artifacts/scorecards/scorecard_l16.json",
       "status": "green"
+    },
+    "L17": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l17.json",
+      "status": "green"
     }
   },
   "module_scorecards": {
@@ -79,5 +83,5 @@
       "status": "green"
     }
   },
-  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, L13 Entra app-separation plus executor certificate-cutover linkage, L14 digital-employee plus executor-domain architecture linkage, L15 tenant-contract plus executor-registry extension linkage, and L16 runtime executor-routing plus domain-selection linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
+  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, L13 Entra app-separation plus executor certificate-cutover linkage, L14 digital-employee plus executor-domain architecture linkage, L15 tenant-contract plus executor-registry extension linkage, L16 runtime executor-routing plus domain-selection linkage, and L17 persona-registry plus humanized delegation integration linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
 }

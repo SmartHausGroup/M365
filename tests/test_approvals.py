@@ -6,6 +6,7 @@ from typing import Any
 
 import ops_adapter.approvals as approvals_module
 import pytest
+from ops_adapter.personas import build_persona_registry
 from smarthaus_common.tenant_config import reload_tenant_config
 
 
@@ -204,3 +205,57 @@ governance:
     assert store.list_id == "list-456"
     assert captured["default_executor"] == "collaboration"
     assert captured["client_id"] == "sharepoint-client"
+
+
+def test_memory_approvals_store_preserves_persona_context(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("APPROVAL_SERVICE_URL", raising=False)
+    monkeypatch.delenv("APPROVALS_SERVICE_URL", raising=False)
+    monkeypatch.delenv("APPROVALS_SITE_URL", raising=False)
+    monkeypatch.delenv("APPROVALS_SITE_ID", raising=False)
+    monkeypatch.delenv("APPROVALS_LIST_ID", raising=False)
+    monkeypatch.setattr(approvals_module, "_selected_tenant_config", lambda: None)
+
+    registry = {
+        "agents": {
+            "website-manager": {
+                "allowed_actions": ["sites.get"],
+                "approval_rules": [{"action": "sites.get", "approvers": ["global_admin"]}],
+            }
+        }
+    }
+    personas = build_persona_registry(
+        registry,
+        {
+            "departments": {
+                "operations": [
+                    {
+                        "agent": "website-manager",
+                        "name": "Elena Rodriguez",
+                        "role": "Website Manager",
+                    }
+                ]
+            }
+        },
+    )
+    store = approvals_module.ApprovalsStore(registry, personas)
+
+    approval_id = store.create(
+        "website-manager",
+        "sites.get",
+        {
+            "requestor": "admin@example.com",
+            "persona": personas["website-manager"],
+            "persona_target": "Elena Rodriguez",
+            "executor_identity": {"domain": "sharepoint", "client_id": "sharepoint-client"},
+            "tenant": "tenant-alpha",
+        },
+    )
+
+    approval = store.get(approval_id)
+
+    assert approval is not None
+    assert approval["persona"]["display_name"] == "Elena Rodriguez"
+    assert approval["persona"]["canonical_agent"] == "website-manager"
+    assert approval["persona_target"] == "Elena Rodriguez"

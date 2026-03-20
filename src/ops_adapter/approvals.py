@@ -12,6 +12,8 @@ from urllib.parse import urlencode
 import httpx
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 
+from .personas import load_persona_registry, project_persona_context
+
 ApprovalUpdateResult = dict[str, list[str]]
 
 
@@ -72,8 +74,13 @@ def _build_graph_token_provider() -> Any:
 
 
 class GraphApprovalsStore:
-    def __init__(self, registry: dict[str, Any] | None = None):
+    def __init__(
+        self,
+        registry: dict[str, Any] | None = None,
+        personas: dict[str, dict[str, Any]] | None = None,
+    ):
         self.registry = registry or {}
+        self.personas = personas or load_persona_registry(self.registry)
         self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
         self.site_url = _resolve_approval_setting("approvals_site_url", ("APPROVALS_SITE_URL",))
         self.site_id = _resolve_approval_setting("approvals_site_id", ("APPROVALS_SITE_ID",))
@@ -89,14 +96,6 @@ class GraphApprovalsStore:
             self.site_id = self._resolve_site_id(self.site_url)
         if not self.list_id:
             self.list_id = self._resolve_list_id(self.site_id, self.list_name)
-
-        # Minimal persona mapping for Teams cards
-        self.personas = {
-            "m365-administrator": {"name": "Marcus Chen", "title": "Senior IT Administrator"},
-            "website-manager": {"name": "Elena Rodriguez", "title": "Website Manager"},
-            "hr-generalist": {"name": "Sarah Williams", "title": "HR Director"},
-            "outreach-coordinator": {"name": "David Park", "title": "Communications Manager"},
-        }
 
     def _graph_token(self) -> str:
         provider = _build_graph_token_provider()
@@ -184,6 +183,8 @@ class GraphApprovalsStore:
                 "agent": f.get("Agent"),
                 "action": f.get("Action"),
                 "params": params,
+                "persona": params.get("persona"),
+                "persona_target": params.get("persona_target"),
                 "status": (f.get("Status") or "").lower(),
                 "requested_at": f.get("Created"),
                 "updated_at": f.get("Modified"),
@@ -276,6 +277,8 @@ class GraphApprovalsStore:
                         "id": f.get("ApprovalId") or it.get("id"),
                         "agent": f.get("Agent"),
                         "action": f.get("Action"),
+                        "persona": params_json.get("persona"),
+                        "persona_target": params_json.get("persona_target"),
                         "status": (f.get("Status") or "").lower(),
                         "approvers": (
                             (f.get("Approvers") or "").split(", ") if f.get("Approvers") else []
@@ -296,9 +299,15 @@ class GraphApprovalsStore:
     ) -> None:
         if not self.teams_webhook:
             return
-        persona = self.personas.get(agent, {"name": agent, "title": agent})
+        persona_payload = params.get("persona")
+        if isinstance(persona_payload, dict):
+            persona = project_persona_context(persona_payload)
+        else:
+            persona = project_persona_context(self.personas.get(agent, {}))
         title = f"Approval Required: {agent}/{action}"
-        text_title = f"{persona['name']} ({persona['title']})"
+        display_name = str(persona.get("display_name") or agent)
+        display_title = str(persona.get("title") or agent)
+        text_title = f"{display_name} ({display_title})"
         # Signed action URLs
         base = os.getenv("OPS_ADAPTER_PUBLIC_URL", "http://localhost:8080")
         ts = str(int(datetime.now(UTC).timestamp()))
@@ -443,7 +452,10 @@ class EnterpriseApprovalsProxy:
         return res
 
 
-def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
+def ApprovalsStore(
+    registry: dict[str, Any] | None = None,
+    personas: dict[str, dict[str, Any]] | None = None,
+) -> Any:
     # Prefer Enterprise approvals service when configured
     svc_url = os.getenv("APPROVAL_SERVICE_URL") or os.getenv("APPROVALS_SERVICE_URL")
     if svc_url:
@@ -453,9 +465,9 @@ def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
     if tenant_cfg is not None and (
         tenant_cfg.governance.approvals_site_url or tenant_cfg.governance.approvals_site_id
     ):
-        return GraphApprovalsStore(registry=registry)
+        return GraphApprovalsStore(registry=registry, personas=personas)
     if os.getenv("APPROVALS_SITE_URL") or os.getenv("APPROVALS_SITE_ID"):
-        return GraphApprovalsStore(registry=registry)
+        return GraphApprovalsStore(registry=registry, personas=personas)
 
     # Fallback to in-memory (ephemeral) minimal store if Graph not configured
     class _Memory:
@@ -463,6 +475,7 @@ def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
             self.db: dict[str, dict[str, Any]] = {}
             self.teams_webhook = os.getenv("TEAMS_APPROVALS_WEBHOOK")
             self.registry = registry or {}
+            self.personas = personas or load_persona_registry(self.registry)
 
         def _default_approvers(self, agent: str, action: str) -> list[str]:
             try:
@@ -481,6 +494,8 @@ def ApprovalsStore(registry: dict[str, Any] | None = None) -> Any:
                 "agent": agent,
                 "action": action,
                 "params": params,
+                "persona": params.get("persona"),
+                "persona_target": params.get("persona_target"),
                 "requestor": params.get("requestor") or "system",
                 "requestor_tier": params.get("requestor_tier"),
                 "requestor_groups": params.get("requestor_groups") or [],

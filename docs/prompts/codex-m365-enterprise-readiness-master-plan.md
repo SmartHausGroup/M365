@@ -89,19 +89,21 @@
 25. `B7A` Tenant Contract and Executor Registry Extension
 26. `B7B` Runtime Executor Routing and Domain Selection
 27. `B7C` Persona Registry and Humanized Delegation Integration
-28. `B7D` Executor Permission Minimization and Azure Cleanup
-29. `B7E` Approval Backend Reproof and Certification Re-Readiness
-30. `C1A` Certification Environment Readiness
-31. `C1B` Live Read-Only Certification
-32. `C1C` Live Mutation and Governance Certification
-33. `C1D` Evidence Packet Completion and Matrix Closure
-34. `C2` Release Certification Packet and Decision
-35. `D1` Enterprise Collateral Pack
-36. `D2` Pilot Acceptance and Customer Handoff
+28. `B7C1` MCP Constraint Contract Repair
+29. `B7D` Executor Permission Minimization and Azure Cleanup
+30. `B7E` Approval Backend Reproof and Certification Re-Readiness
+31. `C1A` Certification Environment Readiness
+32. `C1B` Live Read-Only Certification
+33. `C1C` Live Mutation and Governance Certification
+34. `C1D` Evidence Packet Completion and Matrix Closure
+35. `C2` Release Certification Packet and Decision
+36. `D1` Enterprise Collateral Pack
+37. `D2` Pilot Acceptance and Customer Handoff
 
 ## Active-State Rules
 
-- `B7C` is the next executable act.
+- `B7C1` is complete.
+- `B7D` is the next executable act.
 - `C1A` is prepared but blocked until `B7E` is complete, the bounded SharePoint executor path is re-proven for approval reachability, and the live environment prerequisites exist.
 - `C1B` and `C1C` require explicit live-execution approval.
 - `D1` and `D2` must not be used to imply readiness while `B4*`, `C1*`, or `C2` are incomplete.

@@ -5,6 +5,7 @@ import uuid
 from collections.abc import Awaitable, Callable
 from typing import Any
 
+import yaml
 from fastapi import FastAPI, Header, HTTPException, Request
 from smarthaus_common.config import has_selected_tenant
 from smarthaus_common.permission_enforcer import (
@@ -25,6 +26,7 @@ from .actions import (
 from .approvals import ApprovalsStore
 from .audit import audit_log
 from .models import ActionRequest, ActionResponse
+from .personas import load_persona_registry, resolve_persona_target
 from .policies import OPAClient
 from .rate_limit import RateLimiter
 
@@ -38,12 +40,20 @@ def _actor_header_fallback_enabled() -> bool:
     return _truthy_env("M365_ACTOR_HEADER_FALLBACK", "0")
 
 
+def load_registry() -> dict[str, Any]:
+    path = os.getenv("REGISTRY_FILE", "./registry/agents.yaml")
+    with open(path, encoding="utf-8") as handle:
+        return yaml.safe_load(handle)
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="Ops Adapter", version=os.getenv("OPS_ADAPTER_VERSION", "0.1.0"))
 
     opa_url = os.getenv("OPA_URL", "http://opa:8181")
     opa = OPAClient(base_url=opa_url)
-    approvals = ApprovalsStore()
+    registry = load_registry()
+    personas = load_persona_registry(registry)
+    approvals = ApprovalsStore(registry, personas)
     limiter = RateLimiter(
         default_rps=float(os.getenv("OPS_RATE_DEFAULT_RPS", "5")),
         burst=int(os.getenv("OPS_RATE_BURST", "10")),
@@ -72,10 +82,32 @@ def create_app() -> FastAPI:
         x_request_id: str | None = Header(default=None),
     ) -> ActionResponse:
         correlation_id = getattr(request.state, "correlation_id", x_request_id) or str(uuid.uuid4())
-        if not _actor_header_fallback_enabled():
+        try:
+            canonical_agent, persona = resolve_persona_target(agent, personas)
+        except ValueError as exc:
             audit_log(
                 "policy_denied",
                 agent=agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=str(exc),
+            )
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        if persona.get("status") != "active":
+            audit_log(
+                "policy_denied",
+                agent=canonical_agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=f"persona_inactive:{canonical_agent}",
+            )
+            raise HTTPException(status_code=403, detail=f"persona_inactive:{canonical_agent}")
+
+        if not _actor_header_fallback_enabled():
+            audit_log(
+                "policy_denied",
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 actor="system",
@@ -92,7 +124,7 @@ def create_app() -> FastAPI:
         if not user_email:
             audit_log(
                 "policy_denied",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason="user_identity_missing",
@@ -102,7 +134,7 @@ def create_app() -> FastAPI:
         if not has_selected_tenant():
             audit_log(
                 "policy_denied",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason="tenant_selection_missing",
@@ -114,7 +146,7 @@ def create_app() -> FastAPI:
             reason = f"tenant_config_unavailable:{type(exc).__name__}"
             audit_log(
                 "policy_denied",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason=reason,
@@ -124,21 +156,48 @@ def create_app() -> FastAPI:
         actor_groups: list[str] = []
         actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
         try:
-            executor_name = resolve_executor_name_for_action(agent, action, tenant_config)
+            executor_name = resolve_executor_name_for_action(canonical_agent, action, tenant_config)
         except ValueError as exc:
             audit_log(
                 "action_failed",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason=str(exc),
                 actor=user_email,
                 actor_tier=actor_tier,
                 actor_groups=actor_groups,
+                persona=persona,
                 tenant=tenant_config.tenant.id,
             )
             raise HTTPException(status_code=500, detail=str(exc)) from exc
         executor_identity = build_executor_identity(tenant_config, executor_name)
+        executor_domain = str(executor_identity.get("domain") or "")
+        allowed_domains = [
+            str(domain) for domain in (persona.get("allowed_domains") or []) if domain
+        ]
+        if (
+            len(getattr(tenant_config, "executors", {}) or {}) > 1
+            and executor_domain
+            and executor_domain != "default"
+            and allowed_domains
+            and executor_domain not in allowed_domains
+        ):
+            deny_reason = f"persona_domain_mismatch:{canonical_agent}:{executor_domain}"
+            audit_log(
+                "policy_denied",
+                agent=canonical_agent,
+                action=action,
+                correlation_id=correlation_id,
+                reason=deny_reason,
+                actor=user_email,
+                actor_tier=actor_tier,
+                actor_groups=actor_groups,
+                persona=persona,
+                executor=executor_identity,
+                tenant=tenant_config.tenant.id,
+            )
+            raise HTTPException(status_code=403, detail=deny_reason)
 
         allowed, reason = check_user_permission(
             user_email=user_email,
@@ -149,20 +208,21 @@ def create_app() -> FastAPI:
         if not allowed:
             audit_log(
                 "policy_denied",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason=reason,
                 actor=user_email,
                 actor_tier=actor_tier,
                 actor_groups=actor_groups,
+                persona=persona,
                 executor=executor_identity,
                 tenant=tenant_config.tenant.id,
             )
             raise HTTPException(status_code=403, detail=reason)
 
         # Rate limit per agent
-        if not limiter.allow(agent):
+        if not limiter.allow(canonical_agent):
             raise HTTPException(status_code=429, detail="rate_limit_exceeded")
 
         # Policy check via OPA (fail-open behavior is handled by OPA client)
@@ -172,12 +232,14 @@ def create_app() -> FastAPI:
         params.setdefault("requestor_tier", actor_tier.get("tier_name"))
         params.setdefault("requestor_tier_info", actor_tier)
         params.setdefault("requestor_groups", actor_groups)
+        params.setdefault("persona", persona)
+        params.setdefault("persona_target", agent)
         params.setdefault("executor_name", executor_name)
         params.setdefault("executor_domain", executor_identity.get("domain"))
         params.setdefault("executor_identity", executor_identity)
         params.setdefault("tenant", tenant_config.tenant.id)
         decision = await opa.check(
-            agent=agent,
+            agent=canonical_agent,
             action=action,
             data=params,
             rate_allowed=True,
@@ -186,13 +248,14 @@ def create_app() -> FastAPI:
         if not decision.get("allowed", False):
             audit_log(
                 "policy_denied",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 reason=decision.get("reason") or "denied",
                 actor=user_email,
                 actor_tier=actor_tier,
                 actor_groups=actor_groups,
+                persona=persona,
                 executor=executor_identity,
                 tenant=tenant_config.tenant.id,
             )
@@ -206,34 +269,38 @@ def create_app() -> FastAPI:
         if approval_required:
             registry = getattr(approvals, "registry", {}) or {}
             approvers: list[str] = []
-            for rule in registry.get("agents", {}).get(agent, {}).get("approval_rules", []) or []:
+            for rule in (
+                registry.get("agents", {}).get(canonical_agent, {}).get("approval_rules", []) or []
+            ):
                 if rule.get("action") == action:
                     approvers = rule.get("approvers", []) or []
                     break
             if not approvers:
                 audit_log(
                     "policy_denied",
-                    agent=agent,
+                    agent=canonical_agent,
                     action=action,
                     correlation_id=correlation_id,
                     reason="approval_configuration_missing",
                     actor=user_email,
                     actor_tier=actor_tier,
                     actor_groups=actor_groups,
+                    persona=persona,
                     executor=executor_identity,
                     tenant=tenant_config.tenant.id,
                 )
                 raise HTTPException(status_code=500, detail="approval_configuration_missing")
-            approval_id = approvals.create(agent=agent, action=action, params=params)
+            approval_id = approvals.create(agent=canonical_agent, action=action, params=params)
             audit_log(
                 "approval_pending",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 approval_id=approval_id,
                 actor=user_email,
                 actor_tier=actor_tier,
                 actor_groups=actor_groups,
+                persona=persona,
                 executor=executor_identity,
                 tenant=tenant_config.tenant.id,
             )
@@ -245,14 +312,14 @@ def create_app() -> FastAPI:
 
         # Execute action (may be dry-run)
         # Map known aliases for compatibility
-        if agent == "m365-administrator" and action == "user.provision":
+        if canonical_agent == "m365-administrator" and action == "user.provision":
             mapped_action = "users.create"
         else:
             mapped_action = action
 
         try:
             result = await execute_action(
-                agent=agent,
+                agent=canonical_agent,
                 action=mapped_action,
                 params=params,
                 correlation_id=correlation_id,
@@ -260,13 +327,14 @@ def create_app() -> FastAPI:
             )
             audit_log(
                 "action_executed",
-                agent=agent,
+                agent=canonical_agent,
                 action=action,
                 correlation_id=correlation_id,
                 result=result,
                 actor=user_email,
                 actor_tier=actor_tier,
                 actor_groups=actor_groups,
+                persona=persona,
                 executor=executor_identity,
                 tenant=tenant_config.tenant.id,
             )

@@ -31,6 +31,7 @@ from .actions import (
 from .approvals import ApprovalsStore, GraphApprovalsStore
 from .audit import Auditor
 from .models import ActionRequest, ActionResponse
+from .personas import load_persona_registry, resolve_persona_target
 from .policies import OPAClient
 from .rate_limit import RateLimiter
 
@@ -50,9 +51,10 @@ def load_registry() -> dict[str, Any]:
 
 
 REGISTRY = load_registry()
+PERSONAS = load_persona_registry(REGISTRY)
 OPA = OPAClient(base_url=os.getenv("OPA_URL"))
 AUDITOR = Auditor(log_dir=os.getenv("LOG_DIR", "./logs"))
-APPROVALS = ApprovalsStore(REGISTRY)
+APPROVALS = ApprovalsStore(REGISTRY, PERSONAS)
 RATE = RateLimiter(default_rps=5.0, burst=10)
 
 _JWKS_CACHE: dict[str, Any] = {}
@@ -233,6 +235,10 @@ def _validate_agent_action(agent: str, action: str) -> bool:
         return False
     allowed = set(agents[agent].get("allowed_actions", []) or [])
     return action in allowed
+
+
+def _resolve_persona_agent(agent_target: str) -> tuple[str, dict[str, Any]]:
+    return resolve_persona_target(agent_target, PERSONAS)
 
 
 def _resolve_user_identity(request: Request) -> str:
@@ -526,38 +532,95 @@ async def actions(
     token: SecurityDependency = None,
 ) -> ActionResponse:
     corr = request.state.correlation_id
-    if not _validate_agent_action(agent, action):
-        await AUDITOR.log("denied", agent, action, {"reason": "invalid_agent_or_action"}, corr)
+    try:
+        canonical_agent, persona = _resolve_persona_agent(agent)
+    except ValueError as exc:
+        await AUDITOR.log(
+            "denied",
+            agent,
+            action,
+            {"reason": str(exc), "persona_target": agent},
+            corr,
+        )
+        raise HTTPException(400, str(exc)) from exc
+
+    if persona.get("status") != "active":
+        await AUDITOR.log(
+            "denied",
+            canonical_agent,
+            action,
+            {"reason": f"persona_inactive:{canonical_agent}", "persona": persona},
+            corr,
+        )
+        raise HTTPException(403, f"persona_inactive:{canonical_agent}")
+
+    if not _validate_agent_action(canonical_agent, action):
+        await AUDITOR.log(
+            "denied",
+            canonical_agent,
+            action,
+            {"reason": "invalid_agent_or_action", "persona": persona},
+            corr,
+        )
         raise HTTPException(400, "invalid_agent_or_action")
 
     # Per-agent/action rate limiting
-    rk = f"{agent}:{action}"
+    rk = f"{canonical_agent}:{action}"
     rate_allowed = RATE.allow(rk)
 
     user_email = _resolve_user_identity(request)
     request.state.actor = user_email
+    request.state.persona = persona
     actor_groups = _resolve_actor_groups(request)
     tenant_config = _require_tenant_context()
     actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
     try:
-        executor_name = resolve_executor_name_for_action(agent, action, tenant_config)
+        executor_name = resolve_executor_name_for_action(canonical_agent, action, tenant_config)
     except ValueError as exc:
-        REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
+        REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="failed").inc()
         await AUDITOR.log(
             "failed",
-            agent,
+            canonical_agent,
             action,
             {
                 "reason": str(exc),
                 "actor": user_email,
                 "actor_tier": actor_tier,
                 "actor_groups": actor_groups,
+                "persona": persona,
                 "tenant": tenant_config.tenant.id,
             },
             corr,
         )
         raise HTTPException(500, str(exc)) from exc
     executor_identity = build_executor_identity(tenant_config, executor_name)
+    executor_domain = str(executor_identity.get("domain") or "")
+    allowed_domains = [str(domain) for domain in (persona.get("allowed_domains") or []) if domain]
+    if (
+        len(getattr(tenant_config, "executors", {}) or {}) > 1
+        and executor_domain
+        and executor_domain != "default"
+        and allowed_domains
+        and executor_domain not in allowed_domains
+    ):
+        deny_reason = f"persona_domain_mismatch:{canonical_agent}:{executor_domain}"
+        REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="denied").inc()
+        await AUDITOR.log(
+            "denied",
+            canonical_agent,
+            action,
+            {
+                "reason": deny_reason,
+                "actor": user_email,
+                "actor_tier": actor_tier,
+                "actor_groups": actor_groups,
+                "persona": persona,
+                "executor": executor_identity,
+                "tenant": tenant_config.tenant.id,
+            },
+            corr,
+        )
+        raise HTTPException(403, deny_reason)
 
     allowed, deny_reason = check_user_permission(
         user_email=user_email,
@@ -566,16 +629,17 @@ async def actions(
         actor_groups=actor_groups,
     )
     if not allowed:
-        REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
+        REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="denied").inc()
         await AUDITOR.log(
             "denied",
-            agent,
+            canonical_agent,
             action,
             {
                 "reason": deny_reason,
                 "actor": user_email,
                 "actor_tier": actor_tier,
                 "actor_groups": actor_groups,
+                "persona": persona,
                 "executor": executor_identity,
                 "tenant": tenant_config.tenant.id,
             },
@@ -588,24 +652,27 @@ async def actions(
     params.setdefault("requestor_tier", actor_tier.get("tier_name"))
     params.setdefault("requestor_tier_info", actor_tier)
     params.setdefault("requestor_groups", actor_groups)
+    params.setdefault("persona", persona)
+    params.setdefault("persona_target", agent)
     params.setdefault("executor_name", executor_name)
     params.setdefault("executor_domain", executor_identity.get("domain"))
     params.setdefault("executor_identity", executor_identity)
     params.setdefault("tenant", tenant_config.tenant.id)
 
     # Policy check via OPA
-    policy = await OPA.check(agent, action, params, rate_allowed, corr)
+    policy = await OPA.check(canonical_agent, action, params, rate_allowed, corr)
     if not policy.get("allowed", False):
-        REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
+        REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="denied").inc()
         await AUDITOR.log(
             "denied",
-            agent,
+            canonical_agent,
             action,
             {
                 "reason": policy.get("reason"),
                 "actor": user_email,
                 "actor_tier": actor_tier,
                 "actor_groups": actor_groups,
+                "persona": persona,
                 "executor": executor_identity,
                 "tenant": tenant_config.tenant.id,
             },
@@ -620,36 +687,38 @@ async def actions(
         approval_required = True
 
     if approval_required:
-        rule = _approval_rule(agent, action)
+        rule = _approval_rule(canonical_agent, action)
         approvers = (rule or {}).get("approvers", [])
         if not approvers:
-            REQ_COUNT.labels(agent=agent, action=action, outcome="denied").inc()
+            REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="denied").inc()
             await AUDITOR.log(
                 "denied",
-                agent,
+                canonical_agent,
                 action,
                 {
                     "reason": "approval_configuration_missing",
                     "actor": user_email,
                     "actor_tier": actor_tier,
                     "actor_groups": actor_groups,
+                    "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
                 },
                 corr,
             )
             raise HTTPException(500, "approval_configuration_missing")
-        approval_id = APPROVALS.create(agent, action, params)
-        REQ_COUNT.labels(agent=agent, action=action, outcome="pending").inc()
+        approval_id = APPROVALS.create(canonical_agent, action, params)
+        REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="pending").inc()
         await AUDITOR.log(
             "pending_approval",
-            agent,
+            canonical_agent,
             action,
             {
                 "approval_id": approval_id,
                 "actor": user_email,
                 "actor_tier": actor_tier,
                 "actor_groups": actor_groups,
+                "persona": persona,
                 "executor": executor_identity,
                 "tenant": tenant_config.tenant.id,
                 "approvers": approvers,
@@ -659,23 +728,26 @@ async def actions(
         return ActionResponse(status="pending_approval", approval_id=approval_id)
 
     # Execute
-    with REQ_LATENCY.labels(agent=agent, action=action).time():
+    with REQ_LATENCY.labels(agent=canonical_agent, action=action).time():
         try:
-            result = await execute(agent, action, params, corr, executor_name=executor_name)
-            REQ_COUNT.labels(agent=agent, action=action, outcome="success").inc()
+            result = await execute(
+                canonical_agent, action, params, corr, executor_name=executor_name
+            )
+            REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="success").inc()
             audit_payload = dict(result or {})
             audit_payload["actor"] = user_email
             audit_payload["actor_tier"] = actor_tier
             audit_payload["actor_groups"] = actor_groups
+            audit_payload["persona"] = persona
             audit_payload["executor"] = executor_identity
             audit_payload["tenant"] = tenant_config.tenant.id
-            await AUDITOR.log("success", agent, action, audit_payload, corr)
+            await AUDITOR.log("success", canonical_agent, action, audit_payload, corr)
             return ActionResponse(status="success", result=result)
         except GraphAPIError as ge:
-            REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
+            REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="failed").inc()
             await AUDITOR.log(
                 "failed",
-                agent,
+                canonical_agent,
                 action,
                 {
                     "error": ge.message,
@@ -684,6 +756,7 @@ async def actions(
                     "actor": user_email,
                     "actor_tier": actor_tier,
                     "actor_groups": actor_groups,
+                    "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
                 },
@@ -691,16 +764,17 @@ async def actions(
             )
             raise HTTPException(ge.status, f"graph_error:{ge.code}: {ge.message}") from ge
         except Exception as e:
-            REQ_COUNT.labels(agent=agent, action=action, outcome="failed").inc()
+            REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="failed").inc()
             await AUDITOR.log(
                 "failed",
-                agent,
+                canonical_agent,
                 action,
                 {
                     "error": str(e),
                     "actor": user_email,
                     "actor_tier": actor_tier,
                     "actor_groups": actor_groups,
+                    "persona": persona,
                     "executor": executor_identity,
                     "tenant": tenant_config.tenant.id,
                 },
