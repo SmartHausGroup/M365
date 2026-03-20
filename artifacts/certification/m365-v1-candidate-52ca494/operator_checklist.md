@@ -17,11 +17,19 @@
 
 ## Live Execution Order
 
-- [ ] Execute read-only supported-surface checks first.
-- [ ] Execute controlled mutation checks only after read-only checks are green.
-- [ ] Execute governance, approval, and audit checks during the same certification window.
-- [ ] Save all live transcripts under `artifacts/certification/m365-v1-candidate-52ca494/transcripts/`.
-- [ ] Update `evidence_index.json` with the produced live artifacts.
+- [x] Execute read-only supported-surface checks first.
+- [x] Execute controlled mutation checks only after read-only checks are green.
+- [x] Execute governance, approval, and audit checks during the same certification window.
+- [x] Save all live transcripts under `artifacts/certification/m365-v1-candidate-52ca494/transcripts/`.
+- [x] Update `evidence_index.json` with the produced live artifacts.
+
+## Live Results
+
+- `C1B`: `GO`
+  - read-only supported-surface checks passed
+- `C1C`: `NO-GO`
+  - mutation failures: `provision_service`, `reset_user_password`
+  - governance failures: real actor-authenticated JWT path, approval-record creation
 
 ## Stop Conditions
 

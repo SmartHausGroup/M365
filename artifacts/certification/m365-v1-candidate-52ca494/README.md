@@ -8,13 +8,15 @@ Candidate `52ca494` freezes the `B3` admin audit and evidence-surface remediatio
 
 ## Current Status
 
-- `STATUS: GO`
-- `PHASE: C1A COMPLETE`
-- `NEXT_PHASE: C1B`
-- `PLAN_REF: plan:m365-enterprise-readiness-master-plan:C1A`
-- `GATE: GATE:M365-READY-C1A STATUS:GO`
-- `FINAL_DECISION: GO`
-- `READINESS: under the exact standalone SMARTHAUS launch contract, the bounded SharePoint executor now returns `200` on both the pinned approvals list metadata route and the pinned approvals list items route`
+- `STATUS: NO-GO`
+- `PHASE: C1C ATTEMPTED`
+- `NEXT_PHASE: C1C REMEDIATION_AND_RERUN`
+- `PLAN_REF: plan:m365-enterprise-readiness-master-plan:C1C`
+- `C1A_GATE: GATE:M365-READY-C1A STATUS:GO`
+- `C1B_GATE: GATE:M365-READY-C1B STATUS:GO`
+- `C1C_GATE: GATE:M365-READY-C1C STATUS:NO-GO`
+- `FINAL_DECISION: NO-GO`
+- `LIVE_RESULT: read-only certification is green, but mutation and governance certification remain blocked by live runtime issues`
 
 ## Candidate Boundary
 
@@ -24,18 +26,18 @@ The original candidate includes:
 - `B2` fail-closed governance and approval remediation
 - `B3` append-only admin audit and evidence-surface remediation
 
-The active readiness packet is now rebased to the bounded multi-executor runtime through `B7E`. The packet still does not include `C1B` through `C1D` live execution evidence yet, but it now classifies the environment as `GO` for live certification to begin under the exact standalone shell contract.
+The active readiness packet is now rebased to the bounded multi-executor runtime through `B7E`. The packet now includes live `C1B` and `C1C` transcripts, but the live certification path is still `NO-GO` overall because `C1C` exposed blocking mutation and governance failures that must be remediated before `C1D` and `C2`.
 
 ## Packet Contents
 
-- `evidence_index.json` — deterministic index of frozen evidence and planned live artifacts
+- `evidence_index.json` — deterministic index of frozen evidence, live transcripts, and current blockers
 - `prerequisites_report.json` — exact prerequisite probe and blocker classification
 - `operator_checklist.md` — the operator steps required before live execution may begin
-- `transcripts/` — reserved for live certification outputs once prerequisites are satisfied
+- `transcripts/` — live certification outputs for `C1B` and `C1C`
 
 ## Gate Interpretation
 
-`C1A` is now `GO` because:
+`C1A` is `GO` because:
 
 1. the certification shell exports the exact standalone M365 launch contract:
    - `UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP`
@@ -53,6 +55,15 @@ export ALLOW_M365_MUTATIONS=true
 export ENABLE_AUDIT_LOGGING=true
 ```
 
+## Live Certification Summary
+
+- `C1B`: `GO`
+  - `list_users`, `get_user`, `list_teams`, and `list_sites` all passed against the live SMARTHAUS tenant through `M365ConnectorModule`
+- `C1C`: `NO-GO`
+  - passed: `create_site`, `create_team`, `add_channel`
+  - failed: `provision_service`, `reset_user_password`
+  - failed governance rows: real actor-authenticated governed path and approval-record creation
+
 ## Latest Exact-Shell Probe
 
 - `default_executor`: `sharepoint`
@@ -60,4 +71,11 @@ export ENABLE_AUDIT_LOGGING=true
 - `approval_list_metadata`: `200`
 - `approval_list_items`: `200`
 
-That means the exact standalone shell contract is now sufficient for tenant selection, certificate-backed bounded executor auth, and the governed approval backend. `C1A` is complete, and the next live act is `C1B`, which still requires explicit live-execution approval.
+That means the exact standalone shell contract remains sufficient for tenant selection, certificate-backed bounded executor auth, and the governed approval backend. The current blocker is no longer environment readiness; it is the live `C1C` mutation and governance runtime surface.
+
+## Current Live Blockers
+
+1. `provision_service` fails on live existing-site detection for the HR service surface.
+2. `reset_user_password` fails with Graph `403 Authorization_RequestDenied` under the bounded directory executor.
+3. The governed JWT path rejects the delegated Azure CLI bearer token used for the real actor-authenticated probe.
+4. Approval record creation still fails with Graph `400` on the pinned `Approvals` list, so approval and audit evidence remain incomplete.

@@ -1,0 +1,66 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1B",
+  "run_id": "c1b-live-read-only-certification",
+  "recorded_at": "2026-03-20T08:05:26-04:00",
+  "gate": "GATE:M365-READY-C1B STATUS:GO",
+  "final_decision": "GO",
+  "shell_contract": {
+    "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+    "UCP_TENANT": "smarthaus",
+    "ALLOW_M365_MUTATIONS": "true",
+    "ENABLE_AUDIT_LOGGING": "true"
+  },
+  "runtime_surface": "m365.module.entrypoint:M365ConnectorModule",
+  "actor": "phil@smarthausgroup.com",
+  "checks": [
+    {
+      "action": "list_users",
+      "status": "pass",
+      "trace_id": "c1b-list_users",
+      "count": 5,
+      "sample_principals": [
+        "babu@smarthausgroup.com",
+        "information@smarthausgroup.com",
+        "no-reply@smarthausgroup.com",
+        "phil@smarthausgroup.com"
+      ]
+    },
+    {
+      "action": "get_user",
+      "status": "pass",
+      "trace_id": "c1b-get_user",
+      "principal": "phil@smarthausgroup.com",
+      "display_name": "Philip Siniscalchi",
+      "account_enabled": true
+    },
+    {
+      "action": "list_teams",
+      "status": "pass",
+      "trace_id": "c1b-list_teams",
+      "count": 5,
+      "sample_teams": [
+        "Marketing & Events",
+        "Legal",
+        "Onboarding",
+        "Advisory",
+        "Human Resources"
+      ]
+    },
+    {
+      "action": "list_sites",
+      "status": "pass",
+      "trace_id": "c1b-list_sites",
+      "count": 5,
+      "sample_sites": [
+        "SMARTHAUS M365 Operations",
+        "Babu Srinivasan",
+        "Matt | Phil",
+        "MCP Platform"
+      ]
+    }
+  ],
+  "notes": [
+    "All required read-only supported-surface rows executed successfully against the live SMARTHAUS non-production tenant.",
+    "The approvals backend site appears in the live site inventory, confirming the pinned SharePoint executor path is visible during read-only certification."
+  ]
+}

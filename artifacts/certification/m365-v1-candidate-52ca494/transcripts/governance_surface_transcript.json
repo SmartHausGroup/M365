@@ -1,0 +1,77 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1C",
+  "run_id": "c1c-live-mutation-governance-certification",
+  "recorded_at": "2026-03-20T08:05:26-04:00",
+  "gate": "GATE:M365-READY-C1C STATUS:NO-GO",
+  "final_decision": "NO-GO",
+  "shell_contract": {
+    "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+    "UCP_TENANT": "smarthaus",
+    "ALLOW_M365_MUTATIONS": "true",
+    "ENABLE_AUDIT_LOGGING": "true",
+    "OPA_URL": "http://localhost:8181"
+  },
+  "actor": "phil@smarthausgroup.com",
+  "checks": [
+    {
+      "name": "missing_bearer_fail_closed",
+      "status": "pass",
+      "http_status": 401,
+      "detail": "missing_bearer_token"
+    },
+    {
+      "name": "opa_health",
+      "status": "pass",
+      "http_status": 200,
+      "body": {}
+    },
+    {
+      "name": "opa_policy_decision",
+      "status": "pass",
+      "decision": {
+        "allow": true,
+        "approval_required": true,
+        "reason": ""
+      },
+      "input": {
+        "agent": "m365-administrator",
+        "action": "teams.add_channel"
+      }
+    },
+    {
+      "name": "jwt_backed_actor_governed_path",
+      "status": "fail",
+      "http_status": 401,
+      "detail": "invalid_token:Signature verification failed",
+      "token_source": "Azure CLI delegated Graph bearer token"
+    },
+    {
+      "name": "admin_get_tenant_config",
+      "status": "fail",
+      "http_status": 401,
+      "detail": "invalid_token:Signature verification failed"
+    },
+    {
+      "name": "admin_audit_log",
+      "status": "fail",
+      "http_status": 401,
+      "detail": "invalid_token:Signature verification failed"
+    },
+    {
+      "name": "approval_record_create_compatibility_probe",
+      "status": "fail",
+      "http_status": 400,
+      "detail": "GraphApprovalsStore.create returned 400 when posting to the pinned approvals list during the fallback actor-compatibility probe.",
+      "mode": "JWT_REQUIRED=0 and M365_ACTOR_HEADER_FALLBACK=1"
+    },
+    {
+      "name": "audit_record_evidence",
+      "status": "blocked",
+      "reason": "Live approval creation did not complete successfully, so the governed approval and audit evidence chain could not be retained."
+    }
+  ],
+  "blocking_conditions": [
+    "Real actor-authenticated governed requests do not yet validate Azure CLI delegated bearer tokens against the current JWT middleware contract.",
+    "Approval record creation still fails with Graph HTTP 400 even when the compatibility actor path is enabled, so approval and audit evidence remains incomplete."
+  ]
+}

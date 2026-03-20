@@ -197,6 +197,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `artifacts/scorecards/scorecard_l12.json` | Per-lemma scorecard for approval-contract alignment and exact-shell reachability. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1A` |
 | `tests/test_approvals.py` | Focused approval-store contract tests proving tenant-backed backend selection, Graph token-provider binding, and bounded default-executor projection for the SharePoint approval path. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B7A` |
 
+## Active C1B / C1C Live Certification Evidence
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `artifacts/certification/m365-v1-candidate-52ca494/evidence_index.json` | Deterministic live-certification index now tracking green `C1B` evidence and `C1C` `NO-GO` blockers. | `Core Success Metrics`, `Policy & Security` | `plan:m365-enterprise-readiness-master-plan:C1C` |
+| `artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json` | Retained live read-only certification transcript for `list_users`, `get_user`, `list_teams`, and `list_sites`. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1B` |
+| `artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json` | Retained live mutation certification transcript proving the current pass/fail split across the supported write surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-enterprise-readiness-master-plan:C1C` |
+| `artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json` | Retained live governance certification transcript proving fail-closed auth behavior, OPA reachability, and the current governed-path blockers. | `Policy & Security`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1C` |
+| `artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md` | Operator-facing notes summarizing the exact shell contract, live pass rows, and the blocking `C1C` runtime issues. | `Operational Model: Self-Service & Self-Sufficient`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:C1C` |
+
 ## Active B4D4B Runtime Surface
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
