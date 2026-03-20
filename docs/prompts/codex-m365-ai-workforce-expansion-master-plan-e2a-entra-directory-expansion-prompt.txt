@@ -1,0 +1,7 @@
+Execute E2A Entra / Directory Expansion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e2a-entra-directory-expansion.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E2A
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

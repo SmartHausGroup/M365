@@ -1,0 +1,836 @@
+plan_id: m365-ai-workforce-expansion-master-plan
+status: Active
+date: "2026-03-20"
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-ai-workforce-expansion-master-plan:R1
+north_star: Operations/NORTHSTAR.md
+historical_lineage: m365-enterprise-readiness-master-plan
+ma_process_required: false
+
+objective: >
+  Define and execute the full SMARTHAUS agentic workforce expansion program so Claude can delegate through UCP into a governed M365 pack that covers the full explicitly-inventoried Microsoft 365 capability universe across all departments and personas.
+
+decision_rule: >
+  The workforce is not complete until the full department/persona universe, the full governable M365 capability universe, the bounded executor and auth model, the digital-employee runtime, the department packs, the Claude/UCP delegation layer, the live certification evidence, and the final release decision are all green. Documentation or isolated slices alone are not sufficient.
+
+prompt_discipline: >
+  Every grouped phase and every child act in this plan must have one formal MATHS prompt pair under docs/prompts/. Prompt files must follow the MATHS template structure and the repo two-file prompt rule.
+
+persona_count_target: 39
+department_count_target: 10
+source_roster: registry/ai_team.json
+department_targets:
+  - operations
+  - hr
+  - communication
+  - engineering
+  - marketing
+  - product
+  - project-management
+  - studio-operations
+  - testing
+  - design
+workload_universe_targets:
+  - "Identity, directory, and tenant administration"
+  - "Mail, calendar, contacts, and bookings"
+  - "Collaboration, meetings, and communities"
+  - "Content, intranet, and files"
+  - "Tasks, scheduling, and work management"
+  - "Documents, notes, and workspace productivity"
+  - "Knowledge, search, and employee experience"
+  - "Low-code, workflow, and analytics"
+  - "Security, compliance, and data governance"
+  - "Devices, endpoint management, and adjacent Windows admin surfaces"
+  - "Media, publishing, and extended communications"
+
+execution_status:
+  completed:
+    - phase: E0A
+      date: "2026-03-20"
+      summary: >
+        Locked the authoritative department and persona census by removing the stray
+        non-authoritative bonus department from registry/ai_team.json, proving the
+        resulting roster resolves to 39 personas across 10 departments, cross-checking
+        all roster agent IDs against registry/agents.yaml, and recording the locked
+        census in docs/commercialization/m365-department-persona-census.md.
+    - phase: E0B
+      date: "2026-03-20"
+      summary: >
+        Locked the workload universe at the family level in
+        docs/commercialization/m365-workload-universe-inventory.md by grounding the
+        expansion target in official Microsoft workload references, the repo's current
+        184-action registry surface, and an explicit family inventory that now drives
+        downstream capability taxonomy and routing work.
+    - phase: E0C
+      date: "2026-03-20"
+      summary: >
+        Normalized the locked workload-family inventory into
+        docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md by
+        defining canonical implementation-status, feasibility, auth, and licensing
+        classes that downstream persona, routing, and certification phases must use.
+  prepared_blocked:
+    - phase: E0
+      blocked_by: "Closed `m365-enterprise-readiness-master-plan`"
+      summary: >
+        Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
+    - phase: E0D
+      blocked_by: "E0"
+      summary: >
+        Bind personas and departments to required capabilities, risk classes, and approval posture.
+    - phase: E0E
+      blocked_by: "E0"
+      summary: >
+        Define the executable wave structure and completion criteria for the full workforce program.
+    - phase: E1
+      blocked_by: "E0E"
+      summary: >
+        Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
+    - phase: E1A
+      blocked_by: "E1"
+      summary: >
+        Define the canonical action contract that can represent the expanded workforce action surface.
+    - phase: E1B
+      blocked_by: "E1"
+      summary: >
+        Route actions by workload and domain through bounded executors instead of monolithic identities.
+    - phase: E1C
+      blocked_by: "E1"
+      summary: >
+        Define app-only, delegated, and hybrid execution rules per capability and workload.
+    - phase: E1D
+      blocked_by: "E1"
+      summary: >
+        Classify the expanded action universe into deterministic approval and risk classes.
+    - phase: E1E
+      blocked_by: "E1"
+      summary: >
+        Normalize actor, persona, executor, approval, and result evidence across the expanded workforce.
+    - phase: E2
+      blocked_by: "E1E"
+      summary: >
+        Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
+    - phase: E2A
+      blocked_by: "E2"
+      summary: >
+        Expand identity, group, license, and directory administration capabilities.
+    - phase: E2B
+      blocked_by: "E2"
+      summary: >
+        Expand mail, calendar, shared mailbox, contact, and messaging operations.
+    - phase: E2C
+      blocked_by: "E2"
+      summary: >
+        Expand site, list, library, file, record, and permission operations.
+    - phase: E2D
+      blocked_by: "E2"
+      summary: >
+        Expand team, channel, membership, group, and task-management operations.
+    - phase: E2E
+      blocked_by: "E2"
+      summary: >
+        Expand Word, Excel, and PowerPoint workflows through deterministic generation and update paths.
+    - phase: E3
+      blocked_by: "E2E"
+      summary: >
+        Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
+    - phase: E3A
+      blocked_by: "E3"
+      summary: >
+        Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
+    - phase: E3B
+      blocked_by: "E3"
+      summary: >
+        Add governed Power Apps interaction and administration surfaces.
+    - phase: E3C
+      blocked_by: "E3"
+      summary: >
+        Add governed report, dataset, workspace, and analytics surfaces.
+    - phase: E3D
+      blocked_by: "E3"
+      summary: >
+        Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface.
+    - phase: E3E
+      blocked_by: "E3"
+      summary: >
+        Define reusable end-to-end recipes spanning multiple M365 workloads.
+    - phase: E4
+      blocked_by: "E3E"
+      summary: >
+        Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.
+    - phase: E4A
+      blocked_by: "E4"
+      summary: >
+        Add governed device inventory, compliance, and lifecycle operations.
+    - phase: E4B
+      blocked_by: "E4"
+      summary: >
+        Add governed security alert, incident, score, and response operations.
+    - phase: E4C
+      blocked_by: "E4"
+      summary: >
+        Add governed compliance, policy, and discovery operations.
+    - phase: E4D
+      blocked_by: "E4"
+      summary: >
+        Add governed identity-protection and conditional-access administration.
+    - phase: E4E
+      blocked_by: "E4"
+      summary: >
+        Unify remaining admin-center and governance controls into the workforce plane.
+    - phase: E5
+      blocked_by: "E1E"
+      summary: >
+        Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer.
+    - phase: E5A
+      blocked_by: "E5"
+      summary: >
+        Complete the authoritative persona registry with all required fields, constraints, and runtime projections.
+    - phase: E5B
+      blocked_by: "E5"
+      summary: >
+        Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
+    - phase: E5C
+      blocked_by: "E5"
+      summary: >
+        Give personas deterministic task queues, state, and lifecycle management.
+    - phase: E5D
+      blocked_by: "E5"
+      summary: >
+        Bind performance, ownership, accountability, and escalation into the runtime contract.
+    - phase: E5E
+      blocked_by: "E5"
+      summary: >
+        Define bounded, auditable persona memory and work-history semantics.
+    - phase: E6
+      blocked_by: "E5E"
+      summary: >
+        Package the workforce into department-operable capability sets so each department has its own governed digital team and workflows.
+    - phase: E6A
+      blocked_by: "E6"
+      summary: >
+        Build the Operations department capability pack.
+    - phase: E6B
+      blocked_by: "E6"
+      summary: >
+        Build the HR department capability pack.
+    - phase: E6C
+      blocked_by: "E6"
+      summary: >
+        Build the Communication department capability pack.
+    - phase: E6D
+      blocked_by: "E6"
+      summary: >
+        Build the Engineering department capability pack.
+    - phase: E6E
+      blocked_by: "E6"
+      summary: >
+        Build the Marketing department capability pack.
+    - phase: E6F
+      blocked_by: "E6"
+      summary: >
+        Build the Product department capability pack.
+    - phase: E6G
+      blocked_by: "E6"
+      summary: >
+        Build the Project Management department capability pack.
+    - phase: E6H
+      blocked_by: "E6"
+      summary: >
+        Build the Studio Operations department capability pack.
+    - phase: E6I
+      blocked_by: "E6"
+      summary: >
+        Build the Testing department capability pack.
+    - phase: E6J
+      blocked_by: "E6"
+      summary: >
+        Build the Design department capability pack.
+    - phase: E7
+      blocked_by: "E5E"
+      summary: >
+        Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control.
+    - phase: E7A
+      blocked_by: "E7"
+      summary: >
+        Define the top-level delegation contract between Claude, UCP, and the workforce runtime.
+    - phase: E7B
+      blocked_by: "E7"
+      summary: >
+        Make it easy to find and target the right digital employee for a request.
+    - phase: E7C
+      blocked_by: "E7"
+      summary: >
+        Support composed multi-step work across workload and persona boundaries.
+    - phase: E7D
+      blocked_by: "E7"
+      summary: >
+        Allow digital employees to hand off, collaborate, and coordinate within governed bounds.
+    - phase: E7E
+      blocked_by: "E7"
+      summary: >
+        Give executives visibility and intervention controls across the workforce runtime.
+    - phase: E8
+      blocked_by: "E7E"
+      summary: >
+        Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made.
+    - phase: E8A
+      blocked_by: "E8"
+      summary: >
+        Certify each workload surface against the live tenant and the bounded executor model.
+    - phase: E8B
+      blocked_by: "E8"
+      summary: >
+        Certify each persona class against its allowed domains and approval posture.
+    - phase: E8C
+      blocked_by: "E8"
+      summary: >
+        Certify each department pack against its target workflows and responsibilities.
+    - phase: E8D
+      blocked_by: "E8"
+      summary: >
+        Certify cross-functional workflows spanning multiple departments and personas.
+    - phase: E8E
+      blocked_by: "E8"
+      summary: >
+        Close the formal workforce release gate with live evidence and explicit sign-off.
+    - phase: E9
+      blocked_by: "E8E"
+      summary: >
+        Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.
+    - phase: E9A
+      blocked_by: "E9"
+      summary: >
+        Package the full workforce offering and supported capability sets for customers.
+    - phase: E9B
+      blocked_by: "E9"
+      summary: >
+        Define the onboarding path for the expanded workforce product.
+    - phase: E9C
+      blocked_by: "E9"
+      summary: >
+        Define rollout phases, acceptance, and expansion across customers and departments.
+    - phase: E9D
+      blocked_by: "E9"
+      summary: >
+        Define the final operating, support, and customer-ownership boundaries for the full workforce.
+    - phase: E9E
+      blocked_by: "E9"
+      summary: >
+        Issue the final release decision for the full workforce program.
+  next_act: E0D
+
+open_blockers:
+  - "The control-plane, executor, and certification layers are still bounded to the previously shipped v1 slice."
+  - "No department pack beyond the standalone v1 surface has been certified or released."
+  - "Persona-to-capability, approval, and risk bindings are not yet normalized against the locked roster and taxonomy."
+
+requirements:
+  - id: R1
+    name: "Integrated workforce-expansion control plane"
+  - id: R2
+    name: "Authoritative department and persona census"
+  - id: R3
+    name: "Full M365 workload and capability universe inventory"
+  - id: R4
+    name: "Canonical capability, licensing, API, and auth taxonomy"
+  - id: R5
+    name: "Universal action contract and bounded executor routing"
+  - id: R6
+    name: "Core workload expansion across identity, messaging, files, and collaboration"
+  - id: R7
+    name: "Power Platform, analytics, and connector expansion"
+  - id: R8
+    name: "Enterprise admin, security, and compliance expansion"
+  - id: R9
+    name: "Digital-employee runtime completion"
+  - id: R10
+    name: "Department-pack implementation"
+  - id: R11
+    name: "Claude and UCP workforce experience"
+  - id: R12
+    name: "Live validation, certification, and release closure"
+  - id: R13
+    name: "Governance synchronization and prompt inventory completeness"
+
+phase_stack:
+  - code: E0
+    title: "Universe Definition and Boundary Lock"
+    slug: universe-definition-boundary-lock
+    status: Active
+    goal: >
+      Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
+    outputs:
+      - "department and persona census"
+      - "workload universe inventory"
+      - "capability taxonomy"
+      - "persona-to-capability map"
+      - "release-wave map"
+    dependencies:
+      - "Closed `m365-enterprise-readiness-master-plan`"
+    children:
+      - code: E0A
+        slug: department-persona-census
+        title: "Department and Persona Census"
+        status: Complete
+        goal: >
+          Lock the authoritative department roster and all digital-employee personas that the workforce must support.
+      - code: E0B
+        slug: m365-workload-universe-inventory
+        title: "M365 Workload Universe Inventory"
+        status: Complete
+        goal: >
+          Enumerate every M365 workload and adjacent Microsoft admin surface relevant to the workforce target.
+      - code: E0C
+        slug: capability-taxonomy-and-feasibility-map
+        title: "Capability Taxonomy and Feasibility Map"
+        status: Complete
+        goal: >
+          Normalize all identified capabilities into one taxonomy with implementation feasibility, licensing, and exposure status.
+      - code: E0D
+        slug: persona-to-capability-and-risk-mapping
+        title: "Persona-to-Capability and Risk Mapping"
+        status: Ready
+        goal: >
+          Bind personas and departments to required capabilities, risk classes, and approval posture.
+      - code: E0E
+        slug: release-wave-and-completion-map
+        title: "Release-Wave and Completion Map"
+        status: Pending
+        goal: >
+          Define the executable wave structure and completion criteria for the full workforce program.
+  - code: E1
+    title: "Universal M365 Control Plane"
+    slug: universal-m365-control-plane
+    status: Pending
+    goal: >
+      Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
+    outputs:
+      - "universal action schema"
+      - "executor routing v2"
+      - "auth model v2"
+      - "approval/risk matrix"
+      - "unified audit schema"
+    dependencies:
+      - "E0E"
+    children:
+      - code: E1A
+        slug: universal-action-contract-v2
+        title: "Universal Action Contract v2"
+        status: Pending
+        goal: >
+          Define the canonical action contract that can represent the expanded workforce action surface.
+      - code: E1B
+        slug: executor-routing-v2
+        title: "Executor Routing v2"
+        status: Pending
+        goal: >
+          Route actions by workload and domain through bounded executors instead of monolithic identities.
+      - code: E1C
+        slug: auth-model-v2
+        title: "Auth Model v2"
+        status: Pending
+        goal: >
+          Define app-only, delegated, and hybrid execution rules per capability and workload.
+      - code: E1D
+        slug: approval-risk-matrix-v2
+        title: "Approval and Risk Matrix v2"
+        status: Pending
+        goal: >
+          Classify the expanded action universe into deterministic approval and risk classes.
+      - code: E1E
+        slug: unified-audit-schema-v2
+        title: "Unified Audit Schema v2"
+        status: Pending
+        goal: >
+          Normalize actor, persona, executor, approval, and result evidence across the expanded workforce.
+  - code: E2
+    title: "Core M365 Workload Expansion"
+    slug: core-m365-workload-expansion
+    status: Pending
+    goal: >
+      Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
+    outputs:
+      - "directory expansion"
+      - "messaging expansion"
+      - "file and site expansion"
+      - "collaboration expansion"
+      - "document productivity expansion"
+    dependencies:
+      - "E1E"
+    children:
+      - code: E2A
+        slug: entra-directory-expansion
+        title: "Entra / Directory Expansion"
+        status: Pending
+        goal: >
+          Expand identity, group, license, and directory administration capabilities.
+      - code: E2B
+        slug: outlook-exchange-expansion
+        title: "Outlook / Exchange Expansion"
+        status: Pending
+        goal: >
+          Expand mail, calendar, shared mailbox, contact, and messaging operations.
+      - code: E2C
+        slug: sharepoint-onedrive-files-expansion
+        title: "SharePoint / OneDrive / Files Expansion"
+        status: Pending
+        goal: >
+          Expand site, list, library, file, record, and permission operations.
+      - code: E2D
+        slug: teams-groups-planner-expansion
+        title: "Teams / Groups / Planner Expansion"
+        status: Pending
+        goal: >
+          Expand team, channel, membership, group, and task-management operations.
+      - code: E2E
+        slug: documents-spreadsheets-presentations-expansion
+        title: "Documents / Spreadsheets / Presentations Expansion"
+        status: Pending
+        goal: >
+          Expand Word, Excel, and PowerPoint workflows through deterministic generation and update paths.
+  - code: E3
+    title: "Power Platform and Analytics Expansion"
+    slug: power-platform-analytics-expansion
+    status: Pending
+    goal: >
+      Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
+    outputs:
+      - "Power Automate expansion"
+      - "Power Apps expansion"
+      - "Power BI expansion"
+      - "Forms/connectors expansion"
+      - "cross-workload recipes"
+    dependencies:
+      - "E2E"
+    children:
+      - code: E3A
+        slug: power-automate-expansion
+        title: "Power Automate Expansion"
+        status: Pending
+        goal: >
+          Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
+      - code: E3B
+        slug: power-apps-expansion
+        title: "Power Apps Expansion"
+        status: Pending
+        goal: >
+          Add governed Power Apps interaction and administration surfaces.
+      - code: E3C
+        slug: power-bi-expansion
+        title: "Power BI Expansion"
+        status: Pending
+        goal: >
+          Add governed report, dataset, workspace, and analytics surfaces.
+      - code: E3D
+        slug: forms-approvals-connectors-expansion
+        title: "Forms / Approvals / Connectors Expansion"
+        status: Pending
+        goal: >
+          Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface.
+      - code: E3E
+        slug: cross-workload-automation-recipes
+        title: "Cross-Workload Automation Recipes"
+        status: Pending
+        goal: >
+          Define reusable end-to-end recipes spanning multiple M365 workloads.
+  - code: E4
+    title: "Enterprise Admin and Security Expansion"
+    slug: enterprise-admin-security-expansion
+    status: Pending
+    goal: >
+      Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.
+    outputs:
+      - "device management expansion"
+      - "security expansion"
+      - "compliance expansion"
+      - "conditional access expansion"
+      - "admin/governance expansion"
+    dependencies:
+      - "E3E"
+    children:
+      - code: E4A
+        slug: intune-devices-expansion
+        title: "Intune / Devices Expansion"
+        status: Pending
+        goal: >
+          Add governed device inventory, compliance, and lifecycle operations.
+      - code: E4B
+        slug: security-defender-expansion
+        title: "Security / Defender Expansion"
+        status: Pending
+        goal: >
+          Add governed security alert, incident, score, and response operations.
+      - code: E4C
+        slug: compliance-retention-ediscovery-expansion
+        title: "Compliance / Retention / eDiscovery Expansion"
+        status: Pending
+        goal: >
+          Add governed compliance, policy, and discovery operations.
+      - code: E4D
+        slug: conditional-access-identity-protection-expansion
+        title: "Conditional Access / Identity Protection Expansion"
+        status: Pending
+        goal: >
+          Add governed identity-protection and conditional-access administration.
+      - code: E4E
+        slug: admin-governance-surface-expansion
+        title: "Admin and Governance Surface Expansion"
+        status: Pending
+        goal: >
+          Unify remaining admin-center and governance controls into the workforce plane.
+  - code: E5
+    title: "Digital Employee Runtime"
+    slug: digital-employee-runtime
+    status: Pending
+    goal: >
+      Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer.
+    outputs:
+      - "persona registry completion"
+      - "delegation UX"
+      - "task queues"
+      - "KPIs/escalation"
+      - "memory/work history"
+    dependencies:
+      - "E1E"
+      - "E2E"
+    children:
+      - code: E5A
+        slug: persona-registry-completion
+        title: "Persona Registry Completion"
+        status: Pending
+        goal: >
+          Complete the authoritative persona registry with all required fields, constraints, and runtime projections.
+      - code: E5B
+        slug: humanized-delegation-interface
+        title: "Humanized Delegation Interface"
+        status: Pending
+        goal: >
+          Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
+      - code: E5C
+        slug: persona-task-queues-and-state
+        title: "Persona Task Queues and State"
+        status: Pending
+        goal: >
+          Give personas deterministic task queues, state, and lifecycle management.
+      - code: E5D
+        slug: persona-kpis-ownership-escalation
+        title: "Persona KPIs, Ownership, and Escalation"
+        status: Pending
+        goal: >
+          Bind performance, ownership, accountability, and escalation into the runtime contract.
+      - code: E5E
+        slug: persona-memory-and-work-history
+        title: "Persona Memory and Work History"
+        status: Pending
+        goal: >
+          Define bounded, auditable persona memory and work-history semantics.
+  - code: E6
+    title: "Department Packs"
+    slug: department-packs
+    status: Pending
+    goal: >
+      Package the workforce into department-operable capability sets so each department has its own governed digital team and workflows.
+    outputs:
+      - "department capability packs"
+      - "department workflow maps"
+      - "department approval models"
+      - "department KPIs"
+    dependencies:
+      - "E5E"
+    children:
+      - code: E6A
+        slug: operations-department-pack
+        title: "Operations Department Pack"
+        status: Pending
+        goal: >
+          Build the Operations department capability pack.
+      - code: E6B
+        slug: hr-department-pack
+        title: "HR Department Pack"
+        status: Pending
+        goal: >
+          Build the HR department capability pack.
+      - code: E6C
+        slug: communication-department-pack
+        title: "Communication Department Pack"
+        status: Pending
+        goal: >
+          Build the Communication department capability pack.
+      - code: E6D
+        slug: engineering-department-pack
+        title: "Engineering Department Pack"
+        status: Pending
+        goal: >
+          Build the Engineering department capability pack.
+      - code: E6E
+        slug: marketing-department-pack
+        title: "Marketing Department Pack"
+        status: Pending
+        goal: >
+          Build the Marketing department capability pack.
+      - code: E6F
+        slug: product-department-pack
+        title: "Product Department Pack"
+        status: Pending
+        goal: >
+          Build the Product department capability pack.
+      - code: E6G
+        slug: project-management-department-pack
+        title: "Project Management Department Pack"
+        status: Pending
+        goal: >
+          Build the Project Management department capability pack.
+      - code: E6H
+        slug: studio-operations-department-pack
+        title: "Studio Operations Department Pack"
+        status: Pending
+        goal: >
+          Build the Studio Operations department capability pack.
+      - code: E6I
+        slug: testing-department-pack
+        title: "Testing Department Pack"
+        status: Pending
+        goal: >
+          Build the Testing department capability pack.
+      - code: E6J
+        slug: design-department-pack
+        title: "Design Department Pack"
+        status: Pending
+        goal: >
+          Build the Design department capability pack.
+  - code: E7
+    title: "Claude / UCP Workforce Experience"
+    slug: claude-ucp-workforce-experience
+    status: Pending
+    goal: >
+      Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control.
+    outputs:
+      - "Claude/UCP delegation contract"
+      - "persona selection"
+      - "multi-step orchestration"
+      - "cross-persona collaboration"
+      - "executive controls"
+    dependencies:
+      - "E5E"
+      - "E6J"
+    children:
+      - code: E7A
+        slug: claude-ucp-universal-delegation-contract
+        title: "Claude to UCP Universal Delegation Contract"
+        status: Pending
+        goal: >
+          Define the top-level delegation contract between Claude, UCP, and the workforce runtime.
+      - code: E7B
+        slug: persona-discovery-and-selection
+        title: "Persona Discovery and Selection"
+        status: Pending
+        goal: >
+          Make it easy to find and target the right digital employee for a request.
+      - code: E7C
+        slug: multi-step-task-orchestration
+        title: "Multi-Step Task Orchestration"
+        status: Pending
+        goal: >
+          Support composed multi-step work across workload and persona boundaries.
+      - code: E7D
+        slug: cross-persona-collaboration
+        title: "Cross-Persona Collaboration"
+        status: Pending
+        goal: >
+          Allow digital employees to hand off, collaborate, and coordinate within governed bounds.
+      - code: E7E
+        slug: executive-oversight-intervention-controls
+        title: "Executive Oversight and Intervention Controls"
+        status: Pending
+        goal: >
+          Give executives visibility and intervention controls across the workforce runtime.
+  - code: E8
+    title: "Live Validation and Workforce Certification"
+    slug: live-validation-workforce-certification
+    status: Pending
+    goal: >
+      Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made.
+    outputs:
+      - "workload certification"
+      - "persona certification"
+      - "department certification"
+      - "cross-department certification"
+      - "release gate v2"
+    dependencies:
+      - "E7E"
+    children:
+      - code: E8A
+        slug: workload-certification
+        title: "Workload Certification"
+        status: Pending
+        goal: >
+          Certify each workload surface against the live tenant and the bounded executor model.
+      - code: E8B
+        slug: persona-certification
+        title: "Persona Certification"
+        status: Pending
+        goal: >
+          Certify each persona class against its allowed domains and approval posture.
+      - code: E8C
+        slug: department-certification
+        title: "Department Certification"
+        status: Pending
+        goal: >
+          Certify each department pack against its target workflows and responsibilities.
+      - code: E8D
+        slug: cross-department-workflow-certification
+        title: "Cross-Department Workflow Certification"
+        status: Pending
+        goal: >
+          Certify cross-functional workflows spanning multiple departments and personas.
+      - code: E8E
+        slug: enterprise-release-gate-v2
+        title: "Enterprise Release Gate v2"
+        status: Pending
+        goal: >
+          Close the formal workforce release gate with live evidence and explicit sign-off.
+  - code: E9
+    title: "Launch and Operating Model"
+    slug: launch-operating-model
+    status: Pending
+    goal: >
+      Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.
+    outputs:
+      - "workforce packaging"
+      - "customer onboarding v2"
+      - "pilot/rollout model"
+      - "support boundary v2"
+      - "release decision"
+    dependencies:
+      - "E8E"
+    children:
+      - code: E9A
+        slug: workforce-packaging
+        title: "Workforce Packaging"
+        status: Pending
+        goal: >
+          Package the full workforce offering and supported capability sets for customers.
+      - code: E9B
+        slug: customer-onboarding-v2
+        title: "Customer Onboarding v2"
+        status: Pending
+        goal: >
+          Define the onboarding path for the expanded workforce product.
+      - code: E9C
+        slug: pilot-rollout-model-v2
+        title: "Pilot and Rollout Model v2"
+        status: Pending
+        goal: >
+          Define rollout phases, acceptance, and expansion across customers and departments.
+      - code: E9D
+        slug: support-boundary-v2
+        title: "Support Boundary v2"
+        status: Pending
+        goal: >
+          Define the final operating, support, and customer-ownership boundaries for the full workforce.
+      - code: E9E
+        slug: workforce-expansion-release-decision
+        title: "Workforce Expansion Release Decision"
+        status: Pending
+        goal: >
+          Issue the final release decision for the full workforce program.

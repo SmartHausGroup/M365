@@ -1,0 +1,7 @@
+Execute E5E Persona Memory and Work History
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e5e-persona-memory-and-work-history.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E5E
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

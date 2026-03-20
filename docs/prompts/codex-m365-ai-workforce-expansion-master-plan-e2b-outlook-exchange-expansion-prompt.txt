@@ -1,0 +1,7 @@
+Execute E2B Outlook / Exchange Expansion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e2b-outlook-exchange-expansion.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E2B
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

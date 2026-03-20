@@ -1,0 +1,7 @@
+Execute E5D Persona KPIs, Ownership, and Escalation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e5d-persona-kpis-ownership-escalation.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E5D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

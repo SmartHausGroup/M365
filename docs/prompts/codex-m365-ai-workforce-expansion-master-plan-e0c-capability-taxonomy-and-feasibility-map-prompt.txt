@@ -1,0 +1,7 @@
+Execute E0C Capability Taxonomy and Feasibility Map
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e0c-capability-taxonomy-and-feasibility-map.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E0C
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

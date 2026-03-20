@@ -1,0 +1,7 @@
+Execute E0D Persona-to-Capability and Risk Mapping
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e0d-persona-to-capability-and-risk-mapping.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E0D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

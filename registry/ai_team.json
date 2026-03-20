@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2025-09-07T00:00:00Z",
+  "last_updated": "2026-03-20T16:11:29Z",
   "total_agents": 39,
   "departments": {
     "operations": [
@@ -61,10 +61,6 @@
       {"agent": "ux-researcher", "name": "Mila Novak", "role": "UX Researcher"},
       {"agent": "visual-storyteller", "name": "Diego Alvarez", "role": "Visual Storyteller"},
       {"agent": "whimsy-injector", "name": "Luna Park", "role": "Delight Designer"}
-    ],
-    "bonus": [
-      {"agent": "studio-coach", "name": "Coach Riley", "role": "Performance Coach"},
-      {"agent": "joker", "name": "Jester Bot", "role": "Humorist"}
     ]
   }
 }

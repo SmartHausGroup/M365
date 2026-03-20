@@ -1,0 +1,7 @@
+Execute E7E Executive Oversight and Intervention Controls
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e7e-executive-oversight-intervention-controls.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E7E
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

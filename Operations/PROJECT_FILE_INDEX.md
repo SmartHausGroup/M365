@@ -15,13 +15,44 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `Operations/PROJECT_FILE_INDEX.md` | File-index governance baseline for active readiness artifacts. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 | `docs/governance/MATHS_PROMPT_TEMPLATE.md` | Canonical MATHS prompt template for execution acts. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 
-## Active Master Plan Artifacts
+## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md` | Human-readable active readiness master plan. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
-| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.yaml` | Structured YAML form of the active readiness master plan. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
-| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.json` | Structured JSON form of the active readiness master plan. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
+| `plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md` | Human-readable active workforce-expansion master plan covering the full department, persona, and governable M365 capability universe target. | `Mission Statement`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R1` |
+| `plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.yaml` | Structured YAML form of the active workforce-expansion master plan. | `Mission Statement`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R1` |
+| `plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.json` | Structured JSON form of the active workforce-expansion master plan. | `Mission Statement`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R1` |
+| `docs/prompts/codex-m365-ai-workforce-expansion-master-plan.md` | Overview MATHS prompt for the active workforce-expansion program; paired with the generated grouped-phase and child-act prompt inventory under the same prefix. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
+| `docs/prompts/codex-m365-ai-workforce-expansion-master-plan-prompt.txt` | Kick-off text for the active workforce-expansion master prompt, following the repo two-file prompt rule. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
+
+## Active E0A Census-Lock Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/ai_team.json` | Authoritative workforce roster source, now corrected to the locked `39`-persona / `10`-department census without the stray non-authoritative bonus block. | `Mission Statement`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0A` |
+| `registry/agents.yaml` | Runtime registry cross-check source proving every locked roster persona resolves to a real governed agent definition. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E0A` |
+| `docs/commercialization/m365-department-persona-census.md` | Canonical department and persona census artifact for the expansion program, including counts, roster listing, and validation findings. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E0A` |
+
+## Active E0B Workload-Universe Inventory Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/commercialization/m365-workload-universe-inventory.md` | Canonical workload-family inventory for the expansion program, grounded in official Microsoft references plus the repo's current registry surface. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E0B` |
+| `docs/commercialization/m365-capability-api-license-auth-matrix.md` | Prior capability/auth matrix retained as an input artifact for the broader workload-universe and later capability-taxonomy work. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0B` |
+
+## Active E0C Taxonomy Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md` | Canonical capability taxonomy separating implementation status, feasibility, auth class, and licensing class across the locked workload families. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E0C` |
+
+## Closed Enterprise-Readiness Master Plan Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md` | Human-readable closed readiness master plan that now serves as the historical foundation for the broader workforce-expansion program. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
+| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.yaml` | Structured YAML form of the closed readiness master plan. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
+| `plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.json` | Structured JSON form of the closed readiness master plan. | `Commercialization Scope Clarification`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:R1` |
 
 ## Active B5 Identity Architecture Artifacts
 

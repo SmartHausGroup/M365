@@ -1,0 +1,7 @@
+Execute E9E Workforce Expansion Release Decision
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e9e-workforce-expansion-release-decision.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E9E
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

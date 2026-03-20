@@ -1,0 +1,7 @@
+Execute E5 Digital Employee Runtime
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e5-digital-employee-runtime.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E5
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.
