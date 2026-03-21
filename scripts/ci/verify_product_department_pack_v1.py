@@ -9,17 +9,17 @@ from smarthaus_common.department_pack import build_department_pack, load_departm
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[2]
     authority = load_department_pack_authority(
-        "marketing", path=repo_root / "registry" / "department_pack_marketing_v1.yaml"
+        "product", path=repo_root / "registry" / "department_pack_product_v1.yaml"
     )
-    pack = build_department_pack("marketing")
+    pack = build_department_pack("product")
 
     summary = pack["summary"]
-    if summary["persona_count"] != 7:
-        raise SystemExit("marketing_department_pack_persona_count_mismatch")
+    if summary["persona_count"] != 3:
+        raise SystemExit("product_department_pack_persona_count_mismatch")
     if summary["supported_action_count"] != 0:
-        raise SystemExit("marketing_department_pack_supported_action_count_mismatch")
+        raise SystemExit("product_department_pack_supported_action_count_mismatch")
     if summary["pack_state"] != "blocked":
-        raise SystemExit("marketing_department_pack_expected_blocked")
+        raise SystemExit("product_department_pack_expected_blocked")
 
     payload = {
         "department": authority["department"]["id"],
@@ -42,9 +42,7 @@ def main() -> int:
         ],
     }
 
-    output_path = (
-        repo_root / "configs" / "generated" / "marketing_department_pack_v1_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "product_department_pack_v1_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
