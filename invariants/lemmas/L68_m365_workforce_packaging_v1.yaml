@@ -1,0 +1,20 @@
+lemma_id: L68
+title: M365 Workforce Packaging v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E9A"
+status: green
+invariant: >
+  Four packaging layers and five governance rules so that the workforce
+  product definition traces to certification evidence with bounded claims.
+proof_obligations:
+  - "Packaging authority file exists and validates"
+  - "Four packaging layers present with outputs and failure modes"
+  - "Product tiers match certified persona partition"
+  - "No claim exceeds release gate evidence"
+failure_boundaries:
+  - "Missing packaging authority file"
+  - "Missing packaging layer"
+  - "Tier persona count mismatch"
+  - "Overclaimed capability"
+test_bindings:
+  - tests/test_workforce_packaging_v1.py
+ci_gate: scripts/ci/verify_workforce_packaging_v1.py
