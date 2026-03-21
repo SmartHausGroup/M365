@@ -16,6 +16,7 @@ from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
 from smarthaus_common.forms_approvals_connectors_client import FormsApprovalsConnectorsClient
+from smarthaus_common.identity_security_client import IdentitySecurityClient
 from smarthaus_common.intune_devices_client import IntuneDevicesClient
 from smarthaus_common.office_generation import (
     DOCUMENT_CONTENT_TYPE,
@@ -135,6 +136,13 @@ _SUPPORTED_ACTIONS = {
     "list_secure_scores",
     "get_secure_score_profile",
     "update_security_incident",
+    "list_conditional_access_policies",
+    "get_conditional_access_policy",
+    "create_conditional_access_policy",
+    "update_conditional_access_policy",
+    "delete_conditional_access_policy",
+    "list_named_locations",
+    "list_risk_detections",
     "list_ediscovery_cases",
     "get_ediscovery_case",
     "create_ediscovery_case",
@@ -243,6 +251,9 @@ _MUTATING_ACTIONS = {
     "add_external_group_member",
     "execute_device_action",
     "update_security_incident",
+    "create_conditional_access_policy",
+    "update_conditional_access_policy",
+    "delete_conditional_access_policy",
     "create_ediscovery_case",
     "create_ediscovery_case_search",
 }
@@ -1460,6 +1471,46 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 detail="Provide at least one of 'status', 'assignedTo', 'classification', 'determination', or 'comments'",
             )
         return {"incident_id": incident_id, "body": body}
+    if action == "list_conditional_access_policies":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "get_conditional_access_policy":
+        policy_id = _first_str(params, "policyId", "policy_id", "id")
+        if not policy_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'policyId', 'policy_id', or 'id'",
+            )
+        return {"policy_id": policy_id}
+    if action == "create_conditional_access_policy":
+        body_payload = params.get("body")
+        if not isinstance(body_payload, dict) or not body_payload:
+            raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
+        create_policy_body: dict[str, Any] = body_payload
+        return {"body": create_policy_body}
+    if action == "update_conditional_access_policy":
+        policy_id = _first_str(params, "policyId", "policy_id", "id")
+        body_payload = params.get("body")
+        if not policy_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'policyId', 'policy_id', or 'id'",
+            )
+        if not isinstance(body_payload, dict) or not body_payload:
+            raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
+        update_policy_body: dict[str, Any] = body_payload
+        return {"policy_id": policy_id, "body": update_policy_body}
+    if action == "delete_conditional_access_policy":
+        policy_id = _first_str(params, "policyId", "policy_id", "id")
+        if not policy_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'policyId', 'policy_id', or 'id'",
+            )
+        return {"policy_id": policy_id}
+    if action == "list_named_locations":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "list_risk_detections":
+        return {"top": _normalize_top(params, default=50)}
     if action == "list_ediscovery_cases":
         return {"top": _normalize_top(params, default=50)}
     if action == "get_ediscovery_case":
@@ -1936,6 +1987,23 @@ def _security_defender_client(action: str | None = None) -> SecurityDefenderClie
 
     config = AppConfig()
     return SecurityDefenderClient(legacy_config=config)
+
+
+def _identity_security_client(action: str | None = None) -> IdentitySecurityClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return IdentitySecurityClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return IdentitySecurityClient(legacy_config=config)
 
 
 def _compliance_ediscovery_client(action: str | None = None) -> ComplianceEDiscoveryClient:
@@ -2537,6 +2605,36 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             params["incident_id"],
             body=params["body"],
         )
+    if action == "list_conditional_access_policies":
+        identity_security_client = _identity_security_client(action)
+        value = identity_security_client.list_conditional_access_policies(top=params["top"])
+        return {"policies": value, "count": len(value)}
+    if action == "get_conditional_access_policy":
+        identity_security_client = _identity_security_client(action)
+        return {
+            "policy": identity_security_client.get_conditional_access_policy(params["policy_id"])
+        }
+    if action == "create_conditional_access_policy":
+        identity_security_client = _identity_security_client(action)
+        policy = identity_security_client.create_conditional_access_policy(body=params["body"])
+        return {"policy": policy, "status": "created"}
+    if action == "update_conditional_access_policy":
+        identity_security_client = _identity_security_client(action)
+        return identity_security_client.update_conditional_access_policy(
+            params["policy_id"],
+            body=params["body"],
+        )
+    if action == "delete_conditional_access_policy":
+        identity_security_client = _identity_security_client(action)
+        return identity_security_client.delete_conditional_access_policy(params["policy_id"])
+    if action == "list_named_locations":
+        identity_security_client = _identity_security_client(action)
+        value = identity_security_client.list_named_locations(top=params["top"])
+        return {"namedLocations": value, "count": len(value)}
+    if action == "list_risk_detections":
+        identity_security_client = _identity_security_client(action)
+        value = identity_security_client.list_risk_detections(top=params["top"])
+        return {"riskDetections": value, "count": len(value)}
     if action == "list_ediscovery_cases":
         compliance_client = _compliance_ediscovery_client(action)
         value = compliance_client.list_ediscovery_cases(top=params["top"])
@@ -3711,6 +3809,48 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "status?|assignedTo?|classification?|determination?|comments?",
         ],
         "mutating": True,
+    },
+    {
+        "action": "list_conditional_access_policies",
+        "description": "List Microsoft Entra Conditional Access policies",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_conditional_access_policy",
+        "description": "Get a Conditional Access policy by id",
+        "params": ["policyId|policy_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_conditional_access_policy",
+        "description": "Create a bounded Conditional Access policy",
+        "params": ["body"],
+        "mutating": True,
+    },
+    {
+        "action": "update_conditional_access_policy",
+        "description": "Update a bounded Conditional Access policy",
+        "params": ["policyId|policy_id|id", "body"],
+        "mutating": True,
+    },
+    {
+        "action": "delete_conditional_access_policy",
+        "description": "Delete a bounded Conditional Access policy",
+        "params": ["policyId|policy_id|id"],
+        "mutating": True,
+    },
+    {
+        "action": "list_named_locations",
+        "description": "List Conditional Access named locations",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "list_risk_detections",
+        "description": "List Microsoft Entra identity-protection risk detections",
+        "params": ["top?"],
+        "mutating": False,
     },
     {
         "action": "list_ediscovery_cases",

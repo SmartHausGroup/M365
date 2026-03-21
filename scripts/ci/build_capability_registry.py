@@ -35,6 +35,7 @@ SECTION_TO_DOMAIN = {
     "Search": "search",
     "Reports & analytics": "reports",
     "Access reviews & governance": "access_reviews",
+    "Conditional Access / Identity Protection": "identity_security",
     "Security & compliance (where exposed via Graph)": "security",
     "Devices / endpoint management": "devices",
     "Provisioning / composite (our conveniences)": "provisioning",
@@ -234,6 +235,12 @@ def action_to_resource(action: str, domain: str) -> str:
         return "report"
     if domain == "access_reviews":
         return "accessReview"
+    if domain == "identity_security":
+        if "named_location" in action:
+            return "namedLocation"
+        if "risk_detection" in action:
+            return "riskDetection"
+        return "conditionalAccessPolicy"
     if domain == "security":
         if "alert" in action:
             return "securityAlert"

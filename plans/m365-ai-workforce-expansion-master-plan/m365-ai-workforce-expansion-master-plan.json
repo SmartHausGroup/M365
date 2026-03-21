@@ -154,6 +154,11 @@
         "phase": "E4C",
         "date": "2026-03-20",
         "summary": "Expanded compliance / retention / eDiscovery through registry/compliance_retention_ediscovery_expansion_v2.yaml and docs/commercialization/m365-compliance-retention-ediscovery-expansion-v2.md, projected bounded eDiscovery case, search, custodian, and legal-hold actions into src/smarthaus_common/compliance_ediscovery_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L40 chain and scripts/ci/verify_compliance_retention_ediscovery_expansion.py, and proved the bounded E4C slice through contract verifiers plus targeted compliance regressions."
+      },
+      {
+        "phase": "E4D",
+        "date": "2026-03-20",
+        "summary": "Expanded Conditional Access / Identity Protection through registry/conditional_access_identity_protection_expansion_v2.yaml and docs/commercialization/m365-conditional-access-identity-protection-expansion-v2.md, projected bounded policy, named-location, and risk-detection actions into src/smarthaus_common/identity_security_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L41 chain and scripts/ci/verify_conditional_access_identity_protection_expansion.py, and proved the bounded E4D slice through contract verifiers plus targeted identity-security regressions."
       }
     ],
     "prepared_blocked": [
@@ -171,11 +176,6 @@
         "phase": "E4",
         "blocked_by": "E3E",
         "summary": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries."
-      },
-      {
-        "phase": "E4D",
-        "blocked_by": "E4",
-        "summary": "Add governed identity-protection and conditional-access administration."
       },
       {
         "phase": "E4E",
@@ -358,7 +358,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E4D"
+    "next_act": "E4E"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -677,14 +677,14 @@
           "code": "E4D",
           "slug": "conditional-access-identity-protection-expansion",
           "title": "Conditional Access / Identity Protection Expansion",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Add governed identity-protection and conditional-access administration."
         },
         {
           "code": "E4E",
           "slug": "admin-governance-surface-expansion",
           "title": "Admin and Governance Surface Expansion",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Unify remaining admin-center and governance controls into the workforce plane."
         }
       ]

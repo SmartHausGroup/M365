@@ -1906,11 +1906,14 @@ actions:
   status: planned
 - action: list_risk_detections
   resource: riskDetection
-  domain: security
+  domain: identity_security
   required_permissions:
-  - See permissions reference
+  - IdentityRiskEvent.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - riskDetections
+  - count
 - action: list_secure_scores
   resource: secureScore
   domain: security
@@ -2577,4 +2580,63 @@ actions:
   status: implemented
   result_shape_keys:
   - legalHolds
+  - count
+- action: list_conditional_access_policies
+  resource: conditionalAccessPolicy
+  domain: identity_security
+  required_permissions:
+  - Policy.Read.ConditionalAccess
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - policies
+  - count
+- action: get_conditional_access_policy
+  resource: conditionalAccessPolicy
+  domain: identity_security
+  required_permissions:
+  - Policy.Read.ConditionalAccess
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - policy
+- action: create_conditional_access_policy
+  resource: conditionalAccessPolicy
+  domain: identity_security
+  required_permissions:
+  - Policy.ReadWrite.ConditionalAccess
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - policy
+  - status
+- action: update_conditional_access_policy
+  resource: conditionalAccessPolicy
+  domain: identity_security
+  required_permissions:
+  - Policy.ReadWrite.ConditionalAccess
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - updated
+  - policyId
+- action: delete_conditional_access_policy
+  resource: conditionalAccessPolicy
+  domain: identity_security
+  required_permissions:
+  - Policy.ReadWrite.ConditionalAccess
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - deleted
+  - policyId
+- action: list_named_locations
+  resource: namedLocation
+  domain: identity_security
+  required_permissions:
+  - Policy.Read.ConditionalAccess
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - namedLocations
   - count

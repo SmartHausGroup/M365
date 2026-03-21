@@ -45,6 +45,9 @@ executor_domain_defaults:
   security:
     auth_class: mixed
     delegated_preference: never
+  identity_security:
+    auth_class: app_only
+    delegated_preference: never
   devices:
     auth_class: mixed
     delegated_preference: never
@@ -246,6 +249,20 @@ exact_action_policies:
   get_secure_score_profile:
     auth_class: app_only
   update_security_incident:
+    auth_class: app_only
+  list_conditional_access_policies:
+    auth_class: app_only
+  get_conditional_access_policy:
+    auth_class: app_only
+  create_conditional_access_policy:
+    auth_class: app_only
+  update_conditional_access_policy:
+    auth_class: app_only
+  delete_conditional_access_policy:
+    auth_class: app_only
+  list_named_locations:
+    auth_class: app_only
+  list_risk_detections:
     auth_class: app_only
   list_ediscovery_cases:
     auth_class: app_only

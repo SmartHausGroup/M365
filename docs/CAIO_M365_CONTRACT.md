@@ -149,6 +149,13 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `list_secure_scores` | List Microsoft secure-score snapshots | No | `top?` |
 | `get_secure_score_profile` | Get a Microsoft secure-score control profile by id | No | `profileId` or `profile_id` or `id` |
 | `update_security_incident` | Apply a bounded response update to a Microsoft 365 security incident | Yes | `incidentId` or `incident_id` or `id`, `status?`, `assignedTo?`, `classification?`, `determination?`, `comments?` |
+| `list_conditional_access_policies` | List Microsoft Entra Conditional Access policies | No | `top?` |
+| `get_conditional_access_policy` | Get a Conditional Access policy by id | No | `policyId` or `policy_id` or `id` |
+| `create_conditional_access_policy` | Create a bounded Conditional Access policy | Yes | `body` |
+| `update_conditional_access_policy` | Update a bounded Conditional Access policy | Yes | `policyId` or `policy_id` or `id`, `body` |
+| `delete_conditional_access_policy` | Delete a bounded Conditional Access policy | Yes | `policyId` or `policy_id` or `id` |
+| `list_named_locations` | List Conditional Access named locations | No | `top?` |
+| `list_risk_detections` | List Microsoft Entra identity-protection risk detections | No | `top?` |
 | `list_ediscovery_cases` | List Microsoft 365 eDiscovery cases | No | `top?` |
 | `get_ediscovery_case` | Get a Microsoft 365 eDiscovery case by id | No | `caseId` or `case_id` or `id` |
 | `create_ediscovery_case` | Create a bounded Microsoft 365 eDiscovery case | Yes | `displayName` or `display_name` or `name` or `title`, or `body` |
@@ -292,6 +299,13 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **list_secure_scores:** `{ "scores": [ ... ], "count": N }`
 - **get_secure_score_profile:** `{ "profile": { ... } }`
 - **update_security_incident:** `{ "updated": true, "incidentId": "<id>" }`
+- **list_conditional_access_policies:** `{ "policies": [ ... ], "count": N }`
+- **get_conditional_access_policy:** `{ "policy": { ... } }`
+- **create_conditional_access_policy:** `{ "policy": { ... }, "status": "created" }`
+- **update_conditional_access_policy:** `{ "updated": true, "policyId": "<id>" }`
+- **delete_conditional_access_policy:** `{ "deleted": true, "policyId": "<id>" }`
+- **list_named_locations:** `{ "namedLocations": [ ... ], "count": N }`
+- **list_risk_detections:** `{ "riskDetections": [ ... ], "count": N }`
 - **list_ediscovery_cases:** `{ "cases": [ ... ], "count": N }`
 - **get_ediscovery_case:** `{ "case": { ... } }`
 - **create_ediscovery_case:** `{ "case": { ... }, "status": "created" }`

@@ -130,7 +130,9 @@ def test_e4c_instruction_contract_executes_compliance_actions(
             return [{"id": "hold-1"}]
 
     monkeypatch.setenv("ALLOW_M365_MUTATIONS", "true")
-    monkeypatch.setattr(m365_router, "_compliance_ediscovery_client", lambda action=None: _FakeClient())
+    monkeypatch.setattr(
+        m365_router, "_compliance_ediscovery_client", lambda action=None: _FakeClient()
+    )
 
     assert m365_router.execute_instruction_contract(
         action="list_ediscovery_cases",

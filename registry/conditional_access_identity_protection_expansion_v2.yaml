@@ -1,0 +1,78 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T03:58:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E4DConditionalAccessIdentityProtectionExpansion(action) = InstructionBacked(action) ∧
+  CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=identity_security ∧
+  AuthClass(action)=app_only.
+supported_actions:
+  list_conditional_access_policies:
+    canonical_action_key: identity_security.conditional_access_policy.list
+    agent_alias: ca.policies
+    runtime_handler: IdentitySecurityClient.list_conditional_access_policies
+    mutating: false
+    result_shape_keys: [policies, count]
+    required_permissions: [Policy.Read.ConditionalAccess]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_conditional_access_policies
+  get_conditional_access_policy:
+    canonical_action_key: identity_security.conditional_access_policy.read
+    agent_alias: ca.policy_get
+    runtime_handler: IdentitySecurityClient.get_conditional_access_policy
+    mutating: false
+    result_shape_keys: [policy]
+    required_permissions: [Policy.Read.ConditionalAccess]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_conditional_access_policy
+  create_conditional_access_policy:
+    canonical_action_key: identity_security.conditional_access_policy.create
+    agent_alias: ca.policy_create
+    runtime_handler: IdentitySecurityClient.create_conditional_access_policy
+    mutating: true
+    result_shape_keys: [policy, status]
+    required_permissions: [Policy.ReadWrite.ConditionalAccess]
+    approval_profile: high-impact
+    capability_registry_alias: create_conditional_access_policy
+  update_conditional_access_policy:
+    canonical_action_key: identity_security.conditional_access_policy.update
+    agent_alias: ca.policy_update
+    runtime_handler: IdentitySecurityClient.update_conditional_access_policy
+    mutating: true
+    result_shape_keys: [updated, policyId]
+    required_permissions: [Policy.ReadWrite.ConditionalAccess]
+    approval_profile: high-impact
+    capability_registry_alias: update_conditional_access_policy
+  delete_conditional_access_policy:
+    canonical_action_key: identity_security.conditional_access_policy.delete
+    agent_alias: ca.policy_delete
+    runtime_handler: IdentitySecurityClient.delete_conditional_access_policy
+    mutating: true
+    result_shape_keys: [deleted, policyId]
+    required_permissions: [Policy.ReadWrite.ConditionalAccess]
+    approval_profile: high-impact
+    capability_registry_alias: delete_conditional_access_policy
+  list_named_locations:
+    canonical_action_key: identity_security.named_location.list
+    agent_alias: ca.named_locations
+    runtime_handler: IdentitySecurityClient.list_named_locations
+    mutating: false
+    result_shape_keys: [namedLocations, count]
+    required_permissions: [Policy.Read.ConditionalAccess]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_named_locations
+  list_risk_detections:
+    canonical_action_key: identity_security.risk_detection.list
+    agent_alias: identity_security.risk_detections
+    runtime_handler: IdentitySecurityClient.list_risk_detections
+    mutating: false
+    result_shape_keys: [riskDetections, count]
+    required_permissions: [IdentityRiskEvent.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_risk_detections

@@ -8,8 +8,8 @@ from smarthaus_common.config import AppConfig
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 
 
-class ComplianceEDiscoveryClient:
-    """Bounded Microsoft 365 compliance / eDiscovery client."""
+class IdentitySecurityClient:
+    """Bounded Conditional Access / Identity Protection client."""
 
     def __init__(
         self,
@@ -35,84 +35,61 @@ class ComplianceEDiscoveryClient:
             return payload
         return {}
 
-    def list_ediscovery_cases(self, *, top: int = 50) -> list[dict[str, Any]]:
+    def list_conditional_access_policies(self, *, top: int = 50) -> list[dict[str, Any]]:
         payload = self._graph._request(
             "GET",
-            "/security/cases/ediscoveryCases",
+            "/identity/conditionalAccess/policies",
             params={"$top": min(max(1, top), 999)},
         ).json()
         return self._normalize_list(payload)
 
-    def get_ediscovery_case(self, case_id: str) -> dict[str, Any]:
+    def get_conditional_access_policy(self, policy_id: str) -> dict[str, Any]:
         payload = self._graph._request(
             "GET",
-            f"/security/cases/ediscoveryCases/{case_id}",
+            f"/identity/conditionalAccess/policies/{policy_id}",
         ).json()
         return self._normalize_object(payload)
 
-    def create_ediscovery_case(self, *, body: dict[str, Any]) -> dict[str, Any]:
+    def create_conditional_access_policy(self, *, body: dict[str, Any]) -> dict[str, Any]:
         payload = self._graph._request(
             "POST",
-            "/security/cases/ediscoveryCases",
+            "/identity/conditionalAccess/policies",
             json=body,
         ).json()
         return self._normalize_object(payload)
 
-    def list_ediscovery_case_searches(
+    def update_conditional_access_policy(
         self,
-        case_id: str,
-        *,
-        top: int = 50,
-    ) -> list[dict[str, Any]]:
-        payload = self._graph._request(
-            "GET",
-            f"/security/cases/ediscoveryCases/{case_id}/searches",
-            params={"$top": min(max(1, top), 999)},
-        ).json()
-        return self._normalize_list(payload)
-
-    def get_ediscovery_case_search(self, case_id: str, search_id: str) -> dict[str, Any]:
-        payload = self._graph._request(
-            "GET",
-            f"/security/cases/ediscoveryCases/{case_id}/searches/{search_id}",
-        ).json()
-        return self._normalize_object(payload)
-
-    def create_ediscovery_case_search(
-        self,
-        case_id: str,
+        policy_id: str,
         *,
         body: dict[str, Any],
     ) -> dict[str, Any]:
-        payload = self._graph._request(
-            "POST",
-            f"/security/cases/ediscoveryCases/{case_id}/searches",
+        self._graph._request(
+            "PATCH",
+            f"/identity/conditionalAccess/policies/{policy_id}",
             json=body,
-        ).json()
-        return self._normalize_object(payload)
+        )
+        return {"updated": True, "policyId": policy_id}
 
-    def list_ediscovery_case_custodians(
-        self,
-        case_id: str,
-        *,
-        top: int = 50,
-    ) -> list[dict[str, Any]]:
+    def delete_conditional_access_policy(self, policy_id: str) -> dict[str, Any]:
+        self._graph._request(
+            "DELETE",
+            f"/identity/conditionalAccess/policies/{policy_id}",
+        )
+        return {"deleted": True, "policyId": policy_id}
+
+    def list_named_locations(self, *, top: int = 50) -> list[dict[str, Any]]:
         payload = self._graph._request(
             "GET",
-            f"/security/cases/ediscoveryCases/{case_id}/custodians",
+            "/identity/conditionalAccess/namedLocations",
             params={"$top": min(max(1, top), 999)},
         ).json()
         return self._normalize_list(payload)
 
-    def list_ediscovery_case_legal_holds(
-        self,
-        case_id: str,
-        *,
-        top: int = 50,
-    ) -> list[dict[str, Any]]:
+    def list_risk_detections(self, *, top: int = 50) -> list[dict[str, Any]]:
         payload = self._graph._request(
             "GET",
-            f"/security/cases/ediscoveryCases/{case_id}/legalHolds",
+            "/identityProtection/riskDetections",
             params={"$top": min(max(1, top), 999)},
         ).json()
         return self._normalize_list(payload)

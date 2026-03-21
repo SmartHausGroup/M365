@@ -156,6 +156,13 @@ RESULT_SHAPES = {
     "list_secure_scores": ["scores", "count"],
     "get_secure_score_profile": ["profile"],
     "update_security_incident": ["updated", "incidentId"],
+    "list_conditional_access_policies": ["policies", "count"],
+    "get_conditional_access_policy": ["policy"],
+    "create_conditional_access_policy": ["policy", "status"],
+    "update_conditional_access_policy": ["updated", "policyId"],
+    "delete_conditional_access_policy": ["deleted", "policyId"],
+    "list_named_locations": ["namedLocations", "count"],
+    "list_risk_detections": ["riskDetections", "count"],
     "list_ediscovery_cases": ["cases", "count"],
     "get_ediscovery_case": ["case"],
     "create_ediscovery_case": ["case", "status"],
@@ -575,6 +582,37 @@ def verify_with_mock() -> dict:
         (
             "update_security_incident",
             {"ok": True, "result": {"updated": True, "incidentId": "incident-1"}},
+        ),
+        (
+            "list_conditional_access_policies",
+            {"ok": True, "result": {"policies": [], "count": 0}},
+        ),
+        (
+            "get_conditional_access_policy",
+            {"ok": True, "result": {"policy": {"id": "policy-1"}}},
+        ),
+        (
+            "create_conditional_access_policy",
+            {
+                "ok": True,
+                "result": {"policy": {"id": "policy-1"}, "status": "created"},
+            },
+        ),
+        (
+            "update_conditional_access_policy",
+            {"ok": True, "result": {"updated": True, "policyId": "policy-1"}},
+        ),
+        (
+            "delete_conditional_access_policy",
+            {"ok": True, "result": {"deleted": True, "policyId": "policy-1"}},
+        ),
+        (
+            "list_named_locations",
+            {"ok": True, "result": {"namedLocations": [], "count": 0}},
+        ),
+        (
+            "list_risk_detections",
+            {"ok": True, "result": {"riskDetections": [], "count": 0}},
         ),
         ("list_ediscovery_cases", {"ok": True, "result": {"cases": [], "count": 0}}),
         ("get_ediscovery_case", {"ok": True, "result": {"case": {"id": "case-1"}}}),

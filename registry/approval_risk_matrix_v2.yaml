@@ -59,6 +59,10 @@ executor_domain_defaults:
     risk_class: critical
     approval_requirement: always
     approval_profile: critical-regulated
+  identity_security:
+    risk_class: high
+    approval_requirement: always
+    approval_profile: high-impact
   devices:
     risk_class: high
     approval_requirement: always
@@ -428,6 +432,37 @@ exact_action_policies:
     approval_profile: critical-regulated
     approval_requirement: always
     approvers: [security-team, platform_admin]
+  list_conditional_access_policies:
+    risk_class: high
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_conditional_access_policy:
+    risk_class: high
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_conditional_access_policy:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [security-team, it-director]
+  update_conditional_access_policy:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [security-team, it-director]
+  delete_conditional_access_policy:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [security-team, it-director]
+  list_named_locations:
+    risk_class: high
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_risk_detections:
+    risk_class: high
+    approval_profile: low-observe-create
+    approval_requirement: never
   list_ediscovery_cases:
     risk_class: low
     approval_profile: low-observe-create

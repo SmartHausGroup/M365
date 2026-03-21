@@ -412,13 +412,24 @@ connector-backed surfaces instead.
 
 ---
 
+## Conditional Access / Identity Protection
+
+- list_conditional_access_policies
+- get_conditional_access_policy
+- create_conditional_access_policy
+- update_conditional_access_policy
+- delete_conditional_access_policy
+- list_named_locations
+- list_risk_detections
+
+---
+
 ## Security & compliance (where exposed via Graph)
 
 - list_security_alerts
 - get_security_alert
 - list_security_incidents
 - get_security_incident
-- list_risk_detections
 - list_secure_scores
 - get_secure_score_profile
 - update_security_incident

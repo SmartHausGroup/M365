@@ -16,6 +16,7 @@ canonical_executor_domains:
   - powerplatform
   - compliance
   - security
+  - identity_security
   - devices
   - publishing
   - composite
@@ -152,6 +153,13 @@ exact_action_routes:
   list_secure_scores: security
   get_secure_score_profile: security
   update_security_incident: security
+  list_conditional_access_policies: identity_security
+  get_conditional_access_policy: identity_security
+  create_conditional_access_policy: identity_security
+  update_conditional_access_policy: identity_security
+  delete_conditional_access_policy: identity_security
+  list_named_locations: identity_security
+  list_risk_detections: identity_security
   list_ediscovery_cases: compliance
   get_ediscovery_case: compliance
   create_ediscovery_case: compliance
@@ -185,6 +193,7 @@ prefix_routes:
   "compliance.": compliance
   "devices.": devices
   "security.": security
+  "identity_security.": identity_security
   "external.": knowledge
   "automation.": composite
 agent_action_overrides:

@@ -1,0 +1,13 @@
+lemma_id: L41
+name: M365 Conditional Access / Identity Protection expansion v2
+status: active
+proof_notebook: notebooks/lemma_proofs/L41_m365_conditional_access_identity_protection_expansion_v2.ipynb
+governing_notebook: notebooks/m365/INV-M365-AQ-conditional-access-identity-protection-expansion-v2.ipynb
+scorecard: artifacts/scorecards/scorecard_l41.json
+fail_closed: true
+acceptance:
+  - identity-security workload authority exists
+  - router exposes all E4D actions
+  - executor route is identity_security for all E4D actions
+  - auth class is app_only for all E4D actions
+  - approval profiles match the E4D authority
