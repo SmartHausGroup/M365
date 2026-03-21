@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import yaml
 from fastapi.testclient import TestClient
-
 from ops_adapter.app import create_app
 from ops_adapter.personas import load_persona_registry, resolve_humanized_delegation_request
 

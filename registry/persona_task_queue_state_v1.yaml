@@ -1,0 +1,76 @@
+version: "1.0.0"
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  storage: src/smarthaus_common/json_store.py
+  runtime: src/smarthaus_common/persona_task_queue.py
+  dashboard_router: src/provisioning_api/routers/agent_dashboard.py
+  ops_adapter_main: src/ops_adapter/main.py
+  ops_adapter_app: src/ops_adapter/app.py
+task_required_fields:
+  - id
+  - agent
+  - title
+  - priority
+  - status
+  - created_by
+  - created_at
+  - ts
+task_statuses:
+  queued:
+    open: true
+    terminal: false
+  in_progress:
+    open: true
+    terminal: false
+  blocked:
+    open: true
+    terminal: false
+  completed:
+    open: false
+    terminal: true
+  failed:
+    open: false
+    terminal: true
+  cancelled:
+    open: false
+    terminal: true
+persona_states:
+  idle: No open tasks and no queued instructions.
+  queued: Queued work exists but no task is currently active or blocked.
+  active: At least one task is in progress.
+  blocked: No task is active and at least one task is blocked.
+  attention_required: No task is active or blocked and at least one task has failed.
+transitions:
+  queued:
+    - in_progress
+    - blocked
+    - cancelled
+  in_progress:
+    - blocked
+    - completed
+    - failed
+    - cancelled
+  blocked:
+    - queued
+    - in_progress
+    - cancelled
+  failed:
+    - queued
+    - cancelled
+  completed: []
+  cancelled: []
+projection_rules:
+  state_precedence:
+    - active
+    - blocked
+    - attention_required
+    - queued
+    - idle
+  instruction_status_default: queued
+  task_sort_order: open_first_then_priority_then_last_activity
+eligibility:
+  allowed_persona_statuses:
+    - active
+    - planned
+  denied_persona_statuses:
+    - inactive

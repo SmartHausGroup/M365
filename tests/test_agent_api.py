@@ -3,13 +3,15 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from provisioning_api.main import app
+from provisioning_api.routers.agent_dashboard import router as agent_dashboard_router
 
 
 def test_agent_task_and_instruction_flow(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    # Isolate data dir
     monkeypatch.setenv("APP_DATA", str(tmp_path))
+    app = FastAPI()
+    app.include_router(agent_dashboard_router)
     client = TestClient(app)
 
     agent_id = "m365-administrator"
@@ -36,6 +38,7 @@ def test_agent_task_and_instruction_flow(tmp_path: Path, monkeypatch: pytest.Mon
     assert r.status_code == 200
     tasks = r.json()
     assert any(t["id"] == task_id for t in tasks)
+    assert next(t for t in tasks if t["id"] == task_id)["status"] == "queued"
 
     # Update task
     r = client.put(
@@ -44,6 +47,16 @@ def test_agent_task_and_instruction_flow(tmp_path: Path, monkeypatch: pytest.Mon
     )
     assert r.status_code == 200
     assert r.json()["status"] == "ok"
+    assert r.json()["task"]["status"] == "in_progress"
+
+    r = client.get(f"/api/agents/{agent_id}/tasks")
+    assert r.status_code == 200
+    tasks = r.json()
+    assert next(t for t in tasks if t["id"] == task_id)["status"] == "in_progress"
+
+    r = client.get(f"/api/agents/{agent_id}/status")
+    assert r.status_code == 200
+    assert r.json()["status"] == "active"
 
     # Instruction
     r = client.post(
@@ -52,6 +65,9 @@ def test_agent_task_and_instruction_flow(tmp_path: Path, monkeypatch: pytest.Mon
     )
     assert r.status_code == 200
     assert r.json()["status"] == "accepted"
+    r = client.get(f"/api/agents/{agent_id}/status")
+    assert r.status_code == 200
+    assert r.json()["instructions"]["queued"] == 1
 
     # Performance
     r = client.get(f"/api/agents/{agent_id}/performance")

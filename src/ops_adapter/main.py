@@ -20,6 +20,12 @@ from smarthaus_common.permission_enforcer import (
     get_confirmation_override,
     get_user_tier_info,
 )
+from smarthaus_common.persona_task_queue import (
+    build_persona_state,
+    create_persona_task,
+    list_persona_tasks,
+    update_persona_task,
+)
 from smarthaus_common.tenant_config import get_tenant_config
 from starlette.responses import Response
 
@@ -235,6 +241,64 @@ async def resolve_persona(query: str = Query(..., min_length=1)) -> dict[str, An
         return resolve_humanized_delegation_request(query, PERSONAS)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+def _resolve_task_queue_target(agent_target: str) -> tuple[str, dict[str, Any]]:
+    canonical_agent, persona = _resolve_persona_agent(agent_target)
+    if str(persona.get("status") or "") == "inactive":
+        raise HTTPException(status_code=403, detail=f"persona_inactive:{canonical_agent}")
+    return canonical_agent, persona
+
+
+@app.get("/personas/{agent_target}/state")
+async def get_persona_state(agent_target: str) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    state = build_persona_state(canonical_agent)
+    state["persona"] = persona
+    return state
+
+
+@app.get("/personas/{agent_target}/tasks")
+async def get_persona_tasks(agent_target: str) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    return {
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "tasks": list_persona_tasks(canonical_agent),
+    }
+
+
+@app.post("/personas/{agent_target}/tasks")
+async def queue_persona_task(
+    agent_target: str, body: dict[str, Any], request: Request
+) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    payload = dict(body)
+    payload.setdefault("created_by", _resolve_user_identity(request))
+    try:
+        task = create_persona_task(canonical_agent, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {
+        "status": "accepted",
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "task": task,
+    }
+
+
+@app.put("/personas/{agent_target}/tasks/{task_id}")
+async def set_persona_task_state(
+    agent_target: str, task_id: str, body: dict[str, Any], request: Request
+) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    payload = dict(body)
+    payload.setdefault("updated_by", _resolve_user_identity(request))
+    try:
+        task = update_persona_task(canonical_agent, task_id, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"status": "ok", "canonical_agent": canonical_agent, "persona": persona, "task": task}
 
 
 @app.get("/metrics")

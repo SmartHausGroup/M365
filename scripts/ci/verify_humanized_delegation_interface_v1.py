@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import yaml
-
 from ops_adapter.personas import load_persona_registry, resolve_humanized_delegation_request
 
 
@@ -12,7 +11,9 @@ def main() -> None:
     root = Path(__file__).resolve().parents[2]
     registry_path = root / "registry" / "agents.yaml"
     interface_path = root / "registry" / "humanized_delegation_interface_v1.yaml"
-    output_path = root / "configs" / "generated" / "humanized_delegation_interface_v1_verification.json"
+    output_path = (
+        root / "configs" / "generated" / "humanized_delegation_interface_v1_verification.json"
+    )
 
     with registry_path.open(encoding="utf-8") as handle:
         registry = yaml.safe_load(handle)

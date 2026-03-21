@@ -9,6 +9,13 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
+from smarthaus_common.persona_task_queue import (
+    build_persona_state,
+    create_persona_instruction,
+    create_persona_task,
+    list_persona_tasks,
+    update_persona_task,
+)
 
 from provisioning_api.storage import JsonStore
 
@@ -733,91 +740,63 @@ def _find_agent(agent_id: str) -> dict[str, Any]:
 @router.get("/{agent_id}/status")
 async def agent_status(agent_id: str) -> dict:
     agent_record = _find_agent(agent_id)
-    tasks = JsonStore().list(_tasks_collection(agent_id))
-    total = len(tasks)
-    in_progress = len([t for t in tasks if t.get("status") == "in_progress"])
-    failed = len([t for t in tasks if t.get("status") == "failed"])
-    completed = len([t for t in tasks if t.get("status") == "completed"])
-    last_ts = max([t.get("ts", 0) for t in tasks], default=0)
-    state = "active" if in_progress else ("idle" if total else "idle")
+    queue_state = build_persona_state(agent_id)
     return {
         "agent": agent_id,
         "name": agent_record.get("name"),
         "department": agent_record.get("department"),
-        "status": state,
-        "tasks": {
-            "total": total,
-            "in_progress": in_progress,
-            "completed": completed,
-            "failed": failed,
-        },
-        "last_activity": last_ts or None,
+        "status": queue_state["persona_state"],
+        "tasks": dict(queue_state["task_counts"]),
+        "instructions": dict(queue_state["instruction_counts"]),
+        "last_activity": queue_state["last_activity_ts"],
+        "active_task_id": queue_state["active_task_id"],
+        "queue_depth": queue_state["queue_depth"],
     }
 
 
 @router.get("/{agent_id}/tasks")
 async def list_tasks(agent_id: str) -> list[dict[str, Any]]:
     _find_agent(agent_id)
-    return JsonStore().list(_tasks_collection(agent_id))
+    return list_persona_tasks(agent_id)
 
 
 @router.post("/{agent_id}/tasks")
 async def create_task(agent_id: str, body: dict[str, Any]) -> dict[str, Any]:
     _find_agent(agent_id)
-    task = {
-        "agent": agent_id,
-        "title": body.get("title") or body.get("description") or "Task",
-        "description": body.get("description"),
-        "priority": (body.get("priority") or "medium").lower(),
-        "due": body.get("due"),
-        "status": "queued",
-        "created_by": body.get("created_by", "system"),
-    }
-    rec = JsonStore().append(_tasks_collection(agent_id), task)
-    JsonStore().append(
-        _logs_collection(agent_id),
-        {"type": "task_created", "task_id": rec["id"], "title": task["title"]},
-    )
-    return {"status": "accepted", "id": rec["id"], "task": rec}
+    try:
+        task = create_persona_task(agent_id, body)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"status": "accepted", "id": task["id"], "task": task}
 
 
 @router.put("/{agent_id}/tasks/{task_id}")
 async def update_task(agent_id: str, task_id: str, body: dict[str, Any]) -> dict[str, Any]:
     _find_agent(agent_id)
-    # naive update: append a new record with same id as event
-    update = {
-        "task_id": task_id,
-        "status": (body.get("status") or "in_progress").lower(),
-        "percent": body.get("percent"),
-        "message": body.get("message"),
-    }
-    JsonStore().append(_logs_collection(agent_id), {"type": "task_update", **update})
-    return {"status": "ok", "id": task_id}
+    try:
+        task = update_persona_task(agent_id, task_id, body)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"status": "ok", "id": task_id, "task": task}
 
 
 @router.post("/{agent_id}/instructions")
 async def send_instructions(agent_id: str, body: dict[str, Any]) -> dict[str, Any]:
     _find_agent(agent_id)
-    inst = {
-        "instruction": body.get("instruction") or body.get("command"),
-        "mode": body.get("mode") or "immediate",
-        "priority": (body.get("priority") or "normal").lower(),
-        "scheduled_at": body.get("scheduled_at"),
-    }
-    rec = JsonStore().append(_instructions_collection(agent_id), inst)
-    JsonStore().append(
-        _logs_collection(agent_id), {"type": "instruction", "instruction_id": rec["id"]}
-    )
-    return {"status": "accepted", "id": rec["id"]}
+    try:
+        instruction = create_persona_instruction(agent_id, body)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {"status": "accepted", "id": instruction["id"]}
 
 
 @router.get("/{agent_id}/performance")
 async def get_performance(agent_id: str) -> dict[str, Any]:
     _find_agent(agent_id)
-    tasks = JsonStore().list(_tasks_collection(agent_id))
-    total = len(tasks)
-    completed = len([t for t in tasks if t.get("status") == "completed"])
-    failed = len([t for t in tasks if t.get("status") == "failed"])
+    queue_state = build_persona_state(agent_id)
+    total = int(queue_state["task_counts"]["total"])
+    completed = int(queue_state["task_counts"]["completed"])
+    failed = int(queue_state["task_counts"]["failed"])
     completion_rate = (completed / total) if total else 0.0
     return {
         "agent": agent_id,
@@ -826,6 +805,7 @@ async def get_performance(agent_id: str) -> dict[str, Any]:
             "completed": completed,
             "failed": failed,
             "total": total,
+            "queue_depth": queue_state["queue_depth"],
         },
     }
 
