@@ -1267,3 +1267,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_workload_certification_v1.py` | CI verifier for the workload certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
 | `configs/generated/workload_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
 | `tests/test_workload_certification_v1.py` | Tests for the workload certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+
+## Active E8B Persona Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/persona_certification_v1.yaml` | Authoritative persona certification contract. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `docs/commercialization/m365-persona-certification-v1.md` | Human-readable persona certification contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `docs/ma/lemmas/L64_m365_persona_certification_v1.md` | Lemma doc for L64. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `invariants/lemmas/L64_m365_persona_certification_v1.yaml` | Invariant metadata for L64. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `notebooks/m365/INV-M365-BL-persona-certification-v1.ipynb` | Primary notebook for L64. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `notebooks/lemma_proofs/L64_m365_persona_certification_v1.ipynb` | Proof notebook for L64. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `artifacts/scorecards/scorecard_l64.json` | Scorecard for L64. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `scripts/ci/verify_persona_certification_v1.py` | CI verifier for the persona certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `configs/generated/persona_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+| `tests/test_persona_certification_v1.py` | Tests for the persona certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |

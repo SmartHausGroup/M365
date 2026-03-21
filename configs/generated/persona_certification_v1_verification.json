@@ -1,0 +1,24 @@
+{
+  "all_approval_aligned": true,
+  "all_fields_complete": true,
+  "certification_phase_count": 4,
+  "contract_id": "persona-certification",
+  "contract_only_personas": 35,
+  "governance_rule_count": 5,
+  "overall_verdict": "certified",
+  "phase_ids": [
+    "field_completeness",
+    "coverage_status_consistency",
+    "approval_posture_alignment",
+    "domain_alignment"
+  ],
+  "registry_backed_personas": 4,
+  "rule_keys": [
+    "audit_completeness",
+    "bounded_claims",
+    "coverage_partition",
+    "determinism",
+    "fail_closed"
+  ],
+  "total_personas": 39
+}

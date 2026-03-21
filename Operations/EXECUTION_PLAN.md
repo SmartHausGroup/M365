@@ -156,8 +156,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
 
-**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A` through `E8A` are complete. Sections 0-7 are fully complete. `E8A` (workload certification) is complete. `E8B` is the active next act but has not been started. `E8C` through `E9E` remain planned.
-**Current next act:** `E8B` — persona certification (not yet started).
+**Status:** 🟢 Active — the new expansion master plan triplet and the full MATHS prompt inventory are now in place. `E0A` through `E8B` are complete. Sections 0-7 are fully complete. `E8A` (workload certification) and `E8B` (persona certification) are complete. `E8C` is the active next act but has not been started. `E8D` through `E9E` remain planned.
+**Current next act:** `E8C` — department certification (not yet started).
 
 **Status update (2026-03-20 16:11 EDT):** Created `plans/m365-ai-workforce-expansion-master-plan/` as the new active program with a full phase/child-phase stack `E0` through `E9`, explicit department and workload universe targets, and a complete MATHS prompt pair inventory under `docs/prompts/` for the overview, each grouped phase, and each child act. This new plan follows the now-closed enterprise-readiness master plan and becomes the active critical path for the broader SMARTHAUS AI workforce vision.
 

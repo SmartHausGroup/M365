@@ -1,0 +1,31 @@
+lemma_id: L64
+title: M365 Persona Certification v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E8B"
+status: green
+invariant: >
+  Four ordered certification phases (field_completeness, coverage_status_consistency,
+  approval_posture_alignment, domain_alignment) and five governance rules
+  (fail_closed, audit_completeness, bounded_claims, determinism, coverage_partition)
+  so that every persona receives a deterministic certification verdict,
+  registry-backed personas have actions and aligned domains, contract-only personas
+  have zero actions, and registry-backed plus contract-only equals total.
+proof_obligations:
+  - "Persona certification authority file exists and validates"
+  - "Certification phases are ordered and complete with inputs/outputs/failure_mode"
+  - "Five governance rules present: fail_closed, audit_completeness, bounded_claims, determinism, coverage_partition"
+  - "All 39 personas have 21 required fields"
+  - "Registry-backed personas have non-zero action counts"
+  - "Contract-only personas have zero action counts"
+  - "Risk tier maps to approval profile consistently"
+  - "Registry-backed plus contract-only equals total"
+failure_boundaries:
+  - "Missing certification authority file"
+  - "Missing or disordered certification phase"
+  - "Missing governance rule"
+  - "Persona missing required field"
+  - "Coverage status inconsistency"
+  - "Approval posture mismatch"
+  - "Coverage partition mismatch"
+test_bindings:
+  - tests/test_persona_certification_v1.py
+ci_gate: scripts/ci/verify_persona_certification_v1.py

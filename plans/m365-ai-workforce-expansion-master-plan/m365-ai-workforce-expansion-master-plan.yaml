@@ -490,13 +490,13 @@ execution_status:
       with four ordered certification phases, five governance rules, and per-domain
       certification verdicts. 13 of 15 executor domains pass certification; 2 domains
       (workmanagement, publishing) are explicitly not-yet-certified.
-  prepared_blocked:
   - phase: E8B
-    blocked_by: E8
-    summary: 'Certify each persona class against its allowed domains and approval
-      posture.
-
-      '
+    date: '2026-03-21'
+    summary: Defined the persona certification contract through registry/persona_certification_v1.yaml
+      with four ordered certification phases, five governance rules, and per-persona
+      verdicts. All 39 personas pass certification (4 registry-backed, 35 contract-only).
+      Approval posture floor check permits elevated approval profiles.
+  prepared_blocked:
   - phase: E8C
     blocked_by: E8
     summary: 'Certify each department pack against its target workflows and responsibilities.
@@ -548,7 +548,7 @@ execution_status:
     summary: 'Issue the final release decision for the full workforce program.
 
       '
-  next_act: E8B
+  next_act: E8C
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files,
   collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
@@ -1088,7 +1088,7 @@ phase_stack:
   - code: E8B
     slug: persona-certification
     title: Persona Certification
-    status: Pending
+    status: Complete
     goal: 'Certify each persona class against its allowed domains and approval posture.
 
       '

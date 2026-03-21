@@ -157,9 +157,7 @@ def main() -> None:
             d for d in domains if cert_status[d]["certification_verdict"] == "certified"
         ),
         "not_yet_certified_domains": sorted(
-            d
-            for d in domains
-            if cert_status[d]["certification_verdict"] == "not-yet-certified"
+            d for d in domains if cert_status[d]["certification_verdict"] == "not-yet-certified"
         ),
     }
 
