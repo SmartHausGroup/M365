@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import yaml
-
 from ops_adapter.personas import build_authoritative_persona_registry_document
 
 

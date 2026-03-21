@@ -26,7 +26,11 @@ from .actions import (
 from .approvals import ApprovalsStore
 from .audit import audit_log
 from .models import ActionRequest, ActionResponse
-from .personas import load_persona_registry, resolve_persona_target
+from .personas import (
+    load_persona_registry,
+    resolve_humanized_delegation_request,
+    resolve_persona_target,
+)
 from .policies import OPAClient
 from .rate_limit import RateLimiter
 
@@ -72,6 +76,13 @@ def create_app() -> FastAPI:
     @app.get("/health")
     async def health() -> dict[str, Any]:
         return {"status": "ok", "service": "ops-adapter", "version": app.version}
+
+    @app.get("/personas/resolve")
+    async def resolve_persona(query: str) -> dict[str, Any]:
+        try:
+            return resolve_humanized_delegation_request(query, personas)
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
 
     @app.post("/actions/{agent}/{action}", response_model=ActionResponse)
     async def perform_action(

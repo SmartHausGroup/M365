@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E5A` are complete; `E5B` is the active next act; `E5C` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E5B` are complete; `E5C` is the active next act; `E5D` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -83,8 +83,9 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E4D` is complete.
 - `E4E` is complete.
 - `E5A` is complete.
-- `E5B` is the active next act.
-- `E5C` through `E9E` are prepared but blocked by prerequisite work.
+- `E5B` is complete.
+- `E5C` is the active next act.
+- `E5D` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
@@ -382,13 +383,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E5B — Humanized Delegation Interface
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
 
 #### E5C — Persona Task Queues and State
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Give personas deterministic task queues, state, and lifecycle management.
 
@@ -639,4 +640,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E4E` is complete. It locked the workload authority at `registry/admin_governance_surface_expansion_v2.yaml`, added the bounded admin-reports and access-review runtime in `src/smarthaus_common/admin_governance_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `get_report`, `get_usage_reports`, `get_activity_reports`, `list_access_reviews`, `get_access_review`, `create_access_review`, `list_access_review_decisions`, and `record_access_review_decision`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded admin/governance slice, and added the notebook-backed `L42` evidence chain with generated verification at `configs/generated/admin_governance_surface_expansion_verification.json`. `E5A` is now the active next act and must complete the authoritative persona registry before the digital-employee runtime can expand further.
 
-`E5A` is complete. It locked the authoritative digital-employee registry at `registry/persona_registry_v2.yaml`, added the shared persona loader and validator in `src/ops_adapter/personas.py`, constrained runtime persona resolution to the roster-bound `39` personas instead of the mixed `59`-entry inventory, aligned the machine-readable and human-readable E5A contracts in `docs/commercialization/m365-persona-registry-v2.md` plus the notebook-backed `L43` evidence chain, and added deterministic builder and verifier commands at `scripts/ci/build_persona_registry_v2.py` and `scripts/ci/verify_persona_registry_v2.py` with generated proof at `configs/generated/persona_registry_v2_verification.json`. `E5B` is now the active next act and must make those authoritative digital employees addressable through humanized delegation language.
+`E5A` is complete. It locked the authoritative digital-employee registry at `registry/persona_registry_v2.yaml`, added the shared persona loader and validator in `src/ops_adapter/personas.py`, constrained runtime persona resolution to the roster-bound `39` personas instead of the mixed `59`-entry inventory, aligned the machine-readable and human-readable E5A contracts in `docs/commercialization/m365-persona-registry-v2.md` plus the notebook-backed `L43` evidence chain, and added deterministic builder and verifier commands at `scripts/ci/build_persona_registry_v2.py` and `scripts/ci/verify_persona_registry_v2.py` with generated proof at `configs/generated/persona_registry_v2_verification.json`.
+
+`E5B` is complete. It locked the humanized delegation authority at `registry/humanized_delegation_interface_v1.yaml`, extended the shared persona runtime in `src/ops_adapter/personas.py` to resolve natural delegation phrases, department hints, and alias matching with fail-closed ambiguity handling, exposed bounded resolution endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-humanized-delegation-interface-v1.md` plus the notebook-backed `L44` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_humanized_delegation_interface_v1.py` with generated proof at `configs/generated/humanized_delegation_interface_v1_verification.json`. `E5C` is now the active next act and must give those human-addressable digital employees deterministic task queues and state.

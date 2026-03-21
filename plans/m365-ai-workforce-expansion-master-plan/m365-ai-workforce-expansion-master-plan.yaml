@@ -329,11 +329,21 @@ execution_status:
         scripts/ci/verify_persona_registry_v2.py, and proved the bounded E5A
         slice through targeted persona-registry regressions plus generated proof
         at configs/generated/persona_registry_v2_verification.json.
-  prepared_blocked:
     - phase: E5B
-      blocked_by: "E5"
+      date: "2026-03-20"
       summary: >
-        Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
+        Completed the humanized delegation interface through
+        registry/humanized_delegation_interface_v1.yaml and
+        docs/commercialization/m365-humanized-delegation-interface-v1.md,
+        extended src/ops_adapter/personas.py with natural delegation parsing,
+        department-hint handling, and fail-closed ambiguity detection, exposed
+        bounded resolution endpoints in src/ops_adapter/main.py and
+        src/ops_adapter/app.py, added the notebook-backed L44 chain and the
+        deterministic verifier at
+        scripts/ci/verify_humanized_delegation_interface_v1.py, and proved the
+        bounded E5B slice through targeted delegation regressions plus generated
+        proof at configs/generated/humanized_delegation_interface_v1_verification.json.
+  prepared_blocked:
     - phase: E5C
       blocked_by: "E5"
       summary: >
@@ -462,7 +472,7 @@ execution_status:
       blocked_by: "E9"
       summary: >
         Issue the final release decision for the full workforce program.
-  next_act: E5B
+  next_act: E5C
 
 open_blockers:
   - "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice."
@@ -747,13 +757,13 @@ phase_stack:
       - code: E5B
         slug: humanized-delegation-interface
         title: "Humanized Delegation Interface"
-        status: Active
+        status: Complete
         goal: >
           Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
       - code: E5C
         slug: persona-task-queues-and-state
         title: "Persona Task Queues and State"
-        status: Pending
+        status: Active
         goal: >
           Give personas deterministic task queues, state, and lifecycle management.
       - code: E5D

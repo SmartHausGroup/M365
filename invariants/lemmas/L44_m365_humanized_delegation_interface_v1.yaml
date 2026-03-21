@@ -1,0 +1,17 @@
+invariant_id: L44
+title: Humanized delegation remains bounded and fail-closed
+lemma_reference: docs/ma/lemmas/L44_m365_humanized_delegation_interface_v1.md
+proof_obligations:
+  - natural-language delegation patterns must come from the machine-readable interface registry
+  - authoritative persona resolution must exclude overflow agents
+  - ambiguous short-name requests must fail closed
+  - supported requests must preserve task-hint extraction when present
+failure_boundaries:
+  - unsupported pattern silently succeeds
+  - ambiguity silently resolves
+  - department hint ignored
+  - overflow persona resolves
+test_bindings:
+  - tests/test_humanized_delegation_interface_v1.py
+  - scripts/ci/verify_humanized_delegation_interface_v1.py
+ci_gate: humanized-delegation-interface-v1

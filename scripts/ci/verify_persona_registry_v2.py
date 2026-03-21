@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import yaml
-
 from ops_adapter.personas import load_persona_registry, validate_persona_registry_document
 
 

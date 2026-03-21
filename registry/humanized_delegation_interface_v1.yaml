@@ -1,0 +1,29 @@
+version: "1.0.0"
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  runtime: src/ops_adapter/personas.py
+patterns:
+  - id: talk_to
+    regex: '(?i)^\s*(?:talk|speak|connect)\s+to\s+(?P<target>.+?)\s*$'
+    target_group: target
+    task_group: ""
+  - id: have_handle
+    regex: '(?i)^\s*have\s+(?P<target>.+?)\s+handle(?:\s+this)?\s*$'
+    target_group: target
+    task_group: ""
+  - id: route_to
+    regex: '(?i)^\s*route(?:\s+this)?\s+to\s+(?P<target>.+?)\s*$'
+    target_group: target
+    task_group: ""
+  - id: ask_to
+    regex: '(?i)^\s*ask\s+(?P<target>.+?)\s+to\s+(?P<task>.+?)\s*$'
+    target_group: target
+    task_group: task
+  - id: delegate_to
+    regex: '(?i)^\s*delegate(?:\s+this)?\s+to\s+(?P<target>.+?)\s*$'
+    target_group: target
+    task_group: ""
+resolution_rules:
+  raw_target_allowed: true
+  department_hint_suffix: in <department>
+  ambiguous_short_name_policy: fail_closed

@@ -70,6 +70,11 @@ def _default_persona_registry_file() -> Path:
     return registry_file.with_name("persona_registry_v2.yaml")
 
 
+def _default_delegation_interface_file() -> Path:
+    registry_file = Path(os.getenv("REGISTRY_FILE", "./registry/agents.yaml")).resolve()
+    return registry_file.with_name("humanized_delegation_interface_v1.yaml")
+
+
 def _load_ai_team(path: Path | None = None) -> dict[str, Any]:
     source = path or Path(os.getenv("AI_TEAM_FILE") or _default_ai_team_file())
     if not source.exists():
@@ -89,6 +94,13 @@ def _load_persona_capability_map(path: Path | None = None) -> dict[str, Any]:
 def _load_persona_registry_payload(path: Path | None = None) -> dict[str, Any]:
     source = path or Path(os.getenv("PERSONA_REGISTRY_FILE") or _default_persona_registry_file())
     return _load_yaml_object(source, "persona registry")
+
+
+def _load_delegation_interface_payload(path: Path | None = None) -> dict[str, Any]:
+    source = path or Path(
+        os.getenv("DELEGATION_INTERFACE_FILE") or _default_delegation_interface_file()
+    )
+    return _load_yaml_object(source, "delegation interface")
 
 
 def _department_manager_token(department: str) -> str:
@@ -192,6 +204,116 @@ def _persona_alias_candidates(persona_id: str, display_name: str) -> set[str]:
         _slugify(display_name),
     }
     return {candidate for candidate in candidates if candidate}
+
+
+def _department_matches_hint(persona: dict[str, Any], department_hint: str | None) -> bool:
+    if not department_hint:
+        return True
+    department = str(persona.get("department") or "")
+    return _slugify(department) == _slugify(department_hint)
+
+
+def _split_department_hint(target: str) -> tuple[str, str | None]:
+    match = re.match(
+        r"^(?P<name>.+?)\s+in\s+(?P<department>.+?)\s*$", target.strip(), re.IGNORECASE
+    )
+    if not match:
+        return target.strip(), None
+    return match.group("name").strip(), match.group("department").strip()
+
+
+def _load_delegation_patterns() -> list[dict[str, str]]:
+    payload = _load_delegation_interface_payload()
+    patterns = payload.get("patterns") if isinstance(payload, dict) else None
+    if isinstance(patterns, list):
+        normalized = []
+        for item in patterns:
+            if not isinstance(item, dict):
+                continue
+            pattern_id = str(item.get("id") or "").strip()
+            regex = str(item.get("regex") or "").strip()
+            target_group = str(item.get("target_group") or "target").strip()
+            task_group = str(item.get("task_group") or "").strip()
+            if pattern_id and regex:
+                normalized.append(
+                    {
+                        "id": pattern_id,
+                        "regex": regex,
+                        "target_group": target_group,
+                        "task_group": task_group,
+                    }
+                )
+        if normalized:
+            return normalized
+    return [
+        {
+            "id": "talk_to",
+            "regex": r"(?i)^\s*(?:talk|speak|connect)\s+to\s+(?P<target>.+?)\s*$",
+            "target_group": "target",
+            "task_group": "",
+        },
+        {
+            "id": "have_handle",
+            "regex": r"(?i)^\s*have\s+(?P<target>.+?)\s+handle(?:\s+this)?\s*$",
+            "target_group": "target",
+            "task_group": "",
+        },
+        {
+            "id": "route_to",
+            "regex": r"(?i)^\s*route(?:\s+this)?\s+to\s+(?P<target>.+?)\s*$",
+            "target_group": "target",
+            "task_group": "",
+        },
+        {
+            "id": "ask_to",
+            "regex": r"(?i)^\s*ask\s+(?P<target>.+?)\s+to\s+(?P<task>.+?)\s*$",
+            "target_group": "target",
+            "task_group": "task",
+        },
+        {
+            "id": "delegate_to",
+            "regex": r"(?i)^\s*delegate(?:\s+this)?\s+to\s+(?P<target>.+?)\s*$",
+            "target_group": "target",
+            "task_group": "",
+        },
+    ]
+
+
+def _partial_name_candidates(
+    target: str, personas: dict[str, dict[str, Any]], department_hint: str | None
+) -> list[tuple[str, dict[str, Any]]]:
+    normalized_target = _normalize_alias(target)
+    slug_target = _slugify(target)
+    matches: list[tuple[str, dict[str, Any]]] = []
+    for canonical_agent, persona in personas.items():
+        if not _department_matches_hint(persona, department_hint):
+            continue
+        display_name = str(persona.get("display_name") or "")
+        parts = [part for part in re.split(r"\s+", _normalize_alias(display_name)) if part]
+        tokens = {part for part in parts if part}
+        if normalized_target in tokens or slug_target in {_slugify(token) for token in tokens}:
+            matches.append((canonical_agent, persona))
+    return matches
+
+
+def _resolve_alias_candidate(
+    target: str, personas: dict[str, dict[str, Any]]
+) -> tuple[str, dict[str, Any]]:
+    raw_target, department_hint = _split_department_hint(target)
+    normalized_target = _normalize_alias(raw_target)
+    slug_target = _slugify(raw_target)
+    for canonical_agent, persona in personas.items():
+        if not _department_matches_hint(persona, department_hint):
+            continue
+        aliases = {str(alias) for alias in (persona.get("aliases") or []) if alias}
+        if normalized_target in aliases or slug_target in aliases:
+            return canonical_agent, persona
+    partial_matches = _partial_name_candidates(raw_target, personas, department_hint)
+    if len(partial_matches) == 1:
+        return partial_matches[0]
+    if len(partial_matches) > 1:
+        raise ValueError(f"persona_ambiguous:{target}")
+    raise ValueError(f"persona_not_found:{target}")
 
 
 def _legacy_build_persona_registry(
@@ -528,13 +650,41 @@ def project_persona_context(persona: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def resolve_humanized_delegation_request(
+    request_text: str, personas: dict[str, dict[str, Any]]
+) -> dict[str, Any]:
+    raw_request = str(request_text or "").strip()
+    if not raw_request:
+        raise ValueError("persona_not_found:")
+
+    matched_pattern = "raw_target"
+    normalized_target = raw_request
+    task_hint: str | None = None
+
+    for pattern in _load_delegation_patterns():
+        match = re.match(pattern["regex"], raw_request)
+        if not match:
+            continue
+        matched_pattern = pattern["id"]
+        normalized_target = str(match.group(pattern["target_group"])).strip()
+        task_group = pattern.get("task_group") or ""
+        if task_group:
+            task_value = match.groupdict().get(task_group)
+            task_hint = str(task_value).strip() if task_value else None
+        break
+
+    canonical_agent, persona = _resolve_alias_candidate(normalized_target, personas)
+    return {
+        "canonical_agent": canonical_agent,
+        "persona": project_persona_context(persona),
+        "matched_pattern": matched_pattern,
+        "normalized_target": normalized_target,
+        "task_hint": task_hint,
+    }
+
+
 def resolve_persona_target(
     target: str, personas: dict[str, dict[str, Any]]
 ) -> tuple[str, dict[str, Any]]:
-    normalized_target = _normalize_alias(target)
-    slug_target = _slugify(target)
-    for canonical_agent, persona in personas.items():
-        aliases = {str(alias) for alias in (persona.get("aliases") or []) if alias}
-        if normalized_target in aliases or slug_target in aliases:
-            return canonical_agent, project_persona_context(persona)
-    raise ValueError(f"persona_not_found:{target}")
+    resolution = resolve_humanized_delegation_request(target, personas)
+    return str(resolution["canonical_agent"]), dict(resolution["persona"])

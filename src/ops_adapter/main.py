@@ -32,7 +32,11 @@ from .actions import (
 from .approvals import ApprovalsStore, GraphApprovalsStore
 from .audit import Auditor
 from .models import ActionRequest, ActionResponse
-from .personas import load_persona_registry, resolve_persona_target
+from .personas import (
+    load_persona_registry,
+    resolve_humanized_delegation_request,
+    resolve_persona_target,
+)
 from .policies import OPAClient
 from .rate_limit import RateLimiter
 
@@ -223,6 +227,14 @@ async def health() -> dict[str, str]:
         "timestamp": datetime.now(UTC).isoformat(),
         "version": app.version,
     }
+
+
+@app.get("/personas/resolve")
+async def resolve_persona(query: str = Query(..., min_length=1)) -> dict[str, Any]:
+    try:
+        return resolve_humanized_delegation_request(query, PERSONAS)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
 @app.get("/metrics")
