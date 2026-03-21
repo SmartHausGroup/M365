@@ -1,0 +1,210 @@
+version: 1.0.0
+last_updated: '2026-03-21T05:24:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: engineering
+  display_name: Engineering
+  wave: W6
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Engineering digital employees into one bounded department
+    contract covering service architecture, automation, prototyping, frontend,
+    mobile, and testing responsibilities that are defined but not yet
+    action-backed.
+  bounded_claim: >-
+    The Engineering department pack may only claim the authoritative contract
+    personas, capability families, and governance posture declared here. It may
+    not claim implemented execution coverage until later acts activate those
+    personas.
+workflow_families:
+  - architecture_and_integration_design
+  - automation_and_release_engineering
+  - product_experience_and_frontend_delivery
+  - prototyping_and_validation_support
+workload_families:
+  - Low-code, workflow, and analytics
+  - Documents, notes, and workspace productivity
+  - Content, intranet, and files
+  - Devices, endpoint management, and adjacent Windows admin surfaces
+  - Knowledge, search, and employee experience
+  - Identity, directory, and tenant administration
+  - Security, compliance, and data governance
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the engineering lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:engineering
+  department_lead: department-lead:engineering
+  profiles:
+    medium-operational:
+      approvers:
+        - department-owner:engineering
+      personas:
+        - ai-engineer
+        - backend-architect
+        - devops-automator
+      rule: >-
+        Architecture, automation, and infrastructure changes require department-owner
+        review when later acts activate these personas.
+    low-observe-create:
+      approvers:
+        - department-owner:engineering
+      personas:
+        - frontend-developer
+        - mobile-app-builder
+        - rapid-prototyper
+        - test-writer-fixer
+      rule: >-
+        Draft, prototype, and implementation changes may proceed in observe/create
+        mode until later acts activate their bounded action surfaces.
+kpis:
+  required_personas: 7
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 4
+  supported_action_count: 0
+personas:
+  ai-engineer:
+    display_name: Alex Thompson
+    title: ML Engineer
+    role_type: architecture_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - automation and agent workflow design
+      - model evaluation and experiment analysis
+      - internal knowledge synthesis
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Knowledge, search, and employee experience
+      - Documents, notes, and workspace productivity
+    workflow_families:
+      - architecture_and_integration_design
+      - prototyping_and_validation_support
+    supported_actions: []
+  backend-architect:
+    display_name: Jordan Kim
+    title: Principal Backend Engineer
+    role_type: architecture_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - service architecture and integration contracts
+      - API and data-model design
+      - governance-aware backend change planning
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Identity, directory, and tenant administration
+      - Content, intranet, and files
+    workflow_families:
+      - architecture_and_integration_design
+    supported_actions: []
+  devops-automator:
+    display_name: Casey Johnson
+    title: DevOps Engineer
+    role_type: automation_operator
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - environment automation
+      - CI/CD orchestration
+      - infrastructure and release automation
+    workload_families:
+      - Devices, endpoint management, and adjacent Windows admin surfaces
+      - Low-code, workflow, and analytics
+      - Security, compliance, and data governance
+    workflow_families:
+      - automation_and_release_engineering
+    supported_actions: []
+  frontend-developer:
+    display_name: Riley Martinez
+    title: UI/UX Developer
+    role_type: product_builder
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - dashboard and UI implementation
+      - component and design-system changes
+      - frontend release preparation
+    workload_families:
+      - Content, intranet, and files
+      - Documents, notes, and workspace productivity
+      - Media, publishing, and extended communications
+    workflow_families:
+      - product_experience_and_frontend_delivery
+    supported_actions: []
+  mobile-app-builder:
+    display_name: Taylor Brown
+    title: Mobile Engineer
+    role_type: product_builder
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - mobile workflow implementation
+      - app packaging and release preparation
+      - device-facing experience changes
+    workload_families:
+      - Documents, notes, and workspace productivity
+      - Content, intranet, and files
+      - Collaboration, meetings, and communities
+    workflow_families:
+      - product_experience_and_frontend_delivery
+    supported_actions: []
+  rapid-prototyper:
+    display_name: Ethan Rivera
+    title: Prototype Engineer
+    role_type: innovation_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - prototype assembly
+      - quick workflow validation
+      - concept demonstration
+    workload_families:
+      - Documents, notes, and workspace productivity
+      - Low-code, workflow, and analytics
+      - Collaboration, meetings, and communities
+    workflow_families:
+      - prototyping_and_validation_support
+    supported_actions: []
+  test-writer-fixer:
+    display_name: Grace Lee
+    title: Test Engineer
+    role_type: quality_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - test authoring and remediation
+      - regression harness changes
+      - workflow validation support
+    workload_families:
+      - Tasks, scheduling, and work management
+      - Low-code, workflow, and analytics
+      - Documents, notes, and workspace productivity
+    workflow_families:
+      - prototyping_and_validation_support
+    supported_actions: []
+bounded_claims:
+  supported:
+    - engineering persona census and capability-family contract
+    - approval and escalation semantics for future engineering activation
+    - deterministic blocked-state projection while engineering remains contract-only
+  unsupported:
+    - claims that engineering personas are currently action-backed
+    - production engineering execution beyond explicit later activation acts
+    - finance, HR, or communication work outside the engineering contract

@@ -424,11 +424,21 @@ execution_status:
         proved the bounded E6C slice through targeted pack-state regressions
         plus generated proof at
         configs/generated/communication_department_pack_v1_verification.json.
-  prepared_blocked:
-    - phase: E6E
-      blocked_by: "E6"
+    - phase: E6D
+      date: "2026-03-21"
       summary: >
-        Build the Marketing department capability pack.
+        Completed the Engineering department pack through
+        registry/department_pack_engineering_v1.yaml and
+        docs/commercialization/m365-engineering-department-pack-v1.md, added
+        the notebook-backed L51 chain, generalized the shared pack runtime in
+        src/smarthaus_common/department_pack.py from
+        notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb so
+        contract-only zero-action packs validate and fail closed correctly,
+        added the deterministic verifier at
+        scripts/ci/verify_engineering_department_pack_v1.py, and proved the
+        bounded E6D slice through targeted pack-state regressions plus generated
+        proof at configs/generated/engineering_department_pack_v1_verification.json.
+  prepared_blocked:
     - phase: E6F
       blocked_by: "E6"
       summary: >
@@ -521,11 +531,11 @@ execution_status:
       blocked_by: "E9"
       summary: >
         Issue the final release decision for the full workforce program.
-  next_act: E6D
+  next_act: E6E
 
 open_blockers:
   - "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice."
-  - "Only the Operations, HR, and Communication department packs are now runtime-bounded; the remaining department packs are still unimplemented and uncertified."
+  - "The Operations, HR, Communication, and Engineering department packs are now runtime-bounded; Engineering remains intentionally blocked while its personas stay contract-only, and the remaining department packs are still unimplemented and uncertified."
 
 requirements:
   - id: R1
@@ -862,13 +872,13 @@ phase_stack:
       - code: E6D
         slug: engineering-department-pack
         title: "Engineering Department Pack"
-        status: Active
+        status: Complete
         goal: >
           Build the Engineering department capability pack.
       - code: E6E
         slug: marketing-department-pack
         title: "Marketing Department Pack"
-        status: Pending
+        status: Active
         goal: >
           Build the Marketing department capability pack.
       - code: E6F

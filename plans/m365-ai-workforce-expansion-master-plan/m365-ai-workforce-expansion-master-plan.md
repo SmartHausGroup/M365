@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E6C` are complete; `E6D` is the active next act; `E6E` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E6D` are complete; `E6E` is the active next act; `E6F` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -90,14 +90,15 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E6A` is complete.
 - `E6B` is complete.
 - `E6C` is complete.
-- `E6D` is the active next act.
-- `E6E` through `E9E` are prepared but blocked by prerequisite work.
+- `E6D` is complete.
+- `E6E` is the active next act.
+- `E6F` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
 - The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, bounded cross-workload recipe discovery, and bounded Intune / devices remain unimplemented.
-- Only the Operations, HR, and Communication department packs are now runtime-bounded; the remaining department packs are still unimplemented and uncertified.
+- The Operations, HR, Communication, and Engineering department packs are now runtime-bounded; Engineering remains intentionally blocked while its personas stay contract-only, and the remaining department packs are still unimplemented and uncertified.
 
 ## Scope
 
@@ -445,13 +446,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E6D — Engineering Department Pack
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Build the Engineering department capability pack.
 
 #### E6E — Marketing Department Pack
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Build the Marketing department capability pack.
 
@@ -661,3 +662,5 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 `E6B` is complete. It locked the HR pack authority at `registry/department_pack_hr_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-hr-department-pack-v1.md`, added the notebook-backed `L49` evidence chain, reused and type-hardened the shared department-pack runtime in `src/smarthaus_common/department_pack.py`, proved the regulated HR pack projection through targeted regressions in `tests/test_hr_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_hr_department_pack_v1.py`, and emitted generated proof at `configs/generated/hr_department_pack_v1_verification.json`. `E6C` is now the active next act and must build the Communication department pack on top of the same shared department-pack runtime.
 
 `E6C` is complete. It locked the Communication pack authority at `registry/department_pack_communication_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-communication-department-pack-v1.md`, added the notebook-backed `L50` evidence chain, reused the shared department-pack runtime in `src/smarthaus_common/department_pack.py`, proved the bounded Communication pack projection through targeted regressions in `tests/test_communication_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_communication_department_pack_v1.py`, and emitted generated proof at `configs/generated/communication_department_pack_v1_verification.json`. `E6D` is now the active next act and must build the Engineering department pack.
+
+`E6D` is complete. It locked the Engineering pack authority at `registry/department_pack_engineering_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-engineering-department-pack-v1.md`, added the notebook-backed `L51` evidence chain, generalized the shared department-pack runtime in `src/smarthaus_common/department_pack.py` via the notebook-backed source `notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb` so contract-only zero-action packs can be represented honestly, proved the blocked Engineering pack projection through targeted regressions in `tests/test_engineering_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_engineering_department_pack_v1.py`, and emitted generated proof at `configs/generated/engineering_department_pack_v1_verification.json`. `E6E` is now the active next act and must build the Marketing department pack.

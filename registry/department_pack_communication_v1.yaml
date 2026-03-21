@@ -57,6 +57,7 @@ personas:
     display_name: David Park
     title: Communications Manager
     role_type: department_anchor
+    coverage_status: registry-backed
     risk_tier: high
     approval_profile: high-impact
     capability_families:

@@ -58,6 +58,7 @@ personas:
     display_name: Sarah Williams
     title: HR Director
     role_type: department_anchor
+    coverage_status: registry-backed
     risk_tier: critical
     approval_profile: critical-regulated
     capability_families:

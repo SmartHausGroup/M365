@@ -64,6 +64,7 @@ personas:
     display_name: Marcus Chen
     title: Senior IT Administrator
     role_type: department_anchor
+    coverage_status: registry-backed
     risk_tier: high
     approval_profile: high-impact
     capability_families:
@@ -121,6 +122,7 @@ personas:
     display_name: Elena Rodriguez
     title: Website Manager
     role_type: publishing_operator
+    coverage_status: registry-backed
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
