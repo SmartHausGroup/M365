@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L39",
+  "name": "M365 Security / Defender expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AO-security-defender-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L39_m365_security_defender_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L39_m365_security_defender_expansion_v2"
+  ]
+}

@@ -142,6 +142,13 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `get_device` | Get an Intune managed device by id | No | `deviceId` or `device_id` or `id` |
 | `list_device_compliance_summaries` | List Intune device compliance summaries | No | none |
 | `execute_device_action` | Execute a bounded Intune managed-device action | Yes | `deviceId` or `device_id` or `id`, `action?` or `deviceAction?` |
+| `list_security_alerts` | List Microsoft 365 security alerts | No | `top?` |
+| `get_security_alert` | Get a Microsoft 365 security alert by id | No | `alertId` or `alert_id` or `id` |
+| `list_security_incidents` | List Microsoft 365 security incidents | No | `top?` |
+| `get_security_incident` | Get a Microsoft 365 security incident by id | No | `incidentId` or `incident_id` or `id` |
+| `list_secure_scores` | List Microsoft secure-score snapshots | No | `top?` |
+| `get_secure_score_profile` | Get a Microsoft secure-score control profile by id | No | `profileId` or `profile_id` or `id` |
+| `update_security_incident` | Apply a bounded response update to a Microsoft 365 security incident | Yes | `incidentId` or `incident_id` or `id`, `status?`, `assignedTo?`, `classification?`, `determination?`, `comments?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -270,6 +277,13 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **get_device:** `{ "device": { ... } }`
 - **list_device_compliance_summaries:** `{ "summaries": [ ... ], "count": N }`
 - **execute_device_action:** `{ "executed": true, "deviceId": "<id>", "action": "<action>" }`
+- **list_security_alerts:** `{ "alerts": [ ... ], "count": N }`
+- **get_security_alert:** `{ "alert": { ... } }`
+- **list_security_incidents:** `{ "incidents": [ ... ], "count": N }`
+- **get_security_incident:** `{ "incident": { ... } }`
+- **list_secure_scores:** `{ "scores": [ ... ], "count": N }`
+- **get_secure_score_profile:** `{ "profile": { ... } }`
+- **update_security_incident:** `{ "updated": true, "incidentId": "<id>" }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

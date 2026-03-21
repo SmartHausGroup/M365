@@ -129,6 +129,26 @@
         "phase": "E3C",
         "date": "2026-03-20",
         "summary": "Expanded Power BI through registry/power_bi_expansion_v2.yaml and docs/commercialization/m365-power-bi-expansion-v2.md, projected bounded workspace, report, dataset, dataset-refresh, and dashboard actions into src/smarthaus_common/power_bi_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L35 chain and scripts/ci/verify_power_bi_expansion.py, and proved the bounded E3C slice through contract verifiers plus targeted Power BI regressions."
+      },
+      {
+        "phase": "E3D",
+        "date": "2026-03-20",
+        "summary": "Expanded Forms / approvals / connectors through registry/forms_approvals_connectors_expansion_v2.yaml and docs/commercialization/m365-forms-approvals-connectors-expansion-v2.md, projected bounded approval-item, connector, external-item, and external-group actions into src/smarthaus_common/forms_approvals_connectors_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L36 chain and scripts/ci/verify_forms_approvals_connectors_expansion.py, and proved the bounded E3D slice through contract verifiers plus targeted connector and approval regressions."
+      },
+      {
+        "phase": "E3E",
+        "date": "2026-03-20",
+        "summary": "Expanded cross-workload recipes through registry/cross_workload_automation_recipes_v2.yaml and docs/commercialization/m365-cross-workload-automation-recipes-v2.md, projected bounded recipe-catalog discovery into src/smarthaus_common/automation_recipe_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L37 chain and scripts/ci/verify_cross_workload_automation_recipes.py, and proved the bounded E3E slice through contract verifiers plus targeted recipe-catalog regressions."
+      },
+      {
+        "phase": "E4A",
+        "date": "2026-03-20",
+        "summary": "Expanded Intune / devices through registry/intune_devices_expansion_v2.yaml and docs/commercialization/m365-intune-devices-expansion-v2.md, projected bounded managed-device inventory, compliance-summary, and action operations into src/smarthaus_common/intune_devices_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L38 chain and scripts/ci/verify_intune_devices_expansion.py, and proved the bounded E4A slice through contract verifiers plus targeted Intune regressions."
+      },
+      {
+        "phase": "E4B",
+        "date": "2026-03-20",
+        "summary": "Expanded security / Defender through registry/security_defender_expansion_v2.yaml and docs/commercialization/m365-security-defender-expansion-v2.md, projected bounded alert, incident, secure-score, and incident-update actions into src/smarthaus_common/security_defender_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L39 chain and scripts/ci/verify_security_defender_expansion.py, and proved the bounded E4B slice through contract verifiers plus targeted security regressions."
       }
     ],
     "prepared_blocked": [
@@ -143,29 +163,9 @@
         "summary": "Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane."
       },
       {
-        "phase": "E3D",
-        "blocked_by": "E3",
-        "summary": "Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface."
-      },
-      {
-        "phase": "E3E",
-        "blocked_by": "E3",
-        "summary": "Define reusable end-to-end recipes spanning multiple M365 workloads."
-      },
-      {
         "phase": "E4",
         "blocked_by": "E3E",
         "summary": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries."
-      },
-      {
-        "phase": "E4A",
-        "blocked_by": "E4",
-        "summary": "Add governed device inventory, compliance, and lifecycle operations."
-      },
-      {
-        "phase": "E4B",
-        "blocked_by": "E4",
-        "summary": "Add governed security alert, incident, score, and response operations."
       },
       {
         "phase": "E4C",
@@ -358,10 +358,10 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E4B"
+    "next_act": "E4C"
   },
   "open_blockers": [
-    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, and bounded Intune/devices work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
+    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
     "No department pack beyond the standalone v1 surface has been certified or released."
   ],
   "requirements": [
@@ -585,7 +585,7 @@
       "code": "E3",
       "title": "Power Platform and Analytics Expansion",
       "slug": "power-platform-analytics-expansion",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.",
       "outputs": [
         "Power Automate expansion",
@@ -656,21 +656,21 @@
           "code": "E4A",
           "slug": "intune-devices-expansion",
           "title": "Intune / Devices Expansion",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Add governed device inventory, compliance, and lifecycle operations."
         },
         {
           "code": "E4B",
           "slug": "security-defender-expansion",
           "title": "Security / Defender Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Add governed security alert, incident, score, and response operations."
         },
         {
           "code": "E4C",
           "slug": "compliance-retention-ediscovery-expansion",
           "title": "Compliance / Retention / eDiscovery Expansion",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Add governed compliance, policy, and discovery operations."
         },
         {

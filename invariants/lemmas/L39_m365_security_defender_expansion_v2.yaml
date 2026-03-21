@@ -1,0 +1,16 @@
+lemma_id: L39
+title: M365 Security / Defender Expansion v2
+phase: E4B
+plan_ref: plan:m365-ai-workforce-expansion-master-plan:E4B
+proof_artifacts:
+  - docs/ma/lemmas/L39_m365_security_defender_expansion_v2.md
+  - notebooks/m365/INV-M365-AO-security-defender-expansion-v2.ipynb
+  - notebooks/lemma_proofs/L39_m365_security_defender_expansion_v2.ipynb
+  - artifacts/scorecards/scorecard_l39.json
+enforcement:
+  verifier: scripts/ci/verify_security_defender_expansion.py
+  tests:
+    - tests/test_security_defender_expansion_v2.py
+failure_boundary: >
+  Fail closed if any declared security action is missing from the instruction router,
+  capability registry, executor routing, auth model, approval matrix, or bounded verifier.

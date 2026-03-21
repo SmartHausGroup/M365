@@ -414,9 +414,14 @@ connector-backed surfaces instead.
 
 ## Security & compliance (where exposed via Graph)
 
+- list_security_alerts
+- get_security_alert
+- list_security_incidents
+- get_security_incident
 - list_risk_detections
 - list_secure_scores
 - get_secure_score_profile
+- update_security_incident
 
 ---
 

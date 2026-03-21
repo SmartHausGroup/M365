@@ -1915,16 +1915,21 @@ actions:
   resource: secureScore
   domain: security
   required_permissions:
-  - See permissions reference
+  - SecurityEvents.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - scores
+  - count
 - action: get_secure_score_profile
-  resource: secureScore
+  resource: secureScoreControlProfile
   domain: security
   required_permissions:
-  - See permissions reference
+  - SecurityEvents.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - profile
 - action: provision_user_and_license
   resource: composite
   domain: provisioning
@@ -2447,3 +2452,51 @@ actions:
   status: implemented
   result_shape_keys:
   - recipe
+- action: list_security_alerts
+  resource: securityAlert
+  domain: security
+  required_permissions:
+  - SecurityAlert.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - alerts
+  - count
+- action: get_security_alert
+  resource: securityAlert
+  domain: security
+  required_permissions:
+  - SecurityAlert.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - alert
+- action: list_security_incidents
+  resource: securityIncident
+  domain: security
+  required_permissions:
+  - SecurityIncident.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - incidents
+  - count
+- action: get_security_incident
+  resource: securityIncident
+  domain: security
+  required_permissions:
+  - SecurityIncident.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - incident
+- action: update_security_incident
+  resource: securityIncident
+  domain: security
+  required_permissions:
+  - SecurityIncident.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - updated
+  - incidentId

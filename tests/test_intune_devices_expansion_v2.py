@@ -5,9 +5,15 @@ from typing import Any
 
 import pytest
 from provisioning_api.routers import m365 as m365_router
-from smarthaus_common.approval_risk import reload_approval_risk_registry, resolve_action_approval_risk
+from smarthaus_common.approval_risk import (
+    reload_approval_risk_registry,
+    resolve_action_approval_risk,
+)
 from smarthaus_common.auth_model import reload_auth_model_registry, resolve_action_auth
-from smarthaus_common.executor_routing import executor_route_for_action, reload_executor_routing_registry
+from smarthaus_common.executor_routing import (
+    executor_route_for_action,
+    reload_executor_routing_registry,
+)
 
 
 @pytest.fixture(autouse=True)

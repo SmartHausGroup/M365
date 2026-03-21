@@ -27,6 +27,7 @@ from smarthaus_common.office_generation import (
 from smarthaus_common.power_apps_client import PowerAppsClient
 from smarthaus_common.power_automate_client import PowerAutomateClient
 from smarthaus_common.power_bi_client import PowerBIClient
+from smarthaus_common.security_defender_client import SecurityDefenderClient
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -126,6 +127,13 @@ _SUPPORTED_ACTIONS = {
     "get_device",
     "list_device_compliance_summaries",
     "execute_device_action",
+    "list_security_alerts",
+    "get_security_alert",
+    "list_security_incidents",
+    "get_security_incident",
+    "list_secure_scores",
+    "get_secure_score_profile",
+    "update_security_incident",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -225,6 +233,7 @@ _MUTATING_ACTIONS = {
     "create_external_group",
     "add_external_group_member",
     "execute_device_action",
+    "update_security_incident",
 }
 
 
@@ -1388,6 +1397,58 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "device_id": device_id,
             "device_action": _first_str(params, "action", "deviceAction") or "syncDevice",
         }
+    if action == "list_security_alerts":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "get_security_alert":
+        alert_id = _first_str(params, "alertId", "alert_id", "id")
+        if not alert_id:
+            raise HTTPException(status_code=400, detail="Missing 'alertId', 'alert_id', or 'id'")
+        return {"alert_id": alert_id}
+    if action == "list_security_incidents":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "get_security_incident":
+        incident_id = _first_str(params, "incidentId", "incident_id", "id")
+        if not incident_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'incidentId', 'incident_id', or 'id'",
+            )
+        return {"incident_id": incident_id}
+    if action == "list_secure_scores":
+        return {"top": _normalize_top(params, default=25)}
+    if action == "get_secure_score_profile":
+        profile_id = _first_str(params, "profileId", "profile_id", "id")
+        if not profile_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'profileId', 'profile_id', or 'id'",
+            )
+        return {"profile_id": profile_id}
+    if action == "update_security_incident":
+        incident_id = _first_str(params, "incidentId", "incident_id", "id")
+        if not incident_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'incidentId', 'incident_id', or 'id'",
+            )
+        body: dict[str, Any] = {}
+        for source_key, target_key in (
+            ("status", "status"),
+            ("assignedTo", "assignedTo"),
+            ("classification", "classification"),
+            ("determination", "determination"),
+            ("comments", "comments"),
+            ("comment", "comments"),
+        ):
+            value = _optional_str(params, source_key)
+            if value:
+                body[target_key] = value
+        if not body:
+            raise HTTPException(
+                status_code=400,
+                detail="Provide at least one of 'status', 'assignedTo', 'classification', 'determination', or 'comments'",
+            )
+        return {"incident_id": incident_id, "body": body}
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1530,10 +1591,11 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             raise HTTPException(status_code=400, detail="Missing 'app_id', 'appId', or 'id'")
         if action == "get_application":
             return {"app_id": app_id}
-        body = params.get("body")
-        if not isinstance(body, dict) or not body:
+        body_payload = params.get("body")
+        if not isinstance(body_payload, dict) or not body_payload:
             raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
-        return {"app_id": app_id, "body": body}
+        app_body: dict[str, Any] = body_payload
+        return {"app_id": app_id, "body": app_body}
     if action == "list_messages":
         return {
             "user_id_or_upn": _normalize_user_context(params),
@@ -1582,10 +1644,11 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if action == "get_mailbox_settings":
         return {"user_id_or_upn": _normalize_user_context(params)}
     if action == "update_mailbox_settings":
-        body = params.get("body")
-        if not isinstance(body, dict) or not body:
+        body_payload = params.get("body")
+        if not isinstance(body_payload, dict) or not body_payload:
             raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
-        return {"user_id_or_upn": _normalize_user_context(params), "body": body}
+        mailbox_body: dict[str, Any] = body_payload
+        return {"user_id_or_upn": _normalize_user_context(params), "body": mailbox_body}
     if action == "list_events":
         return {
             "user_id_or_upn": _normalize_user_context(params),
@@ -1786,6 +1849,23 @@ def _intune_devices_client(action: str | None = None) -> IntuneDevicesClient:
 
     config = AppConfig()
     return IntuneDevicesClient(legacy_config=config)
+
+
+def _security_defender_client(action: str | None = None) -> SecurityDefenderClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return SecurityDefenderClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return SecurityDefenderClient(legacy_config=config)
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -2342,6 +2422,33 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
         return devices_client.execute_device_action(
             params["device_id"],
             action=params["device_action"],
+        )
+    if action == "list_security_alerts":
+        security_client = _security_defender_client(action)
+        value = security_client.list_security_alerts(top=params["top"])
+        return {"alerts": value, "count": len(value)}
+    if action == "get_security_alert":
+        security_client = _security_defender_client(action)
+        return {"alert": security_client.get_security_alert(params["alert_id"])}
+    if action == "list_security_incidents":
+        security_client = _security_defender_client(action)
+        value = security_client.list_security_incidents(top=params["top"])
+        return {"incidents": value, "count": len(value)}
+    if action == "get_security_incident":
+        security_client = _security_defender_client(action)
+        return {"incident": security_client.get_security_incident(params["incident_id"])}
+    if action == "list_secure_scores":
+        security_client = _security_defender_client(action)
+        value = security_client.list_secure_scores(top=params["top"])
+        return {"scores": value, "count": len(value)}
+    if action == "get_secure_score_profile":
+        security_client = _security_defender_client(action)
+        return {"profile": security_client.get_secure_score_profile(params["profile_id"])}
+    if action == "update_security_incident":
+        security_client = _security_defender_client(action)
+        return security_client.update_security_incident(
+            params["incident_id"],
+            body=params["body"],
         )
     if action == "get_user":
         client = _graph_client(action)
@@ -3424,6 +3531,51 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "action": "execute_device_action",
         "description": "Execute a bounded Intune managed-device action",
         "params": ["deviceId|device_id|id", "action|deviceAction?"],
+        "mutating": True,
+    },
+    {
+        "action": "list_security_alerts",
+        "description": "List Microsoft 365 security alerts",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_security_alert",
+        "description": "Get a Microsoft 365 security alert by id",
+        "params": ["alertId|alert_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_security_incidents",
+        "description": "List Microsoft 365 security incidents",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_security_incident",
+        "description": "Get a Microsoft 365 security incident by id",
+        "params": ["incidentId|incident_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_secure_scores",
+        "description": "List Microsoft secure-score snapshots",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_secure_score_profile",
+        "description": "Get a Microsoft secure-score control profile by id",
+        "params": ["profileId|profile_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "update_security_incident",
+        "description": "Apply a bounded response update to a Microsoft 365 security incident",
+        "params": [
+            "incidentId|incident_id|id",
+            "status?|assignedTo?|classification?|determination?|comments?",
+        ],
         "mutating": True,
     },
     {

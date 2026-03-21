@@ -395,6 +395,35 @@ exact_action_policies:
     approval_profile: high-impact
     approval_requirement: always
     approvers: [platform_admin]
+  list_security_alerts:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_security_alert:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_security_incidents:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_security_incident:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_secure_scores:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_secure_score_profile:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  update_security_incident:
+    risk_class: critical
+    approval_profile: critical-regulated
+    approval_requirement: always
+    approvers: [security-team, platform_admin]
   get_approval_solution:
     risk_class: low
     approval_profile: low-observe-create

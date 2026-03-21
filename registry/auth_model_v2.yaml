@@ -230,6 +230,20 @@ exact_action_policies:
     auth_class: app_only
   execute_device_action:
     auth_class: app_only
+  list_security_alerts:
+    auth_class: app_only
+  get_security_alert:
+    auth_class: app_only
+  list_security_incidents:
+    auth_class: app_only
+  get_security_incident:
+    auth_class: app_only
+  list_secure_scores:
+    auth_class: app_only
+  get_secure_score_profile:
+    auth_class: app_only
+  update_security_incident:
+    auth_class: app_only
   get_approval_solution:
     auth_class: delegated
     delegated_preference: always

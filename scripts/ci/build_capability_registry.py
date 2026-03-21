@@ -234,6 +234,12 @@ def action_to_resource(action: str, domain: str) -> str:
     if domain == "access_reviews":
         return "accessReview"
     if domain == "security":
+        if "alert" in action:
+            return "securityAlert"
+        if "incident" in action:
+            return "securityIncident"
+        if "score_profile" in action:
+            return "secureScoreControlProfile"
         return "secureScore" if "score" in action else "riskDetection"
     if domain == "provisioning":
         return "composite"
