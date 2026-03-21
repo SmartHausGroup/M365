@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "memory_types": [
+    "decision",
+    "fact",
+    "handoff",
+    "note",
+    "summary"
+  ],
+  "visibility_levels": [
+    "approval_owner",
+    "internal",
+    "manager"
+  ],
+  "memory_count": 1,
+  "event_count": 4,
+  "event_types": [
+    "instruction",
+    "memory",
+    "task_created",
+    "task_update"
+  ],
+  "accountability_state": "on_track"
+}

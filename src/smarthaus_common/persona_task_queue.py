@@ -110,7 +110,9 @@ def _iso_now() -> str:
 
 
 def _sort_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return sorted(records, key=lambda record: (int(record.get("ts", 0)), str(record.get("id", ""))))
+    indexed = list(enumerate(records))
+    indexed.sort(key=lambda item: (int(item[1].get("ts", 0)), item[0]))
+    return [record for _, record in indexed]
 
 
 def _allowed_transition(authority: dict[str, Any], current_status: str, next_status: str) -> bool:
@@ -156,7 +158,9 @@ def _project_task(
     return projected
 
 
-def list_persona_tasks(canonical_agent: str, store: JsonStore | None = None) -> list[dict[str, Any]]:
+def list_persona_tasks(
+    canonical_agent: str, store: JsonStore | None = None
+) -> list[dict[str, Any]]:
     authority = load_persona_task_queue_authority()
     runtime_store = store or JsonStore()
     tasks = _sort_records(runtime_store.list(_task_collection(canonical_agent)))
@@ -209,7 +213,12 @@ def build_persona_state(canonical_agent: str, store: JsonStore | None = None) ->
         task_counts[str(task.get("status"))] += 1
     task_counts["total"] = len(tasks)
 
-    instruction_counts = {"queued": 0, "acknowledged": 0, "cancelled": 0, "total": len(instructions)}
+    instruction_counts = {
+        "queued": 0,
+        "acknowledged": 0,
+        "cancelled": 0,
+        "total": len(instructions),
+    }
     for instruction in instructions:
         status = str(instruction.get("status") or "queued")
         instruction_counts[status] += 1
@@ -275,7 +284,9 @@ def create_persona_task(
         },
     )
     return next(
-        task for task in list_persona_tasks(canonical_agent, store=runtime_store) if task["id"] == record["id"]
+        task
+        for task in list_persona_tasks(canonical_agent, store=runtime_store)
+        if task["id"] == record["id"]
     )
 
 
@@ -287,7 +298,10 @@ def update_persona_task(
 ) -> dict[str, Any]:
     authority = load_persona_task_queue_authority()
     runtime_store = store or JsonStore()
-    tasks = {str(task.get("id")): task for task in list_persona_tasks(canonical_agent, store=runtime_store)}
+    tasks = {
+        str(task.get("id")): task
+        for task in list_persona_tasks(canonical_agent, store=runtime_store)
+    }
     if task_id not in tasks:
         raise ValueError(f"persona_task_not_found:{task_id}")
     current = tasks[task_id]
@@ -308,7 +322,9 @@ def update_persona_task(
         },
     )
     return next(
-        task for task in list_persona_tasks(canonical_agent, store=runtime_store) if task["id"] == task_id
+        task
+        for task in list_persona_tasks(canonical_agent, store=runtime_store)
+        if task["id"] == task_id
     )
 
 

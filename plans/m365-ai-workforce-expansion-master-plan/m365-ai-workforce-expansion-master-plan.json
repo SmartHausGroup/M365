@@ -184,24 +184,14 @@
         "phase": "E5D",
         "date": "2026-03-21",
         "summary": "Completed the persona accountability layer through registry/persona_accountability_v1.yaml and docs/commercialization/m365-persona-accountability-v1.md, added the shared accountability runtime in src/smarthaus_common/persona_accountability.py, projected ownership, KPI thresholds, accountability state, and escalation targets into src/provisioning_api/routers/agent_dashboard.py plus bounded persona state/accountability endpoints in src/ops_adapter/main.py and src/ops_adapter/app.py, added the notebook-backed L46 chain and the deterministic verifier at scripts/ci/verify_persona_accountability_v1.py, and proved the bounded E5D slice through targeted accountability regressions plus generated proof at configs/generated/persona_accountability_v1_verification.json."
+      },
+      {
+        "phase": "E5E",
+        "date": "2026-03-21",
+        "summary": "Completed the persona memory and work-history layer through registry/persona_memory_work_history_v1.yaml and docs/commercialization/m365-persona-memory-work-history-v1.md, added the shared bounded memory/history runtime in src/smarthaus_common/persona_memory.py, corrected same-second queue-event ordering in src/smarthaus_common/persona_task_queue.py so replay stays deterministic, projected memory and history into src/provisioning_api/routers/agent_dashboard.py plus bounded persona memory/history endpoints in src/ops_adapter/main.py and src/ops_adapter/app.py, added the notebook-backed L47 chain and the deterministic verifier at scripts/ci/verify_persona_memory_work_history_v1.py, and proved the bounded E5E slice through targeted memory/history regressions plus generated proof at configs/generated/persona_memory_work_history_v1_verification.json."
       }
     ],
     "prepared_blocked": [
-      {
-        "phase": "E5E",
-        "blocked_by": "E5",
-        "summary": "Define bounded, auditable persona memory and work-history semantics."
-      },
-      {
-        "phase": "E6",
-        "blocked_by": "E5E",
-        "summary": "Package the workforce into department-operable capability sets so each department has its own governed digital team and workflows."
-      },
-      {
-        "phase": "E6A",
-        "blocked_by": "E6",
-        "summary": "Build the Operations department capability pack."
-      },
       {
         "phase": "E6B",
         "blocked_by": "E6",
@@ -249,7 +239,7 @@
       },
       {
         "phase": "E7",
-        "blocked_by": "E5E",
+        "blocked_by": "E6",
         "summary": "Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control."
       },
       {
@@ -673,7 +663,7 @@
       "code": "E5",
       "title": "Digital Employee Runtime",
       "slug": "digital-employee-runtime",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer.",
       "outputs": [
         "persona registry completion",
@@ -719,7 +709,7 @@
           "code": "E5E",
           "slug": "persona-memory-and-work-history",
           "title": "Persona Memory and Work History",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Define bounded, auditable persona memory and work-history semantics."
         }
       ]
@@ -728,7 +718,7 @@
       "code": "E6",
       "title": "Department Packs",
       "slug": "department-packs",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Package the workforce into department-operable capability sets so each department has its own governed digital team and workflows.",
       "outputs": [
         "department capability packs",
@@ -744,7 +734,7 @@
           "code": "E6A",
           "slug": "operations-department-pack",
           "title": "Operations Department Pack",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Build the Operations department capability pack."
         },
         {

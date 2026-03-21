@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-import yaml
 from smarthaus_common.json_store import JsonStore
 from smarthaus_common.persona_task_queue import (
     build_persona_state,

@@ -1,0 +1,21 @@
+lemma_id: L47
+title: M365 Persona Memory and Work History v1
+invariant: >
+  Dashboard and persona-runtime memory/history must be projected from one authoritative
+  memory/work-history contract, one append-only memory store, and one deterministic work-history
+  builder so context remains bounded, auditable, and replayable.
+proof_obligations:
+  - memory authority file exists and validates
+  - memory writes remain bounded and actor-attributed
+  - invalid memory writes fail closed
+  - work history deterministically combines tasks, instructions, and memory entries
+  - dashboard and persona runtime project the same memory/history counts
+failure_boundaries:
+  - missing authority file
+  - unbounded memory retention
+  - unaudited memory writes
+  - dashboard/runtime work-history drift
+test_bindings:
+  - tests/test_persona_memory_work_history_v1.py
+  - tests/test_agent_api.py
+ci_gate: scripts/ci/verify_persona_memory_work_history_v1.py

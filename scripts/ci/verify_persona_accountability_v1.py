@@ -22,10 +22,14 @@ def main() -> None:
     with TemporaryDirectory() as temp_dir:
         store = JsonStore(temp_dir)
         for index in range(3):
-            create_persona_task("website-manager", {"title": f"Queued task {index + 1}"}, store=store)
+            create_persona_task(
+                "website-manager", {"title": f"Queued task {index + 1}"}, store=store
+            )
         warning_snapshot = build_persona_accountability("website-manager", store=store)
 
-        task = create_persona_task("m365-administrator", {"title": "Review privileged access"}, store=store)
+        task = create_persona_task(
+            "m365-administrator", {"title": "Review privileged access"}, store=store
+        )
         update_persona_task(
             "m365-administrator",
             task["id"],

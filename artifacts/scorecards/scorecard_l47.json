@@ -1,0 +1,23 @@
+{
+  "lemma_id": "L47",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AW-persona-memory-work-history-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L47_m365_persona_memory_work_history_v1.ipynb",
+  "invariant": "invariants/lemmas/L47_m365_persona_memory_work_history_v1.yaml",
+  "seed_lock": true,
+  "determinism": "append-only memory writes, fixed retention bounds, and descending timestamp projection over tasks, instructions, and memory records produce one bounded work-history stream",
+  "checks": [
+    {
+      "id": "bounded_memory",
+      "status": "passed"
+    },
+    {
+      "id": "history_projection",
+      "status": "passed"
+    },
+    {
+      "id": "actor_attribution",
+      "status": "passed"
+    }
+  ]
+}

@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
-
 from ops_adapter.app import create_app
 from smarthaus_common.json_store import JsonStore
 from smarthaus_common.persona_task_queue import (
@@ -21,7 +20,9 @@ def test_e5c_projects_queue_state_and_instruction_counts(
     monkeypatch.setenv("APP_DATA", str(tmp_path))
     store = JsonStore(tmp_path)
 
-    task = create_persona_task("website-manager", {"title": "Draft homepage", "priority": "high"}, store)
+    task = create_persona_task(
+        "website-manager", {"title": "Draft homepage", "priority": "high"}, store
+    )
     create_persona_instruction("website-manager", {"instruction": "Review the draft"}, store)
 
     state = build_persona_state("website-manager", store)
@@ -33,9 +34,7 @@ def test_e5c_projects_queue_state_and_instruction_counts(
     assert state["queue_depth"] == 2
 
 
-def test_e5c_enforces_transition_matrix(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_e5c_enforces_transition_matrix(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))
     store = JsonStore(tmp_path)
     task = create_persona_task("website-manager", {"title": "Publish site"}, store)

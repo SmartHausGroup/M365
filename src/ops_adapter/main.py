@@ -21,6 +21,11 @@ from smarthaus_common.permission_enforcer import (
     get_user_tier_info,
 )
 from smarthaus_common.persona_accountability import build_persona_accountability
+from smarthaus_common.persona_memory import (
+    build_persona_work_history,
+    create_persona_memory,
+    list_persona_memory,
+)
 from smarthaus_common.persona_task_queue import (
     build_persona_state,
     create_persona_task,
@@ -256,6 +261,8 @@ async def get_persona_state(agent_target: str) -> dict[str, Any]:
     canonical_agent, persona = _resolve_task_queue_target(agent_target)
     state = build_persona_state(canonical_agent)
     state["accountability"] = build_persona_accountability(canonical_agent)
+    state["memory_count"] = len(list_persona_memory(canonical_agent))
+    state["work_history_events"] = build_persona_work_history(canonical_agent)["event_count"]
     state["persona"] = persona
     return state
 
@@ -267,6 +274,45 @@ async def get_persona_accountability(agent_target: str) -> dict[str, Any]:
         "canonical_agent": canonical_agent,
         "persona": persona,
         "accountability": build_persona_accountability(canonical_agent),
+    }
+
+
+@app.get("/personas/{agent_target}/memory")
+async def get_persona_memory(agent_target: str) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    return {
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "memory": list_persona_memory(canonical_agent),
+    }
+
+
+@app.post("/personas/{agent_target}/memory")
+async def add_persona_memory(
+    agent_target: str, body: dict[str, Any], request: Request
+) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    payload = dict(body)
+    payload.setdefault("created_by", _resolve_user_identity(request))
+    try:
+        memory = create_persona_memory(canonical_agent, payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return {
+        "status": "accepted",
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "memory": memory,
+    }
+
+
+@app.get("/personas/{agent_target}/history")
+async def get_persona_history(agent_target: str) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    return {
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "history": build_persona_work_history(canonical_agent),
     }
 
 

@@ -1,0 +1,29 @@
+version: 1.0.0
+last_updated: '2026-03-21T04:25:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  queue_state: registry/persona_task_queue_state_v1.yaml
+  accountability: registry/persona_accountability_v1.yaml
+  runtime: src/smarthaus_common/persona_memory.py
+memory_types:
+  note: Free-form contextual note linked to active or recent work.
+  fact: Durable factual context that may influence future work.
+  decision: Captured decision or instruction interpretation made during execution.
+  handoff: Explicit handoff context for another persona or human owner.
+  summary: Bounded recap of recent work for quick replay.
+visibility_levels:
+  internal: Visible to the bounded runtime and internal dashboards.
+  manager: Visible to the runtime plus the persona manager and escalation owner.
+  approval_owner: Visible to the runtime plus the approval owner and escalated reviewers.
+retention:
+  max_memories_per_persona: 50
+  max_history_events_per_persona: 100
+  max_content_chars: 2000
+rules:
+  allowed_sources:
+    - human
+    - system
+    - workflow
+  default_visibility: internal
+  require_actor_for_memory_writes: true
+  history_sort: descending_ts
