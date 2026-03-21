@@ -6,10 +6,10 @@ export default async function handler(req, res) {
 
   try {
     const { code, state, error } = req.query;
-    
+
     if (error) {
       console.error('OAuth error:', error);
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'OAuth error',
         message: error
       });
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     if (!code) {
       console.error('Authorization code missing');
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Authorization code missing',
         message: 'OAuth flow incomplete'
       });
@@ -41,11 +41,11 @@ export default async function handler(req, res) {
     if (code && codeVerifier) {
       try {
         console.log('Exchanging authorization code for tokens...');
-        
+
         const clientId = process.env.MICROSOFT_CLIENT_ID;
         const clientSecret = process.env.MICROSOFT_CLIENT_SECRET;
         const redirectUri = process.env.MICROSOFT_REDIRECT_URI || 'https://m365.smarthaus.ai/api/auth/callback';
-        
+
         if (!clientId || !clientSecret) {
           throw new Error('Microsoft OAuth credentials not configured');
         }
@@ -76,14 +76,14 @@ export default async function handler(req, res) {
 
         const tokenData = await tokenResponse.json();
         console.log('Token exchange successful, got access token');
-        
+
         // Store tokens securely (in production, use secure storage)
         // For now, we'll redirect with the access token
         const accessToken = tokenData.access_token;
         const redirectUrl = `${returnUrl}#token=${encodeURIComponent(accessToken)}&type=real`;
-        
+
         return res.redirect(redirectUrl);
-        
+
       } catch (tokenError) {
         console.error('Token exchange error:', tokenError);
         // Fall back to demo mode
@@ -95,13 +95,13 @@ export default async function handler(req, res) {
     console.log('Using demo mode - generating demo token');
     const demoToken = Buffer.from(`demo_${Date.now()}`).toString('base64');
     const redirectUrl = `${returnUrl}#token=${encodeURIComponent(demoToken)}&type=demo`;
-    
+
     // Redirect back to dashboard with token
     res.redirect(redirectUrl);
-    
+
   } catch (error) {
     console.error('Callback endpoint error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Authentication callback failed',
       message: 'Please try again'
     });

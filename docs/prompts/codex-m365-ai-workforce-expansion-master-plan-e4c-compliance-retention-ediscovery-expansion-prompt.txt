@@ -1,0 +1,7 @@
+Execute E4C Compliance / Retention / eDiscovery Expansion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e4c-compliance-retention-ediscovery-expansion.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E4C
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

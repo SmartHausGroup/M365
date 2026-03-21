@@ -12,12 +12,24 @@ from msal import ConfidentialClientApplication
 
 from provisioning_api.sessions import create_session_token, verify_session_token
 
-MICROSOFT_CLIENT_ID = os.getenv("MICROSOFT_CLIENT_ID") or os.getenv("GRAPH_CLIENT_ID")
-MICROSOFT_CLIENT_SECRET = os.getenv("MICROSOFT_CLIENT_SECRET") or os.getenv("GRAPH_CLIENT_SECRET")
-MICROSOFT_TENANT_ID = os.getenv("MICROSOFT_TENANT_ID") or os.getenv("GRAPH_TENANT_ID")
+MICROSOFT_CLIENT_ID = (
+    os.getenv("MICROSOFT_CLIENT_ID")
+    or os.getenv("AZURE_APP_CLIENT_ID_TAI")
+    or os.getenv("GRAPH_CLIENT_ID")
+    or os.getenv("AZURE_CLIENT_ID")
+)
+MICROSOFT_CLIENT_SECRET = (
+    os.getenv("MICROSOFT_CLIENT_SECRET")
+    or os.getenv("AZURE_APP_CLIENT_SECRET_TAI")
+    or os.getenv("GRAPH_CLIENT_SECRET")
+    or os.getenv("AZURE_CLIENT_SECRET")
+)
+MICROSOFT_TENANT_ID = (
+    os.getenv("MICROSOFT_TENANT_ID") or os.getenv("GRAPH_TENANT_ID") or os.getenv("AZURE_TENANT_ID")
+)
 MICROSOFT_REDIRECT_URI = os.getenv(
     "MICROSOFT_REDIRECT_URI",
-    os.getenv("API_BASE_URL", "http://localhost:8000") + "/api/auth/callback",
+    os.getenv("API_BASE_URL", "http://localhost:9000") + "/api/auth/callback",
 )
 
 SCOPES = [

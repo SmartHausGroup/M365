@@ -1,0 +1,8 @@
+// Ops Adapter audit error rate (last 24h)
+AppTraces
+| where TimeGenerated > ago(24h)
+| where Message has "audit"
+| extend audit = todynamic(AdditionalFields)["audit"]
+| extend event = tostring(audit.event)
+| summarize count() by event
+| order by count_ desc

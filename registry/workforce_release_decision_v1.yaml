@@ -1,0 +1,106 @@
+version: "1.0.0"
+last_updated: "2026-03-21T19:00:00Z"
+authority:
+  enterprise_release_gate: registry/enterprise_release_gate_v2.yaml
+  workforce_packaging: registry/workforce_packaging_v1.yaml
+  customer_onboarding: registry/customer_onboarding_v2.yaml
+  pilot_rollout_model: registry/pilot_rollout_model_v2.yaml
+  support_boundary: registry/support_boundary_v2.yaml
+
+contract:
+  id: workforce-release-decision
+  display_name: Workforce Expansion Release Decision v1
+  status: contract-defined
+  description: >
+    Issues the final release decision for the full workforce expansion program
+    by aggregating all prior sections into a single deterministic verdict with
+    explicit program completion status, residual gaps, and follow-on guidance.
+
+decision_inputs:
+  - order: 1
+    id: certification_evidence
+    description: >
+      Aggregate the four-layer certification evidence from Section 8.
+    source: registry/enterprise_release_gate_v2.yaml
+    required_status: GO
+
+  - order: 2
+    id: packaging_evidence
+    description: >
+      Verify the workforce is packaged into customer-facing product tiers.
+    source: registry/workforce_packaging_v1.yaml
+    required_status: contract-defined
+
+  - order: 3
+    id: onboarding_evidence
+    description: >
+      Verify the onboarding path is defined with activation sequence.
+    source: registry/customer_onboarding_v2.yaml
+    required_status: contract-defined
+
+  - order: 4
+    id: rollout_evidence
+    description: >
+      Verify the rollout model defines waves and acceptance gates.
+    source: registry/pilot_rollout_model_v2.yaml
+    required_status: contract-defined
+
+  - order: 5
+    id: support_evidence
+    description: >
+      Verify the support boundary defines tiers and escalation paths.
+    source: registry/support_boundary_v2.yaml
+    required_status: contract-defined
+
+governance_rules:
+  fail_closed:
+    description: >
+      Missing input or failed status forces NO-GO.
+  audit_completeness:
+    description: >
+      Release decision produces traceable evidence for every input.
+  bounded_claims:
+    description: >
+      Release claims match the aggregate certification and packaging evidence.
+  determinism:
+    description: >
+      Same inputs produce the same release decision.
+  program_closure:
+    description: >
+      This decision formally closes the workforce expansion master plan.
+
+kpis:
+  decision_input_count: 5
+  governance_rule_count: 5
+  sections_complete: 10
+  total_acts_complete: 50
+  total_lemmas: 72
+
+release_decision:
+  verdict: GO
+  program_status: complete
+  conditions:
+    - "Sections 0-8 certification evidence: GO"
+    - "Section 9 packaging, onboarding, rollout, and support: contract-defined"
+    - "All 50 acts complete with lemma evidence"
+    - "72 lemmas with green scorecards"
+  residual_gaps:
+    - "2 executor domains (workmanagement, publishing) have zero routed actions"
+    - "35 of 39 personas are contract-only without implemented actions"
+    - "Cross-department workflows are contract-certified, not live-executed"
+    - "Onboarding, rollout, and support are contract-defined, not live-operated"
+  follow_on:
+    - "Implement remaining 35 contract-only personas as action-backed"
+    - "Add routed actions for workmanagement and publishing domains"
+    - "Execute live cross-department workflows"
+    - "Operationalize onboarding, pilot, and support processes"
+
+bounded_claims:
+  supported:
+    - "The workforce expansion master plan is complete as a governed program"
+    - "All 10 sections, 50 acts, and 72 lemmas are closed with evidence"
+    - "Release decision is GO with documented residual gaps"
+  not_supported:
+    - "All personas are action-backed"
+    - "All workload domains are fully implemented"
+    - "The workforce is operationally live in customer tenants"

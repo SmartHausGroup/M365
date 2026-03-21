@@ -15,9 +15,7 @@ from typing import Any
 from m365.instruction.constants import A_Admin, A_User, P
 
 
-def instruction_4tuple(
-    p: str, i: Any, a: str, params: Any
-) -> tuple[Any, Any, Any, Any]:
+def instruction_4tuple(p: str, i: Any, a: str, params: Any) -> tuple[Any, Any, Any, Any]:
     """
     Build instruction as 4-tuple (persona, identity, action, parameters).
 
@@ -36,7 +34,7 @@ def lemma_A001_holds(instruction: Any) -> bool:
     Cell: Lemma Execution (LEM-M365-A-001-01).
     Invariant: INV-M365-A-001
     """
-    if not isinstance(instruction, (tuple, list)) or len(instruction) != 4:
+    if not isinstance(instruction, tuple | list) or len(instruction) != 4:
         return False
     return True
 
@@ -73,7 +71,7 @@ def verify_A001(instruction: Any) -> None:
     Cell: Invariant Verification.
     Fail closed: raises AssertionError on violation.
     """
-    assert isinstance(instruction, (tuple, list)), "instruction must be tuple/list"
+    assert isinstance(instruction, tuple | list), "instruction must be tuple/list"
     assert len(instruction) == 4, "exactly four components"
     assert all(c is not None for c in instruction), "no component missing"
 
@@ -98,7 +96,5 @@ def verify_A003(instruction: Any) -> None:
     Fail closed: raises AssertionError on violation.
     """
     p, a = instruction[0], instruction[2]
-    assert (p == "Admin" and a in A_Admin) or (
-        p == "User" and a in A_User
-    ), "syntactically valid"
+    assert (p == "Admin" and a in A_Admin) or (p == "User" and a in A_User), "syntactically valid"
     assert A_Admin & A_User == set(), "disjoint"

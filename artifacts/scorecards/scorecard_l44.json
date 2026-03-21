@@ -1,0 +1,23 @@
+{
+  "lemma_id": "L44",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AT-humanized-delegation-interface-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L44_m365_humanized_delegation_interface_v1.ipynb",
+  "invariant": "invariants/lemmas/L44_m365_humanized_delegation_interface_v1.yaml",
+  "seed_lock": true,
+  "determinism": "bounded pattern registry plus authoritative persona registry produce deterministic humanized delegation resolution",
+  "checks": [
+    {
+      "id": "pattern_registry",
+      "status": "passed"
+    },
+    {
+      "id": "authoritative_resolution",
+      "status": "passed"
+    },
+    {
+      "id": "ambiguity_fail_closed",
+      "status": "passed"
+    }
+  ]
+}

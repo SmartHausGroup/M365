@@ -1,0 +1,7 @@
+Execute B7B Runtime Executor Routing and Domain Selection
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b7b-runtime-executor-routing-domain-selection.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B7B
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

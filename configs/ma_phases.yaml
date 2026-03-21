@@ -1,0 +1,67 @@
+version: 1
+phases:
+  - phase: 1
+    name: Intent Definition
+    artifacts:
+      - kind: file_exists
+        path: docs/NORTH_STAR.md
+  - phase: 2
+    name: Overarching Mathematical Formula
+    artifacts:
+      - kind: file_exists
+        path: docs/ma/phase1_formula.md
+  - phase: 3
+    name: Formal Mathematical Calculus
+    artifacts:
+      - kind: file_exists
+        path: docs/ma/phase2_calculus.md
+  - phase: 4
+    name: Individual Lemma Definitions
+    artifacts:
+      - kind: glob_exists
+        path: docs/ma/lemmas/L*_*.md
+  - phase: 5
+    name: Individual Invariant Definitions
+    artifacts:
+      - kind: glob_exists
+        path: invariants/lemmas/L*_*.yaml
+  - phase: 6
+    name: Lemma Notebook Proofs
+    artifacts:
+      - kind: glob_exists
+        path: notebooks/lemma_proofs/L*_*.ipynb
+  - phase: 7
+    name: Module Notebook Contracts
+    artifacts:
+      - kind: glob_exists
+        path: notebooks/*_contracts.ipynb
+  - phase: 8
+    name: Per-Module Scorecards
+    artifacts:
+      - kind: glob_exists
+        path: artifacts/scorecards/scorecard_*.json
+  - phase: 9
+    name: Aggregate MA Scorecard Green
+    artifacts:
+      - kind: scorecard_green
+        path: scorecard.json
+make_targets:
+  default_required_phase: 1
+  targets:
+    lint: 1
+    test: 1
+    test-all: 1
+    ma-validate: 9
+    notebooks: 7
+    scorecard: 9
+    ci: 9
+    release: 9
+    extract-runtime: 9
+notebook_execution:
+  deterministic_runs: 2
+  seed_metadata_namespace: ma
+  seed_metadata_key: seed_lock
+  required_seed_metadata_keys:
+    - pythonhashseed
+    - python_random_seed
+    - numpy_seed

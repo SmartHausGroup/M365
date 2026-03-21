@@ -7,7 +7,6 @@ from provisioning_api.schemas import (
     LatticeAIOS,
     LatticeArchitecture,
     LatticeLEF,
-    LatticeLQL,
     LatticeResearch,
 )
 from provisioning_api.storage import JsonStore
@@ -26,12 +25,6 @@ def create_lattice_research(body: LatticeResearch) -> Ack:
 def track_lattice_aios(body: LatticeAIOS) -> Ack:
     rec = store.append("lattice_aios", body.model_dump())
     return Ack(id=rec["id"], collection="lattice_aios")
-
-
-@router.post("/lql", response_model=Ack)
-def track_lattice_lql(body: LatticeLQL) -> Ack:
-    rec = store.append("lattice_lql", body.model_dump())
-    return Ack(id=rec["id"], collection="lattice_lql")
 
 
 @router.post("/lef", response_model=Ack)

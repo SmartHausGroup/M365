@@ -1,0 +1,26 @@
+{
+  "item_id": "L27",
+  "item_kind": "lemma",
+  "lemma_id": "L27",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T23:10:00Z",
+  "notebook": "notebooks/m365/INV-M365-AC-unified-audit-schema-v2.ipynb",
+  "notebook_hash": "projected-l27-unified-audit-schema-v2",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md",
+    "registry/unified_audit_schema_v2.yaml",
+    "docs/commercialization/m365-unified-audit-schema-v2.md",
+    "src/smarthaus_common/audit_schema.py",
+    "src/ops_adapter/audit.py",
+    "src/provisioning_api/audit.py",
+    "scripts/ci/verify_m365_audit.py",
+    "configs/generated/m365_audit_verification.json",
+    "tests/test_audit_schema_v2.py",
+    "tests/test_ops_adapter.py",
+    "notebooks/m365/INV-M365-AC-unified-audit-schema-v2.ipynb",
+    "notebooks/lemma_proofs/L27_m365_unified_audit_schema_v2.ipynb"
+  ]
+}

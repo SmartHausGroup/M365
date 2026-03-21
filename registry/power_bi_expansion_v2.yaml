@@ -1,0 +1,104 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T03:30:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E3CPowerBIExpansion(action) = InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ ExecutorRoute(action)=powerplatform ∧ AuthClass(action)=app_only.
+supported_actions:
+  list_powerbi_workspaces:
+    canonical_action_key: powerplatform.powerbi_workspace.list
+    agent_alias: powerbi.workspace.list
+    runtime_handler: PowerBIClient.list_workspaces
+    mutating: false
+    result_shape_keys: [workspaces, count]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerbi_workspaces
+  get_powerbi_workspace:
+    canonical_action_key: powerplatform.powerbi_workspace.read
+    agent_alias: powerbi.workspace.get
+    runtime_handler: PowerBIClient.get_workspace
+    mutating: false
+    result_shape_keys: [workspace]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerbi_workspace
+  list_powerbi_reports:
+    canonical_action_key: powerplatform.powerbi_report.list
+    agent_alias: powerbi.report.list
+    runtime_handler: PowerBIClient.list_reports
+    mutating: false
+    result_shape_keys: [reports, count]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerbi_reports
+  get_powerbi_report:
+    canonical_action_key: powerplatform.powerbi_report.read
+    agent_alias: powerbi.report.get
+    runtime_handler: PowerBIClient.get_report
+    mutating: false
+    result_shape_keys: [report]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerbi_report
+  list_powerbi_datasets:
+    canonical_action_key: powerplatform.powerbi_dataset.list
+    agent_alias: powerbi.dataset.list
+    runtime_handler: PowerBIClient.list_datasets
+    mutating: false
+    result_shape_keys: [datasets, count]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerbi_datasets
+  get_powerbi_dataset:
+    canonical_action_key: powerplatform.powerbi_dataset.read
+    agent_alias: powerbi.dataset.get
+    runtime_handler: PowerBIClient.get_dataset
+    mutating: false
+    result_shape_keys: [dataset]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerbi_dataset
+  refresh_powerbi_dataset:
+    canonical_action_key: powerplatform.powerbi_dataset.refresh
+    agent_alias: powerbi.dataset.refresh
+    runtime_handler: PowerBIClient.refresh_dataset
+    mutating: true
+    result_shape_keys: [workspaceId, datasetId, status]
+    required_permissions: [PowerBI.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: refresh_powerbi_dataset
+  list_powerbi_dataset_refreshes:
+    canonical_action_key: powerplatform.powerbi_dataset_refresh.list
+    agent_alias: powerbi.dataset.refreshes.list
+    runtime_handler: PowerBIClient.list_dataset_refreshes
+    mutating: false
+    result_shape_keys: [refreshes, count]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerbi_dataset_refreshes
+  list_powerbi_dashboards:
+    canonical_action_key: powerplatform.powerbi_dashboard.list
+    agent_alias: powerbi.dashboard.list
+    runtime_handler: PowerBIClient.list_dashboards
+    mutating: false
+    result_shape_keys: [dashboards, count]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerbi_dashboards
+  get_powerbi_dashboard:
+    canonical_action_key: powerplatform.powerbi_dashboard.read
+    agent_alias: powerbi.dashboard.get
+    runtime_handler: PowerBIClient.get_dashboard
+    mutating: false
+    result_shape_keys: [dashboard]
+    required_permissions: [PowerBI.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerbi_dashboard

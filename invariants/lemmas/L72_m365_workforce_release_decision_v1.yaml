@@ -1,0 +1,22 @@
+lemma_id: L72
+title: M365 Workforce Expansion Release Decision v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E9E"
+status: green
+invariant: >
+  Five decision inputs and five governance rules so that the workforce
+  release decision aggregates all prior sections into a single
+  deterministic GO verdict with documented residual gaps.
+proof_obligations:
+  - "Release decision authority file exists and validates"
+  - "Five decision inputs present with required statuses"
+  - "All prerequisite contracts exist"
+  - "Residual gaps documented"
+  - "Verdict is GO"
+failure_boundaries:
+  - "Missing release decision authority file"
+  - "Missing decision input"
+  - "Prerequisite contract missing"
+  - "Undocumented residual gap"
+test_bindings:
+  - tests/test_workforce_release_decision_v1.py
+ci_gate: scripts/ci/verify_workforce_release_decision_v1.py

@@ -1,0 +1,7 @@
+Execute B5B Runtime Identity Enforcement
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b5b-runtime-identity-enforcement.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B5B
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

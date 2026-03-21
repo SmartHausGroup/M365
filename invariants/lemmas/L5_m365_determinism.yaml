@@ -1,0 +1,12 @@
+lemma_id: L5
+name: M365 deterministic supported-surface projection
+source_notebook: notebooks/m365/INV-M365-C-001-determinism.ipynb
+evidence:
+  artifacts:
+    - registry/capability_registry.yaml
+    - src/provisioning_api/routers/m365.py
+    - docs/CAIO_M365_CONTRACT.md
+  checks:
+    - supported action extraction is identical across repeated runs
+    - supported action count is 9
+status: projected

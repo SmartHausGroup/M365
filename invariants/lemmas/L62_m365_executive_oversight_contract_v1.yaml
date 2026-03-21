@@ -1,0 +1,22 @@
+lemma_id: L62
+title: M365 Executive Oversight Contract v1
+invariant: >
+  The executive oversight contract must define five oversight queries, five
+  intervention primitives, three escalation paths, and five governance rules
+  so that every workforce state is visible, every intervention is audited,
+  and no override is silent or unlinked.
+proof_obligations:
+  - executive oversight contract authority file exists and validates
+  - five oversight queries span global, department, persona, audit, and risk scopes
+  - five intervention primitives have approval and reversibility semantics
+  - three escalation paths are declared
+  - governance rules cover visibility, audit, approval, escalation, and no-silent-override
+failure_boundaries:
+  - missing executive oversight contract authority file
+  - missing oversight query
+  - missing intervention primitive
+  - missing escalation path
+  - missing governance rule
+test_bindings:
+  - tests/test_executive_oversight_contract_v1.py
+ci_gate: scripts/ci/verify_executive_oversight_contract_v1.py

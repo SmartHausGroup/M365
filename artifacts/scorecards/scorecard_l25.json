@@ -1,0 +1,24 @@
+{
+  "item_id": "L25",
+  "item_kind": "lemma",
+  "lemma_id": "L25",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T22:05:00Z",
+  "notebook": "notebooks/m365/INV-M365-AA-auth-model-v2.ipynb",
+  "notebook_hash": "projected-l25-auth-model-v2",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md",
+    "registry/universal_action_contract_v2.yaml",
+    "registry/executor_routing_v2.yaml",
+    "registry/auth_model_v2.yaml",
+    "docs/commercialization/m365-auth-model-v2.md",
+    "src/smarthaus_common/auth_model.py",
+    "src/ops_adapter/actions.py",
+    "tests/test_auth_model_v2.py",
+    "notebooks/m365/INV-M365-AA-auth-model-v2.ipynb",
+    "notebooks/lemma_proofs/L25_m365_auth_model_v2.ipynb"
+  ]
+}

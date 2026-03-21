@@ -1,0 +1,19 @@
+lemma_id: L14
+name: M365 digital employee and executor-domain architecture
+source_notebook: notebooks/m365/INV-M365-P-digital-employee-executor-architecture.ipynb
+evidence:
+  artifacts:
+    - Operations/NORTHSTAR.md
+    - plans/m365-enterprise-readiness-master-plan/m365-enterprise-readiness-master-plan.md
+    - docs/commercialization/m365-digital-employee-operating-model.md
+    - docs/commercialization/m365-capability-api-license-auth-matrix.md
+    - docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md
+    - docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md
+    - docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md
+    - notebooks/lemma_proofs/L14_m365_digital_employee_executor_architecture.ipynb
+  checks:
+    - digital employees are explicitly separated from executor identities
+    - bounded executor domains replace the single giant executor target
+    - the plan inserts B6 and B7 ahead of C1A
+    - certification is rebased to the multi-executor model
+status: projected

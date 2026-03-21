@@ -1,0 +1,5 @@
+{
+  "audit_pass": true,
+  "records_checked": 2,
+  "schema": "schema_version, timestamp, ts, correlation_id, surface, action, status, user, details, result"
+}

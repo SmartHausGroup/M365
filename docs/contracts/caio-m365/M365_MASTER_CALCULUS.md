@@ -1,6 +1,6 @@
 # M365 Master Calculus — System-Level Mathematical Guarantee
 
-**Status:** Draft  
+**Status:** Draft
 **Source of truth:** `docs/contracts/caio-m365/MATHEMATICS.md` (Eq. 1–5), this document.
 
 ---

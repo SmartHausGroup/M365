@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L59",
+  "title": "M365 Persona Discovery Contract v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BG-persona-discovery-contract-v1.ipynb",
+    "notebooks/lemma_proofs/L59_m365_persona_discovery_contract_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L59_m365_persona_discovery_contract_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Discovery contract covers six dimensions across name, department, capability, workload, risk, and coverage.",
+    "Every persona in the authoritative registry is discoverable through at least one dimension."
+  ]
+}

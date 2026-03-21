@@ -1,0 +1,150 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T04:20:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E3DFormsApprovalsConnectorsExpansion(action) =
+  InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ (
+    (ApprovalAction(action) ∧ ExecutorRoute(action)=powerplatform ∧ AuthClass(action)=delegated)
+    ∨
+    (ConnectorAction(action) ∧ ExecutorRoute(action)=knowledge ∧ AuthClass(action)=app_only)
+  ).
+forms_boundary_note: >
+  Direct Microsoft Forms authoring and response APIs are not claimed as implemented runtime actions
+  in E3D. The bounded E3D slice formalizes the Forms boundary, uses approval integrations, and
+  uses Copilot connector APIs while Forms-triggered automation continues to enter through connector-
+  backed or workbook-backed flows already covered elsewhere in the pack.
+supported_actions:
+  get_approval_solution:
+    canonical_action_key: powerplatform.approval_solution.read
+    agent_alias: approvals.solution.get
+    runtime_handler: FormsApprovalsConnectorsClient.get_approval_solution
+    mutating: false
+    result_shape_keys: [solution]
+    required_permissions: [ApprovalSolution.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_approval_solution
+  list_approval_items:
+    canonical_action_key: powerplatform.approval_item.list
+    agent_alias: approvals.item.list
+    runtime_handler: FormsApprovalsConnectorsClient.list_approval_items
+    mutating: false
+    result_shape_keys: [approvals, count]
+    required_permissions: [ApprovalSolution.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_approval_items
+  get_approval_item:
+    canonical_action_key: powerplatform.approval_item.read
+    agent_alias: approvals.item.get
+    runtime_handler: FormsApprovalsConnectorsClient.get_approval_item
+    mutating: false
+    result_shape_keys: [approval]
+    required_permissions: [ApprovalSolution.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_approval_item
+  create_approval_item:
+    canonical_action_key: powerplatform.approval_item.create
+    agent_alias: approvals.item.create
+    runtime_handler: FormsApprovalsConnectorsClient.create_approval_item
+    mutating: true
+    result_shape_keys: [status, displayName]
+    required_permissions: [ApprovalSolution.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: create_approval_item
+  list_approval_item_requests:
+    canonical_action_key: powerplatform.approval_request.list
+    agent_alias: approvals.request.list
+    runtime_handler: FormsApprovalsConnectorsClient.list_approval_item_requests
+    mutating: false
+    result_shape_keys: [requests, count]
+    required_permissions: [ApprovalSolution.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_approval_item_requests
+  respond_to_approval_item:
+    canonical_action_key: powerplatform.approval_response.create
+    agent_alias: approvals.response.create
+    runtime_handler: FormsApprovalsConnectorsClient.respond_to_approval_item
+    mutating: true
+    result_shape_keys: [status, approvalId, response]
+    required_permissions: [ApprovalSolutionResponse.ReadWrite]
+    approval_profile: high-impact
+    capability_registry_alias: respond_to_approval_item
+  list_external_connections:
+    canonical_action_key: knowledge.external_connection.list
+    agent_alias: external.connection.list
+    runtime_handler: FormsApprovalsConnectorsClient.list_external_connections
+    mutating: false
+    result_shape_keys: [connections, count]
+    required_permissions: [ExternalConnection.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_external_connections
+  get_external_connection:
+    canonical_action_key: knowledge.external_connection.read
+    agent_alias: external.connection.get
+    runtime_handler: FormsApprovalsConnectorsClient.get_external_connection
+    mutating: false
+    result_shape_keys: [connection]
+    required_permissions: [ExternalConnection.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_external_connection
+  create_external_connection:
+    canonical_action_key: knowledge.external_connection.create
+    agent_alias: external.connection.create
+    runtime_handler: FormsApprovalsConnectorsClient.create_external_connection
+    mutating: true
+    result_shape_keys: [connection]
+    required_permissions: [ExternalConnection.ReadWrite.OwnedBy]
+    approval_profile: high-impact
+    capability_registry_alias: create_external_connection
+  register_external_connection_schema:
+    canonical_action_key: knowledge.external_connection_schema.register
+    agent_alias: external.connection.schema.register
+    runtime_handler: FormsApprovalsConnectorsClient.register_external_connection_schema
+    mutating: true
+    result_shape_keys: [connectionId, status]
+    required_permissions: [ExternalConnection.ReadWrite.OwnedBy]
+    approval_profile: high-impact
+    capability_registry_alias: register_external_connection_schema
+  get_external_item:
+    canonical_action_key: knowledge.external_item.read
+    agent_alias: external.item.get
+    runtime_handler: FormsApprovalsConnectorsClient.get_external_item
+    mutating: false
+    result_shape_keys: [item]
+    required_permissions: [ExternalItem.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_external_item
+  upsert_external_item:
+    canonical_action_key: knowledge.external_item.upsert
+    agent_alias: external.item.upsert
+    runtime_handler: FormsApprovalsConnectorsClient.upsert_external_item
+    mutating: true
+    result_shape_keys: [itemId, status]
+    required_permissions: [ExternalItem.ReadWrite.OwnedBy]
+    approval_profile: medium-operational
+    capability_registry_alias: upsert_external_item
+  create_external_group:
+    canonical_action_key: knowledge.external_group.create
+    agent_alias: external.group.create
+    runtime_handler: FormsApprovalsConnectorsClient.create_external_group
+    mutating: true
+    result_shape_keys: [group, status]
+    required_permissions: [ExternalItem.ReadWrite.OwnedBy]
+    approval_profile: medium-operational
+    capability_registry_alias: create_external_group
+  add_external_group_member:
+    canonical_action_key: knowledge.external_group_member.create
+    agent_alias: external.group.member.add
+    runtime_handler: FormsApprovalsConnectorsClient.add_external_group_member
+    mutating: true
+    result_shape_keys: [groupId, memberId, status]
+    required_permissions: [ExternalItem.ReadWrite.OwnedBy]
+    approval_profile: medium-operational
+    capability_registry_alias: add_external_group_member

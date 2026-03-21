@@ -1,0 +1,7 @@
+Execute D1 Enterprise Collateral Pack
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-d1-enterprise-collateral-pack.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:D1
+
+Only execute after certification state is explicit. Keep collateral honest to the actual supported and certified surface.

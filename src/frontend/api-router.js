@@ -6,4 +6,3 @@ window.api = (function(){
   function authHeaders(){ const tok=localStorage.getItem('access_token'); return tok?{ Authorization: `Bearer ${tok}` }:{}; }
   return { base, get, post };
 })();
-

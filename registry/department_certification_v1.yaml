@@ -1,0 +1,145 @@
+version: "1.0.0"
+last_updated: "2026-03-21T16:00:00Z"
+authority:
+  department_packs: registry/department_pack_*_v1.yaml
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_certification: registry/persona_certification_v1.yaml
+  workload_certification: registry/workload_certification_v1.yaml
+
+contract:
+  id: department-certification
+  display_name: Department Certification Contract v1
+  status: contract-defined
+  description: >
+    Defines the deterministic certification criteria for each department pack
+    against its target workflows and responsibilities. Every department must
+    have a valid pack, correct persona count, consistent workflow families,
+    and bounded-claim alignment.
+
+certification_phases:
+  - order: 1
+    id: pack_presence
+    description: >
+      Verify every department has a corresponding pack YAML file in the
+      registry with required root keys.
+    inputs:
+      - registry/department_pack_*_v1.yaml
+    outputs:
+      - per-department pack presence status (pass/fail)
+    failure_mode: >
+      Department without a pack file or with missing root keys fails
+      pack presence.
+
+  - order: 2
+    id: persona_count_alignment
+    description: >
+      Verify each department pack's persona count matches the personas
+      assigned to that department in the authoritative persona registry.
+    inputs:
+      - department_pack_*_v1.yaml
+      - persona_registry_v2.yaml
+    outputs:
+      - per-department persona count alignment status
+    failure_mode: >
+      Department pack with persona count mismatch fails alignment.
+
+  - order: 3
+    id: workflow_family_coverage
+    description: >
+      Verify each department pack declares at least one workflow family
+      and at least one workload family.
+    inputs:
+      - department_pack_*_v1.yaml
+    outputs:
+      - per-department workflow family coverage status
+    failure_mode: >
+      Department pack with zero workflow or workload families fails coverage.
+
+  - order: 4
+    id: bounded_claim_consistency
+    description: >
+      Verify no department pack claims capabilities beyond its declared
+      personas and workflow families.
+    inputs:
+      - all certification phase outputs
+    outputs:
+      - per-department certification verdict
+    failure_mode: >
+      Department claiming certification beyond its declared surface fails.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any department that fails any certification phase must be marked
+      not-certified.
+  audit_completeness:
+    description: >
+      Every certification attempt produces a per-department evidence record.
+  bounded_claims:
+    description: >
+      Certification verdicts must not exceed the actual department surface.
+  determinism:
+    description: >
+      Same packs plus same registry must produce the same verdicts on replay.
+  exhaustive_coverage:
+    description: >
+      All 10 departments must have packs. No department may be uncertified
+      by omission.
+
+kpis:
+  total_departments: 10
+  total_department_personas: 39
+  certification_phase_count: 4
+  governance_rule_count: 5
+
+department_certification_status:
+  operations:
+    persona_count: 2
+    workflow_family_count: 5
+    certification_verdict: certified
+  hr:
+    persona_count: 1
+    workflow_family_count: 3
+    certification_verdict: certified
+  communication:
+    persona_count: 1
+    workflow_family_count: 3
+    certification_verdict: certified
+  engineering:
+    persona_count: 7
+    workflow_family_count: 4
+    certification_verdict: certified
+  marketing:
+    persona_count: 7
+    workflow_family_count: 4
+    certification_verdict: certified
+  product:
+    persona_count: 3
+    workflow_family_count: 3
+    certification_verdict: certified
+  project-management:
+    persona_count: 3
+    workflow_family_count: 3
+    certification_verdict: certified
+  studio-operations:
+    persona_count: 5
+    workflow_family_count: 4
+    certification_verdict: certified
+  testing:
+    persona_count: 5
+    workflow_family_count: 4
+    certification_verdict: certified
+  design:
+    persona_count: 5
+    workflow_family_count: 4
+    certification_verdict: certified
+
+bounded_claims:
+  supported:
+    - "All 10 departments have packs and pass four-phase certification"
+    - "39 total personas distributed across 10 departments with correct counts"
+    - "Every department has at least one workflow family and one workload family"
+    - "Certification is deterministic and replay-stable"
+  not_supported:
+    - "All department workflows are implemented end-to-end"
+    - "Live tenant execution evidence for every department workflow"

@@ -1,0 +1,9 @@
+{
+  "name": "Marketing Automation",
+  "department": "marketing",
+  "trigger": { "type": "Manual", "description": "Create marketing campaign" },
+  "steps": [
+    { "action": "CreateSharePointItem", "site": "Marketing Hub", "list": "Marketing Tasks" },
+    { "action": "PostTeamsMessage", "channel": "campaign-coordination", "message": "Campaign created" }
+  ]
+}

@@ -1,0 +1,290 @@
+version: "1.0.0"
+last_updated: "2026-03-20T21:03:00Z"
+authority_inputs:
+  roster: registry/ai_team.json
+  workload_inventory: docs/commercialization/m365-workload-universe-inventory.md
+  capability_taxonomy: docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+  persona_map: registry/persona_capability_map.yaml
+program_completion_rule:
+  workforce_complete_when:
+    - "authority_wave_complete"
+    - "control_plane_wave_complete"
+    - "core_workload_waves_complete"
+    - "enterprise_governance_wave_complete"
+    - "persona_runtime_wave_complete"
+    - "department_pack_waves_complete"
+    - "claude_ucp_wave_complete"
+    - "live_certification_wave_complete"
+    - "launch_closure_wave_complete"
+current_wave: W1
+completed_waves:
+  - W0
+waves:
+  W0:
+    title: "Universe Authority Lock"
+    status: complete
+    acts:
+      - E0A
+      - E0B
+      - E0C
+      - E0D
+      - E0E
+    unlocks:
+      - W1
+    exit_criteria:
+      - "39-persona / 10-department roster locked"
+      - "workload universe locked"
+      - "capability taxonomy locked"
+      - "persona capability and approval map locked"
+      - "release-wave and completion rules locked"
+    allowed_claims:
+      - "The workforce authority surface is locked."
+      - "The build order for the remaining program is explicit."
+    forbidden_claims:
+      - "Full workforce implementation"
+      - "Full M365 capability support"
+      - "Department-pack readiness beyond the standalone v1 slice"
+  W1:
+    title: "Universal Control Plane v2"
+    status: ready
+    acts:
+      - E1A
+      - E1B
+      - E1C
+      - E1D
+      - E1E
+    depends_on:
+      - W0
+    unlocks:
+      - W2
+      - W3
+      - W4
+      - W5
+    exit_criteria:
+      - "universal action contract v2 is locked"
+      - "executor routing v2 is locked"
+      - "auth model v2 is locked"
+      - "approval and risk matrix v2 is locked"
+      - "unified audit schema v2 is locked"
+    allowed_claims:
+      - "The expanded control plane contract is ready for broad workload implementation."
+    forbidden_claims:
+      - "Core workload coverage is complete"
+      - "Claude/UCP workforce delegation is complete"
+  W2:
+    title: "Core Admin and Collaboration Workloads"
+    status: pending
+    acts:
+      - E2A
+      - E2B
+      - E2C
+      - E2D
+    depends_on:
+      - W1
+    unlocks:
+      - W6
+      - W7
+      - W8
+    exit_criteria:
+      - "directory, messaging, files, and collaboration workload families have bounded action surfaces"
+      - "their executor mappings are implemented under the v2 control plane"
+      - "their approval and audit hooks conform to W1 contracts"
+    allowed_claims:
+      - "Core M365 admin and collaboration capabilities are implemented under the new control plane."
+    forbidden_claims:
+      - "Documents, Power Platform, security/compliance, or digital employee runtime are complete"
+  W3:
+    title: "Productivity, Workflow, and Analytics Expansion"
+    status: pending
+    acts:
+      - E2E
+      - E3A
+      - E3B
+      - E3C
+      - E3D
+      - E3E
+    depends_on:
+      - W1
+    unlocks:
+      - W6
+      - W7
+      - W8
+    exit_criteria:
+      - "document productivity flows are defined"
+      - "Power Platform and analytics workloads have bounded integration contracts"
+      - "cross-workload automation recipes are represented in the action surface"
+    allowed_claims:
+      - "Productivity and workflow workloads are available under governed patterns."
+    forbidden_claims:
+      - "Enterprise admin/security or department-pack completion"
+  W4:
+    title: "Enterprise Governance and Admin Expansion"
+    status: pending
+    acts:
+      - E4A
+      - E4B
+      - E4C
+      - E4D
+      - E4E
+    depends_on:
+      - W1
+    unlocks:
+      - W6
+      - W8
+      - W9
+    exit_criteria:
+      - "device, security, compliance, and admin-center surfaces are bounded"
+      - "critical approval paths and privileged actions are mapped to explicit control rules"
+      - "high-risk admin workloads are ready for live certification"
+    allowed_claims:
+      - "Enterprise governance workloads are modeled under bounded execution."
+    forbidden_claims:
+      - "Full department-pack release"
+      - "Full workforce certification"
+  W5:
+    title: "Digital Employee Runtime"
+    status: pending
+    acts:
+      - E5A
+      - E5B
+      - E5C
+      - E5D
+      - E5E
+    depends_on:
+      - W1
+    unlocks:
+      - W6
+      - W7
+      - W8
+    exit_criteria:
+      - "persona registry is runtime-complete"
+      - "humanized delegation resolution is operational"
+      - "persona queues, state, KPI ownership, and bounded memory are defined"
+    allowed_claims:
+      - "Named digital employees are real runtime objects, not documentation only."
+    forbidden_claims:
+      - "Department packs are operational"
+      - "Claude/UCP orchestration is complete"
+  W6:
+    title: "Department Packs Wave A"
+    status: pending
+    acts:
+      - E6A
+      - E6B
+      - E6C
+      - E6D
+      - E6E
+    depends_on:
+      - W2
+      - W3
+      - W4
+      - W5
+    unlocks:
+      - W7
+      - W8
+    exit_criteria:
+      - "Operations, HR, Communication, Engineering, and Marketing packs are defined and internally coherent"
+      - "each pack binds personas, capabilities, approvals, and primary workflows"
+    allowed_claims:
+      - "Wave A department packs are structurally complete."
+    forbidden_claims:
+      - "All departments are complete"
+      - "Full workforce release"
+  W7:
+    title: "Department Packs Wave B"
+    status: pending
+    acts:
+      - E6F
+      - E6G
+      - E6H
+      - E6I
+      - E6J
+    depends_on:
+      - W2
+      - W3
+      - W4
+      - W5
+      - W6
+    unlocks:
+      - W8
+      - W9
+    exit_criteria:
+      - "Product, Project Management, Studio Operations, Testing, and Design packs are defined and internally coherent"
+      - "all 10 departments now have declared governed packs"
+    allowed_claims:
+      - "All department packs are structurally complete."
+    forbidden_claims:
+      - "Claude/UCP orchestration is complete"
+      - "Full workforce certification or launch"
+  W8:
+    title: "Claude and UCP Workforce Experience"
+    status: pending
+    acts:
+      - E7A
+      - E7B
+      - E7C
+      - E7D
+      - E7E
+    depends_on:
+      - W2
+      - W3
+      - W5
+      - W6
+      - W7
+    unlocks:
+      - W9
+    exit_criteria:
+      - "Claude-to-UCP delegation contract is locked"
+      - "persona discovery and selection are operational"
+      - "multi-step orchestration and cross-persona collaboration are represented"
+      - "executive oversight controls are defined"
+    allowed_claims:
+      - "The full workforce is operator-accessible through Claude and UCP."
+    forbidden_claims:
+      - "Live certification is complete"
+      - "Launch closure is complete"
+  W9:
+    title: "Live Validation and Certification"
+    status: pending
+    acts:
+      - E8A
+      - E8B
+      - E8C
+      - E8D
+      - E8E
+    depends_on:
+      - W4
+      - W7
+      - W8
+    unlocks:
+      - W10
+    exit_criteria:
+      - "workload certification is green"
+      - "persona certification is green"
+      - "department certification is green"
+      - "cross-department workflow certification is green"
+      - "workforce release gate v2 is green"
+    allowed_claims:
+      - "The full workforce target is live-certified."
+    forbidden_claims:
+      - "Commercial launch is closed without W10"
+  W10:
+    title: "Launch, Packaging, and Operating Closure"
+    status: pending
+    acts:
+      - E9A
+      - E9B
+      - E9C
+      - E9D
+      - E9E
+    depends_on:
+      - W9
+    exit_criteria:
+      - "workforce packaging is complete"
+      - "customer onboarding path is complete"
+      - "pilot and rollout model is complete"
+      - "support boundary is explicit"
+      - "final workforce release decision is green"
+    allowed_claims:
+      - "The complete SMARTHAUS M365 AI workforce is released."
+    forbidden_claims: []

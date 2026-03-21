@@ -23,7 +23,7 @@ fail_condition:
   Persona, identity, action, or parameters are derived from any source
   other than the instruction input (e.g. inferred from context, chosen
   by routing, or overridden by policy inside M365).
-notes:
+notes: >
   Checkable by design/code review: single code path that reads only
   the instruction tuple for these fields. M365 only evaluates
   validated instructions; it does not validate or assign persona/action.

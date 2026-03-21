@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L61",
+  "title": "M365 Cross-Persona Collaboration Contract v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BI-cross-persona-collaboration-contract-v1.ipynb",
+    "notebooks/lemma_proofs/L61_m365_cross_persona_collaboration_contract_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L61_m365_cross_persona_collaboration_contract_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Collaboration contract defines four primitives with explicit accountability transfer semantics.",
+    "Cross-department handoffs require dual department-owner approval."
+  ]
+}

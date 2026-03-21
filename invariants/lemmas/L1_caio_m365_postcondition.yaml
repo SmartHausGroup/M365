@@ -1,0 +1,10 @@
+lemma_id: L1
+name: CAIO M365 postcondition projection
+source_lemma: docs/contracts/caio-m365/LEMMA_L1.md
+source_invariant: invariants/INV-CAIO-M365-001.yaml
+evidence:
+  artifact: configs/generated/caio_m365_contract_verification.json
+  checks:
+    - response_schema_pass == true
+    - postcondition_pass == true
+status: projected

@@ -1,0 +1,13 @@
+{
+  "name": "Operations Automation",
+  "department": "operations",
+  "trigger": {
+    "type": "SharePointItemCreated",
+    "site": "Operations Hub",
+    "list": "User Management Tasks"
+  },
+  "steps": [
+    { "action": "PostTeamsMessage", "channel": "admin-management", "message": "New ops task received" },
+    { "action": "CreatePlannerTask", "plan": "Operations Board", "bucket": "Backlog" }
+  ]
+}

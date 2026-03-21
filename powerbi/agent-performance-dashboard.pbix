@@ -1,0 +1,124 @@
+{
+  "version": "1.0.0",
+  "name": "SmartHaus AI Agent Performance Dashboard",
+  "description": "Real-time performance analytics for all 39 AI agents across 10 departments",
+  "data_sources": [
+    {
+      "name": "Agent Status API",
+      "url": "http://localhost:8000/api/agents/status",
+      "type": "REST API",
+      "refresh_frequency": "5 minutes"
+    },
+    {
+      "name": "Agent Tasks",
+      "url": "http://localhost:8000/api/agents/{agent_id}/tasks",
+      "type": "REST API",
+      "refresh_frequency": "1 minute"
+    },
+    {
+      "name": "Agent Performance",
+      "url": "http://localhost:8000/api/agents/{agent_id}/performance",
+      "type": "REST API",
+      "refresh_frequency": "5 minutes"
+    }
+  ],
+  "visualizations": [
+    {
+      "name": "Total Agents Overview",
+      "type": "Card",
+      "data_source": "Agent Status API",
+      "metric": "total_agents",
+      "format": "Number",
+      "position": {"x": 0, "y": 0, "width": 200, "height": 100}
+    },
+    {
+      "name": "Active Departments",
+      "type": "Card",
+      "data_source": "Agent Status API",
+      "metric": "departments",
+      "format": "Number",
+      "position": {"x": 220, "y": 0, "width": 200, "height": 100}
+    },
+    {
+      "name": "System Status",
+      "type": "Card",
+      "data_source": "Agent Status API",
+      "metric": "status",
+      "format": "Text",
+      "position": {"x": 440, "y": 0, "width": 200, "height": 100}
+    },
+    {
+      "name": "Agent Performance by Department",
+      "type": "Bar Chart",
+      "data_source": "Agent Performance",
+      "x_axis": "department",
+      "y_axis": "completion_rate",
+      "position": {"x": 0, "y": 120, "width": 400, "height": 300}
+    },
+    {
+      "name": "Task Completion Trends",
+      "type": "Line Chart",
+      "data_source": "Agent Tasks",
+      "x_axis": "created_date",
+      "y_axis": "completed_tasks",
+      "position": {"x": 420, "y": 120, "width": 400, "height": 300}
+    },
+    {
+      "name": "Risk Distribution",
+      "type": "Pie Chart",
+      "data_source": "Agent Status API",
+      "category": "risk_tier",
+      "value": "agent_count",
+      "position": {"x": 0, "y": 440, "width": 300, "height": 250}
+    },
+    {
+      "name": "Top Performing Agents",
+      "type": "Table",
+      "data_source": "Agent Performance",
+      "columns": ["agent_name", "department", "completion_rate", "total_tasks"],
+      "position": {"x": 320, "y": 440, "width": 500, "height": 250}
+    }
+  ],
+  "filters": [
+    {
+      "name": "Department Filter",
+      "type": "Slicer",
+      "data_source": "Agent Status API",
+      "column": "department",
+      "position": {"x": 0, "y": 700, "width": 200, "height": 100}
+    },
+    {
+      "name": "Risk Level Filter",
+      "type": "Slicer",
+      "data_source": "Agent Status API",
+      "column": "risk_tier",
+      "position": {"x": 220, "y": 700, "width": 200, "height": 100}
+    },
+    {
+      "name": "Date Range Filter",
+      "type": "Date Slicer",
+      "data_source": "Agent Tasks",
+      "column": "created_date",
+      "position": {"x": 440, "y": 700, "width": 200, "height": 100}
+    }
+  ],
+  "alerts": [
+    {
+      "name": "Low Performance Alert",
+      "condition": "completion_rate < 0.8",
+      "threshold": 0.8,
+      "notification": "Email to operations team"
+    },
+    {
+      "name": "High Risk Agent Alert",
+      "condition": "risk_tier == 'critical' AND status != 'active'",
+      "notification": "Teams notification to security team"
+    },
+    {
+      "name": "Task Backlog Alert",
+      "condition": "queued_tasks > 10",
+      "threshold": 10,
+      "notification": "Dashboard notification"
+    }
+  ]
+}

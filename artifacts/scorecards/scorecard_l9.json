@@ -1,0 +1,17 @@
+{
+  "item_id": "L9",
+  "item_kind": "lemma",
+  "lemma_id": "L9",
+  "status": "green",
+  "generated_at_utc": "2026-03-18T17:45:00Z",
+  "notebook": "notebooks/m365/INV-M365-K-runtime-cli-notebook-cleanup.ipynb",
+  "notebook_hash": "projected-l9-runtime-cli-notebook-cleanup",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "artifacts/b4d3_failure_inventory.json",
+    "notebooks/m365/INV-M365-K-runtime-cli-notebook-cleanup.ipynb",
+    "notebooks/lemma_proofs/L9_m365_runtime_cli_notebook_validation_cleanup.ipynb",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d3-runtime-cli-ruff-black-cleanup.md"
+  ]
+}

@@ -1,0 +1,419 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T21:15:00Z"
+authority_inputs:
+  roster: registry/ai_team.json
+  persona_map: registry/persona_capability_map.yaml
+  capability_registry: registry/capability_registry.yaml
+  agent_registry: registry/agents.yaml
+  caio_contract: docs/CAIO_M365_CONTRACT.md
+  caio_action_spec: docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+deterministic_rule: >
+  UniversalActionV2 = Identity × Semantics × Execution × Governance × Evidence.
+contract_dimensions:
+  identity:
+    required_fields:
+      - action_key
+      - workload_family
+      - capability_family
+      - resource
+      - operation
+      - aliases
+  semantics:
+    required_fields:
+      - mutating
+      - input_contract
+      - result_contract
+      - idempotency_support
+      - implementation_status
+  execution:
+    required_fields:
+      - executor_domain
+      - auth_class
+      - required_permissions
+  governance:
+    required_fields:
+      - risk_class
+      - approval_profile
+      - allowed_persona_classes
+  evidence:
+    required_fields:
+      - source_surfaces
+      - evidence_refs
+canonical_action_key:
+  syntax: "<executor_domain>.<resource>.<operation>"
+  regex: "^[a-z0-9_]+\\.[a-z0-9_]+\\.[a-z0-9_]+$"
+  normalization_rules:
+    - "lower-case only"
+    - "exactly three dot-separated segments"
+    - "resource segment is singular"
+    - "operation segment may use underscores but not additional dots"
+executor_domains:
+  - directory
+  - collaboration
+  - sharepoint
+  - messaging
+  - workmanagement
+  - knowledge
+  - powerplatform
+  - security
+  - devices
+  - publishing
+  - composite
+auth_classes:
+  - app_only
+  - delegated
+  - hybrid
+  - mixed
+risk_classes:
+  - low
+  - medium
+  - high
+  - critical
+implementation_statuses:
+  - certified-core
+  - registry-backed
+  - docs-backed
+  - planned-only
+request_envelope_v2:
+  required_fields:
+    - action_key
+    - params
+  optional_fields:
+    - persona_id
+    - requestor
+    - executor_hint
+    - idempotency_key
+    - correlation_id
+    - evidence_mode
+  rules:
+    - "action_key must be canonical; legacy aliases resolve before execution"
+    - "params must be a JSON object"
+    - "idempotency_key is required for mutating actions in external orchestration paths"
+response_envelope_v2:
+  required_fields:
+    - ok
+    - result
+    - error
+    - trace_id
+    - action_key
+  optional_fields:
+    - executor_domain
+    - auth_class
+    - approval_required
+    - evidence_refs
+projection_rules:
+  from_caio_instruction:
+    source_shape: "{ action: <snake_case>, params: {...} }"
+    rule: "resolve snake_case action alias to canonical action_key, preserve params, then execute against v2 envelope"
+  from_capability_registry:
+    source_shape: "action rows keyed by snake_case action"
+    rule: "treat capability_registry action as a legacy alias source for canonical action definitions"
+  from_agent_registry:
+    source_shape: "allowed_actions strings, mostly dotted"
+    rule: "treat agent-registry action strings as persona-facing aliases that must resolve to canonical action_key before routing"
+minimum_action_definition:
+  required_fields:
+    - action_key
+    - aliases
+    - workload_family
+    - capability_family
+    - resource
+    - operation
+    - mutating
+    - implementation_status
+    - executor_domain
+    - auth_class
+    - risk_class
+    - approval_profile
+    - required_permissions
+    - input_contract
+    - result_contract
+    - source_surfaces
+    - evidence_refs
+example_actions:
+  - action_key: directory.user.list
+    aliases:
+      caio_instruction: [list_users]
+      capability_registry: [list_users]
+      agent_registry: [users.list]
+    workload_family: "Identity, directory, and tenant administration"
+    capability_family: "user lifecycle and directory lookup"
+    resource: user
+    operation: list
+    mutating: false
+    implementation_status: certified-core
+    executor_domain: directory
+    auth_class: app_only
+    risk_class: low
+    approval_profile: low-observe-create
+    required_permissions: [User.Read.All]
+    input_contract:
+      required: []
+      optional: [top, select]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [users, count]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: directory.user.read
+    aliases:
+      caio_instruction: [get_user]
+      capability_registry: [get_user]
+      agent_registry: [users.read]
+    workload_family: "Identity, directory, and tenant administration"
+    capability_family: "user lifecycle and directory lookup"
+    resource: user
+    operation: read
+    mutating: false
+    implementation_status: certified-core
+    executor_domain: directory
+    auth_class: app_only
+    risk_class: low
+    approval_profile: low-observe-create
+    required_permissions: [User.Read.All]
+    input_contract:
+      required: [userPrincipalName_or_user_id_or_id]
+      optional: []
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [user]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: directory.user.password_reset
+    aliases:
+      caio_instruction: [reset_user_password]
+      capability_registry: [reset_user_password]
+      agent_registry: []
+    workload_family: "Identity, directory, and tenant administration"
+    capability_family: "user lifecycle and directory lookup"
+    resource: user
+    operation: password_reset
+    mutating: true
+    implementation_status: certified-core
+    executor_domain: directory
+    auth_class: app_only
+    risk_class: high
+    approval_profile: high-impact
+    required_permissions: [User.ReadWrite.All]
+    input_contract:
+      required: [userPrincipalName_or_user_id_or_id, temporary_password_or_password]
+      optional: [force_change_next_sign_in]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [user, password_reset]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: sharepoint.site.list
+    aliases:
+      caio_instruction: [list_sites]
+      capability_registry: [list_sites]
+      agent_registry: [sites.list]
+    workload_family: "Content, intranet, and files"
+    capability_family: "site, list, and file administration"
+    resource: site
+    operation: list
+    mutating: false
+    implementation_status: certified-core
+    executor_domain: sharepoint
+    auth_class: app_only
+    risk_class: low
+    approval_profile: low-observe-create
+    required_permissions: [Sites.Read.All]
+    input_contract:
+      required: []
+      optional: [top]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [sites, count]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: sharepoint.site.create
+    aliases:
+      caio_instruction: [create_site]
+      capability_registry: [create_site]
+      agent_registry: [sites.provision]
+    workload_family: "Content, intranet, and files"
+    capability_family: "site, list, and file administration"
+    resource: site
+    operation: create
+    mutating: true
+    implementation_status: certified-core
+    executor_domain: sharepoint
+    auth_class: app_only
+    risk_class: high
+    approval_profile: high-impact
+    required_permissions: [Sites.ReadWrite.All, Group.ReadWrite.All]
+    input_contract:
+      required: [display_name]
+      optional: [mail_nickname, libraries, description]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [site_id, site_url, group_created, libraries_created]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: collaboration.team.create
+    aliases:
+      caio_instruction: [create_team]
+      capability_registry: [create_team]
+      agent_registry: [teams.create]
+    workload_family: "Collaboration, meetings, and communities"
+    capability_family: "team and workspace administration"
+    resource: team
+    operation: create
+    mutating: true
+    implementation_status: certified-core
+    executor_domain: collaboration
+    auth_class: app_only
+    risk_class: high
+    approval_profile: high-impact
+    required_permissions: [Team.Create, Group.ReadWrite.All]
+    input_contract:
+      required: [mail_nickname]
+      optional: [channels]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [team_id, team_url, channels_created]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: collaboration.channel.create
+    aliases:
+      caio_instruction: [add_channel]
+      capability_registry: [add_channel]
+      agent_registry: [channels.create, teams.add_channel]
+    workload_family: "Collaboration, meetings, and communities"
+    capability_family: "team and workspace administration"
+    resource: channel
+    operation: create
+    mutating: true
+    implementation_status: certified-core
+    executor_domain: collaboration
+    auth_class: app_only
+    risk_class: high
+    approval_profile: high-impact
+    required_permissions: [Channel.Create.Group]
+    input_contract:
+      required: [mail_nickname, channel_name]
+      optional: [description]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [team, channel]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: sharepoint.service.provision
+    aliases:
+      caio_instruction: [provision_service]
+      capability_registry: [provision_service]
+      agent_registry: [provision-client-services]
+    workload_family: "Content, intranet, and files"
+    capability_family: "site, list, and file administration"
+    resource: service
+    operation: provision
+    mutating: true
+    implementation_status: certified-core
+    executor_domain: composite
+    auth_class: hybrid
+    risk_class: high
+    approval_profile: high-impact
+    required_permissions: [Sites.ReadWrite.All, Group.ReadWrite.All, Team.Create]
+    input_contract:
+      required: [key]
+      optional: []
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [status, site, team]
+    source_surfaces:
+      - docs/CAIO_M365_CONTRACT.md
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-v1-supported-surface.md
+  - action_key: messaging.mail.send
+    aliases:
+      caio_instruction: [send_mail]
+      capability_registry: [send_mail]
+      agent_registry: [mail.send, email.send_individual]
+    workload_family: "Mail, calendar, contacts, and bookings"
+    capability_family: "mailbox and outbound messaging"
+    resource: mail
+    operation: send
+    mutating: true
+    implementation_status: registry-backed
+    executor_domain: messaging
+    auth_class: hybrid
+    risk_class: medium
+    approval_profile: medium-operational
+    required_permissions: [Mail.Send]
+    input_contract:
+      required: [recipient_or_to, subject, body]
+      optional: [contentType, from]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [sent, message_id]
+    source_surfaces:
+      - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+      - registry/capability_registry.yaml
+      - registry/agents.yaml
+    evidence_refs:
+      - docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+  - action_key: workmanagement.task.create
+    aliases:
+      caio_instruction: []
+      capability_registry: []
+      agent_registry: [task.create, create_task]
+    workload_family: "Tasks, scheduling, and work management"
+    capability_family: "planner and task orchestration"
+    resource: task
+    operation: create
+    mutating: true
+    implementation_status: registry-backed
+    executor_domain: workmanagement
+    auth_class: hybrid
+    risk_class: medium
+    approval_profile: medium-operational
+    required_permissions: []
+    input_contract:
+      required: [plan_or_container, title]
+      optional: [bucket, assignee, due_date]
+    result_contract:
+      envelope: M365InstructionResponse
+      result_shape_keys: [task_id, status]
+    source_surfaces:
+      - registry/agents.yaml
+      - docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+    evidence_refs:
+      - docs/commercialization/m365-persona-capability-and-risk-map.md

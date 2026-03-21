@@ -1,0 +1,56 @@
+schema_version: "2.0"
+last_updated: "2026-03-20"
+deterministic_rule: >
+  AuditRecordV2(surface, action, status, details, contexts) must emit one canonical
+  evidence envelope with stable top-level keys and normalized actor, persona,
+  executor, approval, and result contexts across instruction-api and ops-adapter surfaces.
+required_top_level_fields:
+  - schema_version
+  - timestamp
+  - ts
+  - surface
+  - action
+  - status
+  - details
+  - result
+canonical_contexts:
+  actor:
+    - actor
+    - actor_tier
+    - actor_groups
+  persona:
+    - persona
+    - persona_target
+  executor:
+    - executor
+    - tenant
+  approval:
+    - approval
+  result:
+    - result
+surface_defaults:
+  instruction_api:
+    default_agent: m365-instruction-router
+    required_contexts:
+      - result
+    legacy_aliases:
+      - ts
+      - user
+  ops_adapter:
+    default_agent: m365-administrator
+    required_contexts:
+      - actor
+      - executor
+      - result
+  ops_adapter_admin:
+    default_agent: m365-administrator
+    required_contexts:
+      - actor
+      - executor
+      - result
+  ops_adapter_sync:
+    default_agent: m365-administrator
+    required_contexts:
+      - actor
+      - executor
+      - result

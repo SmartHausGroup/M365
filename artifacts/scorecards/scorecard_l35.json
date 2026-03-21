@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L35",
+  "name": "M365 Power BI expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AK-power-bi-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L35_m365_power_bi_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L35_m365_power_bi_expansion_v2"
+  ]
+}

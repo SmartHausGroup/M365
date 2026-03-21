@@ -1,0 +1,7 @@
+Execute M365 Enterprise Commercialization Readiness P4B.
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-commercialization-readiness-p4b-onboarding-runbooks-support-boundary.md.
+
+Plan Reference: plan:m365-enterprise-commercialization-readiness:P4B
+
+Approval status: do not perform write-effect work until explicitly approved for P4B execution.

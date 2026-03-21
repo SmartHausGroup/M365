@@ -1,0 +1,1 @@
+# SmartHaus Ops Adapter package

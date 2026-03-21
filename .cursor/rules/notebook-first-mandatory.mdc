@@ -1,0 +1,690 @@
+---
+description: Notebook-First Development - MANDATORY for all mathematical/algorithmic code
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Notebook-First Development Mandatory Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Core Principle: Catch ALL Issues in Notebooks Before Extraction
+
+**MANDATORY:** ALL issues (bugs, errors, logic problems, test failures) MUST be caught and fixed in notebooks BEFORE code is extracted to Python files. The codebase should NEVER receive untested or broken code.
+
+**The notebook is the testing and debugging environment. The codebase is the deployment target.**
+
+---
+
+## Rule: ALL Code Must Originate in Notebooks
+
+**MANDATORY:** For ANY code that involves mathematical operations, algorithms, or performance guarantees, you MUST:
+
+1. **Write code in notebooks first** (not in codebase)
+2. **Separate functions** (one function per cell or clearly separated cells)
+3. **Test each function individually** in notebooks (function-level testing)
+4. **Debug at function level** in notebooks (all debugging happens in notebooks)
+5. **Extract code ONLY after all functions pass tests** (working code only)
+6. **Use extraction script** (NEVER manually edit codebase files)
+7. **If codebase code breaks, fix in notebooks and re-extract** (never fix in codebase)
+
+**v1 Scope Gate (CRITICAL):**
+
+**⚠️ Notebook-first is PROHIBITED in v1 for non-algorithmic work.**
+
+The North Star explicitly prohibits advanced matching algorithms in v1. In v1, matching is limited to **location + category filtering only** (see `Operations/NORTHSTAR.md` → "Authorized Capabilities (v1)" → "Explicitly Unauthorized in v1").
+
+**Notebook-first applies ONLY when:**
+- North Star Authorized Capabilities includes algorithmic matching/pricing/recommendations (v2+)
+- The work is explicitly authorized in the Execution Plan for v2+/v3
+- The feature involves mathematical operations, algorithms, or performance guarantees
+
+**For v1 work:** Do NOT use notebook-first for:
+- Service implementations (user-service, request-service, messaging-service, etc.)
+- iOS app code (Swift)
+- Web app code (TypeScript/React)
+- Simple scripts and utilities
+- Test code
+
+**For v2+ algorithmic work:** Notebook-first is required for:
+- Advanced matching algorithms
+- Scoring/ranking systems
+- Recommendation engines
+- Pricing models
+
+**This rule applies ONLY to v2+ algorithmic Python code:**
+- `notebooks/algorithms/` or `notebooks/math/` - Algorithm implementations (v2+ only)
+- Extracted algorithm code (v2+ only)
+
+**Exceptions (infrastructure-only code that doesn't require notebook-first):**
+- Pure configuration files (`setup.py`, `pyproject.toml`, `Makefile`)
+- Build scripts that only call other tools (no algorithms/logic)
+- Pure data transformation scripts with no algorithms (simple I/O only)
+- Simple file I/O wrappers with no logic beyond basic file operations
+- Shell scripts and other non-Python files
+
+**If you're unsure whether code requires notebook-first:**
+- **Default to YES** - create it in a notebook first
+- If it involves any math, algorithms, or logic beyond simple I/O → notebook-first required
+- If it's pure infrastructure (calling other tools, simple file operations) → may be exempt, but verify with team
+- **When in doubt, use notebook-first**
+
+**This rule makes it IMPOSSIBLE to skip the notebook-first process.**
+
+---
+
+## Integration with MA Process
+
+**This rule is REQUIRED for MA Phase 4 (Verification).** See `.cursor/rules/ma-process-mandatory.mdc` for complete MA process.
+
+**MA Phase 4 Requirements (v2+ only):**
+- [ ] Verification notebook created (`notebooks/algorithms/<name>.ipynb` or `notebooks/math/<name>.ipynb`)
+- [ ] **Implementation code written directly in notebook** (NOT imported from codebase)
+- [ ] **Functions separated and individually testable** (one function per cell or clearly separated)
+- [ ] **Each function tested individually** (function-level test cells)
+- [ ] **All debugging completed in notebook** (no issues remain)
+- [ ] VERIFY:L<N> cell with assertions
+- [ ] Artifact JSON exported (`configs/generated/<name>.json`)
+- [ ] Notebook runs successfully locally (ALL functions pass tests)
+
+**After MA Phases 1-5 Complete:**
+- [ ] Code extracted from Phase 4 notebook using extraction script
+- [ ] Extraction script creates/updates Python files automatically
+- [ ] Tests validate against Phase 4 notebook
+- [ ] Telemetry matches Phase 3 invariant
+
+---
+
+## Agent-Specific Requirements (CRITICAL)
+
+**MANDATORY for Codex, Composer, GPT-5, and ALL AI agents:**
+
+**IF YOU ARE TOUCHING A PYTHON FILE DIRECTLY, YOU ARE WRONG. STOP IMMEDIATELY.**
+
+1. **NEVER edit `.py` files directly** - All code changes MUST happen in notebooks first
+   - ❌ **FORBIDDEN:** Editing v2+ algorithmic Python files directly (must use notebook-first)
+   - ✅ **ALLOWED:** Editing v1 service code, iOS/Web code, and non-algorithmic scripts directly (notebook-first does not apply)
+   - ✅ **REQUIRED:** Edit notebooks in `notebooks/` directory instead
+   - ✅ **REQUIRED:** Use extraction script to update `.py` files after notebook is working
+
+2. **ALL iteration happens in notebooks** - Debug, test, and refine code in notebook cells
+   - ❌ **FORBIDDEN:** Iterating on code in `.py` files
+   - ✅ **REQUIRED:** All debugging happens in notebook cells
+   - ✅ **REQUIRED:** All testing happens in notebook cells
+   - ✅ **REQUIRED:** All refinement happens in notebook cells
+
+3. **ALL validation happens in notebooks** - Ensure desired output is achieved before extraction
+   - ❌ **FORBIDDEN:** Validating code by running `.py` files directly
+   - ✅ **REQUIRED:** Run notebook end-to-end to validate
+   - ✅ **REQUIRED:** All functions pass tests in notebook
+   - ✅ **REQUIRED:** All assertions pass in notebook
+   - ✅ **REQUIRED:** Desired output achieved in notebook
+
+4. **Extraction is the FINAL step** - Only use extraction script after notebook is fully working
+   - ❌ **FORBIDDEN:** Extracting code before notebook is fully working
+   - ❌ **FORBIDDEN:** Extracting code before all tests pass
+   - ❌ **FORBIDDEN:** Extracting code before desired output is achieved
+   - ✅ **REQUIRED:** Notebook runs end-to-end with no errors
+   - ✅ **REQUIRED:** All functions tested individually and passing
+   - ✅ **REQUIRED:** All integration tests passing
+   - ✅ **REQUIRED:** Desired output achieved
+   - ✅ **THEN:** Use extraction script to update `.py` files
+
+5. **If you find yourself editing a `.py` file: STOP IMMEDIATELY**
+   - **STOP** - Do not continue editing the `.py` file
+   - **SWITCH** - Open/create the corresponding notebook instead
+   - **WORK** - Make all changes in the notebook
+   - **TEST** - Validate in the notebook
+   - **EXTRACT** - Only then use extraction script
+
+**Remember: The notebook is the source of truth. The codebase is the deployment target. You work in notebooks, not in code files.**
+
+---
+
+## Forbidden Actions (HARD BLOCK)
+
+**NEVER write code directly in codebase for mathematical/algorithmic features:**
+
+❌ **FORBIDDEN:**
+- **Editing ANY `.py` file directly (src/, scripts/, tests/) - THIS IS ALWAYS WRONG FOR AGENTS**
+- Writing functions/classes directly in `src/rfs/`, `src/services/`, `src/core/`, `scripts/`, or `tests/`
+- **Creating diagnostic scripts, utility scripts, or benchmark scripts directly in codebase**
+- **Writing any Python file that contains algorithms, math, or logic (not pure infrastructure)**
+- Manually editing codebase files (use extraction script only)
+- Implementing algorithms in codebase before notebooks
+- Copying code from other codebase files (unless that code was extracted from notebooks)
+- Writing code in codebase and then "validating" it in notebooks
+- Importing from codebase in implementation notebooks (except verification notebooks)
+- Debugging code in codebase (fix in notebooks, then re-extract)
+- Extracting code before all functions pass tests in notebooks
+- Iterating on code in `.py` files (iterate in notebooks instead)
+- Testing code by running `.py` files directly (test in notebooks instead)
+
+**If you find yourself writing code in codebase:**
+1. **STOP immediately** - You are violating the notebook-first rule
+2. **Create/update notebook** with the implementation
+3. **Separate functions** (one function per cell)
+4. **Test each function individually** in notebook
+5. **Debug at function level** in notebook
+6. **Fix all issues in notebook** (not in codebase)
+7. **Extract from notebook** using extraction script
+8. **Then proceed** with codebase integration
+
+---
+
+## Notebook Structure Requirements
+
+**MANDATORY:** All notebooks must follow this structure to ensure clarity, testability, and maintainability.
+
+### Cell Organization
+
+**Every component must be in a separate, individually executable cell:**
+
+- **Imports:** Each import or import group in its own cell
+- **Functions:** Each function in its own cell
+- **Classes:** Each class in its own cell
+- **Constants/Configuration:** Each constant or config group in its own cell
+- **Test Code:** Each test in its own cell
+- **Validation Code:** Each validation in its own cell
+
+**Markdown cells must precede each code cell to explain:**
+
+1. **What it is:** What is this component (function, class, import, etc.)?
+2. **What it does:** What does this component do?
+3. **Why this approach:** Why are we choosing this specific approach?
+4. **Reasoning/Rationale:** What is the reasoning behind this implementation?
+5. **Expected outcome:** What should the outcome be?
+6. **What "good" looks like:** What does success look like? What are the success criteria?
+
+### Required Notebook Structure
+
+```markdown
+# Cell 1: Markdown - Notebook Overview
+## Purpose
+[What is this notebook for? What problem does it solve?]
+
+## Approach
+[Why are we using this approach? What are the alternatives?]
+
+## Success Criteria
+[What does "good" look like? What are the success metrics?]
+
+---
+
+# Cell 2: Markdown - Imports Section
+## Imports
+[What libraries/modules are we importing and why?]
+
+---
+
+# Cell 3: Code - Imports
+import numpy as np
+import json
+from pathlib import Path
+# ... imports ...
+
+---
+
+# Cell 4: Markdown - Function 1 Documentation
+## Function: compute_matched_filter_correlation
+
+**What it is:** A function that computes the matched filter correlation `r = E^H Ψ`.
+
+**What it does:** Takes a query field and superposed field, computes their correlation using the matched filter formula from Lemma L<N>.
+
+**Why this approach:** The matched filter is the optimal retrieval method per Theorem 4 in the thesis. We use NumPy's dot product for efficiency.
+
+**Reasoning/Rationale:**
+- Matched filter provides optimal signal-to-noise ratio
+- NumPy implementation is efficient and well-tested
+- Aligns with mathematical foundation in Phase 2
+
+**Expected outcome:** Returns a correlation vector `r` with shape `(D,)` where `D` is the field dimension.
+
+**What "good" looks like:**
+- Function executes without errors
+- Output shape matches expected `(D,)`
+- Correlation values are in expected range `[-1, 1]`
+- Matches mathematical definition from Lemma L<N>
+
+---
+
+# Cell 5: Code - Function 1 Implementation
+def compute_matched_filter_correlation(query_field, superposed_field):
+    """
+    Compute matched filter correlation: r = E^H Ψ
+
+    Implementation written directly in notebook.
+    This is the source of truth.
+    """
+    r = np.dot(query_field.conj(), superposed_field)
+    return r
+
+---
+
+# Cell 6: Markdown - Function 1 Test Documentation
+## Test: compute_matched_filter_correlation
+
+**What it is:** Unit test for `compute_matched_filter_correlation` function.
+
+**What it does:** Tests the function with known inputs and verifies the output matches expected results.
+
+**Why this approach:** Function-level testing ensures each component works correctly before integration.
+
+**Expected outcome:** All assertions pass, function returns correct correlation vector.
+
+**What "good" looks like:**
+- All assertions pass
+- Output shape is `(D,)`
+- Output values match expected correlation
+- No errors or warnings
+
+---
+
+# Cell 7: Code - Function 1 Test
+query = create_test_query()
+field = create_test_field()
+result = compute_matched_filter_correlation(query, field)
+assert result.shape == expected_shape
+assert np.allclose(result, expected_result, rtol=1e-6)
+print("Function 1 test: PASS")
+
+---
+
+# Cell 8: Markdown - Function 2 Documentation
+## Function: extract_top_peaks
+
+**What it is:** A function that extracts the top-K peaks from a correlation vector.
+
+**What it does:** Takes a correlation vector and returns the indices of the top-K largest magnitude values.
+
+**Why this approach:** We need to identify the strongest correlations for candidate selection. Using `np.argsort` is efficient for this.
+
+**Reasoning/Rationale:**
+- Top-K selection is standard for retrieval systems
+- NumPy argsort is O(D log D) which is acceptable
+- Aligns with Phase 2 complexity analysis
+
+**Expected outcome:** Returns an array of K indices corresponding to the top-K peaks.
+
+**What "good" looks like:**
+- Function executes without errors
+- Returns exactly K indices
+- All indices are valid (0 <= idx < len(correlation))
+- Indices correspond to largest magnitude values
+
+---
+
+# Cell 9: Code - Function 2 Implementation
+def extract_top_peaks(correlation, top_k):
+    """
+    Extract top-K peaks from matched filter correlation.
+    """
+    peaks = np.argsort(-np.abs(correlation))[:top_k]
+    return peaks
+
+---
+
+# Cell 10: Code - Function 2 Test
+correlation = create_test_correlation()
+peaks = extract_top_peaks(correlation, top_k=10)
+assert len(peaks) == 10
+assert all(0 <= p < len(correlation) for p in peaks)
+print("Function 2 test: PASS")
+
+---
+
+# Cell 11: Markdown - Integration Test Documentation
+## Integration Test: Full Matched Filter Pipeline
+
+**What it is:** End-to-end test of the complete matched filter pipeline.
+
+**What it does:** Tests all functions together to verify they work correctly as a system.
+
+**Why this approach:** Integration testing ensures components work together correctly, not just individually.
+
+**Expected outcome:** Complete pipeline executes successfully, all assertions pass.
+
+**What "good" looks like:**
+- All functions execute in sequence without errors
+- Final result matches expected output
+- All VERIFY:L<N> assertions pass
+- Performance meets Phase 2 complexity requirements
+
+---
+
+# Cell 12: Code - Integration Test
+query = create_test_query()
+field = create_test_field()
+correlation = compute_matched_filter_correlation(query, field)
+peaks = extract_top_peaks(correlation, top_k=10)
+result = process_peaks(peaks, field)
+
+# VERIFY:L<N> cell
+assert result.shape == expected_shape
+assert np.allclose(result, expected_result, rtol=1e-6)
+print("VERIFY:L<N>: PASS")
+
+---
+
+# Cell 13: Markdown - Artifact Generation Documentation
+## Artifact Generation
+
+**What it is:** Generation of validation artifact JSON file.
+
+**What it does:** Creates a JSON file documenting the validation results for CI enforcement.
+
+**Why this approach:** Artifacts provide traceability and enable CI validation.
+
+**Expected outcome:** Artifact file created with validation status "computed".
+
+**What "good" looks like:**
+- Artifact file created successfully
+- All required fields present
+- Validation status is "computed"
+- File is valid JSON
+
+---
+
+# Cell 14: Code - Artifact Generation
+artifact = {
+    "validation_status": "computed",
+    "method": "matched_filter",
+    "result_shape": list(result.shape),
+    "timestamp": "2025-01-XXT00:00:00Z"
+}
+with open(CONFIG_GENERATED / "matched_filter_artifact.json", "w") as f:
+    json.dump(artifact, f, indent=2)
+```
+
+### Markdown Cell Requirements
+
+**Every code cell must be preceded by a markdown cell that includes:**
+
+1. **Component Name:** Clear heading with component name (function, class, etc.)
+2. **What it is:** Description of what this component is
+3. **What it does:** Description of what this component does
+4. **Why this approach:** Explanation of why this specific approach was chosen
+5. **Reasoning/Rationale:** The reasoning behind the implementation decisions
+6. **Expected outcome:** What the expected outcome should be
+7. **What "good" looks like:** Success criteria and how to verify success
+
+**Markdown cells should be:**
+- Clear and concise
+- Explain the "why" not just the "what"
+- Reference relevant lemmas, invariants, or mathematical foundations
+- Include success criteria that can be verified
+
+---
+
+## Required Workflow
+
+### Step 1: Write Code in Notebook (Separated Functions)
+
+**MANDATORY:** Implementation code must be written directly in notebook cells, following the notebook structure requirements above.
+
+**Each component (function, class, import, etc.) must be:**
+- In its own separate executable cell
+- Preceded by a markdown cell explaining what it is, what it does, why this approach, reasoning, expected outcome, and what "good" looks like
+- Tested individually in its own test cell (also with markdown explanation)
+
+**See "Notebook Structure Requirements" section above for complete structure template.**
+
+### Step 2: Test and Debug Each Function Individually
+
+**MANDATORY:** Each function must be tested and debugged individually in the notebook before extraction.
+
+- [ ] Function 1: Write function → Test function → Debug if needed → Fix in notebook → Re-test → PASS
+- [ ] Function 2: Write function → Test function → Debug if needed → Fix in notebook → Re-test → PASS
+- [ ] Function N: Write function → Test function → Debug if needed → Fix in notebook → Re-test → PASS
+- [ ] Integration test: Test all functions together → Debug if needed → Fix in notebook → Re-test → PASS
+- [ ] VERIFY:L<N> cell: All assertions pass
+- [ ] Artifact generation: Artifact created successfully
+- [ ] Notebook runs end-to-end: No errors, all tests pass
+
+**CRITICAL:** ALL issues must be caught and fixed in notebooks. Do NOT extract code until ALL functions pass tests.
+
+### Step 3: Extract Code from Notebook (ONLY After All Tests Pass)
+
+**MANDATORY:** Code must be extracted from notebook to codebase using the extraction script. NEVER manually edit codebase files.
+
+```bash
+# Extract code from notebook (ONLY after all functions pass tests)
+python scripts/notebooks/extract_code.py \
+    --notebook notebooks/math/matched_filter_implementation.ipynb \
+    --output src/rfs/retrieval/matched_filter.py \
+    --functions compute_matched_filter_correlation,extract_top_peaks
+```
+
+**The extraction script automatically:**
+- Creates/updates the Python file
+- Extracts function definitions
+- Adds proper imports and structure
+- Maintains code structure from notebook
+
+**NEVER manually edit codebase files.** If you need to change code:
+1. Edit the notebook
+2. Test in notebook
+3. Fix any issues in notebook
+4. Re-extract using script
+
+### Step 4: Verify Alignment
+
+**MANDATORY:** After extraction, verify:
+- [ ] Notebook still runs successfully
+- [ ] Extracted code matches notebook implementation
+- [ ] Tests validate against Phase 4 notebook
+- [ ] Telemetry matches Phase 3 invariant
+
+---
+
+## Exception: Verification Notebooks
+
+**Verification notebooks** (`*_implementation_verification.ipynb`) are allowed to import from codebase. These notebooks verify that extracted code matches the mathematical definition.
+
+**Example:**
+```python
+# notebooks/math/matched_filter_implementation_verification.ipynb
+# VERIFICATION NOTEBOOK
+# This notebook verifies that extracted code matches math definition.
+# Imports from codebase are allowed for verification notebooks.
+
+from rfs.retrieval.matched_filter import matched_filter  # ✅ OK for verification notebooks
+
+# Verify extracted code matches notebook implementation
+result = matched_filter(query, field, geometry)
+assert np.allclose(result, expected_result)
+```
+
+**Note:** Verification notebooks are optional and used for Phase 4.3 "Code Implementation Verification" in the MA process.
+
+---
+
+## Enforcement Checklist
+
+**Before editing ANY Python file in codebase, verify:**
+
+- [ ] **Check if file has source notebook** (read first line: "Code extracted from notebooks/...")
+- [ ] **If yes:** Update notebook first, then re-extract (NEVER edit codebase directly)
+- [ ] **If no:** Create notebook first, then extract
+
+**Before extracting code to codebase, verify:**
+
+- [ ] MA Phase 1 complete (intent documented)
+- [ ] MA Phase 2 complete (math foundation)
+- [ ] MA Phase 3 complete (invariant + lemma)
+- [ ] MA Phase 4 complete (verification notebook with implementation code)
+- [ ] MA Phase 5 complete (CI enforcement)
+- [ ] Code written in notebook (not codebase)
+- [ ] Notebook structure follows requirements (separate cells for each component)
+- [ ] Every code cell preceded by markdown cell explaining: what it is, what it does, why this approach, reasoning, expected outcome, what "good" looks like
+- [ ] Functions separated (one function per cell)
+- [ ] Classes separated (one class per cell)
+- [ ] Imports separated (each import or import group in own cell)
+- [ ] Each function tested individually (function-level test cells with markdown explanations)
+- [ ] All functions pass individual tests (no failures)
+- [ ] Integration test passes (all functions together)
+- [ ] All debugging completed in notebook (no issues remain)
+- [ ] VERIFY:L<N> cell passes (all assertions pass)
+- [ ] Artifact generated successfully
+- [ ] Notebook runs end-to-end (no errors)
+- [ ] Code extracted from notebook using extraction script
+- [ ] Extraction script creates/updates Python files automatically
+- [ ] Tests validate against Phase 4 notebook
+
+**If ANY step is missing:**
+- **STOP** and complete the missing step
+- **DO NOT** extract code until all steps are complete
+- **DO NOT** manually edit codebase files
+- **DO NOT** make infrastructure fixes (imports, types) directly in codebase - update notebook first
+
+---
+
+## What This Prevents
+
+This rule prevents:
+- ❌ Writing code directly in codebase and skipping notebooks
+- ❌ Manually editing codebase files (use extraction script only)
+- ❌ "Validating" codebase code in notebooks (reverse flow)
+- ❌ Copying code from other codebase files without notebook origin
+- ❌ Implementing algorithms without MA process completion
+- ❌ Codebase-codebase dependencies that bypass notebooks
+- ❌ Debugging code in codebase (fix in notebooks, then re-extract)
+- ❌ Extracting code before all functions pass tests
+- ❌ Untested or broken code entering the codebase
+
+This rule ensures:
+- ✅ Code originates in notebooks (source of truth)
+- ✅ Functions are separated and individually testable
+- ✅ Each function is tested individually in notebooks
+- ✅ All debugging happens in notebooks (not in codebase)
+- ✅ Code is validated against lemmas/invariants before extraction
+- ✅ Codebase code is extracted via script (not written directly)
+- ✅ Codebase only receives working, tested code
+- ✅ Notebooks remain canonical and executable
+- ✅ MA process is followed completely
+- ✅ ALL issues are caught in notebooks before extraction
+
+---
+
+## Integration with Other Rules
+
+This rule integrates with:
+- **MA Process Mandatory Rule** (`.cursor/rules/ma-process-mandatory.mdc`): Phase 4 requires notebook implementation
+- **Agent Workflow Mandatory** (`.cursor/rules/agent-workflow-mandatory.mdc`): Pre-work checklist includes MA process
+- **Change Approval Protocol** (`.cursor/rules/rsf-change-approval.mdc`): Approval must include notebook-first verification
+- **Plan-First Execution** (`.cursor/rules/plan-first-execution.mdc`): Plans must include notebook-first workflow
+
+---
+
+## Examples
+
+### ✅ Correct: Notebook-First Workflow
+
+**Scenario:** Implementing matched filter
+
+**Process:**
+1. ✅ MA Phase 1-3 complete (intent, math, lemmas)
+2. ✅ Create `notebooks/math/matched_filter_implementation.ipynb`
+3. ✅ Write `compute_matched_filter_correlation()` function in notebook (Cell 2)
+4. ✅ Test `compute_matched_filter_correlation()` individually (Cell 3) → PASS
+5. ✅ Write `extract_top_peaks()` function in notebook (Cell 4)
+6. ✅ Test `extract_top_peaks()` individually (Cell 5) → PASS
+7. ✅ Integration test (Cell 6) → PASS
+8. ✅ VERIFY:L<N> cell → PASS
+9. ✅ Generate artifact → SUCCESS
+10. ✅ Notebook runs end-to-end → NO ERRORS
+11. ✅ Extract code from notebook: `python scripts/notebooks/extract_code.py ...`
+12. ✅ Extraction script creates `src/rfs/retrieval/matched_filter.py` automatically
+13. ✅ Verify notebook still runs
+14. ✅ Run tests against Phase 4 notebook
+
+**Result:** Code originates in notebook, functions tested individually, all issues caught in notebook, codebase receives working code via extraction script.
+
+### ❌ Incorrect: Codebase-First Workflow
+
+**Scenario:** Implementing matched filter
+
+**Process:**
+1. ❌ Write `matched_filter()` directly in `src/rfs/retrieval/matched_filter.py`
+2. ❌ Create notebook that imports from codebase
+3. ❌ "Validate" codebase code in notebook
+4. ❌ Debug issues in codebase (not in notebook)
+
+**Result:** Code written in codebase first, notebook imports from codebase (reverse flow), debugging happens in codebase.
+
+**Fix:** STOP, delete codebase code, write code in notebook first, separate functions, test each function individually, fix all issues in notebook, then extract.
+
+### ❌ Incorrect: Extracting Before All Tests Pass
+
+**Scenario:** Implementing matched filter
+
+**Process:**
+1. ✅ Write functions in notebook
+2. ❌ Extract code before testing functions individually
+3. ❌ Debug issues in codebase after extraction
+
+**Result:** Untested code enters codebase, debugging happens in codebase.
+
+**Fix:** STOP, test each function individually in notebook, fix all issues in notebook, then extract.
+
+---
+
+## Reference
+
+- **Notebook-First Development:** `docs/operations/notebooks/NOTEBOOK_FIRST_DEVELOPMENT.md`
+- **MA Process Mandatory Rule:** `docs/operations/processes/MA_PROCESS_MANDATORY_RULE.md`
+- **MA Process:** `docs/math/MATH_DEVELOPMENT_PROCESS.md`
+- **Code Extraction Script:** `scripts/notebooks/extract_code.py`
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL AI assistants working on SmartHaus M365 AI Workforce.
+
+**Pre-Write Checklist (MANDATORY - Before Creating/Modifying ANY Python File):**
+
+**CRITICAL FOR AGENTS:** If you are about to edit a `.py` file, ask yourself: "Should I be editing a notebook instead?" The answer is almost always YES.
+
+Before creating or modifying ANY Python file in the codebase, you MUST verify:
+
+- [ ] **Is this code exempt?** (pure infrastructure, no algorithms/logic)
+  - If YES → proceed (but document why it's exempt)
+  - If NO → **STOP** - You should be working in a notebook instead
+
+- [ ] **Does a notebook exist?** (check `notebooks/` directory)
+  - If YES → verify it contains the code you need, then **EDIT THE NOTEBOOK, NOT THE .PY FILE**
+  - If NO → **STOP** and create notebook first - **DO NOT CREATE THE .PY FILE**
+
+- [ ] **Is the code in the notebook?** (verify implementation exists)
+  - If YES → verify all functions are tested individually, then **EDIT THE NOTEBOOK, NOT THE .PY FILE**
+  - If NO → **STOP** and add code to notebook first - **DO NOT ADD CODE TO .PY FILE**
+
+- [ ] **Do all functions pass tests?** (run notebook end-to-end)
+  - If YES → proceed to extraction (use extraction script)
+  - If NO → **STOP** and fix tests in notebook - **DO NOT FIX TESTS IN .PY FILE**
+
+- [ ] **Was code extracted using script?** (verify extraction method)
+  - If YES → proceed
+  - If NO → **STOP** and use extraction script - **DO NOT MANUALLY EDIT .PY FILE**
+
+**AGENT REMINDER:** If you are editing a `.py` file directly, you are violating this rule. Switch to the notebook immediately.
+
+**Verification:**
+- Before any code implementation, verify notebook exists with implementation code
+- Before any codebase write, verify code was extracted from notebook using extraction script
+- Before extraction, verify all functions pass individual tests in notebook
+- If code exists in codebase without notebook origin, STOP and create notebook first
+- If codebase code breaks, fix in notebook and re-extract (never fix in codebase)
+- **Before creating ANY file in `scripts/`, verify it's either exempt or has a notebook**
+
+**This rule makes it IMPOSSIBLE to skip the notebook-first process and ensures ALL issues are caught in notebooks before extraction.**
+
+---
+
+**Last Updated:** 2025-12-31
+**Version:** 2.0

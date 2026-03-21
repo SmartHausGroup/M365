@@ -1,0 +1,7 @@
+Execute M365 Enterprise Commercialization Readiness P2A.
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-commercialization-readiness-p2a-audit-governance-evidence-model.md.
+
+Plan Reference: plan:m365-enterprise-commercialization-readiness:P2A
+
+Approval status: do not perform write-effect work until explicitly approved for P2A execution.

@@ -1,0 +1,13 @@
+lemma_id: L8
+name: M365 scripts and CI Ruff cleanup
+source_notebook: notebooks/m365/INV-M365-J-scripts-ci-ruff-cleanup.ipynb
+evidence:
+  artifacts:
+    - artifacts/b4d1_failure_inventory.json
+    - notebooks/lemma_proofs/L8_m365_scripts_ci_ruff_cleanup.ipynb
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d2-scripts-ci-ruff-cleanup.md
+  checks:
+    - scripts and ci Ruff debt is eliminated without runtime-surface edits
+    - scoped tooling diff remains bounded to scripts and ci paths
+    - git diff --check is clean after the remediation
+status: projected

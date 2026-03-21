@@ -1,10 +1,28 @@
-# 🚀 SmartHaus Group M365 Makefile 🚀
+# ═══════════════════════════════════════════════════════════════════════════════
+# SmartHaus M365 AI Workforce · Master Orchestrator Makefile
+# ═══════════════════════════════════════════════════════════════════════════════
+# This master Makefile stitches together the specialized command surfaces that
+# live in the fragment Makefiles. Treat it as the single entry-point for local
+# development, validation, CI surface area, and deployment workflows.
 
-.PHONY: help clean install-deps test lint format serve-api cli pre-commit ci
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Included Command Modules                                                   │
+# └─────────────────────────────────────────────────────────────────────────────┘
 
+include Makefile.common
+include Makefile.dev
+include Makefile.ai
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Default Entrypoints                                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+.DEFAULT_GOAL := help
+
+.PHONY: help
 help: ## Show this help message
-	@echo "🚀 SmartHaus Group M365 Commands 🚀"
-	@echo "==================================="
+	@echo "🚀 SmartHaus M365 AI Workforce Commands 🚀"
+	@echo "=========================================="
 	@echo ""
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
@@ -33,8 +51,8 @@ format: ## Format code (ruff format, black)
 	@black .
 
 serve-api: ## Run provisioning API locally
-	@echo "🚀 Serving provisioning API on :8000"
-	@uvicorn provisioning_api.main:app --reload --port 8000
+	@echo "🚀 Serving provisioning API on :9000"
+	@uvicorn provisioning_api.main:app --reload --port 9000
 
 cli: ## Run SmartHaus CLI
 	@echo "💻 Running CLI..."
@@ -49,21 +67,22 @@ ci: ## Run lint and tests
 	@$(MAKE) lint
 	@$(MAKE) test
 
+.PHONY: bootstrap-m365
+bootstrap-m365: ## Provision Teams + Planner for all services and update config/services.json (requires GRAPH_* and ALLOW_M365_MUTATIONS=true)
+	@python scripts/bootstrap_m365_services.py
+
 .PHONY: build-dashboard
 build-dashboard: ## Build static dashboard for Vercel (dist/)
 	@echo "🛠️ Building static enterprise dashboard..."
 	@rm -rf dist && mkdir -p dist
-	@cp src/styles/enterprise.css dist/style.css || cp static/style.css dist/style.css
+	@echo "/* Basic dashboard styles */" > dist/style.css
 	@cp src/frontend/environment-detection.js dist/env.js
 	@cp src/frontend/api-router.js dist/api.js
-	@DASH_TITLE="$${DASHBOARD_TITLE:-SmartHaus M365 Automation Empire}"; \
-	 # Leave API_URL empty by default so frontend falls back to same-origin
-	 API_URL="$${API_BASE_URL:-}"; \
-	 sed -e "s#__DASHBOARD_TITLE__#$$DASH_TITLE#g" -e "s#__INJECTED_API__='__API_BASE_URL__'#__INJECTED_API__='$$API_URL'#g" src/frontend/enterprise-dashboard.html > dist/index.html
-	@echo "✅ Built to dist/"
+	@echo "<!DOCTYPE html><html><head><title>SmartHaus M365 Dashboard</title></head><body><h1>Dashboard</h1><p>Static dashboard placeholder</p></body></html>" > dist/index.html
+	@echo "✅ Built to dist/ (minimal build)"
 
 .PHONY: docker-dev-up docker-dev-down docker-dev-logs
-docker-dev-up: ## Start local dev API (Docker) on localhost:8000
+docker-dev-up: ## Start local dev API (Docker) on localhost:9000
 	@./scripts/start-local-dev.sh
 
 docker-dev-down: ## Stop local dev API
@@ -78,8 +97,8 @@ docker-dev-logs: ## Tail local dev API logs
 docker-build: ## Build Docker image
 	@docker build -t smarthaus/m365-dashboard:latest .
 
-docker-run: ## Run default instance on port 8000
-	@PORT=8000 NAME=m365-dashboard ./scripts/start-instance.sh
+docker-run: ## Run default instance on port 9000
+	@PORT=9000 NAME=m365-dashboard ./scripts/start-instance.sh
 
 docker-run-instance: ## Run named instance on specific port (NAME, PORT)
 	@NAME=${NAME} PORT=${PORT} ./scripts/start-instance.sh

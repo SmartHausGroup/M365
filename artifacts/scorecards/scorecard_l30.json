@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L30",
+  "name": "M365 SharePoint / OneDrive / Files expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AF-sharepoint-onedrive-files-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L30_m365_sharepoint_onedrive_files_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L30_m365_sharepoint_onedrive_files_expansion_v2"
+  ]
+}

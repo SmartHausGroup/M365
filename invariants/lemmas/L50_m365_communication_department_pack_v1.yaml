@@ -1,0 +1,21 @@
+lemma_id: L50
+title: M365 Communication Department Pack v1
+invariant: >
+  The Communication department pack must be projected from one declared
+  Communication authority, one authoritative persona registry, and one
+  deterministic pack-state rule so the department boundary, action count,
+  approval posture, and workforce readiness cannot drift between runtime
+  surfaces.
+proof_obligations:
+  - communication department pack authority file exists and validates
+  - declared Communication personas all exist in the authoritative persona registry
+  - projected supported-action counts match the declared pack KPI
+  - pack state is derived deterministically from persona status and accountability state
+failure_boundaries:
+  - missing Communication department pack authority file
+  - missing or inactive expected persona
+  - action-count mismatch between authority and runtime projection
+  - outbound-communication approval posture drift for the declared Communication surface
+test_bindings:
+  - tests/test_communication_department_pack_v1.py
+ci_gate: scripts/ci/verify_communication_department_pack_v1.py

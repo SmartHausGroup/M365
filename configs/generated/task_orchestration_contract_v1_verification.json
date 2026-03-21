@@ -1,0 +1,20 @@
+{
+  "contract_id": "task-orchestration-contract",
+  "governance_rule_count": 4,
+  "primitive_count": 4,
+  "primitives": [
+    "sequential",
+    "parallel",
+    "conditional",
+    "fallback"
+  ],
+  "step_state_count": 6,
+  "step_states": [
+    "pending",
+    "running",
+    "completed",
+    "failed",
+    "skipped",
+    "blocked"
+  ]
+}

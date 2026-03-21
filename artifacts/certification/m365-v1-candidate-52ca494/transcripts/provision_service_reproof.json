@@ -1,0 +1,42 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1C",
+  "status": "pass",
+  "recorded_at": "2026-03-20T10:35:54-04:00",
+  "trace_id": "c1c-provision_service-rerun-20260320",
+  "shell_contract": {
+    "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+    "UCP_TENANT": "smarthaus",
+    "ALLOW_M365_MUTATIONS": "true",
+    "ENABLE_AUDIT_LOGGING": "true"
+  },
+  "runtime_surface": "m365.module.entrypoint:M365ConnectorModule",
+  "actor": "phil@smarthausgroup.com",
+  "service_key": "hr",
+  "root_cause_fixed": "existing service-site detection now resolves the group root site before falling back to /sites/{mail_nickname}",
+  "live_group_surface": {
+    "group_id": "e5634ed7-bdb4-46ef-884e-4d615c58cbe7",
+    "site_id": "smarthausgroup.sharepoint.com,3e3fca26-bce9-4ee2-b0c9-ff3d28c3624c,2a6d0c31-a6d6-465d-b495-0c3ec1fa758b",
+    "site_url": "https://smarthausgroup.sharepoint.com/sites/hr2"
+  },
+  "result": {
+    "status": "ok",
+    "site": {
+      "group_created": false,
+      "libraries_created": [],
+      "site_id": "smarthausgroup.sharepoint.com,3e3fca26-bce9-4ee2-b0c9-ff3d28c3624c,2a6d0c31-a6d6-465d-b495-0c3ec1fa758b",
+      "site_url": "https://smarthausgroup.sharepoint.com/sites/hr2"
+    },
+    "team": {
+      "team_id": "e5634ed7-bdb4-46ef-884e-4d615c58cbe7",
+      "channels_created": [
+        "employee-management",
+        "policy-updates",
+        "onboarding",
+        "offboarding",
+        "training-compliance",
+        "performance-reviews",
+        "hr-analytics"
+      ]
+    }
+  }
+}

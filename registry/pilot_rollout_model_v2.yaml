@@ -1,0 +1,90 @@
+version: "2.0.0"
+last_updated: "2026-03-21T18:30:00Z"
+authority:
+  workforce_packaging: registry/workforce_packaging_v1.yaml
+  customer_onboarding: registry/customer_onboarding_v2.yaml
+  department_certification: registry/department_certification_v1.yaml
+
+contract:
+  id: pilot-rollout-model-v2
+  display_name: Pilot and Rollout Model v2
+  status: contract-defined
+  description: >
+    Defines rollout phases, acceptance gates, and expansion criteria for
+    deploying the workforce product across customers and departments.
+
+rollout_phases:
+  - order: 1
+    id: pilot_scope
+    description: >
+      Define pilot scope: single customer tenant, core tier personas only,
+      operations department first.
+    outputs:
+      - pilot scope document with customer, personas, and department
+    failure_mode: >
+      Pilot scope exceeding core tier forces scope reduction.
+
+  - order: 2
+    id: pilot_acceptance
+    description: >
+      Define measurable pilot acceptance criteria: governed action success
+      rate, audit completeness, no security violations, customer sign-off.
+    outputs:
+      - pilot acceptance checklist
+    failure_mode: >
+      Unmet acceptance criterion blocks expansion.
+
+  - order: 3
+    id: expansion_criteria
+    description: >
+      Define criteria for expanding from pilot to broader rollout:
+      successful pilot acceptance, additional department readiness,
+      expansion tier persona availability.
+    outputs:
+      - expansion criteria document
+    failure_mode: >
+      Expansion without successful pilot acceptance is blocked.
+
+  - order: 4
+    id: rollout_waves
+    description: >
+      Define rollout waves: Wave 1 (core tier, operations), Wave 2
+      (core tier, all active departments), Wave 3 (expansion tier,
+      as personas become active).
+    outputs:
+      - rollout wave definitions with prerequisites
+    failure_mode: >
+      Wave advancement without prior wave acceptance is blocked.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Failed pilot acceptance blocks all expansion.
+  audit_completeness:
+    description: >
+      Every rollout phase produces evidence.
+  bounded_claims:
+    description: >
+      Rollout claims match packaged product tiers.
+  determinism:
+    description: >
+      Same acceptance evidence produces same rollout decision.
+  sequential_waves:
+    description: >
+      Waves advance in order; no wave skipping.
+
+kpis:
+  rollout_phase_count: 4
+  governance_rule_count: 5
+  rollout_wave_count: 3
+  pilot_departments: 1
+  pilot_personas: 4
+
+bounded_claims:
+  supported:
+    - "Three-wave rollout model with deterministic acceptance gates"
+    - "Pilot scoped to core tier (4 personas, operations department)"
+    - "Expansion gated by pilot acceptance and persona readiness"
+  not_supported:
+    - "Immediate full rollout to all departments"
+    - "Expansion tier personas active at pilot"

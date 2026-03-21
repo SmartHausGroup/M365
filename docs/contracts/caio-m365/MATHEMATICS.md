@@ -1,7 +1,7 @@
 # CAIO ↔ M365 Instruction API — Mathematics
 
-**MA Phase:** 2 — Mathematical Foundation  
-**Status:** Draft  
+**MA Phase:** 2 — Mathematical Foundation
+**Status:** Draft
 **Source:** `docs/CAIO_M365_CONTRACT.md`
 
 ---
@@ -17,7 +17,8 @@ This document formalizes the CAIO–M365 instruction API contract: valid request
 - **\(R\)** — Request body (JSON).
 - **\(H\)** — Request headers (e.g. `Idempotency-Key`, `X-CAIO-API-Key`).
 - **\(S\)** — Response body (JSON).
-- **\(\mathcal{A}\)** — Set of supported action names (e.g. `list_users`, `create_site`, `reset_user_password`).
+- **\(\mathcal{O}\)** — Set of all M365 capability names (260; see `registry/capability_registry.yaml`, `M365_MASTER_CALCULUS_ACTIONS.md`). No action outside \(\mathcal{O}\) is executable.
+- **\(\mathcal{A}\)** — Set of **implemented** action names (subset of \(\mathcal{O}\); currently 9).
 - **\(\mathcal{A}_m\)** — Set of mutating actions (subset of \(\mathcal{A}\)).
 - **\(\mathcal{S}_{\texttt{action}}\)** — Set of valid result shapes for a given `action`.
 - **\(\mathcal{E}\)** — Set of error codes/messages (e.g. `Unknown action`, `m365_mutations_disabled`).
@@ -35,7 +36,7 @@ This document formalizes the CAIO–M365 instruction API contract: valid request
 \(R\) is **valid** iff:
 
 1. \(R\) is a JSON object with key `"action"`.
-2. \(\texttt{action}(R) \in \mathcal{A}\).
+2. \(\texttt{action}(R) \in \mathcal{O}\) (and if implemented, \(\texttt{action}(R) \in \mathcal{A}\); otherwise the provider may return "action not implemented" or equivalent).
 3. If present, `params` is a JSON object; keys and types match the action’s parameter schema (see contract table).
 4. Mutating actions \(\texttt{action}(R) \in \mathcal{A}_m\) are allowed only when provider has mutations enabled (environment); otherwise the provider may reject with `m365_mutations_disabled`.
 
@@ -96,7 +97,7 @@ If provider requires API key (e.g. `CAIO_API_KEY` set):
 
 ### Audit (one record per execution)
 
-When audit logging is enabled (`ENABLE_AUDIT_LOGGING` true): for every instruction execution (success, error, or blocked), the system writes **exactly one** audit record. Record schema: identity/user, action, params, response (ok, result/error), timestamp, and optional flags (blocked, idempotent_replay).
+When audit logging is enabled (`ENABLE_AUDIT_LOGGING` true): for every instruction execution (success, error, or blocked), the system writes **exactly one** audit record. Record schema: unified audit schema v2 with `schema_version`, `timestamp`, `ts`, `correlation_id`, `surface`, `action`, `status`, `user`, `details`, and `result`, where `details` carries the request or execution inputs and `result` carries the outcome, trace, and replay flags.
 
 \[
 \mathtt{auditEnabled}() \wedge \text{execution completed} \;\Rightarrow\; \exists \text{ exactly one audit record for this request}.
@@ -121,6 +122,11 @@ The system-level composition (AuthGate ∘ IdempotencyLookup ∘ Execute ∘ Aud
 | `get_user` | `{ "user": object }` |
 | `reset_user_password` | `{ "user": string, "password_reset": true }` |
 | `create_site`, `create_team`, `add_channel`, `provision_service` | Action-specific (site_id, team, etc.) |
+| **Batch 1 (spec + notebook):** `list_groups` | `{ "groups": array, "count": number }` |
+| `get_group` | `{ "group": object }` |
+| `create_group` | `{ "group_id": string, "display_name": string, "mail_nickname": string }` |
+| `list_group_members` | `{ "members": array, "count": number }` |
+| `add_group_member` | `{ "group_id": string, "member_id": string, "added": true }` |
 
 ---
 

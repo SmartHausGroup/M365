@@ -1,0 +1,20 @@
+lemma_id: L69
+title: M365 Customer Onboarding v2
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E9B"
+status: green
+invariant: >
+  Four onboarding phases and five governance rules so that customer
+  onboarding follows a deterministic activation sequence with measurable
+  acceptance criteria.
+proof_obligations:
+  - "Onboarding authority file exists and validates"
+  - "Four onboarding phases present"
+  - "Activation sequence matches packaged personas"
+  - "Acceptance criteria defined"
+failure_boundaries:
+  - "Missing onboarding authority file"
+  - "Missing onboarding phase"
+  - "Activation sequence mismatch"
+test_bindings:
+  - tests/test_customer_onboarding_v2.py
+ci_gate: scripts/ci/verify_customer_onboarding_v2.py

@@ -34,6 +34,8 @@ jobs:
         run: python scripts/ci/verify_m365_auth.py
       - name: MA audit verification
         run: python scripts/ci/verify_m365_audit.py
+      - name: MA capability registry verification
+        run: python scripts/ci/verify_capability_registry.py
       - name: MA artifact check
         run: |
           test -f configs/generated/caio_m365_contract_verification.json || (echo "Contract artifact missing" && exit 1)
@@ -44,4 +46,5 @@ jobs:
           grep -q '"auth_pass": true' configs/generated/m365_auth_verification.json || (echo "Auth verification failed" && exit 1)
           test -f configs/generated/m365_audit_verification.json || (echo "Audit artifact missing" && exit 1)
           grep -q '"audit_pass": true' configs/generated/m365_audit_verification.json || (echo "Audit verification failed" && exit 1)
-
+          test -f configs/generated/capability_registry_verification.json || (echo "Capability registry artifact missing" && exit 1)
+          grep -q '"passed": true' configs/generated/capability_registry_verification.json || (echo "Capability registry verification failed" && exit 1)

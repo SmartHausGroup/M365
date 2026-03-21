@@ -12,8 +12,20 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/(.*)",
+      "source": "/dashboard",
+      "destination": "/dashboard.html"
+    },
+    {
+      "source": "/operations",
       "destination": "/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/sharepoint-intranet.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/sharepoint-intranet.html"
     }
   ],
   "headers": [

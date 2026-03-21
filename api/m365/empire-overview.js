@@ -61,10 +61,10 @@ export default async function handler(req, res) {
     };
 
     res.status(200).json(overview);
-    
+
   } catch (error) {
     console.error('Empire overview endpoint error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to retrieve empire overview',
       message: 'Please try again'
     });

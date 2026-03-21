@@ -14,4 +14,3 @@ mkdir -p "$DATA_DIR"
 
 tar -xzf "$ARCHIVE" -C "$DATA_DIR"
 echo "Restored $ARCHIVE to $DATA_DIR"
-

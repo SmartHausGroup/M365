@@ -1,0 +1,128 @@
+version: "1.0.0"
+last_updated: "2026-03-21T15:30:00Z"
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  approval_risk_matrix: registry/approval_risk_matrix_v2.yaml
+  executor_routing: registry/executor_routing_v2.yaml
+  workload_certification: registry/workload_certification_v1.yaml
+
+contract:
+  id: persona-certification
+  display_name: Persona Certification Contract v1
+  status: contract-defined
+  description: >
+    Defines the deterministic certification criteria for each persona class
+    against its allowed domains and approval posture. Every persona must have
+    a consistent coverage status, risk tier, approval profile, and domain
+    alignment before it can be marked certified.
+
+certification_phases:
+  - order: 1
+    id: field_completeness
+    description: >
+      Verify every persona in the registry has the 21 required fields
+      with no missing or null values.
+    inputs:
+      - persona_registry_v2.yaml
+    outputs:
+      - per-persona field completeness status (pass/fail)
+    failure_mode: >
+      Persona missing any required field fails field completeness.
+
+  - order: 2
+    id: coverage_status_consistency
+    description: >
+      Verify each persona's coverage_status is either registry-backed or
+      persona-contract-only, and that registry-backed personas have non-zero
+      action counts while contract-only personas have zero action counts.
+    inputs:
+      - persona_registry_v2.yaml
+    outputs:
+      - per-persona coverage consistency status
+    failure_mode: >
+      Registry-backed persona with zero actions or contract-only persona
+      with non-zero actions fails consistency.
+
+  - order: 3
+    id: approval_posture_alignment
+    description: >
+      Verify each persona's approval_profile is a valid profile value and
+      that the approval posture is at least as restrictive as the risk_tier
+      baseline. Elevated approval (stricter than risk baseline) is permitted;
+      lowered approval (less strict than risk baseline) is not.
+    inputs:
+      - persona_registry_v2.yaml
+      - approval_risk_matrix_v2.yaml
+    outputs:
+      - per-persona approval alignment status
+    failure_mode: >
+      Persona with an invalid approval_profile or an approval posture
+      less restrictive than its risk_tier baseline fails alignment.
+
+  - order: 4
+    id: domain_alignment
+    description: >
+      Verify each registry-backed persona's allowed_domains are a subset
+      of the certified executor domains from workload certification.
+      Contract-only personas with empty domains pass by default.
+    inputs:
+      - persona_registry_v2.yaml
+      - workload_certification_v1.yaml
+    outputs:
+      - per-persona domain alignment status
+    failure_mode: >
+      Persona claiming domains not in the certified workload surface
+      fails domain alignment.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any persona that fails any certification phase must be marked
+      not-certified. No partial certification is allowed.
+  audit_completeness:
+    description: >
+      Every certification attempt produces a per-persona evidence record
+      with phase-by-phase pass/fail status.
+  bounded_claims:
+    description: >
+      Certification verdicts must not exceed the actual persona surface.
+      Contract-only personas are certified as contract-only, not as
+      action-capable.
+  determinism:
+    description: >
+      Same registry plus same approval matrix must produce the same
+      certification verdicts on every replay.
+  coverage_partition:
+    description: >
+      Registry-backed count plus contract-only count must equal total
+      persona count. No persona may be uncategorized.
+
+kpis:
+  total_personas: 39
+  registry_backed_personas: 4
+  contract_only_personas: 35
+  risk_tier_critical: 1
+  risk_tier_high: 4
+  risk_tier_medium: 6
+  risk_tier_low: 28
+  certification_phase_count: 4
+  governance_rule_count: 5
+
+persona_certification_summary:
+  all_fields_complete: true
+  all_coverage_statuses_consistent: true
+  all_approval_postures_aligned: true
+  all_domains_aligned: true
+  overall_verdict: certified
+
+bounded_claims:
+  supported:
+    - "All 39 personas pass four-phase certification"
+    - "4 registry-backed personas have non-zero actions and certified domains"
+    - "35 contract-only personas are certified as contract-defined with zero actions"
+    - "Risk tier to approval profile mapping is consistent across all personas"
+    - "Certification is deterministic and replay-stable"
+  not_supported:
+    - "All 39 personas have implemented actions"
+    - "Contract-only personas are action-capable"
+    - "Live execution evidence for every persona"

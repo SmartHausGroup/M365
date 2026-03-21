@@ -11,13 +11,13 @@
 ## Assumptions
 
 - When `ENABLE_AUDIT_LOGGING` is true, every code path that completes an instruction request calls the audit writer exactly once (`_audit_instruction` → `log_event`).
-- Audit record schema includes: ts, action, user, details (action, params, ok, result/error, trace_id, blocked?, idempotent_replay?).
+- Audit record schema includes the unified v2 envelope: schema_version, timestamp, ts, correlation_id, surface, action, status, user, details, result.
 
 ---
 
 ## Claim
 
-When audit logging is enabled, for every completed instruction execution (success, error, or blocked) there exists exactly one audit record for that request with the required schema.
+When audit logging is enabled, for every completed instruction execution (success, error, or blocked) there exists exactly one audit record for that request with the required unified v2 schema.
 
 ---
 

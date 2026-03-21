@@ -1,0 +1,59 @@
+{
+  "plan_id": "m365-repo-plan",
+  "parent_plan_id": "tai-maia-caio-vfe-m365-integration",
+  "status": "Draft",
+  "date": "2026-02-06",
+  "owner": "SmartHaus",
+  "master_plan": "plans/tai-maia-caio-vfe-m365-integration/master-plan.md",
+  "execution_plan_reference": "plan:tai-maia-caio-vfe-m365-integration:m365",
+  "north_star": "Operations/NORTHSTAR.md",
+  "ma_process_required": false,
+  "objective": "Define and expose an instruction/command API in the M365 repo that the CAIO M365 adapter can call to execute user-intent actions. Auth, idempotency, audit.",
+  "scope": {
+    "in_scope": [
+      "Design and implement (or document) HTTP API for M365 instructions",
+      "Request/response schema, validation, orchestrator/Graph wiring",
+      "Auth, rate limits, audit logging"
+    ],
+    "out_of_scope": [
+      "TAI, MAIA, CAIO, VFE code; voice or intent logic; CAIO adapter implementation"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      "Endpoint(s) accepting action + params (JSON)",
+      "Map action to existing orchestrator/Graph operations",
+      "Structured response (ok, result, error, trace_id)",
+      "ALLOW_M365_MUTATIONS gate; audit log per instruction"
+    ],
+    "non_functional": [
+      "Auth for CAIO adapter calls",
+      "Idempotency where applicable",
+      "Validation of action and params",
+      "API documentation (OpenAPI/Swagger)"
+    ]
+  },
+  "tasks": [
+    { "id": 1, "name": "Define contract (request/response schema)" },
+    { "id": 2, "name": "Implement or extend router for instruction endpoint(s)" },
+    { "id": 3, "name": "Auth and ALLOW_M365_MUTATIONS gate" },
+    { "id": 4, "name": "Audit logging for each instruction" },
+    { "id": 5, "name": "Unit and integration tests" },
+    { "id": 6, "name": "Update API docs and master plan reference" }
+  ],
+  "validation": [
+    "make test (or equivalent) passes",
+    "Call instruction endpoint; verify response shape and audit log",
+    "Security review (no credentials in logs; auth required)"
+  ],
+  "success_criteria": [
+    "Instruction API documented and implemented",
+    "CAIO adapter can call with intent-derived payload",
+    "Mutations gated and audited",
+    "Plan checklist and tests pass"
+  ],
+  "dependencies": [
+    "Master plan approved",
+    "Schema agreed with CAIO plan owner before CAIO adapter implementation"
+  ]
+}

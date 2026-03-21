@@ -18,3 +18,23 @@ invariants:
     name: M365 instruction API audit one-record-per-request
     owner: m365-contract
     file: invariants/INV-M365-AUDIT-001.yaml
+  - id: L1
+    name: CAIO M365 postcondition projection
+    owner: m365-scorecard-alignment
+    file: invariants/lemmas/L1_caio_m365_postcondition.yaml
+  - id: L2
+    name: CAIO M365 idempotency projection
+    owner: m365-scorecard-alignment
+    file: invariants/lemmas/L2_caio_m365_idempotency.yaml
+  - id: L3
+    name: CAIO M365 authentication projection
+    owner: m365-scorecard-alignment
+    file: invariants/lemmas/L3_caio_m365_authentication.yaml
+  - id: L4
+    name: M365 audit recording projection
+    owner: m365-scorecard-alignment
+    file: invariants/lemmas/L4_m365_audit_recording.yaml
+  - id: L5
+    name: M365 deterministic supported-surface projection
+    owner: m365-scorecard-alignment
+    file: invariants/lemmas/L5_m365_determinism.yaml

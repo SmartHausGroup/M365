@@ -1,0 +1,282 @@
+{
+  "services": [
+    {
+      "key": "operations",
+      "display_name": "Operations Hub",
+      "mail_nickname": "operations",
+      "github_repo": "SmartHausGroup/Operations",
+      "plan_title": "Operations Board",
+      "channels": [
+        "General",
+        "admin-management",
+        "website-management",
+        "security-alerts",
+        "system-monitoring",
+        "deployment-coordination",
+        "incident-response",
+        "compliance-updates"
+      ],
+      "team_id": "4cc86db4-d848-4f73-ada6-fa55f73e84e8",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:B3wQK-ywpn1MhDYhKq0T3Y4mhH9skZRwWAZe9t8LjbM1@thread.tacv2",
+        "admin-management": "19:4518f30bb96f4ab188a342e82998e144@thread.tacv2",
+        "website-management": "19:c5076aa8ea1e43b5b48f80f77f697cc6@thread.tacv2",
+        "security-alerts": "19:13aa47cd36134755adf3b0a01bcdf0ca@thread.tacv2",
+        "system-monitoring": "19:1c7297b7514d40aab254470480a92965@thread.tacv2",
+        "deployment-coordination": "19:1c0abf5e2a344f14b55c1c95f763f3e9@thread.tacv2",
+        "incident-response": "19:3e97744a1c9542c294a6c98847a09176@thread.tacv2",
+        "compliance-updates": "19:324b0e1184e24a9a9e46f341d791194d@thread.tacv2"
+      }
+    },
+    {
+      "key": "hr",
+      "display_name": "HR Hub",
+      "mail_nickname": "hr",
+      "github_repo": "SmartHausGroup/HR",
+      "plan_title": "HR Board",
+      "channels": [
+        "General",
+        "employee-management",
+        "policy-updates",
+        "onboarding",
+        "offboarding",
+        "training-compliance",
+        "performance-reviews",
+        "hr-analytics"
+      ],
+      "team_id": "8736ee00-3458-4fea-9e72-4f3e825a7b91",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:xzoWTGt19-1k6bMSrl8QVacJeW0IqoAphoxIYIDVXmA1@thread.tacv2",
+        "employee-management": "19:7b6c7a63689d4fda8941653289fe9acd@thread.tacv2",
+        "policy-updates": "19:28fc545203214dd38a56fd3bc970b8b0@thread.tacv2",
+        "onboarding": "19:6e0c3d28a252481ea466251c39cbeed1@thread.tacv2",
+        "offboarding": "19:a7dd977ff5164e67baa9314f0c0a61e9@thread.tacv2",
+        "training-compliance": "19:55356661d5b2427da16c34e9eefe818b@thread.tacv2",
+        "performance-reviews": "19:aff2ea8aff394107b63b0973954ee580@thread.tacv2",
+        "hr-analytics": "19:574a5516330b4a829d0e484ddc348e29@thread.tacv2"
+      }
+    },
+    {
+      "key": "communication",
+      "display_name": "Communication Hub",
+      "mail_nickname": "communication",
+      "github_repo": "SmartHausGroup/Communication",
+      "plan_title": "Communication Board",
+      "channels": [
+        "General",
+        "campaign-management",
+        "contact-management",
+        "meeting-coordination",
+        "content-creation",
+        "analytics-reporting",
+        "social-media",
+        "outreach-coordination"
+      ],
+      "team_id": "9da4c2e7-2df1-47ef-a43e-b1b1424bfb12",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:8msDNCIw0wM90XGIwNuLesXdRCsYKgoeXIrFzQVLJxw1@thread.tacv2",
+        "campaign-management": "19:9416b670f332453ead27962490221f8f@thread.tacv2",
+        "contact-management": "19:002dbf3a43a94faf94a2d3b7920cbcb9@thread.tacv2",
+        "meeting-coordination": "19:670eb8871a2d42c497a128ac9f90a681@thread.tacv2",
+        "content-creation": "19:1cf2eb5d82464f5285e27a925bf96d06@thread.tacv2",
+        "analytics-reporting": "19:173a385b283941c7ba50cdb04c5b9bbe@thread.tacv2",
+        "social-media": "19:346efebfb56f41069d00337c0f2da7ef@thread.tacv2",
+        "outreach-coordination": "19:2461466f062b41f7bc4b0fb4466ac707@thread.tacv2"
+      }
+    },
+    {
+      "key": "engineering",
+      "display_name": "Engineering Hub",
+      "mail_nickname": "engineering",
+      "github_repo": "SmartHausGroup/Engineering",
+      "plan_title": "Engineering Board",
+      "channels": [
+        "General",
+        "ai-research",
+        "architecture-design",
+        "mobile-development",
+        "prototyping",
+        "testing-qa",
+        "devops-automation",
+        "code-reviews",
+        "performance-monitoring"
+      ],
+      "team_id": "8129fe4a-7058-4654-a20b-2c74a549e607",
+      "plan_id": null,
+      "channel_ids": {
+        "code-reviews": "19:0690557938db49a680b7cbbd516c9735@thread.tacv2",
+        "ai-research": "19:17b89e077a6f448b9cc9cf26a0a4d8e8@thread.tacv2",
+        "mobile-development": "19:43be08edc6324c048eec9eacfad0e44d@thread.tacv2",
+        "performance-monitoring": "19:447c99835a6341829b6d5da1a27f58a2@thread.tacv2",
+        "testing-qa": "19:688ebccbe9e641d790a2b4649ffd01d4@thread.tacv2",
+        "prototyping": "19:78094824549e4c79b6a90866b0eb3181@thread.tacv2",
+        "architecture-design": "19:82dd3ac329da46fb80150bb5402aff7a@thread.tacv2",
+        "devops-automation": "19:f6b84bab70004d3399b30d367b7000d8@thread.tacv2",
+        "General": "19:SUzFl-wGgYcNEOGa5ANxq9961dp-JElFjtYc_Jfaciw1@thread.tacv2"
+      }
+    },
+    {
+      "key": "marketing",
+      "display_name": "Marketing Hub",
+      "mail_nickname": "marketing",
+      "github_repo": "SmartHausGroup/Marketing",
+      "plan_title": "Marketing Board",
+      "channels": [
+        "General",
+        "aso-optimization",
+        "content-creation",
+        "growth-marketing",
+        "social-media",
+        "analytics-reporting",
+        "campaign-coordination",
+        "brand-management"
+      ],
+      "team_id": "fa4d9a94-357b-46b5-8366-d283c3feaf6a",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:zwCZk-L6XNRRY6z0y7fMnrz1qudx91s6ySk3hggjVqA1@thread.tacv2",
+        "aso-optimization": "19:76a8b4cb205e4808a7a34bce4f83467e@thread.tacv2",
+        "content-creation": "19:747473beeb694e9fb2a79cda55d0b135@thread.tacv2",
+        "growth-marketing": "19:15decdf8db834335bb3134ad65e4a7fa@thread.tacv2",
+        "social-media": "19:daa3f3eed60d46f59ec0de6ec0fd5ff0@thread.tacv2",
+        "analytics-reporting": "19:84a2715ecc1443e4813940c9730ccbf2@thread.tacv2",
+        "campaign-coordination": "19:72ffbc6a24b0434597fb3b14581dbe20@thread.tacv2",
+        "brand-management": "19:891eea9dc38e4797bfd373702e7d6ab2@thread.tacv2"
+      }
+    },
+    {
+      "key": "product",
+      "display_name": "Product Hub",
+      "mail_nickname": "product",
+      "github_repo": "SmartHausGroup/Product",
+      "plan_title": "Product Board",
+      "channels": [
+        "General",
+        "roadmap",
+        "backlog",
+        "user-feedback",
+        "research-trends",
+        "planning"
+      ],
+      "team_id": "904075d1-f762-49c3-941c-e5fbe316336e",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:PbKP2xYQXAxwvuUTOhl_qNPq6kCmScSTWQKh3J3DWro1@thread.tacv2",
+        "roadmap": "19:7052d909b4b347c9be5a841493c013c2@thread.tacv2",
+        "backlog": "19:02d6b2a9208a4e2ba0c7dae0f4306a3c@thread.tacv2",
+        "user-feedback": "19:b4f3f127c2b24e62b5aceb61a05837ab@thread.tacv2",
+        "research-trends": "19:b6404a2da3f84554b5de7fb425a59423@thread.tacv2",
+        "planning": "19:4cc8b44e65ae4266bd6e4aa208e4fd6c@thread.tacv2"
+      }
+    },
+    {
+      "key": "project-management",
+      "display_name": "Project Management Hub",
+      "mail_nickname": "project-management",
+      "github_repo": "SmartHausGroup/Project-Management",
+      "plan_title": "Project Management Board",
+      "channels": [
+        "General",
+        "experiments",
+        "releases",
+        "schedules",
+        "resources",
+        "risks",
+        "standups"
+      ],
+      "team_id": "52a93c66-c0ae-4165-8c4e-da801102c5bb",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:tHPaxWhgPmG-2UecdvNGwg5hSXQxbYU9eTcHmGd0AEw1@thread.tacv2",
+        "experiments": "19:5dd54517c4744e8a8d8c77cf82090876@thread.tacv2",
+        "releases": "19:ebfd114fe1664a5d9316effee36448a5@thread.tacv2",
+        "schedules": "19:0961f14c0c4e47eca50093f82b1d75db@thread.tacv2",
+        "resources": "19:619b3f1469ab4220b1fc985b960c1398@thread.tacv2",
+        "risks": "19:cbb595c62d5b4c388c3108b4b09da087@thread.tacv2",
+        "standups": "19:cd221099ef6f4d83bb43d9367d2d5c6a@thread.tacv2"
+      }
+    },
+    {
+      "key": "studio-operations",
+      "display_name": "Studio Operations Hub",
+      "mail_nickname": "studio-operations",
+      "github_repo": "SmartHausGroup/Studio-Operations",
+      "plan_title": "Studio Operations Board",
+      "channels": [
+        "General",
+        "analytics",
+        "finance",
+        "infrastructure",
+        "security-compliance",
+        "support",
+        "incident-response"
+      ],
+      "team_id": "e3bcc817-485f-40ed-a9d8-451297024be8",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:maF3JuLsyeu4e32i02HO6FZBkg3SJSJbqEx-_NZpic41@thread.tacv2",
+        "analytics": "19:f030de5a7e614b68a902d5a16dd1651e@thread.tacv2",
+        "finance": "19:7c3f297a05fc4c958ea65979024374bd@thread.tacv2",
+        "infrastructure": "19:49f089f3f8e34194a22fa00c021f385a@thread.tacv2",
+        "security-compliance": "19:af34dffa59004155b5dc76046b1ff9ef@thread.tacv2",
+        "support": "19:2a85e08e1b8644cfa02ff6b647feef33@thread.tacv2",
+        "incident-response": "19:3728701b9b804fb3bb2189f7f9ec51ed@thread.tacv2"
+      }
+    },
+    {
+      "key": "testing",
+      "display_name": "Testing Hub",
+      "mail_nickname": "testing",
+      "github_repo": "SmartHausGroup/Testing",
+      "plan_title": "Testing Board",
+      "channels": [
+        "General",
+        "api-testing",
+        "performance",
+        "results",
+        "tools",
+        "qa-review"
+      ],
+      "team_id": "e175108f-e41b-4efe-a4a8-82f5cbf1fe49",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:HTd0HEY1MImWqaszozPKidoHbjwWQPCMwbkrf272RBg1@thread.tacv2",
+        "api-testing": "19:27fb4ca869f84ca082ea0cf76d9785cc@thread.tacv2",
+        "performance": "19:3d454c4507f04e9285ca77aa986e0bbe@thread.tacv2",
+        "results": "19:8b4e2278380e46fe803cb161ec0cfaf3@thread.tacv2",
+        "tools": "19:eb6d895e719141448b8d177bc5da9ee0@thread.tacv2",
+        "qa-review": "19:7856c435d887410fb0890a7f2d037202@thread.tacv2"
+      }
+    },
+    {
+      "key": "design",
+      "display_name": "Design Hub",
+      "mail_nickname": "design",
+      "github_repo": "SmartHausGroup/Design",
+      "plan_title": "Design Board",
+      "channels": [
+        "General",
+        "brand",
+        "ui",
+        "ux-research",
+        "visual",
+        "storytelling",
+        "reviews"
+      ],
+      "team_id": "2fca9f5a-9e79-40fb-acf1-1c26a26188f8",
+      "plan_id": null,
+      "channel_ids": {
+        "General": "19:cvB8udu1_3Qztgh57hTYQD_UhktbvrYteU5qoM3bSFM1@thread.tacv2",
+        "brand": "19:ba7aef222acd4399b2d2b20fc3f0c1f6@thread.tacv2",
+        "ui": "19:0ce807ace96f4e3cb4c5e2d44e9f5ca2@thread.tacv2",
+        "ux-research": "19:c9a09661c6784ef7b3fa5930fe669621@thread.tacv2",
+        "visual": "19:f10305efcdb045578bd82a92979bdf6e@thread.tacv2",
+        "storytelling": "19:3df78abab24f467fb74028d6b0f43318@thread.tacv2",
+        "reviews": "19:b135d2896f0d401a8e4cdcc2bab66f9d@thread.tacv2"
+      }
+    }
+  ]
+}

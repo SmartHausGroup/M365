@@ -1,0 +1,23 @@
+{
+  "lemma_id": "L45",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AU-persona-task-queues-and-state-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L45_m365_persona_task_queue_state_v1.ipynb",
+  "invariant": "invariants/lemmas/L45_m365_persona_task_queue_state_v1.yaml",
+  "seed_lock": true,
+  "determinism": "shared append-only task store, explicit transition matrix, and fixed persona-state precedence project one bounded queue state",
+  "checks": [
+    {
+      "id": "transition_matrix",
+      "status": "passed"
+    },
+    {
+      "id": "shared_projection",
+      "status": "passed"
+    },
+    {
+      "id": "persona_state_precedence",
+      "status": "passed"
+    }
+  ]
+}

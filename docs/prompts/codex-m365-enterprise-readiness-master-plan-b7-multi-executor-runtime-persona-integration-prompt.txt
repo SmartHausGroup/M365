@@ -1,0 +1,7 @@
+Execute B7 Multi-Executor Runtime and Persona Integration
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b7-multi-executor-runtime-persona-integration.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B7
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

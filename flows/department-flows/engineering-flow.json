@@ -1,0 +1,9 @@
+{
+  "name": "Engineering Automation",
+  "department": "engineering",
+  "trigger": { "type": "GitHubWebhook", "event": "push" },
+  "steps": [
+    { "action": "PostTeamsMessage", "channel": "devops-automation", "message": "Build queued" },
+    { "action": "CreatePlannerTask", "plan": "Engineering Board", "bucket": "In Progress" }
+  ]
+}

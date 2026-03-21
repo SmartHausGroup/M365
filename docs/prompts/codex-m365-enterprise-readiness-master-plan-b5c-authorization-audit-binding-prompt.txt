@@ -1,0 +1,7 @@
+Execute B5C Authorization and Audit Binding
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b5c-authorization-audit-binding.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B5C
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

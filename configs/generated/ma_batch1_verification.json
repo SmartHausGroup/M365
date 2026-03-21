@@ -1,0 +1,34 @@
+{
+  "batch": 1,
+  "actions": [
+    "list_groups",
+    "get_group",
+    "create_group",
+    "list_group_members",
+    "add_group_member"
+  ],
+  "postcondition_pass": true,
+  "response_schema_pass": true,
+  "details": {
+    "list_groups": {
+      "postcondition": true,
+      "shape": true
+    },
+    "get_group": {
+      "postcondition": true,
+      "shape": true
+    },
+    "create_group": {
+      "postcondition": true,
+      "shape": true
+    },
+    "list_group_members": {
+      "postcondition": true,
+      "shape": true
+    },
+    "add_group_member": {
+      "postcondition": true,
+      "shape": true
+    }
+  }
+}

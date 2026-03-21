@@ -1,0 +1,21 @@
+lemma_id: L48
+title: M365 Operations Department Pack v1
+invariant: >
+  The Operations department pack must be projected from one declared Operations authority, one
+  authoritative persona registry, and one deterministic pack-state rule so the department boundary,
+  action count, approval posture, and workforce readiness cannot drift between runtime surfaces.
+proof_obligations:
+  - operations department pack authority file exists and validates
+  - declared Operations personas all exist in the authoritative persona registry
+  - projected supported-action counts match the declared pack KPI
+  - pack state is derived deterministically from persona status and accountability state
+  - dashboard and ops runtime project the same department-pack summary
+failure_boundaries:
+  - missing department pack authority file
+  - missing or inactive expected persona
+  - action-count mismatch between authority and runtime projection
+  - dashboard/runtime pack-state drift
+test_bindings:
+  - tests/test_operations_department_pack_v1.py
+  - tests/test_agent_api.py
+ci_gate: scripts/ci/verify_operations_department_pack_v1.py

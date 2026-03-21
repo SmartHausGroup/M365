@@ -1,0 +1,21 @@
+id: L16
+title: Runtime executor routing and domain selection
+phase: B7B
+plan_ref: plan:m365-enterprise-readiness-master-plan:B7B
+lemma_doc: docs/ma/lemmas/L16_m365_runtime_executor_routing_domain_selection.md
+source_notebook: notebooks/m365/INV-M365-R-runtime-executor-routing-domain-selection.ipynb
+lemma_notebook: notebooks/lemma_proofs/L16_m365_runtime_executor_routing_domain_selection.ipynb
+scorecard: artifacts/scorecards/scorecard_l16.json
+proof_obligations:
+  - supported actions map deterministically to one executor domain
+  - unknown or unmapped routes fail closed
+  - approval backend binds to the SharePoint executor path
+  - actor and executor identities remain preserved in approval and audit payloads
+failure_boundaries:
+  - route resolution is implicit or ambiguous
+  - approval backend still uses the wrong executor path
+  - routed executor identity is missing from governed action payloads
+test_bindings:
+  - tests/test_ops_adapter.py
+  - tests/test_approvals.py
+ci_gate: pre-commit

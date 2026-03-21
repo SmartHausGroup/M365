@@ -1,0 +1,9 @@
+{
+  "contract_id": "workforce-packaging",
+  "core_personas": 4,
+  "expansion_personas": 35,
+  "governance_rule_count": 5,
+  "packaging_layer_count": 4,
+  "total_personas": 39,
+  "total_routed_actions": 155
+}

@@ -1,0 +1,22 @@
+{
+  "item_id": "L12",
+  "item_kind": "lemma",
+  "lemma_id": "L12",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T12:30:00Z",
+  "notebook": "notebooks/m365/INV-M365-N-approval-contract-alignment.ipynb",
+  "notebook_hash": "projected-l12-approval-contract-alignment-expanded-fields-lookup",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json",
+    "artifacts/certification/m365-v1-candidate-52ca494/README.md",
+    "artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md",
+    "docs/commercialization/m365-canonical-config-contract.md",
+    "notebooks/m365/INV-M365-N-approval-contract-alignment.ipynb",
+    "notebooks/lemma_proofs/L12_m365_approval_contract_alignment.ipynb",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness.md",
+    "src/ops_adapter/approvals.py",
+    "tests/test_approvals.py"
+  ]
+}

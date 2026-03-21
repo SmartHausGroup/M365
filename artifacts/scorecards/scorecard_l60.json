@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L60",
+  "title": "M365 Task Orchestration Contract v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BH-task-orchestration-contract-v1.ipynb",
+    "notebooks/lemma_proofs/L60_m365_task_orchestration_contract_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L60_m365_task_orchestration_contract_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Orchestration contract defines four primitives for composing multi-step work.",
+    "Per-step audit and no-implicit-escalation rules govern composed tasks."
+  ]
+}

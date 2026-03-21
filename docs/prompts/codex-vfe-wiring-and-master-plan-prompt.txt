@@ -1,0 +1,7 @@
+Add full VFE wiring and master plan update.
+
+Read and execute the detailed plan at docs/prompts/codex-vfe-wiring-and-master-plan.md (in M365 repo; Codex may need to open M365 repo for Part 2).
+
+Plan reference: plan:tai-maia-caio-vfe-m365-integration (follow-on: inference wiring)
+
+You are approved to implement. Execute in order: Part 1 in caio-core (VFE M365 client, M365 adapter draft flow, tests, docs, action log), then Part 2 in M365 repo (master plan edits, ACTION_LOG.md). Update governance in each repo. Report back what you implemented in each repo.

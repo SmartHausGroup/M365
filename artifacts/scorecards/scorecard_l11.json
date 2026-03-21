@@ -1,0 +1,19 @@
+{
+  "item_id": "L11",
+  "item_kind": "lemma",
+  "lemma_id": "L11",
+  "status": "green",
+  "generated_at_utc": "2026-03-18T22:01:35Z",
+  "notebook": "notebooks/m365/INV-M365-M-certification-environment-readiness.ipynb",
+  "notebook_hash": "projected-l11-certification-environment-readiness",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json",
+    "artifacts/certification/m365-v1-candidate-52ca494/README.md",
+    "artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md",
+    "notebooks/m365/INV-M365-M-certification-environment-readiness.ipynb",
+    "notebooks/lemma_proofs/L11_m365_certification_environment_readiness.ipynb",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness.md"
+  ]
+}

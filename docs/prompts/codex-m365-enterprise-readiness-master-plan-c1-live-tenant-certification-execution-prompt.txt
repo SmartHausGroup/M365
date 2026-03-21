@@ -1,0 +1,7 @@
+Execute C1 Live-Tenant Certification Execution Overview
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-c1-live-tenant-certification-execution.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:R6
+
+Use this overview only to coordinate `C1A` through `C1D`. Execute the act-specific C1 prompts, not this overview, when a live-certification act is explicitly approved.

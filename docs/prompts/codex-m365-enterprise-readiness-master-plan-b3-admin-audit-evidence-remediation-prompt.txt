@@ -1,0 +1,7 @@
+Execute B3 Admin Audit and Evidence-Surface Remediation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b3-admin-audit-evidence-remediation.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B3
+
+You are approved to implement only when this phase is explicitly authorized. Close the audit gap before certification work.

@@ -1,0 +1,16 @@
+lemma_id: L40
+title: M365 Compliance / Retention / eDiscovery Expansion v2
+phase: E4C
+plan_ref: plan:m365-ai-workforce-expansion-master-plan:E4C
+proof_artifacts:
+  - docs/ma/lemmas/L40_m365_compliance_retention_ediscovery_expansion_v2.md
+  - notebooks/m365/INV-M365-AP-compliance-retention-ediscovery-expansion-v2.ipynb
+  - notebooks/lemma_proofs/L40_m365_compliance_retention_ediscovery_expansion_v2.ipynb
+  - artifacts/scorecards/scorecard_l40.json
+enforcement:
+  verifier: scripts/ci/verify_compliance_retention_ediscovery_expansion.py
+  tests:
+    - tests/test_compliance_retention_ediscovery_expansion_v2.py
+failure_boundary: >
+  Fail closed if any declared compliance / eDiscovery action is missing from the instruction router,
+  capability registry, executor routing, auth model, approval matrix, or bounded verifier.

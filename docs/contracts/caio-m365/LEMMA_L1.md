@@ -32,7 +32,7 @@
 
 ## Supporting Verification
 
-Producer: `scripts/ci/verify_caio_m365_contract.py` (or equivalent notebook).  
+Producer: `scripts/ci/verify_caio_m365_contract.py` (or equivalent notebook).
 Artifact: `configs/generated/caio_m365_contract_verification.json`.
 
 ---

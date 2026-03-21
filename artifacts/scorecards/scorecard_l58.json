@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L58",
+  "title": "M365 UCP Delegation Contract v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BF-ucp-delegation-contract-v1.ipynb",
+    "notebooks/lemma_proofs/L58_m365_ucp_delegation_contract_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L58_m365_ucp_delegation_contract_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Delegation contract defines the end-to-end path from Claude intent through audited execution.",
+    "Contract-only personas are handled deterministically at the executor routing boundary."
+  ]
+}

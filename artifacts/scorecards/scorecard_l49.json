@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L49",
+  "title": "M365 HR Department Pack v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-AY-hr-department-pack-v1.ipynb",
+    "notebooks/lemma_proofs/L49_m365_hr_department_pack_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L49_m365_hr_department_pack_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "HR pack boundary is authority-backed and deterministic.",
+    "The shared department-pack runtime must preserve the declared HR persona, action total, and pack-state rule."
+  ]
+}

@@ -1,0 +1,204 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T02:05:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E3ECrossWorkloadRecipe(recipe) =
+  CrossWorkload(recipe) ∧ AllStepActionsImplemented(recipe) ∧
+  RecipeCatalogActionsImplemented.
+catalog_actions:
+  list_automation_recipes:
+    canonical_action_key: composite.automation_recipe.list
+    agent_alias: automation.recipe.list
+    runtime_handler: AutomationRecipeClient.list_recipes
+    mutating: false
+    result_shape_keys: [recipes, count]
+    required_permissions: []
+    approval_profile: low-observe-create
+    capability_registry_alias: list_automation_recipes
+  get_automation_recipe:
+    canonical_action_key: composite.automation_recipe.read
+    agent_alias: automation.recipe.get
+    runtime_handler: AutomationRecipeClient.get_recipe
+    mutating: false
+    result_shape_keys: [recipe]
+    required_permissions: []
+    approval_profile: low-observe-create
+    capability_registry_alias: get_automation_recipe
+recipes:
+  - recipeId: employee_onboarding_workspace
+    title: Employee onboarding workspace
+    summary: Create the baseline identity, workspace, documents, and kickoff communication envelope for a new employee.
+    departments: [operations, hr]
+    primaryPersonas: [helen-thompson, james-mitchell]
+    workloads: [identity, collaboration, sharepoint, messaging]
+    riskClass: high
+    approvalProfile: high-impact
+    requiredInputs: [userPrincipalName, displayName, temporaryPassword, licenseSku, teamName, siteName]
+    steps:
+      - stepId: create-user
+        action: create_user
+        workload: identity
+        purpose: Create the Entra user object.
+      - stepId: assign-license
+        action: assign_user_license
+        workload: identity
+        purpose: Attach the agreed M365 license SKU.
+      - stepId: create-team
+        action: create_team
+        workload: collaboration
+        purpose: Create the working Team.
+      - stepId: create-site
+        action: create_site
+        workload: sharepoint
+        purpose: Create the workspace site.
+      - stepId: create-welcome-doc
+        action: create_document
+        workload: sharepoint
+        purpose: Upload the welcome packet.
+      - stepId: create-orientation-event
+        action: create_event
+        workload: messaging
+        purpose: Schedule the orientation event.
+      - stepId: send-welcome-mail
+        action: send_mail
+        workload: messaging
+        purpose: Notify the employee and stakeholders.
+  - recipeId: incident_response_war_room
+    title: Incident response war room
+    summary: Spin up a governed workspace for a live incident with tasking, documents, and communications in one recipe.
+    departments: [operations, engineering]
+    primaryPersonas: [marcus-thompson, ethan-walker]
+    workloads: [collaboration, sharepoint, planner, messaging]
+    riskClass: high
+    approvalProfile: high-impact
+    requiredInputs: [incidentName, teamName, siteName, incidentLeadUpn]
+    steps:
+      - stepId: create-team
+        action: create_team
+        workload: collaboration
+        purpose: Create the war-room Team.
+      - stepId: add-command-channel
+        action: add_channel
+        workload: collaboration
+        purpose: Add the command channel.
+      - stepId: create-site
+        action: create_site
+        workload: sharepoint
+        purpose: Create the incident site.
+      - stepId: create-runbook-doc
+        action: create_document
+        workload: sharepoint
+        purpose: Upload the live runbook.
+      - stepId: create-plan
+        action: create_plan
+        workload: planner
+        purpose: Create the response plan.
+      - stepId: create-task
+        action: create_plan_task
+        workload: planner
+        purpose: Seed the first incident task.
+      - stepId: send-activation-mail
+        action: send_mail
+        workload: messaging
+        purpose: Notify responders.
+  - recipeId: knowledge_connector_launch
+    title: Knowledge connector launch
+    summary: Stand up a connector-backed knowledge feed with schema, access-control, seed content, and supporting documentation.
+    departments: [engineering, product]
+    primaryPersonas: [oliver-brooks, ava-johnson]
+    workloads: [knowledge, sharepoint]
+    riskClass: high
+    approvalProfile: high-impact
+    requiredInputs: [connectionId, connectionName, schema, itemId, siteName]
+    steps:
+      - stepId: create-connection
+        action: create_external_connection
+        workload: knowledge
+        purpose: Create the connector.
+      - stepId: register-schema
+        action: register_external_connection_schema
+        workload: knowledge
+        purpose: Register the external schema.
+      - stepId: create-acl-group
+        action: create_external_group
+        workload: knowledge
+        purpose: Create the connector ACL group.
+      - stepId: seed-group-membership
+        action: add_external_group_member
+        workload: knowledge
+        purpose: Add the first approved member.
+      - stepId: seed-item
+        action: upsert_external_item
+        workload: knowledge
+        purpose: Seed the first searchable item.
+      - stepId: publish-runbook
+        action: create_document
+        workload: sharepoint
+        purpose: Publish the connector runbook.
+  - recipeId: analytics_operating_review
+    title: Analytics operating review
+    summary: Pull the analytics surface together with a presentation draft and distribution mail for a leadership review cycle.
+    departments: [operations, product]
+    primaryPersonas: [sophia-moore, liam-davis]
+    workloads: [reports, sharepoint, messaging]
+    riskClass: medium
+    approvalProfile: medium-operational
+    requiredInputs: [workspaceId, reportId, siteId, driveId, reviewRecipients]
+    steps:
+      - stepId: read-workspace
+        action: get_powerbi_workspace
+        workload: reports
+        purpose: Resolve the Power BI workspace.
+      - stepId: read-report
+        action: get_powerbi_report
+        workload: reports
+        purpose: Resolve the reporting asset.
+      - stepId: refresh-dataset
+        action: refresh_powerbi_dataset
+        workload: reports
+        purpose: Queue the dataset refresh before review.
+      - stepId: create-review-deck
+        action: create_presentation
+        workload: sharepoint
+        purpose: Draft the review deck in the workspace.
+      - stepId: send-review-mail
+        action: send_mail
+        workload: messaging
+        purpose: Distribute the review link and context.
+  - recipeId: service_workspace_bootstrap
+    title: Service workspace bootstrap
+    summary: Provision a new service workspace and seed its operational planning, documentation, and kickoff communications.
+    departments: [operations, project-management]
+    primaryPersonas: [logan-reed, mia-roberts]
+    workloads: [sharepoint, collaboration, planner, messaging]
+    riskClass: high
+    approvalProfile: high-impact
+    requiredInputs: [serviceKey, ownerUpn, siteName, teamName]
+    steps:
+      - stepId: provision-service
+        action: provision_service
+        workload: sharepoint
+        purpose: Create the base service workspace.
+      - stepId: create-plan
+        action: create_plan
+        workload: planner
+        purpose: Create the implementation plan.
+      - stepId: create-plan-task
+        action: create_plan_task
+        workload: planner
+        purpose: Seed the first implementation task.
+      - stepId: create-charter
+        action: create_document
+        workload: sharepoint
+        purpose: Publish the workspace charter.
+      - stepId: send-kickoff-mail
+        action: send_mail
+        workload: messaging
+        purpose: Notify the stakeholders.

@@ -1,0 +1,60 @@
+---
+
+description: SmartHaus M365 AI Workforce AI Change-Approval Protocol (Explain → Propose → GO → Build)
+globs: ["**/*"]
+alwaysApply: true
+
+---
+
+# SmartHaus M365 AI Workforce AI Change-Approval Protocol
+
+## Purpose
+
+Require explicit approval before any write-effect actions. Ensure clarity, safety, and repeatability.
+
+## Process (hard requirement)
+
+**This is Step 3 of the Mandatory Agent Workflow.** See `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow.
+
+1) Explain: Root cause, impact, and scope.
+   - **MUST include:** North Star alignment check result (from Step 1)
+   - **MUST include:** Execution plan reference (from Step 2)
+
+2) Propose: Planned edits (files/steps), risks, validation plan, rollback.
+   - **MUST include:** How this aligns with North Star
+   - **MUST include:** Which execution plan item this addresses
+
+3) Await approval: No changes until the user replies "go" (or "go: <constraints>").
+
+4) Implement: Apply edits exactly as approved.
+
+5) Validate: Run tests/checks; report results.
+
+6) Report: Short summary of changes and outcomes.
+
+## Allowed Before Approval (read-only only)
+
+- Code/doc reading, semantic search, grep, logs inspection
+- Drafting plans, diffs, and commands (not executing)
+- Local reasoning/analysis
+
+## Prohibited Before Approval (write-effect)
+
+- File edits, commits, branches, pushes, PR creation/updates
+- Running make/scripts that modify workspace or external state
+- Dispatching workflows with side effects, starting servers
+
+## Approval Signals
+
+- Proceed: "go" or "continue" or "proceed" or "do it" or "go: <changes>"
+- Decline: "cancel"
+- If ambiguous, ask for clarification; do not proceed.
+
+## Exceptions
+
+- None by default. Explicit override must say: "override: proceed now".
+
+## Enforcement
+
+- The assistant must refuse write-effect actions until "go".
+- After each phase (proposal, implementation, validation), provide a brief status update.

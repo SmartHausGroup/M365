@@ -1,0 +1,94 @@
+version: 1.0.0
+last_updated: '2026-03-21T05:05:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: hr
+  display_name: Human Resources
+  wave: W6
+  wave_track: Wave A
+  status: registry-backed
+  purpose: >-
+    Package the Human Resources digital employee into one bounded workforce
+    contract for onboarding, offboarding, personnel-state administration, review
+    orchestration, and HR policy governance.
+  bounded_claim: >-
+    The HR department pack may only claim the action-backed Sarah Williams
+    workflows plus the explicit approval, escalation, and regulated-change
+    semantics declared in this authority.
+workflow_families:
+  - onboarding_and_offboarding
+  - employee_record_and_policy_administration
+  - review_cycle_and_case_coordination
+workload_families:
+  - Identity, directory, and tenant administration
+  - Documents, notes, and workspace productivity
+  - Tasks, scheduling, and work management
+  - Security, compliance, and data governance
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the HR lead must intervene.
+  blocked: An expected persona is missing, inactive, or outside the declared authority.
+approval_model:
+  department_owner: hr-manager
+  department_lead: department-lead:hr
+  profiles:
+    critical-regulated:
+      approvers:
+        - hr-manager
+        - department-head
+      personas:
+        - hr-generalist
+      rule: >-
+        Personnel-state, offboarding, review, and policy mutations require
+        regulated dual human approval before execution.
+kpis:
+  required_personas: 1
+  required_active_personas: 1
+  required_registry_backed_personas: 1
+  required_workflow_families: 3
+  supported_action_count: 5
+personas:
+  hr-generalist:
+    display_name: Sarah Williams
+    title: HR Director
+    role_type: department_anchor
+    coverage_status: registry-backed
+    risk_tier: critical
+    approval_profile: critical-regulated
+    capability_families:
+      - onboarding and offboarding
+      - employee record updates
+      - review orchestration
+      - HR policy lifecycle
+    workload_families:
+      - Identity, directory, and tenant administration
+      - Documents, notes, and workspace productivity
+      - Tasks, scheduling, and work management
+      - Security, compliance, and data governance
+    workflow_families:
+      - onboarding_and_offboarding
+      - employee_record_and_policy_administration
+      - review_cycle_and_case_coordination
+    supported_actions:
+      - employee.onboard
+      - employee.update_info
+      - employee.offboard
+      - policy.create
+      - review.initiate
+bounded_claims:
+  supported:
+    - onboarding and offboarding orchestration
+    - employee record and personnel-state updates
+    - review initiation and policy lifecycle governance
+    - regulated HR approval routing for explicit hr-generalist actions
+  unsupported:
+    - payroll and benefits system administration
+    - finance approval and accounting operations
+    - legal case management outside explicit HR actions
+    - generalized security, compliance, or device administration outside the declared pack

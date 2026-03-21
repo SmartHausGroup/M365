@@ -1,0 +1,87 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T03:10:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E4CComplianceEDiscoveryExpansion(action) = InstructionBacked(action) ∧
+  CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=compliance ∧
+  AuthClass(action)=app_only.
+supported_actions:
+  list_ediscovery_cases:
+    canonical_action_key: compliance.ediscovery_case.list
+    agent_alias: compliance.cases
+    runtime_handler: ComplianceEDiscoveryClient.list_ediscovery_cases
+    mutating: false
+    result_shape_keys: [cases, count]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_ediscovery_cases
+  get_ediscovery_case:
+    canonical_action_key: compliance.ediscovery_case.read
+    agent_alias: compliance.case_get
+    runtime_handler: ComplianceEDiscoveryClient.get_ediscovery_case
+    mutating: false
+    result_shape_keys: [case]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_ediscovery_case
+  create_ediscovery_case:
+    canonical_action_key: compliance.ediscovery_case.create
+    agent_alias: compliance.case_create
+    runtime_handler: ComplianceEDiscoveryClient.create_ediscovery_case
+    mutating: true
+    result_shape_keys: [case, status]
+    required_permissions: [eDiscovery.ReadWrite.All]
+    approval_profile: critical-regulated
+    capability_registry_alias: create_ediscovery_case
+  list_ediscovery_case_searches:
+    canonical_action_key: compliance.ediscovery_search.list
+    agent_alias: compliance.case_searches
+    runtime_handler: ComplianceEDiscoveryClient.list_ediscovery_case_searches
+    mutating: false
+    result_shape_keys: [searches, count]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_ediscovery_case_searches
+  get_ediscovery_case_search:
+    canonical_action_key: compliance.ediscovery_search.read
+    agent_alias: compliance.case_search_get
+    runtime_handler: ComplianceEDiscoveryClient.get_ediscovery_case_search
+    mutating: false
+    result_shape_keys: [search]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_ediscovery_case_search
+  create_ediscovery_case_search:
+    canonical_action_key: compliance.ediscovery_search.create
+    agent_alias: compliance.case_search_create
+    runtime_handler: ComplianceEDiscoveryClient.create_ediscovery_case_search
+    mutating: true
+    result_shape_keys: [search, status]
+    required_permissions: [eDiscovery.ReadWrite.All]
+    approval_profile: critical-regulated
+    capability_registry_alias: create_ediscovery_case_search
+  list_ediscovery_case_custodians:
+    canonical_action_key: compliance.ediscovery_custodian.list
+    agent_alias: compliance.custodians
+    runtime_handler: ComplianceEDiscoveryClient.list_ediscovery_case_custodians
+    mutating: false
+    result_shape_keys: [custodians, count]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_ediscovery_case_custodians
+  list_ediscovery_case_legal_holds:
+    canonical_action_key: compliance.ediscovery_legal_hold.list
+    agent_alias: compliance.legal_holds
+    runtime_handler: ComplianceEDiscoveryClient.list_ediscovery_case_legal_holds
+    mutating: false
+    result_shape_keys: [legalHolds, count]
+    required_permissions: [eDiscovery.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_ediscovery_case_legal_holds

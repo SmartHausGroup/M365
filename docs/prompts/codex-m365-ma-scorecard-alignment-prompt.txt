@@ -1,0 +1,9 @@
+Execute the M365 MA scorecard-alignment plan.
+
+Read:
+- `plans/m365-ma-scorecard-alignment/m365-ma-scorecard-alignment.md`
+- `docs/prompts/codex-m365-ma-scorecard-alignment.md`
+
+Use plan ref `plan:m365-ma-scorecard-alignment:R1`.
+
+Build the UCP-required MA bridge artifacts, emit the repo scorecard, validate phase/status/push readiness, and keep the work traceable to existing M365 proof artifacts.

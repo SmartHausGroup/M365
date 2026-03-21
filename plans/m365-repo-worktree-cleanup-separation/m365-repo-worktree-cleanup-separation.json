@@ -1,0 +1,69 @@
+{
+  "plan_id": "m365-repo-worktree-cleanup-separation",
+  "status": "Complete",
+  "date": "2026-03-17",
+  "owner": "SmartHaus",
+  "execution_plan_reference": "plan:m365-repo-worktree-cleanup-separation:R1",
+  "north_star": "Operations/NORTHSTAR.md",
+  "objective": "Reduce the current mixed dirty worktree into a safe, reviewable, governed state by removing secret-bearing artifacts, reverting formatter-only noise, and separating the remaining substantive payload into clear keep versus discard buckets.",
+  "scope": {
+    "in_scope": [
+      "create a formal cleanup initiative and prompt pair",
+      "remove or sanitize secret-bearing local artifacts",
+      "revert tracked formatter-only fallout from the failed repo-wide pre-commit run",
+      "classify remaining substantive payload into keep, split, and delete buckets",
+      "synchronize Operations/EXECUTION_PLAN.md and Operations/ACTION_LOG.md"
+    ],
+    "out_of_scope": [
+      "committing the remaining substantive payload without explicit user authorization",
+      "implementing new runtime features as part of cleanup",
+      "changing commercialization scope or MA scorecard requirements",
+      "deleting substantive feature work without explicit classification"
+    ]
+  },
+  "requirements": [
+    { "id": "R1", "name": "Governed cleanup initiative" },
+    { "id": "R2", "name": "Secret scrub" },
+    { "id": "R3", "name": "Formatter-noise revert" },
+    { "id": "R4", "name": "Residual payload classification" },
+    { "id": "R5", "name": "Governance synchronization" }
+  ],
+  "success_criteria": [
+    "no plaintext credentials remain in local workflow docs",
+    "all tracked formatter-only fallout is reverted",
+    "the remaining worktree is materially smaller and easier to separate",
+    "remaining dirty files are classified into explicit keep split delete buckets"
+  ],
+  "execution_status": [
+    {
+      "id": "R1",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "created cleanup plan triplet prompt pair and execution-plan initiative entry"
+    },
+    {
+      "id": "R2",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "removed CODEX_CONFIGURATION.md and AGENT_SYSTEM_DEEP_DIVE.md from the worktree; exposed credentials require rotation"
+    },
+    {
+      "id": "R3",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "reverted tracked formatter-only fallout; formatter-noise bucket is zero"
+    },
+    {
+      "id": "R4",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "user directed treating the remaining substantive payload as intended keep-work; committed and pushed after scrubbing the push-protection-blocked Azure secret in create_teams_workspace.py"
+    },
+    {
+      "id": "R5",
+      "status": "complete",
+      "date": "2026-03-17",
+      "note": "synchronized cleanup plan and governance trackers to reflect the completed ship and return focus to the active enterprise-readiness master plan"
+    }
+  ]
+}

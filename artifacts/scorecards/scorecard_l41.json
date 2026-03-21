@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L41",
+  "name": "M365 Conditional Access / Identity Protection expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AQ-conditional-access-identity-protection-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L41_m365_conditional_access_identity_protection_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L41_m365_conditional_access_identity_protection_expansion_v2"
+  ]
+}

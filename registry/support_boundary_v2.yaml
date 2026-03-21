@@ -1,0 +1,90 @@
+version: "2.0.0"
+last_updated: "2026-03-21T18:45:00Z"
+authority:
+  workforce_packaging: registry/workforce_packaging_v1.yaml
+  pilot_rollout_model: registry/pilot_rollout_model_v2.yaml
+  executive_oversight: registry/executive_oversight_contract_v1.yaml
+
+contract:
+  id: support-boundary-v2
+  display_name: Support Boundary v2
+  status: contract-defined
+  description: >
+    Defines the final operating, support, and customer-ownership boundaries
+    for the full workforce product.
+
+support_layers:
+  - order: 1
+    id: operating_model
+    description: >
+      Define who operates what: SMARTHAUS maintains the platform, customers
+      own their tenant configuration, agents execute within governed bounds.
+    outputs:
+      - operating model RACI matrix
+    failure_mode: >
+      Ambiguous ownership boundary blocks support definition.
+
+  - order: 2
+    id: support_tiers
+    description: >
+      Define support tiers: self-service (documentation and dashboards),
+      assisted (SMARTHAUS-guided configuration), and escalated (SMARTHAUS
+      direct intervention for platform issues).
+    outputs:
+      - support tier definitions with response expectations
+    failure_mode: >
+      Missing support tier blocks customer confidence.
+
+  - order: 3
+    id: customer_ownership_boundary
+    description: >
+      Define what the customer owns and controls: tenant configuration,
+      approval decisions, department pack customization, and audit review.
+    outputs:
+      - customer ownership document
+    failure_mode: >
+      Ambiguous customer ownership blocks deployment.
+
+  - order: 4
+    id: escalation_and_incident_model
+    description: >
+      Define how incidents escalate: agent-level (automatic retry or
+      fail-closed), department-level (department lead review), platform-level
+      (SMARTHAUS engineering response).
+    outputs:
+      - escalation model with severity tiers and response times
+    failure_mode: >
+      Missing escalation path blocks incident response.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Ambiguous support boundaries default to SMARTHAUS responsibility.
+  audit_completeness:
+    description: >
+      Support interactions produce traceable records.
+  bounded_claims:
+    description: >
+      Support scope matches the packaged product tiers.
+  determinism:
+    description: >
+      Same incident type produces the same escalation path.
+  customer_sovereignty:
+    description: >
+      Customer retains control of their tenant, approvals, and data.
+
+kpis:
+  support_layer_count: 4
+  governance_rule_count: 5
+  support_tier_count: 3
+  escalation_severity_levels: 3
+
+bounded_claims:
+  supported:
+    - "Three-tier support model: self-service, assisted, escalated"
+    - "Clear RACI between SMARTHAUS and customer"
+    - "Deterministic escalation paths for incidents"
+  not_supported:
+    - "24/7 dedicated support for all customers"
+    - "SMARTHAUS managing customer-owned configuration"
+    - "Automatic incident resolution without human oversight"

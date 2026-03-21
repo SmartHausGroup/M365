@@ -6,11 +6,11 @@ export default async function handler(req, res) {
 
   try {
     const { r: returnUrl = '/' } = req.query;
-    
+
     // Microsoft 365 OAuth configuration
     const clientId = process.env.MICROSOFT_CLIENT_ID;
     const redirectUri = process.env.MICROSOFT_REDIRECT_URI || 'https://m365.smarthaus.ai/api/auth/callback';
-    
+
     // Required scopes for M365 access
     const scopes = [
       'User.Read',                    // Read user profile
@@ -19,9 +19,10 @@ export default async function handler(req, res) {
       'Directory.Read.All',          // Read directory data
       'Calendars.Read',              // Read calendars
       'Mail.Read',                   // Read email
+      'Mail.Send',                   // Send email
       'Files.Read.All'               // Read OneDrive files
     ];
-    
+
     if (!clientId) {
       // Demo mode - redirect to callback with demo token
       console.log('Microsoft OAuth not configured, using demo mode');
@@ -32,11 +33,11 @@ export default async function handler(req, res) {
 
     // Real Microsoft OAuth flow
     console.log('Initiating Microsoft OAuth flow...');
-    
+
     // Generate PKCE challenge for security
     const codeVerifier = generateRandomString(128);
     const codeChallenge = await generateCodeChallenge(codeVerifier);
-    
+
     // Store code verifier in state parameter (in production, use Redis/database)
     const stateData = {
       returnUrl,
@@ -44,7 +45,7 @@ export default async function handler(req, res) {
       timestamp: Date.now()
     };
     const state = Buffer.from(JSON.stringify(stateData)).toString('base64');
-    
+
     // Build Microsoft OAuth URL with proper parameters
     // Use specific tenant ID instead of /common for single-tenant apps
     const tenantId = process.env.MICROSOFT_TENANT_ID || 'common';
@@ -58,15 +59,15 @@ export default async function handler(req, res) {
     authUrl.searchParams.set('code_challenge', codeChallenge);
     authUrl.searchParams.set('code_challenge_method', 'S256');
     authUrl.searchParams.set('prompt', 'login'); // Force login prompt every time
-    
+
     console.log('Redirecting to Microsoft OAuth:', authUrl.toString());
-    
+
     // Redirect to Microsoft OAuth - this will show the Microsoft login popup
     res.redirect(authUrl.toString());
-    
+
   } catch (error) {
     console.error('Login endpoint error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Authentication service unavailable',
       message: 'Please try again later'
     });

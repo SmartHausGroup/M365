@@ -1,0 +1,87 @@
+version: 1.0.0
+last_updated: '2026-03-21T14:00:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  delegation_contract: registry/ucp_delegation_contract_v1.yaml
+  orchestration_contract: registry/task_orchestration_contract_v1.yaml
+  audit_schema: src/smarthaus_common/audit_schema.py
+contract:
+  id: cross-persona-collaboration-contract
+  display_name: Cross-Persona Collaboration
+  version: v1
+  status: contract-defined
+  purpose: >-
+    Allow digital employees to hand off, collaborate, and coordinate within
+    governed bounds by defining collaboration primitives, handoff semantics,
+    accountability transfer rules, and cross-department governance.
+  bounded_claim: >-
+    This contract defines the collaboration protocol between personas. It
+    does not claim that all personas can actively collaborate. Contract-only
+    personas may be named as collaboration targets but their participation
+    resolves to blocked until activation.
+collaboration_primitives:
+  - id: handoff
+    description: >-
+      One persona transfers a task to another persona with full context.
+      The originating persona retains audit responsibility for the handoff
+      but the receiving persona assumes execution accountability.
+    accountability_transfer: true
+  - id: consultation
+    description: >-
+      One persona requests input from another persona without transferring
+      task ownership. The originating persona retains full accountability.
+    accountability_transfer: false
+  - id: co_execution
+    description: >-
+      Two or more personas execute parts of a task concurrently. Each
+      persona is accountable for its own portion. A coordination envelope
+      tracks the combined outcome.
+    accountability_transfer: false
+  - id: escalation
+    description: >-
+      A persona escalates a task to a higher-authority persona when the
+      task exceeds its risk tier or capability boundary. The escalation
+      target assumes accountability.
+    accountability_transfer: true
+handoff_rules:
+  context_required: >-
+    Every handoff must include the task context, originating persona,
+    reason for handoff, and expected outcome.
+  cross_department_allowed: true
+  cross_department_approval: >-
+    Cross-department handoffs require department-owner approval from both
+    the originating and receiving departments.
+  contract_only_target: >-
+    Handoffs to contract-only personas are accepted but resolve to blocked
+    at execution time with a structured pending-activation response.
+  audit_chain: >-
+    Every handoff creates a linked audit envelope connecting the
+    originating and receiving personas.
+governance_rules:
+  accountability_continuity: >-
+    Accountability must be explicitly tracked at every collaboration
+    boundary. No task may exist without an accountable persona.
+  no_circular_handoff: >-
+    A task may not be handed off back to its originating persona without
+    explicit justification and audit.
+  risk_tier_boundary: >-
+    A persona may not accept a handoff or escalation that exceeds its
+    declared risk tier without approval.
+  collaboration_audit: >-
+    Every collaboration event (handoff, consultation, co-execution,
+    escalation) must produce an audit envelope.
+kpis:
+  collaboration_primitives: 4
+  handoff_rules: 5
+  governance_rules: 4
+bounded_claims:
+  supported:
+    - four collaboration primitives with defined accountability semantics
+    - cross-department handoff with approval requirements
+    - contract-only persona handling at collaboration boundaries
+    - per-event audit envelopes for all collaboration events
+  unsupported:
+    - claims that all personas can actively collaborate
+    - real-time collaboration state beyond audit trail
+    - automated persona selection for collaboration targets

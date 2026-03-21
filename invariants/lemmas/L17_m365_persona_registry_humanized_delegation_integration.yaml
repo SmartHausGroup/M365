@@ -1,0 +1,21 @@
+id: L17
+title: Persona registry and humanized delegation integration
+phase: B7C
+plan_ref: plan:m365-enterprise-readiness-master-plan:B7C
+lemma_doc: docs/ma/lemmas/L17_m365_persona_registry_humanized_delegation_integration.md
+source_notebook: notebooks/m365/INV-M365-S-persona-registry-humanized-delegation-integration.ipynb
+lemma_notebook: notebooks/lemma_proofs/L17_m365_persona_registry_humanized_delegation_integration.ipynb
+scorecard: artifacts/scorecards/scorecard_l17.json
+proof_obligations:
+  - persona aliases resolve deterministically to one canonical agent
+  - inactive or unknown personas fail closed before execution
+  - persona allowed domains are enforced before bounded executor selection proceeds
+  - approval and audit payloads preserve persona context
+failure_boundaries:
+  - runtime exposes only raw agent identifiers
+  - persona resolution is ambiguous or missing
+  - persona context is dropped from approvals or audit
+test_bindings:
+  - tests/test_ops_adapter.py
+  - tests/test_approvals.py
+ci_gate: pre-commit

@@ -1,0 +1,15 @@
+lemma_id: L4
+name: M365 audit recording projection
+source_lemma: docs/contracts/caio-m365/LEMMA_L4.md
+source_invariant: invariants/INV-M365-AUDIT-001.yaml
+evidence:
+  artifacts:
+    - configs/generated/m365_audit_verification.json
+    - src/ops_adapter/audit.py
+    - src/ops_adapter/actions.py
+    - tests/test_ops_adapter.py
+  checks:
+    - audit_pass == true for the instruction contract surface
+    - append-only admin audit events are recorded for admin config operations
+    - admin.audit_log returns event_log status and recent admin events
+status: projected

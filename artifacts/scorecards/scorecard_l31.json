@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L31",
+  "name": "M365 Teams / Groups / Planner expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AG-teams-groups-planner-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L31_m365_teams_groups_planner_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L31_m365_teams_groups_planner_expansion_v2"
+  ]
+}

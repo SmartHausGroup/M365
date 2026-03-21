@@ -1,0 +1,68 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1C",
+  "run_id": "c1c-live-mutation-governance-certification",
+  "recorded_at": "2026-03-20T08:05:26-04:00",
+  "gate": "GATE:M365-READY-C1C STATUS:NO-GO",
+  "final_decision": "NO-GO",
+  "shell_contract": {
+    "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+    "UCP_TENANT": "smarthaus",
+    "ALLOW_M365_MUTATIONS": "true",
+    "ENABLE_AUDIT_LOGGING": "true"
+  },
+  "runtime_surface": "m365.module.entrypoint:M365ConnectorModule",
+  "actor": "phil@smarthausgroup.com",
+  "certification_tag": "20260320073520",
+  "checks": [
+    {
+      "action": "create_site",
+      "status": "pass_with_warning",
+      "trace_id": "c1c-create_site-20260320073520",
+      "site_id": "smarthausgroup.sharepoint.com,483d16d9-0ee7-46d6-9287-d8857fb97160,bb8840b4-db36-4818-8cbd-0adfd17c0bc0",
+      "site_url": "https://smarthausgroup.sharepoint.com/sites/c1csite20260320073520",
+      "warning": "Requested extra library creation returned Graph 403 accessDenied, so only the base site creation is proven."
+    },
+    {
+      "action": "create_team",
+      "status": "pass",
+      "trace_id": "c1c-create_team-20260320073520",
+      "mail_nickname": "hr",
+      "team_id": "e5634ed7-bdb4-46ef-884e-4d615c58cbe7",
+      "channels_created": [
+        "c1c-team-20260320073520"
+      ]
+    },
+    {
+      "action": "add_channel",
+      "status": "pass",
+      "trace_id": "c1c-add_channel-20260320073520",
+      "mail_nickname": "hr",
+      "channel_name": "c1c-channel-20260320073520"
+    },
+    {
+      "action": "provision_service",
+      "status": "fail",
+      "trace_id": "c1c-provision_service-20260320073520",
+      "params": {
+        "key": "hr"
+      },
+      "error": "Site provisioning detection failed; try again shortly.",
+      "root_cause_hint": "Existing service-site detection assumes a SharePoint path that does not match the live HR site."
+    },
+    {
+      "action": "reset_user_password",
+      "status": "fail",
+      "trace_id": "c1c-reset_user_password-20260320073520",
+      "params": {
+        "userPrincipalName": "information@smarthausgroup.com",
+        "force_change_next_sign_in": false
+      },
+      "error": "Graph error 403 Authorization_RequestDenied: Insufficient privileges to complete the operation.",
+      "root_cause_hint": "The bounded directory executor does not yet have the privilege required for password reset."
+    }
+  ],
+  "blocking_conditions": [
+    "The supported mutation surface is not fully green because `provision_service` fails on live existing-site detection.",
+    "The supported mutation surface is not fully green because `reset_user_password` fails with Graph 403 insufficient privileges."
+  ]
+}

@@ -52,8 +52,9 @@ class LatticeAIOS(BaseModel):
 
 
 class LatticeLQL(BaseModel):
-    change: str
-    tests: list[str] = Field(default_factory=list)
+    query: str
+    description: str | None = None
+    status: str | None = None
 
 
 class LatticeLEF(BaseModel):

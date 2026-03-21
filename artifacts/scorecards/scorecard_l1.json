@@ -1,0 +1,16 @@
+{
+  "item_id": "L1",
+  "item_kind": "lemma",
+  "lemma_id": "L1",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "notebook": "notebooks/ma_caio_m365_contract.ipynb",
+  "notebook_hash": "f3da74725751333e2c920bbc37fa915682b3ca92df95c3729c40c6f2b91b7b2f",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "docs/contracts/caio-m365/LEMMA_L1.md",
+    "invariants/INV-CAIO-M365-001.yaml",
+    "configs/generated/caio_m365_contract_verification.json"
+  ]
+}

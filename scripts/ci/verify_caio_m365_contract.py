@@ -15,6 +15,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 # Repo root
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -24,9 +25,160 @@ ARTIFACT_PATH = REPO_ROOT / "configs" / "generated" / "caio_m365_contract_verifi
 RESULT_SHAPES = {
     "list_users": ["users", "count"],
     "list_teams": ["teams", "count"],
+    "get_team": ["team"],
+    "list_channels": ["channels", "count"],
+    "create_channel": ["channel", "status"],
+    "list_plans": ["plans", "count"],
+    "create_plan": ["plan", "status"],
+    "list_plan_buckets": ["buckets", "count"],
+    "create_plan_bucket": ["bucket", "status"],
+    "create_plan_task": ["task", "status"],
     "list_sites": ["sites", "count"],
     "get_user": ["user"],
     "reset_user_password": ["user", "password_reset"],
+    "create_user": ["user", "temporaryPassword"],
+    "update_user": ["user"],
+    "disable_user": ["user", "disabled"],
+    "list_groups": ["groups", "count"],
+    "get_group": ["group"],
+    "create_group": ["group_id", "display_name", "mail_nickname"],
+    "list_group_members": ["members", "count"],
+    "add_group_member": ["group_id", "member_id", "added"],
+    "remove_group_member": ["group_id", "member_id", "removed"],
+    "assign_user_license": ["user", "assigned", "skipped"],
+    "list_directory_roles": ["roles", "count"],
+    "list_directory_role_members": ["members", "count"],
+    "list_domains": ["domains", "count"],
+    "get_organization": ["organization"],
+    "list_applications": ["applications", "count"],
+    "get_application": ["application"],
+    "update_application": ["app_id", "status"],
+    "list_service_principals": ["service_principals", "count"],
+    "list_messages": ["messages", "count"],
+    "get_message": ["message"],
+    "send_mail": ["sent", "to", "subject", "from", "saveToSentItems"],
+    "move_message": ["moved", "messageId", "destinationId", "message"],
+    "delete_message": ["deleted", "messageId"],
+    "list_mail_folders": ["folders", "count"],
+    "get_mailbox_settings": ["settings"],
+    "update_mailbox_settings": ["updated", "settings"],
+    "list_events": ["events", "count"],
+    "create_event": ["event", "status"],
+    "get_event": ["event"],
+    "update_event": ["updated", "eventId"],
+    "delete_event": ["deleted", "eventId"],
+    "get_schedule": ["schedules", "count"],
+    "list_contacts": ["contacts", "count"],
+    "get_contact": ["contact"],
+    "create_contact": ["contact", "status"],
+    "update_contact": ["updated", "contactId"],
+    "delete_contact": ["deleted", "contactId"],
+    "list_contact_folders": ["folders", "count"],
+    "get_site": ["site"],
+    "list_site_lists": ["lists", "count"],
+    "get_list": ["list"],
+    "list_list_items": ["items", "count"],
+    "create_list_item": ["item", "status"],
+    "list_drives": ["drives", "count"],
+    "get_drive": ["drive"],
+    "list_drive_items": ["items", "count"],
+    "get_drive_item": ["item"],
+    "create_folder": ["folder", "status"],
+    "upload_file": ["file", "status"],
+    "create_document": ["document", "status"],
+    "update_document": ["document", "status"],
+    "create_workbook": ["workbook", "status"],
+    "update_workbook": ["workbook", "status"],
+    "create_presentation": ["presentation", "status"],
+    "update_presentation": ["presentation", "status"],
+    "list_flows_admin": ["flows", "count"],
+    "get_flow_admin": ["flow"],
+    "list_http_flows": ["flows", "count"],
+    "list_flow_owners": ["owners", "count"],
+    "list_flow_runs": ["runs", "count"],
+    "set_flow_owner_role": ["flowName", "principalObjectId", "roleName", "status"],
+    "remove_flow_owner_role": ["flowName", "roleId", "removed"],
+    "enable_flow": ["flowName", "status"],
+    "disable_flow": ["flowName", "status"],
+    "delete_flow": ["flowName", "status"],
+    "restore_flow": ["flowName", "status"],
+    "invoke_flow_callback": ["invoked", "status_code", "response"],
+    "list_powerapps_admin": ["apps", "count"],
+    "get_powerapp_admin": ["app"],
+    "list_powerapp_role_assignments": ["roles", "count"],
+    "set_powerapp_owner": ["appName", "ownerObjectId", "status"],
+    "remove_powerapp_role_assignment": ["appName", "roleId", "removed"],
+    "delete_powerapp": ["appName", "status"],
+    "list_powerapp_environments": ["environments", "count"],
+    "get_powerapp_environment": ["environment"],
+    "list_powerapp_environment_role_assignments": ["roles", "count"],
+    "set_powerapp_environment_role_assignment": [
+        "environmentName",
+        "principalObjectId",
+        "roleName",
+        "status",
+    ],
+    "remove_powerapp_environment_role_assignment": ["environmentName", "roleId", "removed"],
+    "list_powerbi_workspaces": ["workspaces", "count"],
+    "get_powerbi_workspace": ["workspace"],
+    "list_powerbi_reports": ["reports", "count"],
+    "get_powerbi_report": ["report"],
+    "list_powerbi_datasets": ["datasets", "count"],
+    "get_powerbi_dataset": ["dataset"],
+    "refresh_powerbi_dataset": ["workspaceId", "datasetId", "status"],
+    "list_powerbi_dataset_refreshes": ["refreshes", "count"],
+    "list_powerbi_dashboards": ["dashboards", "count"],
+    "get_powerbi_dashboard": ["dashboard"],
+    "get_report": ["report"],
+    "get_usage_reports": ["report"],
+    "get_activity_reports": ["report"],
+    "list_access_reviews": ["reviews", "count"],
+    "get_access_review": ["review"],
+    "create_access_review": ["review", "status"],
+    "list_access_review_decisions": ["decisions", "count"],
+    "record_access_review_decision": ["updated", "reviewId", "instanceId", "decisionId"],
+    "get_approval_solution": ["solution"],
+    "list_approval_items": ["approvals", "count"],
+    "get_approval_item": ["approval"],
+    "create_approval_item": ["status", "displayName"],
+    "list_approval_item_requests": ["requests", "count"],
+    "respond_to_approval_item": ["status", "approvalId", "response"],
+    "list_external_connections": ["connections", "count"],
+    "get_external_connection": ["connection"],
+    "create_external_connection": ["connection"],
+    "register_external_connection_schema": ["connectionId", "status"],
+    "get_external_item": ["item"],
+    "upsert_external_item": ["itemId", "status"],
+    "create_external_group": ["group", "status"],
+    "add_external_group_member": ["groupId", "memberId", "status"],
+    "list_automation_recipes": ["recipes", "count"],
+    "get_automation_recipe": ["recipe"],
+    "list_devices": ["devices", "count"],
+    "get_device": ["device"],
+    "list_device_compliance_summaries": ["summaries", "count"],
+    "execute_device_action": ["executed", "deviceId", "action"],
+    "list_security_alerts": ["alerts", "count"],
+    "get_security_alert": ["alert"],
+    "list_security_incidents": ["incidents", "count"],
+    "get_security_incident": ["incident"],
+    "list_secure_scores": ["scores", "count"],
+    "get_secure_score_profile": ["profile"],
+    "update_security_incident": ["updated", "incidentId"],
+    "list_conditional_access_policies": ["policies", "count"],
+    "get_conditional_access_policy": ["policy"],
+    "create_conditional_access_policy": ["policy", "status"],
+    "update_conditional_access_policy": ["updated", "policyId"],
+    "delete_conditional_access_policy": ["deleted", "policyId"],
+    "list_named_locations": ["namedLocations", "count"],
+    "list_risk_detections": ["riskDetections", "count"],
+    "list_ediscovery_cases": ["cases", "count"],
+    "get_ediscovery_case": ["case"],
+    "create_ediscovery_case": ["case", "status"],
+    "list_ediscovery_case_searches": ["searches", "count"],
+    "get_ediscovery_case_search": ["search"],
+    "create_ediscovery_case_search": ["search", "status"],
+    "list_ediscovery_case_custodians": ["custodians", "count"],
+    "list_ediscovery_case_legal_holds": ["legalHolds", "count"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -68,12 +220,546 @@ def verify_with_mock() -> dict:
     mocks = [
         ("list_users", {"ok": True, "result": {"users": [], "count": 0}}),
         ("list_teams", {"ok": True, "result": {"teams": [], "count": 0}}),
+        ("get_team", {"ok": True, "result": {"team": {}}}),
+        ("list_channels", {"ok": True, "result": {"channels": [], "count": 0}}),
+        ("create_channel", {"ok": True, "result": {"channel": {}, "status": "created"}}),
+        ("list_plans", {"ok": True, "result": {"plans": [], "count": 0}}),
+        ("create_plan", {"ok": True, "result": {"plan": {}, "status": "created"}}),
+        ("list_plan_buckets", {"ok": True, "result": {"buckets": [], "count": 0}}),
+        (
+            "create_plan_bucket",
+            {"ok": True, "result": {"bucket": {}, "status": "created"}},
+        ),
+        ("create_plan_task", {"ok": True, "result": {"task": {}, "status": "created"}}),
         ("list_sites", {"ok": True, "result": {"sites": [], "count": 0}}),
         ("get_user", {"ok": True, "result": {"user": {}}}),
-        ("reset_user_password", {"ok": True, "result": {"user": "user@test", "password_reset": True}}),
-        ("create_site", {"ok": True, "result": {"site_id": "x", "site_url": "https://x", "group_created": True, "libraries_created": []}}),
-        ("create_team", {"ok": True, "result": {"team_id": "y", "team_url": "https://teams/y", "channels_created": []}}),
-        ("add_channel", {"ok": True, "result": {"team": {"team_id": "y", "team_url": "https://teams/y", "channels_created": ["ch"]}, "channel": "ch"}}),
+        (
+            "reset_user_password",
+            {"ok": True, "result": {"user": "user@test", "password_reset": True}},
+        ),
+        (
+            "create_user",
+            {"ok": True, "result": {"user": {"id": "u1"}, "temporaryPassword": "Temp#123"}},
+        ),
+        ("update_user", {"ok": True, "result": {"user": {"id": "u1"}}}),
+        ("disable_user", {"ok": True, "result": {"user": "u1", "disabled": True}}),
+        ("list_groups", {"ok": True, "result": {"groups": [], "count": 0}}),
+        ("get_group", {"ok": True, "result": {"group": {}}}),
+        (
+            "create_group",
+            {
+                "ok": True,
+                "result": {
+                    "group_id": "g1",
+                    "display_name": "Ops",
+                    "mail_nickname": "ops",
+                },
+            },
+        ),
+        ("list_group_members", {"ok": True, "result": {"members": [], "count": 0}}),
+        (
+            "add_group_member",
+            {"ok": True, "result": {"group_id": "g1", "member_id": "u1", "added": True}},
+        ),
+        (
+            "remove_group_member",
+            {"ok": True, "result": {"group_id": "g1", "member_id": "u1", "removed": True}},
+        ),
+        (
+            "assign_user_license",
+            {"ok": True, "result": {"user": "u1", "assigned": [], "skipped": []}},
+        ),
+        ("list_directory_roles", {"ok": True, "result": {"roles": [], "count": 0}}),
+        ("list_directory_role_members", {"ok": True, "result": {"members": [], "count": 0}}),
+        ("list_domains", {"ok": True, "result": {"domains": [], "count": 0}}),
+        ("get_organization", {"ok": True, "result": {"organization": {}}}),
+        ("list_applications", {"ok": True, "result": {"applications": [], "count": 0}}),
+        ("get_application", {"ok": True, "result": {"application": {}}}),
+        ("update_application", {"ok": True, "result": {"app_id": "a1", "status": "updated"}}),
+        (
+            "list_service_principals",
+            {"ok": True, "result": {"service_principals": [], "count": 0}},
+        ),
+        ("list_messages", {"ok": True, "result": {"messages": [], "count": 0}}),
+        ("get_message", {"ok": True, "result": {"message": {}}}),
+        (
+            "send_mail",
+            {
+                "ok": True,
+                "result": {
+                    "sent": True,
+                    "to": ["ops@test"],
+                    "subject": "hello",
+                    "from": "me",
+                    "saveToSentItems": True,
+                },
+            },
+        ),
+        (
+            "move_message",
+            {
+                "ok": True,
+                "result": {
+                    "moved": True,
+                    "messageId": "m1",
+                    "destinationId": "archive",
+                    "message": {},
+                },
+            },
+        ),
+        ("delete_message", {"ok": True, "result": {"deleted": True, "messageId": "m1"}}),
+        ("list_mail_folders", {"ok": True, "result": {"folders": [], "count": 0}}),
+        ("get_mailbox_settings", {"ok": True, "result": {"settings": {}}}),
+        (
+            "update_mailbox_settings",
+            {"ok": True, "result": {"updated": True, "settings": {}}},
+        ),
+        ("list_events", {"ok": True, "result": {"events": [], "count": 0}}),
+        ("create_event", {"ok": True, "result": {"event": {}, "status": "created"}}),
+        ("get_event", {"ok": True, "result": {"event": {}}}),
+        ("update_event", {"ok": True, "result": {"updated": True, "eventId": "evt-1"}}),
+        ("delete_event", {"ok": True, "result": {"deleted": True, "eventId": "evt-1"}}),
+        ("get_schedule", {"ok": True, "result": {"schedules": [], "count": 0}}),
+        ("list_contacts", {"ok": True, "result": {"contacts": [], "count": 0}}),
+        ("get_contact", {"ok": True, "result": {"contact": {}}}),
+        ("create_contact", {"ok": True, "result": {"contact": {}, "status": "created"}}),
+        (
+            "update_contact",
+            {"ok": True, "result": {"updated": True, "contactId": "contact-1"}},
+        ),
+        (
+            "delete_contact",
+            {"ok": True, "result": {"deleted": True, "contactId": "contact-1"}},
+        ),
+        ("list_contact_folders", {"ok": True, "result": {"folders": [], "count": 0}}),
+        ("get_site", {"ok": True, "result": {"site": {}}}),
+        ("list_site_lists", {"ok": True, "result": {"lists": [], "count": 0}}),
+        ("get_list", {"ok": True, "result": {"list": {}}}),
+        ("list_list_items", {"ok": True, "result": {"items": [], "count": 0}}),
+        ("create_list_item", {"ok": True, "result": {"item": {}, "status": "created"}}),
+        ("list_drives", {"ok": True, "result": {"drives": [], "count": 0}}),
+        ("get_drive", {"ok": True, "result": {"drive": {}}}),
+        ("list_drive_items", {"ok": True, "result": {"items": [], "count": 0}}),
+        ("get_drive_item", {"ok": True, "result": {"item": {}}}),
+        ("create_folder", {"ok": True, "result": {"folder": {}, "status": "created"}}),
+        ("upload_file", {"ok": True, "result": {"file": {}, "status": "uploaded"}}),
+        (
+            "create_document",
+            {"ok": True, "result": {"document": {}, "status": "created"}},
+        ),
+        (
+            "update_document",
+            {"ok": True, "result": {"document": {}, "status": "updated"}},
+        ),
+        (
+            "create_workbook",
+            {"ok": True, "result": {"workbook": {}, "status": "created"}},
+        ),
+        (
+            "update_workbook",
+            {"ok": True, "result": {"workbook": {}, "status": "updated"}},
+        ),
+        (
+            "create_presentation",
+            {"ok": True, "result": {"presentation": {}, "status": "created"}},
+        ),
+        (
+            "update_presentation",
+            {"ok": True, "result": {"presentation": {}, "status": "updated"}},
+        ),
+        ("list_flows_admin", {"ok": True, "result": {"flows": [], "count": 0}}),
+        ("get_flow_admin", {"ok": True, "result": {"flow": {}}}),
+        ("list_http_flows", {"ok": True, "result": {"flows": [], "count": 0}}),
+        ("list_flow_owners", {"ok": True, "result": {"owners": [], "count": 0}}),
+        ("list_flow_runs", {"ok": True, "result": {"runs": [], "count": 0}}),
+        (
+            "set_flow_owner_role",
+            {
+                "ok": True,
+                "result": {
+                    "flowName": "flow-1",
+                    "principalObjectId": "user-1",
+                    "roleName": "CanEdit",
+                    "status": "updated",
+                },
+            },
+        ),
+        (
+            "remove_flow_owner_role",
+            {
+                "ok": True,
+                "result": {"flowName": "flow-1", "roleId": "role-1", "removed": True},
+            },
+        ),
+        ("enable_flow", {"ok": True, "result": {"flowName": "flow-1", "status": "enabled"}}),
+        ("disable_flow", {"ok": True, "result": {"flowName": "flow-1", "status": "disabled"}}),
+        ("delete_flow", {"ok": True, "result": {"flowName": "flow-1", "status": "deleted"}}),
+        ("restore_flow", {"ok": True, "result": {"flowName": "flow-1", "status": "restored"}}),
+        (
+            "invoke_flow_callback",
+            {
+                "ok": True,
+                "result": {"invoked": True, "status_code": 202, "response": {"ok": True}},
+            },
+        ),
+        ("list_powerapps_admin", {"ok": True, "result": {"apps": [], "count": 0}}),
+        ("get_powerapp_admin", {"ok": True, "result": {"app": {}}}),
+        (
+            "list_powerapp_role_assignments",
+            {"ok": True, "result": {"roles": [], "count": 0}},
+        ),
+        (
+            "set_powerapp_owner",
+            {
+                "ok": True,
+                "result": {
+                    "appName": "app-1",
+                    "ownerObjectId": "owner-1",
+                    "status": "updated",
+                },
+            },
+        ),
+        (
+            "remove_powerapp_role_assignment",
+            {
+                "ok": True,
+                "result": {"appName": "app-1", "roleId": "role-1", "removed": True},
+            },
+        ),
+        (
+            "delete_powerapp",
+            {"ok": True, "result": {"appName": "app-1", "status": "deleted"}},
+        ),
+        (
+            "list_powerapp_environments",
+            {"ok": True, "result": {"environments": [], "count": 0}},
+        ),
+        ("get_powerapp_environment", {"ok": True, "result": {"environment": {}}}),
+        (
+            "list_powerapp_environment_role_assignments",
+            {"ok": True, "result": {"roles": [], "count": 0}},
+        ),
+        (
+            "set_powerapp_environment_role_assignment",
+            {
+                "ok": True,
+                "result": {
+                    "environmentName": "Default-Env",
+                    "principalObjectId": "owner-1",
+                    "roleName": "Environment Admin",
+                    "status": "updated",
+                },
+            },
+        ),
+        (
+            "remove_powerapp_environment_role_assignment",
+            {
+                "ok": True,
+                "result": {
+                    "environmentName": "Default-Env",
+                    "roleId": "role-1",
+                    "removed": True,
+                },
+            },
+        ),
+        ("list_powerbi_workspaces", {"ok": True, "result": {"workspaces": [], "count": 0}}),
+        ("get_powerbi_workspace", {"ok": True, "result": {"workspace": {}}}),
+        ("list_powerbi_reports", {"ok": True, "result": {"reports": [], "count": 0}}),
+        ("get_powerbi_report", {"ok": True, "result": {"report": {}}}),
+        ("list_powerbi_datasets", {"ok": True, "result": {"datasets": [], "count": 0}}),
+        ("get_powerbi_dataset", {"ok": True, "result": {"dataset": {}}}),
+        (
+            "refresh_powerbi_dataset",
+            {
+                "ok": True,
+                "result": {
+                    "workspaceId": "w1",
+                    "datasetId": "d1",
+                    "status": "queued",
+                    "requestId": "req-1",
+                },
+            },
+        ),
+        (
+            "list_powerbi_dataset_refreshes",
+            {"ok": True, "result": {"refreshes": [], "count": 0}},
+        ),
+        (
+            "list_powerbi_dashboards",
+            {"ok": True, "result": {"dashboards": [], "count": 0}},
+        ),
+        ("get_powerbi_dashboard", {"ok": True, "result": {"dashboard": {}}}),
+        (
+            "get_report",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "office365_active_user_detail",
+                        "category": "usage",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        (
+            "get_usage_reports",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "office365_active_user_detail",
+                        "category": "usage",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        (
+            "get_activity_reports",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "email_activity_user_detail",
+                        "category": "activity",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        ("list_access_reviews", {"ok": True, "result": {"reviews": [], "count": 0}}),
+        ("get_access_review", {"ok": True, "result": {"review": {"id": "review-1"}}}),
+        (
+            "create_access_review",
+            {
+                "ok": True,
+                "result": {"review": {"id": "review-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_access_review_decisions",
+            {"ok": True, "result": {"decisions": [], "count": 0}},
+        ),
+        (
+            "record_access_review_decision",
+            {
+                "ok": True,
+                "result": {
+                    "updated": True,
+                    "reviewId": "review-1",
+                    "instanceId": "instance-1",
+                    "decisionId": "decision-1",
+                },
+            },
+        ),
+        ("get_approval_solution", {"ok": True, "result": {"solution": {"state": "provisioned"}}}),
+        ("list_approval_items", {"ok": True, "result": {"approvals": [], "count": 0}}),
+        ("get_approval_item", {"ok": True, "result": {"approval": {}}}),
+        (
+            "create_approval_item",
+            {
+                "ok": True,
+                "result": {
+                    "status": "accepted",
+                    "displayName": "Approve spend",
+                    "operationId": "op-1",
+                },
+            },
+        ),
+        (
+            "list_approval_item_requests",
+            {"ok": True, "result": {"requests": [], "count": 0}},
+        ),
+        (
+            "respond_to_approval_item",
+            {
+                "ok": True,
+                "result": {
+                    "status": "accepted",
+                    "approvalId": "approval-1",
+                    "response": "approve",
+                },
+            },
+        ),
+        (
+            "list_external_connections",
+            {"ok": True, "result": {"connections": [], "count": 0}},
+        ),
+        ("get_external_connection", {"ok": True, "result": {"connection": {}}}),
+        (
+            "create_external_connection",
+            {"ok": True, "result": {"connection": {"id": "conn-1", "name": "Tickets"}}},
+        ),
+        (
+            "register_external_connection_schema",
+            {
+                "ok": True,
+                "result": {"connectionId": "conn-1", "status": "registered"},
+            },
+        ),
+        ("get_external_item", {"ok": True, "result": {"item": {}}}),
+        (
+            "upsert_external_item",
+            {"ok": True, "result": {"itemId": "item-1", "status": "upserted"}},
+        ),
+        (
+            "create_external_group",
+            {"ok": True, "result": {"group": {"id": "group-1"}, "status": "created"}},
+        ),
+        (
+            "add_external_group_member",
+            {
+                "ok": True,
+                "result": {"groupId": "group-1", "memberId": "user-1", "status": "added"},
+            },
+        ),
+        ("list_automation_recipes", {"ok": True, "result": {"recipes": [], "count": 0}}),
+        (
+            "get_automation_recipe",
+            {"ok": True, "result": {"recipe": {"recipeId": "incident_response_war_room"}}},
+        ),
+        ("list_devices", {"ok": True, "result": {"devices": [], "count": 0}}),
+        ("get_device", {"ok": True, "result": {"device": {"id": "device-1"}}}),
+        (
+            "list_device_compliance_summaries",
+            {"ok": True, "result": {"summaries": [], "count": 0}},
+        ),
+        (
+            "execute_device_action",
+            {
+                "ok": True,
+                "result": {
+                    "executed": True,
+                    "deviceId": "device-1",
+                    "action": "syncDevice",
+                },
+            },
+        ),
+        ("list_security_alerts", {"ok": True, "result": {"alerts": [], "count": 0}}),
+        ("get_security_alert", {"ok": True, "result": {"alert": {"id": "alert-1"}}}),
+        (
+            "list_security_incidents",
+            {"ok": True, "result": {"incidents": [], "count": 0}},
+        ),
+        (
+            "get_security_incident",
+            {"ok": True, "result": {"incident": {"id": "incident-1"}}},
+        ),
+        ("list_secure_scores", {"ok": True, "result": {"scores": [], "count": 0}}),
+        (
+            "get_secure_score_profile",
+            {"ok": True, "result": {"profile": {"id": "profile-1"}}},
+        ),
+        (
+            "update_security_incident",
+            {"ok": True, "result": {"updated": True, "incidentId": "incident-1"}},
+        ),
+        (
+            "list_conditional_access_policies",
+            {"ok": True, "result": {"policies": [], "count": 0}},
+        ),
+        (
+            "get_conditional_access_policy",
+            {"ok": True, "result": {"policy": {"id": "policy-1"}}},
+        ),
+        (
+            "create_conditional_access_policy",
+            {
+                "ok": True,
+                "result": {"policy": {"id": "policy-1"}, "status": "created"},
+            },
+        ),
+        (
+            "update_conditional_access_policy",
+            {"ok": True, "result": {"updated": True, "policyId": "policy-1"}},
+        ),
+        (
+            "delete_conditional_access_policy",
+            {"ok": True, "result": {"deleted": True, "policyId": "policy-1"}},
+        ),
+        (
+            "list_named_locations",
+            {"ok": True, "result": {"namedLocations": [], "count": 0}},
+        ),
+        (
+            "list_risk_detections",
+            {"ok": True, "result": {"riskDetections": [], "count": 0}},
+        ),
+        ("list_ediscovery_cases", {"ok": True, "result": {"cases": [], "count": 0}}),
+        ("get_ediscovery_case", {"ok": True, "result": {"case": {"id": "case-1"}}}),
+        (
+            "create_ediscovery_case",
+            {
+                "ok": True,
+                "result": {"case": {"id": "case-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_ediscovery_case_searches",
+            {"ok": True, "result": {"searches": [], "count": 0}},
+        ),
+        (
+            "get_ediscovery_case_search",
+            {"ok": True, "result": {"search": {"id": "search-1"}}},
+        ),
+        (
+            "create_ediscovery_case_search",
+            {
+                "ok": True,
+                "result": {"search": {"id": "search-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_ediscovery_case_custodians",
+            {"ok": True, "result": {"custodians": [], "count": 0}},
+        ),
+        (
+            "list_ediscovery_case_legal_holds",
+            {"ok": True, "result": {"legalHolds": [], "count": 0}},
+        ),
+        (
+            "create_site",
+            {
+                "ok": True,
+                "result": {
+                    "site_id": "x",
+                    "site_url": "https://x",
+                    "group_created": True,
+                    "libraries_created": [],
+                },
+            },
+        ),
+        (
+            "create_team",
+            {
+                "ok": True,
+                "result": {"team_id": "y", "team_url": "https://teams/y", "channels_created": []},
+            },
+        ),
+        (
+            "add_channel",
+            {
+                "ok": True,
+                "result": {
+                    "team": {
+                        "team_id": "y",
+                        "team_url": "https://teams/y",
+                        "channels_created": ["ch"],
+                    },
+                    "channel": "ch",
+                },
+            },
+        ),
         ("provision_service", {"ok": True, "result": {"status": "ok", "site": {}, "team": {}}}),
         ("list_users", {"ok": False, "error": "Graph not configured", "result": None}),
     ]
@@ -87,7 +773,8 @@ def verify_with_mock() -> dict:
         else:
             results[f"postcondition_{action}"] = "pass"
         if mock.get("ok") is True and mock.get("result"):
-            shape_ok, shape_msg = check_result_shape(action, mock["result"])
+            result = cast(dict[Any, Any], mock["result"])
+            shape_ok, shape_msg = check_result_shape(action, result)
             if not shape_ok:
                 response_schema_pass = False
                 results[f"schema_{action}"] = shape_msg
@@ -109,6 +796,7 @@ def main() -> int:
         # Optional: hit live API and verify real responses
         try:
             import urllib.request
+
             req = urllib.request.Request(
                 f"{base_url.rstrip('/')}/api/m365/instruction",
                 data=json.dumps({"action": "list_users", "params": {}}).encode(),
@@ -121,7 +809,8 @@ def main() -> int:
             pc_ok, _ = check_postcondition(body)
             shape_ok = True
             if body.get("ok") and body.get("result"):
-                shape_ok, _ = check_result_shape("list_users", body["result"])
+                result = cast(dict[Any, Any], body["result"])
+                shape_ok, _ = check_result_shape("list_users", result)
             artifact["postcondition_pass"] = artifact["postcondition_pass"] and pc_ok
             artifact["response_schema_pass"] = artifact["response_schema_pass"] and shape_ok
             artifact["live_check"] = "list_users"

@@ -1,0 +1,16 @@
+{
+  "contract_id": "persona-discovery-contract",
+  "department_count": 10,
+  "dimensions": [
+    "by_name",
+    "by_department",
+    "by_capability_family",
+    "by_workload_family",
+    "by_risk_tier",
+    "by_coverage_status"
+  ],
+  "discoverable_persona_count": 39,
+  "discovery_dimension_count": 6,
+  "governance_rule_count": 3,
+  "selection_rule_count": 4
+}

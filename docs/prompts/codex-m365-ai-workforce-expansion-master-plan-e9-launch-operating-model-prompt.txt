@@ -1,0 +1,7 @@
+Execute E9 Launch and Operating Model
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e9-launch-operating-model.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E9
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

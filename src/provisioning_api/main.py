@@ -2,16 +2,21 @@ from __future__ import annotations
 
 import os
 import uuid
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
-
 from integrations import vercel as vercel_api
+from pydantic import BaseModel
+from smarthaus_common.config import EnterpriseConfig, load_bootstrap_env
+from smarthaus_common.logging import configure_logging
+from smarthaus_graph.client import GraphClient
+
 from provisioning_api import auth as authn
+from provisioning_api import orchestrator
 from provisioning_api.audit import recent_events
 from provisioning_api.cache import cached
 from provisioning_api.metrics import inc_requests, snapshot
@@ -28,13 +33,15 @@ from provisioning_api.routers import (
     tai,
     website,
 )
+from provisioning_api.routers.agent_dashboard import router as agent_dashboard_router
+from provisioning_api.routers.email_dashboard import router as email_dashboard_router
 from provisioning_api.storage import JsonStore
-from smarthaus_common.config import EnterpriseConfig
-from smarthaus_common.logging import configure_logging
-from smarthaus_graph.client import GraphClient
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+load_bootstrap_env(_REPO_ROOT / ".env")
 
 configure_logging()
-app = FastAPI(title="SmartHaus Provisioning API", version=os.getenv("APP_VERSION", "0.1.0"))
+app = FastAPI(title="SMARTHAUS Provisioning API", version=os.getenv("APP_VERSION", "0.1.0"))
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 store = JsonStore()
@@ -98,14 +105,12 @@ def dashboard(request: Request) -> object:
     from provisioning_api.storage import JsonStore
 
     store = JsonStore()
-    tai_data = store.list("tai_research")
     lattice_data = store.list("lattice_research")
     website_data = store.list("website_updates")
     return templates.TemplateResponse(
         "dashboard.html",
         {
             "request": request,
-            "tai_str": json.dumps(tai_data, indent=2),
             "lattice_str": json.dumps(lattice_data, indent=2),
             "website_str": json.dumps(website_data, indent=2),
         },
@@ -114,8 +119,8 @@ def dashboard(request: Request) -> object:
 
 # Routers (secured when auth is enabled)
 deps = [Depends(authn.verify_microsoft_token)] if authn.auth_enabled() else []
-app.include_router(tai.router, dependencies=deps)
 app.include_router(lattice.router, dependencies=deps)
+app.include_router(tai.router, dependencies=deps)
 app.include_router(website.router, dependencies=deps)
 app.include_router(research.router, dependencies=deps)
 app.include_router(sigma.router, dependencies=deps)
@@ -125,6 +130,8 @@ app.include_router(marketing.router, dependencies=deps)
 app.include_router(patents.router, dependencies=deps)
 app.include_router(infrastructure.router, dependencies=deps)
 app.include_router(clients.router, dependencies=deps)
+app.include_router(email_dashboard_router, dependencies=deps)
+app.include_router(agent_dashboard_router, dependencies=deps)
 
 
 @app.middleware("http")
@@ -204,9 +211,8 @@ def vercel_domains() -> dict:
 
 
 @app.post("/api/webhooks/github/{project}")
-def github_webhook(project: str, payload: dict) -> dict:
+async def github_webhook(project: str, request: Request) -> dict:
     projects = {
-        "tai": "TAI Research Team",
         "lattice": "LATTICE Research Team",
         "sigma": "SIGMA Trading Team",
         "c2": "C2 Cloud Team",
@@ -216,6 +222,23 @@ def github_webhook(project: str, payload: dict) -> dict:
     if project not in projects:
         raise HTTPException(status_code=404, detail=f"Unknown project: {project}")
     team_name = projects[project]
+    # Optional GitHub signature verification
+    secret = os.getenv("GITHUB_WEBHOOK_SECRET", "")
+    try:
+        raw = await request.body()
+        if secret:
+            import hashlib
+            import hmac
+
+            sig_hdr = request.headers.get("X-Hub-Signature-256", "")
+            expected = "sha256=" + hmac.new(secret.encode("utf-8"), raw, hashlib.sha256).hexdigest()
+            if not hmac.compare_digest(sig_hdr, expected):
+                raise HTTPException(status_code=401, detail="Invalid signature")
+        payload = await request.json()
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid payload") from exc
     return process_github_update(project, team_name, payload)
 
 
@@ -230,7 +253,12 @@ def process_github_update(project: str, team_name: str, payload: dict) -> dict:
         "message": (payload.get("head_commit") or {}).get("message"),
     }
     rec = store.append(f"github_events_{project}", {"payload": payload, "summary": summary})
-    return {"status": "ok", "id": rec["id"], "summary": summary, "notified": False}
+    # Attempt automation orchestration (Teams + Planner) if enabled
+    try:
+        action = orchestrator.handle_github_event(project, payload)
+    except Exception as e:
+        action = {"error": str(e), "notified": False, "planner": False}
+    return {"status": "ok", "id": rec["id"], "summary": summary, **action}
 
 
 # -----------------------
@@ -240,17 +268,16 @@ def process_github_update(project: str, team_name: str, payload: dict) -> dict:
 
 @app.get("/api/research/insights")
 def research_insights() -> dict:
-    tai = store.list("tai_research")
     lattice = store.list("lattice_research")
     sigma = store.list("sigma_performance")
-    total = len(tai) + len(lattice)
+    total = len(lattice)
     tags: dict[str, int] = {}
-    for row in tai + lattice:
+    for row in lattice:
         for t in row.get("tags", []):
             tags[t] = tags.get(t, 0) + 1
     return {
         "entries": total,
-        "by_project": {"tai": len(tai), "lattice": len(lattice)},
+        "by_project": {"lattice": len(lattice)},
         "top_tags": sorted(tags.items(), key=lambda x: x[1], reverse=True)[:10],
         "sigma_updates": len(sigma),
     }

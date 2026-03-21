@@ -1,0 +1,13 @@
+lemma_id: L10
+name: M365 mypy stub and module-path remediation
+source_notebook: notebooks/m365/INV-M365-L-mypy-stub-module-path-remediation.ipynb
+evidence:
+  artifacts:
+    - artifacts/b4d3_failure_inventory.json
+    - notebooks/lemma_proofs/L10_m365_mypy_stub_module_path_remediation.ipynb
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d4-mypy-stub-module-path-remediation.md
+  checks:
+    - missing yaml stubs are handled explicitly for the governed checker environment
+    - duplicate module discovery for src/ops_adapter/actions.py is removed
+    - mypy output advances to actionable type diagnostics after the remediation
+status: projected

@@ -1,0 +1,17 @@
+{
+  "item_id": "L5",
+  "item_kind": "lemma",
+  "lemma_id": "L5",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "notebook": "notebooks/m365/INV-M365-C-001-determinism.ipynb",
+  "notebook_hash": "9e566138a570c6f0df2f03409a42fa9919b460b867d7c2a73381ed85196b9c57",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "notebooks/m365/INV-M365-C-001-determinism.ipynb",
+    "registry/capability_registry.yaml",
+    "src/provisioning_api/routers/m365.py",
+    "docs/CAIO_M365_CONTRACT.md"
+  ]
+}

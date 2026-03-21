@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "name": "SmartHaus Department Metrics Dashboard",
+  "description": "Department-level analytics and performance metrics for all 10 departments",
+  "data_sources": [
+    {
+      "name": "Department Status",
+      "url": "http://localhost:8000/api/agents/status",
+      "type": "REST API",
+      "refresh_frequency": "5 minutes"
+    },
+    {
+      "name": "M365 Services",
+      "url": "http://localhost:8000/api/m365/empire-overview",
+      "type": "REST API",
+      "refresh_frequency": "10 minutes"
+    },
+    {
+      "name": "Teams Activity",
+      "url": "https://graph.microsoft.com/v1.0/teams/{team_id}/channels",
+      "type": "Microsoft Graph API",
+      "refresh_frequency": "15 minutes"
+    }
+  ],
+  "visualizations": [
+    {
+      "name": "Department Overview",
+      "type": "Matrix",
+      "data_source": "Department Status",
+      "rows": ["department"],
+      "columns": ["agent_count", "active_agents", "completion_rate"],
+      "position": {"x": 0, "y": 0, "width": 600, "height": 400}
+    },
+    {
+      "name": "Agent Distribution",
+      "type": "Treemap",
+      "data_source": "Department Status",
+      "category": "department",
+      "value": "agent_count",
+      "position": {"x": 620, "y": 0, "width": 400, "height": 300}
+    },
+    {
+      "name": "Department Performance Trend",
+      "type": "Line Chart",
+      "data_source": "Department Status",
+      "x_axis": "date",
+      "y_axis": "performance_score",
+      "series": "department",
+      "position": {"x": 0, "y": 420, "width": 500, "height": 300}
+    },
+    {
+      "name": "M365 Services Status",
+      "type": "Gauge",
+      "data_source": "M365 Services",
+      "metric": "service_health_score",
+      "position": {"x": 520, "y": 320, "width": 200, "height": 200}
+    },
+    {
+      "name": "Teams Activity Heatmap",
+      "type": "Heatmap",
+      "data_source": "Teams Activity",
+      "x_axis": "department",
+      "y_axis": "channel",
+      "value": "message_count",
+      "position": {"x": 0, "y": 740, "width": 600, "height": 300}
+    },
+    {
+      "name": "Resource Utilization",
+      "type": "Stacked Bar Chart",
+      "data_source": "Department Status",
+      "x_axis": "department",
+      "y_axis": ["cpu_usage", "memory_usage", "storage_usage"],
+      "position": {"x": 620, "y": 320, "width": 400, "height": 300}
+    }
+  ],
+  "kpis": [
+    {
+      "name": "Overall System Health",
+      "metric": "system_health_score",
+      "target": 95,
+      "format": "Percentage"
+    },
+    {
+      "name": "Average Response Time",
+      "metric": "avg_response_time",
+      "target": 2.0,
+      "format": "Seconds"
+    },
+    {
+      "name": "Task Completion Rate",
+      "metric": "completion_rate",
+      "target": 90,
+      "format": "Percentage"
+    },
+    {
+      "name": "Active Agents",
+      "metric": "active_agents",
+      "target": 39,
+      "format": "Number"
+    }
+  ],
+  "filters": [
+    {
+      "name": "Department Filter",
+      "type": "Slicer",
+      "data_source": "Department Status",
+      "column": "department",
+      "position": {"x": 0, "y": 1060, "width": 200, "height": 100}
+    },
+    {
+      "name": "Time Period Filter",
+      "type": "Date Slicer",
+      "data_source": "Department Status",
+      "column": "date",
+      "position": {"x": 220, "y": 1060, "width": 200, "height": 100}
+    }
+  ]
+}

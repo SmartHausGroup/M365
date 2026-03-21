@@ -1,0 +1,7 @@
+Execute B4E Full Repo Validation Closure
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b4e-full-repo-validation-closure.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B4E
+
+This act is complete only when repo-wide validation is green and the worktree is clean.

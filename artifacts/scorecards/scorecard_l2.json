@@ -1,0 +1,16 @@
+{
+  "item_id": "L2",
+  "item_kind": "lemma",
+  "lemma_id": "L2",
+  "status": "green",
+  "generated_at_utc": "2026-03-17T16:57:19Z",
+  "notebook": "notebooks/ma_m365_idempotency.ipynb",
+  "notebook_hash": "9397c3a277511e4bbbaa9bacb2b75fc29d4801f59d43dbbddf4ca01a17b45b68",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "docs/contracts/caio-m365/LEMMA_L2.md",
+    "invariants/INV-CAIO-M365-002.yaml",
+    "configs/generated/m365_idempotency_verification.json"
+  ]
+}

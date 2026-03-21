@@ -1,0 +1,17 @@
+{
+  "item_id": "L10",
+  "item_kind": "lemma",
+  "lemma_id": "L10",
+  "status": "green",
+  "generated_at_utc": "2026-03-18T18:05:00Z",
+  "notebook": "notebooks/m365/INV-M365-L-mypy-stub-module-path-remediation.ipynb",
+  "notebook_hash": "projected-l10-mypy-stub-module-path-remediation",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "artifacts/b4d3_failure_inventory.json",
+    "notebooks/m365/INV-M365-L-mypy-stub-module-path-remediation.ipynb",
+    "notebooks/lemma_proofs/L10_m365_mypy_stub_module_path_remediation.ipynb",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d4-mypy-stub-module-path-remediation.md"
+  ]
+}

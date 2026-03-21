@@ -1,0 +1,86 @@
+{
+  "status": "green",
+  "phase": "B7D",
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:B7D",
+  "tenant_id": "smarthaus",
+  "default_executor": "sharepoint",
+  "identity_app": {
+    "display_name": "SMARTHAUS M365 Operator Identity",
+    "client_id": "e6fd71d3-4116-401e-a4f1-b2fda4318a8b",
+    "purpose": "human_entra_login_and_api_audience"
+  },
+  "legacy_executor": {
+    "display_name": "SMARTHAUS Legacy M365 Executor",
+    "client_id": "720788ac-1485-4073-b0c8-1a6294819a87",
+    "status": "demoted_not_default"
+  },
+  "bounded_executors": [
+    {
+      "domain": "sharepoint",
+      "display_name": "SMARTHAUS SharePoint Executor",
+      "client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+      "app_object_id": "e9a375b1-b2be-4f2e-a0a8-49f9b37c6d4f",
+      "service_principal_id": "e2c4f0f8-504f-4537-aefb-f6e475bedbde",
+      "supported_v1_actions": [
+        "list_sites",
+        "create_site",
+        "provision_service",
+        "approvals"
+      ],
+      "graph_application_roles": [
+        "Sites.Read.All",
+        "Sites.ReadWrite.All",
+        "Group.ReadWrite.All"
+      ],
+      "certificate_path": "/Users/smarthaus/.ucp/certs/smarthaus-sharepoint-executor.pem",
+      "certificate_display_name": "SMARTHAUS SharePoint Executor Certificate 2026-03-19",
+      "password_credential_count": 0
+    },
+    {
+      "domain": "collaboration",
+      "display_name": "SMARTHAUS Collaboration Executor",
+      "client_id": "98826c42-1dd6-47c8-8353-7f1e539f89bc",
+      "app_object_id": "37fbc370-7c59-4374-9bdd-e4ee852cc355",
+      "service_principal_id": "44b494af-3b12-4548-833b-6b8bedd8baa1",
+      "supported_v1_actions": [
+        "list_teams",
+        "create_team",
+        "add_channel",
+        "provision_service"
+      ],
+      "graph_application_roles": [
+        "Team.ReadBasic.All",
+        "Team.Create",
+        "Channel.Create",
+        "Group.ReadWrite.All"
+      ],
+      "certificate_path": "/Users/smarthaus/.ucp/certs/smarthaus-collaboration-executor.pem",
+      "certificate_display_name": "SMARTHAUS Collaboration Executor Certificate 2026-03-19",
+      "password_credential_count": 0
+    },
+    {
+      "domain": "directory",
+      "display_name": "SMARTHAUS Directory Executor",
+      "client_id": "f1aba812-90b1-4d5f-9204-c7d61e7680bb",
+      "app_object_id": "cea4e491-9d84-4331-ad8a-eb0321f04015",
+      "service_principal_id": "366eebd0-5a58-4615-862d-d3e70f8135ed",
+      "supported_v1_actions": [
+        "list_users",
+        "get_user",
+        "reset_user_password"
+      ],
+      "graph_application_roles": [
+        "User.Read.All",
+        "User.ReadWrite.All"
+      ],
+      "certificate_path": "/Users/smarthaus/.ucp/certs/smarthaus-directory-executor.pem",
+      "certificate_display_name": "SMARTHAUS Directory Executor Certificate 2026-03-19",
+      "password_credential_count": 0
+    }
+  ],
+  "deferred_domains": [
+    "messaging_calendar",
+    "power_platform_analytics"
+  ],
+  "note": "The active SMARTHAUS tenant contract now defaults to the bounded SharePoint executor and routes collaboration and directory actions to separate live certificate-backed executors. The legacy monolithic executor remains only as a historical object and is no longer the active runtime default."
+}

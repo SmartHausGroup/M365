@@ -1,0 +1,78 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T03:45:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E4BSecurityDefenderExpansion(action) = InstructionBacked(action) ∧
+  CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=security ∧
+  AuthClass(action)=app_only.
+supported_actions:
+  list_security_alerts:
+    canonical_action_key: security.alert.list
+    agent_alias: security.alerts
+    runtime_handler: SecurityDefenderClient.list_security_alerts
+    mutating: false
+    result_shape_keys: [alerts, count]
+    required_permissions: [SecurityAlert.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_security_alerts
+  get_security_alert:
+    canonical_action_key: security.alert.read
+    agent_alias: security.alert_get
+    runtime_handler: SecurityDefenderClient.get_security_alert
+    mutating: false
+    result_shape_keys: [alert]
+    required_permissions: [SecurityAlert.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_security_alert
+  list_security_incidents:
+    canonical_action_key: security.incident.list
+    agent_alias: security.incidents
+    runtime_handler: SecurityDefenderClient.list_security_incidents
+    mutating: false
+    result_shape_keys: [incidents, count]
+    required_permissions: [SecurityIncident.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_security_incidents
+  get_security_incident:
+    canonical_action_key: security.incident.read
+    agent_alias: security.incident_get
+    runtime_handler: SecurityDefenderClient.get_security_incident
+    mutating: false
+    result_shape_keys: [incident]
+    required_permissions: [SecurityIncident.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_security_incident
+  list_secure_scores:
+    canonical_action_key: security.secure_score.list
+    agent_alias: security.secure_score
+    runtime_handler: SecurityDefenderClient.list_secure_scores
+    mutating: false
+    result_shape_keys: [scores, count]
+    required_permissions: [SecurityEvents.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_secure_scores
+  get_secure_score_profile:
+    canonical_action_key: security.secure_score_profile.read
+    agent_alias: security.secure_score_profile
+    runtime_handler: SecurityDefenderClient.get_secure_score_profile
+    mutating: false
+    result_shape_keys: [profile]
+    required_permissions: [SecurityEvents.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_secure_score_profile
+  update_security_incident:
+    canonical_action_key: security.incident.update
+    agent_alias: security.incident_update
+    runtime_handler: SecurityDefenderClient.update_security_incident
+    mutating: true
+    result_shape_keys: [updated, incidentId]
+    required_permissions: [SecurityIncident.ReadWrite.All]
+    approval_profile: critical-regulated
+    capability_registry_alias: update_security_incident

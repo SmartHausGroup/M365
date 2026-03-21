@@ -1,0 +1,19 @@
+{
+  "lemma_id": "L63",
+  "title": "M365 Workload Certification v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BK-workload-certification-v1.ipynb",
+    "notebooks/lemma_proofs/L63_m365_workload_certification_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L63_m365_workload_certification_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Workload certification defines deterministic per-domain verdicts against the routing table",
+    "13 of 15 executor domains pass certification; 2 domains with zero actions are not-yet-certified",
+    "Certification is bounded: no verdict exceeds the actual routed action surface"
+  ]
+}

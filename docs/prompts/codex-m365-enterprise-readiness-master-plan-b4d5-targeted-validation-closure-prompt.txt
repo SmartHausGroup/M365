@@ -1,0 +1,7 @@
+Use `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d5-targeted-validation-closure.md`.
+
+Plan refs:
+- `plan:m365-enterprise-readiness-master-plan:R5`
+- `plan:m365-enterprise-readiness-master-plan:B4D5`
+
+Run the targeted validation handoff for the completed B4D cleanup surface and stop before B4E.

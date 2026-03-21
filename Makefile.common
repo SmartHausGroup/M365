@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Makefile.common · Shared Build Orchestration Variables
+# ═══════════════════════════════════════════════════════════════════════════════
+# This fragment centralizes the cross-cutting variables that every Makefile in
+# the repository relies on. Keeping the toolchain discovery, environment
+# wiring, and project configuration in one place prevents subtle drift between
+# developer utilities, CI pipelines, and deployment workflows.
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Runtime Configuration                                                      │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+# Node.js Environment
+NODE ?= $(shell command -v node || echo "node")
+NPM ?= $(shell command -v npm || echo "npm")
+NODE_VERSION ?= $(shell $(NODE) --version 2>/dev/null | cut -d'v' -f2 || echo "unknown")
+
+# Python Environment
+PY ?= $(shell bash -lc 'if command -v python3.14 >/dev/null 2>&1; then echo python3.14; elif command -v python3.13 >/dev/null 2>&1; then echo python3.13; elif command -v python3.12 >/dev/null 2>&1; then echo python3.12; elif command -v python3 >/dev/null 2>&1; then echo python3; elif command -v python >/dev/null 2>&1; then echo python; else echo python3; fi')
+PY := $(strip $(PY))
+VENV_DIR ?= .venv
+VENV_PY ?= $(shell if [ -x "$(PWD)/$(VENV_DIR)/bin/python" ]; then echo "$(PWD)/$(VENV_DIR)/bin/python"; else echo "$(PY)"; fi)
+VENV_PIP ?= $(VENV_PY) -m pip
+
+# Project Configuration
+PROJECT_NAME := M365
+APP_NAME := SmartHaus M365 AI Workforce
+NODE_ENV ?= development
+
+# Directories
+SRC_DIR := src
+SCRIPTS_DIR := scripts
+DOCS_DIR := docs
+TESTS_DIR := tests
+REGISTRY_DIR := registry
+POLICIES_DIR := policies
+OPERATIONS_DIR := Operations
+
+# Service Names
+SERVICES := provisioning-api ops-adapter
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Feature Flags                                                              │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+FEATURE_M365_MUTATIONS ?= false
+FEATURE_OPA_ENFORCEMENT ?= true
+FEATURE_TEAMS_WEBHOOKS ?= false

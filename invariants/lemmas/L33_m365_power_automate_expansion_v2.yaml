@@ -1,0 +1,20 @@
+lemma_id: L33
+name: M365 Power Automate expansion v2
+invariant_id: L33_m365_power_automate_expansion_v2
+status: active
+proof_obligations:
+  - instruction_api_exposes_e3a_actions
+  - power_automate_runtime_is_bounded
+  - capability_registry_marks_e3a_actions_implemented
+  - executor_routing_auth_and_approval_are_bounded
+  - plan_advances_from_e3a_to_e3b
+failure_boundaries:
+  - missing_instruction_action
+  - power_automate_runtime_not_fail_closed
+  - registry_status_not_implemented
+  - route_auth_or_approval_mismatch
+  - tracker_state_not_advanced
+test_bindings:
+  - tests/test_power_automate_expansion_v2.py
+  - scripts/ci/verify_power_automate_expansion.py
+ci_gate: scripts/ci/verify_power_automate_expansion.py

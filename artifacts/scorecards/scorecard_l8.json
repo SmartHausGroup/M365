@@ -1,0 +1,17 @@
+{
+  "item_id": "L8",
+  "item_kind": "lemma",
+  "lemma_id": "L8",
+  "status": "green",
+  "generated_at_utc": "2026-03-18T13:00:00Z",
+  "notebook": "notebooks/m365/INV-M365-J-scripts-ci-ruff-cleanup.ipynb",
+  "notebook_hash": "projected-l8-scripts-ci-ruff-cleanup",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "artifacts/b4d1_failure_inventory.json",
+    "notebooks/m365/INV-M365-J-scripts-ci-ruff-cleanup.ipynb",
+    "notebooks/lemma_proofs/L8_m365_scripts_ci_ruff_cleanup.ipynb",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d2-scripts-ci-ruff-cleanup.md"
+  ]
+}

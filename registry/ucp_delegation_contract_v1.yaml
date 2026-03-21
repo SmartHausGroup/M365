@@ -1,0 +1,145 @@
+version: 1.0.0
+last_updated: '2026-03-21T13:10:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  humanized_delegation: registry/humanized_delegation_interface_v1.yaml
+  executor_routing: src/smarthaus_common/executor_routing.py
+  auth_model: src/smarthaus_common/auth_model.py
+  approval_risk: src/smarthaus_common/approval_risk.py
+  audit_schema: src/smarthaus_common/audit_schema.py
+  department_packs: registry/department_pack_*_v1.yaml
+contract:
+  id: ucp-delegation-contract
+  display_name: Claude to UCP Universal Delegation Contract
+  version: v1
+  status: contract-defined
+  purpose: >-
+    Define the top-level delegation contract between Claude, UCP, and the
+    workforce runtime so that every Claude-originated request follows a
+    deterministic path from natural language intent through persona
+    resolution, risk assessment, approval gating, executor routing, and
+    audited execution.
+  bounded_claim: >-
+    This contract defines the delegation protocol, phases, and governance
+    boundaries. It does not claim that all personas are action-backed or
+    that all workloads are executable. It governs the path a request
+    follows, not the completeness of the execution surface.
+delegation_phases:
+  - id: intent_capture
+    order: 1
+    description: >-
+      Claude captures the user intent and extracts a structured delegation
+      request containing target persona hint, task description, and any
+      department or capability constraints.
+    inputs:
+      - natural_language_request
+    outputs:
+      - delegation_request
+    failure_mode: malformed_request
+  - id: persona_resolution
+    order: 2
+    description: >-
+      UCP resolves the delegation request to a specific persona using the
+      humanized delegation interface, persona registry, and department hint
+      resolution. Ambiguous targets fail closed.
+    inputs:
+      - delegation_request
+    outputs:
+      - resolved_persona_id
+      - resolution_confidence
+    failure_mode: ambiguous_or_missing_persona
+    authority: registry/humanized_delegation_interface_v1.yaml
+  - id: risk_assessment
+    order: 3
+    description: >-
+      UCP evaluates the resolved persona's risk tier, the requested action
+      surface, and the approval profile to determine whether the request
+      can proceed, requires approval, or must be blocked.
+    inputs:
+      - resolved_persona_id
+      - requested_actions
+    outputs:
+      - risk_tier
+      - approval_required
+      - approval_profile
+    failure_mode: risk_assessment_failure
+    authority: src/smarthaus_common/approval_risk.py
+  - id: approval_gating
+    order: 4
+    description: >-
+      If approval is required, UCP routes the request through the
+      appropriate approval workflow. Critical and high-risk actions require
+      explicit human approval before proceeding.
+    inputs:
+      - risk_tier
+      - approval_profile
+      - resolved_persona_id
+    outputs:
+      - approval_decision
+      - approval_token
+    failure_mode: approval_denied_or_timeout
+  - id: executor_routing
+    order: 5
+    description: >-
+      UCP routes the approved request to the correct executor domain using
+      the action contract and executor routing rules. Contract-only
+      personas are routed to a blocked executor that returns a
+      not-yet-active response.
+    inputs:
+      - resolved_persona_id
+      - approved_actions
+    outputs:
+      - executor_domain
+      - execution_plan
+    failure_mode: no_executor_available
+    authority: src/smarthaus_common/executor_routing.py
+  - id: audited_execution
+    order: 6
+    description: >-
+      The executor performs the action and the result is wrapped in a
+      unified audit envelope capturing the full delegation chain from
+      intent through execution.
+    inputs:
+      - execution_plan
+      - approval_token
+    outputs:
+      - execution_result
+      - audit_envelope
+    failure_mode: execution_error
+    authority: src/smarthaus_common/audit_schema.py
+governance_rules:
+  fail_closed: >-
+    Any phase that cannot produce its required outputs must fail closed and
+    return a structured error to Claude. Silent failures are not permitted.
+  audit_completeness: >-
+    Every delegation attempt, whether successful or failed, must produce an
+    audit envelope capturing the phase reached, the outcome, and the
+    delegation chain.
+  contract_only_handling: >-
+    Contract-only personas must be resolvable and risk-assessable but must
+    return a deterministic blocked response at the executor routing phase
+    rather than silently dropping or overclaiming execution capability.
+  approval_integrity: >-
+    Approval decisions must be traceable to the approval profile declared
+    in the persona's department pack authority. Runtime approval bypass is
+    not permitted.
+  idempotency: >-
+    Repeated delegation of the same request with the same state must
+    produce the same routing and audit outcome.
+kpis:
+  delegation_phases: 6
+  governance_rules: 5
+  supported_persona_count: 39
+  contract_only_persona_count: 35
+  registry_backed_persona_count: 4
+bounded_claims:
+  supported:
+    - delegation protocol definition from intent through execution
+    - governance rules for fail-closed, audit, and approval integrity
+    - contract-only persona handling at executor routing boundary
+    - deterministic delegation path for any persona in the authoritative registry
+  unsupported:
+    - claims that all personas are action-backed
+    - claims that all workloads are executable
+    - live execution capability beyond the currently registry-backed personas
+    - approval workflow implementation details beyond the contract definition

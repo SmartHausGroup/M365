@@ -1,0 +1,21 @@
+{
+  "contract_id": "executive-oversight-contract",
+  "escalation_path_count": 3,
+  "governance_rule_count": 5,
+  "intervention_primitive_count": 5,
+  "interventions": [
+    "pause_persona",
+    "pause_department",
+    "redirect_task",
+    "override_decision",
+    "emergency_halt"
+  ],
+  "oversight_query_count": 5,
+  "queries": [
+    "workforce_status",
+    "department_status",
+    "persona_status",
+    "delegation_audit",
+    "risk_summary"
+  ]
+}

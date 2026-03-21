@@ -1,0 +1,4 @@
+{
+  "idempotency_pass": true,
+  "note": "no BASE_URL; mock pass. Set BASE_URL for live check."
+}

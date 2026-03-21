@@ -1,0 +1,23 @@
+id: L19
+title: Approval backend reproof and certification re-readiness
+phase: B7E
+plan_ref: plan:m365-enterprise-readiness-master-plan:B7E
+lemma_doc: docs/ma/lemmas/L19_m365_approval_backend_reproof_certification_rereadiness.md
+source_notebook: notebooks/m365/INV-M365-U-approval-backend-reproof-certification-rereadiness.ipynb
+lemma_notebook: notebooks/lemma_proofs/L19_m365_approval_backend_reproof_certification_rereadiness.ipynb
+scorecard: artifacts/scorecards/scorecard_l19.json
+proof_obligations:
+  - exact standalone shell contract selects the SMARTHAUS tenant and controlled certification toggles
+  - approvals backend resolves through pinned site_id and list_id, not URL discovery
+  - the bounded SharePoint executor remains the projected approval executor
+  - live approval list metadata and list items probes both return success
+  - C1A is only reopened after the bounded proof is recorded
+failure_boundaries:
+  - exact-shell contract is incomplete
+  - approvals executor does not project to the bounded SharePoint executor
+  - pinned site_id or list_id do not resolve
+  - live approval probes return a non-success status
+  - readiness packet claims GO without bounded proof
+test_bindings:
+  - artifacts/b7e_approval_backend_reproof.json
+ci_gate: pre-commit

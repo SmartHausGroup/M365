@@ -1,0 +1,134 @@
+---
+description: SmartHaus M365 AI Workforce Testing Requirements - Test Real Implementations
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Testing Requirements: Test Real Implementations
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Core Principle: Test the Real Thing, Not Workarounds
+
+**MANDATORY:** When testing services and features, always test the real implementation. Never use mocks or simplified versions that mask missing requirements.
+
+---
+
+## Rule 1: Test Real Service Implementations
+
+**FORBIDDEN:**
+
+- Using mock services when testing integration behavior
+- Skipping validation in tests
+- Testing simplified versions when the real service is needed
+
+**REQUIRED:**
+
+- Test real service endpoints
+- Test actual Firebase Auth flows (Firebase Auth Emulator acceptable for CI)
+- Test real Firestore operations (Firestore Emulator acceptable for CI)
+- Test messaging delivery logic (contract tests acceptable; live push not required in CI)
+- Test notification sending logic (stub provider or contract tests acceptable; live APNs not required in CI)
+
+**Example - WRONG:**
+
+```typescript
+// Using mock instead of real service
+const mockRequestService = jest.fn();
+mockRequestService.createRequest.mockReturnValue({ id: "123" }); // WRONG: Mocking core behavior
+```
+
+**Example - CORRECT:**
+
+```typescript
+// Test with real request service (using Firebase Emulator in CI)
+import { createTaskRequest } from '../services/request-service';
+// Firebase Emulator is initialized in test setup
+const result = await createTaskRequest(validRequestData);
+expect(result.id).toBeDefined();
+expect(result.status).toBe('posted');
+```
+
+---
+
+## Rule 2: Test What You're Testing
+
+**REQUIRED:**
+
+- If testing task creation, test with real Firestore writes
+- If testing messaging, test with real message delivery
+- If testing notifications, test with real push notification sending
+- Test the actual code path that will run in production
+
+---
+
+## Rule 3: Fail Fast, Don't Skip
+
+**FORBIDDEN:**
+
+- `pytest.skip()` or `test.skip()` when a required component is missing
+- Conditional logic that silently skips tests
+- Tests that pass when requirements aren't met
+
+**REQUIRED:**
+
+- If a test requires a service, it should **FAIL** if service unavailable
+- Make requirements explicit
+- Use test markers for optional dependencies
+
+---
+
+## Rule 4: Proper Test Organization
+
+**REQUIRED:**
+
+- **tests/user-service/** - User service tests
+- **tests/request-service/** - Request service tests
+- **tests/messaging-service/** - Messaging service tests
+- **tests/moderation-service/** - Moderation service tests
+- **tests/notification-service/** - Notification service tests
+- **tests/integration/** - Service integration tests
+- **tests/e2e/** - End-to-end tests
+
+---
+
+## Rule 5: Test Categories
+
+| Category | Location | Purpose |
+|----------|----------|---------|
+| Unit | tests/*/ | Individual function tests |
+| Integration | tests/integration/ | Service integration |
+| E2E | tests/e2e/ | Full user flows |
+
+---
+
+## Test Commands
+
+```bash
+# Run all tests
+make test
+
+# Run specific test categories
+npm test -- tests/user-service/
+npm test -- tests/request-service/
+npm test -- tests/messaging-service/
+
+# Run with coverage
+make test-coverage
+```
+
+---
+
+## Enforcement
+
+**MANDATORY:** These rules apply to ALL tests written or modified.
+
+**Code Review Checklist:**
+
+- [ ] Does the test use real implementations (not mocks for core behavior)?
+- [ ] Does the test use the actual code path being tested?
+- [ ] Does the test fail when requirements aren't met?
+- [ ] Is the test in the correct location?

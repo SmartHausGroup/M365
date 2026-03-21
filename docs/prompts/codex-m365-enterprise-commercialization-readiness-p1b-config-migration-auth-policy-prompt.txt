@@ -1,0 +1,7 @@
+Execute M365 Enterprise Commercialization Readiness P1B.
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-commercialization-readiness-p1b-config-migration-auth-policy.md.
+
+Plan Reference: plan:m365-enterprise-commercialization-readiness:P1B
+
+Approval status: do not perform write-effect work until explicitly approved for P1B execution.

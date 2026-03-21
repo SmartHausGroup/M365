@@ -1,0 +1,23 @@
+{
+  "item_id": "L23",
+  "item_kind": "lemma",
+  "lemma_id": "L23",
+  "status": "green",
+  "generated_at_utc": "2026-03-20T21:15:00Z",
+  "notebook": "notebooks/m365/INV-M365-Y-universal-action-contract-v2.ipynb",
+  "notebook_hash": "projected-l23-universal-action-contract-v2",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "Operations/NORTHSTAR.md",
+    "plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md",
+    "docs/CAIO_M365_CONTRACT.md",
+    "docs/contracts/caio-m365/ACTION_SPECIFICATION.md",
+    "registry/capability_registry.yaml",
+    "registry/agents.yaml",
+    "registry/universal_action_contract_v2.yaml",
+    "docs/commercialization/m365-universal-action-contract-v2.md",
+    "notebooks/m365/INV-M365-Y-universal-action-contract-v2.ipynb",
+    "notebooks/lemma_proofs/L23_m365_universal_action_contract_v2.ipynb"
+  ]
+}

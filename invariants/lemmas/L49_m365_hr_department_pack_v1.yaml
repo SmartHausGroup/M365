@@ -1,0 +1,20 @@
+lemma_id: L49
+title: M365 HR Department Pack v1
+invariant: >
+  The HR department pack must be projected from one declared HR authority, one
+  authoritative persona registry, and one deterministic pack-state rule so the
+  department boundary, action count, approval posture, and workforce readiness
+  cannot drift between runtime surfaces.
+proof_obligations:
+  - hr department pack authority file exists and validates
+  - declared HR personas all exist in the authoritative persona registry
+  - projected supported-action counts match the declared pack KPI
+  - pack state is derived deterministically from persona status and accountability state
+failure_boundaries:
+  - missing HR department pack authority file
+  - missing or inactive expected persona
+  - action-count mismatch between authority and runtime projection
+  - regulated-approval posture drift for the declared HR surface
+test_bindings:
+  - tests/test_hr_department_pack_v1.py
+ci_gate: scripts/ci/verify_hr_department_pack_v1.py

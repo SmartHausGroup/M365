@@ -1,0 +1,16 @@
+lemma_id: L11
+name: M365 certification environment readiness
+source_notebook: notebooks/m365/INV-M365-M-certification-environment-readiness.ipynb
+evidence:
+  artifacts:
+    - artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json
+    - artifacts/certification/m365-v1-candidate-52ca494/README.md
+    - artifacts/certification/m365-v1-candidate-52ca494/operator_checklist.md
+    - notebooks/lemma_proofs/L11_m365_certification_environment_readiness.ipynb
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-c1a-certification-environment-readiness.md
+  checks:
+    - the SmartHaus tenant contract resolves deterministically when selected
+    - the app-only credential contract is classified without exposing secret values
+    - missing launch-time inputs force deterministic NO-GO
+    - readiness output names the remaining blockers explicitly
+status: projected

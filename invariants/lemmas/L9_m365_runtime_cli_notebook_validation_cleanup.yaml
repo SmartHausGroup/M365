@@ -1,0 +1,13 @@
+lemma_id: L9
+name: M365 runtime, CLI, and notebook validation cleanup
+source_notebook: notebooks/m365/INV-M365-K-runtime-cli-notebook-cleanup.ipynb
+evidence:
+  artifacts:
+    - artifacts/b4d3_failure_inventory.json
+    - notebooks/lemma_proofs/L9_m365_runtime_cli_notebook_validation_cleanup.ipynb
+    - docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d3-runtime-cli-ruff-black-cleanup.md
+  checks:
+    - runtime, cli, governed-test, and notebook validation debt is reduced without widening into mypy-only work
+    - scoped diff remains bounded to runtime, cli, governed-test, and notebook paths
+    - git diff --check is clean after the remediation
+status: projected

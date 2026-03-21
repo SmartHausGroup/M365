@@ -1,0 +1,19 @@
+{
+  "lemma_id": "L64",
+  "title": "M365 Persona Certification v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BL-persona-certification-v1.ipynb",
+    "notebooks/lemma_proofs/L64_m365_persona_certification_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L64_m365_persona_certification_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Persona certification defines deterministic per-persona verdicts against the registry",
+    "All 39 personas pass four-phase certification",
+    "4 registry-backed, 35 contract-only; coverage partition exhaustive"
+  ]
+}

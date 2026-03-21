@@ -1,0 +1,17 @@
+lemma_id: L20
+title: Service provisioning site detection alignment
+claim: >
+  Existing service provisioning remains deterministic only when the runtime
+  resolves the actual group-root SharePoint site before trying a guessed
+  /sites/{mail_nickname} path.
+proof_obligations:
+  - Existing services prefer group-root site resolution when a group id is present.
+  - Path lookup remains a bounded fallback for fresh-group propagation lag.
+  - Live HR evidence is represented as mail_nickname=hr resolving to /sites/hr2.
+failure_boundaries:
+  - Group-root site is ignored even when it returns an id.
+  - Existing service detection depends solely on a guessed site path.
+test_bindings:
+  - tests/test_m365_provision.py::test_provision_group_site_prefers_group_root_site_for_existing_group
+  - tests/test_m365_provision.py::test_provision_group_site_falls_back_to_path_lookup_when_root_site_not_ready
+ci_gate: targeted-pytest

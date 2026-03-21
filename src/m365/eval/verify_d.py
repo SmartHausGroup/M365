@@ -10,7 +10,8 @@ Lemma: LEM-M365-D-001-01, LEM-M365-D-002-01
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from m365.instruction.constants import A_mut, A_read
 

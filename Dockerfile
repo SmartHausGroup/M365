@@ -26,7 +26,7 @@ COPY templates ./templates
 COPY static ./static
 
 # Healthcheck port env
-ENV PORT=8000
+ENV PORT=9000
 
 # Entrypoint to allow dynamic port
 COPY docker/entrypoint.sh /entrypoint.sh
@@ -36,15 +36,14 @@ RUN chmod +x /entrypoint.sh
 RUN useradd -m -u 10001 appuser && mkdir -p /app/data /app/logs /app/config && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 8000
+EXPOSE 9000
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD python -c "import os,sys,urllib.request,json; p=os.getenv('PORT','8000');\
+  CMD python -c "import os,sys,urllib.request,json; p=os.getenv('PORT','9000');\
   \n\
   \n d=urllib.request.urlopen(f'http://127.0.0.1:{p}/health',timeout=2).read();\
   \n\
   \n import json as _j; sys.exit(0 if _j.loads(d).get('status')=='ok' else 1)" || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["uvicorn", "provisioning_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
+CMD ["uvicorn", "provisioning_api.main:app", "--host", "0.0.0.0", "--port", "9000"]

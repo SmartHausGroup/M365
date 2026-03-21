@@ -1,0 +1,7 @@
+Execute B5E Executor Certificate Cutover and Tenant Contract Finalization
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b5e-executor-certificate-cutover-tenant-contract-finalization.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B5E
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

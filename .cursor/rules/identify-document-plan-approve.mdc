@@ -1,0 +1,132 @@
+---
+description: Identify, Document, Plan, Approve Rule - Build a plan and get approval before implementing
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Identify, Document, Plan, Approve Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: When You Identify Something That Needs Doing, Build a Plan and Get Approval
+
+**MANDATORY:** When you identify something that needs to be fixed, improved, or changed, you MUST:
+
+1. **Identify it** - Clearly state what needs to be done
+2. **Document it** - Document the issue/improvement
+3. **Build a plan** - Add to `Operations/EXECUTION_PLAN.md` (PRIMARY) or create formal plan in `/plans/` directory (OPTIONAL - only for large initiatives)
+4. **Ask for review and go-ahead** - Present the plan and wait for approval before implementing
+
+**FORBIDDEN:**
+- ❌ Just suggesting "you should do X" without a plan
+- ❌ Implementing without approval
+- ❌ Leaving work incomplete for the user to do
+
+**REQUIRED:**
+- ✅ Identify the issue/improvement clearly
+- ✅ Document it (in Execution Plan or issue tracker)
+- ✅ Add to `Operations/EXECUTION_PLAN.md` OR create formal plan in `/plans/` directory (only if large initiative explicitly authorized)
+- ✅ Present plan and ask for approval
+- ✅ Wait for explicit "go" before implementing
+
+---
+
+## Process
+
+### Step 1: Identify
+Clearly state what needs to be done and why.
+
+### Step 2: Document
+Document the issue/improvement:
+- What is the problem/opportunity?
+- Why does it need to be addressed?
+- What is the current state?
+- What is the target state?
+
+### Step 3: Build Plan
+**PRIMARY:** Add work to `Operations/EXECUTION_PLAN.md` with appropriate phase/task ID.
+
+**OPTIONAL (only for large initiatives):** Create a formal plan in `/plans/{plan-name}/`:
+- Markdown format (`{plan-name}.md`) - REQUIRED
+- YAML format (`{plan-name}.yaml`) - OPTIONAL (only if tooling requires it)
+- JSON format (`{plan-name}.json`) - OPTIONAL (only if tooling requires it)
+
+Plan must include:
+- Objective
+- Current state analysis
+- Target state
+- Implementation steps
+- Validation criteria
+- Risks and mitigation
+
+### Step 4: Ask for Review and Go-Ahead
+Present the plan and explicitly ask for approval:
+- "I've identified [issue]. I've created a plan at [location]. Please review and let me know if you want me to proceed."
+
+**DO NOT implement until you receive explicit approval.**
+
+---
+
+## Examples
+
+### ❌ Bad: Just Suggesting
+
+**Scenario:** Test doesn't verify scores are non-zero
+
+**Bad Response:**
+```
+The test doesn't check scores. You should add an assertion.
+```
+
+**Why Bad:** No plan, no documentation, just a suggestion.
+
+### ✅ Good: Identify, Document, Plan, Approve
+
+**Scenario:** Test doesn't verify scores are non-zero
+
+**Good Response:**
+```
+I've identified that test_query_superposed.py doesn't verify scores are non-zero, which could allow the 0.0 score bug to regress.
+
+I've documented this in [location] and created a plan at docs/plans/test-score-validation/ to add the assertion.
+
+The plan includes:
+- Adding assertion to verify scores > 0.0
+- Updating test to validate fix works
+- Validation criteria
+
+Please review the plan and let me know if you want me to proceed.
+```
+
+**Why Good:** Identified, documented, planned, waiting for approval.
+
+---
+
+## Integration with Other Rules
+
+This rule works alongside:
+- **Mandatory Agent Workflow:** Follow the workflow when implementing (after approval)
+- **Plan-First Execution:** Plans must be in `Operations/EXECUTION_PLAN.md` (PRIMARY) or `/plans/` (OPTIONAL - only for large initiatives)
+- **Change Approval Protocol:** Get approval before implementing
+- **Action Log Requirement:** Log all plans and implementations
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL AI assistants.
+
+**Verification Checklist:**
+- [ ] Did I identify the issue clearly?
+- [ ] Did I document it?
+- [ ] Did I create a formal plan?
+- [ ] Did I ask for approval?
+- [ ] Did I wait for approval before implementing?
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.0

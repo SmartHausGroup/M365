@@ -1,0 +1,171 @@
+version: 1.0.0
+last_updated: '2026-03-21T12:05:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: testing
+  display_name: Testing
+  wave: W7
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Testing digital employees into one bounded department contract
+    covering QA automation, performance benchmarking, test analysis, tool
+    evaluation, and workflow optimization responsibilities that are defined but
+    not yet action-backed.
+  bounded_claim: >-
+    The Testing department pack may only claim the authoritative contract
+    personas, capability families, approval posture, and blocked readiness
+    state declared here. It may not claim implemented QA, benchmarking,
+    analysis, or optimization execution coverage until later acts activate
+    those personas.
+workflow_families:
+  - qa_automation_and_regression
+  - performance_measurement_and_benchmarking
+  - test_analysis_and_quality_reporting
+  - tool_evaluation_and_workflow_optimization
+workload_families:
+  - Low-code, workflow, and analytics
+  - Tasks, scheduling, and work management
+  - Knowledge, search, and employee experience
+  - Documents, notes, and workspace productivity
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the testing lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:testing
+  department_lead: department-lead:testing
+  profiles:
+    medium-operational:
+      approvers:
+        - department-owner:testing
+      personas:
+        - workflow-optimizer
+      rule: >-
+        Process changes, workflow tuning, and automation opportunity mapping
+        require department-owner review when later acts activate the Testing
+        personas.
+    low-observe-create:
+      approvers:
+        - department-owner:testing
+      personas:
+        - api-tester
+        - performance-benchmarker
+        - test-results-analyzer
+        - tool-evaluator
+      rule: >-
+        QA automation, benchmarking, test analysis, and tool evaluation may
+        proceed in observe/create mode until later acts activate mutating
+        Testing execution surfaces.
+kpis:
+  required_personas: 5
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 4
+  supported_action_count: 0
+personas:
+  api-tester:
+    display_name: Nina Shah
+    title: QA Automation Lead
+    role_type: qa_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - API validation
+      - service certification
+      - regression execution
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Tasks, scheduling, and work management
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - qa_automation_and_regression
+    supported_actions: []
+  performance-benchmarker:
+    display_name: Omar Haddad
+    title: Performance Engineer
+    role_type: performance_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - performance measurement
+      - benchmark reporting
+      - workload comparison
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Documents, notes, and workspace productivity
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - performance_measurement_and_benchmarking
+    supported_actions: []
+  test-results-analyzer:
+    display_name: Sofia Alvarez
+    title: Quality Analyst
+    role_type: analysis_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - test evidence synthesis
+      - failure clustering
+      - QA reporting
+    workload_families:
+      - Knowledge, search, and employee experience
+      - Documents, notes, and workspace productivity
+      - Low-code, workflow, and analytics
+    workflow_families:
+      - test_analysis_and_quality_reporting
+    supported_actions: []
+  tool-evaluator:
+    display_name: Liam Nguyen
+    title: Dev Tools Strategist
+    role_type: evaluation_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - tool comparison
+      - workflow-fit evaluation
+      - adoption recommendations
+    workload_families:
+      - Knowledge, search, and employee experience
+      - Low-code, workflow, and analytics
+      - Documents, notes, and workspace productivity
+    workflow_families:
+      - tool_evaluation_and_workflow_optimization
+    supported_actions: []
+  workflow-optimizer:
+    display_name: Ava Johnson
+    title: Process Engineer
+    role_type: process_anchor
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: medium-operational
+    capability_families:
+      - process analysis
+      - workflow tuning
+      - automation opportunity mapping
+    workload_families:
+      - Tasks, scheduling, and work management
+      - Low-code, workflow, and analytics
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - tool_evaluation_and_workflow_optimization
+    supported_actions: []
+bounded_claims:
+  supported:
+    - testing persona census and capability-family contract
+    - approval and escalation semantics for future testing activation
+    - deterministic blocked-state projection while testing remains contract-only
+  unsupported:
+    - claims that testing personas are currently action-backed
+    - live QA, benchmarking, analysis, or optimization mutations beyond later activation acts
+    - HR, design, or engineering work outside the testing contract

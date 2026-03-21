@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-03-20T16:11:29Z",
+  "total_agents": 39,
+  "departments": {
+    "operations": [
+      {"agent": "m365-administrator", "name": "Marcus Chen", "role": "Senior IT Administrator"},
+      {"agent": "website-manager", "name": "Elena Rodriguez", "role": "Website Manager"}
+    ],
+    "hr": [
+      {"agent": "hr-generalist", "name": "Sarah Williams", "role": "HR Director"}
+    ],
+    "communication": [
+      {"agent": "outreach-coordinator", "name": "David Park", "role": "Communications Manager"}
+    ],
+    "engineering": [
+      {"agent": "ai-engineer", "name": "Alex Thompson", "role": "ML Engineer"},
+      {"agent": "backend-architect", "name": "Jordan Kim", "role": "Principal Backend Engineer"},
+      {"agent": "devops-automator", "name": "Casey Johnson", "role": "DevOps Engineer"},
+      {"agent": "frontend-developer", "name": "Riley Martinez", "role": "UI/UX Developer"},
+      {"agent": "mobile-app-builder", "name": "Taylor Brown", "role": "Mobile Engineer"},
+      {"agent": "rapid-prototyper", "name": "Ethan Rivera", "role": "Prototype Engineer"},
+      {"agent": "test-writer-fixer", "name": "Grace Lee", "role": "Test Engineer"}
+    ],
+    "marketing": [
+      {"agent": "app-store-optimizer", "name": "Jake Thompson", "role": "ASO Specialist"},
+      {"agent": "content-creator", "name": "Taylor Swift", "role": "Content Strategist"},
+      {"agent": "growth-hacker", "name": "Morgan Davis", "role": "Growth Lead"},
+      {"agent": "instagram-curator", "name": "Zoe Martinez", "role": "Visual Content Specialist"},
+      {"agent": "reddit-community-builder", "name": "Priya Singh", "role": "Community Manager"},
+      {"agent": "tiktok-strategist", "name": "Ryan O'Connor", "role": "Short-form Video Expert"},
+      {"agent": "twitter-engager", "name": "Jamie Lee", "role": "Social Media Director"}
+    ],
+    "product": [
+      {"agent": "sprint-prioritizer", "name": "Sam Chen", "role": "Product Manager"},
+      {"agent": "feedback-synthesizer", "name": "Maya Patel", "role": "User Research Lead"},
+      {"agent": "trend-researcher", "name": "Chris Wong", "role": "Market Analyst"}
+    ],
+    "project-management": [
+      {"agent": "experiment-tracker", "name": "Emily Carter", "role": "Experimentation PM"},
+      {"agent": "project-shipper", "name": "Ben Foster", "role": "Release Manager"},
+      {"agent": "studio-producer", "name": "Olivia Park", "role": "Studio Producer"}
+    ],
+    "studio-operations": [
+      {"agent": "analytics-reporter", "name": "Amanda Foster", "role": "Data Scientist"},
+      {"agent": "finance-tracker", "name": "Lisa Chang", "role": "Chief Financial Officer"},
+      {"agent": "infrastructure-maintainer", "name": "Jennifer Liu", "role": "Site Reliability Engineer"},
+      {"agent": "legal-compliance-checker", "name": "Robert Kim", "role": "Legal Counsel"},
+      {"agent": "support-responder", "name": "Mike Rodriguez", "role": "Customer Success Manager"}
+    ],
+    "testing": [
+      {"agent": "api-tester", "name": "Nina Shah", "role": "QA Automation Lead"},
+      {"agent": "performance-benchmarker", "name": "Omar Haddad", "role": "Performance Engineer"},
+      {"agent": "test-results-analyzer", "name": "Sofia Alvarez", "role": "Quality Analyst"},
+      {"agent": "tool-evaluator", "name": "Liam Nguyen", "role": "Dev Tools Strategist"},
+      {"agent": "workflow-optimizer", "name": "Ava Johnson", "role": "Process Engineer"}
+    ],
+    "design": [
+      {"agent": "brand-guardian", "name": "Isabella Rossi", "role": "Brand Guardian"},
+      {"agent": "ui-designer", "name": "Noah Anderson", "role": "UI Designer"},
+      {"agent": "ux-researcher", "name": "Mila Novak", "role": "UX Researcher"},
+      {"agent": "visual-storyteller", "name": "Diego Alvarez", "role": "Visual Storyteller"},
+      {"agent": "whimsy-injector", "name": "Luna Park", "role": "Delight Designer"}
+    ]
+  }
+}

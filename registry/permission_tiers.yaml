@@ -1,0 +1,325 @@
+# =============================================================================
+# UCP Permission Tiers — M365 Integration Pack
+# =============================================================================
+#
+# This file defines USER-LEVEL permission tiers for the M365 Integration Pack.
+# These tiers govern what actions a user can invoke through the UCP, regardless
+# of what the Azure AD app has access to at the API level.
+#
+# Architecture:
+#   Azure AD App  →  has ALL Graph API permissions (the pipe)
+#   Agent Registry →  defines what actions exist (the catalog)
+#   Permission Tiers →  controls what a user can actually do (the governance)
+#
+# The Azure AD app is intentionally over-provisioned. The governance layer
+# restricts access based on the user's assigned tier. This means:
+#   - Adding new capabilities never requires Azure AD changes
+#   - Access control is managed in one place (this file)
+#   - Audit trails capture both what was requested and what tier allowed it
+#
+# Tier assignment is per-tenant, per-user. See tenant config for mapping.
+# =============================================================================
+
+version: "1.0.0"
+
+tiers:
+
+  # ===========================================================================
+  # GLOBAL ADMIN — Full access to everything
+  # ===========================================================================
+  # Use case: IT administrators, SMARTHAUS operators, tenant owners
+  # Risk: Unrestricted — all actions available, all confirmation gates active
+  # ===========================================================================
+  global_admin:
+    name: "Global Administrator"
+    description: "Full access to all M365 Integration Pack capabilities. All confirmation gates and audit trails remain active."
+    risk_tier: "critical"
+    inherits: null  # Top of the chain
+    allowed_domains:
+      - users          # User management (create, update, disable, licenses)
+      - groups         # Group management (create, membership, settings)
+      - directory      # Azure AD directory (roles, domains, org, apps)
+      - mail           # Full mailbox access (read, write, send, delete)
+      - calendar       # Calendar management (create, update, delete events)
+      - teams          # Teams management (create, archive, membership)
+      - channels       # Channel management (create, delete, messages)
+      - chat           # 1:1 and group chat (create, send, read)
+      - files          # File operations (list, upload, share, create folders)
+      - sites          # SharePoint sites (list, provision, manage lists)
+      - drives         # OneDrive/drive management
+      - security       # Security alerts and incidents
+      - compliance     # Compliance checks, eDiscovery, policies
+      - audit          # Audit logs (directory, sign-ins, provisioning)
+      - reports        # Usage and activity reports
+      - devices        # Device management and compliance
+      - ca             # Conditional Access policies
+      - health         # Service health monitoring
+      - tasks          # Planner tasks and plans
+      - presence       # User presence/availability
+      - admin          # UCP administration (tier management, config, audit)
+    blocked_actions: []  # Nothing blocked
+    confirmation_overrides: {}  # Use default confirmation gates
+
+  # ===========================================================================
+  # DEPARTMENT ADMIN — Manages their department's M365 resources
+  # ===========================================================================
+  # Use case: Department heads, team leads, regional managers
+  # Risk: High — can manage users and resources within their scope
+  # ===========================================================================
+  department_admin:
+    name: "Department Administrator"
+    description: "Manages M365 resources for their department. Cannot modify org-wide settings, security policies, or other departments."
+    risk_tier: "high"
+    inherits: null
+    allowed_domains:
+      - users.list
+      - users.read
+      - groups         # Full group management for their groups
+      - mail           # Full mailbox access (scoped to department)
+      - calendar       # Calendar management
+      - teams          # Teams management (scoped)
+      - channels       # Channel management
+      - chat           # Chat messaging
+      - files          # File operations
+      - sites          # SharePoint (read + write to assigned sites)
+      - drives         # Drive access
+      - reports        # Read reports
+      - tasks          # Planner tasks
+      - presence       # Presence info
+      - health         # Service health (read-only)
+    blocked_actions:
+      - users.create         # Cannot create users
+      - users.disable        # Cannot disable users
+      - users.update         # Cannot modify user profiles
+      - licenses.assign      # Cannot manage licenses
+      - sites.provision      # Cannot create new sites
+      - teams.archive        # Cannot archive teams
+      - ca.*                 # No Conditional Access
+      - security.*           # No security management
+      - compliance.*         # No compliance management
+      - audit.*              # No audit log access
+      - directory.*          # No directory management
+      - devices.*            # No device management
+      - admin.*              # No UCP administration
+    confirmation_overrides:
+      mail.send: "always"           # Always confirm before sending on behalf of dept
+      teams.remove_member: "always" # Always confirm member removal
+
+  # ===========================================================================
+  # POWER USER — Reads broadly, writes within their own scope
+  # ===========================================================================
+  # Use case: Senior employees, consultants, project leads
+  # Risk: Medium — broad read access, limited write access
+  # ===========================================================================
+  power_user:
+    name: "Power User"
+    description: "Broad read access across M365. Can send mail, manage own calendar, upload files, and participate in Teams. Cannot manage users, groups, or security."
+    risk_tier: "medium"
+    inherits: null
+    allowed_domains:
+      - mail.list
+      - mail.read
+      - mail.send
+      - mail.reply
+      - mail.forward
+      - mail.folders
+      - mailbox.settings
+      - calendar       # Full calendar access
+      - chat           # Chat messaging
+      - channels.send_message
+      - files.list
+      - files.get
+      - files.search
+      - files.upload
+      - files.create_folder
+      - drives.list
+      - sites.list
+      - sites.get
+      - teams.list
+      - teams.get
+      - channels.list
+      - tasks          # Planner tasks
+      - presence       # Presence info
+      - reports        # Read reports
+      - health         # Service health
+    blocked_actions:
+      - mail.delete          # Cannot delete mail
+      - mail.move            # Cannot move mail between folders
+      - files.share          # Cannot create sharing links
+      - users.*              # No user management
+      - groups.*             # No group management
+      - directory.*          # No directory access
+      - security.*           # No security
+      - compliance.*         # No compliance
+      - audit.*              # No audit logs
+      - ca.*                 # No Conditional Access
+      - devices.*            # No device management
+      - teams.create         # Cannot create teams
+      - teams.archive        # Cannot archive teams
+      - teams.add_member     # Cannot manage team membership
+      - teams.remove_member
+      - channels.create      # Cannot create channels
+      - admin.*              # No UCP administration
+    confirmation_overrides:
+      mail.send: "always"
+      mail.forward: "always"
+      chat.send: "always"
+      channels.send_message: "always"
+
+  # ===========================================================================
+  # STANDARD USER — Basic productivity access
+  # ===========================================================================
+  # Use case: Most employees, field reps, individual contributors
+  # Risk: Low — own mailbox, own calendar, read files, participate in chat
+  # ===========================================================================
+  standard_user:
+    name: "Standard User"
+    description: "Basic M365 productivity. Own mailbox, own calendar, read shared files, participate in assigned Teams and chats."
+    risk_tier: "low"
+    inherits: null
+    allowed_domains:
+      - mail.list
+      - mail.read
+      - mail.send
+      - mail.reply
+      - mail.folders
+      - calendar.list
+      - calendar.get
+      - calendar.create       # Can create own events
+      - calendar.availability
+      - chat.send
+      - chat.list
+      - chat.send_message
+      - channels.send_message # Can post in channels they're in
+      - files.list
+      - files.get
+      - files.search
+      - files.upload          # Can upload to shared libraries
+      - drives.list
+      - sites.list
+      - sites.get
+      - teams.list
+      - teams.get
+      - channels.list
+      - tasks                 # Can manage own tasks
+      - presence              # Can see presence
+      - health.overview       # Can see service health
+    blocked_actions:
+      - mail.delete
+      - mail.move
+      - mail.forward         # Must be explicit
+      - mailbox.settings
+      - calendar.delete
+      - calendar.update      # Cannot modify others' events
+      - files.share
+      - files.create_folder  # Cannot create folders in shared sites
+      - users.*
+      - groups.*
+      - directory.*
+      - security.*
+      - compliance.*
+      - audit.*
+      - ca.*
+      - devices.*
+      - reports.*
+      - teams.create
+      - teams.archive
+      - teams.add_member
+      - teams.remove_member
+      - channels.create
+      - chat.create          # Cannot create new chats (only reply)
+      - admin.*              # No UCP administration
+    confirmation_overrides:
+      mail.send: "always"
+      chat.send: "always"
+      channels.send_message: "always"
+      files.upload: "always"
+
+  # ===========================================================================
+  # READ ONLY — Auditor / compliance observer
+  # ===========================================================================
+  # Use case: External auditors, compliance reviewers, read-only observers
+  # Risk: Minimal — can read everything, cannot write anything
+  # ===========================================================================
+  read_only:
+    name: "Read Only / Auditor"
+    description: "Full read access across M365 for audit and compliance purposes. Cannot modify, send, or create anything."
+    risk_tier: "low"
+    inherits: null
+    allowed_domains:
+      - users.list
+      - users.read
+      - groups.list
+      - groups.get
+      - groups.list_members
+      - directory.roles
+      - directory.role_members
+      - directory.domains
+      - directory.org
+      - mail.list
+      - mail.read
+      - mail.folders
+      - mailbox.settings
+      - calendar.list
+      - calendar.get
+      - calendar.availability
+      - teams.list
+      - teams.get
+      - channels.list
+      - chat.list
+      - files.list
+      - files.get
+      - files.search
+      - drives.list
+      - sites.list
+      - sites.get
+      - lists.list
+      - lists.get
+      - lists.items
+      - security.alerts
+      - security.alert_get
+      - security.incidents
+      - security.incident_get
+      - security.secure_score
+      - audit.directory
+      - audit.signins
+      - audit.provisioning
+      - reports            # All reports
+      - health             # All health data
+      - devices.list
+      - devices.get
+      - devices.compliance
+      - ca.policies
+      - ca.policy_get
+      - ca.named_locations
+      - presence
+      - tasks              # Read tasks
+    blocked_actions:
+      - "*.create"
+      - "*.update"
+      - "*.delete"
+      - "*.send"
+      - "*.reply"
+      - "*.forward"
+      - "*.move"
+      - "*.upload"
+      - "*.share"
+      - "*.archive"
+      - "*.disable"
+      - "*.assign"
+      - "*.provision"
+      - "*.add_member"
+      - "*.remove_member"
+      - admin.*              # No UCP administration
+    confirmation_overrides: {}  # No writes, no confirmations needed
+
+
+# =============================================================================
+# Default tier assignment
+# =============================================================================
+# When no tier is explicitly assigned to a user in the tenant config,
+# this tier is used. Conservative by default.
+# =============================================================================
+defaults:
+  tier: "standard_user"
+  escalation_path: "department_admin"  # Who to ask for tier upgrades

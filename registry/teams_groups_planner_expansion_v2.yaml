@@ -1,0 +1,95 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T00:20:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E2DTeamsGroupsPlannerExpansion(action) = InstructionBacked(action)
+  ∧ CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=collaboration
+  ∧ AuthClass(action)=app_only ∧ ApprovalProfile(action)=ExpectedProfile(action).
+supported_actions:
+  get_team:
+    canonical_action_key: collaboration.team.read
+    agent_alias: teams.get
+    runtime_handler: GraphClient.get_team
+    mutating: false
+    result_shape_keys: [team]
+    required_permissions: [Team.ReadBasic.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: get_team
+  list_channels:
+    canonical_action_key: collaboration.channel.list
+    agent_alias: channels.list
+    runtime_handler: GraphClient.list_channels
+    mutating: false
+    result_shape_keys: [channels, count]
+    required_permissions: [Channel.ReadBasic.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: list_channels
+  create_channel:
+    canonical_action_key: collaboration.channel.create
+    agent_alias: channels.create
+    runtime_handler: GraphClient.create_channel
+    mutating: true
+    result_shape_keys: [channel, status]
+    required_permissions: [Channel.Create.Group]
+    approval_profile: high-impact
+    auth_class: app_only
+    capability_registry_alias: create_channel
+  list_plans:
+    canonical_action_key: collaboration.plan.list
+    agent_alias: planner.list
+    runtime_handler: GraphClient.list_plans
+    mutating: false
+    result_shape_keys: [plans, count]
+    required_permissions: [Tasks.Read, Group.Read.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: list_plans
+  create_plan:
+    canonical_action_key: collaboration.plan.create
+    agent_alias: planner.create
+    runtime_handler: GraphClient.create_plan
+    mutating: true
+    result_shape_keys: [plan, status]
+    required_permissions: [Tasks.ReadWrite, Group.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: app_only
+    capability_registry_alias: create_plan
+  list_plan_buckets:
+    canonical_action_key: collaboration.plan_bucket.list
+    agent_alias: planner.buckets
+    runtime_handler: GraphClient.list_plan_buckets
+    mutating: false
+    result_shape_keys: [buckets, count]
+    required_permissions: [Tasks.Read]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: list_plan_buckets
+  create_plan_bucket:
+    canonical_action_key: collaboration.plan_bucket.create
+    agent_alias: planner.create_bucket
+    runtime_handler: GraphClient.create_plan_bucket
+    mutating: true
+    result_shape_keys: [bucket, status]
+    required_permissions: [Tasks.ReadWrite]
+    approval_profile: medium-operational
+    auth_class: app_only
+    capability_registry_alias: create_plan_bucket
+  create_plan_task:
+    canonical_action_key: collaboration.plan_task.create
+    agent_alias: planner.create_task
+    runtime_handler: GraphClient.create_plan_task
+    mutating: true
+    result_shape_keys: [task, status]
+    required_permissions: [Tasks.ReadWrite]
+    approval_profile: medium-operational
+    auth_class: app_only
+    capability_registry_alias: create_plan_task

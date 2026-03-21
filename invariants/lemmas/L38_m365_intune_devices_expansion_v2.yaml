@@ -1,0 +1,16 @@
+lemma_id: L38
+title: M365 Intune / Devices Expansion v2
+phase: E4A
+plan_ref: plan:m365-ai-workforce-expansion-master-plan:E4A
+proof_artifacts:
+  - docs/ma/lemmas/L38_m365_intune_devices_expansion_v2.md
+  - notebooks/m365/INV-M365-AN-intune-devices-expansion-v2.ipynb
+  - notebooks/lemma_proofs/L38_m365_intune_devices_expansion_v2.ipynb
+  - artifacts/scorecards/scorecard_l38.json
+enforcement:
+  verifier: scripts/ci/verify_intune_devices_expansion.py
+  tests:
+    - tests/test_intune_devices_expansion_v2.py
+failure_boundary: >
+  Fail closed if any declared device action is missing from the instruction router,
+  capability registry, executor routing, auth model, approval matrix, or bounded verifier.

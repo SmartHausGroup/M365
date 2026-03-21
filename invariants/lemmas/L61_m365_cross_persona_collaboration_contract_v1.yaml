@@ -1,0 +1,20 @@
+lemma_id: L61
+title: M365 Cross-Persona Collaboration Contract v1
+invariant: >
+  The cross-persona collaboration contract must define four collaboration
+  primitives, five handoff rules, and four governance rules so that
+  accountability is continuous, handoffs are audited, and risk tiers are
+  enforced at every collaboration boundary.
+proof_obligations:
+  - cross-persona collaboration contract authority file exists and validates
+  - four collaboration primitives are declared with accountability semantics
+  - five handoff rules are declared
+  - governance rules cover accountability continuity, circular handoff prevention, risk tier enforcement, and audit
+failure_boundaries:
+  - missing cross-persona collaboration contract authority file
+  - missing collaboration primitive
+  - missing handoff rule
+  - missing governance rule
+test_bindings:
+  - tests/test_cross_persona_collaboration_contract_v1.py
+ci_gate: scripts/ci/verify_cross_persona_collaboration_contract_v1.py

@@ -1,18 +1,29 @@
 from __future__ import annotations
 
-import os
 import time
 from collections.abc import Sequence
 
+from smarthaus_common.config import AppConfig, has_selected_tenant, resolve_sharepoint_hostname
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.logging import get_logger
+from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
 log = get_logger(__name__)
 
 
 def _hostname() -> str:
-    return os.getenv("SP_HOSTNAME", "smarthausgroup.sharepoint.com")
+    return resolve_sharepoint_hostname()
+
+
+def _graph_client(route_key: str | None = None) -> GraphClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            executor_name = tenant_cfg.resolve_executor_name(route_key, fallback_keys=[route_key])
+            tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return GraphClient(tenant_config=tenant_cfg)
+    return GraphClient(config=AppConfig())
 
 
 def provision_group_site(
@@ -27,7 +38,7 @@ def provision_group_site(
     Returns dict with site_id, site_url, created flags.
     Requires app permissions: Group.ReadWrite.All and Sites.ReadWrite.All (or FullControl).
     """
-    client = GraphClient()
+    client = _graph_client("sharepoint")
     created_group = False
 
     grp = client.find_group_by_mailnickname(mail_nickname)
@@ -36,6 +47,10 @@ def provision_group_site(
         grp = client.create_group(display_name, mail_nickname, description)
         created_group = True
 
+    group_id = grp.get("id")
+    if not group_id:
+        raise SmarthausError("Group missing id")
+
     hostname = _hostname()
     site_path = mail_nickname
 
@@ -43,11 +58,17 @@ def provision_group_site(
     site = None
     for attempt in range(max(1, wait_secs // 3)):
         try:
+            site = client.get_group_root_site(group_id)
+            if site and site.get("id"):
+                break
+        except SmarthausError as e:
+            log.warning("Group root site not ready yet (%s): %s", attempt, e)
+        try:
             site = client.get_site_by_path(hostname, site_path)
             if site and site.get("id"):
                 break
         except SmarthausError as e:
-            log.warning("Site not ready yet (%s): %s", attempt, e)
+            log.warning("Site path not ready yet (%s): %s", attempt, e)
         time.sleep(3)
 
     if not site or not site.get("id"):
@@ -84,7 +105,7 @@ def provision_teams_workspace(
 
     Requires application permissions: Team.ReadWrite.All, Channel.ReadWrite.All.
     """
-    client = GraphClient()
+    client = _graph_client("collaboration")
     grp = client.find_group_by_mailnickname(mail_nickname)
     if not grp:
         raise SmarthausError(f"Group '{mail_nickname}' not found; create site/group first.")

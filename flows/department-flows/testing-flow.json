@@ -1,0 +1,9 @@
+{
+  "name": "Testing Automation",
+  "department": "testing",
+  "trigger": { "type": "Manual", "description": "Run test suite" },
+  "steps": [
+    { "action": "PostTeamsMessage", "channel": "qa-review", "message": "Triggered test run" },
+    { "action": "CreateSharePointItem", "site": "Testing Hub", "list": "Test Results" }
+  ]
+}

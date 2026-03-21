@@ -1,0 +1,591 @@
+plan_id: m365-enterprise-readiness-master-plan
+status: Complete
+date: "2026-03-20"
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-enterprise-readiness-master-plan:R1
+north_star: Operations/NORTHSTAR.md
+historical_lineage: m365-enterprise-commercialization-readiness
+ma_process_required: false
+
+objective: >
+  Define and execute the full critical path required to make the current M365
+  capability commercially honest, operationally supportable, technically
+  hardened, standards-compliant, and enterprise-ready as a standalone
+  deterministic module.
+
+decision_rule: >
+  Enterprise readiness requires product boundary lock, runtime hardening,
+  identity-execution architecture, digital-employee operating-model lock,
+  multi-executor runtime implementation, repo-validation closure,
+  app-registration role separation, executor credential finalization,
+  live-tenant certification, release decision closure, and launch
+  readiness. Documentation alone is not sufficient.
+
+prompt_discipline: >
+  Every execution act in this plan must have one formal MATHS prompt pair
+  under docs/prompts/. Historical commercialization prompts remain traceability
+  artifacts only.
+
+execution_status:
+  completed:
+    - phase: A1
+      date: "2026-03-17"
+      summary: >
+        Imported the supported-surface and buyer/operator boundary work from
+        P0A and P0B.
+    - phase: A2
+      date: "2026-03-17"
+      summary: >
+        Imported the canonical config-contract and auth/secret posture work
+        from P1A and P1B.
+    - phase: A3
+      date: "2026-03-17"
+      summary: >
+        Imported the governance, audit, live-validation, and release-gate
+        definition work from P2A, P2B, P3A, and P3B.
+    - phase: A4
+      date: "2026-03-17"
+      summary: >
+        Imported the packaging, onboarding, runbooks, and support-boundary
+        work from P4A and P4B.
+    - phase: B1
+      date: "2026-03-17"
+      summary: >
+        Made tenant-scoped config the runtime authority and added targeted
+        config-authority verification.
+    - phase: B2
+      date: "2026-03-17"
+      summary: >
+        Hardened fail-closed permission, approval, and policy behavior for the
+        active ops-adapter path.
+    - phase: B3
+      date: "2026-03-17"
+      summary: >
+        Replaced snapshot-mode admin audit with append-only admin event
+        evidence and aligned admin dispatch with the registry contract.
+    - phase: B4A
+      date: "2026-03-18"
+      summary: >
+        Corrected the active master plan and governance template to match
+        AGENTS.md, created the required project-file-index baseline, and made
+        the active critical path explicit.
+    - phase: B4B
+      date: "2026-03-18"
+      summary: >
+        Regenerated the active MATHS prompt inventory so the master plan and
+        every execution act A1 through D2 now have one formal prompt pair.
+    - phase: B4C
+      date: "2026-03-18"
+      summary: >
+        Removed the Black parse blocker in scripts/generate-policies.py,
+        corrected the malformed governance invariants, and proved the narrow
+        recovery surface with targeted parser, YAML, and formatter checks.
+    - phase: B4D1
+      date: "2026-03-18"
+      summary: >
+        Restored the worktree to the approved post-B4C baseline, pinned the
+        remaining Ruff/Black/Mypy inventory in artifacts/b4d1_failure_inventory.json,
+        and sequenced B4D2 as the next bounded cleanup act.
+    - phase: B4D2
+      date: "2026-03-18"
+      summary: >
+        Added notebook-backed L8 traceability for the scripts and CI tooling
+        surface, eliminated the scoped Ruff debt under scripts/ and scripts/ci/,
+        and validated the bounded cleanup with Ruff, py_compile, and diff checks
+        before advancing to B4D3.
+    - phase: B4D3
+      date: "2026-03-18"
+      summary: >
+        Added notebook-backed L9 traceability for the runtime, CLI, and notebook
+        validation surface, eliminated the remaining targeted Ruff debt under
+        src/ops_adapter/, src/provisioning_api/, src/smarthaus_cli/, and
+        tests/test_policies.py, fixed the notebook formatter parse blocker in
+        notebooks/ma_m365_batch1_groups.ipynb, stabilized targeted formatting,
+        and validated the bounded cleanup with Ruff, ruff format --check, and
+        git diff --check before advancing to B4D4.
+    - phase: B4D4A
+      date: "2026-03-18"
+      summary: >
+        Added types-PyYAML to the governed mypy hook and the repo dev
+        dependencies, removed duplicate module discovery for
+        src/ops_adapter/actions.py, and converted the governed mypy path from
+        environment blockers into a real actionable type inventory.
+    - phase: B4D4B
+      date: "2026-03-18"
+      summary: >
+        Reduced the bounded core mypy surface from 90 errors across 11 files
+        to green by tightening the runtime typing surfaces under src/ops_adapter/,
+        src/smarthaus_common/, and src/smarthaus_graph/, correcting the duplicated
+        CLI analyzer Path and signature issues under src/smarthaus_cli/, and
+        validating the governed surface with targeted mypy, py_compile, and
+        git diff --check.
+    - phase: B4D4C
+      date: "2026-03-18"
+      summary: >
+        Reduced the remaining dashboard, script, and test mypy surface from
+        126 errors across 15 files to green by adding bounded annotations and
+        type-shape corrections under src/provisioning_api/, fixing the dynamic
+        GraphClient typing and nullable group-id flow in the standalone scripts
+        under scripts/, and validating the full bounded surface with targeted
+        mypy and git diff --check.
+    - phase: B4D4D
+      date: "2026-03-18"
+      summary: >
+        Proved repo-wide mypy repeatability by running the governed
+        pre-commit mypy all-files surface twice, confirming the same 67-error /
+        21-file remainder both times, and capturing the stable handoff inventory
+        in artifacts/b4d4d_failure_inventory.json.
+    - phase: B4D5
+      date: "2026-03-18"
+      summary: >
+        Closed the bounded B4D validation surface with green targeted Ruff,
+        formatter, Mypy, and diff checks, then captured the current B4E handoff
+        inventory in artifacts/b4d5_validation_handoff.json with repo-wide
+        format green, repo-wide Ruff reduced to 26 issues, and repo-wide mypy
+        reduced to 5 errors across 5 files.
+    - phase: B4E
+      date: "2026-03-18"
+      summary: >
+        Cleared the repo-wide validation gate to green with passing Ruff,
+        formatter, mypy, full pre-commit, and diff checks, and recorded the
+        authoritative closure in artifacts/b4e_full_repo_validation_closure.json.
+    - phase: B5A
+      date: "2026-03-18"
+      summary: >
+        Locked the enterprise production identity model as Entra-authenticated
+        SMARTHAUS users plus app-only Graph execution through the SMARTHAUS
+        service principal, documented the actor-versus-executor split, and
+        synchronized the commercialization and certification docs to that
+        architecture.
+    - phase: B5B
+      date: "2026-03-18"
+      summary: >
+        Enforced JWT-backed actor identity on the governed ops-adapter
+        execution path, aligned the legacy app path to deny raw header-only
+        actor access unless the explicit non-enterprise override is enabled,
+        propagated the validated actor identity through the action request
+        path, fixed the middleware fail-closed response boundary to return
+        deterministic auth errors instead of leaking ASGI exceptions, and
+        validated the bounded identity-enforcement surface with py_compile,
+        targeted pytest, and diff checks.
+    - phase: B5C
+      date: "2026-03-18"
+      summary: >
+        Bound the authenticated SMARTHAUS Entra actor into tier resolution,
+        approvals, and actor-versus-executor audit semantics by adding
+        group-aware tier resolution, preserving actor tier, actor groups,
+        tenant, and executor metadata in the governed runtime path, and
+        validating the bounded binding surface with py_compile, targeted
+        pytest, and diff checks.
+    - phase: B5D
+      date: "2026-03-19"
+      summary: >
+        Completed the governed Azure / Entra app-registration role-separation
+        act by renaming app 720788ac-1485-4073-b0c8-1a6294819a87 to
+        SMARTHAUS M365 Executor, renaming app
+        e6fd71d3-4116-401e-a4f1-b2fda4318a8b to
+        SMARTHAUS M365 Operator Identity, pruning Graph role overlap from
+        the operator-identity app, pruning delegated-scope overlap from the
+        executor app, and setting Application ID URI
+        api://e6fd71d3-4116-401e-a4f1-b2fda4318a8b on the operator-identity
+        app.
+    - phase: B5E
+      date: "2026-03-19"
+      summary: >
+        Completed the governed executor certificate-cutover act by fixing
+        valid MSAL certificate-path handling in src/smarthaus_graph/client.py,
+        generating the executor PEM under /Users/smarthaus/.ucp/certs/,
+        appending the public certificate to app
+        720788ac-1485-4073-b0c8-1a6294819a87, updating the SMARTHAUS tenant
+        contract to certificate-first auth with an empty client_secret,
+        validating non-mutating Graph execution through the certificate path,
+        and retiring the executor password credentials.
+    - phase: B6A
+      date: "2026-03-19"
+      summary: >
+        Locked the operator-facing digital-employee model in
+        docs/commercialization/m365-digital-employee-operating-model.md and
+        explicitly separated named SMARTHAUS personas from Microsoft executor
+        identities.
+    - phase: B6B
+      date: "2026-03-19"
+      summary: >
+        Defined the capability, API, license, and auth matrix in
+        docs/commercialization/m365-capability-api-license-auth-matrix.md so
+        licensing scope, automation surface, and delegated-versus-app-only
+        posture are no longer conflated.
+    - phase: B6C
+      date: "2026-03-19"
+      summary: >
+        Defined the bounded executor-domain split and minimum-permission model
+        in docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md,
+        replacing the single over-broad executor posture with explicit domain
+        executors.
+    - phase: B6D
+      date: "2026-03-19"
+      summary: >
+        Locked the persona-registry and humanized delegation contract in
+        docs/commercialization/m365-persona-registry-and-humanized-delegation-contract.md,
+        defining how named digital employees route through responsibilities,
+        approvals, executor domains, and audit attribution.
+    - phase: B6E
+      date: "2026-03-19"
+      summary: >
+        Rebased certification in
+        docs/commercialization/m365-certification-rebase-digital-employee-multi-executor-model.md
+        so C1A no longer attempts to certify the legacy single-executor
+        posture and now remains blocked until the multi-executor runtime
+        exists.
+    - phase: B7A
+      date: "2026-03-19"
+      summary: >
+        Extended src/smarthaus_common/tenant_config.py so the tenant contract
+        can represent bounded executors, executor-registry metadata,
+        deterministic default projection, and fail-closed multi-executor
+        default resolution.
+    - phase: B7B
+      date: "2026-03-19"
+      summary: >
+        Implemented deterministic action-to-executor routing in
+        src/ops_adapter/actions.py, src/ops_adapter/main.py,
+        src/ops_adapter/app.py, and src/ops_adapter/approvals.py, and
+        validated the bounded SharePoint, directory, and approval-routing
+        surface in tests/test_ops_adapter.py and tests/test_approvals.py.
+    - phase: B7C
+      date: "2026-03-19"
+      summary: >
+        Integrated a deterministic persona registry derived from
+        registry/ai_team.json and registry/agents.yaml into
+        src/ops_adapter/personas.py, src/ops_adapter/main.py,
+        src/ops_adapter/app.py, and src/ops_adapter/approvals.py so named
+        digital employees resolve to one canonical runtime agent, fail
+        closed on inactive persona targets or bounded-domain mismatches, and
+        preserve persona context through policy, approval, and audit payloads.
+    - phase: B7C1
+      date: "2026-03-19"
+      summary: >
+        Read the live UCP constraint sources and evaluator, documented the
+        exact accepted metadata contract for bounded test_run and
+        governance-closeout validation shapes, and proved one bounded
+        test_run shape plus one governance_edit shape with live
+        validate_action so B7D can resume without undocumented gate
+        behavior.
+    - phase: B7D
+      date: "2026-03-19"
+      summary: >
+        Created bounded SharePoint, collaboration, and directory executor
+        apps with certificate-backed credentials, repaired the missing Graph
+        app-role assignments for the SharePoint and directory service
+        principals, demoted the old monolithic executor to SMARTHAUS Legacy
+        M365 Executor, cut the active tenant contract over to the bounded
+        SharePoint default, projected bounded executors into the supported
+        v1 router and provisioning runtime surfaces, and re-proved live
+        app-only SharePoint, collaboration, and directory access with exact
+        bounded role sets and success responses.
+    - phase: B7E
+      date: "2026-03-20"
+      summary: >
+        Re-proved the approval backend through the bounded SharePoint
+        executor under the exact standalone shell contract, returning 200 on
+        both the pinned approvals list metadata route and the pinned
+        approvals list items route without URL-based site discovery, and
+        refreshed the C1A readiness packet to GO.
+    - phase: C1A
+      date: "2026-03-20"
+      summary: >
+        Closed the certification environment-readiness act because candidate
+        52ca494 and the refreshed evidence packet prove the SMARTHAUS
+        tenant contract, bounded certificate-backed executors, pinned
+        approvals target, and exact standalone shell contract are ready for
+        live certification, and advanced the next act to C1B pending
+        explicit live-execution approval.
+    - phase: C1B
+      date: "2026-03-20"
+      summary: >
+        Completed the live read-only certification act because list_users,
+        get_user, list_teams, and list_sites all executed successfully
+        against the live SMARTHAUS tenant through M365ConnectorModule, with
+        the retained transcript in the certification packet.
+    - phase: C1C
+      date: "2026-03-20"
+      summary: >
+        Completed the live mutation and governance certification act by
+        retaining the original live transcripts and closing the failed rows
+        with bounded reproofs for provision_service, reset_user_password,
+        the real actor-authenticated governed path on the supported OPA
+        surface, approval create/readback, and audit evidence.
+    - phase: C1D
+      date: "2026-03-20"
+      summary: >
+        Completed the evidence-packet and matrix-closeout act by mapping
+        the retained C1A through C1C packet into the standalone validation
+        matrix and release-gate docs, and by adding the bounded
+        validation_matrix_status artifact for candidate 52ca494.
+    - phase: C2
+      date: "2026-03-20"
+      summary: >
+        Recorded the formal standalone release decision in
+        artifacts/certification/m365-v1-candidate-52ca494/release_decision.json
+        and sign_off_record.json, with an explicit GO because the
+        required human engineering, security, and release-owner sign-off
+        record is now complete.
+    - phase: D1
+      date: "2026-03-20"
+      summary: >
+        Created docs/commercialization/m365-enterprise-collateral-pack.md
+        as the bounded buyer-facing and delivery-facing collateral pack,
+        keeping product claims, security posture, supported-action
+        commitments, and operating-model language inside the certified
+        standalone 9-action boundary and the existing C2 GO release
+        decision.
+    - phase: D2
+      date: "2026-03-20"
+      summary: >
+        Created docs/commercialization/m365-pilot-acceptance-and-customer-handoff.md
+        as the bounded pilot acceptance and ownership-transfer pack,
+        keeping pilot success criteria, acceptance, customer
+        responsibilities, handoff steps, and sign-off language inside the
+        certified standalone 9-action boundary and the existing
+        operator/support model.
+  prepared_blocked: null
+  next_act: null
+
+open_enterprise_blockers: []
+
+requirements:
+  - id: R1
+    name: Integrated enterprise-readiness control plane
+  - id: R2
+    name: Imported foundation and product-boundary traceability
+  - id: R3
+    name: Runtime hardening implementation
+  - id: R4
+    name: Repo standards and governance baseline closure
+  - id: R5
+    name: Repo validation closure
+  - id: R6
+    name: Live-tenant certification and release closure
+  - id: R7
+    name: Launch collateral and handoff
+  - id: R8
+    name: Governance synchronization and prompt regeneration
+  - id: R9
+    name: Entra user identity, app-registration role separation, and app-only execution architecture
+  - id: R10
+    name: Digital-employee operating model and executor-domain architecture
+  - id: R11
+    name: Multi-executor runtime and persona integration
+
+phase_groups:
+  - id: A
+    name: Imported Foundation and Product Boundary
+    acts:
+      - id: A1
+        name: Product Boundary and Positioning
+        status: complete
+      - id: A2
+        name: Canonical Config Contract and Auth Posture
+        status: complete
+      - id: A3
+        name: Governance Boundary and Certification Model
+        status: complete
+      - id: A4
+        name: Packaging and Operator Model
+        status: complete
+  - id: B
+    name: Runtime and Standards Hardening Implementation
+    acts:
+      - id: B1
+        name: Runtime Config Authority Remediation
+        status: complete
+      - id: B2
+        name: Fail-Closed Governance and Approval Remediation
+        status: complete
+      - id: B3
+        name: Admin Audit and Evidence-Surface Remediation
+        status: complete
+      - id: B4A
+        name: Governance Baseline Alignment
+        status: complete
+      - id: B4B
+        name: Prompt System Regeneration
+        status: complete
+      - id: B4C
+        name: Validation Blockers and Syntax Recovery
+        status: complete
+      - id: B4D1
+        name: Spillover Reset and Failure Inventory Pin
+        status: complete
+      - id: B4D2
+        name: Scripts and CI Ruff Cleanup
+        status: complete
+      - id: B4D3
+        name: Runtime, CLI, and Notebook Ruff/Black Cleanup
+        status: complete
+      - id: B4D4
+        name: Mypy Stub and Module-Path Remediation
+        status: complete
+      - id: B4D4A
+        name: Typing Environment and Module-Path Unblock
+        status: complete
+      - id: B4D4B
+        name: Core Runtime and Governance Mypy Remediation
+        status: complete
+      - id: B4D4C
+        name: Dashboard, Script, and Test Mypy Remediation
+        status: complete
+      - id: B4D4D
+        name: Targeted Mypy Closure
+        status: complete
+      - id: B4D5
+        name: Targeted Validation Closure
+        status: complete
+      - id: B4E
+        name: Full Repo Validation Closure
+        status: complete
+      - id: B5A
+        name: Identity Architecture Lock
+        status: complete
+      - id: B5B
+        name: Runtime Identity Enforcement
+        status: complete
+      - id: B5C
+        name: Authorization and Audit Binding
+        status: complete
+      - id: B5D
+        name: Entra App Registration Role Separation
+        status: complete
+      - id: B5E
+        name: Executor Certificate Cutover and Tenant Contract Finalization
+        status: complete
+      - id: B6A
+        name: Digital Employee Operating Model
+        status: complete
+      - id: B6B
+        name: Capability, API, License, and Auth Matrix
+        status: complete
+      - id: B6C
+        name: Executor-Domain Partitioning and Minimum-Permission Model
+        status: complete
+      - id: B6D
+        name: Persona Registry and Humanized Delegation Routing
+        status: complete
+      - id: B6E
+        name: Certification Rebase to the Digital-Employee Multi-Executor Target
+        status: complete
+      - id: B7A
+        name: Tenant Contract and Executor Registry Extension
+        status: complete
+      - id: B7B
+        name: Runtime Executor Routing and Domain Selection
+        status: complete
+      - id: B7C
+        name: Persona Registry and Humanized Delegation Integration
+        status: complete
+      - id: B7C1
+        name: MCP Constraint Contract Repair
+        status: complete
+      - id: B7D
+        name: Executor Permission Minimization and Azure Cleanup
+        status: complete
+      - id: B7E
+        name: Approval Backend Reproof and Certification Re-Readiness
+        status: complete
+  - id: C
+    name: Live-Tenant Certification
+    acts:
+      - id: C1A
+        name: Certification Environment Readiness
+        status: complete
+      - id: C1B
+        name: Live Read-Only Certification
+        status: complete
+      - id: C1C
+        name: Live Mutation and Governance Certification
+        status: complete
+      - id: C1D
+        name: Evidence Packet Completion and Matrix Closure
+        status: complete
+      - id: C2
+        name: Release Certification Packet and Decision
+        status: complete
+  - id: D
+    name: Launch Readiness
+    acts:
+      - id: D1
+        name: Enterprise Collateral Pack
+        status: complete
+      - id: D2
+        name: Pilot Acceptance and Customer Handoff
+        status: complete
+
+critical_path_rules:
+  - No act after B4E may proceed while pre-commit run --all-files is red.
+  - B5A may not start until B4E is complete.
+  - B5D may not start until B5C is complete.
+  - B5E may not start until B5D is complete.
+  - B6A may not start until B5E is complete.
+  - B7A may not start until B6E is complete.
+  - B7D may not start until B7C1 is complete.
+  - C1A may not start until B7E is complete.
+  - C1B and C1C require explicit live-execution approval.
+  - Historical commercialization prompts may not be used as active execution authority.
+
+prompt_inventory:
+  overview_prompt: docs/prompts/codex-m365-enterprise-readiness-master-plan.md
+  required_acts:
+    - A1
+    - A2
+    - A3
+    - A4
+    - B1
+    - B2
+    - B3
+    - B4A
+    - B4B
+    - B4C
+    - B4D1
+    - B4D2
+    - B4D3
+    - B4D4
+    - B4D5
+    - B4E
+    - B5A
+    - B5B
+    - B5C
+    - B5D
+    - B5E
+    - B6
+    - B6A
+    - B6B
+    - B6C
+    - B6D
+    - B6E
+    - B7
+    - B7A
+    - B7B
+    - B7C
+    - B7C1
+    - B7D
+    - B7E
+    - C1A
+    - C1B
+    - C1C
+    - C1D
+    - C2
+    - D1
+    - D2
+
+legacy_mapping:
+  P0A: A1
+  P0B: A1
+  P1A: A2
+  P1B: A2
+  P2A: A3
+  P2B: A3
+  P3A: A3
+  P3B: A3
+  P4A: A4
+  P4B: A4
+  P5A: D1
+  P5B: D2

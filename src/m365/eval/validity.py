@@ -27,7 +27,7 @@ def is_valid(instruction: Any) -> bool:
     Invariant: INV-M365-A-003
     Lemma: LEM-M365-A-003-01
     """
-    if not isinstance(instruction, (tuple, list)) or len(instruction) != 4:
+    if not isinstance(instruction, tuple | list) or len(instruction) != 4:
         return False
     p, a = instruction[0], instruction[2]
     return (p == "Admin" and a in A_Admin) or (p == "User" and a in A_User)

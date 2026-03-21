@@ -1,0 +1,7 @@
+{
+  "contract_id": "pilot-rollout-model-v2",
+  "governance_rule_count": 5,
+  "pilot_personas": 4,
+  "rollout_phase_count": 4,
+  "rollout_wave_count": 3
+}

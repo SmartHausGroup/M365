@@ -1,0 +1,90 @@
+version: 1.0.0
+last_updated: '2026-03-21T13:30:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  humanized_delegation: registry/humanized_delegation_interface_v1.yaml
+  department_packs: registry/department_pack_*_v1.yaml
+contract:
+  id: persona-discovery-contract
+  display_name: Persona Discovery and Selection
+  version: v1
+  status: contract-defined
+  purpose: >-
+    Make it easy for Claude and UCP to find and target the right digital
+    employee for any request by providing deterministic discovery filters,
+    ranking criteria, and selection rules across all 39 personas, 10
+    departments, and the full capability-family taxonomy.
+  bounded_claim: >-
+    This contract defines the discovery protocol and selection rules. It
+    does not claim that discovered personas are action-backed. Discovery
+    returns persona metadata and readiness state; execution eligibility
+    is determined downstream by the delegation contract.
+discovery_dimensions:
+  - id: by_name
+    description: >-
+      Resolve a persona by display name, slug, canonical agent ID, or
+      alias using the humanized delegation interface.
+    authority: registry/humanized_delegation_interface_v1.yaml
+  - id: by_department
+    description: >-
+      List all personas in a given department using the department pack
+      authority and persona registry.
+    authority: registry/department_pack_*_v1.yaml
+  - id: by_capability_family
+    description: >-
+      Find personas whose declared capability families match a query
+      using the persona capability map.
+    authority: registry/persona_capability_map.yaml
+  - id: by_workload_family
+    description: >-
+      Find personas whose declared workload families match a query
+      using the department pack authority.
+    authority: registry/department_pack_*_v1.yaml
+  - id: by_risk_tier
+    description: >-
+      Filter personas by risk tier (low, medium, high, critical) to
+      match the sensitivity of the requested work.
+    authority: registry/persona_registry_v2.yaml
+  - id: by_coverage_status
+    description: >-
+      Filter personas by coverage status (registry-backed vs
+      persona-contract-only) to determine execution eligibility.
+    authority: registry/persona_registry_v2.yaml
+selection_rules:
+  single_match: >-
+    If exactly one persona matches the discovery query, select it.
+  multiple_matches: >-
+    If multiple personas match, rank by specificity: exact name match
+    first, then capability-family overlap count, then risk-tier
+    appropriateness. Return the ranked list for user confirmation.
+  no_match: >-
+    If no persona matches, return a structured not-found response with
+    suggested alternative discovery dimensions.
+  ambiguity_policy: fail_closed
+  contract_only_visible: true
+governance_rules:
+  deterministic_discovery: >-
+    The same query against the same registry state must always return
+    the same discovery results.
+  no_hidden_personas: >-
+    Every persona in the authoritative registry must be discoverable
+    through at least one discovery dimension.
+  contract_only_transparency: >-
+    Contract-only personas must be discoverable but their response must
+    clearly indicate they are not yet action-backed.
+kpis:
+  discovery_dimensions: 6
+  selection_rules: 4
+  governance_rules: 3
+  discoverable_persona_count: 39
+  department_count: 10
+bounded_claims:
+  supported:
+    - six deterministic discovery dimensions across name, department, capability, workload, risk, and coverage
+    - selection rules for single, multiple, and zero matches
+    - contract-only persona transparency in discovery results
+  unsupported:
+    - claims that discovered personas are action-backed
+    - natural language understanding beyond the humanized delegation patterns
+    - persona recommendation or AI-driven ranking beyond declared specificity rules

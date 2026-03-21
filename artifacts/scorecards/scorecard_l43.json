@@ -1,0 +1,23 @@
+{
+  "lemma_id": "L43",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AS-persona-registry-v2.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L43_m365_persona_registry_v2.ipynb",
+  "invariant": "invariants/lemmas/L43_m365_persona_registry_v2.yaml",
+  "seed_lock": true,
+  "determinism": "authoritative roster, persona map, and agent registry project deterministically into one bounded persona registry",
+  "checks": [
+    {
+      "id": "roster_count",
+      "status": "passed"
+    },
+    {
+      "id": "overflow_exclusion",
+      "status": "passed"
+    },
+    {
+      "id": "status_consistency",
+      "status": "passed"
+    }
+  ]
+}

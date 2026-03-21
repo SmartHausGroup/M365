@@ -1,0 +1,7 @@
+Use `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d4-mypy-stub-module-path-remediation.md`.
+
+Plan refs:
+- `plan:m365-enterprise-readiness-master-plan:R5`
+- `plan:m365-enterprise-readiness-master-plan:B4D4`
+
+Resolve the current Mypy stub and module-path blockers only, then stop.

@@ -1,0 +1,22 @@
+lemma_id: L59
+title: M365 Persona Discovery Contract v1
+invariant: >
+  The persona discovery contract must define six discovery dimensions, four
+  selection rules, and three governance rules so that every persona in the
+  authoritative registry is discoverable and selection is deterministic
+  for any fixed registry state.
+proof_obligations:
+  - persona discovery contract authority file exists and validates
+  - six discovery dimensions are declared with required fields
+  - selection rules cover single match, multiple matches, no match, and ambiguity
+  - governance rules cover determinism, no hidden personas, and contract-only transparency
+  - discoverable persona count matches the authoritative registry
+failure_boundaries:
+  - missing persona discovery contract authority file
+  - missing discovery dimension
+  - missing selection rule
+  - persona count mismatch
+  - department count mismatch
+test_bindings:
+  - tests/test_persona_discovery_contract_v1.py
+ci_gate: scripts/ci/verify_persona_discovery_contract_v1.py

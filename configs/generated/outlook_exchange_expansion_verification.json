@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "supported_actions_count": 20,
+  "missing_in_supported_set": [],
+  "missing_in_instruction_schema": [],
+  "capability_registry_mismatches": [],
+  "route_mismatches": [],
+  "auth_mismatches": [],
+  "approval_profile_mismatches": []
+}

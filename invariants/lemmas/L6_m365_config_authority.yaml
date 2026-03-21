@@ -1,0 +1,13 @@
+lemma_id: L6
+name: M365 tenant-selected runtime config authority
+source_notebook: notebooks/m365/INV-M365-H-config-authority.ipynb
+evidence:
+  artifacts:
+    - src/smarthaus_common/tenant_config.py
+    - docs/commercialization/m365-canonical-config-contract.md
+    - docs/commercialization/m365-config-migration-and-auth-policy.md
+  checks:
+    - tenant-selected bootstrap filtering suppresses dotenv credential overrides
+    - tenant-selected graph auth resolution prefers tenant config values
+    - local no-tenant bootstrap remains available
+status: projected

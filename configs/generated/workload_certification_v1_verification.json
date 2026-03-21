@@ -1,0 +1,41 @@
+{
+  "certification_phase_count": 4,
+  "certified_domains": [
+    "access_reviews",
+    "collaboration",
+    "compliance",
+    "composite",
+    "devices",
+    "directory",
+    "identity_security",
+    "knowledge",
+    "messaging",
+    "powerplatform",
+    "reports",
+    "security",
+    "sharepoint"
+  ],
+  "contract_id": "workload-certification",
+  "domains_with_routed_actions": 13,
+  "domains_without_routed_actions": 2,
+  "governance_rule_count": 5,
+  "not_yet_certified_domains": [
+    "publishing",
+    "workmanagement"
+  ],
+  "phase_ids": [
+    "schema_validation",
+    "action_coverage_audit",
+    "auth_posture_alignment",
+    "bounded_claim_consistency"
+  ],
+  "rule_keys": [
+    "audit_completeness",
+    "bounded_claims",
+    "determinism",
+    "fail_closed",
+    "wave_alignment"
+  ],
+  "total_executor_domains": 15,
+  "total_routed_actions": 155
+}

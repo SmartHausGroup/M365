@@ -1,0 +1,13 @@
+{
+  "lemma_id": "L71",
+  "title": "M365 Support Boundary v2",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BS-support-boundary-v2.ipynb",
+    "notebooks/lemma_proofs/L71_m365_support_boundary_v2.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L71_m365_support_boundary_v2.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": ["Three-tier support with deterministic escalation"]
+}

@@ -1,0 +1,353 @@
+---
+description: Mandatory Agent Workflow - Unified pre-work and post-work checklist for all agents
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Mandatory Agent Workflow
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5, External Agents)
+
+---
+
+## Rule: ALL Work Must Follow This Complete Workflow
+
+**MANDATORY:** Every agent action (code changes, investigations, implementations, documentation, etc.) MUST follow this complete workflow. No exceptions.
+
+---
+
+## Pre-Work Checklist (MANDATORY - Before ANY Work)
+
+### Step 1: North Star Alignment Check
+**MANDATORY:** Before starting ANY work, you MUST:
+
+- [ ] Read `Operations/NORTHSTAR.md` and understand:
+  - Mission Statement
+  - Vision 2025
+  - Core Success Metrics
+  - Technical Excellence Goals
+  - Competitive Advantages
+  - M365-only tooling requirement
+  - AI agent workforce management goals
+  - Department-based organization (10 departments, 39 agents)
+
+- [ ] Verify your work aligns with North Star:
+  - Does this support North Star metrics?
+  - Does this align with mission/vision?
+  - Does this move us toward Vision 2025?
+
+- [ ] If misaligned:
+  - **STOP** immediately
+  - **HUMAN-IN-THE-LOOP:** Explain misalignment to user
+  - **HUMAN-IN-THE-LOOP:** Ask: "This work is not aligned with North Star. Should we: (a) update North Star to include this, or (b) stop this work?"
+  - **DO NOT proceed** until user explicitly approves
+
+- [ ] Document alignment check result (will be logged in action log)
+
+**Reference:** `.cursor/rules/north-star-alignment.mdc` for complete details
+
+---
+
+### Step 2: Execution Plan Verification
+**MANDATORY:** Before starting ANY work, you MUST:
+
+- [ ] Check if work is in `Operations/EXECUTION_PLAN.md`:
+  - Search for related task/requirement
+  - Verify task exists and is authorized
+  - Note the plan ID and requirement ID
+
+- [ ] Check if work is in `/plans/` directory (OPTIONAL - only for large initiatives explicitly authorized in Execution Plan):
+  - Search for relevant plan (Markdown, YAML, or JSON)
+  - If found: Verify plan exists and is approved, note the plan ID
+  - If not found: This is normal - SmartHaus M365 AI Workforce uses `Operations/EXECUTION_PLAN.md` as the primary plan system
+
+- [ ] If no plan exists in EXECUTION_PLAN.md:
+  - **STOP** immediately
+  - **HUMAN-IN-THE-LOOP:** Explain: "This work is aligned with North Star but not in execution plan."
+  - **HUMAN-IN-THE-LOOP:** Ask: "Should we: (a) add this to execution plan, or (b) stop this work?"
+  - **DO NOT proceed** until user explicitly approves and plan is updated
+
+- [ ] Reference plan item in format: `plan:EXECUTION_PLAN:{phase}.{task-id}` or `plan:{plan-id}:{requirement-id}` (if using /plans/)
+  - Example: `plan:EXECUTION_PLAN:2.2.2` (for Phase 2.2.2 Request Service)
+  - Example: `plan:EXECUTION_PLAN:0.1` (for Phase 0.1 Project Foundation)
+
+- [ ] **Prerequisite Phase Verification (MANDATORY):**
+  - [ ] Identify which phase this work belongs to (e.g., Phase 0.2, Phase 0.3, Phase 1.1)
+  - [ ] Check if this phase has prerequisites (earlier phases in sequence)
+  - [ ] Verify all prerequisite phases are marked "✅ Complete" in `Operations/EXECUTION_PLAN.md`
+  - [ ] If prerequisites are incomplete:
+    - **STOP** immediately
+    - **HUMAN-IN-THE-LOOP:** Explain: "Phase {X} cannot start because prerequisite phase {Y} is not complete (status: {status})."
+    - **HUMAN-IN-THE-LOOP:** Ask: "Should we: (a) complete prerequisite phase {Y} first, or (b) get explicit authorization to skip prerequisites?"
+    - **DO NOT proceed** until prerequisites are complete or explicit authorization is given
+  - [ ] If phase is already marked "✅ Complete":
+    - **STOP** - Phase is already done
+    - **HUMAN-IN-THE-LOOP:** Explain: "Phase {X} is already marked complete. No work needed."
+    - **DO NOT proceed** unless explicitly authorized to rework completed phase
+
+**Prerequisite Examples:**
+- Before starting Phase 0.2: Verify Phase 0.1 status is "✅ Complete"
+- Before starting Phase 0.3: Verify Phase 0.2 status is "✅ Complete"
+- Before starting Phase 1.1: Verify Phase 0.3 status is "✅ Complete"
+
+**Reference:** `.cursor/rules/plan-first-execution.mdc` for complete details
+
+---
+
+### Step 3: Change Approval (if write operations)
+**MANDATORY:** Before any write-effect actions, you MUST:
+
+- [ ] Follow change approval protocol in this exact order:
+  1. **North Star Alignment:** Explicit statement of alignment check result (from Step 1)
+  2. **Plan Verification:** Explicit statement of plan verification result (from Step 2)
+  3. **Explain:** Root cause, impact, scope
+  4. **Propose:** Planned edits (files/steps with plan references), risks, validation plan, rollback
+  5. **Await approval:** Explicitly ask "If you're good with this plan, reply 'go'..." - NO changes until user replies "go"
+  6. **Implement:** Apply edits exactly as approved
+  7. **Validate:** Run tests/checks; report results
+  8. **Report:** Short summary of changes and outcomes
+
+- [ ] Present proposal in the exact format specified in `.cursor/rules/rsf-change-approval.mdc`:
+  - Use explicit section headers: "North Star alignment:", "Plan verification:", "Explain (root cause, impact, scope):", "Propose (planned edits, risks, validation, rollback):"
+  - Include plan references in format: `plan:[plan-id]:[requirement-id]`
+  - Break down requirements/tasks with specific file lists
+  - End with explicit approval request: "If you're good with this plan, reply 'go'..."
+
+**Reference:** `.cursor/rules/rsf-change-approval.mdc` for complete details and example format
+
+**Note:** Read-only operations (file reading, searching, investigation) skip this step.
+
+---
+
+## During Work
+
+### Step 4: Execute Work
+While executing work:
+
+- [ ] Follow plan structure and requirements exactly
+- [ ] Maintain North Star alignment throughout
+- [ ] Document decisions and changes as you go
+- [ ] Reference plan item in all communications
+
+---
+
+## Post-Work Checklist (MANDATORY - After ANY Work)
+
+### Step 5: Update Action Log
+**MANDATORY:** After completing ANY work, you MUST:
+
+- [ ] Update `Operations/ACTION_LOG.md` with entry:
+  - **Format:** `YYYY-MM-DD HH:MM:SS TZ — Brief description: detailed explanation`
+  - **Time Zone:** Use local machine's timezone (do NOT hardcode; use actual local timezone abbreviation)
+  - **Include:**
+    - North Star alignment check result (from Step 1)
+    - Execution plan reference: `plan:{plan-id}:{requirement-id}` (from Step 2)
+    - What was done (specific files, changes, results)
+    - Findings, issues, or resolutions
+  - **Location:** Add at TOP of file (newest first)
+
+**Example:**
+```
+2025-01-28 10:00:00 EST — Completed field-native encoder MA Phase 4: plan:execution_plan:field-native-encoder; aligned with North Star 4-D field lattice goals; created verification notebook notebooks/math/field_native_encoder_verification.ipynb; exported artifact to configs/generated/field_native_encoder.json; updated Operations/EXECUTION_PLAN.md to mark Phase 4 complete.
+```
+
+**Note:** The timezone in the example (EST) is shown for illustration. Use your local machine's actual timezone when creating log entries.
+
+**Reference:** `.cursor/rules/action-log-requirement.mdc` for complete details
+
+---
+
+### Step 6: Update Execution Plan (if milestone-related)
+**MANDATORY:** After work that affects milestones, you MUST:
+
+- [ ] Update `Operations/EXECUTION_PLAN.md` if work affects:
+  - Completion percentages (>5% change)
+  - Milestone completion
+  - Phase status changes
+  - Blocker/risk changes
+  - Overall progress assessment
+
+- [ ] Update sections:
+  - Completion percentages for affected phases
+  - Current implementation status
+  - Overall progress assessment (if >5% change)
+  - Blocker/risk notes
+
+- [ ] Cross-reference:
+  - Mark completed tasks with ✅ in `Operations/EXECUTION_PLAN.md` (in the task checklist section for the relevant phase)
+  - Reference related action log entries
+
+**Reference:** `.cursor/rules/action-log-requirement.mdc` for complete details
+
+---
+
+### Step 7: Update Execution Plan Progress (if task completed)
+**MANDATORY:** After completing a task, you MUST:
+
+- [ ] Update `Operations/EXECUTION_PLAN.md` if task was completed:
+  - **MANDATORY:** Mark `[x]` checkbox in the task checklist section for the relevant phase IMMEDIATELY after task completion
+  - **VERIFICATION:** Re-read execution plan to confirm checkbox is marked `[x]` (not still `[ ]`)
+  - Update status at the top of the phase section: `✅ Complete`, `⚠️ Partial`, or `❌ Not Started`
+  - Add completion date
+  - Add notes about what was done
+  - **CRITICAL:** If checkbox update fails, STOP and report error - do not proceed until checkbox is marked
+
+- [ ] Update progress tracking section in `Operations/EXECUTION_PLAN.md`:
+  - Update phase completion percentage (if progress tracking section exists)
+  - Update overall progress if significant (if progress tracking section exists)
+  - Update phase status at the top of the phase section (e.g., `**Status:** ⚠️ In Progress`)
+
+- [ ] Document any changes:
+  - Dependencies that changed
+  - Timeline adjustments
+  - Risk updates
+
+**Reference:** `.cursor/rules/action-log-requirement.mdc` for complete details
+
+---
+
+### Step 8: Verify Post-Work Checklist Complete (MANDATORY)
+**MANDATORY:** Before considering work complete, you MUST explicitly verify:
+
+- [ ] **Step 5 completed:** Action log updated with all required elements
+- [ ] **Step 6 completed:** Execution plan updated (if milestone-related)
+- [ ] **Step 6 completed:** Project status updated (if milestone-related)
+- [ ] **Step 7 completed:** Task progress updated (if task completed)
+
+**CRITICAL:** Work is NOT complete until ALL applicable post-work steps are verified.
+
+**If ANY step is missing:**
+- **STOP** and complete the missing step(s)
+- **DO NOT** consider work finished until all steps are done
+- **DO NOT** proceed to new work until post-work checklist is complete
+
+**Verification Method:**
+1. Read `Operations/ACTION_LOG.md` - verify your entry is at the top
+2. Read `Operations/EXECUTION_PLAN.md` - verify updates if milestone-related
+3. Read `Operations/EXECUTION_PLAN.md` - verify updates if milestone-related
+4. Confirm all applicable steps are complete
+
+**Reference:** `.cursor/rules/post-work-enforcement.mdc` for complete details
+
+---
+
+## Workflow Integration
+
+This unified workflow integrates with all other rules:
+
+```
+agent-workflow-mandatory.mdc (THIS FILE - Unified Workflow)
+    ↓
+    ├── north-star-alignment.mdc (Step 1: Pre-work)
+    ├── plan-first-execution.mdc (Step 2: Pre-work)
+    ├── c2-change-approval.mdc (Step 3: Pre-work, if write operations)
+    ├── action-log-requirement.mdc (Steps 5-7: Post-work)
+    └── post-work-enforcement.mdc (Step 8: Post-work verification)
+```
+
+---
+
+## Enforcement
+
+**MANDATORY:** This workflow applies to:
+
+- All Codex agents (via `AGENTS.md` and `docs/codex/CODEX_OPERATING_RULE.mdc`)
+- All Cursor AI assistants (via `.cursor/rules/`)
+- All external agents accessing the repository
+- All automated systems performing work
+
+**Verification Checklist:**
+
+Before work:
+- [ ] North Star alignment checked
+- [ ] Execution plan verified
+- [ ] Plan reference obtained
+- [ ] Approval obtained (if write operations)
+
+After work:
+- [ ] Action log updated (Step 5 - MANDATORY)
+- [ ] Execution plan updated (Step 6 - if milestone-related)
+- [ ] Project status updated (Step 6 - if milestone-related)
+- [ ] Task progress updated (Step 7 - if task completed)
+- [ ] Post-work checklist verified (Step 8 - MANDATORY)
+
+**CRITICAL:** Work is NOT complete until Step 8 verification confirms all applicable steps are done.
+
+---
+
+## Document Hierarchy
+
+**Source of Truth Order:**
+
+1. `Operations/NORTHSTAR.md` - Vision, goals, metrics (EVERYTHING must align)
+2. `Operations/EXECUTION_PLAN.md` - Planned work (work must be in plan)
+3. `Operations/ACTION_LOG.md` - Granular history (every action logged)
+4. `/plans/` - Detailed execution plans (specific implementations)
+
+**Workflow:**
+```
+Operations/NORTHSTAR.md (vision)
+    ↓
+Operations/EXECUTION_PLAN.md (planned work)
+    ↓
+/plans/ (detailed plans)
+    ↓
+Work Execution
+    ↓
+Operations/ACTION_LOG.md (granular tracking)
+    ↓
+Operations/EXECUTION_PLAN.md (progress update)
+```
+
+---
+
+## Examples
+
+### ✅ Good: Complete Workflow Followed
+
+**Scenario:** Implementing Phase 0.3 requirement
+
+**Pre-Work:**
+1. ✅ Checked North Star alignment - supports 4-D field lattice goals
+2. ✅ Verified in Operations/EXECUTION_PLAN.md - field-native encoder exists
+3. ✅ Found plan in /plans/ or execution_plan.md
+4. ✅ Reference: `plan:execution_plan:field-native-encoder`
+5. ✅ Got approval for work
+
+**Work:**
+- Executed MA Phase 4 per plan
+- Maintained North Star alignment
+
+**Post-Work:**
+6. ✅ Updated Operations/ACTION_LOG.md with plan reference and alignment
+7. ✅ Updated Operations/EXECUTION_PLAN.md (milestone-related)
+8. ✅ Updated Operations/EXECUTION_PLAN.md (task completed)
+9. ✅ Verified post-work checklist complete (all steps done)
+
+### ❌ Bad: Workflow Not Followed
+
+**Scenario:** Adding new feature
+
+**Pre-Work:**
+1. ❌ Skipped North Star alignment check
+2. ❌ No execution plan verification
+3. ❌ Started work without plan
+
+**Result:** Work should be STOPPED and workflow followed
+
+---
+
+## Related Documents
+
+- `Operations/NORTHSTAR.md` - Source of truth for vision/goals
+- `Operations/EXECUTION_PLAN.md` - Source of truth for planned work
+- `Operations/ACTION_LOG.md` - Granular action history
+- `/plans/` - Detailed execution plans
+- `AGENTS.md` - Agent specifications (Codex entry point)
+- `docs/codex/CODEX_OPERATING_RULE.mdc` - Codex operating rules
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.1

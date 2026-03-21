@@ -1,0 +1,18 @@
+lemma_id: L45
+title: M365 Persona Task Queues and State v1
+invariant: >
+  Dashboard and persona-runtime queue state must be projected from one authoritative
+  task/status contract, one shared append-only store, and one deterministic transition matrix.
+proof_obligations:
+  - authority file exists and validates
+  - invalid task transitions fail closed
+  - dashboard and persona runtime project the same effective task state
+  - planned personas may hold queued work while inactive personas may not
+failure_boundaries:
+  - missing authority file
+  - invalid transition accepted
+  - queue/state drift across runtime surfaces
+test_bindings:
+  - tests/test_persona_task_queue_state_v1.py
+  - tests/test_agent_api.py
+ci_gate: scripts/ci/verify_persona_task_queue_state_v1.py

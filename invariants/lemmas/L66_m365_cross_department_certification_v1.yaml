@@ -1,0 +1,22 @@
+lemma_id: L66
+title: M365 Cross-Department Workflow Certification v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E8D"
+status: green
+invariant: >
+  Four ordered certification phases and five governance rules so that
+  cross-department workflows are certified through the collaboration
+  contract, handoff rules, and bounded claims consistent with the
+  certified department and persona surfaces.
+proof_obligations:
+  - "Cross-department certification authority file exists and validates"
+  - "Collaboration contract has primitives and handoff rules"
+  - "All 10 certified departments can participate"
+  - "No claim exceeds certified surfaces"
+failure_boundaries:
+  - "Missing certification authority file"
+  - "Missing collaboration contract"
+  - "Missing handoff rules"
+  - "Claim exceeding surfaces"
+test_bindings:
+  - tests/test_cross_department_certification_v1.py
+ci_gate: scripts/ci/verify_cross_department_certification_v1.py

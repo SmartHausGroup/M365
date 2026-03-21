@@ -1,0 +1,159 @@
+---
+description: Question-Answer Protocol Rule - Answer questions first, then ask about action
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Question-Answer Protocol Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: Answer Questions First, Then Ask About Action
+
+**MANDATORY:** When the user asks a question, you MUST:
+1. **Answer the question completely** (provide information, explanation, clarification)
+2. **STOP** - Do NOT take any action (no code changes, no file edits, no command execution)
+3. **Ask explicitly:** "Would you like me to [specific action] based on this answer?" or "Should I proceed with [action]?"
+
+**DO NOT assume the user wants action just because they asked a question.**
+
+---
+
+## What This Means
+
+### When User Asks a Question:
+
+**MANDATORY Workflow:**
+1. ✅ **Answer the question** - Provide complete, accurate information
+2. ✅ **STOP** - Do not take any action
+3. ✅ **Ask for permission** - "Would you like me to [action]?" or "Should I [action]?"
+
+### FORBIDDEN Actions (When User Only Asks a Question):
+
+- ❌ Making code changes
+- ❌ Editing files
+- ❌ Creating new files
+- ❌ Running commands
+- ❌ Updating documentation
+- ❌ Implementing fixes
+- ❌ Taking any action without explicit permission
+
+---
+
+## Examples
+
+### ❌ BAD: Taking Action After Question
+
+**User:** "How many tests do I have?"
+
+**WRONG Response:**
+- Answers: "You have 2 tests" ✅
+- Then immediately: "Let me update the documentation..." ❌ (NOT ASKED)
+
+**CORRECT Response:**
+- Answers: "You have 2 tests: superposed_semantics_gate.py (can run on 2 datasets: beir_arguana and beir_scifact). Both use the same script, so it's 1 test script with 2 dataset options."
+- Then asks: "Would you like me to update the documentation to clarify this?"
+
+### ❌ BAD: Implementing After Clarification Question
+
+**User:** "Will both tests display status as they progress?"
+
+**WRONG Response:**
+- Answers: "Yes, both will show progress" ✅
+- Then immediately starts implementing enhanced progress indicators ❌ (NOT ASKED)
+
+**CORRECT Response:**
+- Answers: "Yes, both tests use the same script (superposed_semantics_gate.py), so they both show the same progress indicators: progress bars for encoding and queries, plus status messages."
+- Then asks: "Would you like me to enhance the progress indicators with stage headers and visual indicators?"
+
+### ✅ GOOD: Answer Then Ask
+
+**User:** "What field shape are we using?"
+
+**CORRECT Response:**
+- Answers: "We're using 32,32,32,4 (32×32×32 spatial, 4 time slices). This is a benchmark shape chosen for speed/memory trade-offs. Production default is 256,256,256,16. See docs/benchmarking/SUPERPOSED_SEMANTICS_GATE_ANALYSIS.md for details."
+- Then asks: "Would you like me to update the documentation to make this clearer, or change the default field shape?"
+
+---
+
+## When User Explicitly Requests Action
+
+**ONLY take action when user says:**
+- "Do this"
+- "Fix this"
+- "Update this"
+- "Implement this"
+- "Create this"
+- "Yes, do it"
+- "Go ahead"
+- "Proceed"
+- "Make this change"
+
+**DO NOT take action when user says:**
+- "How many...?" (question)
+- "What is...?" (question)
+- "Why...?" (question)
+- "Will this...?" (question)
+- "Does this...?" (question)
+- "Explain..." (question)
+- "Clarify..." (question)
+
+---
+
+## Question vs Action Request Detection
+
+### Questions (Answer Only):
+- Start with: "How", "What", "Why", "When", "Where", "Who", "Will", "Does", "Is", "Are", "Can", "Should"
+- Contain: "?", "explain", "clarify", "tell me", "show me" (information request)
+- Pattern: Asking for information, explanation, or clarification
+
+### Action Requests (Can Proceed):
+- Start with: "Do", "Fix", "Update", "Create", "Implement", "Change", "Add", "Remove", "Run", "Execute"
+- Contain: "make this", "update this", "fix this", "create this"
+- Pattern: Direct instruction to perform an action
+
+**When in doubt:** Treat as a question. Answer it, then ask if they want action.
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL user interactions.
+
+**Before taking ANY action:**
+1. Ask yourself: "Did the user ask a question or request an action?"
+2. If QUESTION: Answer it completely, then ask: "Would you like me to [action]?"
+3. If ACTION REQUEST: Proceed with the action (following other mandatory rules)
+
+**Exception:** Read-only operations (reading files, searching codebase) are allowed to answer questions, but NO write operations without explicit permission.
+
+---
+
+## Rationale
+
+Users often ask questions to:
+- Understand the current state
+- Get clarification before deciding
+- Learn about the system
+- Verify assumptions
+
+**Respect user intent:** If they ask a question, they want information first. Don't assume they want action. Let them decide after getting the answer.
+
+---
+
+## Integration with Other Rules
+
+This rule works alongside:
+- **No Unsolicited Execution:** Don't run commands/tests without permission
+- **Change Approval Protocol:** Get approval before write operations
+- **Agent Workflow:** Follow pre-work checklist before any action
+
+**This rule is MORE GENERAL:** It applies to ALL actions (not just execution), and requires asking permission even for read-write operations that might seem "helpful."
+
+---
+
+**Last Updated:** 2025-12-30
+**Version:** 1.0

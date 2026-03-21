@@ -1,0 +1,9 @@
+{
+  "lemma_id": "L42_m365_admin_governance_surface_expansion_v2",
+  "status": "green",
+  "notebook_path": "notebooks/m365/INV-M365-AR-admin-governance-surface-expansion-v2.ipynb",
+  "lemma_notebook_path": "notebooks/lemma_proofs/L42_m365_admin_governance_surface_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "invariant_status": "pass"
+}

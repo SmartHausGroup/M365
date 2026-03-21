@@ -1,0 +1,147 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C1A",
+  "candidate_sha": "52ca494",
+  "checked_at": "2026-03-20T06:51:24-04:00",
+  "status": "go",
+  "next_act": "C1B",
+  "gate": "GATE:M365-READY-C1A STATUS:GO",
+  "final_decision": "GO",
+  "probe_mode": "exact_shell_contract_reproof",
+  "all_prerequisites_present": true,
+  "scope_decisions": {
+    "caio_surface_in_scope": false,
+    "external_opa_required": "optional"
+  },
+  "prerequisite_groups": [
+    {
+      "group": "tenant_contract",
+      "required": [
+        "tenant YAML exists for the selected certification tenant",
+        "tenant-config loader resolves the selected tenant",
+        "tenant identity and auth mode resolve without exposing secrets"
+      ],
+      "present": {
+        "tenant_yaml_present": true,
+        "tenant_loader_resolution": true,
+        "tenant_identity_present": true,
+        "auth_mode_app_only": true
+      },
+      "ready": true,
+      "note": "The SMARTHAUS tenant contract exists at the sibling UCP tenant path and resolves through smarthaus_common.tenant_config when selected."
+    },
+    {
+      "group": "tenant_selection_runtime",
+      "required": [
+        "UCP_TENANT"
+      ],
+      "present": {
+        "UCP_TENANT": true
+      },
+      "ready": true,
+      "note": "The exact standalone certification shell contract was activated for the B7E re-proof, so tenant selection is now proven on the rebased multi-executor runtime."
+    },
+    {
+      "group": "graph_app_auth_contract",
+      "required_any_of": [
+        [
+          "tenant_yaml.azure.tenant_id",
+          "tenant_yaml.azure.client_id",
+          "tenant_yaml.azure.client_secret"
+        ],
+        [
+          "tenant_yaml.azure.tenant_id",
+          "tenant_yaml.azure.client_id",
+          "tenant_yaml.azure.client_certificate_path"
+        ]
+      ],
+      "present": {
+        "tenant_yaml.azure.tenant_id": true,
+        "tenant_yaml.azure.client_id": true,
+        "tenant_yaml.azure.client_secret": false,
+        "tenant_yaml.azure.client_certificate_path": true,
+        "AZURE_TENANT_ID": false,
+        "AZURE_CLIENT_ID": false,
+        "AZURE_CLIENT_SECRET": false,
+        "GRAPH_TENANT_ID": false,
+        "GRAPH_CLIENT_ID": false,
+        "GRAPH_CLIENT_SECRET": false,
+        "AZURE_CLIENT_CERTIFICATE_PATH": false
+      },
+      "ready": true,
+      "note": "The SMARTHAUS tenant YAML now provides an app-only certificate-backed credential contract, and the executor app has validated Graph access after secret retirement."
+    },
+    {
+      "group": "mutation_and_audit_controls",
+      "required": [
+        "ALLOW_M365_MUTATIONS",
+        "ENABLE_AUDIT_LOGGING"
+      ],
+      "present": {
+        "ALLOW_M365_MUTATIONS": true,
+        "ENABLE_AUDIT_LOGGING": true
+      },
+      "ready": true,
+      "note": "The exact standalone certification shell contract activates the mutation and audit toggles required for the approved non-production certification window."
+    },
+    {
+      "group": "approval_path",
+      "required": [
+        "tenant-backed or approved compatibility approval target",
+        "approval site/list resolution reachable for the selected tenant"
+      ],
+      "present": {
+        "tenant_yaml.governance.approvals_site_url": true,
+        "tenant_yaml.governance.approvals_site_id": true,
+        "tenant_yaml.governance.approvals_list_id": true,
+        "tenant_yaml.governance.approvals_list_name": true,
+        "APPROVALS_SITE_ID": false,
+        "APPROVALS_SITE_URL": false,
+        "approval_backend_reachable": true
+      },
+      "ready": true,
+      "note": "The SMARTHAUS tenant contract now pins the real SMARTHAUS M365 Operations approvals target by explicit site and list IDs. Under the exact standalone shell contract, the bounded SharePoint executor returns HTTP 200 on both the approvals list metadata route and the approvals list items route."
+    },
+    {
+      "group": "instruction_api_operator",
+      "required": [],
+      "present": {},
+      "ready": true,
+      "out_of_scope": true,
+      "note": "CAIO and instruction-API operator inputs are out of scope for standalone M365 C1 certification."
+    },
+    {
+      "group": "external_policy_engine",
+      "required_optional": [
+        "OPA_URL"
+      ],
+      "present": {
+        "OPA_URL": false
+      },
+      "ready": true,
+      "note": "Only required if the live certification run is configured to use an external OPA service."
+    }
+  ],
+  "blocking_conditions": [],
+  "next_actions": [
+    "Use the exact standalone shell contract for the approved C1 live-certification window: UCP_ROOT=/Users/smarthaus/Projects/GitHub/UCP, UCP_TENANT=smarthaus, ALLOW_M365_MUTATIONS=true, ENABLE_AUDIT_LOGGING=true.",
+    "Execute C1B read-only certification and save transcripts under artifacts/certification/m365-v1-candidate-52ca494/transcripts/.",
+    "Execute C1C controlled mutation, approval, and audit checks only after C1B is green."
+  ],
+  "exact_shell_probe": {
+    "contract": {
+      "UCP_ROOT": "/Users/smarthaus/Projects/GitHub/UCP",
+      "UCP_TENANT": "smarthaus",
+      "ALLOW_M365_MUTATIONS": "true",
+      "ENABLE_AUDIT_LOGGING": "true"
+    },
+    "default_executor": "sharepoint",
+    "sharepoint_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "approval_site_url": "https://smarthausgroup.sharepoint.com/sites/SMARTHAUSM365Operations",
+    "approval_site_id": "smarthausgroup.sharepoint.com,f30b4c3c-de67-4faf-954d-fd0037c9e01b,bb8840b4-db36-4818-8cbd-0adfd17c0bc0",
+    "approval_list_id": "4d7c74f4-b3a5-4bc1-9530-5c612f55209f",
+    "approval_list_display_name": "Approvals",
+    "list_metadata_status": 200,
+    "list_items_status": 200,
+    "item_count_observed": 0
+  }
+}

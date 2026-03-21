@@ -1,0 +1,90 @@
+version: 1.0.0
+last_updated: '2026-03-21T13:45:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_task_queue: registry/persona_task_queue_state_v1.yaml
+  delegation_contract: registry/ucp_delegation_contract_v1.yaml
+  discovery_contract: registry/persona_discovery_contract_v1.yaml
+  executor_routing: src/smarthaus_common/executor_routing.py
+  audit_schema: src/smarthaus_common/audit_schema.py
+contract:
+  id: task-orchestration-contract
+  display_name: Multi-Step Task Orchestration
+  version: v1
+  status: contract-defined
+  purpose: >-
+    Support composed multi-step work across workload and persona boundaries
+    by defining orchestration primitives, step dependency semantics, failure
+    handling, and audit requirements for multi-step task graphs.
+  bounded_claim: >-
+    This contract defines the orchestration protocol for composed tasks. It
+    does not claim that all personas can execute steps. Contract-only
+    personas may appear in orchestration plans but their steps resolve to
+    blocked at execution time.
+orchestration_primitives:
+  - id: sequential
+    description: >-
+      Steps execute in declared order. Each step must complete successfully
+      before the next step begins.
+    failure_semantics: stop_on_first_failure
+  - id: parallel
+    description: >-
+      Independent steps execute concurrently. All steps must complete before
+      the orchestration advances to the next stage.
+    failure_semantics: collect_all_then_evaluate
+  - id: conditional
+    description: >-
+      A step executes only if a declared condition on a predecessor step
+      result is satisfied.
+    failure_semantics: skip_on_condition_unmet
+  - id: fallback
+    description: >-
+      If the primary step fails, a declared fallback step executes instead.
+    failure_semantics: try_fallback_on_primary_failure
+step_contract:
+  required_fields:
+    - step_id
+    - persona_id
+    - action_or_task
+    - inputs
+    - outputs
+    - dependency_on
+  step_states:
+    - pending
+    - running
+    - completed
+    - failed
+    - skipped
+    - blocked
+  transition_rules: >-
+    Steps transition from pending to running when dependencies are met,
+    from running to completed or failed based on execution outcome, from
+    pending to skipped when conditions are unmet, and from pending to
+    blocked when the assigned persona is contract-only.
+governance_rules:
+  deterministic_ordering: >-
+    The execution order of steps must be deterministic for any fixed
+    orchestration plan and dependency graph.
+  fail_closed_on_missing_persona: >-
+    If a step references a persona not in the authoritative registry, the
+    orchestration must fail closed.
+  audit_per_step: >-
+    Each step must produce its own audit envelope as part of the
+    orchestration audit trail.
+  no_implicit_escalation: >-
+    An orchestration cannot implicitly escalate the risk tier of a composed
+    task beyond the maximum risk tier of its individual steps.
+kpis:
+  orchestration_primitives: 4
+  step_states: 6
+  governance_rules: 4
+bounded_claims:
+  supported:
+    - four orchestration primitives for composing multi-step work
+    - step dependency semantics with defined state transitions
+    - fail-closed handling for missing or contract-only personas
+    - per-step audit envelopes within orchestration audit trails
+  unsupported:
+    - claims that all orchestration steps are executable
+    - dynamic persona selection within orchestration (uses discovery contract separately)
+    - real-time orchestration monitoring beyond audit trail

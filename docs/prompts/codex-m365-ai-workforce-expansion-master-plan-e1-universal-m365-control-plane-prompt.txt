@@ -1,0 +1,7 @@
+Execute E1 Universal M365 Control Plane
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e1-universal-m365-control-plane.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E1
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

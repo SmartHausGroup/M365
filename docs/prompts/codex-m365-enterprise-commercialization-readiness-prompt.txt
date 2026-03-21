@@ -1,0 +1,9 @@
+Prepare M365 Enterprise Commercialization Readiness execution.
+
+Read the detailed plan at docs/prompts/codex-m365-enterprise-commercialization-readiness.md.
+
+Plan Reference: plan:m365-enterprise-commercialization-readiness:R1
+
+Implementation approval status: not yet approved. Use this prompt only after CTO approval for phase execution.
+
+When approved, execute phases P0 through P5 in order and synchronize Operations/ACTION_LOG.md and Operations/EXECUTION_PLAN.md as required.

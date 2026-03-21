@@ -1,0 +1,7 @@
+Execute E4D Conditional Access / Identity Protection Expansion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ai-workforce-expansion-master-plan-e4d-conditional-access-identity-protection-expansion.md.
+
+Plan Reference: plan:m365-ai-workforce-expansion-master-plan:E4D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

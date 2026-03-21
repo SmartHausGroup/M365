@@ -1,0 +1,250 @@
+---
+alwaysApply: true
+---
+## 2. Context Awareness (Codex MUST read files, never assume)
+
+* Codex MUST open and inspect relevant files **before** proposing changes.
+
+* Codex MUST NOT hallucinate file contents or rely on outdated memory.
+
+* If a referenced file is missing, Codex MUST state this and ask how to proceed.
+
+---
+
+## 3. Minimal Scope / Least-Diff Principle
+
+* Codex MUST perform the smallest possible change required to satisfy the request.
+
+* Codex MUST NOT restructure modules, rewrite files, or perform large refactors unless explicitly instructed.
+
+* Codex MUST preserve architecture, naming patterns, directory structure, and coding style.
+
+---
+
+## 4. Patch-First Requirement
+
+* All code modification proposals MUST be provided as **patch-style diffs first**.
+
+* Full file rewrites may be provided **only if the user asks** or if the file is too small for a patch to be meaningful.
+
+* Codex MUST clearly mark what files are being changed and why.
+
+---
+
+## 5. Verification-First Principle
+
+For every non-trivial change, Codex MUST provide specific verification instructions:
+
+* Use ONLY commands documented in the repository's `CODEX_PROFILE.md`.
+
+* MUST NOT invent commands.
+
+* MUST specify test commands, lint commands, MA/CI commands where appropriate.
+
+---
+
+## 6. Error Handling & Uncertainty Rules
+
+* If instructions are unclear, Codex MUST ask a clarifying question.
+
+* If multiple interpretations exist, Codex MUST enumerate them and ask the user to choose.
+
+* Codex MUST NOT "guess" math, invariants, PDE behavior, API contracts, or missing module logic.
+
+---
+
+## 7. Architecture Preservation Rule
+
+Codex MUST:
+
+* Preserve all existing architecture patterns
+
+* Preserve directory layout
+
+* Follow existing naming conventions
+
+* Maintain import structure
+
+* Avoid introducing new frameworks/libraries unless explicitly instructed
+
+---
+
+## 8. Forbidden Actions (Unless User Explicitly Allows)
+
+Codex MUST NOT modify:
+
+* CI workflows (`.github/workflows/`)
+
+* Dependency files (`pyproject.toml`, `package.json`, `requirements/*.txt`)
+
+* Generated artifacts (`configs/generated/`, `artifacts/`)
+
+* Schema directories (`configs/schemas/`)
+
+* Infrastructure configurations (`docker`, `compose`, `terraform`, etc.)
+
+**Exception:** Governance / contract enforcement changes are allowed when explicitly requested by the user (e.g., traceability gate, contract gate, Makefile updates for validation, contract YAML files).
+
+Codex MUST NOT:
+
+* Delete files or directories
+
+* Perform large multi-file refactors
+
+* Change public interfaces without approval
+
+* Modify math/spec/invariant files unless explicitly asked
+
+---
+
+## 9. Security & Secret Handling Rules
+
+Codex MUST:
+
+* NEVER output real secret values
+
+* NEVER hardcode secrets, tokens, passwords, or keys
+
+* Mask or redact any secret-like strings
+
+* Warn the user if a proposed change might expose sensitive info
+
+---
+
+## 10. Logging, Telemetry & Tracing Integrity
+
+Codex MUST:
+
+* Preserve existing logging structures
+
+* Preserve telemetry/tracing APIs
+
+* Use the project's logger (not raw `print`)
+
+* Avoid changing log formats unless explicitly instructed
+
+---
+
+## 11. Repository Bootstrapping Rule
+
+Every time Codex starts work in a repo, it MUST:
+
+1. Locate:
+
+   * `docs/codex/CODEX_PROFILE.md`
+
+   * `docs/codex/CODEX_PLAYBOOK.md`
+
+2. Read them
+
+3. Treat them as authoritative for that repo
+
+4. Apply the Priority Order above
+
+---
+
+## 12. North Star & Execution Plan Maintenance (MANDATORY)
+
+**Scope:** This section applies only to repositories that define a North Star and Execution Plan in their `CODEX_PROFILE.md`. If a repository does not declare these documents, Codex MUST treat this section as informational and MUST NOT invent them.
+
+**North Star and Execution Plan are canonical sources of truth and MUST remain synchronized.**
+
+### Document Roles
+
+* **North Star** (`Operations/NORTHSTAR.md`): Canonical definition (WHAT/WHY)
+  * System definition, guarantees, KPIs, guardrails
+  * Architecture, mathematical foundations, invariants
+  * Normative — defines what must be true
+
+* **Execution Plan** (`Operations/EXECUTION_PLAN.md`): Canonical progress tracking (HOW/WHEN)
+  * Phases, tasks, completion status
+  * Progress against North Star objectives
+  * Operational gates and acceptance criteria
+  * **If disagreement: North Star wins**
+
+### When Codex Makes Changes
+
+When user instructions include work that changes core objectives, guarantees, or status, Codex MUST either:
+
+* Propose patch-style updates to the North Star / Execution Plan, or
+
+* Explicitly remind the user that these documents must be updated and ask for permission to change them.
+
+Codex MUST NOT silently change North Star or Execution Plan documents without the user's awareness.
+
+**MUST update North Star when:**
+
+* Core objectives of the project change
+* New guarantee/KPI added (normative change)
+* Architecture change (system definition)
+* Guardrail change (canonical threshold)
+* New invariant added (mathematical guarantee)
+
+**MUST update Execution Plan when:**
+
+* Any work is completed (add to "Recent Work" section)
+* Phase status changes (update phase completion)
+* New work begins (add to appropriate phase)
+* PR merged (add to "Recent Work" within 24 hours)
+
+**MUST keep them synchronized:**
+
+* Everything in North Star MUST be reflected in Execution Plan
+* Everything in Execution Plan MUST map to North Star sections
+* Traceability matrix MUST be updated when either document changes
+* Run sync check after any update: `python3 scripts/ci/north_star_execution_plan_sync_check.py` (if available)
+
+### Process
+
+1. **Before making changes that affect core objectives:**
+   * Locate North Star document in `docs/`
+   * Locate Execution Plan document in `docs/operations/`
+   * Read both to understand current state
+
+2. **When updating North Star:**
+   * Update relevant sections
+   * Update Execution Plan traceability matrix to reflect changes
+   * Ensure Execution Plan phases map to updated North Star sections
+
+3. **When updating Execution Plan:**
+   * Add work to "Recent Work" section (for recent work)
+   * Update phase status (for completed work)
+   * Update traceability matrix (ensure North Star sections are tracked)
+   * Verify all references to North Star sections are valid
+
+4. **After any update:**
+   * Run sync check script if available: `python3 scripts/ci/north_star_execution_plan_sync_check.py`
+   * Verify references are valid (no broken links)
+   * Ensure traceability matrix is complete
+
+### References
+
+* **Process Documentation:** `docs/operations/EXECUTION_PLAN_MAINTENANCE.md` (if exists)
+* **Sync Check Script:** `scripts/ci/north_star_execution_plan_sync_check.py` (if exists)
+
+If `scripts/ci/north_star_execution_plan_sync_check.py` does not exist, Codex MUST NOT invent it. Instead, it should recommend adding a sync check script or performing a manual comparison.
+
+**This rule is MANDATORY. North Star and Execution Plan must remain canonical and synchronized.**
+
+---
+
+## Optional `.cursor/codex.json` note snippet
+
+If you want to add a hint into `.cursor/codex.json` as well, you can do something like:
+
+```json
+{
+  "agents": {
+    "repo-dev": {
+      "root": ".",
+      "include": ["src/**", "tests/**", "docs/**", "notebooks/**"],
+      "exclude": ["node_modules/**", ".venv/**"],
+      "notes": [
+        "Before doing any significant work, read and obey docs/codex/CODEX_PROFILE.md and docs/codex/CODEX_PLAYBOOK.md.",
+        "Use CODEX_PROFILE.md for repo structure, commands, allowed/disallowed actions.",
+        "Use CODEX_PLAYBOOK.md for workflow steps when adding features, fixing tests, refactoring, or updating docs."
+      ]
+    }
+  }
+}
+```

@@ -1,0 +1,157 @@
+version: 1.0.0
+last_updated: '2026-03-21T04:32:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: operations
+  display_name: Operations
+  wave: W6
+  wave_track: Wave A
+  status: registry-backed
+  purpose: >-
+    Package the Operations digital employees into one bounded workforce contract for
+    identity, collaboration, SharePoint administration, website publishing, and
+    governed operational change management.
+  bounded_claim: >-
+    The Operations department pack may only claim the action-backed Marcus Chen and
+    Elena Rodriguez workflows plus their explicit approval, accountability, and
+    escalation semantics.
+workflow_families:
+  - identity_access_lifecycle
+  - workspace_provisioning_and_administration
+  - sharepoint_site_list_file_administration
+  - website_content_publication
+  - analytics_and_seo_change_management
+workload_families:
+  - Identity, directory, and tenant administration
+  - Collaboration, meetings, and communities
+  - Content, intranet, and files
+  - Media, publishing, and extended communications
+  - Low-code, workflow, and analytics
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the department lead must intervene.
+  blocked: An expected persona is missing, inactive, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:operations
+  department_lead: department-lead:operations
+  profiles:
+    high-impact:
+      approvers:
+        - department-owner:operations
+      personas:
+        - m365-administrator
+      rule: Identity, licensing, directory, workspace, and tenant-governance changes require department-owner review.
+    medium-operational:
+      approvers:
+        - department-owner:operations
+      personas:
+        - website-manager
+      rule: Publishing, deployment, analytics, and SEO changes require department-owner review when they leave preview or observation mode.
+kpis:
+  required_personas: 2
+  required_active_personas: 2
+  required_registry_backed_personas: 2
+  required_workflow_families: 5
+  supported_action_count: 43
+personas:
+  m365-administrator:
+    display_name: Marcus Chen
+    title: Senior IT Administrator
+    role_type: department_anchor
+    coverage_status: registry-backed
+    risk_tier: high
+    approval_profile: high-impact
+    capability_families:
+      - user lifecycle and licensing
+      - groups and workspace administration
+      - SharePoint site, list, and file administration
+      - directory and app governance
+    workload_families:
+      - Identity, directory, and tenant administration
+      - Collaboration, meetings, and communities
+      - Content, intranet, and files
+    workflow_families:
+      - identity_access_lifecycle
+      - workspace_provisioning_and_administration
+      - sharepoint_site_list_file_administration
+    supported_actions:
+      - users.list
+      - users.read
+      - users.create
+      - users.update
+      - users.disable
+      - licenses.assign
+      - groups.list
+      - groups.get
+      - groups.create
+      - groups.add_member
+      - groups.remove_member
+      - groups.list_members
+      - sites.list
+      - sites.get
+      - sites.root
+      - sites.provision
+      - lists.list
+      - lists.get
+      - lists.items
+      - lists.create_item
+      - files.list
+      - files.get
+      - files.search
+      - files.create_folder
+      - files.upload
+      - files.share
+      - drives.list
+      - directory.roles
+      - directory.role_members
+      - directory.domains
+      - directory.org
+      - apps.list
+      - apps.get
+      - apps.update
+      - service_principals.list
+      - teams.create
+      - teams.add_channel
+  website-manager:
+    display_name: Elena Rodriguez
+    title: Website Manager
+    role_type: publishing_operator
+    coverage_status: registry-backed
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - website publishing and content lifecycle
+      - production deployment coordination
+      - analytics and SEO changes
+    workload_families:
+      - Content, intranet, and files
+      - Media, publishing, and extended communications
+      - Low-code, workflow, and analytics
+    workflow_families:
+      - website_content_publication
+      - analytics_and_seo_change_management
+    supported_actions:
+      - deployment.preview
+      - deployment.production
+      - content.update
+      - content.create
+      - analytics.read
+      - seo.update
+bounded_claims:
+  supported:
+    - identity, directory, and licensing administration
+    - workspace and site administration
+    - SharePoint list and file administration
+    - website publishing and deployment coordination
+    - analytics and SEO operational changes
+  unsupported:
+    - hr case management
+    - finance approval and accounting operations
+    - design or product roadmap ownership
+    - generalized Power Platform authoring beyond explicit website-manager actions

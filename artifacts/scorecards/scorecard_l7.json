@@ -1,0 +1,21 @@
+{
+  "item_id": "L7",
+  "item_kind": "lemma",
+  "lemma_id": "L7",
+  "status": "green",
+  "generated_at_utc": "2026-03-18T11:10:00Z",
+  "notebook": "notebooks/m365/INV-M365-I-validation-blocker-recovery.ipynb",
+  "notebook_hash": "projected-l7-validation-blocker-recovery",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "evidence_files": [
+    "notebooks/m365/INV-M365-I-validation-blocker-recovery.ipynb",
+    "notebooks/lemma_proofs/L7_m365_validation_blocker_recovery.ipynb",
+    "scripts/generate-policies.py",
+    "governance/invariants/m365/INV-M365-B-001.yaml",
+    "governance/invariants/m365/INV-M365-E-001.yaml",
+    "governance/invariants/m365/INV-M365-F-001.yaml",
+    "governance/invariants/m365/INV-M365-G-001.yaml",
+    "docs/prompts/codex-m365-enterprise-readiness-master-plan-b4c-validation-blockers-syntax-recovery.md"
+  ]
+}

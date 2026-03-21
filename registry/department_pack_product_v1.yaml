@@ -1,0 +1,125 @@
+version: 1.0.0
+last_updated: '2026-03-21T05:52:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: product
+  display_name: Product
+  wave: W7
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Product digital employees into one bounded department contract
+    covering backlog prioritization, insight synthesis, and market research
+    responsibilities that are defined but not yet action-backed.
+  bounded_claim: >-
+    The Product department pack may only claim the authoritative contract
+    personas, capability families, approval posture, and blocked readiness
+    state declared here. It may not claim implemented planning, prioritization,
+    or research execution coverage until later acts activate those personas.
+workflow_families:
+  - backlog_planning_and_prioritization
+  - feedback_synthesis_and_insight_briefing
+  - market_research_and_opportunity_analysis
+workload_families:
+  - Tasks, scheduling, and work management
+  - Knowledge, search, and employee experience
+  - Low-code, workflow, and analytics
+  - Collaboration, meetings, and communities
+  - Mail, calendar, contacts, and bookings
+  - Documents, notes, and workspace productivity
+  - Media, publishing, and extended communications
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the product lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:product
+  department_lead: department-lead:product
+  profiles:
+    low-observe-create:
+      approvers:
+        - department-owner:product
+      personas:
+        - sprint-prioritizer
+        - feedback-synthesizer
+        - trend-researcher
+      rule: >-
+        Planning, synthesis, and research preparation may proceed in
+        observe/create mode until later acts activate mutating Product
+        execution surfaces.
+kpis:
+  required_personas: 3
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 3
+  supported_action_count: 0
+personas:
+  sprint-prioritizer:
+    display_name: Sam Chen
+    title: Product Manager
+    role_type: strategy_anchor
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - backlog prioritization
+      - sprint planning
+      - cross-team task sequencing
+    workload_families:
+      - Tasks, scheduling, and work management
+      - Collaboration, meetings, and communities
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - backlog_planning_and_prioritization
+    supported_actions: []
+  feedback-synthesizer:
+    display_name: Maya Patel
+    title: User Research Lead
+    role_type: research_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - feedback synthesis
+      - customer signal consolidation
+      - insight brief preparation
+    workload_families:
+      - Knowledge, search, and employee experience
+      - Mail, calendar, contacts, and bookings
+      - Documents, notes, and workspace productivity
+    workflow_families:
+      - feedback_synthesis_and_insight_briefing
+    supported_actions: []
+  trend-researcher:
+    display_name: Chris Wong
+    title: Market Analyst
+    role_type: research_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - market scanning
+      - trend analysis
+      - opportunity briefs
+    workload_families:
+      - Knowledge, search, and employee experience
+      - Low-code, workflow, and analytics
+      - Media, publishing, and extended communications
+    workflow_families:
+      - market_research_and_opportunity_analysis
+    supported_actions: []
+bounded_claims:
+  supported:
+    - product persona census and capability-family contract
+    - approval and escalation semantics for future product activation
+    - deterministic blocked-state projection while product remains contract-only
+  unsupported:
+    - claims that product personas are currently action-backed
+    - live backlog mutation, roadmap execution, or research publication beyond later activation acts
+    - engineering, finance, or HR work outside the product contract

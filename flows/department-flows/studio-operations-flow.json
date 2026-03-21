@@ -1,0 +1,9 @@
+{
+  "name": "Studio Operations Automation",
+  "department": "studio-operations",
+  "trigger": { "type": "Scheduled", "cron": "0 * * * *" },
+  "steps": [
+    { "action": "RunHealthChecks" },
+    { "action": "PostTeamsMessage", "channel": "incident-response", "message": "Hourly ops health summary" }
+  ]
+}

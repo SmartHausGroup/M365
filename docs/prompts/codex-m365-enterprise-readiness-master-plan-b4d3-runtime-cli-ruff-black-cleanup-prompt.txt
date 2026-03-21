@@ -1,0 +1,7 @@
+Use `docs/prompts/codex-m365-enterprise-readiness-master-plan-b4d3-runtime-cli-ruff-black-cleanup.md`.
+
+Plan refs:
+- `plan:m365-enterprise-readiness-master-plan:R5`
+- `plan:m365-enterprise-readiness-master-plan:B4D3`
+
+Close runtime, CLI, and notebook Ruff/Black debt on the governed execution path only.

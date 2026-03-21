@@ -2,8 +2,8 @@
 
 **Phase 1 — Math Only**
 
-**System:** M365 Instruction API  
-**Repo:** https://github.com/SmartHausGroup/M365  
+**System:** M365 Instruction API
+**Repo:** https://github.com/SmartHausGroup/M365
 **MA Phase:** Phase 1 (Intent & Mathematical Foundation)
 
 ---

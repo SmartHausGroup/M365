@@ -1,0 +1,129 @@
+version: 1.0.0
+last_updated: '2026-03-21T14:15:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  delegation_contract: registry/ucp_delegation_contract_v1.yaml
+  orchestration_contract: registry/task_orchestration_contract_v1.yaml
+  collaboration_contract: registry/cross_persona_collaboration_contract_v1.yaml
+  department_packs: registry/department_pack_*_v1.yaml
+  audit_schema: src/smarthaus_common/audit_schema.py
+contract:
+  id: executive-oversight-contract
+  display_name: Executive Oversight and Intervention Controls
+  version: v1
+  status: contract-defined
+  purpose: >-
+    Give executives visibility and intervention controls across the
+    workforce runtime by defining oversight queries, intervention
+    primitives, escalation paths, and audit visibility so that the
+    workforce can be monitored, paused, redirected, or overridden
+    through governed channels.
+  bounded_claim: >-
+    This contract defines the oversight and intervention protocol. It
+    does not claim that all intervention primitives are implemented in
+    runtime. The contract defines what oversight and intervention look
+    like; implementation is downstream.
+oversight_queries:
+  - id: workforce_status
+    description: >-
+      Query the current state of the entire workforce across all 10
+      departments and 39 personas, including pack states, accountability
+      states, active tasks, and queue depths.
+    scope: global
+  - id: department_status
+    description: >-
+      Query the current state of a specific department including all
+      persona states, active tasks, and escalations.
+    scope: department
+  - id: persona_status
+    description: >-
+      Query the current state of a specific persona including
+      accountability state, active tasks, queue depth, memory count,
+      and work history.
+    scope: persona
+  - id: delegation_audit
+    description: >-
+      Query the audit trail for delegation requests, filtering by time
+      range, persona, department, risk tier, or outcome.
+    scope: audit
+  - id: risk_summary
+    description: >-
+      Query the current risk exposure across the workforce including
+      high and critical tier activity, pending approvals, and escalated
+      personas.
+    scope: risk
+intervention_primitives:
+  - id: pause_persona
+    description: >-
+      Temporarily pause a persona's task processing. The persona stops
+      accepting new tasks but completes in-progress work. Requires
+      department-owner or executive authority.
+    reversible: true
+    approval_required: department_owner
+  - id: pause_department
+    description: >-
+      Temporarily pause all personas in a department. Requires executive
+      authority.
+    reversible: true
+    approval_required: executive
+  - id: redirect_task
+    description: >-
+      Redirect an in-progress or pending task from one persona to another.
+      Creates an audited handoff with justification.
+    reversible: false
+    approval_required: department_owner
+  - id: override_decision
+    description: >-
+      Override a persona's completed action result. The override is
+      recorded as a separate audit event linked to the original action.
+    reversible: false
+    approval_required: executive
+  - id: emergency_halt
+    description: >-
+      Immediately halt all workforce activity across all departments.
+      Requires executive authority with dual-approval.
+    reversible: true
+    approval_required: executive_dual
+escalation_paths:
+  persona_to_department: >-
+    A persona escalates to its department owner when risk tier or
+    accountability state requires intervention.
+  department_to_executive: >-
+    A department owner escalates to executive authority when the
+    department-level intervention is insufficient.
+  executive_to_audit: >-
+    All executive interventions are automatically logged to the
+    executive audit trail for compliance and review.
+governance_rules:
+  visibility_completeness: >-
+    Every persona, department, task, and delegation event must be
+    queryable through oversight queries. No workforce state may be
+    hidden from executive oversight.
+  intervention_audit: >-
+    Every intervention primitive must produce an audit envelope
+    capturing the authority, justification, scope, and outcome.
+  intervention_approval: >-
+    Every intervention requires explicit approval from the declared
+    authority level. Self-approval is not permitted.
+  escalation_determinism: >-
+    Escalation paths must follow the declared hierarchy. Skipping
+    levels requires executive authority with justification.
+  no_silent_override: >-
+    Overrides must be linked to the original action in the audit trail.
+    Silent or unlinked overrides are not permitted.
+kpis:
+  oversight_queries: 5
+  intervention_primitives: 5
+  escalation_paths: 3
+  governance_rules: 5
+bounded_claims:
+  supported:
+    - five oversight queries spanning global, department, persona, audit, and risk scopes
+    - five intervention primitives with defined approval and reversibility semantics
+    - three escalation paths from persona through department to executive
+    - per-intervention audit envelopes with linked authority and justification
+  unsupported:
+    - claims that intervention primitives are implemented in runtime
+    - real-time monitoring dashboards beyond query-based oversight
+    - automated intervention without human approval

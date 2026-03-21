@@ -1,0 +1,136 @@
+{
+  "plan_ref": "plan:m365-enterprise-readiness-master-plan:C2",
+  "candidate_sha": "52ca494",
+  "candidate_date": "2026-03-18",
+  "status": "c2_release_decision_go",
+  "current_plan_ref": "plan:m365-enterprise-readiness-master-plan:D1",
+  "current_gate": "GATE:M365-READY-C2 STATUS:GO",
+  "frozen_runtime_evidence": [
+    {
+      "id": "candidate_commit",
+      "type": "git_commit",
+      "ref": "52ca494",
+      "summary": "Freeze B3 admin audit remediation as C1 certification candidate."
+    },
+    {
+      "id": "b3_runtime_logic",
+      "type": "source_files",
+      "paths": [
+        "src/ops_adapter/audit.py",
+        "src/ops_adapter/actions.py"
+      ],
+      "summary": "Append-only admin and configuration audit recording plus event-log query surface."
+    },
+    {
+      "id": "b3_targeted_validation",
+      "type": "targeted_test",
+      "command": "PYTHONPATH=src pytest -q tests/test_ops_adapter.py",
+      "result": "pass",
+      "summary": "Targeted admin-audit validation passed for the frozen candidate."
+    },
+    {
+      "id": "enterprise_audit_docs",
+      "type": "documentation",
+      "paths": [
+        "docs/commercialization/m365-audit-and-governance-evidence-model.md",
+        "docs/commercialization/m365-live-tenant-validation-matrix.md",
+        "docs/commercialization/m365-release-gates-and-certification.md"
+      ],
+      "summary": "Commercial evidence model and release-gate documents synchronized through B3."
+    }
+  ],
+  "live_execution_summary": {
+    "c1a": {
+      "status": "go",
+      "artifact": "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json"
+    },
+    "c1b": {
+      "status": "go",
+      "artifact": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json"
+    },
+    "c1c": {
+      "status": "go",
+      "artifacts": [
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/reset_user_password_reproof.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md",
+        "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json"
+      ]
+    },
+    "c1d": {
+      "status": "go",
+      "artifacts": [
+        "artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json",
+        "docs/commercialization/m365-live-tenant-validation-matrix.md",
+        "docs/commercialization/m365-release-gates-and-certification.md"
+      ]
+    },
+    "c2": {
+      "status": "go",
+      "artifacts": [
+        "artifacts/certification/m365-v1-candidate-52ca494/release_decision.json",
+        "artifacts/certification/m365-v1-candidate-52ca494/sign_off_record.json"
+      ]
+    }
+  },
+  "planned_live_artifacts": [
+    {
+      "id": "read_only_surface_transcript",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/read_only_surface_transcript.json",
+      "status": "pass"
+    },
+    {
+      "id": "mutation_surface_transcript",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/mutation_surface_transcript.json",
+      "status": "historical_fail_retained"
+    },
+    {
+      "id": "provision_service_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/provision_service_reproof.json",
+      "status": "pass"
+    },
+    {
+      "id": "reset_user_password_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/reset_user_password_reproof.json",
+      "status": "pass"
+    },
+    {
+      "id": "governance_surface_transcript",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_transcript.json",
+      "status": "historical_fail_retained"
+    },
+    {
+      "id": "governance_surface_reproof",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/governance_surface_reproof.json",
+      "status": "pass"
+    },
+    {
+      "id": "operator_notes",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/transcripts/operator_notes.md",
+      "status": "present"
+    },
+    {
+      "id": "validation_matrix_status",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/validation_matrix_status.json",
+      "status": "pass"
+    },
+    {
+      "id": "release_decision",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/release_decision.json",
+      "status": "pass"
+    },
+    {
+      "id": "sign_off_record",
+      "path": "artifacts/certification/m365-v1-candidate-52ca494/sign_off_record.json",
+      "status": "pass"
+    }
+  ],
+  "blocking_conditions": [],
+  "next_actions": [
+    "Execute D1 and prepare the enterprise collateral pack.",
+    "Execute D2 and complete pilot acceptance and customer handoff."
+  ],
+  "blocker_report": "artifacts/certification/m365-v1-candidate-52ca494/prerequisites_report.json"
+}

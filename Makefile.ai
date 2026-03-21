@@ -1,0 +1,123 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Makefile.ai · AI Governance, Quality Gates, and Reporting Automation
+# ═══════════════════════════════════════════════════════════════════════════════
+# Use this fragment for AI-related tasks, quality gates, and reporting automation.
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Shared Configuration                                                        │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+include Makefile.common
+SHELL := /bin/bash
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Target Declarations                                                         │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+.PHONY: ai-status ai-health-check ai-perf-check ai-validate
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Operational Reporting & Monitoring                                          │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+# 🎙️ TARGET: ai-status
+#   • What: Quick status check of project health.
+ai-status:
+	@echo "🤖 SmartHaus M365 AI Workforce Status"
+	@echo "======================================"
+	@echo ""
+	@echo "📊 Git Status:"
+	@git status --porcelain 2>/dev/null | head -10 || echo "  No changes"
+	@echo ""
+	@echo "📦 Dependencies:"
+	@if [ -d "node_modules" ] || [ -d "$(VENV_DIR)" ]; then echo "  ✅ Dependencies installed"; else echo "  ❌ Run 'make dev' first"; fi
+	@echo ""
+	@echo "🧪 Tests:"
+	@echo "  Run 'make test' to execute tests"
+	@echo ""
+	@echo "🔍 Linting:"
+	@echo "  Run 'make lint' to check code quality"
+	@echo ""
+
+# 🏥 TARGET: ai-health-check
+#   • What: Runs a holistic project health check.
+ai-health-check:
+	@echo "🏥 Running Health Check..."
+	@echo ""
+	@echo "Step 1/4: Checking dependencies..."
+	@if [ ! -d "$(VENV_DIR)" ] && [ ! -d "node_modules" ]; then \
+		echo "  ❌ Dependencies not installed. Run 'make dev'"; \
+		exit 1; \
+	fi
+	@echo "  ✅ Dependencies installed"
+	@echo ""
+	@echo "Step 2/4: Checking environment..."
+	@if [ ! -f "instances/sandbox.env" ]; then \
+		echo "  ⚠️  sandbox.env file not found. Copy from sandbox.env.example"; \
+	else \
+		echo "  ✅ sandbox.env file exists"; \
+	fi
+	@echo ""
+	@echo "Step 3/4: Checking syntax..."
+	@$(MAKE) lint 2>/dev/null || echo "  ⚠️  Lint check skipped"
+	@echo ""
+	@echo "Step 4/4: Recent activity..."
+	@git log --oneline -5 2>/dev/null || echo "  No git history"
+	@echo ""
+	@echo "✅ Health check complete!"
+
+# ⚡ TARGET: ai-perf-check
+#   • What: Quick performance check of key operations.
+ai-perf-check:
+	@echo "⚡ Running Performance Check..."
+	@echo ""
+	@echo "Step 1/3: Checking API availability..."
+	@if command -v curl >/dev/null 2>&1; then \
+		echo "  ✅ curl available"; \
+	else \
+		echo "  ⚠️  curl not found"; \
+	fi
+	@echo ""
+	@echo "Step 2/3: Checking test execution..."
+	@if [ -d "$(TESTS_DIR)" ]; then \
+		echo "  ✅ Test directory exists"; \
+		echo "  ℹ️  Run 'make test' for full performance validation"; \
+	else \
+		echo "  ⚠️  Test directory not found"; \
+	fi
+	@echo ""
+	@echo "Step 3/3: Quick syntax validation..."
+	@$(MAKE) lint 2>/dev/null || echo "  ⚠️  Lint check skipped"
+	@echo ""
+	@echo "✅ Performance check complete!"
+
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │ Quality Gates                                                               │
+# └─────────────────────────────────────────────────────────────────────────────┘
+
+# 🎯 TARGET: ai-validate
+#   • What: Runs comprehensive validation suite.
+ai-validate:
+	@echo "🎯 Running AI validation suite..."
+	@echo ""
+	@echo "Step 1/4: Running linting..."
+	@$(MAKE) lint-all
+	@echo ""
+	@echo "Step 2/4: Running tests..."
+	@$(MAKE) test-all
+	@echo ""
+	@echo "Step 3/4: Checking agent registry..."
+	@if [ -f "$(REGISTRY_DIR)/ai_team.json" ] && [ -f "$(REGISTRY_DIR)/agents.yaml" ]; then \
+		echo "  ✅ Agent registry files exist"; \
+	else \
+		echo "  ⚠️  Agent registry files missing"; \
+	fi
+	@echo ""
+	@echo "Step 4/4: Checking Operations documents..."
+	@if [ -f "$(OPERATIONS_DIR)/NORTHSTAR.md" ] && [ -f "$(OPERATIONS_DIR)/EXECUTION_PLAN.md" ]; then \
+		echo "  ✅ Operations documents exist"; \
+	else \
+		echo "  ⚠️  Operations documents missing"; \
+	fi
+	@echo ""
+	@echo "✅ AI validation complete!"

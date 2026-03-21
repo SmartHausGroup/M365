@@ -1,0 +1,75 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T01:50:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E2EDocumentsSpreadsheetsPresentationsExpansion(action) = InstructionBacked(action)
+  ∧ CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=sharepoint
+  ∧ AuthClass(action)=hybrid ∧ ApprovalProfile(action)=medium-operational.
+supported_actions:
+  create_document:
+    canonical_action_key: sharepoint.document.create
+    agent_alias: documents.create
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_docx_bytes
+    mutating: true
+    result_shape_keys: [document, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: create_document
+  update_document:
+    canonical_action_key: sharepoint.document.update
+    agent_alias: documents.update
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_docx_bytes
+    mutating: true
+    result_shape_keys: [document, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: update_document
+  create_workbook:
+    canonical_action_key: sharepoint.workbook.create
+    agent_alias: workbooks.create
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_xlsx_bytes
+    mutating: true
+    result_shape_keys: [workbook, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: create_workbook
+  update_workbook:
+    canonical_action_key: sharepoint.workbook.update
+    agent_alias: workbooks.update
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_xlsx_bytes
+    mutating: true
+    result_shape_keys: [workbook, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: update_workbook
+  create_presentation:
+    canonical_action_key: sharepoint.presentation.create
+    agent_alias: presentations.create
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_pptx_bytes
+    mutating: true
+    result_shape_keys: [presentation, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: create_presentation
+  update_presentation:
+    canonical_action_key: sharepoint.presentation.update
+    agent_alias: presentations.update
+    runtime_handler: GraphClient.upload_bytes + office_generation.generate_pptx_bytes
+    mutating: true
+    result_shape_keys: [presentation, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: update_presentation

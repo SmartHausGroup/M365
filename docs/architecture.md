@@ -6,4 +6,3 @@
 - Infra (future): Azure Functions or containers, APIM, Key Vault, Service Bus, App Insights
 
 See `docs/adr/0001-repo-structure.md` for the repository rationale.
-

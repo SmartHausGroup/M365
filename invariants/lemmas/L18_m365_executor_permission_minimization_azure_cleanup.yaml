@@ -1,0 +1,22 @@
+id: L18
+title: Executor permission minimization and Azure cleanup
+phase: B7D
+plan_ref: plan:m365-enterprise-readiness-master-plan:B7D
+lemma_doc: docs/ma/lemmas/L18_m365_executor_permission_minimization_azure_cleanup.md
+source_notebook: notebooks/m365/INV-M365-T-executor-permission-minimization-azure-cleanup.ipynb
+lemma_notebook: notebooks/lemma_proofs/L18_m365_executor_permission_minimization_azure_cleanup.ipynb
+scorecard: artifacts/scorecards/scorecard_l18.json
+proof_obligations:
+  - each supported v1 action maps to exactly one bounded executor domain
+  - each live executor app carries only the Graph application roles needed for its bounded domain
+  - the SMARTHAUS tenant contract projects a bounded default executor instead of the legacy monolithic executor
+  - missing Azure app-role assignments are repaired before live proof
+  - each bounded executor returns success on one representative live app-only Graph route
+failure_boundaries:
+  - the legacy executor remains the active runtime default
+  - a bounded executor is missing a required app-role assignment
+  - runtime routing does not project the bounded executor before GraphClient construction
+  - any representative live app-only probe returns a non-success status
+test_bindings:
+  - tests/test_env_loading.py
+ci_gate: pre-commit

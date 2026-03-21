@@ -1,0 +1,68 @@
+---
+description: SmartHaus M365 AI Workforce AI Agent Governance Rules - Launcher
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# SmartHaus M365 AI Workforce AI Agent Rules (Launcher)
+
+## Status
+
+Review document to check yourself
+
+## Quick start
+
+```bash
+make ai-status || true
+make ai-health-check || true
+make ai-perf-check || true
+```
+
+## Validate (one command)
+
+```bash
+make ai-validate
+```
+
+Runs quality gate (lint + tests + docs) plus contract and traceability gates.
+
+## Quality gates
+
+```bash
+make quality-gate
+make test-all
+make lint-all
+make contract-gate
+make traceability-gate
+```
+
+## North Star alignment (must)
+
+- Hyper-local neighbor-to-neighbor help marketplace
+- App-first development (iOS native, web secondary)
+- Simple, safe task scope (no permits, no licensed work)
+- Self-service platform (SMARTHAUS maintenance-only)
+- Direct payments between neighbors (no platform processing in v1)
+- v1 scope lock: location + category filtering only (no advanced matching)
+
+## Required reading
+
+- Operations/NORTHSTAR.md
+- Operations/EXECUTION_PLAN.md
+- contracts/localhelp_v1_contract.yml
+- contracts/traceability_manifest.yml
+
+## Mandatory validation rules
+
+- NEVER assume previous work is done; ALWAYS validate
+- ALWAYS run tests; failing tests = not done
+- VERIFY dependencies and functionality; docs ≠ working code
+- If you can't run it, it doesn't work
+
+## Forbidden actions (short)
+
+- Skipping validation or trusting claims
+- Implementing v2+ features in v1 (advanced matching, payments, ratings)
+- "Good enough" code, skipped tests, known bugs, partial features
+- Vague commits without rationale/decisions
+- Underusing AI on complex end-to-end work

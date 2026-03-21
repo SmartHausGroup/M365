@@ -1,0 +1,186 @@
+{
+  "status": "passed",
+  "pattern_count": 5,
+  "talk_to": {
+    "canonical_agent": "website-manager",
+    "persona": {
+      "persona_id": "website-manager",
+      "canonical_agent": "website-manager",
+      "display_name": "Elena Rodriguez",
+      "slug": "elena-rodriguez",
+      "department": "operations",
+      "title": "Website Manager",
+      "manager": "department-lead:operations",
+      "escalation_owner": "department-lead:operations",
+      "responsibilities": [
+        "website publishing and content lifecycle",
+        "production deployment coordination",
+        "analytics and SEO changes"
+      ],
+      "allowed_actions": [
+        "deployment.preview",
+        "deployment.production",
+        "content.update",
+        "content.create",
+        "analytics.read",
+        "seo.update"
+      ],
+      "allowed_domains": [
+        "sharepoint"
+      ],
+      "approval_owner": "engineering-lead",
+      "approval_profile": "medium-operational",
+      "risk_tier": "medium",
+      "coverage_status": "registry-backed",
+      "status": "active",
+      "external_presence_policy": "internal_only",
+      "action_count": 6,
+      "workload_families": [
+        "Content, intranet, and files",
+        "Media, publishing, and extended communications",
+        "Low-code, workflow, and analytics"
+      ],
+      "capability_families": [
+        "website publishing and content lifecycle",
+        "production deployment coordination",
+        "analytics and SEO changes"
+      ]
+    },
+    "matched_pattern": "talk_to",
+    "normalized_target": "Elena Rodriguez",
+    "task_hint": null
+  },
+  "route_to": {
+    "canonical_agent": "m365-administrator",
+    "persona": {
+      "persona_id": "m365-administrator",
+      "canonical_agent": "m365-administrator",
+      "display_name": "Marcus Chen",
+      "slug": "marcus-chen",
+      "department": "operations",
+      "title": "Senior IT Administrator",
+      "manager": "department-lead:operations",
+      "escalation_owner": "department-lead:operations",
+      "responsibilities": [
+        "user lifecycle and licensing",
+        "groups and workspace administration",
+        "SharePoint site, list, and file administration",
+        "directory and app governance"
+      ],
+      "allowed_actions": [
+        "users.list",
+        "users.read",
+        "users.create",
+        "users.update",
+        "users.disable",
+        "licenses.assign",
+        "groups.list",
+        "groups.get",
+        "groups.create",
+        "groups.add_member",
+        "groups.remove_member",
+        "groups.list_members",
+        "sites.list",
+        "sites.get",
+        "sites.root",
+        "sites.provision",
+        "lists.list",
+        "lists.get",
+        "lists.items",
+        "lists.create_item",
+        "files.list",
+        "files.get",
+        "files.search",
+        "files.create_folder",
+        "files.upload",
+        "files.share",
+        "drives.list",
+        "directory.roles",
+        "directory.role_members",
+        "directory.domains",
+        "directory.org",
+        "apps.list",
+        "apps.get",
+        "apps.update",
+        "service_principals.list",
+        "teams.create",
+        "teams.add_channel"
+      ],
+      "allowed_domains": [
+        "directory",
+        "sharepoint",
+        "collaboration"
+      ],
+      "approval_owner": "global_admin",
+      "approval_profile": "high-impact",
+      "risk_tier": "high",
+      "coverage_status": "registry-backed",
+      "status": "active",
+      "external_presence_policy": "internal_only",
+      "action_count": 37,
+      "workload_families": [
+        "Identity, directory, and tenant administration",
+        "Collaboration, meetings, and communities",
+        "Content, intranet, and files"
+      ],
+      "capability_families": [
+        "user lifecycle and licensing",
+        "groups and workspace administration",
+        "SharePoint site, list, and file administration",
+        "directory and app governance"
+      ]
+    },
+    "matched_pattern": "route_to",
+    "normalized_target": "Marcus in Operations",
+    "task_hint": null
+  },
+  "ask_to": {
+    "canonical_agent": "website-manager",
+    "persona": {
+      "persona_id": "website-manager",
+      "canonical_agent": "website-manager",
+      "display_name": "Elena Rodriguez",
+      "slug": "elena-rodriguez",
+      "department": "operations",
+      "title": "Website Manager",
+      "manager": "department-lead:operations",
+      "escalation_owner": "department-lead:operations",
+      "responsibilities": [
+        "website publishing and content lifecycle",
+        "production deployment coordination",
+        "analytics and SEO changes"
+      ],
+      "allowed_actions": [
+        "deployment.preview",
+        "deployment.production",
+        "content.update",
+        "content.create",
+        "analytics.read",
+        "seo.update"
+      ],
+      "allowed_domains": [
+        "sharepoint"
+      ],
+      "approval_owner": "engineering-lead",
+      "approval_profile": "medium-operational",
+      "risk_tier": "medium",
+      "coverage_status": "registry-backed",
+      "status": "active",
+      "external_presence_policy": "internal_only",
+      "action_count": 6,
+      "workload_families": [
+        "Content, intranet, and files",
+        "Media, publishing, and extended communications",
+        "Low-code, workflow, and analytics"
+      ],
+      "capability_families": [
+        "website publishing and content lifecycle",
+        "production deployment coordination",
+        "analytics and SEO changes"
+      ]
+    },
+    "matched_pattern": "ask_to",
+    "normalized_target": "Elena Rodriguez",
+    "task_hint": "prepare the homepage draft"
+  }
+}

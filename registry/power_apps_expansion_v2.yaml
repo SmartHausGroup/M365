@@ -1,0 +1,113 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T02:45:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E3BPowerAppsExpansion(action) = InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ ExecutorRoute(action)=powerplatform ∧ AuthClass(action)=app_only.
+supported_actions:
+  list_powerapps_admin:
+    canonical_action_key: powerplatform.powerapp.list_admin
+    agent_alias: powerapp.admin.list
+    runtime_handler: PowerAppsClient.list_powerapps_admin
+    mutating: false
+    result_shape_keys: [apps, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerapps_admin
+  get_powerapp_admin:
+    canonical_action_key: powerplatform.powerapp.read_admin
+    agent_alias: powerapp.admin.get
+    runtime_handler: PowerAppsClient.get_powerapp_admin
+    mutating: false
+    result_shape_keys: [app]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerapp_admin
+  list_powerapp_role_assignments:
+    canonical_action_key: powerplatform.powerapp_role.list
+    agent_alias: powerapp.roles.list
+    runtime_handler: PowerAppsClient.list_powerapp_role_assignments
+    mutating: false
+    result_shape_keys: [roles, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerapp_role_assignments
+  set_powerapp_owner:
+    canonical_action_key: powerplatform.powerapp_owner.set
+    agent_alias: powerapp.owner.set
+    runtime_handler: PowerAppsClient.set_powerapp_owner
+    mutating: true
+    result_shape_keys: [appName, ownerObjectId, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: set_powerapp_owner
+  remove_powerapp_role_assignment:
+    canonical_action_key: powerplatform.powerapp_role.remove
+    agent_alias: powerapp.role.remove
+    runtime_handler: PowerAppsClient.remove_powerapp_role_assignment
+    mutating: true
+    result_shape_keys: [appName, roleId, removed]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: remove_powerapp_role_assignment
+  delete_powerapp:
+    canonical_action_key: powerplatform.powerapp.delete
+    agent_alias: powerapp.delete
+    runtime_handler: PowerAppsClient.delete_powerapp
+    mutating: true
+    result_shape_keys: [appName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: delete_powerapp
+  list_powerapp_environments:
+    canonical_action_key: powerplatform.powerapp_environment.list
+    agent_alias: powerapp.environments.list
+    runtime_handler: PowerAppsClient.list_powerapp_environments
+    mutating: false
+    result_shape_keys: [environments, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerapp_environments
+  get_powerapp_environment:
+    canonical_action_key: powerplatform.powerapp_environment.read
+    agent_alias: powerapp.environment.get
+    runtime_handler: PowerAppsClient.get_powerapp_environment
+    mutating: false
+    result_shape_keys: [environment]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_powerapp_environment
+  list_powerapp_environment_role_assignments:
+    canonical_action_key: powerplatform.powerapp_environment_role.list
+    agent_alias: powerapp.environment.roles.list
+    runtime_handler: PowerAppsClient.list_powerapp_environment_role_assignments
+    mutating: false
+    result_shape_keys: [roles, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_powerapp_environment_role_assignments
+  set_powerapp_environment_role_assignment:
+    canonical_action_key: powerplatform.powerapp_environment_role.set
+    agent_alias: powerapp.environment.role.set
+    runtime_handler: PowerAppsClient.set_powerapp_environment_role_assignment
+    mutating: true
+    result_shape_keys: [environmentName, principalObjectId, roleName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: set_powerapp_environment_role_assignment
+  remove_powerapp_environment_role_assignment:
+    canonical_action_key: powerplatform.powerapp_environment_role.remove
+    agent_alias: powerapp.environment.role.remove
+    runtime_handler: PowerAppsClient.remove_powerapp_environment_role_assignment
+    mutating: true
+    result_shape_keys: [environmentName, roleId, removed]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: remove_powerapp_environment_role_assignment

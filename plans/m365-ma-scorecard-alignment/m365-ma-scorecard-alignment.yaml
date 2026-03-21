@@ -1,0 +1,49 @@
+plan_id: m365-ma-scorecard-alignment
+status: Complete
+date: "2026-03-17"
+owner: SmartHaus
+execution_plan_reference: plan:m365-ma-scorecard-alignment:R1
+north_star: Operations/NORTHSTAR.md
+
+objective: >
+  Align the repo's existing M365 MA evidence to the structural artifact layout
+  required by UCP governance, emit a legitimate aggregate scorecard.json, and
+  unblock governed push without runtime code changes.
+
+scope:
+  in_scope:
+    - create UCP-required MA bridge documents
+    - project lemmas and invariants from existing M365 contract evidence
+    - add notebook-path artifacts required by phase gating
+    - emit per-lemma, module, and aggregate scorecards
+    - validate phase, scorecard, and push gate status
+  out_of_scope:
+    - runtime code changes
+    - new algorithm implementation
+    - live-tenant commercialization certification
+    - replacing existing proof artifacts
+
+requirements:
+  - id: R1
+    name: Governed initiative and prompts
+  - id: R2
+    name: Phase bridge documents
+  - id: R3
+    name: Lemma and invariant projections
+  - id: R4
+    name: Notebook path alignment
+  - id: R5
+    name: Scorecard projection
+  - id: R6
+    name: Governance validation
+
+success_criteria:
+  - phase_status reports completed phase 9
+  - validate_scorecard returns green true
+  - validate_action push returns allowed true
+  - all new bridge artifacts remain traceable to existing repo evidence
+
+validation_outcome:
+  phase_status: completed_phase_9
+  validate_scorecard: green
+  validate_action_push: allowed

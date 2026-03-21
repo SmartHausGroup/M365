@@ -1,0 +1,7 @@
+Execute B6D Persona Registry and Humanized Delegation Routing
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-b6d-persona-registry-humanized-delegation-routing.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:B6D
+
+You are approved to implement only when this act is explicitly authorized. Follow the master plan critical path.

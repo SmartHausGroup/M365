@@ -1,0 +1,17 @@
+lemma_id: L36
+title: M365 Forms / Approvals / Connectors Expansion v2
+phase: E3D
+plan_ref: plan:m365-ai-workforce-expansion-master-plan:E3D
+proof_artifacts:
+  - docs/ma/lemmas/L36_m365_forms_approvals_connectors_expansion_v2.md
+  - notebooks/m365/INV-M365-AL-forms-approvals-connectors-expansion-v2.ipynb
+  - notebooks/lemma_proofs/L36_m365_forms_approvals_connectors_expansion_v2.ipynb
+  - artifacts/scorecards/scorecard_l36.json
+enforcement:
+  verifier: scripts/ci/verify_forms_approvals_connectors_expansion.py
+  tests:
+    - tests/test_forms_approvals_connectors_expansion_v2.py
+failure_boundary: >
+  Fail closed if any declared approvals or connector action is missing from the
+  instruction router, capability registry, executor routing, auth model,
+  approval matrix, or bounded verifier.

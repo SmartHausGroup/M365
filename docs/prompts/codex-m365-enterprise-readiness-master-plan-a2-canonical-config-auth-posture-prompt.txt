@@ -1,0 +1,7 @@
+Execute A2 Canonical Config Contract and Auth Posture
+
+Read and execute the detailed MATHS prompt at docs/prompts/codex-m365-enterprise-readiness-master-plan-a2-canonical-config-auth-posture.md.
+
+Plan Reference: plan:m365-enterprise-readiness-master-plan:A2
+
+This is a historical imported act. Use it only if A2 is explicitly reopened.

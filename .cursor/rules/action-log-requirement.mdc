@@ -1,0 +1,139 @@
+---
+
+description: SmartHaus M365 AI Workforce Action Log Requirement Rule
+globs: ["**/*"]
+alwaysApply: true
+
+---
+
+# Action Log Requirement Rule
+
+**Status:** MANDATORY
+**Owner:** All AI Assistants (Composer, Codex, GPT-5)
+
+---
+
+## Rule: ALWAYS Update ACTION_LOG After Each Action
+
+**MANDATORY:** After completing ANY action (code changes, investigations, searches, tests, etc.), you MUST:
+1. Update the `Operations/ACTION_LOG.md` file with a brief entry describing what was done
+2. Include North Star alignment check result (from Step 1 of workflow)
+3. Include execution plan reference (from Step 2 of workflow)
+4. Update `Operations/EXECUTION_PLAN.md` if the action affects project progress, completion status, or milestones
+
+**This is Steps 5-7 of the Mandatory Agent Workflow.** See `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow.
+
+---
+
+## Log Format
+
+Each entry should follow this format:
+
+```
+YYYY-MM-DD HH:MM:SS TZ — Brief description: detailed explanation of what was done, findings, results, or changes made.
+```
+
+**Time Zone Requirement:**
+- **MUST use local machine's timezone** for date/time stamping
+- Use the timezone abbreviation from the local machine (e.g., EST, PST, PST, UTC, etc.)
+- Do NOT hardcode a specific timezone; use the actual local timezone where the action is being performed
+- Format: `YYYY-MM-DD HH:MM:SS TZ` where TZ is the local machine's timezone abbreviation
+
+**Required Elements:**
+- North Star alignment check result (from Step 1)
+- Execution plan reference: `plan:{plan-id}:{requirement-id}` (from Step 2)
+- What was done (specific files, changes, results)
+- Findings, issues, or resolutions
+
+**Example:**
+```
+2025-01-06 14:30:00 EST — Completed user service implementation: plan:EXECUTION_PLAN:2.2.1; aligned with North Star app-first goals; created user-service with Firebase integration; updated Operations/EXECUTION_PLAN.md to mark service complete.
+```
+
+**Note:** The timezone in the example (EST) is shown for illustration. Use your local machine's actual timezone when creating log entries.
+
+---
+
+## When to Log
+
+Update BOTH logs after:
+- Code changes (edits, new files, deletions)
+- Investigations or searches that produce findings
+- Test runs and results
+- Documentation updates
+- Configuration changes
+- Service modifications
+- Agent updates
+- Milestone completions
+- Phase progress updates
+
+**Update Operations/ACTION_LOG.md only (not EXECUTION_PLAN.md) for:**
+- Minor investigations without milestone impact
+- Simple file reads that lead to findings
+- Test runs that don't change completion status
+
+**Do NOT log:**
+- Simple file reads (unless they lead to findings)
+- Failed tool calls that don't produce results
+- Redundant information already logged
+
+---
+
+## Log Entry Guidelines
+
+1. **Newest First:** Add new entries at the TOP of the file
+2. **Be Specific:** Include file paths, service names, or key findings
+3. **Reference Context:** Link to agents, services, or related work
+4. **Include Results:** Mention what was found, changed, or learned
+5. **Keep It Concise:** One line per action, but include essential details
+
+---
+
+## Enforcement
+
+**MANDATORY:** This rule applies to ALL AI assistants working on SmartHaus M365 AI Workforce.
+
+**Exception:** Only skip logging for:
+- Purely conversational responses with no actions taken
+- Reading files for context without making changes or findings
+
+**Never skip logging for:**
+- Code changes
+- Investigations
+- Test runs
+- Documentation updates
+- Any action that produces results or findings
+
+---
+
+## Execution Plan Updates
+
+When updating `Operations/EXECUTION_PLAN.md`:
+1. Mark completed tasks with [x] checkbox
+2. Update task status (Complete, Partial, Not Started)
+3. Add completion dates and notes
+4. Update progress percentages in "Progress Tracking" section
+5. Document any changes to dependencies or timeline
+
+**Example EXECUTION_PLAN update:**
+- Mark task 2.2.1 as [x] when user service is complete
+- Update status from "⚠️ Partial" to "✅ Complete"
+- Add completion date and notes
+
+## Integration with Other Rules
+
+This rule is **Steps 5-7** of the Mandatory Agent Workflow. See `.cursor/rules/agent-workflow-mandatory.mdc` for complete workflow.
+
+This rule works alongside:
+- **Mandatory Agent Workflow:** This is Steps 5-7 (post-work checklist)
+- **North Star Alignment:** Step 1 result must be logged (Step 5)
+- **Plan-First Execution:** Step 2 reference must be logged (Step 5)
+- **RFS Change-Approval Protocol:** Log after getting approval and implementing changes (Step 5)
+- **Execution Plan Updates:** Step 6-7 requires updating `Operations/EXECUTION_PLAN.md` when milestones/tasks affected
+
+## Reference
+
+- **Action Log File:** `Operations/ACTION_LOG.md` (create if missing)
+- **Execution Plan File:** `Operations/EXECUTION_PLAN.md`
+- **Agent Specifications:** `AGENTS.md`
+- **North Star Document:** `Operations/NORTHSTAR.md`

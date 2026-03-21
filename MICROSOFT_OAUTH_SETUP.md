@@ -17,7 +17,7 @@ This guide will walk you through setting up real Microsoft 365 OAuth authenticat
 - Click **New registration**
 - **Name**: `SmartHaus M365 Enterprise Platform`
 - **Supported account types**: `Accounts in this organizational directory only`
-- **Redirect URI**: 
+- **Redirect URI**:
   - Type: `Web`
   - URI: `https://m365.smarthaus.ai/api/auth/callback`
 - Click **Register**

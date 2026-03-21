@@ -1,0 +1,167 @@
+version: "1.0.0"
+last_updated: "2026-03-21T15:00:00Z"
+authority:
+  executor_routing: registry/executor_routing_v2.yaml
+  universal_action_contract: registry/universal_action_contract_v2.yaml
+  capability_registry: registry/capability_registry.yaml
+  auth_model: registry/auth_model_v2.yaml
+  approval_risk_matrix: registry/approval_risk_matrix_v2.yaml
+  workforce_release_wave_map: registry/workforce_release_wave_map.yaml
+
+contract:
+  id: workload-certification
+  display_name: Workload Certification Contract v1
+  status: contract-defined
+  description: >
+    Defines the deterministic certification criteria for each executor domain
+    against the live tenant and the bounded executor model. Each workload
+    surface must pass schema validation, action routing coverage, auth posture
+    alignment, and bounded-claim consistency before the domain can be marked
+    certified.
+
+certification_phases:
+  - order: 1
+    id: schema_validation
+    description: >
+      Verify each executor domain has a valid entry in the routing table
+      with at least one mapped action and declared auth requirements.
+    inputs:
+      - executor_routing_v2.yaml
+      - universal_action_contract_v2.yaml
+    outputs:
+      - per-domain schema status (pass/fail)
+    failure_mode: >
+      Domain missing from routing table or has zero mapped actions fails
+      schema validation.
+
+  - order: 2
+    id: action_coverage_audit
+    description: >
+      For each executor domain, count the routed actions and compare against
+      the capability registry to determine coverage percentage.
+    inputs:
+      - executor_routing_v2.yaml
+      - capability_registry.yaml
+    outputs:
+      - per-domain action count
+      - per-domain coverage ratio
+    failure_mode: >
+      Domain with zero routed actions or missing capability registry entries
+      fails the coverage audit.
+
+  - order: 3
+    id: auth_posture_alignment
+    description: >
+      Verify each routed action's required permissions are declared in the
+      auth model and the capability registry.
+    inputs:
+      - auth_model_v2.yaml
+      - capability_registry.yaml
+      - executor_routing_v2.yaml
+    outputs:
+      - per-domain auth alignment status
+    failure_mode: >
+      Action with undeclared permissions or missing auth class fails
+      auth posture alignment.
+
+  - order: 4
+    id: bounded_claim_consistency
+    description: >
+      Verify no certification claim exceeds the actual action surface.
+      Domains with zero routed actions must be marked as not-yet-certified
+      and cannot claim coverage.
+    inputs:
+      - all certification phase outputs
+    outputs:
+      - per-domain certification verdict (certified/not-yet-certified)
+    failure_mode: >
+      Domain claiming certification without passing all prior phases
+      fails bounded claim consistency.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any domain that fails any certification phase must be marked
+      not-yet-certified. No partial certification is allowed.
+  audit_completeness:
+    description: >
+      Every certification attempt produces a per-domain evidence record
+      with phase-by-phase pass/fail status.
+  bounded_claims:
+    description: >
+      Certification verdicts must not exceed the actual routed action surface.
+      Domains with zero actions are explicitly not-yet-certified.
+  determinism:
+    description: >
+      Same routing table plus same capability registry must produce the
+      same certification verdicts on every replay.
+  wave_alignment:
+    description: >
+      Certification verdicts must be consistent with the workforce release
+      wave map exit criteria for W9.
+
+kpis:
+  total_executor_domains: 15
+  domains_with_routed_actions: 13
+  domains_without_routed_actions: 2
+  total_routed_actions: 155
+  certification_phase_count: 4
+  governance_rule_count: 5
+
+domain_certification_status:
+  directory:
+    routed_action_count: 21
+    certification_verdict: certified
+  collaboration:
+    routed_action_count: 11
+    certification_verdict: certified
+  sharepoint:
+    routed_action_count: 20
+    certification_verdict: certified
+  messaging:
+    routed_action_count: 20
+    certification_verdict: certified
+  workmanagement:
+    routed_action_count: 0
+    certification_verdict: not-yet-certified
+  knowledge:
+    routed_action_count: 8
+    certification_verdict: certified
+  powerplatform:
+    routed_action_count: 39
+    certification_verdict: certified
+  reports:
+    routed_action_count: 3
+    certification_verdict: certified
+  access_reviews:
+    routed_action_count: 5
+    certification_verdict: certified
+  compliance:
+    routed_action_count: 8
+    certification_verdict: certified
+  security:
+    routed_action_count: 7
+    certification_verdict: certified
+  identity_security:
+    routed_action_count: 7
+    certification_verdict: certified
+  devices:
+    routed_action_count: 4
+    certification_verdict: certified
+  publishing:
+    routed_action_count: 0
+    certification_verdict: not-yet-certified
+  composite:
+    routed_action_count: 2
+    certification_verdict: certified
+
+bounded_claims:
+  supported:
+    - "13 of 15 executor domains have routed actions and pass certification"
+    - "2 domains (workmanagement, publishing) are explicitly not-yet-certified"
+    - "155 actions are routed through the executor model"
+    - "Certification is deterministic and replay-stable"
+  not_supported:
+    - "All 15 executor domains are fully certified"
+    - "Live tenant execution evidence for every action"
+    - "Workmanagement or publishing domain readiness"

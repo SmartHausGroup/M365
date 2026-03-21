@@ -1,0 +1,99 @@
+{
+  "status": "green",
+  "decision": "green",
+  "generated_at_utc": "2026-03-20T10:51:24Z",
+  "seed_lock_verified": true,
+  "determinism_certified": true,
+  "notebook_hash": "eb9d3fb6a7a9ff3493402b214de05d8bd8d7d4657ad35fdcc00ba70e587a9280",
+  "failing_lemma_ids": [],
+  "failing_module_ids": [],
+  "lemma_scorecards": {
+    "L1": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l1.json",
+      "status": "green"
+    },
+    "L2": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l2.json",
+      "status": "green"
+    },
+    "L3": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l3.json",
+      "status": "green"
+    },
+    "L4": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l4.json",
+      "status": "green"
+    },
+    "L5": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l5.json",
+      "status": "green"
+    },
+    "L6": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l6.json",
+      "status": "green"
+    },
+    "L7": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l7.json",
+      "status": "green"
+    },
+    "L8": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l8.json",
+      "status": "green"
+    },
+    "L9": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l9.json",
+      "status": "green"
+    },
+    "L10": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l10.json",
+      "status": "green"
+    },
+    "L11": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l11.json",
+      "status": "green"
+    },
+    "L12": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l12.json",
+      "status": "green"
+    },
+    "L13": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l13.json",
+      "status": "green"
+    },
+    "L14": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l14.json",
+      "status": "green"
+    },
+    "L15": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l15.json",
+      "status": "green"
+    },
+    "L16": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l16.json",
+      "status": "green"
+    },
+    "L17": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l17.json",
+      "status": "green"
+    },
+    "L18": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l18.json",
+      "status": "green"
+    },
+    "L19": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l19.json",
+      "status": "green"
+    },
+    "L20": {
+      "scorecard_path": "artifacts/scorecards/scorecard_l20.json",
+      "status": "green"
+    }
+  },
+  "module_scorecards": {
+    "m365_contracts": {
+      "scorecard_path": "artifacts/scorecards/scorecard_m365_contracts.json",
+      "status": "green"
+    }
+  },
+  "note": "Governance alignment projection over committed M365 contract notebooks, invariants, and verification artifacts, now including L11 certification-environment readiness linkage, L12 approval-contract alignment linkage, L13 Entra app-separation plus executor certificate-cutover linkage, L14 digital-employee plus executor-domain architecture linkage, L15 tenant-contract plus executor-registry extension linkage, L16 runtime executor-routing plus domain-selection linkage, L17 persona-registry plus humanized delegation integration linkage, L18 executor-permission minimization plus Azure-cleanup linkage, L19 approval-backend reproof plus certification re-readiness linkage, and L20 service-provisioning site-detection alignment linkage. This scorecard unblocks repo governance structure and does not replace later live-tenant release certification."
+}

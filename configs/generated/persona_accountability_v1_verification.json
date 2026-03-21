@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "profiles": [
+    "critical",
+    "high",
+    "low",
+    "medium"
+  ],
+  "states": [
+    "escalated",
+    "on_track",
+    "warning"
+  ],
+  "warning_state": "warning",
+  "warning_queue_depth": 3,
+  "escalated_state": "escalated",
+  "escalation_target": "department-lead:operations",
+  "escalation_reasons": [
+    "blocked_work_present"
+  ]
+}

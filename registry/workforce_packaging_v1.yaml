@@ -1,0 +1,107 @@
+version: "1.0.0"
+last_updated: "2026-03-21T18:00:00Z"
+authority:
+  enterprise_release_gate: registry/enterprise_release_gate_v2.yaml
+  persona_registry: registry/persona_registry_v2.yaml
+  workload_certification: registry/workload_certification_v1.yaml
+  department_certification: registry/department_certification_v1.yaml
+  capability_registry: registry/capability_registry.yaml
+
+contract:
+  id: workforce-packaging
+  display_name: Workforce Packaging Contract v1
+  status: contract-defined
+  description: >
+    Packages the full workforce offering into a deterministic product
+    definition with explicit capability tiers, persona classes, department
+    coverage, and bounded claims for customers.
+
+packaging_layers:
+  - order: 1
+    id: capability_tier_definition
+    description: >
+      Define the capability tiers available to customers based on the
+      certified workload surface and routed actions.
+    outputs:
+      - tier definitions with action counts and domain coverage
+    failure_mode: >
+      Missing tier definition or overclaimed capability fails packaging.
+
+  - order: 2
+    id: persona_class_packaging
+    description: >
+      Package personas into customer-facing classes: active (registry-backed
+      with implemented actions) and planned (contract-only, roadmap).
+    outputs:
+      - persona class definitions with counts and capability summaries
+    failure_mode: >
+      Persona class claiming action capability for contract-only personas fails.
+
+  - order: 3
+    id: department_coverage_matrix
+    description: >
+      Define the department coverage matrix showing which departments
+      have active personas versus planned-only personas.
+    outputs:
+      - department coverage matrix with active/planned persona counts
+    failure_mode: >
+      Department claiming active coverage without registry-backed personas fails.
+
+  - order: 4
+    id: product_boundary_lock
+    description: >
+      Lock the product boundary with explicit supported and unsupported
+      claims derived from the release gate evidence.
+    outputs:
+      - product boundary document with versioned claims
+    failure_mode: >
+      Product claim exceeding release gate evidence fails boundary lock.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any packaging claim that exceeds release gate evidence is rejected.
+  audit_completeness:
+    description: >
+      Packaging decisions produce traceable evidence back to certification.
+  bounded_claims:
+    description: >
+      Customer-facing claims must not exceed the certified action surface.
+  determinism:
+    description: >
+      Same certification evidence produces the same packaging output.
+  traceability:
+    description: >
+      Every packaged capability traces to a specific certification layer.
+
+kpis:
+  packaging_layer_count: 4
+  governance_rule_count: 5
+  active_persona_count: 4
+  planned_persona_count: 35
+  total_persona_count: 39
+  certified_workload_domains: 13
+  total_routed_actions: 155
+  department_count: 10
+
+product_tiers:
+  core:
+    description: "Registry-backed personas with certified actions across 13 workload domains"
+    persona_count: 4
+    action_count: 155
+    departments_with_active_personas: 3
+  expansion:
+    description: "Contract-defined personas across all 10 departments, roadmap to full action backing"
+    persona_count: 35
+    action_count: 0
+    departments_covered: 10
+
+bounded_claims:
+  supported:
+    - "4 active personas with 155 routed actions across 13 certified domains"
+    - "35 planned personas with governance contracts across all 10 departments"
+    - "Deterministic packaging derived from four-layer certification evidence"
+  not_supported:
+    - "All 39 personas have implemented actions"
+    - "All 15 executor domains are certified"
+    - "Full workforce operational readiness"

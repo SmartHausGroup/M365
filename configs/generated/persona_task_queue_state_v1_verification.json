@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "task_statuses": [
+    "blocked",
+    "cancelled",
+    "completed",
+    "failed",
+    "in_progress",
+    "queued"
+  ],
+  "persona_states": [
+    "active",
+    "attention_required",
+    "blocked",
+    "idle",
+    "queued"
+  ],
+  "transition_origins": [
+    "blocked",
+    "cancelled",
+    "completed",
+    "failed",
+    "in_progress",
+    "queued"
+  ],
+  "queued_state": "queued",
+  "active_state": "active",
+  "queue_depth_after_queue": 2,
+  "queue_depth_after_start": 2
+}

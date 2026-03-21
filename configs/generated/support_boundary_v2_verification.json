@@ -1,0 +1,7 @@
+{
+  "contract_id": "support-boundary-v2",
+  "escalation_severity_levels": 3,
+  "governance_rule_count": 5,
+  "support_layer_count": 4,
+  "support_tier_count": 3
+}

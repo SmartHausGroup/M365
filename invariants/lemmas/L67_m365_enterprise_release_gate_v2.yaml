@@ -1,0 +1,25 @@
+lemma_id: L67
+title: M365 Enterprise Release Gate v2
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E8E"
+status: green
+invariant: >
+  Six ordered release gate checks and five governance rules so that the
+  workforce release decision aggregates workload, persona, department, and
+  cross-department certifications into a single deterministic GO/NO-GO with
+  documented residual gaps.
+proof_obligations:
+  - "Release gate authority file exists and validates"
+  - "Six gate checks are present and ordered"
+  - "All gate checks are green"
+  - "Five governance rules present"
+  - "Residual gaps are documented"
+  - "Release verdict is GO"
+failure_boundaries:
+  - "Missing release gate authority file"
+  - "Missing gate check"
+  - "Gate check not green"
+  - "Missing governance rule"
+  - "Undocumented residual gap"
+test_bindings:
+  - tests/test_enterprise_release_gate_v2.py
+ci_gate: scripts/ci/verify_enterprise_release_gate_v2.py

@@ -1,0 +1,20 @@
+lemma_id: L30
+name: M365 SharePoint / OneDrive / Files expansion v2
+invariant_id: L30_m365_sharepoint_onedrive_files_expansion_v2
+status: active
+proof_obligations:
+  - instruction_api_exposes_e2c_actions
+  - graph_client_backs_e2c_actions
+  - capability_registry_marks_e2c_actions_implemented
+  - executor_routing_auth_and_approval_are_bounded
+  - plan_advances_from_e2c_to_e2d
+failure_boundaries:
+  - missing_instruction_action
+  - missing_graph_handler
+  - registry_status_not_implemented
+  - route_auth_or_approval_mismatch
+  - tracker_state_not_advanced
+test_bindings:
+  - tests/test_sharepoint_onedrive_files_expansion_v2.py
+  - scripts/ci/verify_sharepoint_onedrive_files_expansion.py
+ci_gate: scripts/ci/verify_sharepoint_onedrive_files_expansion.py
