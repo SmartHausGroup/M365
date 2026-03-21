@@ -9,18 +9,18 @@ from smarthaus_common.department_pack import build_department_pack, load_departm
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[2]
     authority = load_department_pack_authority(
-        "studio-operations",
-        path=repo_root / "registry" / "department_pack_studio_operations_v1.yaml",
+        "testing",
+        path=repo_root / "registry" / "department_pack_testing_v1.yaml",
     )
-    pack = build_department_pack("studio-operations")
+    pack = build_department_pack("testing")
 
     summary = pack["summary"]
     if summary["persona_count"] != 5:
-        raise SystemExit("studio_operations_department_pack_persona_count_mismatch")
+        raise SystemExit("testing_department_pack_persona_count_mismatch")
     if summary["supported_action_count"] != 0:
-        raise SystemExit("studio_operations_department_pack_supported_action_count_mismatch")
+        raise SystemExit("testing_department_pack_supported_action_count_mismatch")
     if summary["pack_state"] != "blocked":
-        raise SystemExit("studio_operations_department_pack_expected_blocked")
+        raise SystemExit("testing_department_pack_expected_blocked")
 
     payload = {
         "department": authority["department"]["id"],
@@ -43,12 +43,7 @@ def main() -> int:
         ],
     }
 
-    output_path = (
-        repo_root
-        / "configs"
-        / "generated"
-        / "studio_operations_department_pack_v1_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "testing_department_pack_v1_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(

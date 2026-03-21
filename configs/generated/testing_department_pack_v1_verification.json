@@ -1,0 +1,47 @@
+{
+  "active_persona_count": 0,
+  "department": "testing",
+  "pack_state": "blocked",
+  "persona_count": 5,
+  "personas": [
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "api-tester",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "performance-benchmarker",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "test-results-analyzer",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "tool-evaluator",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "workflow-optimizer",
+      "status": "planned"
+    }
+  ],
+  "registry_backed_persona_count": 0,
+  "supported_action_count": 0,
+  "workflow_family_count": 4,
+  "workload_family_count": 4
+}
