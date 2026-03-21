@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
 import yaml
 
 
 def _load_contract() -> dict:
-    return yaml.safe_load(Path("registry/ucp_delegation_contract_v1.yaml").read_text(encoding="utf-8"))
+    return yaml.safe_load(
+        Path("registry/ucp_delegation_contract_v1.yaml").read_text(encoding="utf-8")
+    )
 
 
 def test_e7a_delegation_contract_has_six_ordered_phases() -> None:
@@ -50,9 +51,7 @@ def test_e7a_governance_rules_complete() -> None:
 
 def test_e7a_kpi_persona_counts_match_registry() -> None:
     contract = _load_contract()
-    registry = yaml.safe_load(
-        Path("registry/persona_registry_v2.yaml").read_text(encoding="utf-8")
-    )
+    registry = yaml.safe_load(Path("registry/persona_registry_v2.yaml").read_text(encoding="utf-8"))
     personas = registry["personas"]
     total = len(personas)
     contract_only = sum(

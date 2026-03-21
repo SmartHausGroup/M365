@@ -32,13 +32,17 @@ def main() -> int:
     # Validate delegation phases
     phases = contract.get("delegation_phases") or []
     if len(phases) != 6:
-        raise SystemExit(f"ucp_delegation_contract_phase_count_mismatch:expected=6:got={len(phases)}")
+        raise SystemExit(
+            f"ucp_delegation_contract_phase_count_mismatch:expected=6:got={len(phases)}"
+        )
     for i, phase in enumerate(phases):
         if phase.get("order") != i + 1:
             raise SystemExit(f"ucp_delegation_contract_phase_order_mismatch:{phase.get('id')}")
         for key in ("id", "description", "inputs", "outputs", "failure_mode"):
             if key not in phase:
-                raise SystemExit(f"ucp_delegation_contract_phase_missing_key:{phase.get('id')}:{key}")
+                raise SystemExit(
+                    f"ucp_delegation_contract_phase_missing_key:{phase.get('id')}:{key}"
+                )
 
     # Validate governance rules
     rules = contract.get("governance_rules") or {}
