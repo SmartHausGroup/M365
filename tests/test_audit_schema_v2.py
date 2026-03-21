@@ -3,8 +3,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 from provisioning_api.audit import log_event, recent_events
-from smarthaus_common.audit_schema import build_audit_record_v2, reload_unified_audit_schema_registry
+from smarthaus_common.audit_schema import (
+    build_audit_record_v2,
+    reload_unified_audit_schema_registry,
+)
 
 
 def test_build_audit_record_v2_projects_canonical_contexts() -> None:
@@ -42,7 +46,8 @@ def test_build_audit_record_v2_projects_canonical_contexts() -> None:
 
 
 def test_provisioning_api_log_event_writes_unified_schema(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("ENABLE_AUDIT_LOGGING", "1")
     monkeypatch.setenv("APP_DATA", str(tmp_path / "data"))
@@ -71,5 +76,9 @@ def test_provisioning_api_log_event_writes_unified_schema(
     assert entry["user"]["userPrincipalName"] == "tester@example.com"
 
     audit_path = (tmp_path / "data" / "audit.jsonl").resolve()
-    raw = [json.loads(line) for line in audit_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    raw = [
+        json.loads(line)
+        for line in audit_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
     assert raw[-1]["status"] == "success"

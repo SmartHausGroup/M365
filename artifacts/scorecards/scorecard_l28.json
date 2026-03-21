@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L28",
+  "name": "M365 Entra / directory expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AD-entra-directory-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L28_m365_entra_directory_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L28_m365_entra_directory_expansion_v2"
+  ]
+}

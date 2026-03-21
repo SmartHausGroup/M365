@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L29",
+  "name": "M365 Outlook / Exchange expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AE-outlook-exchange-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L29_m365_outlook_exchange_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L29_m365_outlook_exchange_expansion_v2"
+  ]
+}

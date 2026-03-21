@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E1E` are complete; `E2A` is the active next act; `E2B` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E2D` are complete; `E2E` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -67,13 +67,17 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E1C` is complete.
 - `E1D` is complete.
 - `E1E` is complete.
-- `E2A` is the active next act.
-- `E2B` through `E9E` are prepared but blocked by prerequisite work.
+- `E2A` is complete.
+- `E2B` is complete.
+- `E2C` is complete.
+- `E2D` is complete.
+- `E2E` is the active next act.
+- `E3` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
-- The implemented action surface and live certification layers are still bounded to the previously shipped v1 slice.
+- The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, and SharePoint / files remain unimplemented.
 - No department pack beyond the standalone v1 surface has been certified or released.
 
 ## Scope
@@ -225,31 +229,31 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E2A — Entra / Directory Expansion
 
-**Status:** 🟢 Ready
+**Status:** ✅ Complete
 
 **Goal:** Expand identity, group, license, and directory administration capabilities.
 
 #### E2B — Outlook / Exchange Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Expand mail, calendar, shared mailbox, contact, and messaging operations.
 
 #### E2C — SharePoint / OneDrive / Files Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Expand site, list, library, file, record, and permission operations.
 
 #### E2D — Teams / Groups / Planner Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Expand team, channel, membership, group, and task-management operations.
 
 #### E2E — Documents / Spreadsheets / Presentations Expansion
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Ready
 
 **Goal:** Expand Word, Excel, and PowerPoint workflows through deterministic generation and update paths.
 
@@ -599,4 +603,4 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ## Next Act
 
-`E2A` is the active next act. `E1E` completed the machine-readable audit authority at `registry/unified_audit_schema_v2.yaml`, the shared runtime builder at `src/smarthaus_common/audit_schema.py`, the notebook-backed `L27` evidence chain, and the runtime extraction in `src/ops_adapter/audit.py` plus `src/provisioning_api/audit.py` so instruction-api and ops-adapter audit writers now emit one canonical top-level envelope with normalized actor, persona, executor, approval, and result contexts. `E2A` must now begin the first real workload-expansion implementation wave by expanding identity, group, license, and directory administration capabilities on top of the completed v2 control plane.
+`E2D` is complete. It locked the workload authority at `registry/teams_groups_planner_expansion_v2.yaml`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` plus `src/smarthaus_graph/client.py`, aligned the CAIO, capability, routing, auth, and approval contracts for the team/channel/plan/bucket/task slice, and added the notebook-backed `L31` evidence chain with generated verification at `configs/generated/teams_groups_planner_expansion_verification.json`. `E2E` is now the active next act and must expand Word, Excel, and PowerPoint workflows on top of the completed v2 control plane and the newly-expanded directory, messaging, SharePoint / files, and collaboration / Planner surfaces.

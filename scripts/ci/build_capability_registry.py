@@ -83,6 +83,12 @@ def action_to_resource(action: str, domain: str) -> str:
         return "user"
     if "group" in action and domain == "identity":
         return "group"
+    if "license" in action and domain == "identity":
+        return "license"
+    if "domain" in action and domain == "identity":
+        return "domain"
+    if "organization" in action and domain == "identity":
+        return "organization"
     if "device" in action:
         return "device"
     if "application" in action:

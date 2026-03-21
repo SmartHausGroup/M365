@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import pytest
+from collections.abc import Iterator
 
+import pytest
 from smarthaus_common.approval_risk import (
     reload_approval_risk_registry,
     resolve_action_approval_risk,
@@ -9,7 +10,7 @@ from smarthaus_common.approval_risk import (
 
 
 @pytest.fixture(autouse=True)
-def _reset_registries() -> None:
+def _reset_registries() -> Iterator[None]:
     reload_approval_risk_registry()
     yield
     reload_approval_risk_registry()

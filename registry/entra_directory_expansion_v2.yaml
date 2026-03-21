@@ -1,0 +1,176 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T23:30:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E2ADirectoryExpansion(action) = InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ ExecutorRoute(action)=directory ∧ AuthClass(action)=app_only.
+supported_actions:
+  create_user:
+    canonical_action_key: directory.user.create
+    agent_alias: users.create
+    runtime_handler: GraphClient.create_user
+    mutating: true
+    result_shape_keys: [user, temporaryPassword]
+    required_permissions: [User.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: create_user
+  update_user:
+    canonical_action_key: directory.user.update
+    agent_alias: users.update
+    runtime_handler: GraphClient.update_user
+    mutating: true
+    result_shape_keys: [user]
+    required_permissions: [User.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: update_user
+  disable_user:
+    canonical_action_key: directory.user.disable
+    agent_alias: users.disable
+    runtime_handler: GraphClient.disable_user
+    mutating: true
+    result_shape_keys: [user, disabled]
+    required_permissions: [User.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: disable_user
+  list_groups:
+    canonical_action_key: directory.group.list
+    agent_alias: groups.list
+    runtime_handler: GraphClient.list_groups
+    mutating: false
+    result_shape_keys: [groups, count]
+    required_permissions: [Group.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_groups
+  get_group:
+    canonical_action_key: directory.group.read
+    agent_alias: groups.get
+    runtime_handler: GraphClient.get_group
+    mutating: false
+    result_shape_keys: [group]
+    required_permissions: [Group.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_group
+  create_group:
+    canonical_action_key: directory.group.create
+    agent_alias: groups.create
+    runtime_handler: GraphClient.create_group
+    mutating: true
+    result_shape_keys: [group_id, display_name, mail_nickname]
+    required_permissions: [Group.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: create_group
+  list_group_members:
+    canonical_action_key: directory.group.list_members
+    agent_alias: groups.list_members
+    runtime_handler: GraphClient.list_group_members
+    mutating: false
+    result_shape_keys: [members, count]
+    required_permissions: [Group.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_group_members
+  add_group_member:
+    canonical_action_key: directory.group.add_member
+    agent_alias: groups.add_member
+    runtime_handler: GraphClient.add_group_member
+    mutating: true
+    result_shape_keys: [group_id, member_id, added]
+    required_permissions: [Group.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: add_group_member
+  remove_group_member:
+    canonical_action_key: directory.group.remove_member
+    agent_alias: groups.remove_member
+    runtime_handler: GraphClient.remove_group_member
+    mutating: true
+    result_shape_keys: [group_id, member_id, removed]
+    required_permissions: [Group.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: remove_group_member
+  assign_user_license:
+    canonical_action_key: directory.license.assign
+    agent_alias: licenses.assign
+    runtime_handler: GraphClient.assign_user_license
+    mutating: true
+    result_shape_keys: [user, assigned, skipped]
+    required_permissions: [LicenseAssignment.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: assign_user_license
+  list_directory_roles:
+    canonical_action_key: directory.role.list
+    agent_alias: directory.roles
+    runtime_handler: GraphClient.list_directory_roles
+    mutating: false
+    result_shape_keys: [roles, count]
+    required_permissions: [RoleManagement.Read.Directory]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_directory_roles
+  list_directory_role_members:
+    canonical_action_key: directory.role.list_members
+    agent_alias: directory.role_members
+    runtime_handler: GraphClient.list_directory_role_members
+    mutating: false
+    result_shape_keys: [members, count]
+    required_permissions: [RoleManagement.Read.Directory]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_directory_role_members
+  list_domains:
+    canonical_action_key: directory.domain.list
+    agent_alias: directory.domains
+    runtime_handler: GraphClient.list_domains
+    mutating: false
+    result_shape_keys: [domains, count]
+    required_permissions: [Domain.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_domains
+  get_organization:
+    canonical_action_key: directory.organization.read
+    agent_alias: directory.org
+    runtime_handler: GraphClient.get_organization
+    mutating: false
+    result_shape_keys: [organization]
+    required_permissions: [Organization.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_organization
+  list_applications:
+    canonical_action_key: directory.application.list
+    agent_alias: apps.list
+    runtime_handler: GraphClient.list_applications
+    mutating: false
+    result_shape_keys: [applications, count]
+    required_permissions: [Application.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_applications
+  get_application:
+    canonical_action_key: directory.application.read
+    agent_alias: apps.get
+    runtime_handler: GraphClient.get_application
+    mutating: false
+    result_shape_keys: [application]
+    required_permissions: [Application.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_application
+  update_application:
+    canonical_action_key: directory.application.update
+    agent_alias: apps.update
+    runtime_handler: GraphClient.update_application
+    mutating: true
+    result_shape_keys: [app_id, status]
+    required_permissions: [Application.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: update_application
+  list_service_principals:
+    canonical_action_key: directory.service_principal.list
+    agent_alias: service_principals.list
+    runtime_handler: GraphClient.list_service_principals
+    mutating: false
+    result_shape_keys: [service_principals, count]
+    required_permissions: [Application.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_service_principals

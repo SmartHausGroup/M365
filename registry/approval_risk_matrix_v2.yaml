@@ -1,5 +1,5 @@
 schema_version: "2.0"
-last_updated: "2026-03-20T22:45:00Z"
+last_updated: "2026-03-21T00:20:00Z"
 authority_inputs:
   universal_action_contract: registry/universal_action_contract_v2.yaml
   persona_map: registry/persona_capability_map.yaml
@@ -86,6 +86,38 @@ prefix_action_policies:
   groups.list_members:
     risk_class: low
     approval_profile: low-observe-create
+    approval_requirement: never
+  teams.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  teams.get:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  channels.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  planner.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  planner.buckets:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  planner.create:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  planner.create_bucket:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  planner.create_task:
+    risk_class: medium
+    approval_profile: medium-operational
     approval_requirement: never
   sites.list:
     risk_class: low
@@ -193,6 +225,210 @@ prefix_action_policies:
     approval_profile: medium-operational
     approval_requirement: never
 exact_action_policies:
+  create_user:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  update_user:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  disable_user:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [hr-team, security-team]
+  list_groups:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_group:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_site:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_site_lists:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_list_items:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_list_item:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  list_drives:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_drive:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_drive_items:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_drive_item:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_folder:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  upload_file:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_group:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  list_group_members:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  add_group_member:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  remove_group_member:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  assign_user_license:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  list_directory_roles:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_directory_role_members:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_domains:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_organization:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_messages:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_message:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  send_mail:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  move_message:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  delete_message:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  list_mail_folders:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_mailbox_settings:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  update_mailbox_settings:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  list_events:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_event:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_event:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  update_event:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  delete_event:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  get_schedule:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_contacts:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_contact:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_contact:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  update_contact:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  delete_contact:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  list_contact_folders:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_applications:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_application:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  update_application:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  list_service_principals:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
   users.create:
     risk_class: high
     approval_profile: high-impact
@@ -224,6 +460,11 @@ exact_action_policies:
     approval_requirement: always
     approvers: [global_admin]
   groups.add_member:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  groups.remove_member:
     risk_class: high
     approval_profile: high-impact
     approval_requirement: always
@@ -268,12 +509,33 @@ exact_action_policies:
     approval_profile: high-impact
     approval_requirement: always
     approvers: [global_admin]
+  collaboration.team.read:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
   create_team:
     risk_class: high
     approval_profile: high-impact
     approval_requirement: always
     approvers: [global_admin]
+  get_team:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  collaboration.channel.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_channels:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
   collaboration.channel.create:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  create_channel:
     risk_class: high
     approval_profile: high-impact
     approval_requirement: always
@@ -283,12 +545,57 @@ exact_action_policies:
     approval_profile: high-impact
     approval_requirement: always
     approvers: [global_admin]
+  collaboration.plan.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_plans:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  collaboration.plan.create:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_plan:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  collaboration.plan_bucket.list:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_plan_buckets:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  collaboration.plan_bucket.create:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_plan_bucket:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  collaboration.plan_task.create:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_plan_task:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
   sharepoint.service.provision:
     risk_class: high
     approval_profile: high-impact
     approval_requirement: always
     approvers: [global_admin]
   provision_service:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
+  apps.update:
     risk_class: high
     approval_profile: high-impact
     approval_requirement: always

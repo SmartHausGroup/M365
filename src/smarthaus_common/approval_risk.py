@@ -52,7 +52,9 @@ def _risk_from_approval_profile(profile: str) -> str:
     return mapping.get(profile, "medium")
 
 
-def _resolve_executor_domain(agent: str | None, action: str, policy: dict[str, Any] | None = None) -> str:
+def _resolve_executor_domain(
+    agent: str | None, action: str, policy: dict[str, Any] | None = None
+) -> str:
     explicit_domain = _normalize((policy or {}).get("executor_domain"))
     if explicit_domain:
         return explicit_domain
@@ -64,7 +66,7 @@ def _resolve_executor_domain(agent: str | None, action: str, policy: dict[str, A
 def _to_number(value: Any) -> float | None:
     if isinstance(value, bool):
         return float(value)
-    if isinstance(value, (int, float)):
+    if isinstance(value, int | float):
         return float(value)
     try:
         return float(str(value))
@@ -81,11 +83,19 @@ def _condition_matches(condition: dict[str, Any], params: dict[str, Any]) -> boo
     if operator == "gt":
         actual_number = _to_number(actual)
         expected_number = _to_number(expected)
-        return actual_number is not None and expected_number is not None and actual_number > expected_number
+        return (
+            actual_number is not None
+            and expected_number is not None
+            and actual_number > expected_number
+        )
     if operator == "gte":
         actual_number = _to_number(actual)
         expected_number = _to_number(expected)
-        return actual_number is not None and expected_number is not None and actual_number >= expected_number
+        return (
+            actual_number is not None
+            and expected_number is not None
+            and actual_number >= expected_number
+        )
     if operator == "eq":
         return actual == expected
     if operator == "truthy":
@@ -172,12 +182,15 @@ def resolve_action_approval_risk(
     exact_policy = (registry.get("exact_action_policies") or {}).get(normalized_action)
     if exact_policy:
         executor_domain = _resolve_executor_domain(agent, normalized_action, exact_policy)
-        profile = _normalize(exact_policy.get("approval_profile")) or load_persona_approval_profiles().get(
+        profile = _normalize(
+            exact_policy.get("approval_profile")
+        ) or load_persona_approval_profiles().get(
             normalized_agent,
             "medium-operational",
         )
         return ApprovalRiskResolution(
-            risk_class=_normalize(exact_policy.get("risk_class")) or _risk_from_approval_profile(profile),
+            risk_class=_normalize(exact_policy.get("risk_class"))
+            or _risk_from_approval_profile(profile),
             approval_profile=profile,
             approval_required=_evaluate_approval_requirement(exact_policy, normalized_params),
             executor_domain=executor_domain,
@@ -190,12 +203,15 @@ def resolve_action_approval_risk(
         if normalized_action.startswith(str(prefix).lower()):
             policy = prefix_policies[prefix] or {}
             executor_domain = _resolve_executor_domain(agent, normalized_action, policy)
-            profile = _normalize(policy.get("approval_profile")) or load_persona_approval_profiles().get(
+            profile = _normalize(
+                policy.get("approval_profile")
+            ) or load_persona_approval_profiles().get(
                 normalized_agent,
                 "medium-operational",
             )
             return ApprovalRiskResolution(
-                risk_class=_normalize(policy.get("risk_class")) or _risk_from_approval_profile(profile),
+                risk_class=_normalize(policy.get("risk_class"))
+                or _risk_from_approval_profile(profile),
                 approval_profile=profile,
                 approval_required=_evaluate_approval_requirement(policy, normalized_params),
                 executor_domain=executor_domain,

@@ -1,0 +1,125 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T23:40:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E2CSharePointOneDriveFilesExpansion(action) = InstructionBacked(action)
+  ∧ CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=sharepoint
+  ∧ AuthClass(action)=ExpectedAuth(action).
+supported_actions:
+  get_site:
+    canonical_action_key: sharepoint.site.read
+    agent_alias: sites.get
+    runtime_handler: GraphClient.get_site
+    mutating: false
+    result_shape_keys: [site]
+    required_permissions: [Sites.Read.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: get_site
+  list_site_lists:
+    canonical_action_key: sharepoint.list.list
+    agent_alias: lists.list
+    runtime_handler: GraphClient.list_site_lists
+    mutating: false
+    result_shape_keys: [lists, count]
+    required_permissions: [Sites.Read.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: list_site_lists
+  get_list:
+    canonical_action_key: sharepoint.list.read
+    agent_alias: lists.get
+    runtime_handler: GraphClient.get_list
+    mutating: false
+    result_shape_keys: [list]
+    required_permissions: [Sites.Read.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: get_list
+  list_list_items:
+    canonical_action_key: sharepoint.list_item.list
+    agent_alias: lists.items
+    runtime_handler: GraphClient.list_list_items
+    mutating: false
+    result_shape_keys: [items, count]
+    required_permissions: [Sites.Read.All]
+    approval_profile: low-observe-create
+    auth_class: app_only
+    capability_registry_alias: list_list_items
+  create_list_item:
+    canonical_action_key: sharepoint.list_item.create
+    agent_alias: lists.create_item
+    runtime_handler: GraphClient.create_list_item
+    mutating: true
+    result_shape_keys: [item, status]
+    required_permissions: [Sites.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: app_only
+    capability_registry_alias: create_list_item
+  list_drives:
+    canonical_action_key: sharepoint.drive.list
+    agent_alias: drives.list
+    runtime_handler: GraphClient.list_drives
+    mutating: false
+    result_shape_keys: [drives, count]
+    required_permissions: [Files.Read.All]
+    approval_profile: low-observe-create
+    auth_class: hybrid
+    capability_registry_alias: list_drives
+  get_drive:
+    canonical_action_key: sharepoint.drive.read
+    agent_alias: drives.get
+    runtime_handler: GraphClient.get_drive
+    mutating: false
+    result_shape_keys: [drive]
+    required_permissions: [Files.Read.All]
+    approval_profile: low-observe-create
+    auth_class: hybrid
+    capability_registry_alias: get_drive
+  list_drive_items:
+    canonical_action_key: sharepoint.drive_item.list
+    agent_alias: files.list
+    runtime_handler: GraphClient.list_drive_items
+    mutating: false
+    result_shape_keys: [items, count]
+    required_permissions: [Files.Read.All]
+    approval_profile: low-observe-create
+    auth_class: hybrid
+    capability_registry_alias: list_drive_items
+  get_drive_item:
+    canonical_action_key: sharepoint.drive_item.read
+    agent_alias: files.get
+    runtime_handler: GraphClient.get_drive_item
+    mutating: false
+    result_shape_keys: [item]
+    required_permissions: [Files.Read.All]
+    approval_profile: low-observe-create
+    auth_class: hybrid
+    capability_registry_alias: get_drive_item
+  create_folder:
+    canonical_action_key: sharepoint.drive_item.create_folder
+    agent_alias: files.create_folder
+    runtime_handler: GraphClient.create_folder
+    mutating: true
+    result_shape_keys: [folder, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: create_folder
+  upload_file:
+    canonical_action_key: sharepoint.drive_item.upload
+    agent_alias: files.upload
+    runtime_handler: GraphClient.upload_file
+    mutating: true
+    result_shape_keys: [file, status]
+    required_permissions: [Files.ReadWrite.All]
+    approval_profile: medium-operational
+    auth_class: hybrid
+    capability_registry_alias: upload_file

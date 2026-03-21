@@ -89,6 +89,21 @@
         "phase": "E1E",
         "date": "2026-03-20",
         "summary": "Defined the machine-readable unified audit authority in registry/unified_audit_schema_v2.yaml, added the shared src/smarthaus_common/audit_schema.py builder, projected the canonical audit envelope into src/ops_adapter/audit.py and src/provisioning_api/audit.py, updated the bounded instruction-audit verifier to the v2 schema, and proved the shared evidence contract through the notebook-backed L27 chain plus targeted audit-schema regressions."
+      },
+      {
+        "phase": "E2A",
+        "date": "2026-03-20",
+        "summary": "Expanded the first post-control-plane workload slice through registry/entra_directory_expansion_v2.yaml and docs/commercialization/m365-entra-directory-expansion-v2.md, projected deterministic Entra and directory actions into src/smarthaus_graph/client.py and src/provisioning_api/routers/m365.py, aligned the v2 routing/auth/approval registries and CAIO/capability contracts, and proved the slice through the notebook-backed L28 chain, scripts/ci/verify_entra_directory_expansion.py, and targeted E2A regressions."
+      },
+      {
+        "phase": "E2B",
+        "date": "2026-03-20",
+        "summary": "Expanded Outlook / Exchange messaging through registry/outlook_exchange_expansion_v2.yaml and docs/commercialization/m365-outlook-exchange-expansion-v2.md, projected mail, calendar, mailbox, shared-mailbox, and contact actions into the shared Graph client and instruction router, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L29 chain and scripts/ci/verify_outlook_exchange_expansion.py, and proved the bounded E2B slice through contract verifiers plus targeted messaging regressions."
+      },
+      {
+        "phase": "E2C",
+        "date": "2026-03-20",
+        "summary": "Expanded SharePoint / OneDrive / files work through registry/sharepoint_onedrive_files_expansion_v2.yaml and docs/commercialization/m365-sharepoint-onedrive-files-expansion-v2.md, projected deterministic site, list, drive, and drive-item actions into src/smarthaus_graph/client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L30 chain and scripts/ci/verify_sharepoint_onedrive_files_expansion.py, and proved the bounded E2C slice through contract verifiers plus targeted SharePoint/files regressions."
       }
     ],
     "prepared_blocked": [
@@ -96,26 +111,6 @@
         "phase": "E0",
         "blocked_by": "Closed `m365-enterprise-readiness-master-plan`",
         "summary": "Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands."
-      },
-      {
-        "phase": "E2A",
-        "blocked_by": "E2",
-        "summary": "Expand identity, group, license, and directory administration capabilities."
-      },
-      {
-        "phase": "E2B",
-        "blocked_by": "E2",
-        "summary": "Expand mail, calendar, shared mailbox, contact, and messaging operations."
-      },
-      {
-        "phase": "E2C",
-        "blocked_by": "E2",
-        "summary": "Expand site, list, library, file, record, and permission operations."
-      },
-      {
-        "phase": "E2D",
-        "blocked_by": "E2",
-        "summary": "Expand team, channel, membership, group, and task-management operations."
       },
       {
         "phase": "E2E",
@@ -358,10 +353,10 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E2A"
+    "next_act": "E2E"
   },
   "open_blockers": [
-    "The implemented action surface and live certification layers are still bounded to the previously shipped v1 slice.",
+    "The implemented action surface now covers directory, messaging, SharePoint/files, and collaboration/Planner, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
     "No department pack beyond the standalone v1 surface has been certified or released."
   ],
   "requirements": [
@@ -473,11 +468,11 @@
         }
       ]
     },
-    {
-      "code": "E1",
-      "title": "Universal M365 Control Plane",
-      "slug": "universal-m365-control-plane",
-      "status": "Active",
+  {
+    "code": "E1",
+    "title": "Universal M365 Control Plane",
+    "slug": "universal-m365-control-plane",
+    "status": "Complete",
       "goal": "Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.",
       "outputs": [
         "universal action schema",
@@ -515,23 +510,23 @@
           "code": "E1D",
           "slug": "approval-risk-matrix-v2",
           "title": "Approval and Risk Matrix v2",
-          "status": "Ready",
+          "status": "Complete",
           "goal": "Classify the expanded action universe into deterministic approval and risk classes."
         },
         {
           "code": "E1E",
           "slug": "unified-audit-schema-v2",
           "title": "Unified Audit Schema v2",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Normalize actor, persona, executor, approval, and result evidence across the expanded workforce."
         }
       ]
     },
-    {
-      "code": "E2",
-      "title": "Core M365 Workload Expansion",
-      "slug": "core-m365-workload-expansion",
-      "status": "Pending",
+  {
+    "code": "E2",
+    "title": "Core M365 Workload Expansion",
+    "slug": "core-m365-workload-expansion",
+    "status": "Active",
       "goal": "Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.",
       "outputs": [
         "directory expansion",
@@ -548,35 +543,35 @@
           "code": "E2A",
           "slug": "entra-directory-expansion",
           "title": "Entra / Directory Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Expand identity, group, license, and directory administration capabilities."
         },
         {
           "code": "E2B",
           "slug": "outlook-exchange-expansion",
           "title": "Outlook / Exchange Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Expand mail, calendar, shared mailbox, contact, and messaging operations."
         },
         {
           "code": "E2C",
           "slug": "sharepoint-onedrive-files-expansion",
           "title": "SharePoint / OneDrive / Files Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Expand site, list, library, file, record, and permission operations."
         },
         {
           "code": "E2D",
           "slug": "teams-groups-planner-expansion",
           "title": "Teams / Groups / Planner Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Expand team, channel, membership, group, and task-management operations."
         },
         {
           "code": "E2E",
           "slug": "documents-spreadsheets-presentations-expansion",
           "title": "Documents / Spreadsheets / Presentations Expansion",
-          "status": "Pending",
+          "status": "Ready",
           "goal": "Expand Word, Excel, and PowerPoint workflows through deterministic generation and update paths."
         }
       ]

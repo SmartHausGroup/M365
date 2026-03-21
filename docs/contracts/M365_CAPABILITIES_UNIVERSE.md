@@ -10,6 +10,7 @@
 - get_user
 - create_user
 - update_user
+- disable_user
 - delete_user
 - reset_user_password
 - get_user_photo
@@ -52,6 +53,8 @@
 - assign_directory_role
 - remove_directory_role
 - list_directory_role_members
+- list_domains
+- get_organization
 - list_administrative_units
 - get_administrative_unit
 - create_administrative_unit
@@ -60,7 +63,7 @@
 - list_administrative_unit_members
 - add_administrative_unit_member
 - remove_administrative_unit_member
-- list_contacts
+- list_org_contacts
 - get_org_contact
 
 ---

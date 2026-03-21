@@ -81,7 +81,9 @@ def build_audit_record_v2(
         raise ValueError(f"unified_audit_schema_unknown_surface:{surface}")
 
     ts = timestamp or datetime.now(UTC).isoformat()
-    resolved_agent = _normalize_string(agent) or _normalize_string(surface_defaults.get("default_agent"))
+    resolved_agent = _normalize_string(agent) or _normalize_string(
+        surface_defaults.get("default_agent")
+    )
     resolved_result = sanitize_audit_payload(result or {"outcome": status})
 
     entry: dict[str, Any] = {

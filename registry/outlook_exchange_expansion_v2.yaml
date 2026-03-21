@@ -1,0 +1,194 @@
+schema_version: "2.0"
+last_updated: "2026-03-20T23:59:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E2BOutlookExchangeExpansion(action) = InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ ExecutorRoute(action)=messaging ∧ AuthClass(action)=hybrid.
+supported_actions:
+  list_messages:
+    canonical_action_key: messaging.message.list
+    agent_alias: mail.list
+    runtime_handler: GraphClient.list_messages
+    mutating: false
+    result_shape_keys: [messages, count]
+    required_permissions: [Mail.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_messages
+  get_message:
+    canonical_action_key: messaging.message.read
+    agent_alias: mail.read
+    runtime_handler: GraphClient.get_message
+    mutating: false
+    result_shape_keys: [message]
+    required_permissions: [Mail.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_message
+  send_mail:
+    canonical_action_key: messaging.mail.send
+    agent_alias: mail.send
+    runtime_handler: GraphClient.send_mail
+    mutating: true
+    result_shape_keys: [sent, to, subject, from, saveToSentItems]
+    required_permissions: [Mail.Send]
+    approval_profile: medium-operational
+    capability_registry_alias: send_mail
+  move_message:
+    canonical_action_key: messaging.message.move
+    agent_alias: mail.move
+    runtime_handler: GraphClient.move_message
+    mutating: true
+    result_shape_keys: [moved, messageId, destinationId, message]
+    required_permissions: [Mail.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: move_message
+  delete_message:
+    canonical_action_key: messaging.message.delete
+    agent_alias: mail.delete
+    runtime_handler: GraphClient.delete_message
+    mutating: true
+    result_shape_keys: [deleted, messageId]
+    required_permissions: [Mail.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: delete_message
+  list_mail_folders:
+    canonical_action_key: messaging.mail_folder.list
+    agent_alias: mail.folders
+    runtime_handler: GraphClient.list_mail_folders
+    mutating: false
+    result_shape_keys: [folders, count]
+    required_permissions: [Mail.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_mail_folders
+  get_mailbox_settings:
+    canonical_action_key: messaging.mailbox_settings.read
+    agent_alias: mailbox.settings
+    runtime_handler: GraphClient.get_mailbox_settings
+    mutating: false
+    result_shape_keys: [settings]
+    required_permissions: [MailboxSettings.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_mailbox_settings
+  update_mailbox_settings:
+    canonical_action_key: messaging.mailbox_settings.update
+    agent_alias: mailbox.settings
+    runtime_handler: GraphClient.update_mailbox_settings
+    mutating: true
+    result_shape_keys: [updated, settings]
+    required_permissions: [MailboxSettings.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: update_mailbox_settings
+  list_events:
+    canonical_action_key: messaging.event.list
+    agent_alias: calendar.list
+    runtime_handler: GraphClient.list_events
+    mutating: false
+    result_shape_keys: [events, count]
+    required_permissions: [Calendars.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_events
+  create_event:
+    canonical_action_key: messaging.event.create
+    agent_alias: calendar.create
+    runtime_handler: GraphClient.create_event
+    mutating: true
+    result_shape_keys: [event, status]
+    required_permissions: [Calendars.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: create_event
+  get_event:
+    canonical_action_key: messaging.event.read
+    agent_alias: calendar.get
+    runtime_handler: GraphClient.get_event
+    mutating: false
+    result_shape_keys: [event]
+    required_permissions: [Calendars.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_event
+  update_event:
+    canonical_action_key: messaging.event.update
+    agent_alias: calendar.update
+    runtime_handler: GraphClient.update_event
+    mutating: true
+    result_shape_keys: [updated, eventId]
+    required_permissions: [Calendars.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: update_event
+  delete_event:
+    canonical_action_key: messaging.event.delete
+    agent_alias: calendar.delete
+    runtime_handler: GraphClient.delete_event
+    mutating: true
+    result_shape_keys: [deleted, eventId]
+    required_permissions: [Calendars.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: delete_event
+  get_schedule:
+    canonical_action_key: messaging.schedule.read
+    agent_alias: calendar.availability
+    runtime_handler: GraphClient.get_schedule
+    mutating: false
+    result_shape_keys: [schedules, count]
+    required_permissions: [Calendars.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_schedule
+  list_contacts:
+    canonical_action_key: messaging.contact.list
+    agent_alias: contacts.list
+    runtime_handler: GraphClient.list_contacts
+    mutating: false
+    result_shape_keys: [contacts, count]
+    required_permissions: [Contacts.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_contacts
+  get_contact:
+    canonical_action_key: messaging.contact.read
+    agent_alias: contacts.get
+    runtime_handler: GraphClient.get_contact
+    mutating: false
+    result_shape_keys: [contact]
+    required_permissions: [Contacts.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_contact
+  create_contact:
+    canonical_action_key: messaging.contact.create
+    agent_alias: contacts.create
+    runtime_handler: GraphClient.create_contact
+    mutating: true
+    result_shape_keys: [contact, status]
+    required_permissions: [Contacts.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: create_contact
+  update_contact:
+    canonical_action_key: messaging.contact.update
+    agent_alias: contacts.update
+    runtime_handler: GraphClient.update_contact
+    mutating: true
+    result_shape_keys: [updated, contactId]
+    required_permissions: [Contacts.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: update_contact
+  delete_contact:
+    canonical_action_key: messaging.contact.delete
+    agent_alias: contacts.delete
+    runtime_handler: GraphClient.delete_contact
+    mutating: true
+    result_shape_keys: [deleted, contactId]
+    required_permissions: [Contacts.ReadWrite]
+    approval_profile: medium-operational
+    capability_registry_alias: delete_contact
+  list_contact_folders:
+    canonical_action_key: messaging.contact_folder.list
+    agent_alias: contacts.folders
+    runtime_handler: GraphClient.list_contact_folders
+    mutating: false
+    result_shape_keys: [folders, count]
+    required_permissions: [Contacts.Read]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_contact_folders

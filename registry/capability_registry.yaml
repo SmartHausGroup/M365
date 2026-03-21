@@ -111,126 +111,126 @@ actions:
   required_permissions:
   - User.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: update_user
   resource: user
   domain: identity
   required_permissions:
   - User.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: list_groups
   resource: group
   domain: identity
   required_permissions:
   - Group.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_group
   resource: group
   domain: identity
   required_permissions:
   - Group.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: create_group
   resource: group
   domain: identity
   required_permissions:
   - Group.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: list_messages
   resource: message
   domain: mail
   required_permissions:
   - Mail.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: get_message
   resource: message
   domain: mail
   required_permissions:
   - Mail.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: send_mail
   resource: message
   domain: mail
   required_permissions:
   - Mail.Send
   mutating: true
-  status: planned
+  status: implemented
 - action: list_mail_folders
   resource: mailFolder
   domain: mail
   required_permissions:
   - Mail.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: list_events
   resource: event
   domain: calendar
   required_permissions:
   - Calendars.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: get_event
   resource: event
   domain: calendar
   required_permissions:
   - Calendars.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: create_event
   resource: event
   domain: calendar
   required_permissions:
   - Calendars.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: update_event
   resource: event
   domain: calendar
   required_permissions:
   - Calendars.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: list_drive_items
   resource: driveItem
   domain: files
   required_permissions:
   - Files.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_drive_item
   resource: driveItem
   domain: files
   required_permissions:
   - Files.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: upload_file
   resource: driveItem
   domain: files
   required_permissions:
   - Files.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: create_folder
   resource: driveItem
   domain: files
   required_permissions:
   - Files.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: list_channels
   resource: channel
   domain: teams
   required_permissions:
   - Channel.ReadBasic.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_channel
   resource: channel
   domain: teams
@@ -251,7 +251,7 @@ actions:
   required_permissions:
   - Sites.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: list_lists
   resource: list
   domain: sharepoint
@@ -272,7 +272,7 @@ actions:
   required_permissions:
   - Sites.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: delete_user
   resource: user
   domain: identity
@@ -326,9 +326,9 @@ actions:
   resource: user
   domain: identity
   required_permissions:
-  - See permissions reference
+  - LicenseAssignment.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: remove_user_license
   resource: user
   domain: identity
@@ -354,23 +354,23 @@ actions:
   resource: group
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Group.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: add_group_member
   resource: group
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Group.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: remove_group_member
   resource: group
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Group.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: list_group_owners
   resource: group
   domain: identity
@@ -438,16 +438,16 @@ actions:
   resource: application
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Application.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_application
   resource: application
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Application.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: create_application
   resource: application
   domain: identity
@@ -459,9 +459,9 @@ actions:
   resource: application
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Application.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: delete_application
   resource: application
   domain: identity
@@ -473,9 +473,9 @@ actions:
   resource: servicePrincipal
   domain: identity
   required_permissions:
-  - See permissions reference
+  - Application.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_service_principal
   resource: servicePrincipal
   domain: identity
@@ -508,9 +508,9 @@ actions:
   resource: directoryRole
   domain: identity
   required_permissions:
-  - See permissions reference
+  - RoleManagement.Read.Directory
   mutating: false
-  status: planned
+  status: implemented
 - action: get_directory_role
   resource: directoryRole
   domain: identity
@@ -536,9 +536,9 @@ actions:
   resource: directoryRole
   domain: identity
   required_permissions:
-  - See permissions reference
+  - RoleManagement.Read.Directory
   mutating: false
-  status: planned
+  status: implemented
 - action: list_administrative_units
   resource: administrativeUnit
   domain: identity
@@ -595,11 +595,11 @@ actions:
   - See permissions reference
   mutating: true
   status: planned
-- action: list_contacts
+- action: list_org_contacts
   resource: orgContact
   domain: identity
   required_permissions:
-  - See permissions reference
+  - OrgContact.Read.All
   mutating: false
   status: planned
 - action: get_org_contact
@@ -627,16 +627,16 @@ actions:
   resource: message
   domain: mail
   required_permissions:
-  - See permissions reference
+  - Mail.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: move_message
   resource: message
   domain: mail
   required_permissions:
-  - See permissions reference
+  - Mail.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: copy_message
   resource: message
   domain: mail
@@ -676,16 +676,16 @@ actions:
   resource: mailboxSettings
   domain: mail
   required_permissions:
-  - See permissions reference
+  - MailboxSettings.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: update_mailbox_settings
   resource: mailboxSettings
   domain: mail
   required_permissions:
-  - See permissions reference
+  - MailboxSettings.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: list_message_attachments
   resource: attachment
   domain: mail
@@ -767,9 +767,9 @@ actions:
   resource: event
   domain: calendar
   required_permissions:
-  - See permissions reference
+  - Calendars.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: cancel_event
   resource: event
   domain: calendar
@@ -802,9 +802,9 @@ actions:
   resource: schedule
   domain: calendar
   required_permissions:
-  - See permissions reference
+  - Calendars.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: get_schedule_availability
   resource: schedule
   domain: calendar
@@ -819,41 +819,48 @@ actions:
   - See permissions reference
   mutating: false
   status: planned
+- action: list_contacts
+  resource: contact
+  domain: contacts
+  required_permissions:
+  - Contacts.Read
+  mutating: false
+  status: implemented
 - action: get_contact
   resource: contact
   domain: contacts
   required_permissions:
-  - See permissions reference
+  - Contacts.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: create_contact
   resource: contact
   domain: contacts
   required_permissions:
-  - See permissions reference
+  - Contacts.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: update_contact
   resource: contact
   domain: contacts
   required_permissions:
-  - See permissions reference
+  - Contacts.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: delete_contact
   resource: contact
   domain: contacts
   required_permissions:
-  - See permissions reference
+  - Contacts.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: list_contact_folders
   resource: contactFolder
   domain: contacts
   required_permissions:
-  - See permissions reference
+  - Contacts.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: get_contact_folder
   resource: contactFolder
   domain: contacts
@@ -872,16 +879,16 @@ actions:
   resource: drive
   domain: files
   required_permissions:
-  - See permissions reference
+  - Files.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: list_drives
   resource: drive
   domain: files
   required_permissions:
-  - See permissions reference
+  - Files.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: upload_file_content
   resource: driveItem
   domain: files
@@ -1026,16 +1033,16 @@ actions:
   resource: list
   domain: sharepoint
   required_permissions:
-  - See permissions reference
+  - Sites.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_list
   resource: list
   domain: sharepoint
   required_permissions:
-  - See permissions reference
+  - Sites.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: update_list
   resource: list
   domain: sharepoint
@@ -1061,9 +1068,9 @@ actions:
   resource: listItem
   domain: sharepoint
   required_permissions:
-  - See permissions reference
+  - Sites.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: update_list_item
   resource: listItem
   domain: sharepoint
@@ -1145,9 +1152,9 @@ actions:
   resource: team
   domain: teams
   required_permissions:
-  - See permissions reference
+  - Team.ReadBasic.All
   mutating: false
-  status: planned
+  status: implemented
 - action: update_team
   resource: team
   domain: teams
@@ -1222,9 +1229,9 @@ actions:
   resource: channel
   domain: teams
   required_permissions:
-  - See permissions reference
+  - Channel.Create.Group
   mutating: true
-  status: planned
+  status: implemented
 - action: update_channel
   resource: channel
   domain: teams
@@ -1411,9 +1418,10 @@ actions:
   resource: plan
   domain: planner
   required_permissions:
-  - See permissions reference
+  - Tasks.Read
+  - Group.Read.All
   mutating: false
-  status: planned
+  status: implemented
 - action: get_plan
   resource: plan
   domain: planner
@@ -1425,9 +1433,10 @@ actions:
   resource: plan
   domain: planner
   required_permissions:
-  - See permissions reference
+  - Tasks.ReadWrite
+  - Group.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
 - action: update_plan
   resource: plan
   domain: planner
@@ -1460,9 +1469,9 @@ actions:
   resource: plannerTask
   domain: planner
   required_permissions:
-  - See permissions reference
+  - Tasks.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: update_plan_task
   resource: plannerTask
   domain: planner
@@ -1488,9 +1497,9 @@ actions:
   resource: plannerBucket
   domain: planner
   required_permissions:
-  - See permissions reference
+  - Tasks.Read
   mutating: false
-  status: planned
+  status: implemented
 - action: get_plan_bucket
   resource: plannerBucket
   domain: planner
@@ -1502,9 +1511,9 @@ actions:
   resource: plannerBucket
   domain: planner
   required_permissions:
-  - See permissions reference
+  - Tasks.ReadWrite
   mutating: true
-  status: planned
+  status: implemented
 - action: update_plan_bucket
   resource: plannerBucket
   domain: planner
@@ -1862,3 +1871,24 @@ actions:
   - See permissions reference
   mutating: true
   status: planned
+- action: disable_user
+  resource: user
+  domain: identity
+  required_permissions:
+  - User.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: list_domains
+  resource: domain
+  domain: identity
+  required_permissions:
+  - Domain.Read.All
+  mutating: false
+  status: implemented
+- action: get_organization
+  resource: organization
+  domain: identity
+  required_permissions:
+  - Organization.Read.All
+  mutating: false
+  status: implemented

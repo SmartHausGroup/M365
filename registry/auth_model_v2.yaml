@@ -1,5 +1,5 @@
 schema_version: "2.0"
-last_updated: "2026-03-20T22:05:00Z"
+last_updated: "2026-03-21T00:20:00Z"
 authority_inputs:
   universal_action_contract: registry/universal_action_contract_v2.yaml
   executor_routing: registry/executor_routing_v2.yaml
@@ -58,16 +58,180 @@ exact_action_policies:
     auth_class: app_only
   reset_user_password:
     auth_class: app_only
+  create_user:
+    auth_class: app_only
+  update_user:
+    auth_class: app_only
+  disable_user:
+    auth_class: app_only
+  list_groups:
+    auth_class: app_only
+  get_group:
+    auth_class: app_only
+  create_group:
+    auth_class: app_only
+  list_group_members:
+    auth_class: app_only
+  add_group_member:
+    auth_class: app_only
+  remove_group_member:
+    auth_class: app_only
+  assign_user_license:
+    auth_class: app_only
+  list_directory_roles:
+    auth_class: app_only
+  list_directory_role_members:
+    auth_class: app_only
+  list_domains:
+    auth_class: app_only
+  get_organization:
+    auth_class: app_only
+  list_applications:
+    auth_class: app_only
+  get_application:
+    auth_class: app_only
+  update_application:
+    auth_class: app_only
+  list_service_principals:
+    auth_class: app_only
   list_sites:
     auth_class: app_only
+  get_site:
+    auth_class: app_only
+  list_site_lists:
+    auth_class: app_only
+  get_list:
+    auth_class: app_only
+  list_list_items:
+    auth_class: app_only
+  create_list_item:
+    auth_class: app_only
+  list_drives:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [groupId, siteId, userId, userPrincipalName]
+  get_drive:
+    auth_class: hybrid
+    delegated_preference: never
+  list_drive_items:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  get_drive_item:
+    auth_class: hybrid
+    delegated_preference: never
+  create_folder:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  upload_file:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
   create_site:
+    auth_class: app_only
+  get_team:
+    auth_class: app_only
+  list_channels:
+    auth_class: app_only
+  create_channel:
     auth_class: app_only
   create_team:
     auth_class: app_only
   add_channel:
     auth_class: app_only
+  list_plans:
+    auth_class: app_only
+  create_plan:
+    auth_class: app_only
+  list_plan_buckets:
+    auth_class: app_only
+  create_plan_bucket:
+    auth_class: app_only
+  create_plan_task:
+    auth_class: app_only
   provision_service:
     auth_class: app_only
+  list_messages:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  get_message:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  send_mail:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [from, userId, userPrincipalName, mailbox]
+  move_message:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  delete_message:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  list_mail_folders:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  get_mailbox_settings:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  update_mailbox_settings:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  list_events:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  get_event:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  create_event:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  update_event:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  delete_event:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  get_schedule:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  list_contacts:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  get_contact:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  create_contact:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  update_contact:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  delete_contact:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
+  list_contact_folders:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [userId, userPrincipalName, mailbox]
   email.send_individual:
     auth_class: hybrid
     delegated_preference: prefer_self_when_implicit

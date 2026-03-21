@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import pytest
+from collections.abc import Iterator
 
+import pytest
 from smarthaus_common.executor_routing import (
     executor_route_for_action,
     reload_executor_routing_registry,
@@ -9,7 +10,7 @@ from smarthaus_common.executor_routing import (
 
 
 @pytest.fixture(autouse=True)
-def _reset_routing_registry() -> None:
+def _reset_routing_registry() -> Iterator[None]:
     reload_executor_routing_registry()
     yield
     reload_executor_routing_registry()

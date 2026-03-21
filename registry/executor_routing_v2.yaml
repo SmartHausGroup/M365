@@ -1,5 +1,5 @@
 schema_version: "2.0"
-last_updated: "2026-03-20T21:25:00Z"
+last_updated: "2026-03-21T00:20:00Z"
 source_contracts:
   - registry/universal_action_contract_v2.yaml
   - registry/capability_registry.yaml
@@ -24,23 +24,63 @@ exact_action_routes:
   reset_user_password: directory
   create_user: directory
   update_user: directory
-  list_groups: collaboration
-  get_group: collaboration
-  create_group: collaboration
+  disable_user: directory
+  list_groups: directory
+  get_group: directory
+  create_group: directory
+  list_group_members: directory
+  add_group_member: directory
+  remove_group_member: directory
+  assign_user_license: directory
+  list_directory_roles: directory
+  list_directory_role_members: directory
+  list_domains: directory
+  get_organization: directory
+  list_applications: directory
+  get_application: directory
+  update_application: directory
+  list_service_principals: directory
   list_teams: collaboration
+  get_team: collaboration
+  list_channels: collaboration
+  create_channel: collaboration
   create_team: collaboration
   add_channel: collaboration
+  list_plans: collaboration
+  create_plan: collaboration
+  list_plan_buckets: collaboration
+  create_plan_bucket: collaboration
+  create_plan_task: collaboration
   list_sites: sharepoint
+  get_site: sharepoint
+  list_site_lists: sharepoint
+  get_list: sharepoint
+  list_list_items: sharepoint
+  create_list_item: sharepoint
+  list_drives: sharepoint
+  get_drive: sharepoint
   create_site: sharepoint
   provision_service: sharepoint
   list_messages: messaging
   get_message: messaging
   send_mail: messaging
+  move_message: messaging
+  delete_message: messaging
   list_mail_folders: messaging
+  get_mailbox_settings: messaging
+  update_mailbox_settings: messaging
   list_events: messaging
   get_event: messaging
   create_event: messaging
   update_event: messaging
+  delete_event: messaging
+  get_schedule: messaging
+  list_contacts: messaging
+  get_contact: messaging
+  create_contact: messaging
+  update_contact: messaging
+  delete_contact: messaging
+  list_contact_folders: messaging
   list_drive_items: sharepoint
   get_drive_item: sharepoint
   upload_file: sharepoint
@@ -53,7 +93,7 @@ prefix_routes:
   "teams.": collaboration
   "channels.": collaboration
   "chat.": collaboration
-  "groups.": collaboration
+  "groups.": directory
   "planner.": collaboration
   "mail.": messaging
   "calendar.": messaging

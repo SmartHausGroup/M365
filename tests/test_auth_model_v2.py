@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any
 
 import pytest
-
 from ops_adapter import actions
 from smarthaus_common.auth_model import reload_auth_model_registry, resolve_action_auth
 from smarthaus_common.tenant_config import reload_tenant_config
 
 
 @pytest.fixture(autouse=True)
-def _reset_auth_registry() -> None:
+def _reset_auth_registry() -> Iterator[None]:
     reload_auth_model_registry()
     reload_tenant_config()
     yield

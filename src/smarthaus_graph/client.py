@@ -42,6 +42,24 @@ _CERTIFICATE_PATTERN = re.compile(
     r"-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----",
     re.DOTALL,
 )
+_ALIAS_PARTNUMBERS = {
+    "E3": ["ENTERPRISEPACK", "SPE_E3", "M365_E3"],
+    "E5": ["ENTERPRISEPREMIUM", "SPE_E5", "M365_E5"],
+    "E1": ["STANDARDPACK", "SPE_E1"],
+    "BusinessBasic": ["STANDARDPACK"],
+    "BusinessStandard": ["STANDARDWOFFPACK"],
+    "Developer": ["DEVELOPERPACK", "DEVELOPERPACK_E5", "M365_DEVELOPER"],
+}
+
+
+def _is_guid(value: str) -> bool:
+    import uuid
+
+    try:
+        uuid.UUID(str(value))
+        return True
+    except Exception:
+        return False
 
 
 def _load_client_certificate_credential(cert_path: str) -> dict[str, Any]:
@@ -479,6 +497,42 @@ class GraphClient:
         r = self._request("GET", "/sites", params=params)
         return r.json()
 
+    def create_user(
+        self,
+        user_principal_name: str,
+        *,
+        display_name: str | None = None,
+        mail_nickname: str | None = None,
+        password: str,
+        account_enabled: bool = True,
+        job_title: str | None = None,
+        department: str | None = None,
+    ) -> dict[str, Any]:
+        body: dict[str, Any] = {
+            "accountEnabled": account_enabled,
+            "displayName": display_name or mail_nickname or user_principal_name.split("@")[0],
+            "mailNickname": mail_nickname or user_principal_name.split("@")[0],
+            "userPrincipalName": user_principal_name,
+            "passwordProfile": {
+                "forceChangePasswordNextSignIn": True,
+                "password": password,
+            },
+        }
+        if job_title:
+            body["jobTitle"] = job_title
+        if department:
+            body["department"] = department
+        r = self._request("POST", "/users", json=body)
+        return r.json()
+
+    def update_user(self, user_id_or_upn: str, patch: dict[str, Any]) -> dict[str, Any]:
+        self._request("PATCH", f"/users/{user_id_or_upn}", json=patch)
+        return self.get_user(user_id_or_upn)
+
+    def disable_user(self, user_id_or_upn: str) -> dict[str, Any]:
+        self._request("PATCH", f"/users/{user_id_or_upn}", json={"accountEnabled": False})
+        return {"user": user_id_or_upn, "disabled": True}
+
     def reset_user_password(
         self,
         user_id_or_upn: str,
@@ -493,6 +547,365 @@ class GraphClient:
         }
         self._request("PATCH", f"/users/{user_id_or_upn}", json=body)
         return {"user": user_id_or_upn, "password_reset": True}
+
+    def _resolve_user_scoped_path(
+        self,
+        *,
+        user_id_or_upn: str | None,
+        me_suffix: str,
+        user_suffix: str | None = None,
+        error_message: str,
+    ) -> tuple[str, bool]:
+        scoped_user = (user_id_or_upn or "").strip()
+        if scoped_user:
+            suffix = (user_suffix or me_suffix).lstrip("/")
+            return f"/users/{quote(scoped_user, safe='')}/{suffix}", False
+        if self.can_use_me_endpoint:
+            return f"/me/{me_suffix.lstrip('/')}", True
+        raise GraphRequestError(error_message)
+
+    def list_messages(
+        self,
+        *,
+        user_id_or_upn: str | None = None,
+        top: int = 25,
+        select: str | None = "id,subject,from,receivedDateTime,isRead",
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="messages",
+            user_suffix="messages",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        r = self._request(
+            "GET",
+            path,
+            prefer_delegated=prefer_delegated,
+            params={
+                "$select": select or "id,subject,from,receivedDateTime,isRead",
+                "$top": min(max(1, top), 999),
+                "$orderby": "receivedDateTime desc",
+            },
+        )
+        return r.json()
+
+    def get_message(self, message_id: str, *, user_id_or_upn: str | None = None) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"messages/{message_id}",
+            user_suffix=f"messages/{message_id}",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        r = self._request("GET", path, prefer_delegated=prefer_delegated)
+        return r.json()
+
+    def send_mail(
+        self,
+        recipient_or_to: list[str] | str,
+        subject: str,
+        body: str | dict[str, Any],
+        *,
+        user_id_or_upn: str | None = None,
+        content_type: str = "Text",
+        save_to_sent_items: bool = True,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="sendMail",
+            user_suffix="sendMail",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        recipients = (
+            recipient_or_to
+            if isinstance(recipient_or_to, list)
+            else [
+                item.strip()
+                for item in str(recipient_or_to).replace(";", ",").split(",")
+                if item.strip()
+            ]
+        )
+        if isinstance(body, dict):
+            body_payload = body
+        else:
+            body_payload = {"contentType": content_type, "content": str(body)}
+        message: dict[str, Any] = {
+            "subject": subject,
+            "body": body_payload,
+            "toRecipients": [{"emailAddress": {"address": addr}} for addr in recipients],
+        }
+        self._request(
+            "POST",
+            path,
+            prefer_delegated=prefer_delegated,
+            json={"message": message, "saveToSentItems": save_to_sent_items},
+        )
+        return {
+            "sent": True,
+            "to": recipients,
+            "subject": subject,
+            "from": user_id_or_upn or "me",
+            "saveToSentItems": save_to_sent_items,
+        }
+
+    def move_message(
+        self,
+        message_id: str,
+        destination_id: str,
+        *,
+        user_id_or_upn: str | None = None,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"messages/{message_id}/move",
+            user_suffix=f"messages/{message_id}/move",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        r = self._request(
+            "POST",
+            path,
+            prefer_delegated=prefer_delegated,
+            json={"destinationId": destination_id},
+        )
+        return {
+            "moved": True,
+            "messageId": message_id,
+            "destinationId": destination_id,
+            "message": r.json() if r.content else None,
+        }
+
+    def delete_message(
+        self, message_id: str, *, user_id_or_upn: str | None = None
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"messages/{message_id}",
+            user_suffix=f"messages/{message_id}",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        self._request("DELETE", path, prefer_delegated=prefer_delegated)
+        return {"deleted": True, "messageId": message_id}
+
+    def list_mail_folders(
+        self, *, user_id_or_upn: str | None = None, top: int = 100
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="mailFolders",
+            user_suffix="mailFolders",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        r = self._request(
+            "GET",
+            path,
+            prefer_delegated=prefer_delegated,
+            params={"$top": min(max(1, top), 999)},
+        )
+        return r.json()
+
+    def get_mailbox_settings(self, *, user_id_or_upn: str | None = None) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="mailboxSettings",
+            user_suffix="mailboxSettings",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        r = self._request("GET", path, prefer_delegated=prefer_delegated)
+        return r.json()
+
+    def update_mailbox_settings(
+        self, body: dict[str, Any], *, user_id_or_upn: str | None = None
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="mailboxSettings",
+            user_suffix="mailboxSettings",
+            error_message="userId is required for app-only auth (cannot use /me mailbox).",
+        )
+        self._request("PATCH", path, prefer_delegated=prefer_delegated, json=body)
+        return self.get_mailbox_settings(user_id_or_upn=user_id_or_upn)
+
+    def list_events(
+        self,
+        *,
+        user_id_or_upn: str | None = None,
+        top: int = 25,
+        select: str = "id,subject,start,end,organizer,attendees,location",
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="events",
+            user_suffix="events",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        r = self._request(
+            "GET",
+            path,
+            prefer_delegated=prefer_delegated,
+            params={
+                "$select": select,
+                "$top": min(max(1, top), 999),
+                "$orderby": "start/dateTime",
+            },
+        )
+        return r.json()
+
+    def create_event(
+        self, body: dict[str, Any], *, user_id_or_upn: str | None = None
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="events",
+            user_suffix="events",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        r = self._request("POST", path, prefer_delegated=prefer_delegated, json=body)
+        return r.json()
+
+    def get_event(self, event_id: str, *, user_id_or_upn: str | None = None) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"events/{event_id}",
+            user_suffix=f"events/{event_id}",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        r = self._request("GET", path, prefer_delegated=prefer_delegated)
+        return r.json()
+
+    def update_event(
+        self,
+        event_id: str,
+        patch: dict[str, Any],
+        *,
+        user_id_or_upn: str | None = None,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"events/{event_id}",
+            user_suffix=f"events/{event_id}",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        self._request("PATCH", path, prefer_delegated=prefer_delegated, json=patch)
+        return self.get_event(event_id, user_id_or_upn=user_id_or_upn)
+
+    def delete_event(self, event_id: str, *, user_id_or_upn: str | None = None) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"events/{event_id}",
+            user_suffix=f"events/{event_id}",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        self._request("DELETE", path, prefer_delegated=prefer_delegated)
+        return {"deleted": True, "eventId": event_id}
+
+    def get_schedule(
+        self,
+        schedules: list[str],
+        start_time: dict[str, Any],
+        end_time: dict[str, Any],
+        *,
+        user_id_or_upn: str | None = None,
+        availability_view_interval: int = 30,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="calendar/getSchedule",
+            user_suffix="calendar/getSchedule",
+            error_message="userId is required for app-only auth (cannot use /me calendar).",
+        )
+        r = self._request(
+            "POST",
+            path,
+            prefer_delegated=prefer_delegated,
+            json={
+                "schedules": schedules,
+                "startTime": start_time,
+                "endTime": end_time,
+                "availabilityViewInterval": availability_view_interval,
+            },
+        )
+        return r.json()
+
+    def list_contacts(self, *, user_id_or_upn: str | None = None, top: int = 100) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="contacts",
+            user_suffix="contacts",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        r = self._request(
+            "GET",
+            path,
+            prefer_delegated=prefer_delegated,
+            params={"$top": min(max(1, top), 999)},
+        )
+        return r.json()
+
+    def get_contact(self, contact_id: str, *, user_id_or_upn: str | None = None) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"contacts/{contact_id}",
+            user_suffix=f"contacts/{contact_id}",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        r = self._request("GET", path, prefer_delegated=prefer_delegated)
+        return r.json()
+
+    def create_contact(
+        self, body: dict[str, Any], *, user_id_or_upn: str | None = None
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="contacts",
+            user_suffix="contacts",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        r = self._request("POST", path, prefer_delegated=prefer_delegated, json=body)
+        return r.json()
+
+    def update_contact(
+        self,
+        contact_id: str,
+        patch: dict[str, Any],
+        *,
+        user_id_or_upn: str | None = None,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"contacts/{contact_id}",
+            user_suffix=f"contacts/{contact_id}",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        self._request("PATCH", path, prefer_delegated=prefer_delegated, json=patch)
+        return self.get_contact(contact_id, user_id_or_upn=user_id_or_upn)
+
+    def delete_contact(
+        self, contact_id: str, *, user_id_or_upn: str | None = None
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix=f"contacts/{contact_id}",
+            user_suffix=f"contacts/{contact_id}",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        self._request("DELETE", path, prefer_delegated=prefer_delegated)
+        return {"deleted": True, "contactId": contact_id}
+
+    def list_contact_folders(
+        self, *, user_id_or_upn: str | None = None, top: int = 100
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_user_scoped_path(
+            user_id_or_upn=user_id_or_upn,
+            me_suffix="contactFolders",
+            user_suffix="contactFolders",
+            error_message="userId is required for app-only auth (cannot use /me contacts).",
+        )
+        r = self._request(
+            "GET",
+            path,
+            prefer_delegated=prefer_delegated,
+            params={"$top": min(max(1, top), 999)},
+        )
+        return r.json()
 
     # ---------- M365 Helpers ----------
 
@@ -510,6 +923,33 @@ class GraphClient:
         data = r.json()
         items = data.get("value", [])
         return items[0] if items else None
+
+    def list_groups(self, top: int = 100) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            "/groups",
+            params={
+                "$select": "id,displayName,mail,mailNickname,groupTypes,securityEnabled",
+                "$top": min(max(1, top), 999),
+            },
+        )
+        return r.json()
+
+    def get_group(
+        self, *, group_id: str | None = None, mail_nickname: str | None = None
+    ) -> dict[str, Any]:
+        if group_id:
+            r = self._request(
+                "GET",
+                f"/groups/{group_id}",
+                params={"$select": "id,displayName,mail,mailNickname,groupTypes,securityEnabled"},
+            )
+            return r.json()
+        if mail_nickname:
+            group = self.find_group_by_mailnickname(mail_nickname)
+            if group:
+                return group
+        raise GraphRequestError("group lookup requires group_id or mail_nickname")
 
     # ---------- File Operations (auth-mode aware) ----------
 
@@ -574,22 +1014,248 @@ class GraphClient:
     ) -> dict[str, Any]:
         return self.upload_file_to_drive("user", user_id, path_in_drive, file_bytes, content_type)
 
+    def _supports_delegated_self_drive(self) -> bool:
+        return self._tenant_config.auth.mode in {"delegated", "hybrid"}
+
+    def _resolve_drive_collection_path(
+        self,
+        *,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+    ) -> tuple[str, bool]:
+        if group_id:
+            return f"/groups/{group_id}/drives", False
+        if site_id:
+            return f"/sites/{site_id}/drives", False
+        if user_id_or_upn:
+            return f"/users/{user_id_or_upn}/drives", False
+        if self._supports_delegated_self_drive():
+            return "/me/drives", True
+        raise GraphRequestError(
+            "drive listing requires group_id, site_id, or user_id_or_upn when delegated /me is unavailable"
+        )
+
+    def _resolve_drive_base_path(
+        self,
+        *,
+        drive_id: str | None = None,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+    ) -> tuple[str, bool]:
+        if drive_id:
+            return f"/drives/{drive_id}", False
+        if group_id:
+            return f"/groups/{group_id}/drive", False
+        if site_id:
+            return f"/sites/{site_id}/drive", False
+        if user_id_or_upn:
+            return f"/users/{user_id_or_upn}/drive", False
+        if self._supports_delegated_self_drive():
+            return "/me/drive", True
+        raise GraphRequestError(
+            "drive operation requires drive_id, group_id, site_id, or user_id_or_upn when delegated /me is unavailable"
+        )
+
     # ---------- Site & List Helpers ----------
 
     def create_group(
-        self, display_name: str, mail_nickname: str, description: str | None = None
+        self,
+        display_name: str,
+        mail_nickname: str,
+        description: str | None = None,
+        *,
+        mail_enabled: bool = True,
+        security_enabled: bool = False,
+        group_types: list[str] | None = None,
+        owners: list[str] | None = None,
+        members: list[str] | None = None,
     ) -> dict:
         body = {
             "displayName": display_name,
-            "mailEnabled": True,
+            "mailEnabled": mail_enabled,
             "mailNickname": mail_nickname,
-            "securityEnabled": False,
-            "groupTypes": ["Unified"],
+            "securityEnabled": security_enabled,
+            "groupTypes": group_types or ["Unified"],
         }
         if description:
             body["description"] = description
+        if owners:
+            body["owners@odata.bind"] = [
+                f"https://graph.microsoft.com/v1.0/users/{owner}" for owner in owners
+            ]
+        if members:
+            body["members@odata.bind"] = [
+                f"https://graph.microsoft.com/v1.0/users/{member}" for member in members
+            ]
         r = self._request("POST", "/groups", json=body)
         return r.json()
+
+    def list_group_members(self, group_id: str) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            f"/groups/{group_id}/members",
+            params={"$select": "id,displayName,userPrincipalName"},
+        )
+        return r.json()
+
+    def add_group_member(self, group_id: str, member_id: str) -> None:
+        self._request(
+            "POST",
+            f"/groups/{group_id}/members/$ref",
+            json={"@odata.id": f"https://graph.microsoft.com/v1.0/directoryObjects/{member_id}"},
+        )
+
+    def remove_group_member(self, group_id: str, member_id: str) -> None:
+        self._request("DELETE", f"/groups/{group_id}/members/{member_id}/$ref")
+
+    def list_directory_roles(self, top: int = 100) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            "/directoryRoles",
+            params={"$select": "id,displayName,description", "$top": min(max(1, top), 999)},
+        )
+        return r.json()
+
+    def list_directory_role_members(self, role_id: str) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            f"/directoryRoles/{role_id}/members",
+            params={"$select": "id,displayName,userPrincipalName"},
+        )
+        return r.json()
+
+    def list_domains(self) -> dict[str, Any]:
+        r = self._request("GET", "/domains")
+        return r.json()
+
+    def list_applications(self, top: int = 100) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            "/applications",
+            params={"$select": "id,displayName,appId", "$top": min(max(1, top), 999)},
+        )
+        return r.json()
+
+    def get_application(self, app_id: str) -> dict[str, Any]:
+        r = self._request("GET", f"/applications/{app_id}")
+        return r.json()
+
+    def update_application(self, app_id: str, body: dict[str, Any]) -> None:
+        self._request("PATCH", f"/applications/{app_id}", json=body)
+
+    def list_service_principals(self, top: int = 100) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            "/servicePrincipals",
+            params={"$select": "id,displayName,appId", "$top": min(max(1, top), 999)},
+        )
+        return r.json()
+
+    def _get_subscribed_skus(self) -> list[dict[str, Any]]:
+        response = self._request("GET", "/subscribedSkus").json()
+        skus = response.get("value", [])
+        for sku in skus:
+            prepaid = (sku.get("prepaidUnits") or {}).get("enabled") or 0
+            consumed = sku.get("consumedUnits") or 0
+            sku["availableUnits"] = max(0, prepaid - consumed)
+        return skus
+
+    def _resolve_user_id(self, user_id_or_upn: str) -> str:
+        if _is_guid(user_id_or_upn):
+            return user_id_or_upn
+        return str(self.get_user(user_id_or_upn).get("id") or "")
+
+    def _get_user_assigned_skus(self, user_id: str) -> list[str]:
+        response = self._request(
+            "GET", f"/users/{user_id}/licenseDetails", params={"$select": "skuId"}
+        ).json()
+        return [str(item.get("skuId")).lower() for item in response.get("value", [])]
+
+    def assign_user_license(
+        self,
+        user_id_or_upn: str,
+        licenses: list[str],
+        *,
+        disabled_plans: dict[str, list[str]] | None = None,
+    ) -> dict[str, Any]:
+        subscribed = self._get_subscribed_skus()
+        by_id = {str(sku["skuId"]).lower(): sku for sku in subscribed}
+        by_part = {str(sku["skuPartNumber"]).upper(): sku for sku in subscribed}
+
+        resolved: list[dict[str, Any]] = []
+        skipped: list[dict[str, Any]] = []
+        for raw in licenses:
+            if _is_guid(raw):
+                sku = by_id.get(str(raw).lower())
+            else:
+                key = str(raw).upper().replace(" ", "").replace("-", "_")
+                sku = by_part.get(key)
+                if sku is None:
+                    aliases = _ALIAS_PARTNUMBERS.get(str(raw)) or _ALIAS_PARTNUMBERS.get(key) or []
+                    sku = next((by_part[item] for item in aliases if item in by_part), None)
+            if not sku:
+                skipped.append(
+                    {
+                        "skuId": None,
+                        "skuPartNumber": raw,
+                        "reason": "unknown_license_or_unsubscribed",
+                    }
+                )
+                continue
+            resolved.append(sku)
+
+        user_id = self._resolve_user_id(user_id_or_upn)
+        already_assigned = set(self._get_user_assigned_skus(user_id))
+        add_licenses: list[dict[str, Any]] = []
+        assigned: list[str] = []
+        disabled_plans = disabled_plans or {}
+
+        for sku in resolved:
+            sku_id = str(sku["skuId"]).lower()
+            if sku_id in already_assigned:
+                skipped.append(
+                    {
+                        "skuId": sku["skuId"],
+                        "skuPartNumber": sku["skuPartNumber"],
+                        "reason": "already_assigned",
+                    }
+                )
+                continue
+            if sku.get("availableUnits", 0) <= 0:
+                skipped.append(
+                    {
+                        "skuId": sku["skuId"],
+                        "skuPartNumber": sku["skuPartNumber"],
+                        "reason": "insufficient_seats",
+                    }
+                )
+                continue
+            key_id = str(sku["skuId"]).lower()
+            key_part = str(sku["skuPartNumber"]).upper()
+            add_licenses.append(
+                {
+                    "skuId": sku["skuId"],
+                    "disabledPlans": disabled_plans.get(key_id)
+                    or disabled_plans.get(key_part)
+                    or [],
+                }
+            )
+            assigned.append(str(sku["skuId"]))
+
+        if add_licenses:
+            self._request(
+                "POST",
+                f"/users/{user_id}/assignLicense",
+                json={"addLicenses": add_licenses, "removeLicenses": []},
+            )
+
+        return {
+            "user": user_id_or_upn,
+            "assigned": assigned,
+            "skipped": skipped,
+        }
 
     def get_site_by_path(self, hostname: str, site_path: str) -> dict:
         p = f"/sites/{hostname}:/sites/{site_path}"
@@ -604,10 +1270,41 @@ class GraphClient:
         r = self._request("GET", "/sites/root")
         return r.json()
 
-    def list_site_lists(self, site_id: str) -> list[dict]:
-        r = self._request("GET", f"/sites/{site_id}/lists", params={"$top": "999"})
+    def get_site(self, site_id: str) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            f"/sites/{site_id}",
+            params={"$select": "id,displayName,webUrl,description"},
+        )
+        return r.json()
+
+    def list_site_lists(self, site_id: str, top: int = 100) -> list[dict]:
+        r = self._request(
+            "GET",
+            f"/sites/{site_id}/lists",
+            params={
+                "$select": "id,displayName,list",
+                "$top": min(max(1, top), 999),
+            },
+        )
         data = r.json()
         return data.get("value", [])
+
+    def get_list(self, site_id: str, list_id: str) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            f"/sites/{site_id}/lists/{list_id}",
+            params={"$select": "id,displayName,list,webUrl"},
+        )
+        return r.json()
+
+    def list_list_items(self, site_id: str, list_id: str, top: int = 50) -> dict[str, Any]:
+        r = self._request(
+            "GET",
+            f"/sites/{site_id}/lists/{list_id}/items",
+            params={"$expand": "fields", "$top": min(max(1, top), 999)},
+        )
+        return r.json()
 
     def create_document_library(self, site_id: str, display_name: str) -> dict:
         body = {
@@ -643,6 +1340,199 @@ class GraphClient:
         )
         return r.json()
 
+    def list_drives(
+        self,
+        *,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+        top: int = 100,
+    ) -> dict[str, Any]:
+        path, prefer_delegated = self._resolve_drive_collection_path(
+            group_id=group_id,
+            site_id=site_id,
+            user_id_or_upn=user_id_or_upn,
+        )
+        r = self._request(
+            "GET",
+            path,
+            params={"$top": min(max(1, top), 999)},
+            prefer_delegated=prefer_delegated,
+        )
+        return r.json()
+
+    def get_drive(self, drive_id: str) -> dict[str, Any]:
+        r = self._request("GET", f"/drives/{drive_id}")
+        return r.json()
+
+    def list_drive_items(
+        self,
+        *,
+        drive_id: str | None = None,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+        folder_id: str | None = None,
+        folder_path: str | None = None,
+        top: int = 100,
+    ) -> dict[str, Any]:
+        base_path, prefer_delegated = self._resolve_drive_base_path(
+            drive_id=drive_id,
+            group_id=group_id,
+            site_id=site_id,
+            user_id_or_upn=user_id_or_upn,
+        )
+        if folder_id and folder_id != "root":
+            path = f"{base_path}/items/{folder_id}/children"
+        elif folder_path:
+            encoded_path = quote(folder_path.strip("/"), safe="/")
+            path = f"{base_path}/root:/{encoded_path}:/children"
+        else:
+            path = f"{base_path}/root/children"
+        r = self._request(
+            "GET",
+            path,
+            params={"$top": min(max(1, top), 999)},
+            prefer_delegated=prefer_delegated,
+        )
+        return r.json()
+
+    def get_drive_item(self, drive_id: str, item_id: str) -> dict[str, Any]:
+        r = self._request("GET", f"/drives/{drive_id}/items/{item_id}")
+        return r.json()
+
+    def create_folder(
+        self,
+        name: str,
+        *,
+        drive_id: str | None = None,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+        parent_id: str = "root",
+        conflict_behavior: str = "rename",
+    ) -> dict[str, Any]:
+        base_path, prefer_delegated = self._resolve_drive_base_path(
+            drive_id=drive_id,
+            group_id=group_id,
+            site_id=site_id,
+            user_id_or_upn=user_id_or_upn,
+        )
+        if parent_id == "root":
+            path = f"{base_path}/root/children"
+        else:
+            path = f"{base_path}/items/{parent_id}/children"
+        r = self._request(
+            "POST",
+            path,
+            json={
+                "name": name,
+                "folder": {},
+                "@microsoft.graph.conflictBehavior": conflict_behavior,
+            },
+            prefer_delegated=prefer_delegated,
+        )
+        return r.json()
+
+    def upload_file(
+        self,
+        local_path: str,
+        remote_path: str,
+        *,
+        drive_id: str | None = None,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+        conflict_behavior: str = "replace",
+        content_type: str | None = None,
+    ) -> dict[str, Any]:
+        file_path = Path(local_path)
+        if not file_path.exists():
+            raise GraphRequestError(f"Local file not found: {local_path}")
+        normalized_remote_path = remote_path.strip("/")
+        if not normalized_remote_path:
+            raise GraphRequestError("remote_path is required")
+
+        base_path, prefer_delegated = self._resolve_drive_base_path(
+            drive_id=drive_id,
+            group_id=group_id,
+            site_id=site_id,
+            user_id_or_upn=user_id_or_upn,
+        )
+        token = self._token_provider.get_token(prefer_delegated=prefer_delegated)
+        headers = {"Authorization": f"Bearer {token}"}
+        if content_type:
+            headers["Content-Type"] = content_type
+
+        file_bytes = file_path.read_bytes()
+        encoded_path = quote(normalized_remote_path, safe="/")
+        if len(file_bytes) <= 4 * 1024 * 1024:
+            upload_url = f"{self.base_url}{base_path}/root:/{encoded_path}:/content"
+            if conflict_behavior != "replace":
+                upload_url += f"?@microsoft.graph.conflictBehavior={conflict_behavior}"
+            resp = self._client.request(
+                "PUT",
+                upload_url,
+                headers=headers,
+                content=file_bytes,
+                timeout=60,
+            )
+            if resp.status_code in (429, 503, 504):
+                raise GraphRequestError(f"Transient error {resp.status_code}: {resp.text}")
+            if resp.status_code >= 400:
+                raise GraphRequestError(f"Graph error {resp.status_code}: {resp.text}")
+            return resp.json() if resp.content else {}
+
+        session_url = f"{self.base_url}{base_path}/root:/{encoded_path}:/createUploadSession"
+        session_resp = self._client.request(
+            "POST",
+            session_url,
+            headers={**headers, "Content-Type": "application/json"},
+            json={
+                "item": {
+                    "@microsoft.graph.conflictBehavior": conflict_behavior,
+                    "name": file_path.name,
+                }
+            },
+            timeout=60,
+        )
+        if session_resp.status_code in (429, 503, 504):
+            raise GraphRequestError(
+                f"Transient error {session_resp.status_code}: {session_resp.text}"
+            )
+        if session_resp.status_code >= 400:
+            raise GraphRequestError(f"Graph error {session_resp.status_code}: {session_resp.text}")
+        upload_url = str(session_resp.json().get("uploadUrl") or "")
+        if not upload_url:
+            raise GraphRequestError("Upload session response missing uploadUrl")
+
+        chunk_size = 3200 * 1024
+        offset = 0
+        completed: dict[str, Any] = {}
+        while offset < len(file_bytes):
+            chunk_end = min(offset + chunk_size, len(file_bytes)) - 1
+            chunk = file_bytes[offset : chunk_end + 1]
+            chunk_resp = self._client.request(
+                "PUT",
+                upload_url,
+                headers={
+                    "Content-Length": str(len(chunk)),
+                    "Content-Range": f"bytes {offset}-{chunk_end}/{len(file_bytes)}",
+                },
+                content=chunk,
+                timeout=120,
+            )
+            if chunk_resp.status_code in (429, 503, 504):
+                raise GraphRequestError(
+                    f"Transient error {chunk_resp.status_code}: {chunk_resp.text}"
+                )
+            if chunk_resp.status_code >= 400:
+                raise GraphRequestError(f"Graph error {chunk_resp.status_code}: {chunk_resp.text}")
+            if chunk_resp.status_code in (200, 201):
+                completed = chunk_resp.json() if chunk_resp.content else {}
+            offset = chunk_end + 1
+        return completed
+
     # ---------- Teams Helpers ----------
 
     def teamify_group(self, group_id: str) -> None:
@@ -656,23 +1546,99 @@ class GraphClient:
         }
         self._request("PUT", f"/groups/{group_id}/team", json=body)
 
-    def get_team(self, team_id: str) -> dict:
-        r = self._request("GET", f"/teams/{team_id}")
+    def _resolve_group_id(
+        self,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+    ) -> str:
+        if group_id:
+            return group_id
+        if mail_nickname:
+            group = self.find_group_by_mailnickname(mail_nickname)
+            resolved = str((group or {}).get("id") or "").strip()
+            if resolved:
+                return resolved
+            raise GraphRequestError(f"group_not_found:{mail_nickname}")
+        raise GraphRequestError("group lookup requires group_id or mail_nickname")
+
+    def get_team(
+        self,
+        team_id: str | None = None,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+    ) -> dict:
+        resolved_team_id = team_id or self._resolve_group_id(
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
+        r = self._request("GET", f"/teams/{resolved_team_id}")
         return r.json()
 
-    def list_team_channels(self, team_id: str) -> list[dict]:
-        r = self._request("GET", f"/teams/{team_id}/channels")
+    def list_team_channels(
+        self,
+        team_id: str | None = None,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+    ) -> list[dict]:
+        resolved_team_id = team_id or self._resolve_group_id(
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
+        r = self._request("GET", f"/teams/{resolved_team_id}/channels")
         data = r.json()
         return data.get("value", [])
 
     def create_team_channel(
-        self, team_id: str, display_name: str, description: str | None = None
+        self,
+        team_id: str | None,
+        display_name: str,
+        description: str | None = None,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
     ) -> dict:
+        resolved_team_id = team_id or self._resolve_group_id(
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
         body = {"displayName": display_name}
         if description:
             body["description"] = description
-        r = self._request("POST", f"/teams/{team_id}/channels", json=body)
+        r = self._request("POST", f"/teams/{resolved_team_id}/channels", json=body)
         return r.json()
+
+    def list_channels(
+        self,
+        team_id: str | None = None,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+    ) -> list[dict]:
+        return self.list_team_channels(
+            team_id,
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
+
+    def create_channel(
+        self,
+        display_name: str,
+        *,
+        team_id: str | None = None,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+        description: str | None = None,
+    ) -> dict:
+        return self.create_team_channel(
+            team_id,
+            display_name,
+            description=description,
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
 
     # ---------- Teams Messaging ----------
 
@@ -700,8 +1666,30 @@ class GraphClient:
         data = r.json()
         return data.get("value", [])
 
-    def create_plan(self, group_id: str, title: str) -> dict:
-        body = {"owner": group_id, "title": title}
+    def list_plans(
+        self,
+        *,
+        group_id: str | None = None,
+        mail_nickname: str | None = None,
+    ) -> list[dict]:
+        resolved_group_id = self._resolve_group_id(
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
+        return self.list_group_plans(resolved_group_id)
+
+    def create_plan(
+        self,
+        group_id: str | None,
+        title: str,
+        *,
+        mail_nickname: str | None = None,
+    ) -> dict:
+        resolved_group_id = self._resolve_group_id(
+            group_id=group_id,
+            mail_nickname=mail_nickname,
+        )
+        body = {"owner": resolved_group_id, "title": title}
         r = self._request("POST", "/planner/plans", json=body)
         return r.json()
 
@@ -714,6 +1702,9 @@ class GraphClient:
         body = {"name": name, "planId": plan_id, "orderHint": order_hint}
         r = self._request("POST", "/planner/buckets", json=body)
         return r.json()
+
+    def create_plan_bucket(self, plan_id: str, name: str, order_hint: str = " !") -> dict:
+        return self.create_bucket(plan_id, name, order_hint=order_hint)
 
     def create_task(
         self,
@@ -754,6 +1745,25 @@ class GraphClient:
                     "PATCH", f"/planner/tasks/{task_id}/details", headers=headers, json=details
                 )
         return task
+
+    def create_plan_task(
+        self,
+        plan_id: str,
+        bucket_id: str,
+        title: str,
+        *,
+        description: str | None = None,
+        reference_url: str | None = None,
+        percent_complete: int | None = None,
+    ) -> dict:
+        return self.create_task(
+            plan_id,
+            bucket_id,
+            title,
+            description=description,
+            reference_url=reference_url,
+            percent_complete=percent_complete,
+        )
 
     # ---------- Ops Adapter Integration ----------
 

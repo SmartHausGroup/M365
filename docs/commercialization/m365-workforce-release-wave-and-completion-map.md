@@ -221,4 +221,3 @@ The workforce is complete only when:
 ## Next Dependency
 
 `E1A` is now the next act. It must define the universal action contract v2 that the rest of the workforce expansion will use.
-

@@ -1,0 +1,27 @@
+lemma_id: L28
+name: M365 Entra / directory expansion v2
+source_notebook: notebooks/m365/INV-M365-AD-entra-directory-expansion-v2.ipynb
+evidence:
+  artifacts:
+    - plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md
+    - docs/commercialization/m365-entra-directory-expansion-v2.md
+    - registry/entra_directory_expansion_v2.yaml
+    - registry/capability_registry.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/auth_model_v2.yaml
+    - registry/approval_risk_matrix_v2.yaml
+    - docs/CAIO_M365_CONTRACT.md
+    - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+    - src/provisioning_api/routers/m365.py
+    - src/smarthaus_graph/client.py
+    - scripts/ci/verify_caio_m365_contract.py
+    - scripts/ci/verify_capability_registry.py
+    - scripts/ci/verify_entra_directory_expansion.py
+    - tests/test_entra_directory_expansion_v2.py
+    - notebooks/lemma_proofs/L28_m365_entra_directory_expansion_v2.ipynb
+  checks:
+    - the instruction API exposes the expanded Entra / directory action set
+    - capability-registry verification treats the expanded directory aliases as implemented
+    - executor routing, auth, and approval posture stay deterministic for the expanded action set
+    - E2A advances the active next act to E2B
+status: projected
