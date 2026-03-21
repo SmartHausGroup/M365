@@ -502,12 +502,6 @@ execution_status:
       with four ordered certification phases, five governance rules, and per-department
       verdicts. All 10 departments pass certification with 39 total personas.
   prepared_blocked:
-  - phase: E8D
-    blocked_by: E8
-    summary: 'Certify cross-functional workflows spanning multiple departments and
-      personas.
-
-      '
   - phase: E8E
     blocked_by: E8
     summary: 'Close the formal workforce release gate with live evidence and explicit
@@ -548,7 +542,7 @@ execution_status:
     summary: 'Issue the final release decision for the full workforce program.
 
       '
-  next_act: E8D
+  next_act: E8E
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files,
   collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
@@ -1102,7 +1096,7 @@ phase_stack:
   - code: E8D
     slug: cross-department-workflow-certification
     title: Cross-Department Workflow Certification
-    status: Pending
+    status: Complete
     goal: 'Certify cross-functional workflows spanning multiple departments and personas.
 
       '

@@ -76,12 +76,16 @@ def main() -> None:
 
         pack_personas = len(pack.get("personas", {}))
         if pack_personas != entry["persona_count"]:
-            print(f"FAILED: {dept_id} pack persona count {pack_personas} != {entry['persona_count']}")
+            print(
+                f"FAILED: {dept_id} pack persona count {pack_personas} != {entry['persona_count']}"
+            )
             sys.exit(1)
 
         registry_count = dept_counts.get(dept_id, 0)
         if entry["persona_count"] != registry_count:
-            print(f"FAILED: {dept_id} persona count {entry['persona_count']} != registry {registry_count}")
+            print(
+                f"FAILED: {dept_id} persona count {entry['persona_count']} != registry {registry_count}"
+            )
             sys.exit(1)
 
         wf_count = len(pack.get("workflow_families", []))
@@ -96,7 +100,9 @@ def main() -> None:
         dept_names.append(dept_id)
 
     if total_personas != kpis["total_department_personas"]:
-        print(f"FAILED: total department personas {total_personas} != {kpis['total_department_personas']}")
+        print(
+            f"FAILED: total department personas {total_personas} != {kpis['total_department_personas']}"
+        )
         sys.exit(1)
 
     output = {

@@ -58,9 +58,7 @@ def test_e8c_persona_counts_and_total() -> None:
     total = 0
     for dept_id, entry in contract["department_certification_status"].items():
         pack_name = f"department_pack_{dept_id.replace('-', '_')}_v1.yaml"
-        pack = yaml.safe_load(
-            (REPO_ROOT / "registry" / pack_name).read_text(encoding="utf-8")
-        )
+        pack = yaml.safe_load((REPO_ROOT / "registry" / pack_name).read_text(encoding="utf-8"))
         assert len(pack.get("personas", {})) == entry["persona_count"]
         assert entry["persona_count"] == dept_counts.get(dept_id, 0)
         assert entry["workflow_family_count"] > 0

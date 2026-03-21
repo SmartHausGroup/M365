@@ -1297,3 +1297,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_department_certification_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
 | `configs/generated/department_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
 | `tests/test_department_certification_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+
+## Active E8D Cross-Department Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/cross_department_certification_v1.yaml` | Cross-department certification contract. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `docs/commercialization/m365-cross-department-certification-v1.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `docs/ma/lemmas/L66_m365_cross_department_certification_v1.md` | Lemma doc for L66. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `invariants/lemmas/L66_m365_cross_department_certification_v1.yaml` | Invariant for L66. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `notebooks/m365/INV-M365-BN-cross-department-certification-v1.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `notebooks/lemma_proofs/L66_m365_cross_department_certification_v1.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `artifacts/scorecards/scorecard_l66.json` | Scorecard for L66. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `scripts/ci/verify_cross_department_certification_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `configs/generated/cross_department_certification_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+| `tests/test_cross_department_certification_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |

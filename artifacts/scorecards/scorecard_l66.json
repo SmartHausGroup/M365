@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L66",
+  "title": "M365 Cross-Department Workflow Certification v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BN-cross-department-certification-v1.ipynb",
+    "notebooks/lemma_proofs/L66_m365_cross_department_certification_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L66_m365_cross_department_certification_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Cross-department certification covers 4 collaboration primitives and 5 handoff rules",
+    "All 10 certified departments eligible for cross-department workflows"
+  ]
+}

@@ -1,0 +1,111 @@
+version: "1.0.0"
+last_updated: "2026-03-21T16:30:00Z"
+authority:
+  cross_persona_collaboration: registry/cross_persona_collaboration_contract_v1.yaml
+  department_certification: registry/department_certification_v1.yaml
+  persona_certification: registry/persona_certification_v1.yaml
+  persona_registry: registry/persona_registry_v2.yaml
+
+contract:
+  id: cross-department-certification
+  display_name: Cross-Department Workflow Certification Contract v1
+  status: contract-defined
+  description: >
+    Defines the deterministic certification criteria for cross-functional
+    workflows spanning multiple departments and personas. Certifies that the
+    collaboration contract, handoff rules, and department-pair coverage are
+    consistent with the certified department and persona surfaces.
+
+certification_phases:
+  - order: 1
+    id: collaboration_contract_presence
+    description: >
+      Verify the cross-persona collaboration contract exists and defines
+      collaboration primitives and handoff rules.
+    inputs:
+      - cross_persona_collaboration_contract_v1.yaml
+    outputs:
+      - collaboration contract presence status
+    failure_mode: >
+      Missing collaboration contract fails presence check.
+
+  - order: 2
+    id: department_pair_coverage
+    description: >
+      Verify that cross-department workflows are possible between every
+      pair of certified departments through the collaboration primitives.
+    inputs:
+      - cross_persona_collaboration_contract_v1.yaml
+      - department_certification_v1.yaml
+    outputs:
+      - department pair coverage status
+    failure_mode: >
+      Collaboration contract without department-spanning primitives fails.
+
+  - order: 3
+    id: handoff_rule_completeness
+    description: >
+      Verify the handoff rules cover the required transitions: initiation,
+      state transfer, completion acknowledgment, and failure recovery.
+    inputs:
+      - cross_persona_collaboration_contract_v1.yaml
+    outputs:
+      - handoff rule completeness status
+    failure_mode: >
+      Missing handoff rules fail completeness check.
+
+  - order: 4
+    id: bounded_claim_consistency
+    description: >
+      Verify no cross-department certification claim exceeds the actual
+      collaboration surface or the certified department/persona surfaces.
+    inputs:
+      - all certification phase outputs
+    outputs:
+      - overall cross-department certification verdict
+    failure_mode: >
+      Claim exceeding actual collaboration or department surface fails.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Missing collaboration contract or handoff rules force not-certified.
+  audit_completeness:
+    description: >
+      Every certification attempt produces evidence for each phase.
+  bounded_claims:
+    description: >
+      Cross-department claims cannot exceed certified department surface.
+  determinism:
+    description: >
+      Same contracts produce the same verdicts on every replay.
+  prerequisite_alignment:
+    description: >
+      Cross-department certification requires E8A, E8B, and E8C to be
+      complete. Verdicts must not contradict earlier certifications.
+
+kpis:
+  collaboration_primitive_count: 4
+  handoff_rule_count: 5
+  governance_rule_count_collab: 4
+  certified_department_count: 10
+  certification_phase_count: 4
+  governance_rule_count: 5
+
+cross_department_certification_summary:
+  collaboration_contract_present: true
+  department_pair_coverage: true
+  handoff_rules_complete: true
+  bounded_claims_consistent: true
+  overall_verdict: certified
+
+bounded_claims:
+  supported:
+    - "Cross-department collaboration contract is present with 4 primitives and 5 handoff rules"
+    - "All 10 certified departments can participate in cross-department workflows"
+    - "Handoff rules cover required transition states"
+    - "Certification is deterministic and replay-stable"
+  not_supported:
+    - "All cross-department workflow combinations have been executed end-to-end"
+    - "Live tenant evidence for every department-pair collaboration"
+    - "Automated cross-department workflow orchestration"
