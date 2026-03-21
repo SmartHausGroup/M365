@@ -293,16 +293,6 @@
     ],
     "prepared_blocked": [
       {
-        "phase": "E9",
-        "blocked_by": "E8E",
-        "summary": "Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model."
-      },
-      {
-        "phase": "E9A",
-        "blocked_by": "E9",
-        "summary": "Package the full workforce offering and supported capability sets for customers."
-      },
-      {
         "phase": "E9B",
         "blocked_by": "E9",
         "summary": "Define the onboarding path for the expanded workforce product."
