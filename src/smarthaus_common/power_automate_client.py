@@ -7,6 +7,7 @@ import subprocess
 from typing import Any
 
 import httpx
+
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import AuthConfigurationError, SmarthausError
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config

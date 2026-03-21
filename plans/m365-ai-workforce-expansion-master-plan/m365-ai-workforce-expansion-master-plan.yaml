@@ -194,6 +194,28 @@ execution_status:
         scripts/ci/verify_documents_spreadsheets_presentations_expansion.py, and
         proved the bounded E2E slice through contract verifiers plus targeted
         productivity regressions.
+    - phase: E3A
+      date: "2026-03-20"
+      summary: >
+        Expanded Power Automate through registry/power_automate_expansion_v2.yaml
+        and docs/commercialization/m365-power-automate-expansion-v2.md, projected
+        bounded flow discovery, owner governance, lifecycle control, run-history,
+        and explicit callback actions into src/smarthaus_common/power_automate_client.py
+        and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+        contracts, added the notebook-backed L33 chain and
+        scripts/ci/verify_power_automate_expansion.py, and proved the bounded E3A slice
+        through contract verifiers plus targeted Power Automate regressions.
+    - phase: E3B
+      date: "2026-03-20"
+      summary: >
+        Expanded Power Apps through registry/power_apps_expansion_v2.yaml and
+        docs/commercialization/m365-power-apps-expansion-v2.md, projected bounded app,
+        role, ownership, environment, and environment-role actions into
+        src/smarthaus_common/power_apps_client.py and src/provisioning_api/routers/m365.py,
+        aligned the CAIO/capability/routing/auth/approval contracts, added the
+        notebook-backed L34 chain and scripts/ci/verify_power_apps_expansion.py,
+        and proved the bounded E3B slice through contract verifiers plus targeted
+        Power Apps regressions.
   prepared_blocked:
     - phase: E0
       blocked_by: "Closed `m365-enterprise-readiness-master-plan`"
@@ -203,14 +225,6 @@ execution_status:
       blocked_by: "E2E"
       summary: >
         Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
-    - phase: E3A
-      blocked_by: "E3"
-      summary: >
-        Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
-    - phase: E3B
-      blocked_by: "E3"
-      summary: >
-        Add governed Power Apps interaction and administration surfaces.
     - phase: E3C
       blocked_by: "E3"
       summary: >
@@ -387,10 +401,10 @@ execution_status:
       blocked_by: "E9"
       summary: >
         Issue the final release decision for the full workforce program.
-  next_act: E3B
+  next_act: E3C
 
 open_blockers:
-  - "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, and bounded Power Automate, but most workload families and live-certification layers remain beyond the previously shipped v1 slice."
+  - "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Automate, and bounded Power Apps, but most workload families and live-certification layers remain beyond the previously shipped v1 slice."
   - "No department pack beyond the standalone v1 surface has been certified or released."
 
 requirements:
@@ -575,13 +589,13 @@ phase_stack:
       - code: E3A
         slug: power-automate-expansion
         title: "Power Automate Expansion"
-        status: Pending
+        status: Complete
         goal: >
           Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
       - code: E3B
         slug: power-apps-expansion
         title: "Power Apps Expansion"
-        status: Pending
+        status: Complete
         goal: >
           Add governed Power Apps interaction and administration surfaces.
       - code: E3C

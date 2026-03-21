@@ -25,6 +25,7 @@ SECTION_TO_DOMAIN = {
     "Teams": "teams",
     "Planner & tasks": "planner",
     "Power Automate": "powerplatform",
+    "Power Apps": "powerplatform",
     "OneNote": "onenote",
     "To Do / tasks (Microsoft To Do)": "todo",
     "Subscriptions & webhooks": "subscriptions",
@@ -164,6 +165,14 @@ def action_to_resource(action: str, domain: str) -> str:
             return "plannerBucket"
         return "plan"
     if domain == "powerplatform":
+        if "powerapp_environment_role" in action:
+            return "powerAppEnvironmentRoleAssignment"
+        if "powerapp_role" in action:
+            return "powerAppRoleAssignment"
+        if "powerapp_environment" in action:
+            return "powerAppEnvironment"
+        if "powerapp" in action:
+            return "powerApp"
         if "run" in action:
             return "flowRun"
         if "owner" in action:

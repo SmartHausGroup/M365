@@ -21,6 +21,7 @@ from smarthaus_common.office_generation import (
     generate_pptx_bytes,
     generate_xlsx_bytes,
 )
+from smarthaus_common.power_apps_client import PowerAppsClient
 from smarthaus_common.power_automate_client import PowerAutomateClient
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
@@ -80,6 +81,17 @@ _SUPPORTED_ACTIONS = {
     "delete_flow",
     "restore_flow",
     "invoke_flow_callback",
+    "list_powerapps_admin",
+    "get_powerapp_admin",
+    "list_powerapp_role_assignments",
+    "set_powerapp_owner",
+    "remove_powerapp_role_assignment",
+    "delete_powerapp",
+    "list_powerapp_environments",
+    "get_powerapp_environment",
+    "list_powerapp_environment_role_assignments",
+    "set_powerapp_environment_role_assignment",
+    "remove_powerapp_environment_role_assignment",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -165,6 +177,11 @@ _MUTATING_ACTIONS = {
     "delete_flow",
     "restore_flow",
     "invoke_flow_callback",
+    "set_powerapp_owner",
+    "remove_powerapp_role_assignment",
+    "delete_powerapp",
+    "set_powerapp_environment_role_assignment",
+    "remove_powerapp_environment_role_assignment",
 }
 
 
@@ -839,6 +856,119 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "headers": _normalize_string_map(params.get("headers"), "headers"),
             "timeout_seconds": normalized_timeout,
         }
+    if action in {
+        "list_powerapps_admin",
+        "get_powerapp_admin",
+        "list_powerapp_role_assignments",
+        "set_powerapp_owner",
+        "remove_powerapp_role_assignment",
+        "delete_powerapp",
+        "list_powerapp_environments",
+        "get_powerapp_environment",
+        "list_powerapp_environment_role_assignments",
+        "set_powerapp_environment_role_assignment",
+        "remove_powerapp_environment_role_assignment",
+    }:
+        if action == "list_powerapp_environments":
+            return {"top": _normalize_top(params, default=50)}
+        environment_name = _first_str(
+            params,
+            "environmentName",
+            "environment_name",
+            "environment",
+            "environmentId",
+            "environment_id",
+            "id",
+        )
+        if action == "list_powerapps_admin":
+            return {
+                "environment_name": environment_name,
+                "owner": _first_str(params, "owner", "ownerId", "owner_id", "userId", "user_id"),
+                "filter_text": _first_str(params, "filter", "filterText", "filter_text"),
+                "top": _normalize_top(params, default=50),
+            }
+        if not environment_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'environmentName', 'environment_name', 'environment', or 'id'",
+            )
+        if action == "get_powerapp_environment":
+            return {"environment_name": environment_name}
+        if action == "list_powerapp_environment_role_assignments":
+            return {
+                "environment_name": environment_name,
+                "user_id": _first_str(params, "userId", "user_id"),
+            }
+        if action == "set_powerapp_environment_role_assignment":
+            principal_object_id = _first_str(
+                params,
+                "principalObjectId",
+                "principal_object_id",
+                "userId",
+                "user_id",
+            )
+            if not principal_object_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'principalObjectId', 'principal_object_id', or 'userId'",
+                )
+            role_name = _first_str(params, "roleName", "role_name")
+            if not role_name:
+                raise HTTPException(status_code=400, detail="Missing 'roleName' or 'role_name'")
+            return {
+                "environment_name": environment_name,
+                "principal_object_id": principal_object_id,
+                "role_name": role_name,
+                "principal_type": _first_str(params, "principalType", "principal_type") or "User",
+            }
+        if action == "remove_powerapp_environment_role_assignment":
+            role_id = _first_str(params, "roleId", "role_id")
+            if not role_id:
+                raise HTTPException(status_code=400, detail="Missing 'roleId' or 'role_id'")
+            return {
+                "environment_name": environment_name,
+                "role_id": role_id,
+            }
+        app_name = _first_str(params, "appName", "app_name", "appId", "app_id", "id")
+        if action == "list_powerapps_admin":
+            raise AssertionError("list_powerapps_admin must return before app normalization")
+        if not app_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'appName', 'app_name', 'appId', 'app_id', or 'id'",
+            )
+        normalized_powerapp: dict[str, Any] = {
+            "environment_name": environment_name,
+            "app_name": app_name,
+        }
+        if action == "get_powerapp_admin":
+            return normalized_powerapp
+        if action == "list_powerapp_role_assignments":
+            normalized_powerapp["user_id"] = _first_str(params, "userId", "user_id")
+            return normalized_powerapp
+        if action == "set_powerapp_owner":
+            owner_object_id = _first_str(
+                params,
+                "ownerObjectId",
+                "owner_object_id",
+                "principalObjectId",
+                "principal_object_id",
+                "userId",
+                "user_id",
+            )
+            if not owner_object_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'ownerObjectId', 'owner_object_id', or 'principalObjectId'",
+                )
+            normalized_powerapp["owner_object_id"] = owner_object_id
+            return normalized_powerapp
+        if action == "remove_powerapp_role_assignment":
+            role_id = _first_str(params, "roleId", "role_id")
+            if not role_id:
+                raise HTTPException(status_code=400, detail="Missing 'roleId' or 'role_id'")
+            normalized_powerapp["role_id"] = role_id
+        return normalized_powerapp
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1165,6 +1295,23 @@ def _power_automate_client(action: str | None = None) -> PowerAutomateClient:
     return PowerAutomateClient(legacy_config=config)
 
 
+def _power_apps_client(action: str | None = None) -> PowerAppsClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return PowerAppsClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return PowerAppsClient(legacy_config=config)
+
+
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if action == "create_site":
         result = provision_group_site(
@@ -1468,6 +1615,80 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             params.get("body", {}),
             headers=params.get("headers"),
             timeout_seconds=params.get("timeout_seconds", 30),
+        )
+    if action == "list_powerapps_admin":
+        power_apps_client = _power_apps_client(action)
+        value = power_apps_client.list_powerapps_admin(
+            environment_name=params.get("environment_name"),
+            owner=params.get("owner"),
+            filter_text=params.get("filter_text"),
+        )[: params["top"]]
+        return {"apps": value, "count": len(value)}
+    if action == "get_powerapp_admin":
+        power_apps_client = _power_apps_client(action)
+        return {
+            "app": power_apps_client.get_powerapp_admin(
+                params["environment_name"],
+                params["app_name"],
+            )
+        }
+    if action == "list_powerapp_role_assignments":
+        power_apps_client = _power_apps_client(action)
+        value = power_apps_client.list_powerapp_role_assignments(
+            params["environment_name"],
+            params["app_name"],
+            user_id=params.get("user_id"),
+        )
+        return {"roles": value, "count": len(value)}
+    if action == "set_powerapp_owner":
+        power_apps_client = _power_apps_client(action)
+        return power_apps_client.set_powerapp_owner(
+            params["environment_name"],
+            params["app_name"],
+            params["owner_object_id"],
+        )
+    if action == "remove_powerapp_role_assignment":
+        power_apps_client = _power_apps_client(action)
+        return power_apps_client.remove_powerapp_role_assignment(
+            params["environment_name"],
+            params["app_name"],
+            params["role_id"],
+        )
+    if action == "delete_powerapp":
+        power_apps_client = _power_apps_client(action)
+        return power_apps_client.delete_powerapp(
+            params["environment_name"],
+            params["app_name"],
+        )
+    if action == "list_powerapp_environments":
+        power_apps_client = _power_apps_client(action)
+        value = power_apps_client.list_powerapp_environments()[: params["top"]]
+        return {"environments": value, "count": len(value)}
+    if action == "get_powerapp_environment":
+        power_apps_client = _power_apps_client(action)
+        return {
+            "environment": power_apps_client.get_powerapp_environment(params["environment_name"])
+        }
+    if action == "list_powerapp_environment_role_assignments":
+        power_apps_client = _power_apps_client(action)
+        value = power_apps_client.list_powerapp_environment_role_assignments(
+            params["environment_name"],
+            user_id=params.get("user_id"),
+        )
+        return {"roles": value, "count": len(value)}
+    if action == "set_powerapp_environment_role_assignment":
+        power_apps_client = _power_apps_client(action)
+        return power_apps_client.set_powerapp_environment_role_assignment(
+            params["environment_name"],
+            params["principal_object_id"],
+            role_name=params["role_name"],
+            principal_type=params.get("principal_type", "User"),
+        )
+    if action == "remove_powerapp_environment_role_assignment":
+        power_apps_client = _power_apps_client(action)
+        return power_apps_client.remove_powerapp_environment_role_assignment(
+            params["environment_name"],
+            params["role_id"],
         )
     if action == "get_user":
         client = _graph_client(action)
@@ -2243,6 +2464,101 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "action": "invoke_flow_callback",
         "description": "Invoke a Power Automate HTTP callback URL with a bounded payload",
         "params": ["callbackUrl|callback_url|url", "body|payload?", "headers?", "timeoutSeconds?"],
+        "mutating": True,
+    },
+    {
+        "action": "list_powerapps_admin",
+        "description": "List Power Apps as admin across environments or within a specific environment",
+        "params": ["environmentName?|environment_name?|environment?|id?", "owner?|filter?|top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerapp_admin",
+        "description": "Get a Power App as admin by environment and app name",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id",
+            "appName|app_name|appId|app_id|id",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "list_powerapp_role_assignments",
+        "description": "List Power App role assignments for an app",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id",
+            "appName|app_name|appId|app_id|id",
+            "userId?|user_id?",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "set_powerapp_owner",
+        "description": "Transfer or set Power App ownership",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id",
+            "appName|app_name|appId|app_id|id",
+            "ownerObjectId|owner_object_id|principalObjectId|principal_object_id|userId|user_id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "remove_powerapp_role_assignment",
+        "description": "Remove a Power App role assignment",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id",
+            "appName|app_name|appId|app_id|id",
+            "roleId|role_id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "delete_powerapp",
+        "description": "Delete a Power App by environment and app name",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id",
+            "appName|app_name|appId|app_id|id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "list_powerapp_environments",
+        "description": "List Power Apps environments",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerapp_environment",
+        "description": "Get a Power Apps environment",
+        "params": ["environmentName|environment_name|environment|environmentId|environment_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_powerapp_environment_role_assignments",
+        "description": "List Power Apps environment role assignments",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id|id",
+            "userId?|user_id?",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "set_powerapp_environment_role_assignment",
+        "description": "Grant or update a Power Apps environment role assignment",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id|id",
+            "principalObjectId|principal_object_id|userId|user_id",
+            "roleName|role_name",
+            "principalType?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "remove_powerapp_environment_role_assignment",
+        "description": "Remove a Power Apps environment role assignment",
+        "params": [
+            "environmentName|environment_name|environment|environmentId|environment_id|id",
+            "roleId|role_id",
+        ],
         "mutating": True,
     },
     {

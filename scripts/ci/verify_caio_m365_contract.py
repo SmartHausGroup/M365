@@ -103,6 +103,22 @@ RESULT_SHAPES = {
     "delete_flow": ["flowName", "status"],
     "restore_flow": ["flowName", "status"],
     "invoke_flow_callback": ["invoked", "status_code", "response"],
+    "list_powerapps_admin": ["apps", "count"],
+    "get_powerapp_admin": ["app"],
+    "list_powerapp_role_assignments": ["roles", "count"],
+    "set_powerapp_owner": ["appName", "ownerObjectId", "status"],
+    "remove_powerapp_role_assignment": ["appName", "roleId", "removed"],
+    "delete_powerapp": ["appName", "status"],
+    "list_powerapp_environments": ["environments", "count"],
+    "get_powerapp_environment": ["environment"],
+    "list_powerapp_environment_role_assignments": ["roles", "count"],
+    "set_powerapp_environment_role_assignment": [
+        "environmentName",
+        "principalObjectId",
+        "roleName",
+        "status",
+    ],
+    "remove_powerapp_environment_role_assignment": ["environmentName", "roleId", "removed"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -324,6 +340,66 @@ def verify_with_mock() -> dict:
             {
                 "ok": True,
                 "result": {"invoked": True, "status_code": 202, "response": {"ok": True}},
+            },
+        ),
+        ("list_powerapps_admin", {"ok": True, "result": {"apps": [], "count": 0}}),
+        ("get_powerapp_admin", {"ok": True, "result": {"app": {}}}),
+        (
+            "list_powerapp_role_assignments",
+            {"ok": True, "result": {"roles": [], "count": 0}},
+        ),
+        (
+            "set_powerapp_owner",
+            {
+                "ok": True,
+                "result": {
+                    "appName": "app-1",
+                    "ownerObjectId": "owner-1",
+                    "status": "updated",
+                },
+            },
+        ),
+        (
+            "remove_powerapp_role_assignment",
+            {
+                "ok": True,
+                "result": {"appName": "app-1", "roleId": "role-1", "removed": True},
+            },
+        ),
+        (
+            "delete_powerapp",
+            {"ok": True, "result": {"appName": "app-1", "status": "deleted"}},
+        ),
+        (
+            "list_powerapp_environments",
+            {"ok": True, "result": {"environments": [], "count": 0}},
+        ),
+        ("get_powerapp_environment", {"ok": True, "result": {"environment": {}}}),
+        (
+            "list_powerapp_environment_role_assignments",
+            {"ok": True, "result": {"roles": [], "count": 0}},
+        ),
+        (
+            "set_powerapp_environment_role_assignment",
+            {
+                "ok": True,
+                "result": {
+                    "environmentName": "Default-Env",
+                    "principalObjectId": "owner-1",
+                    "roleName": "Environment Admin",
+                    "status": "updated",
+                },
+            },
+        ),
+        (
+            "remove_powerapp_environment_role_assignment",
+            {
+                "ok": True,
+                "result": {
+                    "environmentName": "Default-Env",
+                    "roleId": "role-1",
+                    "removed": True,
+                },
             },
         ),
         (

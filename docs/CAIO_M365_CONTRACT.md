@@ -101,6 +101,17 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `delete_flow` | Soft-delete a Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
 | `restore_flow` | Restore a soft-deleted Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
 | `invoke_flow_callback` | Invoke a Power Automate HTTP callback URL with a bounded payload | Yes | `callbackUrl` or `callback_url` or `url`, `body?` or `payload?`, `headers?`, `timeoutSeconds?` |
+| `list_powerapps_admin` | List Power Apps as admin across environments or within a specific environment | No | `environmentName?` or `environment_name?` or `environment?`, `owner?`, `filter?`, `top?` |
+| `get_powerapp_admin` | Get a Power App as admin | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id` |
+| `list_powerapp_role_assignments` | List Power App role assignments for an app | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id`, `userId?` |
+| `set_powerapp_owner` | Transfer or set Power App ownership | Yes | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id`, `ownerObjectId` or `owner_object_id` or `principalObjectId` or `principal_object_id` or `userId` |
+| `remove_powerapp_role_assignment` | Remove a Power App role assignment | Yes | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id`, `roleId` or `role_id` |
+| `delete_powerapp` | Delete a Power App | Yes | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id` |
+| `list_powerapp_environments` | List Power Apps environments | No | `top?` |
+| `get_powerapp_environment` | Get a Power Apps environment | No | `environmentName` or `environment_name` or `environment` or `id` |
+| `list_powerapp_environment_role_assignments` | List Power Apps environment role assignments | No | `environmentName` or `environment_name` or `environment` or `id`, `userId?` |
+| `set_powerapp_environment_role_assignment` | Grant or update a Power Apps environment role assignment | Yes | `environmentName` or `environment_name` or `environment` or `id`, `principalObjectId` or `principal_object_id` or `userId`, `roleName` or `role_name`, `principalType?` |
+| `remove_powerapp_environment_role_assignment` | Remove a Power Apps environment role assignment | Yes | `environmentName` or `environment_name` or `environment` or `id`, `roleId` or `role_id` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -188,6 +199,17 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **delete_flow:** `{ "flowName": "<name>", "status": "deleted" }`
 - **restore_flow:** `{ "flowName": "<name>", "status": "restored" }`
 - **invoke_flow_callback:** `{ "invoked": true, "status_code": 2xx, "response": { ... } | "<text>" }`
+- **list_powerapps_admin:** `{ "apps": [ ... ], "count": N }`
+- **get_powerapp_admin:** `{ "app": { ... } }`
+- **list_powerapp_role_assignments:** `{ "roles": [ ... ], "count": N }`
+- **set_powerapp_owner:** `{ "appName": "<name>", "ownerObjectId": "<id>", "status": "updated" }`
+- **remove_powerapp_role_assignment:** `{ "appName": "<name>", "roleId": "<id>", "removed": true }`
+- **delete_powerapp:** `{ "appName": "<name>", "status": "deleted" }`
+- **list_powerapp_environments:** `{ "environments": [ ... ], "count": N }`
+- **get_powerapp_environment:** `{ "environment": { ... } }`
+- **list_powerapp_environment_role_assignments:** `{ "roles": [ ... ], "count": N }`
+- **set_powerapp_environment_role_assignment:** `{ "environmentName": "<env>", "principalObjectId": "<id>", "roleName": "<role>", "status": "updated" }`
+- **remove_powerapp_environment_role_assignment:** `{ "environmentName": "<env>", "roleId": "<id>", "removed": true }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

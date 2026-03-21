@@ -284,6 +284,22 @@
 
 ---
 
+## Power Apps
+
+- list_powerapps_admin
+- get_powerapp_admin
+- list_powerapp_role_assignments
+- set_powerapp_owner
+- remove_powerapp_role_assignment
+- delete_powerapp
+- list_powerapp_environments
+- get_powerapp_environment
+- list_powerapp_environment_role_assignments
+- set_powerapp_environment_role_assignment
+- remove_powerapp_environment_role_assignment
+
+---
+
 ## OneNote
 
 - list_notebooks
