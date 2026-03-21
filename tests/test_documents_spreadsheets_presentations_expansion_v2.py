@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Generator
 import io
 import zipfile
+from collections.abc import Generator
 from typing import Any
 
 import pytest
-
 from provisioning_api.routers import m365 as m365_router
 from smarthaus_common.approval_risk import (
     reload_approval_risk_registry,

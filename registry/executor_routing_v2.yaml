@@ -91,6 +91,18 @@ exact_action_routes:
   update_workbook: sharepoint
   create_presentation: sharepoint
   update_presentation: sharepoint
+  list_flows_admin: powerplatform
+  get_flow_admin: powerplatform
+  list_http_flows: powerplatform
+  list_flow_owners: powerplatform
+  list_flow_runs: powerplatform
+  set_flow_owner_role: powerplatform
+  remove_flow_owner_role: powerplatform
+  enable_flow: powerplatform
+  disable_flow: powerplatform
+  delete_flow: powerplatform
+  restore_flow: powerplatform
+  invoke_flow_callback: powerplatform
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint
@@ -109,6 +121,7 @@ prefix_routes:
   "apps.": directory
   "service_principals.": directory
   "admin.": directory
+  "flows.": powerplatform
 agent_action_overrides:
   website-manager:
     deployment.preview: sharepoint

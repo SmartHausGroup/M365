@@ -21,6 +21,7 @@ from smarthaus_common.office_generation import (
     generate_pptx_bytes,
     generate_xlsx_bytes,
 )
+from smarthaus_common.power_automate_client import PowerAutomateClient
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -67,6 +68,18 @@ _SUPPORTED_ACTIONS = {
     "update_workbook",
     "create_presentation",
     "update_presentation",
+    "list_flows_admin",
+    "get_flow_admin",
+    "list_http_flows",
+    "list_flow_owners",
+    "list_flow_runs",
+    "set_flow_owner_role",
+    "remove_flow_owner_role",
+    "enable_flow",
+    "disable_flow",
+    "delete_flow",
+    "restore_flow",
+    "invoke_flow_callback",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -145,6 +158,13 @@ _MUTATING_ACTIONS = {
     "update_workbook",
     "create_presentation",
     "update_presentation",
+    "set_flow_owner_role",
+    "remove_flow_owner_role",
+    "enable_flow",
+    "disable_flow",
+    "delete_flow",
+    "restore_flow",
+    "invoke_flow_callback",
 }
 
 
@@ -238,6 +258,21 @@ def _normalize_top(params: dict[str, Any], default: int = 100) -> int:
         except (TypeError, ValueError):
             return default
     return default
+
+
+def _normalize_string_map(value: Any, field_name: str) -> dict[str, str]:
+    if value is None:
+        return {}
+    if not isinstance(value, dict):
+        raise HTTPException(status_code=400, detail=f"'{field_name}' must be an object")
+    normalized = {
+        str(key).strip(): str(item).strip()
+        for key, item in value.items()
+        if str(key).strip() and str(item).strip()
+    }
+    if len(normalized) != len(value):
+        raise HTTPException(status_code=400, detail=f"Invalid '{field_name}' entries")
+    return normalized
 
 
 def _normalize_user_context(params: dict[str, Any]) -> str | None:
@@ -715,6 +750,95 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
             or "replace",
         }
+    if action in {
+        "list_flows_admin",
+        "list_http_flows",
+        "get_flow_admin",
+        "list_flow_owners",
+        "list_flow_runs",
+        "set_flow_owner_role",
+        "remove_flow_owner_role",
+        "enable_flow",
+        "disable_flow",
+        "delete_flow",
+        "restore_flow",
+    }:
+        environment_name = _first_str(
+            params,
+            "environmentName",
+            "environment_name",
+            "environment",
+            "environmentId",
+            "environment_id",
+        )
+        if not environment_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'environmentName', 'environment_name', or 'environment'",
+            )
+        normalized_flow: dict[str, Any] = {"environment_name": environment_name}
+        if action in {"list_flows_admin", "list_http_flows"}:
+            normalized_flow["top"] = _normalize_top(params, default=50)
+            return normalized_flow
+        flow_name = _first_str(params, "flowName", "flow_name", "flowId", "flow_id", "id")
+        if not flow_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'flowName', 'flow_name', 'flowId', 'flow_id', or 'id'",
+            )
+        normalized_flow["flow_name"] = flow_name
+        if action == "list_flow_owners":
+            return normalized_flow
+        if action == "list_flow_runs":
+            normalized_flow["top"] = _normalize_top(params, default=25)
+            return normalized_flow
+        if action == "set_flow_owner_role":
+            principal_object_id = _first_str(
+                params,
+                "principalObjectId",
+                "principal_object_id",
+                "userId",
+                "user_id",
+                "id",
+            )
+            if not principal_object_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'principalObjectId', 'principal_object_id', or 'userId'",
+                )
+            normalized_flow["principal_object_id"] = principal_object_id
+            normalized_flow["role_name"] = _first_str(params, "roleName", "role_name") or "CanEdit"
+            normalized_flow["principal_type"] = (
+                _first_str(params, "principalType", "principal_type") or "User"
+            )
+            return normalized_flow
+        if action == "remove_flow_owner_role":
+            role_id = _first_str(params, "roleId", "role_id")
+            if not role_id:
+                raise HTTPException(status_code=400, detail="Missing 'roleId' or 'role_id'")
+            normalized_flow["role_id"] = role_id
+        return normalized_flow
+    if action == "invoke_flow_callback":
+        callback_url = _first_str(params, "callbackUrl", "callback_url", "url")
+        if not callback_url:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'callbackUrl', 'callback_url', or 'url'",
+            )
+        timeout_seconds = params.get("timeoutSeconds", params.get("timeout_seconds", 30))
+        try:
+            normalized_timeout = max(1, int(timeout_seconds))
+        except (TypeError, ValueError) as exc:
+            raise HTTPException(
+                status_code=400,
+                detail="timeoutSeconds must be an integer",
+            ) from exc
+        return {
+            "callback_url": callback_url,
+            "body": params.get("body", params.get("payload", {})),
+            "headers": _normalize_string_map(params.get("headers"), "headers"),
+            "timeout_seconds": normalized_timeout,
+        }
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1024,6 +1148,23 @@ def _graph_client(action: str | None = None) -> GraphClient:
     return GraphClient(config=config)
 
 
+def _power_automate_client(action: str | None = None) -> PowerAutomateClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return PowerAutomateClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return PowerAutomateClient(legacy_config=config)
+
+
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if action == "create_site":
         result = provision_group_site(
@@ -1262,6 +1403,72 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "presentation": presentation,
             "status": "created" if action == "create_presentation" else "updated",
         }
+    if action == "list_flows_admin":
+        pa_client = _power_automate_client(action)
+        value = pa_client.list_flows_admin(params["environment_name"])[: params["top"]]
+        return {"flows": value, "count": len(value)}
+    if action == "get_flow_admin":
+        pa_client = _power_automate_client(action)
+        return {
+            "flow": pa_client.get_flow_admin(
+                params["environment_name"],
+                params["flow_name"],
+            )
+        }
+    if action == "list_http_flows":
+        pa_client = _power_automate_client(action)
+        value = pa_client.list_http_flows(params["environment_name"])[: params["top"]]
+        return {"flows": value, "count": len(value)}
+    if action == "list_flow_owners":
+        pa_client = _power_automate_client(action)
+        value = pa_client.list_flow_owners(
+            params["environment_name"],
+            params["flow_name"],
+        )
+        return {"owners": value, "count": len(value)}
+    if action == "list_flow_runs":
+        pa_client = _power_automate_client(action)
+        value = pa_client.list_flow_runs(
+            params["environment_name"],
+            params["flow_name"],
+        )[: params["top"]]
+        return {"runs": value, "count": len(value)}
+    if action == "set_flow_owner_role":
+        pa_client = _power_automate_client(action)
+        return pa_client.set_flow_owner_role(
+            params["environment_name"],
+            params["flow_name"],
+            params["principal_object_id"],
+            role_name=params.get("role_name", "CanEdit"),
+            principal_type=params.get("principal_type", "User"),
+        )
+    if action == "remove_flow_owner_role":
+        pa_client = _power_automate_client(action)
+        return pa_client.remove_flow_owner_role(
+            params["environment_name"],
+            params["flow_name"],
+            params["role_id"],
+        )
+    if action == "enable_flow":
+        pa_client = _power_automate_client(action)
+        return pa_client.enable_flow(params["environment_name"], params["flow_name"])
+    if action == "disable_flow":
+        pa_client = _power_automate_client(action)
+        return pa_client.disable_flow(params["environment_name"], params["flow_name"])
+    if action == "delete_flow":
+        pa_client = _power_automate_client(action)
+        return pa_client.delete_flow(params["environment_name"], params["flow_name"])
+    if action == "restore_flow":
+        pa_client = _power_automate_client(action)
+        return pa_client.restore_flow(params["environment_name"], params["flow_name"])
+    if action == "invoke_flow_callback":
+        pa_client = _power_automate_client(action)
+        return pa_client.invoke_flow_callback(
+            params["callback_url"],
+            params.get("body", {}),
+            headers=params.get("headers"),
+            timeout_seconds=params.get("timeout_seconds", 30),
+        )
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -1932,6 +2139,110 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
             "conflictBehavior?",
         ],
+        "mutating": True,
+    },
+    {
+        "action": "list_flows_admin",
+        "description": "List Power Automate flows as admin for an environment",
+        "params": ["environmentName|environment_name|environment", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_flow_admin",
+        "description": "Get a Power Automate flow as admin by environment and flow name",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "list_http_flows",
+        "description": "List Power Automate HTTP-triggered flows for an environment",
+        "params": ["environmentName|environment_name|environment", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "list_flow_owners",
+        "description": "List Power Automate flow owner roles for a flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "list_flow_runs",
+        "description": "List Power Automate runs for a flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+            "top?",
+        ],
+        "mutating": False,
+    },
+    {
+        "action": "set_flow_owner_role",
+        "description": "Grant or update a Power Automate flow owner role",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+            "principalObjectId|principal_object_id|userId|user_id",
+            "roleName?",
+            "principalType?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "remove_flow_owner_role",
+        "description": "Remove a Power Automate flow owner role",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+            "roleId|role_id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "enable_flow",
+        "description": "Enable a Power Automate flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "disable_flow",
+        "description": "Disable a Power Automate flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "delete_flow",
+        "description": "Soft-delete a Power Automate flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "restore_flow",
+        "description": "Restore a soft-deleted Power Automate flow",
+        "params": [
+            "environmentName|environment_name|environment",
+            "flowName|flow_name|flowId|flow_id|id",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "invoke_flow_callback",
+        "description": "Invoke a Power Automate HTTP callback URL with a bounded payload",
+        "params": ["callbackUrl|callback_url|url", "body|payload?", "headers?", "timeoutSeconds?"],
         "mutating": True,
     },
     {

@@ -267,6 +267,23 @@
 
 ---
 
+## Power Automate
+
+- list_flows_admin
+- get_flow_admin
+- list_http_flows
+- list_flow_owners
+- list_flow_runs
+- set_flow_owner_role
+- remove_flow_owner_role
+- enable_flow
+- disable_flow
+- delete_flow
+- restore_flow
+- invoke_flow_callback
+
+---
+
 ## OneNote
 
 - list_notebooks

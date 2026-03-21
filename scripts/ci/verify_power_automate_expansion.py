@@ -11,14 +11,9 @@ from smarthaus_common.auth_model import resolve_action_auth
 from smarthaus_common.executor_routing import executor_route_for_action
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-REGISTRY_PATH = REPO_ROOT / "registry" / "documents_spreadsheets_presentations_expansion_v2.yaml"
+REGISTRY_PATH = REPO_ROOT / "registry" / "power_automate_expansion_v2.yaml"
 CAPABILITY_REGISTRY_PATH = REPO_ROOT / "registry" / "capability_registry.yaml"
-ARTIFACT_PATH = (
-    REPO_ROOT
-    / "configs"
-    / "generated"
-    / "documents_spreadsheets_presentations_expansion_verification.json"
-)
+ARTIFACT_PATH = REPO_ROOT / "configs" / "generated" / "power_automate_expansion_verification.json"
 ROUTER_PATH = REPO_ROOT / "src" / "provisioning_api" / "routers" / "m365.py"
 
 
@@ -84,12 +79,11 @@ def main() -> int:
         if not capability_entry or capability_entry.get("status") != "implemented":
             capability_mismatches.append(action)
 
-        if executor_route_for_action(None, action) != "sharepoint":
+        if executor_route_for_action(None, action) != "powerplatform":
             route_mismatches.append(action)
 
         auth = resolve_action_auth("m365-administrator", action, {})
-        expected_auth_class = str(definition.get("auth_class") or "")
-        if auth.auth_class != expected_auth_class or auth.executor_domain != "sharepoint":
+        if auth.auth_class != "app_only" or auth.executor_domain != "powerplatform":
             auth_mismatches.append(action)
 
         approval = resolve_action_approval_risk("m365-administrator", action, {})
@@ -120,7 +114,7 @@ def main() -> int:
     ARTIFACT_PATH.parent.mkdir(parents=True, exist_ok=True)
     ARTIFACT_PATH.write_text(json.dumps(artifact, indent=2), encoding="utf-8")
     print(
-        "verify_documents_spreadsheets_presentations_expansion:",
+        "verify_power_automate_expansion:",
         "PASSED" if passed else "FAILED",
         f"({len(supported_actions)} actions)",
     )

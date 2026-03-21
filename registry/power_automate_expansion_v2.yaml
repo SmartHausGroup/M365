@@ -1,0 +1,122 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T01:30:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E3APowerAutomateExpansion(action) = InstructionBacked(action) ∧ CapabilityRegistryImplemented(action)
+  ∧ ExecutorRoute(action)=powerplatform ∧ AuthClass(action)=app_only.
+supported_actions:
+  list_flows_admin:
+    canonical_action_key: powerplatform.flow.list_admin
+    agent_alias: flow.admin.list
+    runtime_handler: PowerAutomateClient.list_flows_admin
+    mutating: false
+    result_shape_keys: [flows, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_flows_admin
+  get_flow_admin:
+    canonical_action_key: powerplatform.flow.read_admin
+    agent_alias: flow.admin.get
+    runtime_handler: PowerAutomateClient.get_flow_admin
+    mutating: false
+    result_shape_keys: [flow]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_flow_admin
+  list_http_flows:
+    canonical_action_key: powerplatform.flow.list_http
+    agent_alias: flow.http.list
+    runtime_handler: PowerAutomateClient.list_http_flows
+    mutating: false
+    result_shape_keys: [flows, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_http_flows
+  list_flow_owners:
+    canonical_action_key: powerplatform.flow_owner.list
+    agent_alias: flow.owners.list
+    runtime_handler: PowerAutomateClient.list_flow_owners
+    mutating: false
+    result_shape_keys: [owners, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_flow_owners
+  list_flow_runs:
+    canonical_action_key: powerplatform.flow_run.list
+    agent_alias: flow.runs.list
+    runtime_handler: PowerAutomateClient.list_flow_runs
+    mutating: false
+    result_shape_keys: [runs, count]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_flow_runs
+  set_flow_owner_role:
+    canonical_action_key: powerplatform.flow_owner.set
+    agent_alias: flow.owner.set
+    runtime_handler: PowerAutomateClient.set_flow_owner_role
+    mutating: true
+    result_shape_keys: [flowName, principalObjectId, roleName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: set_flow_owner_role
+  remove_flow_owner_role:
+    canonical_action_key: powerplatform.flow_owner.remove
+    agent_alias: flow.owner.remove
+    runtime_handler: PowerAutomateClient.remove_flow_owner_role
+    mutating: true
+    result_shape_keys: [flowName, roleId, removed]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: remove_flow_owner_role
+  enable_flow:
+    canonical_action_key: powerplatform.flow.enable
+    agent_alias: flow.enable
+    runtime_handler: PowerAutomateClient.enable_flow
+    mutating: true
+    result_shape_keys: [flowName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: enable_flow
+  disable_flow:
+    canonical_action_key: powerplatform.flow.disable
+    agent_alias: flow.disable
+    runtime_handler: PowerAutomateClient.disable_flow
+    mutating: true
+    result_shape_keys: [flowName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: disable_flow
+  delete_flow:
+    canonical_action_key: powerplatform.flow.delete
+    agent_alias: flow.delete
+    runtime_handler: PowerAutomateClient.delete_flow
+    mutating: true
+    result_shape_keys: [flowName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: delete_flow
+  restore_flow:
+    canonical_action_key: powerplatform.flow.restore
+    agent_alias: flow.restore
+    runtime_handler: PowerAutomateClient.restore_flow
+    mutating: true
+    result_shape_keys: [flowName, status]
+    required_permissions: [PowerPlatform.Admin]
+    approval_profile: high-impact
+    capability_registry_alias: restore_flow
+  invoke_flow_callback:
+    canonical_action_key: powerplatform.flow.callback_invoke
+    agent_alias: flow.callback.invoke
+    runtime_handler: PowerAutomateClient.invoke_flow_callback
+    mutating: true
+    result_shape_keys: [invoked, status_code, response]
+    required_permissions: [Flow.Callback]
+    approval_profile: high-impact
+    capability_registry_alias: invoke_flow_callback

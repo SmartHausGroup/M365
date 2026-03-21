@@ -152,6 +152,30 @@ exact_action_policies:
     auth_class: hybrid
     delegated_preference: prefer_self_when_implicit
     self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  list_flows_admin:
+    auth_class: app_only
+  get_flow_admin:
+    auth_class: app_only
+  list_http_flows:
+    auth_class: app_only
+  list_flow_owners:
+    auth_class: app_only
+  list_flow_runs:
+    auth_class: app_only
+  set_flow_owner_role:
+    auth_class: app_only
+  remove_flow_owner_role:
+    auth_class: app_only
+  enable_flow:
+    auth_class: app_only
+  disable_flow:
+    auth_class: app_only
+  delete_flow:
+    auth_class: app_only
+  restore_flow:
+    auth_class: app_only
+  invoke_flow_callback:
+    auth_class: app_only
   create_site:
     auth_class: app_only
   get_team:

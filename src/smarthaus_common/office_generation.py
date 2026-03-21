@@ -9,12 +9,8 @@ from xml.sax.saxutils import escape
 _FIXED_ZIP_DATETIME = (1980, 1, 1, 0, 0, 0)
 _TEMPLATE_DIR = Path(__file__).with_name("office_templates")
 
-DOCUMENT_CONTENT_TYPE = (
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-)
-WORKBOOK_CONTENT_TYPE = (
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
+DOCUMENT_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+WORKBOOK_CONTENT_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 PRESENTATION_CONTENT_TYPE = (
     "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 )
@@ -58,11 +54,7 @@ def _normalize_paragraphs(
 
 
 def _docx_paragraph_xml(text: str) -> str:
-    return (
-        "<w:p><w:r><w:t xml:space=\"preserve\">"
-        f"{escape(text)}"
-        "</w:t></w:r></w:p>"
-    )
+    return '<w:p><w:r><w:t xml:space="preserve">' f"{escape(text)}" "</w:t></w:r></w:p>"
 
 
 def generate_docx_bytes(
@@ -76,80 +68,80 @@ def generate_docx_bytes(
         for paragraph in _normalize_paragraphs(title=title, paragraphs=paragraphs, content=content)
     )
     document_xml = (
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-        "<w:document xmlns:wpc=\"http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas\" "
-        "xmlns:mc=\"http://schemas.openxmlformats.org/markup-compatibility/2006\" "
-        "xmlns:o=\"urn:schemas-microsoft-com:office:office\" "
-        "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" "
-        "xmlns:m=\"http://schemas.openxmlformats.org/officeDocument/2006/math\" "
-        "xmlns:v=\"urn:schemas-microsoft-com:vml\" "
-        "xmlns:wp14=\"http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing\" "
-        "xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" "
-        "xmlns:w10=\"urn:schemas-microsoft-com:office:word\" "
-        "xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" "
-        "xmlns:w14=\"http://schemas.microsoft.com/office/word/2010/wordml\" "
-        "xmlns:wpg=\"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup\" "
-        "xmlns:wpi=\"http://schemas.microsoft.com/office/word/2010/wordprocessingInk\" "
-        "xmlns:wne=\"http://schemas.microsoft.com/office/word/2006/wordml\" "
-        "xmlns:wps=\"http://schemas.microsoft.com/office/word/2010/wordprocessingShape\" "
-        "mc:Ignorable=\"w14 wp14\">"
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" '
+        'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" '
+        'xmlns:o="urn:schemas-microsoft-com:office:office" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" '
+        'xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" '
+        'xmlns:v="urn:schemas-microsoft-com:vml" '
+        'xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" '
+        'xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" '
+        'xmlns:w10="urn:schemas-microsoft-com:office:word" '
+        'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
+        'xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" '
+        'xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" '
+        'xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" '
+        'xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" '
+        'xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" '
+        'mc:Ignorable="w14 wp14">'
         "<w:body>"
         f"{body_xml}"
-        "<w:sectPr><w:pgSz w:w=\"12240\" w:h=\"15840\"/><w:pgMar w:top=\"1440\" w:right=\"1440\" "
-        "w:bottom=\"1440\" w:left=\"1440\" w:header=\"720\" w:footer=\"720\" w:gutter=\"0\"/>"
-        "<w:cols w:space=\"720\"/><w:docGrid w:linePitch=\"360\"/></w:sectPr>"
+        '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" '
+        'w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>'
+        '<w:cols w:space="720"/><w:docGrid w:linePitch="360"/></w:sectPr>'
         "</w:body></w:document>"
     )
     core_xml = (
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-        "<cp:coreProperties xmlns:cp=\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\" "
-        "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" "
-        "xmlns:dcterms=\"http://purl.org/dc/terms/\" "
-        "xmlns:dcmitype=\"http://purl.org/dc/dcmitype/\" "
-        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
+        'xmlns:dc="http://purl.org/dc/elements/1.1/" '
+        'xmlns:dcterms="http://purl.org/dc/terms/" '
+        'xmlns:dcmitype="http://purl.org/dc/dcmitype/" '
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
         f"<dc:title>{escape(title or 'SMARTHAUS Document')}</dc:title>"
         "<dc:creator>SMARTHAUS</dc:creator>"
         "<cp:lastModifiedBy>SMARTHAUS</cp:lastModifiedBy>"
         "<cp:revision>1</cp:revision>"
-        f"<dcterms:created xsi:type=\"dcterms:W3CDTF\">{_w3c_timestamp()}</dcterms:created>"
-        f"<dcterms:modified xsi:type=\"dcterms:W3CDTF\">{_w3c_timestamp()}</dcterms:modified>"
+        f'<dcterms:created xsi:type="dcterms:W3CDTF">{_w3c_timestamp()}</dcterms:created>'
+        f'<dcterms:modified xsi:type="dcterms:W3CDTF">{_w3c_timestamp()}</dcterms:modified>'
         "</cp:coreProperties>"
     )
     app_xml = (
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-        "<Properties xmlns=\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\" "
-        "xmlns:vt=\"http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes\">"
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" '
+        'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">'
         "<Application>SMARTHAUS M365</Application></Properties>"
     )
     return _fixed_zip_bytes(
         {
             "[Content_Types].xml": (
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-                "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">"
-                "<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
-                "<Default Extension=\"xml\" ContentType=\"application/xml\"/>"
-                "<Override PartName=\"/word/document.xml\" "
-                "ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml\"/>"
-                "<Override PartName=\"/docProps/core.xml\" "
-                "ContentType=\"application/vnd.openxmlformats-package.core-properties+xml\"/>"
-                "<Override PartName=\"/docProps/app.xml\" "
-                "ContentType=\"application/vnd.openxmlformats-officedocument.extended-properties+xml\"/>"
-                "</Types>"
-            ).encode("utf-8"),
+                b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                b'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+                b'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+                b'<Default Extension="xml" ContentType="application/xml"/>'
+                b'<Override PartName="/word/document.xml" '
+                b'ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>'
+                b'<Override PartName="/docProps/core.xml" '
+                b'ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>'
+                b'<Override PartName="/docProps/app.xml" '
+                b'ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>'
+                b"</Types>"
+            ),
             "_rels/.rels": (
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-                "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
-                "<Relationship Id=\"rId1\" "
-                "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" "
-                "Target=\"word/document.xml\"/>"
-                "<Relationship Id=\"rId2\" "
-                "Type=\"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties\" "
-                "Target=\"docProps/core.xml\"/>"
-                "<Relationship Id=\"rId3\" "
-                "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties\" "
-                "Target=\"docProps/app.xml\"/>"
-                "</Relationships>"
-            ).encode("utf-8"),
+                b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+                b'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+                b'<Relationship Id="rId1" '
+                b'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+                b'Target="word/document.xml"/>'
+                b'<Relationship Id="rId2" '
+                b'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" '
+                b'Target="docProps/core.xml"/>'
+                b'<Relationship Id="rId3" '
+                b'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" '
+                b'Target="docProps/app.xml"/>'
+                b"</Relationships>"
+            ),
             "word/document.xml": document_xml.encode("utf-8"),
             "docProps/core.xml": core_xml.encode("utf-8"),
             "docProps/app.xml": app_xml.encode("utf-8"),
@@ -171,11 +163,11 @@ def _xlsx_col_name(index: int) -> str:
 def _xlsx_cell_xml(row_index: int, col_index: int, value: Any) -> str:
     cell_ref = f"{_xlsx_col_name(col_index)}{row_index + 1}"
     if isinstance(value, bool):
-        return f"<c r=\"{cell_ref}\" t=\"b\"><v>{1 if value else 0}</v></c>"
+        return f'<c r="{cell_ref}" t="b"><v>{1 if value else 0}</v></c>'
     if isinstance(value, int | float) and not isinstance(value, bool):
-        return f"<c r=\"{cell_ref}\"><v>{value}</v></c>"
+        return f'<c r="{cell_ref}"><v>{value}</v></c>'
     return (
-        f"<c r=\"{cell_ref}\" t=\"inlineStr\"><is><t xml:space=\"preserve\">"
+        f'<c r="{cell_ref}" t="inlineStr"><is><t xml:space="preserve">'
         f"{escape(str(value))}</t></is></c>"
     )
 
@@ -192,19 +184,17 @@ def _xlsx_sheet_xml(rows: list[list[Any]]) -> str:
         ]
         if cells:
             max_col = max(max_col, len(row))
-            row_xml.append(
-                f"<row r=\"{row_index + 1}\">{''.join(cells)}</row>"
-            )
+            row_xml.append(f"<row r=\"{row_index + 1}\">{''.join(cells)}</row>")
     dimension = f"A1:{_xlsx_col_name(max_col - 1)}{max_row}"
     return (
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-        "<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" "
-        "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
-        f"<dimension ref=\"{dimension}\"/>"
-        "<sheetViews><sheetView workbookViewId=\"0\"/></sheetViews>"
-        "<sheetFormatPr defaultRowHeight=\"15\"/>"
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        f'<dimension ref="{dimension}"/>'
+        '<sheetViews><sheetView workbookViewId="0"/></sheetViews>'
+        '<sheetFormatPr defaultRowHeight="15"/>'
         f"<sheetData>{''.join(row_xml)}</sheetData>"
-        "<pageMargins left=\"0.7\" right=\"0.7\" top=\"0.75\" bottom=\"0.75\" header=\"0.3\" footer=\"0.3\"/>"
+        '<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>'
         "</worksheet>"
     )
 
@@ -222,8 +212,8 @@ def generate_xlsx_bytes(worksheets: list[dict[str, Any]]) -> bytes:
         normalized_sheets = [{"name": "Sheet1", "rows": [["SMARTHAUS"]]}]
 
     sheet_overrides = "".join(
-        f"<Override PartName=\"/xl/worksheets/sheet{index}.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml\"/>"
+        f'<Override PartName="/xl/worksheets/sheet{index}.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
         for index, _ in enumerate(normalized_sheets, start=1)
     )
     workbook_sheets = "".join(
@@ -231,41 +221,41 @@ def generate_xlsx_bytes(worksheets: list[dict[str, Any]]) -> bytes:
         for index, sheet in enumerate(normalized_sheets, start=1)
     )
     workbook_rels = "".join(
-        f"<Relationship Id=\"rId{index}\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet\" "
-        f"Target=\"worksheets/sheet{index}.xml\"/>"
+        f'<Relationship Id="rId{index}" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
+        f'Target="worksheets/sheet{index}.xml"/>'
         for index, _ in enumerate(normalized_sheets, start=1)
     )
     entries: dict[str, bytes] = {
         "[Content_Types].xml": (
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">"
-            "<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
-            "<Default Extension=\"xml\" ContentType=\"application/xml\"/>"
-            "<Override PartName=\"/xl/workbook.xml\" "
-            "ContentType=\"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml\"/>"
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+            '<Default Extension="xml" ContentType="application/xml"/>'
+            '<Override PartName="/xl/workbook.xml" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
             f"{sheet_overrides}</Types>"
-        ).encode("utf-8"),
+        ).encode(),
         "_rels/.rels": (
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
-            "<Relationship Id=\"rId1\" "
-            "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" "
-            "Target=\"xl/workbook.xml\"/></Relationships>"
-        ).encode("utf-8"),
+            b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            b'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            b'<Relationship Id="rId1" '
+            b'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+            b'Target="xl/workbook.xml"/></Relationships>'
+        ),
         "xl/workbook.xml": (
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            "<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\" "
-            "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+            'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
             "<bookViews><workbookView/></bookViews>"
             f"<sheets>{workbook_sheets}</sheets>"
             "</workbook>"
-        ).encode("utf-8"),
+        ).encode(),
         "xl/_rels/workbook.xml.rels": (
-            "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-            "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
             f"{workbook_rels}</Relationships>"
-        ).encode("utf-8"),
+        ).encode(),
     }
     for index, sheet in enumerate(normalized_sheets, start=1):
         sheet_rows = cast(list[list[Any]], sheet["rows"])
@@ -275,34 +265,34 @@ def generate_xlsx_bytes(worksheets: list[dict[str, Any]]) -> bytes:
 
 def _ppt_content_types_xml(slide_count: int) -> str:
     slide_overrides = "".join(
-        f"<Override PartName=\"/ppt/slides/slide{index}.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slide+xml\"/>"
+        f'<Override PartName="/ppt/slides/slide{index}.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>'
         for index in range(1, slide_count + 1)
     )
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">"
-        "<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>"
-        "<Default Extension=\"xml\" ContentType=\"application/xml\"/>"
-        "<Override PartName=\"/docProps/app.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.extended-properties+xml\"/>"
-        "<Override PartName=\"/docProps/core.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-package.core-properties+xml\"/>"
-        "<Override PartName=\"/ppt/presProps.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.presProps+xml\"/>"
-        "<Override PartName=\"/ppt/presentation.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml\"/>"
-        "<Override PartName=\"/ppt/slideLayouts/slideLayout2.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml\"/>"
-        "<Override PartName=\"/ppt/slideMasters/slideMaster1.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml\"/>"
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+        '<Default Extension="xml" ContentType="application/xml"/>'
+        '<Override PartName="/docProps/app.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>'
+        '<Override PartName="/docProps/core.xml" '
+        'ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>'
+        '<Override PartName="/ppt/presProps.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.presProps+xml"/>'
+        '<Override PartName="/ppt/presentation.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>'
+        '<Override PartName="/ppt/slideLayouts/slideLayout2.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/>'
+        '<Override PartName="/ppt/slideMasters/slideMaster1.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>'
         f"{slide_overrides}"
-        "<Override PartName=\"/ppt/tableStyles.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml\"/>"
-        "<Override PartName=\"/ppt/theme/theme1.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.theme+xml\"/>"
-        "<Override PartName=\"/ppt/viewProps.xml\" "
-        "ContentType=\"application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml\"/>"
+        '<Override PartName="/ppt/tableStyles.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.tableStyles+xml"/>'
+        '<Override PartName="/ppt/theme/theme1.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>'
+        '<Override PartName="/ppt/viewProps.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.presentationml.viewProps+xml"/>'
         "</Types>"
     )
 
@@ -310,16 +300,16 @@ def _ppt_content_types_xml(slide_count: int) -> str:
 def _ppt_root_rels_xml() -> str:
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
-        "<Relationship Id=\"rId1\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" "
-        "Target=\"ppt/presentation.xml\"/>"
-        "<Relationship Id=\"rId2\" "
-        "Type=\"http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties\" "
-        "Target=\"docProps/core.xml\"/>"
-        "<Relationship Id=\"rId3\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties\" "
-        "Target=\"docProps/app.xml\"/>"
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+        'Target="ppt/presentation.xml"/>'
+        '<Relationship Id="rId2" '
+        'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" '
+        'Target="docProps/core.xml"/>'
+        '<Relationship Id="rId3" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" '
+        'Target="docProps/app.xml"/>'
         "</Relationships>"
     )
 
@@ -327,26 +317,26 @@ def _ppt_root_rels_xml() -> str:
 def _ppt_core_xml(title: str) -> str:
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<cp:coreProperties xmlns:cp=\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\" "
-        "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" "
-        "xmlns:dcterms=\"http://purl.org/dc/terms/\" "
-        "xmlns:dcmitype=\"http://purl.org/dc/dcmitype/\" "
-        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"
+        '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
+        'xmlns:dc="http://purl.org/dc/elements/1.1/" '
+        'xmlns:dcterms="http://purl.org/dc/terms/" '
+        'xmlns:dcmitype="http://purl.org/dc/dcmitype/" '
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
         f"<dc:title>{escape(title)}</dc:title>"
         "<dc:creator>SMARTHAUS</dc:creator>"
         "<cp:lastModifiedBy>SMARTHAUS</cp:lastModifiedBy>"
         "<cp:revision>1</cp:revision>"
-        f"<dcterms:created xsi:type=\"dcterms:W3CDTF\">{_w3c_timestamp()}</dcterms:created>"
-        f"<dcterms:modified xsi:type=\"dcterms:W3CDTF\">{_w3c_timestamp()}</dcterms:modified>"
+        f'<dcterms:created xsi:type="dcterms:W3CDTF">{_w3c_timestamp()}</dcterms:created>'
+        f'<dcterms:modified xsi:type="dcterms:W3CDTF">{_w3c_timestamp()}</dcterms:modified>'
         "</cp:coreProperties>"
     )
 
 
 def _ppt_app_xml(slide_count: int) -> str:
     return (
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
-        "<Properties xmlns=\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\" "
-        "xmlns:vt=\"http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes\">"
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" '
+        'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">'
         "<Application>SMARTHAUS M365</Application>"
         "<PresentationFormat>On-screen Show (4:3)</PresentationFormat>"
         f"<Slides>{slide_count}</Slides>"
@@ -359,69 +349,72 @@ def _ppt_app_xml(slide_count: int) -> str:
 
 def _ppt_presentation_xml(slide_count: int) -> str:
     slide_entries = "".join(
-        f"<p:sldId id=\"{255 + index}\" r:id=\"rId{5 + index}\"/>"
+        f'<p:sldId id="{255 + index}" r:id="rId{5 + index}"/>'
         for index in range(1, slide_count + 1)
     )
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<p:presentation xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
-        "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" "
-        "xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
-        "saveSubsetFonts=\"1\" autoCompressPictures=\"0\">"
-        "<p:sldMasterIdLst><p:sldMasterId id=\"2147483648\" r:id=\"rId1\"/></p:sldMasterIdLst>"
+        '<p:presentation xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" '
+        'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+        'saveSubsetFonts="1" autoCompressPictures="0">'
+        '<p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst>'
         f"<p:sldIdLst>{slide_entries}</p:sldIdLst>"
-        "<p:sldSz cx=\"9144000\" cy=\"6858000\" type=\"screen4x3\"/>"
-        "<p:notesSz cx=\"6858000\" cy=\"9144000\"/>"
-        "<p:defaultTextStyle><a:defPPr><a:defRPr lang=\"en-US\"/></a:defPPr></p:defaultTextStyle>"
+        '<p:sldSz cx="9144000" cy="6858000" type="screen4x3"/>'
+        '<p:notesSz cx="6858000" cy="9144000"/>'
+        '<p:defaultTextStyle><a:defPPr><a:defRPr lang="en-US"/></a:defPPr></p:defaultTextStyle>'
         "</p:presentation>"
     )
 
 
 def _ppt_presentation_rels_xml(slide_count: int) -> str:
     slide_rels = "".join(
-        f"<Relationship Id=\"rId{5 + index}\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide\" "
-        f"Target=\"slides/slide{index}.xml\"/>"
+        f'<Relationship Id="rId{5 + index}" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" '
+        f'Target="slides/slide{index}.xml"/>'
         for index in range(1, slide_count + 1)
     )
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
-        "<Relationship Id=\"rId1\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster\" "
-        "Target=\"slideMasters/slideMaster1.xml\"/>"
-        "<Relationship Id=\"rId2\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/presProps\" "
-        "Target=\"presProps.xml\"/>"
-        "<Relationship Id=\"rId3\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/viewProps\" "
-        "Target=\"viewProps.xml\"/>"
-        "<Relationship Id=\"rId4\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles\" "
-        "Target=\"tableStyles.xml\"/>"
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" '
+        'Target="slideMasters/slideMaster1.xml"/>'
+        '<Relationship Id="rId2" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/presProps" '
+        'Target="presProps.xml"/>'
+        '<Relationship Id="rId3" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/viewProps" '
+        'Target="viewProps.xml"/>'
+        '<Relationship Id="rId4" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/tableStyles" '
+        'Target="tableStyles.xml"/>'
         f"{slide_rels}</Relationships>"
     )
 
 
 def _ppt_slide_xml(title: str, bullets: list[str]) -> str:
-    bullet_xml = "".join(
-        f"<a:p><a:r><a:t>{escape(item)}</a:t></a:r></a:p>"
-        for item in bullets
-        if str(item).strip()
-    ) or "<a:p/>"
+    bullet_xml = (
+        "".join(
+            f"<a:p><a:r><a:t>{escape(item)}</a:t></a:r></a:p>"
+            for item in bullets
+            if str(item).strip()
+        )
+        or "<a:p/>"
+    )
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" "
-        "xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" "
-        "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
+        '<p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" '
+        'xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
         "<p:cSld><p:spTree>"
-        "<p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>"
+        '<p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>'
         "<p:grpSpPr/>"
-        "<p:sp><p:nvSpPr><p:cNvPr id=\"2\" name=\"Title 1\"/><p:cNvSpPr><a:spLocks noGrp=\"1\"/></p:cNvSpPr>"
-        "<p:nvPr><p:ph type=\"title\"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/>"
+        '<p:sp><p:nvSpPr><p:cNvPr id="2" name="Title 1"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>'
+        '<p:nvPr><p:ph type="title"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/>'
         f"<a:p><a:r><a:t>{escape(title)}</a:t></a:r></a:p></p:txBody></p:sp>"
-        "<p:sp><p:nvSpPr><p:cNvPr id=\"3\" name=\"Content Placeholder 2\"/><p:cNvSpPr><a:spLocks noGrp=\"1\"/></p:cNvSpPr>"
-        "<p:nvPr><p:ph idx=\"1\"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/>"
+        '<p:sp><p:nvSpPr><p:cNvPr id="3" name="Content Placeholder 2"/><p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr>'
+        '<p:nvPr><p:ph idx="1"/></p:nvPr></p:nvSpPr><p:spPr/><p:txBody><a:bodyPr/><a:lstStyle/>'
         f"{bullet_xml}</p:txBody></p:sp>"
         "</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>"
     )
@@ -430,10 +423,10 @@ def _ppt_slide_xml(title: str, bullets: list[str]) -> str:
 def _ppt_slide_rels_xml() -> str:
     return (
         "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
-        "<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">"
-        "<Relationship Id=\"rId1\" "
-        "Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout\" "
-        "Target=\"../slideLayouts/slideLayout2.xml\"/>"
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" '
+        'Target="../slideLayouts/slideLayout2.xml"/>'
         "</Relationships>"
     )
 
@@ -441,7 +434,9 @@ def _ppt_slide_rels_xml() -> str:
 def generate_pptx_bytes(*, title: str, slides: list[dict[str, Any]]) -> bytes:
     normalized_slides: list[dict[str, Any]] = []
     for index, slide in enumerate(slides or [], start=1):
-        slide_title = str(slide.get("title") or title or f"Slide {index}").strip() or f"Slide {index}"
+        slide_title = (
+            str(slide.get("title") or title or f"Slide {index}").strip() or f"Slide {index}"
+        )
         bullets = slide.get("bullets") or slide.get("items") or []
         if isinstance(bullets, str):
             bullet_list = [line for line in bullets.splitlines() if line.strip()]
@@ -464,15 +459,11 @@ def generate_pptx_bytes(*, title: str, slides: list[dict[str, Any]]) -> bytes:
         "ppt/viewProps.xml": _load_template("ppt_viewProps.xml").encode("utf-8"),
         "ppt/tableStyles.xml": _load_template("ppt_tableStyles.xml").encode("utf-8"),
         "ppt/theme/theme1.xml": _load_template("ppt_theme1.xml").encode("utf-8"),
-        "ppt/slideMasters/slideMaster1.xml": _load_template("ppt_slideMaster1.xml").encode(
-            "utf-8"
-        ),
+        "ppt/slideMasters/slideMaster1.xml": _load_template("ppt_slideMaster1.xml").encode("utf-8"),
         "ppt/slideMasters/_rels/slideMaster1.xml.rels": _load_template(
             "ppt_slideMaster1_rels.xml"
         ).encode("utf-8"),
-        "ppt/slideLayouts/slideLayout2.xml": _load_template("ppt_slideLayout2.xml").encode(
-            "utf-8"
-        ),
+        "ppt/slideLayouts/slideLayout2.xml": _load_template("ppt_slideLayout2.xml").encode("utf-8"),
         "ppt/slideLayouts/_rels/slideLayout2.xml.rels": _load_template(
             "ppt_slideLayout2_rels.xml"
         ).encode("utf-8"),
@@ -480,10 +471,8 @@ def generate_pptx_bytes(*, title: str, slides: list[dict[str, Any]]) -> bytes:
     for index, slide in enumerate(normalized_slides, start=1):
         slide_title = str(slide["title"])
         slide_bullets = cast(list[str], slide["bullets"])
-        entries[f"ppt/slides/slide{index}.xml"] = _ppt_slide_xml(
-            slide_title, slide_bullets
-        ).encode("utf-8")
-        entries[f"ppt/slides/_rels/slide{index}.xml.rels"] = _ppt_slide_rels_xml().encode(
+        entries[f"ppt/slides/slide{index}.xml"] = _ppt_slide_xml(slide_title, slide_bullets).encode(
             "utf-8"
         )
+        entries[f"ppt/slides/_rels/slide{index}.xml.rels"] = _ppt_slide_rels_xml().encode("utf-8")
     return _fixed_zip_bytes(entries)

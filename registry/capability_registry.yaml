@@ -1934,3 +1934,126 @@ actions:
   - Organization.Read.All
   mutating: false
   status: implemented
+- action: list_flows_admin
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - flows
+  - count
+- action: get_flow_admin
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - flow
+- action: list_http_flows
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - flows
+  - count
+- action: list_flow_owners
+  resource: flowOwner
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - owners
+  - count
+- action: list_flow_runs
+  resource: flowRun
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - runs
+  - count
+- action: set_flow_owner_role
+  resource: flowOwner
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - principalObjectId
+  - roleName
+  - status
+- action: remove_flow_owner_role
+  resource: flowOwner
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - roleId
+  - removed
+- action: enable_flow
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - status
+- action: disable_flow
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - status
+- action: delete_flow
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - status
+- action: restore_flow
+  resource: flow
+  domain: powerplatform
+  required_permissions:
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - flowName
+  - status
+- action: invoke_flow_callback
+  resource: flowTrigger
+  domain: powerplatform
+  required_permissions:
+  - Flow.Callback
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - invoked
+  - status_code
+  - response

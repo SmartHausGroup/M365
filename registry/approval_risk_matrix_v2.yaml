@@ -225,6 +225,61 @@ prefix_action_policies:
     approval_profile: medium-operational
     approval_requirement: never
 exact_action_policies:
+  list_flows_admin:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_flow_admin:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_http_flows:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_flow_owners:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_flow_runs:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  set_flow_owner_role:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  remove_flow_owner_role:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  enable_flow:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  disable_flow:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  delete_flow:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  restore_flow:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  invoke_flow_callback:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
   create_user:
     risk_class: high
     approval_profile: high-impact

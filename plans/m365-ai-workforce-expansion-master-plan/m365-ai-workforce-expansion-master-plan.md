@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E2E` are complete; `E3A` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E3A` are complete; `E3B` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -72,13 +72,14 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E2C` is complete.
 - `E2D` is complete.
 - `E2E` is complete.
-- `E3A` is the active next act.
+- `E3A` is complete.
+- `E3B` is the active next act.
 - `E3` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
-- The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, and bounded Office productivity remain unimplemented.
+- The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, and bounded Power Automate remain unimplemented.
 - No department pack beyond the standalone v1 surface has been certified or released.
 
 ## Scope
@@ -260,7 +261,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ### E3 — Power Platform and Analytics Expansion
 
-**Status:** ⏳ Pending
+**Status:** 🚧 In progress
 
 **Goal:** Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
 
@@ -275,7 +276,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E3A — Power Automate Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
 
@@ -606,4 +607,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E2D` is complete. It locked the workload authority at `registry/teams_groups_planner_expansion_v2.yaml`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` plus `src/smarthaus_graph/client.py`, aligned the CAIO, capability, routing, auth, and approval contracts for the team/channel/plan/bucket/task slice, and added the notebook-backed `L31` evidence chain with generated verification at `configs/generated/teams_groups_planner_expansion_verification.json`.
 
-`E2E` is complete. It locked the workload authority at `registry/documents_spreadsheets_presentations_expansion_v2.yaml`, added deterministic DOCX/XLSX/PPTX generation in `src/smarthaus_common/office_generation.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` plus `src/smarthaus_graph/client.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, and `update_presentation`, and added the notebook-backed `L32` evidence chain with generated verification at `configs/generated/documents_spreadsheets_presentations_expansion_verification.json`. `E3A` is now the active next act and must expand Power Automate on top of the completed v2 control plane and the newly-expanded directory, messaging, SharePoint / files, collaboration / Planner, and bounded Office productivity surfaces.
+`E2E` is complete. It locked the workload authority at `registry/documents_spreadsheets_presentations_expansion_v2.yaml`, added deterministic DOCX/XLSX/PPTX generation in `src/smarthaus_common/office_generation.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` plus `src/smarthaus_graph/client.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, and `update_presentation`, and added the notebook-backed `L32` evidence chain with generated verification at `configs/generated/documents_spreadsheets_presentations_expansion_verification.json`.
+
+`E3A` is complete. It locked the workload authority at `registry/power_automate_expansion_v2.yaml`, added the bounded Power Automate runtime in `src/smarthaus_common/power_automate_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, and `invoke_flow_callback`, and added the notebook-backed `L33` evidence chain with generated verification at `configs/generated/power_automate_expansion_verification.json`. `E3B` is now the active next act and must expand Power Apps on top of the completed v2 control plane and the newly-expanded directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, and bounded Power Automate surfaces.

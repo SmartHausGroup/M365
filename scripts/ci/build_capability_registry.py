@@ -24,6 +24,7 @@ SECTION_TO_DOMAIN = {
     "SharePoint (sites, lists, pages)": "sharepoint",
     "Teams": "teams",
     "Planner & tasks": "planner",
+    "Power Automate": "powerplatform",
     "OneNote": "onenote",
     "To Do / tasks (Microsoft To Do)": "todo",
     "Subscriptions & webhooks": "subscriptions",
@@ -51,6 +52,8 @@ MUTATING_VERBS = (
     "install",
     "uninstall",
     "upgrade",
+    "enable",
+    "disable",
     "restore",
     "publish",
     "reply",
@@ -160,6 +163,14 @@ def action_to_resource(action: str, domain: str) -> str:
         if "bucket" in action:
             return "plannerBucket"
         return "plan"
+    if domain == "powerplatform":
+        if "run" in action:
+            return "flowRun"
+        if "owner" in action:
+            return "flowOwner"
+        if "callback" in action:
+            return "flowTrigger"
+        return "flow"
     if domain == "onenote":
         if "section" in action:
             return "section"

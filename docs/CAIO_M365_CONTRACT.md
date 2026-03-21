@@ -89,6 +89,18 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `update_workbook` | Regenerate and upload an XLSX workbook into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `worksheets?` or `rows?`, `sheetName?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
 | `create_presentation` | Generate and upload a PPTX presentation into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `slides?` or `bullets?` or `items?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
 | `update_presentation` | Regenerate and upload a PPTX presentation into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `slides?` or `bullets?` or `items?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `list_flows_admin` | List Power Automate flows as admin for an environment | No | `environmentName` or `environment_name` or `environment`, `top?` |
+| `get_flow_admin` | Get a Power Automate flow as admin | No | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `list_http_flows` | List Power Automate HTTP-triggered flows for an environment | No | `environmentName` or `environment_name` or `environment`, `top?` |
+| `list_flow_owners` | List Power Automate flow owner roles | No | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `list_flow_runs` | List Power Automate runs for a flow | No | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id`, `top?` |
+| `set_flow_owner_role` | Grant or update a Power Automate flow owner role | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id`, `principalObjectId` or `principal_object_id` or `userId`, `roleName?`, `principalType?` |
+| `remove_flow_owner_role` | Remove a Power Automate flow owner role | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id`, `roleId` or `role_id` |
+| `enable_flow` | Enable a Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `disable_flow` | Disable a Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `delete_flow` | Soft-delete a Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `restore_flow` | Restore a soft-deleted Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
+| `invoke_flow_callback` | Invoke a Power Automate HTTP callback URL with a bounded payload | Yes | `callbackUrl` or `callback_url` or `url`, `body?` or `payload?`, `headers?`, `timeoutSeconds?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -164,6 +176,18 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **update_workbook:** `{ "workbook": { ... }, "status": "updated" }`
 - **create_presentation:** `{ "presentation": { ... }, "status": "created" }`
 - **update_presentation:** `{ "presentation": { ... }, "status": "updated" }`
+- **list_flows_admin:** `{ "flows": [ ... ], "count": N }`
+- **get_flow_admin:** `{ "flow": { ... } }`
+- **list_http_flows:** `{ "flows": [ ... ], "count": N }`
+- **list_flow_owners:** `{ "owners": [ ... ], "count": N }`
+- **list_flow_runs:** `{ "runs": [ ... ], "count": N }`
+- **set_flow_owner_role:** `{ "flowName": "<name>", "principalObjectId": "<id>", "roleName": "<role>", "status": "updated" }`
+- **remove_flow_owner_role:** `{ "flowName": "<name>", "roleId": "<id>", "removed": true }`
+- **enable_flow:** `{ "flowName": "<name>", "status": "enabled" }`
+- **disable_flow:** `{ "flowName": "<name>", "status": "disabled" }`
+- **delete_flow:** `{ "flowName": "<name>", "status": "deleted" }`
+- **restore_flow:** `{ "flowName": "<name>", "status": "restored" }`
+- **invoke_flow_callback:** `{ "invoked": true, "status_code": 2xx, "response": { ... } | "<text>" }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

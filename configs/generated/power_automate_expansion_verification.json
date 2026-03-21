@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "supported_actions_count": 6,
+  "supported_actions_count": 12,
   "missing_in_supported_set": [],
   "missing_in_instruction_schema": [],
   "capability_registry_mismatches": [],
