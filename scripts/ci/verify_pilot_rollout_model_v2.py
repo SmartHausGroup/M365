@@ -60,13 +60,9 @@ def main() -> None:
         "rollout_wave_count": kpis["rollout_wave_count"],
         "pilot_personas": kpis["pilot_personas"],
     }
-    output_path = (
-        repo_root / "configs" / "generated" / "pilot_rollout_model_v2_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "pilot_rollout_model_v2_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(
         f"PASSED: pilot rollout model '{contract['contract']['id']}' — "

@@ -289,31 +289,35 @@
         "phase": "E8E",
         "date": "2026-03-21",
         "summary": "Defined the enterprise release gate v2 through registry/enterprise_release_gate_v2.yaml with six gate checks, five governance rules. Release verdict is GO with 3 documented residual gaps. Section 8 is now fully complete."
-      }
-    ],
-    "prepared_blocked": [
+      },
+      {
+        "phase": "E9A",
+        "date": "2026-03-21",
+        "summary": "Defined workforce packaging contract with four layers, five governance rules. Core tier (4 active personas, 155 actions) and expansion tier (35 planned personas)."
+      },
       {
         "phase": "E9B",
-        "blocked_by": "E9",
-        "summary": "Define the onboarding path for the expanded workforce product."
+        "date": "2026-03-21",
+        "summary": "Defined customer onboarding v2 contract with four phases, five governance rules. Sequential activation of 4 registry-backed personas with department rollout."
       },
       {
         "phase": "E9C",
-        "blocked_by": "E9",
-        "summary": "Define rollout phases, acceptance, and expansion across customers and departments."
+        "date": "2026-03-21",
+        "summary": "Defined pilot and rollout model v2 with four phases, five governance rules. Three sequential waves with pilot acceptance gating expansion."
       },
       {
         "phase": "E9D",
-        "blocked_by": "E9",
-        "summary": "Define the final operating, support, and customer-ownership boundaries for the full workforce."
+        "date": "2026-03-21",
+        "summary": "Defined support boundary v2 with four layers, five governance rules. Three-tier support with deterministic escalation paths."
       },
       {
         "phase": "E9E",
-        "blocked_by": "E9",
-        "summary": "Issue the final release decision for the full workforce program."
+        "date": "2026-03-21",
+        "summary": "Issued the final workforce expansion release decision: verdict GO, program COMPLETE. All 10 sections, 50 acts, 72 lemmas closed. 4 documented residual gaps."
       }
     ],
-    "next_act": "E9A"
+    "prepared_blocked": [],
+    "next_act": "none"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -900,7 +904,7 @@
       "code": "E9",
       "title": "Launch and Operating Model",
       "slug": "launch-operating-model",
-      "status": "Pending",
+      "status": "Complete",
       "goal": "Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.",
       "outputs": [
         "workforce packaging",
@@ -917,35 +921,35 @@
           "code": "E9A",
           "slug": "workforce-packaging",
           "title": "Workforce Packaging",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Package the full workforce offering and supported capability sets for customers."
         },
         {
           "code": "E9B",
           "slug": "customer-onboarding-v2",
           "title": "Customer Onboarding v2",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Define the onboarding path for the expanded workforce product."
         },
         {
           "code": "E9C",
           "slug": "pilot-rollout-model-v2",
           "title": "Pilot and Rollout Model v2",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Define rollout phases, acceptance, and expansion across customers and departments."
         },
         {
           "code": "E9D",
           "slug": "support-boundary-v2",
           "title": "Support Boundary v2",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Define the final operating, support, and customer-ownership boundaries for the full workforce."
         },
         {
           "code": "E9E",
           "slug": "workforce-expansion-release-decision",
           "title": "Workforce Expansion Release Decision",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Issue the final release decision for the full workforce program."
         }
       ]

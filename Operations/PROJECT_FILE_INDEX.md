@@ -1327,3 +1327,78 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_enterprise_release_gate_v2.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
 | `configs/generated/enterprise_release_gate_v2_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
 | `tests/test_enterprise_release_gate_v2.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+
+## Active E9A Workforce Packaging Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/workforce_packaging_v1.yaml` | Workforce packaging contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `docs/commercialization/m365-workforce-packaging-v1.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `docs/ma/lemmas/L68_m365_workforce_packaging_v1.md` | Lemma doc for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `invariants/lemmas/L68_m365_workforce_packaging_v1.yaml` | Invariant for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `notebooks/m365/INV-M365-BP-workforce-packaging-v1.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `notebooks/lemma_proofs/L68_m365_workforce_packaging_v1.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `artifacts/scorecards/scorecard_l68.json` | Scorecard for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `scripts/ci/verify_workforce_packaging_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `configs/generated/workforce_packaging_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `tests/test_workforce_packaging_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+
+## Active E9B Customer Onboarding v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/customer_onboarding_v2.yaml` | Customer onboarding contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `docs/commercialization/m365-customer-onboarding-v2.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `docs/ma/lemmas/L69_m365_customer_onboarding_v2.md` | Lemma doc for L69. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `invariants/lemmas/L69_m365_customer_onboarding_v2.yaml` | Invariant for L69. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `notebooks/m365/INV-M365-BQ-customer-onboarding-v2.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `notebooks/lemma_proofs/L69_m365_customer_onboarding_v2.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `artifacts/scorecards/scorecard_l69.json` | Scorecard for L69. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `scripts/ci/verify_customer_onboarding_v2.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `configs/generated/customer_onboarding_v2_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+| `tests/test_customer_onboarding_v2.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9B` |
+
+## Active E9C Pilot and Rollout Model v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/pilot_rollout_model_v2.yaml` | Pilot and rollout model contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `docs/commercialization/m365-pilot-rollout-model-v2.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `docs/ma/lemmas/L70_m365_pilot_rollout_model_v2.md` | Lemma doc for L70. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `invariants/lemmas/L70_m365_pilot_rollout_model_v2.yaml` | Invariant for L70. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `notebooks/m365/INV-M365-BR-pilot-rollout-model-v2.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `notebooks/lemma_proofs/L70_m365_pilot_rollout_model_v2.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `artifacts/scorecards/scorecard_l70.json` | Scorecard for L70. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `scripts/ci/verify_pilot_rollout_model_v2.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `configs/generated/pilot_rollout_model_v2_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+| `tests/test_pilot_rollout_model_v2.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9C` |
+
+## Active E9D Support Boundary v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/support_boundary_v2.yaml` | Support boundary contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `docs/commercialization/m365-support-boundary-v2.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `docs/ma/lemmas/L71_m365_support_boundary_v2.md` | Lemma doc for L71. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `invariants/lemmas/L71_m365_support_boundary_v2.yaml` | Invariant for L71. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `notebooks/m365/INV-M365-BS-support-boundary-v2.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `notebooks/lemma_proofs/L71_m365_support_boundary_v2.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `artifacts/scorecards/scorecard_l71.json` | Scorecard for L71. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `scripts/ci/verify_support_boundary_v2.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `configs/generated/support_boundary_v2_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+| `tests/test_support_boundary_v2.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9D` |
+
+## Active E9E Workforce Expansion Release Decision Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/workforce_release_decision_v1.yaml` | Final release decision contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `docs/commercialization/m365-workforce-release-decision-v1.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `docs/ma/lemmas/L72_m365_workforce_release_decision_v1.md` | Lemma doc for L72. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `invariants/lemmas/L72_m365_workforce_release_decision_v1.yaml` | Invariant for L72. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `notebooks/m365/INV-M365-BT-workforce-release-decision-v1.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `notebooks/lemma_proofs/L72_m365_workforce_release_decision_v1.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `artifacts/scorecards/scorecard_l72.json` | Scorecard for L72. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `scripts/ci/verify_workforce_release_decision_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `configs/generated/workforce_release_decision_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+| `tests/test_workforce_release_decision_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |

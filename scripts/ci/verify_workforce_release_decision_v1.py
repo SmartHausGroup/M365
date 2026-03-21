@@ -83,15 +83,10 @@ def main() -> None:
         "follow_on_count": len(decision.get("follow_on", [])),
     }
     output_path = (
-        repo_root
-        / "configs"
-        / "generated"
-        / "workforce_release_decision_v1_verification.json"
+        repo_root / "configs" / "generated" / "workforce_release_decision_v1_verification.json"
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(
         f"PASSED: workforce release decision '{contract['contract']['id']}' — "

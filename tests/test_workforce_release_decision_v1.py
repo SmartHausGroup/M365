@@ -19,9 +19,7 @@ PREREQUISITE_CONTRACTS = [
 
 def _load_contract() -> dict:
     return yaml.safe_load(
-        (REPO_ROOT / "registry" / "workforce_release_decision_v1.yaml").read_text(
-            encoding="utf-8"
-        )
+        (REPO_ROOT / "registry" / "workforce_release_decision_v1.yaml").read_text(encoding="utf-8")
     )
 
 

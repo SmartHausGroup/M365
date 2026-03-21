@@ -18,7 +18,7 @@ def _load_contract() -> dict:
 def test_e9d_support_has_four_layers() -> None:
     contract = _load_contract()
     assert len(contract["support_layers"]) == 4
-    assert [l["order"] for l in contract["support_layers"]] == [1, 2, 3, 4]
+    assert [layer["order"] for layer in contract["support_layers"]] == [1, 2, 3, 4]
 
 
 def test_e9d_governance_rules_complete() -> None:

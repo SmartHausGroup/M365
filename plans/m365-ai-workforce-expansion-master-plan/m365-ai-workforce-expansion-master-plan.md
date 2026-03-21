@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E8E` are complete; Sections 0-8 are fully complete; `E9A` is the active next act but has not been started; `E9B` through `E9E` remain planned)
+**Status:** ✅ Complete (`E0A` through `E9E` are complete; all 10 sections are fully complete; the workforce expansion master plan is closed with a GO release decision)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -110,10 +110,15 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E8D` is complete.
 - `E8E` is complete.
 - Section 8 (Live Validation and Workforce Certification) is fully complete.
-- `E9A` is the active next act but has not been started.
-- `E9B` through `E9E` remain planned.
+- `E9A` is complete.
+- `E9B` is complete.
+- `E9C` is complete.
+- `E9D` is complete.
+- `E9E` is complete.
+- Section 9 (Launch and Operating Model) is fully complete.
+- **The M365 AI Workforce Expansion Master Plan is complete.**
 
-## Open Expansion Blockers
+## Residual Gaps (Post-Program)
 
 - The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, bounded cross-workload recipe discovery, and bounded Intune / devices remain unimplemented.
 - All 10 department packs are now runtime-bounded. Operations, HR, and Communication are registry-backed, while Engineering, Marketing, Product, Project Management, Studio Operations, Testing, and Design remain intentionally blocked while their personas stay contract-only.
@@ -596,7 +601,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ### E9 — Launch and Operating Model
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.
 
@@ -611,37 +616,37 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E9A — Workforce Packaging
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Package the full workforce offering and supported capability sets for customers.
 
 #### E9B — Customer Onboarding v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Define the onboarding path for the expanded workforce product.
 
 #### E9C — Pilot and Rollout Model v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Define rollout phases, acceptance, and expansion across customers and departments.
 
 #### E9D — Support Boundary v2
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Define the final operating, support, and customer-ownership boundaries for the full workforce.
 
 #### E9E — Workforce Expansion Release Decision
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Issue the final release decision for the full workforce program.
 
-## Next Act
+## Program Closure
 
-`E9A` (Workforce Packaging) is the active next act. It has not been started. Sections 0 through 8 are fully complete.
+The M365 AI Workforce Expansion Master Plan is complete. All 10 sections (E0–E9), 50 acts, and 72 lemmas are closed with green evidence. Release decision is GO with documented residual gaps.
 
 `E3A` is complete. It locked the workload authority at `registry/power_automate_expansion_v2.yaml`, added the bounded Power Automate runtime in `src/smarthaus_common/power_automate_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, and `invoke_flow_callback`, and added the notebook-backed `L33` evidence chain with generated verification at `configs/generated/power_automate_expansion_verification.json`.
 

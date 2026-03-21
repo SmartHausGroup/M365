@@ -60,13 +60,9 @@ def main() -> None:
         "support_tier_count": kpis["support_tier_count"],
         "escalation_severity_levels": kpis["escalation_severity_levels"],
     }
-    output_path = (
-        repo_root / "configs" / "generated" / "support_boundary_v2_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "support_boundary_v2_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(
         f"PASSED: support boundary '{contract['contract']['id']}' — "

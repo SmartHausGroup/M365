@@ -18,7 +18,7 @@ def _load_contract() -> dict:
 def test_e9a_packaging_has_four_layers() -> None:
     contract = _load_contract()
     assert len(contract["packaging_layers"]) == 4
-    assert [l["order"] for l in contract["packaging_layers"]] == [1, 2, 3, 4]
+    assert [layer["order"] for layer in contract["packaging_layers"]] == [1, 2, 3, 4]
 
 
 def test_e9a_governance_rules_complete() -> None:
@@ -39,9 +39,7 @@ def test_e9a_tiers_match_registry() -> None:
     )
     personas = registry["personas"]
     rb = sum(1 for p in personas.values() if p.get("coverage_status") == "registry-backed")
-    co = sum(
-        1 for p in personas.values() if p.get("coverage_status") == "persona-contract-only"
-    )
+    co = sum(1 for p in personas.values() if p.get("coverage_status") == "persona-contract-only")
     assert contract["product_tiers"]["core"]["persona_count"] == rb
     assert contract["product_tiers"]["expansion"]["persona_count"] == co
     assert contract["kpis"]["total_persona_count"] == len(personas)

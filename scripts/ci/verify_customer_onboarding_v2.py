@@ -72,13 +72,9 @@ def main() -> None:
         "activation_sequence": activation_seq,
         "active_personas_at_onboarding": len(activation_seq),
     }
-    output_path = (
-        repo_root / "configs" / "generated" / "customer_onboarding_v2_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "customer_onboarding_v2_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     print(
         f"PASSED: customer onboarding '{contract['contract']['id']}' — "
