@@ -1312,3 +1312,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_cross_department_certification_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
 | `configs/generated/cross_department_certification_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
 | `tests/test_cross_department_certification_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8D` |
+
+## Active E8E Enterprise Release Gate v2 Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/enterprise_release_gate_v2.yaml` | Enterprise release gate v2 contract. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `docs/commercialization/m365-enterprise-release-gate-v2.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `docs/ma/lemmas/L67_m365_enterprise_release_gate_v2.md` | Lemma doc for L67. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `invariants/lemmas/L67_m365_enterprise_release_gate_v2.yaml` | Invariant for L67. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `notebooks/m365/INV-M365-BO-enterprise-release-gate-v2.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `notebooks/lemma_proofs/L67_m365_enterprise_release_gate_v2.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `artifacts/scorecards/scorecard_l67.json` | Scorecard for L67. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `scripts/ci/verify_enterprise_release_gate_v2.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `configs/generated/enterprise_release_gate_v2_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |
+| `tests/test_enterprise_release_gate_v2.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8E` |

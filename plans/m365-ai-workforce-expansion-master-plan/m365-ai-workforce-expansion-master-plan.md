@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E8D` are complete; Sections 0-7 are fully complete; `E8A` through `E8D` are complete; `E8D` is the active next act but has not been started; `E9A` through `E9E` remain planned.
+**Status:** Active (`E0A` through `E8E` are complete; Sections 0-7 are fully complete; `E8A` through `E8E` are complete; Section 8 is fully complete; `E8D` is the active next act but has not been started; `E9A` through `E9E` remain planned.
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -106,9 +106,10 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - Section 7 (Claude / UCP Workforce Experience) is fully complete.
 - `E8A` is complete.
 - `E8B` is complete.
-- `E8C` is complete.- `E8E` is the active next act but has not been started.
+- `E8C` is complete.- `E9A` is the active next act but has not been started.
 - `E8D` is complete.- `E9A` through `E9E` remain planned.
-- No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
+- `E8E` is complete.
+- Section 8 (Live Validation and Workforce Certification) is fully complete.- No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 

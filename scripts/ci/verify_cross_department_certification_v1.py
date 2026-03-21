@@ -96,10 +96,7 @@ def main() -> None:
     }
 
     output_path = (
-        repo_root
-        / "configs"
-        / "generated"
-        / "cross_department_certification_v1_verification.json"
+        repo_root / "configs" / "generated" / "cross_department_certification_v1_verification.json"
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")

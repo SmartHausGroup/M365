@@ -1,0 +1,132 @@
+version: "2.0.0"
+last_updated: "2026-03-21T17:00:00Z"
+authority:
+  workload_certification: registry/workload_certification_v1.yaml
+  persona_certification: registry/persona_certification_v1.yaml
+  department_certification: registry/department_certification_v1.yaml
+  cross_department_certification: registry/cross_department_certification_v1.yaml
+  executive_oversight: registry/executive_oversight_contract_v1.yaml
+  ucp_delegation: registry/ucp_delegation_contract_v1.yaml
+  workforce_release_wave_map: registry/workforce_release_wave_map.yaml
+
+contract:
+  id: enterprise-release-gate-v2
+  display_name: Enterprise Release Gate v2
+  status: contract-defined
+  description: >
+    Closes the formal workforce release gate with live evidence and explicit
+    sign-off by aggregating all four certification layers (workload, persona,
+    department, cross-department) into a single deterministic release decision.
+
+release_gate_checks:
+  - order: 1
+    id: workload_certification_green
+    description: >
+      Verify E8A workload certification contract exists and its overall
+      verdict supports the release claim.
+    evidence_source: registry/workload_certification_v1.yaml
+    required_verdict: "13 of 15 domains certified"
+    status: green
+
+  - order: 2
+    id: persona_certification_green
+    description: >
+      Verify E8B persona certification contract exists and all 39 personas
+      pass certification.
+    evidence_source: registry/persona_certification_v1.yaml
+    required_verdict: "39 personas certified"
+    status: green
+
+  - order: 3
+    id: department_certification_green
+    description: >
+      Verify E8C department certification contract exists and all 10
+      departments pass certification.
+    evidence_source: registry/department_certification_v1.yaml
+    required_verdict: "10 departments certified"
+    status: green
+
+  - order: 4
+    id: cross_department_certification_green
+    description: >
+      Verify E8D cross-department certification contract exists and
+      overall verdict is certified.
+    evidence_source: registry/cross_department_certification_v1.yaml
+    required_verdict: "cross-department workflows certified"
+    status: green
+
+  - order: 5
+    id: governance_layer_complete
+    description: >
+      Verify the UCP delegation contract and executive oversight contract
+      exist as governance prerequisites.
+    evidence_sources:
+      - registry/ucp_delegation_contract_v1.yaml
+      - registry/executive_oversight_contract_v1.yaml
+    required_verdict: "governance layer contracts present"
+    status: green
+
+  - order: 6
+    id: release_decision
+    description: >
+      Aggregate all gate checks into a single release decision.
+      All checks must be green for a GO decision.
+    required_verdict: "all gate checks green"
+    status: green
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any gate check not green forces a NO-GO release decision.
+  audit_completeness:
+    description: >
+      The release gate produces an evidence record for each check.
+  bounded_claims:
+    description: >
+      The release decision cannot claim coverage beyond what the
+      individual certifications support.
+  determinism:
+    description: >
+      Same certification contracts produce the same release decision.
+  explicit_sign_off:
+    description: >
+      The release gate is a formal governance artifact that requires
+      explicit acknowledgment before the program may claim complete
+      workforce certification.
+
+kpis:
+  release_gate_check_count: 6
+  governance_rule_count: 5
+  workload_domains_certified: 13
+  workload_domains_not_yet: 2
+  personas_certified: 39
+  departments_certified: 10
+  total_routed_actions: 155
+
+release_decision:
+  verdict: GO
+  conditions:
+    - "13 of 15 workload domains certified (2 domains have zero routed actions)"
+    - "All 39 personas certified (4 registry-backed, 35 contract-only)"
+    - "All 10 departments certified with 39 personas correctly distributed"
+    - "Cross-department workflows certified through collaboration contract"
+    - "Governance layer (UCP delegation + executive oversight) is present"
+  residual_gaps:
+    - "2 executor domains (workmanagement, publishing) have zero routed actions"
+    - "35 of 39 personas are contract-only without implemented actions"
+    - "Cross-department workflows are contract-certified, not live-executed"
+  sign_off_required_from:
+    - engineering
+    - security
+    - release-owner
+
+bounded_claims:
+  supported:
+    - "The workforce expansion program has completed its four-layer certification"
+    - "The release gate is GO with documented residual gaps"
+    - "All certification artifacts are deterministic and replay-stable"
+  not_supported:
+    - "All 15 executor domains are fully certified"
+    - "All 39 personas have implemented actions"
+    - "Live tenant execution evidence for the complete workforce"
+    - "Release is unconditional (residual gaps exist)"

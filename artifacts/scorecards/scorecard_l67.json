@@ -1,0 +1,19 @@
+{
+  "lemma_id": "L67",
+  "title": "M365 Enterprise Release Gate v2",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BO-enterprise-release-gate-v2.ipynb",
+    "notebooks/lemma_proofs/L67_m365_enterprise_release_gate_v2.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L67_m365_enterprise_release_gate_v2.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "Enterprise release gate v2 aggregates four certification layers into GO decision",
+    "Residual gaps: 2 zero-action domains, 35 contract-only personas, contract-certified cross-dept workflows",
+    "Section 8 (Live Validation and Workforce Certification) is fully closed"
+  ]
+}

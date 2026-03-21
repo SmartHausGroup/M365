@@ -502,12 +502,6 @@ execution_status:
       with four ordered certification phases, five governance rules, and per-department
       verdicts. All 10 departments pass certification with 39 total personas.
   prepared_blocked:
-  - phase: E8E
-    blocked_by: E8
-    summary: 'Close the formal workforce release gate with live evidence and explicit
-      sign-off.
-
-      '
   - phase: E9
     blocked_by: E8E
     summary: 'Package, onboard, launch, and support the complete workforce with an
@@ -542,7 +536,7 @@ execution_status:
     summary: 'Issue the final release decision for the full workforce program.
 
       '
-  next_act: E8E
+  next_act: E9A
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files,
   collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
@@ -1057,7 +1051,7 @@ phase_stack:
 - code: E8
   title: Live Validation and Workforce Certification
   slug: live-validation-workforce-certification
-  status: Pending
+  status: Complete
   goal: 'Prove the expanded workforce in the live tenant, by workload, persona, department,
     and cross-department workflows, before release claims are made.
 
@@ -1103,7 +1097,7 @@ phase_stack:
   - code: E8E
     slug: enterprise-release-gate-v2
     title: Enterprise Release Gate v2
-    status: Pending
+    status: Complete
     goal: 'Close the formal workforce release gate with live evidence and explicit
       sign-off.
 

@@ -284,14 +284,14 @@
         "phase": "E8D",
         "date": "2026-03-21",
         "summary": "Defined the cross-department workflow certification contract through registry/cross_department_certification_v1.yaml with four phases, five governance rules. All 10 certified departments eligible through 4 collaboration primitives and 5 handoff rules."
+      },
+      {
+        "phase": "E8E",
+        "date": "2026-03-21",
+        "summary": "Defined the enterprise release gate v2 through registry/enterprise_release_gate_v2.yaml with six gate checks, five governance rules. Release verdict is GO with 3 documented residual gaps. Section 8 is now fully complete."
       }
     ],
     "prepared_blocked": [
-      {
-        "phase": "E8E",
-        "blocked_by": "E8",
-        "summary": "Close the formal workforce release gate with live evidence and explicit sign-off."
-      },
       {
         "phase": "E9",
         "blocked_by": "E8E",
@@ -323,7 +323,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E8E"
+    "next_act": "E9A"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -856,7 +856,7 @@
       "code": "E8",
       "title": "Live Validation and Workforce Certification",
       "slug": "live-validation-workforce-certification",
-      "status": "Pending",
+      "status": "Complete",
       "goal": "Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made.",
       "outputs": [
         "workload certification",
@@ -901,7 +901,7 @@
           "code": "E8E",
           "slug": "enterprise-release-gate-v2",
           "title": "Enterprise Release Gate v2",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Close the formal workforce release gate with live evidence and explicit sign-off."
         }
       ]
