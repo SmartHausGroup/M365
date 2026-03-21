@@ -1,0 +1,164 @@
+version: 1.0.0
+last_updated: '2026-03-21T12:20:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: design
+  display_name: Design
+  wave: W7
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Design digital employees into one bounded department contract
+    covering brand governance, UI design, UX research, visual storytelling,
+    and delight design responsibilities that are defined but not yet
+    action-backed.
+  bounded_claim: >-
+    The Design department pack may only claim the authoritative contract
+    personas, capability families, approval posture, and blocked readiness
+    state declared here. It may not claim implemented brand, UI, UX,
+    visual, or delight execution coverage until later acts activate those
+    personas.
+workflow_families:
+  - brand_governance_and_consistency
+  - interface_design_and_component_specs
+  - user_research_and_insight_capture
+  - visual_narrative_and_creative_production
+workload_families:
+  - Media, publishing, and extended communications
+  - Content, intranet, and files
+  - Knowledge, search, and employee experience
+  - Documents, notes, and workspace productivity
+  - Mail, calendar, contacts, and bookings
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the design lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:design
+  department_lead: department-lead:design
+  profiles:
+    low-observe-create:
+      approvers:
+        - department-owner:design
+      personas:
+        - brand-guardian
+        - ui-designer
+        - ux-researcher
+        - visual-storyteller
+        - whimsy-injector
+      rule: >-
+        Brand review, UI design, UX research, visual storytelling, and delight
+        design may proceed in observe/create mode until later acts activate
+        mutating Design execution surfaces.
+kpis:
+  required_personas: 5
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 4
+  supported_action_count: 0
+personas:
+  brand-guardian:
+    display_name: Isabella Rossi
+    title: Brand Guardian
+    role_type: brand_anchor
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - brand policy review
+      - asset approval
+      - outward-facing consistency checks
+    workload_families:
+      - Media, publishing, and extended communications
+      - Content, intranet, and files
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - brand_governance_and_consistency
+    supported_actions: []
+  ui-designer:
+    display_name: Noah Anderson
+    title: UI Designer
+    role_type: design_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - interface design
+      - component specs
+      - interaction polishing
+    workload_families:
+      - Documents, notes, and workspace productivity
+      - Content, intranet, and files
+      - Media, publishing, and extended communications
+    workflow_families:
+      - interface_design_and_component_specs
+    supported_actions: []
+  ux-researcher:
+    display_name: Mila Novak
+    title: UX Researcher
+    role_type: research_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - user research synthesis
+      - insight capture
+      - interview and study coordination
+    workload_families:
+      - Knowledge, search, and employee experience
+      - Documents, notes, and workspace productivity
+      - Mail, calendar, contacts, and bookings
+    workflow_families:
+      - user_research_and_insight_capture
+    supported_actions: []
+  visual-storyteller:
+    display_name: Diego Alvarez
+    title: Visual Storyteller
+    role_type: creative_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - visual narrative creation
+      - presentation and story asset production
+      - campaign visual design
+    workload_families:
+      - Media, publishing, and extended communications
+      - Documents, notes, and workspace productivity
+      - Content, intranet, and files
+    workflow_families:
+      - visual_narrative_and_creative_production
+    supported_actions: []
+  whimsy-injector:
+    display_name: Luna Park
+    title: Delight Designer
+    role_type: delight_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - delight and tone improvements
+      - polish passes
+      - creative variation generation
+    workload_families:
+      - Media, publishing, and extended communications
+      - Documents, notes, and workspace productivity
+      - Content, intranet, and files
+    workflow_families:
+      - visual_narrative_and_creative_production
+    supported_actions: []
+bounded_claims:
+  supported:
+    - design persona census and capability-family contract
+    - approval and escalation semantics for future design activation
+    - deterministic blocked-state projection while design remains contract-only
+  unsupported:
+    - claims that design personas are currently action-backed
+    - live brand, UI, UX, visual, or delight mutations beyond later activation acts
+    - HR, engineering, or testing work outside the design contract
