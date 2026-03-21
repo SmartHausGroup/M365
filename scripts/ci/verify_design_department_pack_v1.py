@@ -43,7 +43,9 @@ def main() -> int:
         ],
     }
 
-    output_path = repo_root / "configs" / "generated" / "design_department_pack_v1_verification.json"
+    output_path = (
+        repo_root / "configs" / "generated" / "design_department_pack_v1_verification.json"
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(

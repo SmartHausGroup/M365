@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E6H` are complete; `E6I` is the active next act; `E6J` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E6J` are complete; Section 6 (Department Packs) is fully complete; `E7A` is the next act but has not been started; `E7A` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -95,8 +95,11 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E6F` is complete.
 - `E6G` is complete.
 - `E6H` is complete.
-- `E6I` is the active next act.
-- `E6J` through `E9E` are prepared but blocked by prerequisite work.
+- `E6I` is complete.
+- `E6J` is complete.
+- Section 6 (Department Packs) is fully complete. All 10 departments have bounded packs.
+- `E7A` through `E9E` are prepared but blocked by prerequisite work.
+- `E7A` is the next act but has not been started.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
@@ -480,13 +483,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E6I — Testing Department Pack
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Build the Testing department capability pack.
 
 #### E6J — Design Department Pack
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Build the Design department capability pack.
 

@@ -229,14 +229,19 @@
         "phase": "E6H",
         "date": "2026-03-21",
         "summary": "Completed the Studio Operations department pack through registry/department_pack_studio_operations_v1.yaml and docs/commercialization/m365-studio-operations-department-pack-v1.md, added the notebook-backed L55 chain, reused the generalized shared pack runtime in src/smarthaus_common/department_pack.py, added the deterministic verifier at scripts/ci/verify_studio_operations_department_pack_v1.py, and proved the bounded E6H slice through targeted pack-state regressions plus generated proof at configs/generated/studio_operations_department_pack_v1_verification.json."
+      },
+      {
+        "phase": "E6I",
+        "date": "2026-03-21",
+        "summary": "Completed the Testing department pack through registry/department_pack_testing_v1.yaml and docs/commercialization/m365-testing-department-pack-v1.md, added the notebook-backed L56 chain, reused the generalized shared pack runtime in src/smarthaus_common/department_pack.py, added the deterministic verifier at scripts/ci/verify_testing_department_pack_v1.py, and proved the bounded E6I slice through targeted pack-state regressions plus generated proof at configs/generated/testing_department_pack_v1_verification.json."
+      },
+      {
+        "phase": "E6J",
+        "date": "2026-03-21",
+        "summary": "Completed the Design department pack through registry/department_pack_design_v1.yaml and docs/commercialization/m365-design-department-pack-v1.md, added the notebook-backed L57 chain, reused the generalized shared pack runtime in src/smarthaus_common/department_pack.py, added the deterministic verifier at scripts/ci/verify_design_department_pack_v1.py, and proved the bounded E6J slice through targeted pack-state regressions plus generated proof at configs/generated/design_department_pack_v1_verification.json. Section 6 (Department Packs) is now fully complete across all 10 departments."
       }
     ],
     "prepared_blocked": [
-      {
-        "phase": "E6J",
-        "blocked_by": "E6",
-        "summary": "Build the Design department capability pack."
-      },
       {
         "phase": "E7",
         "blocked_by": "E6",
@@ -328,7 +333,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E6I"
+    "next_act": "E7A"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -790,14 +795,14 @@
           "code": "E6I",
           "slug": "testing-department-pack",
           "title": "Testing Department Pack",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Build the Testing department capability pack."
         },
         {
           "code": "E6J",
           "slug": "design-department-pack",
           "title": "Design Department Pack",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Build the Design department capability pack."
         }
       ]

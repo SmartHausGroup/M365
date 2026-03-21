@@ -22,9 +22,7 @@ def test_e6j_builds_blocked_design_contract_pack(
     assert pack["summary"]["registry_backed_persona_count"] == 0
     assert pack["summary"]["supported_action_count"] == 0
     assert pack["summary"]["pack_state"] == "blocked"
-    assert {persona["coverage_status"] for persona in pack["personas"]} == {
-        "persona-contract-only"
-    }
+    assert {persona["coverage_status"] for persona in pack["personas"]} == {"persona-contract-only"}
 
 
 def test_e6j_contract_only_pack_remains_blocked_even_without_queue_pressure(
