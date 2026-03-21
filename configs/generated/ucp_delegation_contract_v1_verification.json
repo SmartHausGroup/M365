@@ -1,0 +1,23 @@
+{
+  "contract_id": "ucp-delegation-contract",
+  "contract_only_persona_count": 35,
+  "delegation_phase_count": 6,
+  "governance_rule_count": 5,
+  "phases": [
+    "intent_capture",
+    "persona_resolution",
+    "risk_assessment",
+    "approval_gating",
+    "executor_routing",
+    "audited_execution"
+  ],
+  "registry_backed_persona_count": 4,
+  "rules": [
+    "approval_integrity",
+    "audit_completeness",
+    "contract_only_handling",
+    "fail_closed",
+    "idempotency"
+  ],
+  "supported_persona_count": 39
+}

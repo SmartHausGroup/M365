@@ -1,0 +1,22 @@
+lemma_id: L58
+title: M365 UCP Delegation Contract v1
+invariant: >
+  The Claude-to-UCP delegation contract must define six ordered phases from
+  intent through audited execution, five governance rules, and deterministic
+  contract-only persona handling so the delegation path cannot drift between
+  runtime surfaces.
+proof_obligations:
+  - ucp delegation contract authority file exists and validates
+  - delegation phases are ordered and complete with inputs, outputs, and failure modes
+  - governance rules cover fail-closed, audit, approval integrity, contract-only handling, and idempotency
+  - KPI persona counts match the authoritative persona registry
+  - contract-only persona count plus registry-backed persona count equals total persona count
+failure_boundaries:
+  - missing ucp delegation contract authority file
+  - missing or disordered delegation phase
+  - missing governance rule
+  - persona count mismatch between contract and registry
+  - contract-only persona count mismatch
+test_bindings:
+  - tests/test_ucp_delegation_contract_v1.py
+ci_gate: scripts/ci/verify_ucp_delegation_contract_v1.py
