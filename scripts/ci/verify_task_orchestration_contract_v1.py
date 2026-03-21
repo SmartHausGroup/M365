@@ -37,7 +37,9 @@ def main() -> int:
         raise SystemExit(f"task_orchestration_step_state_count:expected=6:got={len(states)}")
     required_fields = step.get("required_fields") or []
     if len(required_fields) != 6:
-        raise SystemExit(f"task_orchestration_required_field_count:expected=6:got={len(required_fields)}")
+        raise SystemExit(
+            f"task_orchestration_required_field_count:expected=6:got={len(required_fields)}"
+        )
 
     gov_rules = contract.get("governance_rules") or {}
     expected_rules = {

@@ -1,0 +1,12 @@
+{
+  "contract_id": "cross-persona-collaboration-contract",
+  "governance_rule_count": 4,
+  "handoff_rule_count": 5,
+  "primitive_count": 4,
+  "primitives": [
+    "handoff",
+    "consultation",
+    "co_execution",
+    "escalation"
+  ]
+}
