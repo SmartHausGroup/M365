@@ -1,0 +1,13 @@
+{
+  "lemma_id": "L69",
+  "title": "M365 Customer Onboarding v2",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BQ-customer-onboarding-v2.ipynb",
+    "notebooks/lemma_proofs/L69_m365_customer_onboarding_v2.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L69_m365_customer_onboarding_v2.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": ["Deterministic onboarding with 4-persona activation sequence"]
+}

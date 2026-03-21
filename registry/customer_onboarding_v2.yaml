@@ -1,0 +1,95 @@
+version: "2.0.0"
+last_updated: "2026-03-21T18:15:00Z"
+authority:
+  workforce_packaging: registry/workforce_packaging_v1.yaml
+  persona_registry: registry/persona_registry_v2.yaml
+  department_certification: registry/department_certification_v1.yaml
+
+contract:
+  id: customer-onboarding-v2
+  display_name: Customer Onboarding v2
+  status: contract-defined
+  description: >
+    Defines the deterministic onboarding path for the expanded workforce product.
+    Covers tenant readiness, persona activation sequence, department rollout
+    order, and acceptance criteria.
+
+onboarding_phases:
+  - order: 1
+    id: tenant_readiness
+    description: >
+      Verify the customer tenant meets prerequisites: Azure AD configured,
+      Graph API credentials provisioned, M365 licensing in place.
+    outputs:
+      - tenant readiness checklist with pass/fail per prerequisite
+    failure_mode: >
+      Missing prerequisite blocks onboarding until resolved.
+
+  - order: 2
+    id: core_persona_activation
+    description: >
+      Activate the 4 registry-backed personas in sequence: m365-administrator
+      first, then hr-generalist, outreach-coordinator, website-manager.
+    outputs:
+      - per-persona activation status and verification evidence
+    failure_mode: >
+      Persona activation failure blocks subsequent activations.
+
+  - order: 3
+    id: department_rollout_sequence
+    description: >
+      Roll out department packs starting with operations (has the most
+      registry-backed personas), then communication, hr, followed by
+      remaining departments as expansion personas become active.
+    outputs:
+      - department rollout order with activation prerequisites
+    failure_mode: >
+      Department with zero active personas receives contract-only pack.
+
+  - order: 4
+    id: acceptance_criteria
+    description: >
+      Define measurable acceptance criteria: at least one successful
+      governed action per active persona, department pack validation
+      green, and audit trail complete.
+    outputs:
+      - acceptance criteria checklist
+    failure_mode: >
+      Unmet acceptance criterion blocks onboarding completion.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any failed prerequisite or activation blocks further onboarding.
+  audit_completeness:
+    description: >
+      Every onboarding step produces traceable evidence.
+  bounded_claims:
+    description: >
+      Onboarding scope must not exceed packaged product tiers.
+  determinism:
+    description: >
+      Same tenant state plus same packaging produces the same onboarding plan.
+  sequential_activation:
+    description: >
+      Personas activate in declared order; departments roll out in sequence.
+
+kpis:
+  onboarding_phase_count: 4
+  governance_rule_count: 5
+  active_personas_at_onboarding: 4
+  departments_at_onboarding: 10
+  core_tier_activation_sequence:
+    - m365-administrator
+    - hr-generalist
+    - outreach-coordinator
+    - website-manager
+
+bounded_claims:
+  supported:
+    - "Deterministic onboarding path for the 4 active personas"
+    - "Sequential department rollout with acceptance criteria"
+    - "Contract-only departments receive pack documentation without live actions"
+  not_supported:
+    - "All 39 personas activated at onboarding"
+    - "Self-service onboarding without SMARTHAUS involvement"

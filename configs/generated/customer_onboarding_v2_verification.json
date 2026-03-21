@@ -1,0 +1,12 @@
+{
+  "activation_sequence": [
+    "m365-administrator",
+    "hr-generalist",
+    "outreach-coordinator",
+    "website-manager"
+  ],
+  "active_personas_at_onboarding": 4,
+  "contract_id": "customer-onboarding-v2",
+  "governance_rule_count": 5,
+  "onboarding_phase_count": 4
+}
