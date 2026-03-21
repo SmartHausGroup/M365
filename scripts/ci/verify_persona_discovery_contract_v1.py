@@ -30,7 +30,9 @@ def main() -> int:
 
     dimensions = contract.get("discovery_dimensions") or []
     if len(dimensions) != 6:
-        raise SystemExit(f"persona_discovery_dimension_count_mismatch:expected=6:got={len(dimensions)}")
+        raise SystemExit(
+            f"persona_discovery_dimension_count_mismatch:expected=6:got={len(dimensions)}"
+        )
 
     rules = contract.get("selection_rules") or {}
     for key in ("single_match", "multiple_matches", "no_match", "ambiguity_policy"):

@@ -1,0 +1,22 @@
+lemma_id: L60
+title: M365 Task Orchestration Contract v1
+invariant: >
+  The task orchestration contract must define four orchestration primitives,
+  six step states, and four governance rules so that composed multi-step
+  tasks follow deterministic ordering, fail-closed semantics, and per-step
+  audit requirements.
+proof_obligations:
+  - task orchestration contract authority file exists and validates
+  - four orchestration primitives are declared
+  - six step states are declared
+  - step contract has all required fields
+  - governance rules cover ordering, fail-closed, audit, and escalation
+failure_boundaries:
+  - missing task orchestration contract authority file
+  - missing orchestration primitive
+  - missing step state
+  - missing step contract field
+  - missing governance rule
+test_bindings:
+  - tests/test_task_orchestration_contract_v1.py
+ci_gate: scripts/ci/verify_task_orchestration_contract_v1.py

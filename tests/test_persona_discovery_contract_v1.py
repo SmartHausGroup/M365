@@ -42,8 +42,6 @@ def test_e7b_governance_rules_complete() -> None:
 
 def test_e7b_persona_count_matches_registry() -> None:
     contract = _load_contract()
-    registry = yaml.safe_load(
-        Path("registry/persona_registry_v2.yaml").read_text(encoding="utf-8")
-    )
+    registry = yaml.safe_load(Path("registry/persona_registry_v2.yaml").read_text(encoding="utf-8"))
     assert contract["kpis"]["discoverable_persona_count"] == len(registry["personas"])
     assert contract["kpis"]["department_count"] == 10
