@@ -247,12 +247,14 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — the closed workforce-expansion program is already merged into `development`, the branch-promotion path and persona-activation follow-on program are now formally defined, and the current next act is the promotion of `development` to `staging`.
-**Current next act:** `P1A` — promote `development` to `staging`.
+**Status:** 🟢 Active — the closed workforce-expansion program is now promoted cleanly across `development`, `staging`, and `main`, and the persona-activation follow-on program is now the active critical path.
+**Current next act:** `P2A` — activation contract and first-wave lock.
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-staging-main-promotion.md`, `docs/prompts/codex-m365-staging-main-promotion-prompt.txt`, `docs/prompts/codex-m365-persona-activation-follow-on.md`, `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt`
+
+**Status update (2026-03-21 13:52 EDT):** `P1A` through `P1C` are complete. The approved post-expansion promotion and persona-activation plan was first committed to `development` at `2b738e5`, then `staging` was created and pushed directly from that exact tip, staging parity was validated by proving `development`, `staging`, `origin/development`, and `origin/staging` all resolve to `2b738e5` with `git diff --check` clean, and `main` was then created and pushed directly from the validated `staging` tip. The branch-promotion track is closed without divergence. `P2A` is now the active next act.
 
 ---
 

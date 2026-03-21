@@ -74,13 +74,26 @@
     ]
   },
   "execution_status": {
-    "completed": [],
-    "in_progress": "P1A",
-    "next_act": "P1A",
+    "completed": [
+      {
+        "phase": "P1A",
+        "date": "2026-03-21",
+        "summary": "Created and pushed staging directly from the approved development tip 2b738e5 so the release-candidate branch carries the exact post-expansion promotion and persona-activation plan state."
+      },
+      {
+        "phase": "P1B",
+        "date": "2026-03-21",
+        "summary": "Validated staging branch parity and deterministic replay by confirming development, staging, origin/development, and origin/staging all resolve to commit 2b738e5 with clean branch state and git diff --check green."
+      },
+      {
+        "phase": "P1C",
+        "date": "2026-03-21",
+        "summary": "Created and pushed main directly from the validated staging tip so development, staging, and main now all resolve to commit 2b738e5, closing the branch-promotion track without divergence."
+      }
+    ],
+    "in_progress": "P2A",
+    "next_act": "P2A",
     "prepared_blocked": [
-      "P1B",
-      "P1C",
-      "P2A",
       "P2B",
       "P2C",
       "P2D",
@@ -136,7 +149,7 @@
     {
       "phase": "P1",
       "title": "Branch Promotion",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Promote the completed workforce program from development into staging and then main through a deterministic, governed branch path.",
       "outputs": [
         "staging promotion prompt pair",
@@ -147,19 +160,19 @@
         {
           "act": "P1A",
           "title": "Promote development to staging",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Create or align staging from the merged development tip and push it as the release-candidate branch."
         },
         {
           "act": "P1B",
           "title": "Validate staging candidate",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Confirm staging is aligned, replay-safe, and ready for production promotion."
         },
         {
           "act": "P1C",
           "title": "Promote staging to main",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Advance the validated release candidate from staging into main and close the promotion track."
         }
       ]
@@ -167,7 +180,7 @@
     {
       "phase": "P2",
       "title": "Persona Activation Follow-On",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Turn selected contract-only personas into action-backed, commercially claimable digital employees in bounded waves.",
       "outputs": [
         "activation-definition contract",
@@ -179,7 +192,7 @@
         {
           "act": "P2A",
           "title": "Activation contract and first-wave lock",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Define activation entry criteria and lock the first-wave roster against the current authoritative persona registry."
         },
         {

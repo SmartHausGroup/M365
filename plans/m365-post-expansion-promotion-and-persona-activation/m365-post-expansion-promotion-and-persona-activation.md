@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1A` is next; branch-promotion track is active; persona-activation track is planned behind it)
+**Status:** 🟢 Active (`P1` is complete; `P2A` is next; persona-activation track is now the active critical path)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -94,9 +94,12 @@ Why these first:
 
 ## Execution Status
 
-- `P1A` is the active next act.
-- `P1B` and `P1C` remain blocked by `P1A`.
-- `P2A` through `P2E` remain blocked by completion of the branch-promotion track.
+- `P1A` is complete.
+- `P1B` is complete.
+- `P1C` is complete.
+- Branch promotion is complete: `development`, `staging`, and `main` all resolve to commit `2b738e5`.
+- `P2A` is the active next act.
+- `P2B` through `P2E` remain blocked by `P2A`.
 
 ## Scope
 
@@ -129,7 +132,7 @@ Why these first:
 
 ### P1 — Branch Promotion
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Promote the completed workforce program from `development` into `staging` and then `main` through a deterministic, governed branch path.
 
@@ -143,25 +146,25 @@ Why these first:
 
 #### P1A — Promote `development` to `staging`
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Create or align `staging` from the merged `development` tip and push it as the release-candidate branch.
 
 #### P1B — Validate Staging Candidate
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Confirm `staging` is aligned, replay-safe, and ready for production promotion.
 
 #### P1C — Promote `staging` to `main`
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Advance the validated release candidate from `staging` into `main` and close the promotion track.
 
 ### P2 — Persona Activation Follow-On
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Turn selected contract-only personas into action-backed, commercially claimable digital employees in bounded waves.
 
@@ -176,7 +179,7 @@ Why these first:
 
 #### P2A — Activation Contract and First-Wave Lock
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Define activation entry criteria and lock the first-wave roster against the current authoritative persona registry.
 
