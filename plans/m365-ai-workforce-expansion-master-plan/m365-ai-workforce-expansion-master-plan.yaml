@@ -1,5 +1,5 @@
 plan_id: m365-ai-workforce-expansion-master-plan
-status: Active
+status: Complete
 date: '2026-03-20'
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-ai-workforce-expansion-master-plan:R1
@@ -487,7 +487,7 @@ execution_status:
     summary: 'Issued the final workforce expansion release decision: verdict GO, program COMPLETE. All
       10 sections, 50 acts, 72 lemmas closed. 4 documented residual gaps.'
   prepared_blocked: []
-  next_act: none
+  next_act: null
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner,
   bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery,
