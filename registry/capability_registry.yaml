@@ -1,7 +1,3 @@
-# M365 Capability Registry — full O (master calculus)
-# Generated from M365_CAPABILITIES_UNIVERSE.md. Do not edit by hand; run scripts/ci/build_capability_registry.py
-# Verification: scripts/ci/verify_capability_registry.py
-
 schema_version: '1.0'
 source:
 - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
@@ -2170,3 +2166,100 @@ actions:
   - environmentName
   - roleId
   - removed
+- action: list_powerbi_workspaces
+  resource: workspace
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - workspaces
+  - count
+- action: get_powerbi_workspace
+  resource: workspace
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - workspace
+- action: list_powerbi_reports
+  resource: report
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - reports
+  - count
+- action: get_powerbi_report
+  resource: report
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - report
+- action: list_powerbi_datasets
+  resource: dataset
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - datasets
+  - count
+- action: get_powerbi_dataset
+  resource: dataset
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - dataset
+- action: refresh_powerbi_dataset
+  resource: datasetRefresh
+  domain: reports
+  required_permissions:
+  - PowerBI.ReadWrite.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - workspaceId
+  - datasetId
+  - status
+- action: list_powerbi_dataset_refreshes
+  resource: datasetRefresh
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - refreshes
+  - count
+- action: list_powerbi_dashboards
+  resource: dashboard
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - dashboards
+  - count
+- action: get_powerbi_dashboard
+  resource: dashboard
+  domain: reports
+  required_permissions:
+  - PowerBI.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - dashboard

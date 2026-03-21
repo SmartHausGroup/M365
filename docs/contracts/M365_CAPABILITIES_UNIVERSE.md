@@ -300,6 +300,21 @@
 
 ---
 
+## Power BI
+
+- list_powerbi_workspaces
+- get_powerbi_workspace
+- list_powerbi_reports
+- get_powerbi_report
+- list_powerbi_datasets
+- get_powerbi_dataset
+- refresh_powerbi_dataset
+- list_powerbi_dataset_refreshes
+- list_powerbi_dashboards
+- get_powerbi_dashboard
+
+---
+
 ## OneNote
 
 - list_notebooks

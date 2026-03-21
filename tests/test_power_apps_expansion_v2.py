@@ -63,9 +63,7 @@ def test_e3b_actions_route_and_auth_to_powerplatform() -> None:
 
 
 def test_e3b_reads_and_mutations_resolve_expected_approval_profiles() -> None:
-    read_resolution = resolve_action_approval_risk(
-        "m365-administrator", "list_powerapps_admin", {}
-    )
+    read_resolution = resolve_action_approval_risk("m365-administrator", "list_powerapps_admin", {})
     mutation_resolution = resolve_action_approval_risk(
         "m365-administrator", "set_powerapp_owner", {}
     )

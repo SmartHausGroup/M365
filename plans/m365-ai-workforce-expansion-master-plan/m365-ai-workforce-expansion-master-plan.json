@@ -124,6 +124,11 @@
         "phase": "E3B",
         "date": "2026-03-20",
         "summary": "Expanded Power Apps through registry/power_apps_expansion_v2.yaml and docs/commercialization/m365-power-apps-expansion-v2.md, projected bounded app, role, ownership, environment, and environment-role actions into src/smarthaus_common/power_apps_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L34 chain and scripts/ci/verify_power_apps_expansion.py, and proved the bounded E3B slice through contract verifiers plus targeted Power Apps regressions."
+      },
+      {
+        "phase": "E3C",
+        "date": "2026-03-20",
+        "summary": "Expanded Power BI through registry/power_bi_expansion_v2.yaml and docs/commercialization/m365-power-bi-expansion-v2.md, projected bounded workspace, report, dataset, dataset-refresh, and dashboard actions into src/smarthaus_common/power_bi_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L35 chain and scripts/ci/verify_power_bi_expansion.py, and proved the bounded E3C slice through contract verifiers plus targeted Power BI regressions."
       }
     ],
     "prepared_blocked": [
@@ -136,11 +141,6 @@
         "phase": "E3",
         "blocked_by": "E2E",
         "summary": "Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane."
-      },
-      {
-        "phase": "E3C",
-        "blocked_by": "E3",
-        "summary": "Add governed report, dataset, workspace, and analytics surfaces."
       },
       {
         "phase": "E3D",
@@ -358,7 +358,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E3C"
+    "next_act": "E3D"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Automate, and bounded Power Apps, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -473,11 +473,11 @@
         }
       ]
     },
-  {
-    "code": "E1",
-    "title": "Universal M365 Control Plane",
-    "slug": "universal-m365-control-plane",
-    "status": "Complete",
+    {
+      "code": "E1",
+      "title": "Universal M365 Control Plane",
+      "slug": "universal-m365-control-plane",
+      "status": "Complete",
       "goal": "Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.",
       "outputs": [
         "universal action schema",
@@ -527,11 +527,11 @@
         }
       ]
     },
-  {
-    "code": "E2",
-    "title": "Core M365 Workload Expansion",
-    "slug": "core-m365-workload-expansion",
-    "status": "Active",
+    {
+      "code": "E2",
+      "title": "Core M365 Workload Expansion",
+      "slug": "core-m365-workload-expansion",
+      "status": "Active",
       "goal": "Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.",
       "outputs": [
         "directory expansion",
@@ -585,7 +585,7 @@
       "code": "E3",
       "title": "Power Platform and Analytics Expansion",
       "slug": "power-platform-analytics-expansion",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.",
       "outputs": [
         "Power Automate expansion",
@@ -616,14 +616,14 @@
           "code": "E3C",
           "slug": "power-bi-expansion",
           "title": "Power BI Expansion",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Add governed report, dataset, workspace, and analytics surfaces."
         },
         {
           "code": "E3D",
           "slug": "forms-approvals-connectors-expansion",
           "title": "Forms / Approvals / Connectors Expansion",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface."
         },
         {

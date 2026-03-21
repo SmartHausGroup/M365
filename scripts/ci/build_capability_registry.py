@@ -26,6 +26,7 @@ SECTION_TO_DOMAIN = {
     "Planner & tasks": "planner",
     "Power Automate": "powerplatform",
     "Power Apps": "powerplatform",
+    "Power BI": "reports",
     "OneNote": "onenote",
     "To Do / tasks (Microsoft To Do)": "todo",
     "Subscriptions & webhooks": "subscriptions",
@@ -55,6 +56,7 @@ MUTATING_VERBS = (
     "upgrade",
     "enable",
     "disable",
+    "refresh",
     "restore",
     "publish",
     "reply",
@@ -193,6 +195,14 @@ def action_to_resource(action: str, domain: str) -> str:
     if domain == "search":
         return "search"
     if domain == "reports":
+        if "workspace" in action:
+            return "workspace"
+        if "dashboard" in action:
+            return "dashboard"
+        if "dataset_refresh" in action or ("refresh" in action and "dataset" in action):
+            return "datasetRefresh"
+        if "dataset" in action:
+            return "dataset"
         return "report"
     if domain == "access_reviews":
         return "accessReview"

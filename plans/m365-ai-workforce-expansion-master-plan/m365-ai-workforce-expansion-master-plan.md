@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E3B` are complete; `E3C` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E3C` are complete; `E3D` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -74,7 +74,8 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E2E` is complete.
 - `E3A` is complete.
 - `E3B` is complete.
-- `E3C` is the active next act.
+- `E3C` is complete.
+- `E3D` is the active next act.
 - `E3` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
@@ -289,7 +290,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E3C — Power BI Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Add governed report, dataset, workspace, and analytics surfaces.
 
@@ -612,4 +613,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E3A` is complete. It locked the workload authority at `registry/power_automate_expansion_v2.yaml`, added the bounded Power Automate runtime in `src/smarthaus_common/power_automate_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, and `invoke_flow_callback`, and added the notebook-backed `L33` evidence chain with generated verification at `configs/generated/power_automate_expansion_verification.json`.
 
-`E3B` is complete. It locked the workload authority at `registry/power_apps_expansion_v2.yaml`, added the bounded Power Apps runtime in `src/smarthaus_common/power_apps_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, and `remove_powerapp_environment_role_assignment`, and added the notebook-backed `L34` evidence chain with generated verification at `configs/generated/power_apps_expansion_verification.json`. `E3C` is now the active next act and must expand Power BI on top of the completed v2 control plane plus the newly-expanded workload slices through bounded Power Apps.
+`E3B` is complete. It locked the workload authority at `registry/power_apps_expansion_v2.yaml`, added the bounded Power Apps runtime in `src/smarthaus_common/power_apps_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, and `remove_powerapp_environment_role_assignment`, and added the notebook-backed `L34` evidence chain with generated verification at `configs/generated/power_apps_expansion_verification.json`.
+
+`E3C` is complete. It locked the workload authority at `registry/power_bi_expansion_v2.yaml`, added the bounded Power BI runtime in `src/smarthaus_common/power_bi_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, and `get_powerbi_dashboard`, and added the notebook-backed `L35` evidence chain with generated verification at `configs/generated/power_bi_expansion_verification.json`. `E3D` is now the active next act and must bring Forms, approvals, and connector-backed workflow triggers into the same bounded control plane.

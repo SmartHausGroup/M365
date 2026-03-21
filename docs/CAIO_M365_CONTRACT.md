@@ -112,6 +112,16 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `list_powerapp_environment_role_assignments` | List Power Apps environment role assignments | No | `environmentName` or `environment_name` or `environment` or `id`, `userId?` |
 | `set_powerapp_environment_role_assignment` | Grant or update a Power Apps environment role assignment | Yes | `environmentName` or `environment_name` or `environment` or `id`, `principalObjectId` or `principal_object_id` or `userId`, `roleName` or `role_name`, `principalType?` |
 | `remove_powerapp_environment_role_assignment` | Remove a Power Apps environment role assignment | Yes | `environmentName` or `environment_name` or `environment` or `id`, `roleId` or `role_id` |
+| `list_powerbi_workspaces` | List Power BI workspaces | No | `top?` |
+| `get_powerbi_workspace` | Get a Power BI workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id` |
+| `list_powerbi_reports` | List Power BI reports for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id`, `top?` |
+| `get_powerbi_report` | Get a Power BI report for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `reportId` or `report_id` or `id` |
+| `list_powerbi_datasets` | List Power BI datasets for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id`, `top?` |
+| `get_powerbi_dataset` | Get a Power BI dataset for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `datasetId` or `dataset_id` or `id` |
+| `refresh_powerbi_dataset` | Trigger a bounded Power BI dataset refresh | Yes | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `datasetId` or `dataset_id` or `id`, `notifyOption?` |
+| `list_powerbi_dataset_refreshes` | List Power BI dataset refresh history | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `datasetId` or `dataset_id`, `top?` |
+| `list_powerbi_dashboards` | List Power BI dashboards for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id`, `top?` |
+| `get_powerbi_dashboard` | Get a Power BI dashboard for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `dashboardId` or `dashboard_id` or `id` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -210,6 +220,16 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **list_powerapp_environment_role_assignments:** `{ "roles": [ ... ], "count": N }`
 - **set_powerapp_environment_role_assignment:** `{ "environmentName": "<env>", "principalObjectId": "<id>", "roleName": "<role>", "status": "updated" }`
 - **remove_powerapp_environment_role_assignment:** `{ "environmentName": "<env>", "roleId": "<id>", "removed": true }`
+- **list_powerbi_workspaces:** `{ "workspaces": [ ... ], "count": N }`
+- **get_powerbi_workspace:** `{ "workspace": { ... } }`
+- **list_powerbi_reports:** `{ "reports": [ ... ], "count": N }`
+- **get_powerbi_report:** `{ "report": { ... } }`
+- **list_powerbi_datasets:** `{ "datasets": [ ... ], "count": N }`
+- **get_powerbi_dataset:** `{ "dataset": { ... } }`
+- **refresh_powerbi_dataset:** `{ "workspaceId": "<id>", "datasetId": "<id>", "status": "queued", "requestId"?: "<id>", "location"?: "<url>" }`
+- **list_powerbi_dataset_refreshes:** `{ "refreshes": [ ... ], "count": N }`
+- **list_powerbi_dashboards:** `{ "dashboards": [ ... ], "count": N }`
+- **get_powerbi_dashboard:** `{ "dashboard": { ... } }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

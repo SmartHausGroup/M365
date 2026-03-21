@@ -114,6 +114,16 @@ exact_action_routes:
   list_powerapp_environment_role_assignments: powerplatform
   set_powerapp_environment_role_assignment: powerplatform
   remove_powerapp_environment_role_assignment: powerplatform
+  list_powerbi_workspaces: powerplatform
+  get_powerbi_workspace: powerplatform
+  list_powerbi_reports: powerplatform
+  get_powerbi_report: powerplatform
+  list_powerbi_datasets: powerplatform
+  get_powerbi_dataset: powerplatform
+  refresh_powerbi_dataset: powerplatform
+  list_powerbi_dataset_refreshes: powerplatform
+  list_powerbi_dashboards: powerplatform
+  get_powerbi_dashboard: powerplatform
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint
@@ -134,6 +144,7 @@ prefix_routes:
   "admin.": directory
   "flows.": powerplatform
   "powerapp.": powerplatform
+  "powerbi.": powerplatform
 agent_action_overrides:
   website-manager:
     deployment.preview: sharepoint

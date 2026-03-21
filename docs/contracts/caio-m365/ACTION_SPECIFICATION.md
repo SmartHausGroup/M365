@@ -970,12 +970,112 @@ The following actions are implemented as part of `E2C`. They share the same dete
 | **Result shape** \(\mathcal{S}_{\texttt{remove\_powerapp\_environment\_role\_assignment}}\) | `{ "environmentName": string, "roleId": string, "removed": true }` |
 | **Error cases** | Missing environment or role selector; Power Apps admin runtime not configured; PowerShell module import failure; service-principal auth failure; forbidden Dataverse environment; mutations disabled. |
 
+### 96. list_powerbi_workspaces
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_powerbi_workspaces` |
+| **Mutating** | No |
+| **Preconditions** | Optional `params`: `top` (integer). The selected `powerplatform` executor must have service-principal Power BI REST access via the tenant contract. |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_powerbi\_workspaces}}\) | `{ "workspaces": array, "count": number }` |
+| **Error cases** | Invalid `top`; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 97. get_powerbi_workspace
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_powerbi_workspace` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_powerbi\_workspace}}\) | `{ "workspace": object }` |
+| **Error cases** | Missing workspace selector; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 98. list_powerbi_reports
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_powerbi_reports` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id` (string, required), plus optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_powerbi\_reports}}\) | `{ "reports": array, "count": number }` |
+| **Error cases** | Missing workspace selector; invalid `top`; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 99. get_powerbi_report
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_powerbi_report` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` (string, required), plus `reportId` or `report_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_powerbi\_report}}\) | `{ "report": object }` |
+| **Error cases** | Missing workspace or report selector; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 100. list_powerbi_datasets
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_powerbi_datasets` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id` (string, required), plus optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_powerbi\_datasets}}\) | `{ "datasets": array, "count": number }` |
+| **Error cases** | Missing workspace selector; invalid `top`; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 101. get_powerbi_dataset
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_powerbi_dataset` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` (string, required), plus `datasetId` or `dataset_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_powerbi\_dataset}}\) | `{ "dataset": object }` |
+| **Error cases** | Missing workspace or dataset selector; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 102. refresh_powerbi_dataset
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `refresh_powerbi_dataset` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` (string, required), `datasetId` or `dataset_id` or `id` (string, required), and optional `notifyOption` (default `NoNotification`). Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{refresh\_powerbi\_dataset}}\) | `{ "workspaceId": string, "datasetId": string, "status": "queued", "requestId"?: string, "location"?: string }` |
+| **Error cases** | Missing workspace or dataset selector; Power BI identity missing; token acquisition failure; Power BI REST request failure; mutations disabled. |
+
+### 103. list_powerbi_dataset_refreshes
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_powerbi_dataset_refreshes` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` (string, required), `datasetId` or `dataset_id` (string, required), and optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_powerbi\_dataset\_refreshes}}\) | `{ "refreshes": array, "count": number }` |
+| **Error cases** | Missing workspace or dataset selector; invalid `top`; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 104. list_powerbi_dashboards
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_powerbi_dashboards` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id` (string, required), plus optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_powerbi\_dashboards}}\) | `{ "dashboards": array, "count": number }` |
+| **Error cases** | Missing workspace selector; invalid `top`; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
+### 105. get_powerbi_dashboard
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_powerbi_dashboard` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `workspaceId` or `workspace_id` or `groupId` or `group_id` (string, required), plus `dashboardId` or `dashboard_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_powerbi\_dashboard}}\) | `{ "dashboard": object }` |
+| **Error cases** | Missing workspace or dashboard selector; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
+
 ---
 
 ## Canonical sets
 
-- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
-- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, `get_powerbi_dashboard`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `refresh_powerbi_dataset`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
 
 ---
 

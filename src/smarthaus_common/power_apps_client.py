@@ -140,12 +140,10 @@ class PowerAppsClient:
 
     def get_powerapp_admin(self, environment_name: str, app_name: str) -> dict[str, Any]:
         payload = self._run_powershell_json(
-            (
-                "$result = Get-AdminPowerApp "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-AppName {_ps_string(app_name)}\n"
-                "$result | ConvertTo-Json -Depth 25 -Compress"
-            )
+            "$result = Get-AdminPowerApp "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-AppName {_ps_string(app_name)}\n"
+            "$result | ConvertTo-Json -Depth 25 -Compress"
         )
         if isinstance(payload, dict):
             return payload
@@ -178,18 +176,16 @@ class PowerAppsClient:
         owner_object_id: str,
     ) -> dict[str, Any]:
         return self._run_powershell_json(
-            (
-                "Set-AdminPowerAppOwner "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-AppName {_ps_string(app_name)} "
-                f"-AppOwner {_ps_string(owner_object_id)} | Out-Null\n"
-                "$result = @{"
-                f"appName = {_ps_string(app_name)};"
-                f"ownerObjectId = {_ps_string(owner_object_id)};"
-                "status = 'updated'"
-                "}\n"
-                "$result | ConvertTo-Json -Depth 10 -Compress"
-            )
+            "Set-AdminPowerAppOwner "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-AppName {_ps_string(app_name)} "
+            f"-AppOwner {_ps_string(owner_object_id)} | Out-Null\n"
+            "$result = @{"
+            f"appName = {_ps_string(app_name)};"
+            f"ownerObjectId = {_ps_string(owner_object_id)};"
+            "status = 'updated'"
+            "}\n"
+            "$result | ConvertTo-Json -Depth 10 -Compress"
         )
 
     def remove_powerapp_role_assignment(
@@ -199,32 +195,28 @@ class PowerAppsClient:
         role_id: str,
     ) -> dict[str, Any]:
         return self._run_powershell_json(
-            (
-                "Remove-AdminPowerAppRoleAssignment "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-AppName {_ps_string(app_name)} "
-                f"-RoleId {_ps_string(role_id)} | Out-Null\n"
-                "$result = @{"
-                f"appName = {_ps_string(app_name)};"
-                f"roleId = {_ps_string(role_id)};"
-                "removed = $true"
-                "}\n"
-                "$result | ConvertTo-Json -Depth 10 -Compress"
-            )
+            "Remove-AdminPowerAppRoleAssignment "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-AppName {_ps_string(app_name)} "
+            f"-RoleId {_ps_string(role_id)} | Out-Null\n"
+            "$result = @{"
+            f"appName = {_ps_string(app_name)};"
+            f"roleId = {_ps_string(role_id)};"
+            "removed = $true"
+            "}\n"
+            "$result | ConvertTo-Json -Depth 10 -Compress"
         )
 
     def delete_powerapp(self, environment_name: str, app_name: str) -> dict[str, Any]:
         return self._run_powershell_json(
-            (
-                "Remove-AdminPowerApp "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-AppName {_ps_string(app_name)} | Out-Null\n"
-                "$result = @{"
-                f"appName = {_ps_string(app_name)};"
-                "status = 'deleted'"
-                "}\n"
-                "$result | ConvertTo-Json -Depth 10 -Compress"
-            )
+            "Remove-AdminPowerApp "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-AppName {_ps_string(app_name)} | Out-Null\n"
+            "$result = @{"
+            f"appName = {_ps_string(app_name)};"
+            "status = 'deleted'"
+            "}\n"
+            "$result | ConvertTo-Json -Depth 10 -Compress"
         )
 
     def list_powerapp_environments(self) -> list[dict[str, Any]]:
@@ -235,11 +227,9 @@ class PowerAppsClient:
 
     def get_powerapp_environment(self, environment_name: str) -> dict[str, Any]:
         payload = self._run_powershell_json(
-            (
-                "$result = Get-AdminPowerAppEnvironment "
-                f"-EnvironmentName {_ps_string(environment_name)}\n"
-                "$result | ConvertTo-Json -Depth 25 -Compress"
-            )
+            "$result = Get-AdminPowerAppEnvironment "
+            f"-EnvironmentName {_ps_string(environment_name)}\n"
+            "$result | ConvertTo-Json -Depth 25 -Compress"
         )
         if isinstance(payload, dict):
             return payload
@@ -272,20 +262,18 @@ class PowerAppsClient:
         principal_type: str = "User",
     ) -> dict[str, Any]:
         return self._run_powershell_json(
-            (
-                "Set-AdminPowerAppEnvironmentRoleAssignment "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-RoleName {_ps_string(role_name)} "
-                f"-PrincipalType {_ps_string(principal_type)} "
-                f"-PrincipalObjectId {_ps_string(principal_object_id)} | Out-Null\n"
-                "$result = @{"
-                f"environmentName = {_ps_string(environment_name)};"
-                f"principalObjectId = {_ps_string(principal_object_id)};"
-                f"roleName = {_ps_string(role_name)};"
-                "status = 'updated'"
-                "}\n"
-                "$result | ConvertTo-Json -Depth 10 -Compress"
-            )
+            "Set-AdminPowerAppEnvironmentRoleAssignment "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-RoleName {_ps_string(role_name)} "
+            f"-PrincipalType {_ps_string(principal_type)} "
+            f"-PrincipalObjectId {_ps_string(principal_object_id)} | Out-Null\n"
+            "$result = @{"
+            f"environmentName = {_ps_string(environment_name)};"
+            f"principalObjectId = {_ps_string(principal_object_id)};"
+            f"roleName = {_ps_string(role_name)};"
+            "status = 'updated'"
+            "}\n"
+            "$result | ConvertTo-Json -Depth 10 -Compress"
         )
 
     def remove_powerapp_environment_role_assignment(
@@ -294,15 +282,13 @@ class PowerAppsClient:
         role_id: str,
     ) -> dict[str, Any]:
         return self._run_powershell_json(
-            (
-                "Remove-AdminPowerAppEnvironmentRoleAssignment "
-                f"-EnvironmentName {_ps_string(environment_name)} "
-                f"-RoleId {_ps_string(role_id)} | Out-Null\n"
-                "$result = @{"
-                f"environmentName = {_ps_string(environment_name)};"
-                f"roleId = {_ps_string(role_id)};"
-                "removed = $true"
-                "}\n"
-                "$result | ConvertTo-Json -Depth 10 -Compress"
-            )
+            "Remove-AdminPowerAppEnvironmentRoleAssignment "
+            f"-EnvironmentName {_ps_string(environment_name)} "
+            f"-RoleId {_ps_string(role_id)} | Out-Null\n"
+            "$result = @{"
+            f"environmentName = {_ps_string(environment_name)};"
+            f"roleId = {_ps_string(role_id)};"
+            "removed = $true"
+            "}\n"
+            "$result | ConvertTo-Json -Depth 10 -Compress"
         )

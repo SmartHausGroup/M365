@@ -23,6 +23,7 @@ from smarthaus_common.office_generation import (
 )
 from smarthaus_common.power_apps_client import PowerAppsClient
 from smarthaus_common.power_automate_client import PowerAutomateClient
+from smarthaus_common.power_bi_client import PowerBIClient
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -92,6 +93,16 @@ _SUPPORTED_ACTIONS = {
     "list_powerapp_environment_role_assignments",
     "set_powerapp_environment_role_assignment",
     "remove_powerapp_environment_role_assignment",
+    "list_powerbi_workspaces",
+    "get_powerbi_workspace",
+    "list_powerbi_reports",
+    "get_powerbi_report",
+    "list_powerbi_datasets",
+    "get_powerbi_dataset",
+    "refresh_powerbi_dataset",
+    "list_powerbi_dataset_refreshes",
+    "list_powerbi_dashboards",
+    "get_powerbi_dashboard",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -182,6 +193,7 @@ _MUTATING_ACTIONS = {
     "delete_powerapp",
     "set_powerapp_environment_role_assignment",
     "remove_powerapp_environment_role_assignment",
+    "refresh_powerbi_dataset",
 }
 
 
@@ -969,6 +981,83 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 raise HTTPException(status_code=400, detail="Missing 'roleId' or 'role_id'")
             normalized_powerapp["role_id"] = role_id
         return normalized_powerapp
+    if action in {
+        "list_powerbi_workspaces",
+        "get_powerbi_workspace",
+        "list_powerbi_reports",
+        "get_powerbi_report",
+        "list_powerbi_datasets",
+        "get_powerbi_dataset",
+        "refresh_powerbi_dataset",
+        "list_powerbi_dataset_refreshes",
+        "list_powerbi_dashboards",
+        "get_powerbi_dashboard",
+    }:
+        if action == "list_powerbi_workspaces":
+            return {"top": _normalize_top(params, default=50)}
+        workspace_id = _first_str(
+            params,
+            "workspaceId",
+            "workspace_id",
+            "groupId",
+            "group_id",
+            "id",
+        )
+        if not workspace_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'workspaceId', 'workspace_id', 'groupId', 'group_id', or 'id'",
+            )
+        if action == "get_powerbi_workspace":
+            return {"workspace_id": workspace_id}
+        if action in {
+            "list_powerbi_reports",
+            "list_powerbi_datasets",
+            "list_powerbi_dashboards",
+        }:
+            return {"workspace_id": workspace_id, "top": _normalize_top(params, default=50)}
+        if action == "list_powerbi_dataset_refreshes":
+            dataset_id = _first_str(params, "datasetId", "dataset_id")
+            if not dataset_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'datasetId' or 'dataset_id'",
+                )
+            return {
+                "workspace_id": workspace_id,
+                "dataset_id": dataset_id,
+                "top": _normalize_top(params, default=50),
+            }
+        if action == "get_powerbi_report":
+            report_id = _first_str(params, "reportId", "report_id", "id")
+            if not report_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'reportId', 'report_id', or 'id'",
+                )
+            return {"workspace_id": workspace_id, "report_id": report_id}
+        if action in {"get_powerbi_dataset", "refresh_powerbi_dataset"}:
+            dataset_id = _first_str(params, "datasetId", "dataset_id", "id")
+            if not dataset_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'datasetId', 'dataset_id', or 'id'",
+                )
+            normalized_dataset = {"workspace_id": workspace_id, "dataset_id": dataset_id}
+            if action == "refresh_powerbi_dataset":
+                normalized_dataset["notify_option"] = (
+                    _first_str(params, "notifyOption", "notify_option") or "NoNotification"
+                )
+            return normalized_dataset
+        if action == "get_powerbi_dashboard":
+            dashboard_id = _first_str(params, "dashboardId", "dashboard_id", "id")
+            if not dashboard_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'dashboardId', 'dashboard_id', or 'id'",
+                )
+            return {"workspace_id": workspace_id, "dashboard_id": dashboard_id}
+        raise HTTPException(status_code=400, detail=f"Unknown Power BI action: {action}")
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1310,6 +1399,23 @@ def _power_apps_client(action: str | None = None) -> PowerAppsClient:
 
     config = AppConfig()
     return PowerAppsClient(legacy_config=config)
+
+
+def _power_bi_client(action: str | None = None) -> PowerBIClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return PowerBIClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return PowerBIClient(legacy_config=config)
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -1690,6 +1796,63 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             params["environment_name"],
             params["role_id"],
         )
+    if action == "list_powerbi_workspaces":
+        power_bi_client = _power_bi_client(action)
+        value = power_bi_client.list_workspaces()[: params["top"]]
+        return {"workspaces": value, "count": len(value)}
+    if action == "get_powerbi_workspace":
+        power_bi_client = _power_bi_client(action)
+        return {"workspace": power_bi_client.get_workspace(params["workspace_id"])}
+    if action == "list_powerbi_reports":
+        power_bi_client = _power_bi_client(action)
+        value = power_bi_client.list_reports(params["workspace_id"])[: params["top"]]
+        return {"reports": value, "count": len(value)}
+    if action == "get_powerbi_report":
+        power_bi_client = _power_bi_client(action)
+        return {
+            "report": power_bi_client.get_report(
+                params["workspace_id"],
+                params["report_id"],
+            )
+        }
+    if action == "list_powerbi_datasets":
+        power_bi_client = _power_bi_client(action)
+        value = power_bi_client.list_datasets(params["workspace_id"])[: params["top"]]
+        return {"datasets": value, "count": len(value)}
+    if action == "get_powerbi_dataset":
+        power_bi_client = _power_bi_client(action)
+        return {
+            "dataset": power_bi_client.get_dataset(
+                params["workspace_id"],
+                params["dataset_id"],
+            )
+        }
+    if action == "refresh_powerbi_dataset":
+        power_bi_client = _power_bi_client(action)
+        return power_bi_client.refresh_dataset(
+            params["workspace_id"],
+            params["dataset_id"],
+            notify_option=params.get("notify_option", "NoNotification"),
+        )
+    if action == "list_powerbi_dataset_refreshes":
+        power_bi_client = _power_bi_client(action)
+        value = power_bi_client.list_dataset_refreshes(
+            params["workspace_id"],
+            params["dataset_id"],
+        )[: params["top"]]
+        return {"refreshes": value, "count": len(value)}
+    if action == "list_powerbi_dashboards":
+        power_bi_client = _power_bi_client(action)
+        value = power_bi_client.list_dashboards(params["workspace_id"])[: params["top"]]
+        return {"dashboards": value, "count": len(value)}
+    if action == "get_powerbi_dashboard":
+        power_bi_client = _power_bi_client(action)
+        return {
+            "dashboard": power_bi_client.get_dashboard(
+                params["workspace_id"],
+                params["dashboard_id"],
+            )
+        }
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -2560,6 +2723,70 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "roleId|role_id",
         ],
         "mutating": True,
+    },
+    {
+        "action": "list_powerbi_workspaces",
+        "description": "List Power BI workspaces",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerbi_workspace",
+        "description": "Get a Power BI workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_powerbi_reports",
+        "description": "List Power BI reports for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerbi_report",
+        "description": "Get a Power BI report for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id", "reportId|report_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_powerbi_datasets",
+        "description": "List Power BI datasets for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerbi_dataset",
+        "description": "Get a Power BI dataset for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id", "datasetId|dataset_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "refresh_powerbi_dataset",
+        "description": "Trigger a bounded Power BI dataset refresh",
+        "params": [
+            "workspaceId|workspace_id|groupId|group_id",
+            "datasetId|dataset_id|id",
+            "notifyOption?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "list_powerbi_dataset_refreshes",
+        "description": "List Power BI dataset refresh history",
+        "params": ["workspaceId|workspace_id|groupId|group_id", "datasetId|dataset_id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "list_powerbi_dashboards",
+        "description": "List Power BI dashboards for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_powerbi_dashboard",
+        "description": "Get a Power BI dashboard for a workspace",
+        "params": ["workspaceId|workspace_id|groupId|group_id", "dashboardId|dashboard_id|id"],
+        "mutating": False,
     },
     {
         "action": "get_user",

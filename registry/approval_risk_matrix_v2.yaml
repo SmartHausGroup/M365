@@ -329,6 +329,47 @@ exact_action_policies:
     approval_profile: high-impact
     approval_requirement: always
     approvers: [platform_admin]
+  list_powerbi_workspaces:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_powerbi_workspace:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_powerbi_reports:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_powerbi_report:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_powerbi_datasets:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_powerbi_dataset:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  refresh_powerbi_dataset:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  list_powerbi_dataset_refreshes:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_powerbi_dashboards:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_powerbi_dashboard:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
   create_user:
     risk_class: high
     approval_profile: high-impact

@@ -198,6 +198,26 @@ exact_action_policies:
     auth_class: app_only
   remove_powerapp_environment_role_assignment:
     auth_class: app_only
+  list_powerbi_workspaces:
+    auth_class: app_only
+  get_powerbi_workspace:
+    auth_class: app_only
+  list_powerbi_reports:
+    auth_class: app_only
+  get_powerbi_report:
+    auth_class: app_only
+  list_powerbi_datasets:
+    auth_class: app_only
+  get_powerbi_dataset:
+    auth_class: app_only
+  refresh_powerbi_dataset:
+    auth_class: app_only
+  list_powerbi_dataset_refreshes:
+    auth_class: app_only
+  list_powerbi_dashboards:
+    auth_class: app_only
+  get_powerbi_dashboard:
+    auth_class: app_only
   create_site:
     auth_class: app_only
   get_team:
