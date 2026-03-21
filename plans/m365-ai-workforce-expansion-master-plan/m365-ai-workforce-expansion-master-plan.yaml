@@ -485,18 +485,6 @@ execution_status:
       with five oversight queries, five intervention primitives, three escalation paths,
       and five governance rules. Section 7 (Claude / UCP Workforce Experience) is now complete.
   prepared_blocked:
-  - phase: E8
-    blocked_by: E7
-    summary: 'Prove the expanded workforce in the live tenant before release claims
-      are made.
-
-      '
-  - phase: E8A
-    blocked_by: E8
-    summary: 'Certify each workload surface against the live tenant and the bounded
-      executor model.
-
-      '
   - phase: E8B
     blocked_by: E8
     summary: 'Certify each persona class against its allowed domains and approval

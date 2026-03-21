@@ -268,16 +268,6 @@
     ],
     "prepared_blocked": [
       {
-        "phase": "E8",
-        "blocked_by": "E7E",
-        "summary": "Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made."
-      },
-      {
-        "phase": "E8A",
-        "blocked_by": "E8",
-        "summary": "Certify each workload surface against the live tenant and the bounded executor model."
-      },
-      {
         "phase": "E8B",
         "blocked_by": "E8",
         "summary": "Certify each persona class against its allowed domains and approval posture."
