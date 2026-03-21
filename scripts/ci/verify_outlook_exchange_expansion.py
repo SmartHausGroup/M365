@@ -6,7 +6,6 @@ import json
 from pathlib import Path
 
 import yaml
-
 from smarthaus_common.approval_risk import resolve_action_approval_risk
 from smarthaus_common.auth_model import resolve_action_auth
 from smarthaus_common.executor_routing import executor_route_for_action
@@ -27,12 +26,16 @@ def _load_router_literals() -> tuple[set[str], set[str]]:
             continue
         for target in node.targets:
             if isinstance(target, ast.Name) and target.id == "_SUPPORTED_ACTIONS":
+                if not isinstance(node.value, ast.Set | ast.List | ast.Tuple):
+                    continue
                 supported_actions = {
                     elt.value
                     for elt in node.value.elts
                     if isinstance(elt, ast.Constant) and isinstance(elt.value, str)
                 }
             if isinstance(target, ast.Name) and target.id == "INSTRUCTION_ACTIONS_SCHEMA":
+                if not isinstance(node.value, ast.List | ast.Tuple):
+                    continue
                 for item in node.value.elts:
                     if not isinstance(item, ast.Dict):
                         continue

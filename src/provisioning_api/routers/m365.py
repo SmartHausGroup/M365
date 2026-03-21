@@ -13,6 +13,14 @@ from pydantic import BaseModel, Field
 from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
+from smarthaus_common.office_generation import (
+    DOCUMENT_CONTENT_TYPE,
+    PRESENTATION_CONTENT_TYPE,
+    WORKBOOK_CONTENT_TYPE,
+    generate_docx_bytes,
+    generate_pptx_bytes,
+    generate_xlsx_bytes,
+)
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -53,6 +61,12 @@ _SUPPORTED_ACTIONS = {
     "get_drive_item",
     "create_folder",
     "upload_file",
+    "create_document",
+    "update_document",
+    "create_workbook",
+    "update_workbook",
+    "create_presentation",
+    "update_presentation",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -125,6 +139,12 @@ _MUTATING_ACTIONS = {
     "create_list_item",
     "create_folder",
     "upload_file",
+    "create_document",
+    "update_document",
+    "create_workbook",
+    "update_workbook",
+    "create_presentation",
+    "update_presentation",
 }
 
 
@@ -222,6 +242,105 @@ def _normalize_top(params: dict[str, Any], default: int = 100) -> int:
 
 def _normalize_user_context(params: dict[str, Any]) -> str | None:
     return _first_str(params, "userId", "user_id", "userPrincipalName", "mailbox")
+
+
+def _normalize_drive_target(params: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "drive_id": _first_str(params, "driveId", "drive_id"),
+        "group_id": _first_str(params, "groupId", "group_id"),
+        "site_id": _first_str(params, "siteId", "site_id"),
+        "user_id_or_upn": _normalize_user_context(params),
+    }
+
+
+def _normalize_office_remote_path(params: dict[str, Any], extension: str) -> str:
+    remote_path = _first_str(params, "remotePath", "remote_path", "path", "fileName", "file_name")
+    if not remote_path:
+        raise HTTPException(status_code=400, detail="Missing 'remotePath' or 'fileName'")
+    normalized = remote_path.strip("/")
+    dotted_extension = f".{extension}"
+    if "." not in Path(normalized).name:
+        return f"{normalized}{dotted_extension}"
+    if not normalized.lower().endswith(dotted_extension):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Remote path must end with '{dotted_extension}'",
+        )
+    return normalized
+
+
+def _normalize_document_payload(params: dict[str, Any]) -> dict[str, Any]:
+    paragraphs = params.get("paragraphs")
+    if paragraphs is not None and not isinstance(paragraphs, list):
+        raise HTTPException(status_code=400, detail="'paragraphs' must be a list of strings")
+    return {
+        "title": _first_str(params, "title", "name"),
+        "paragraphs": [str(item) for item in paragraphs or [] if str(item).strip()],
+        "content": _optional_str(params, "content"),
+    }
+
+
+def _normalize_workbook_payload(params: dict[str, Any]) -> list[dict[str, Any]]:
+    raw = params.get("worksheets")
+    if raw is None:
+        rows = params.get("rows")
+        if rows is None:
+            raise HTTPException(status_code=400, detail="Missing 'worksheets' or 'rows'")
+        raw = [{"name": _first_str(params, "sheetName", "sheet_name") or "Sheet1", "rows": rows}]
+    if not isinstance(raw, list) or not raw:
+        raise HTTPException(status_code=400, detail="'worksheets' must be a non-empty list")
+    normalized: list[dict[str, Any]] = []
+    for index, worksheet in enumerate(raw, start=1):
+        if not isinstance(worksheet, dict):
+            raise HTTPException(status_code=400, detail="Each worksheet must be an object")
+        rows = worksheet.get("rows")
+        if not isinstance(rows, list):
+            raise HTTPException(status_code=400, detail="Each worksheet requires a 'rows' list")
+        normalized_rows: list[list[Any]] = []
+        for row in rows:
+            if isinstance(row, list):
+                normalized_rows.append(list(row))
+            else:
+                normalized_rows.append([row])
+        normalized.append(
+            {
+                "name": str(worksheet.get("name") or f"Sheet{index}").strip() or f"Sheet{index}",
+                "rows": normalized_rows,
+            }
+        )
+    return normalized
+
+
+def _normalize_presentation_payload(params: dict[str, Any]) -> tuple[str, list[dict[str, Any]]]:
+    title = _first_str(params, "title", "name") or "SMARTHAUS Presentation"
+    raw_slides = params.get("slides")
+    if raw_slides is None:
+        bullets = params.get("bullets") or params.get("items") or []
+        if isinstance(bullets, str):
+            bullets = [line for line in bullets.splitlines() if line.strip()]
+        elif not isinstance(bullets, list):
+            raise HTTPException(status_code=400, detail="'bullets' must be a list of strings")
+        raw_slides = [{"title": title, "bullets": bullets}]
+    if not isinstance(raw_slides, list) or not raw_slides:
+        raise HTTPException(status_code=400, detail="'slides' must be a non-empty list")
+    normalized: list[dict[str, Any]] = []
+    for index, slide in enumerate(raw_slides, start=1):
+        if not isinstance(slide, dict):
+            raise HTTPException(status_code=400, detail="Each slide must be an object")
+        bullets = slide.get("bullets") or slide.get("items") or []
+        if isinstance(bullets, str):
+            bullet_list = [line for line in bullets.splitlines() if line.strip()]
+        elif isinstance(bullets, list):
+            bullet_list = [str(item) for item in bullets if str(item).strip()]
+        else:
+            raise HTTPException(status_code=400, detail="Each slide 'bullets' value must be a list")
+        normalized.append(
+            {
+                "title": str(slide.get("title") or f"Slide {index}").strip() or f"Slide {index}",
+                "bullets": bullet_list,
+            }
+        )
+    return title, normalized
 
 
 def _normalize_email_addresses(value: Any, field_name: str) -> list[str]:
@@ -569,6 +688,32 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
             or "replace",
             "content_type": _first_str(params, "contentType", "content_type"),
+        }
+    if action in {"create_document", "update_document"}:
+        return {
+            **_normalize_drive_target(params),
+            "remote_path": _normalize_office_remote_path(params, "docx"),
+            "payload": _normalize_document_payload(params),
+            "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
+            or "replace",
+        }
+    if action in {"create_workbook", "update_workbook"}:
+        return {
+            **_normalize_drive_target(params),
+            "remote_path": _normalize_office_remote_path(params, "xlsx"),
+            "worksheets": _normalize_workbook_payload(params),
+            "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
+            or "replace",
+        }
+    if action in {"create_presentation", "update_presentation"}:
+        presentation_title, slides = _normalize_presentation_payload(params)
+        return {
+            **_normalize_drive_target(params),
+            "remote_path": _normalize_office_remote_path(params, "pptx"),
+            "title": presentation_title,
+            "slides": slides,
+            "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
+            or "replace",
         }
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
@@ -1065,6 +1210,57 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 content_type=params.get("content_type"),
             ),
             "status": "uploaded",
+        }
+    if action in {"create_document", "update_document"}:
+        client = _graph_client(action)
+        document = client.upload_bytes(
+            file_bytes=generate_docx_bytes(**params["payload"]),
+            remote_path=params["remote_path"],
+            drive_id=params.get("drive_id"),
+            group_id=params.get("group_id"),
+            site_id=params.get("site_id"),
+            user_id_or_upn=params.get("user_id_or_upn"),
+            conflict_behavior=params.get("conflict_behavior", "replace"),
+            content_type=DOCUMENT_CONTENT_TYPE,
+            source_name=Path(params["remote_path"]).name,
+        )
+        return {
+            "document": document,
+            "status": "created" if action == "create_document" else "updated",
+        }
+    if action in {"create_workbook", "update_workbook"}:
+        client = _graph_client(action)
+        workbook = client.upload_bytes(
+            file_bytes=generate_xlsx_bytes(params["worksheets"]),
+            remote_path=params["remote_path"],
+            drive_id=params.get("drive_id"),
+            group_id=params.get("group_id"),
+            site_id=params.get("site_id"),
+            user_id_or_upn=params.get("user_id_or_upn"),
+            conflict_behavior=params.get("conflict_behavior", "replace"),
+            content_type=WORKBOOK_CONTENT_TYPE,
+            source_name=Path(params["remote_path"]).name,
+        )
+        return {
+            "workbook": workbook,
+            "status": "created" if action == "create_workbook" else "updated",
+        }
+    if action in {"create_presentation", "update_presentation"}:
+        client = _graph_client(action)
+        presentation = client.upload_bytes(
+            file_bytes=generate_pptx_bytes(title=params["title"], slides=params["slides"]),
+            remote_path=params["remote_path"],
+            drive_id=params.get("drive_id"),
+            group_id=params.get("group_id"),
+            site_id=params.get("site_id"),
+            user_id_or_upn=params.get("user_id_or_upn"),
+            conflict_behavior=params.get("conflict_behavior", "replace"),
+            content_type=PRESENTATION_CONTENT_TYPE,
+            source_name=Path(params["remote_path"]).name,
+        )
+        return {
+            "presentation": presentation,
+            "status": "created" if action == "create_presentation" else "updated",
         }
     if action == "get_user":
         client = _graph_client(action)
@@ -1663,6 +1859,78 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
             "conflictBehavior?",
             "contentType?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "create_document",
+        "description": "Generate and upload a DOCX document into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "title?",
+            "paragraphs?|content?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "update_document",
+        "description": "Update a DOCX document by regenerating and uploading it into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "title?",
+            "paragraphs?|content?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "create_workbook",
+        "description": "Generate and upload an XLSX workbook into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "worksheets?|rows?",
+            "sheetName?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "update_workbook",
+        "description": "Update an XLSX workbook by regenerating and uploading it into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "worksheets?|rows?",
+            "sheetName?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "create_presentation",
+        "description": "Generate and upload a PPTX presentation into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "title?",
+            "slides?|bullets?|items?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "update_presentation",
+        "description": "Update a PPTX presentation by regenerating and uploading it into a drive, site drive, group drive, or delegated self drive",
+        "params": [
+            "remotePath|path|fileName",
+            "title?",
+            "slides?|bullets?|items?",
+            "driveId?|groupId?|siteId?|userId?|userPrincipalName?",
+            "conflictBehavior?",
         ],
         "mutating": True,
     },

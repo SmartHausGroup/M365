@@ -84,7 +84,7 @@ No later phase may use the phrase “supported” unless all five axes are expli
 | Collaboration, meetings, and communities | Teams, chats, channels, meetings, groups-backed workspaces, collaboration messaging | `teams.*`, `channels.*`, `chat.*`, `create-workspace`, `add-workspace-members`, `create-channels` | `registry-backed` with a certified core subset | `feasible-graph` | `app-only` for many admin tasks, `hybrid` overall | `core-m365` | community/Viva Engage style surfaces remain split and may need mixed treatment |
 | Content, intranet, and files | sites, lists, libraries, files, drives, permissions, upload/share, content indexing | `sites.*`, `lists.*`, `files.*`, `drives.*`, `document.index`, `content.*`, current approvals backend | `registry-backed` with a certified core subset | `feasible-graph` plus some `feasible-mixed-api` file/content paths | `hybrid` | `core-m365` | this family already anchors approvals and site provisioning |
 | Tasks, scheduling, and work management | Planner, task assignment, plan/bucket management, project/task orchestration, approvals and work queues | `task.*`, `create_plan`, `list_plans`, `create_bucket`, `list_buckets`, `create_task`, `deadline.track`, `status.update`, `report.generate` | `registry-backed` | `feasible-graph` and `feasible-mixed-api` | `hybrid` | `workload-specific` | approvals and tasking need later boundary cleanup to avoid concept drift |
-| Documents, notes, and workspace productivity | document generation, workbook changes, presentations, notes, collaborative productivity objects | no strong runtime surface yet beyond files; partial doc references and future executor plan | `docs-backed` | `template-or-workflow-driven` plus selected `feasible-graph` edges | `mixed` | `core-m365` and `tenant-config-dependent` | Excel is the cleanest current subfamily; Word/PowerPoint stay template-driven for now |
+| Documents, notes, and workspace productivity | document generation, workbook changes, presentations, notes, collaborative productivity objects | deterministic DOCX/XLSX/PPTX generation plus file-backed upload/runtime surface | `registry-backed` | `implemented-now` | `hybrid` | `core-m365` and `tenant-config-dependent` | bounded Office generation is real now; richer editing and collaborative authoring remain later |
 | Knowledge, search, and employee experience | search, knowledge indexing, recommendations, training, employee-experience surfaces | `search.optimize`, `training.recommend`, `expert.connect`, broad Viva-style target from workload inventory | `docs-backed` with light registry hints | `feasible-mixed-api` and `tenant-or-license-dependent` | `mixed` | `workload-specific` and `tenant-config-dependent` | broad employee-experience surfaces are real but unevenly exposed |
 | Low-code, workflow, and analytics | Power Automate, Power Apps, Power BI, Forms, connector-backed orchestration | repo docs reference Power Apps/Power BI; explicit phase targets `E3A`..`E3E` | `docs-backed` | `feasible-mixed-api` and `tenant-or-license-dependent` | `mixed` | `power-platform` | important to the vision, but not the same clean Graph-only story |
 | Security, compliance, and data governance | alerts, incidents, secure score, audits, remediation, compliance checks, policy validation, retention/eDiscovery-style controls | `security.*`, `audit.*`, `compliance.check`, `policy.validate`, `remediation.plan`, `violation.report` | `registry-backed` with partial audit runtime already present | `feasible-graph` plus `tenant-or-license-dependent` admin surfaces | `app-only` and `delegated-sensitive` split by risk | `premium-admin-security` | highest governance burden in the workforce target |
@@ -106,13 +106,13 @@ No later phase may use the phrase “supported” unless all five axes are expli
   - collaboration
   - content/files
   - tasks/work management
+  - documents/notes/productivity
   - security/compliance
   - devices/admin-adjacent operations
 
 ### What is named in architecture but still mostly doc-level
 
 - `docs-backed`
-  - documents/notes/productivity
   - knowledge/search/employee experience
   - Power Platform / analytics / forms
   - media/publishing/extended communications

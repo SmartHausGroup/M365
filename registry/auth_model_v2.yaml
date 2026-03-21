@@ -128,6 +128,30 @@ exact_action_policies:
     auth_class: hybrid
     delegated_preference: prefer_self_when_implicit
     self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  create_document:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  update_document:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  create_workbook:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  update_workbook:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  create_presentation:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
+  update_presentation:
+    auth_class: hybrid
+    delegated_preference: prefer_self_when_implicit
+    self_context_keys: [driveId, groupId, siteId, userId, userPrincipalName]
   create_site:
     auth_class: app_only
   get_team:

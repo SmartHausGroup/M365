@@ -1,0 +1,22 @@
+lemma_id: L32
+name: M365 Documents / Spreadsheets / Presentations expansion v2
+invariant_id: L32_m365_documents_spreadsheets_presentations_expansion_v2
+status: active
+proof_obligations:
+  - instruction_api_exposes_e2e_actions
+  - office_generation_is_deterministic
+  - graph_runtime_backs_e2e_actions
+  - capability_registry_marks_e2e_actions_implemented
+  - executor_routing_auth_and_approval_are_bounded
+  - plan_advances_from_e2e_to_e3a
+failure_boundaries:
+  - missing_instruction_action
+  - office_generation_not_replay_stable
+  - missing_graph_handler
+  - registry_status_not_implemented
+  - route_auth_or_approval_mismatch
+  - tracker_state_not_advanced
+test_bindings:
+  - tests/test_documents_spreadsheets_presentations_expansion_v2.py
+  - scripts/ci/verify_documents_spreadsheets_presentations_expansion.py
+ci_gate: scripts/ci/verify_documents_spreadsheets_presentations_expansion.py

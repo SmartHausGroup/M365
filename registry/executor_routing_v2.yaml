@@ -85,6 +85,12 @@ exact_action_routes:
   get_drive_item: sharepoint
   upload_file: sharepoint
   create_folder: sharepoint
+  create_document: sharepoint
+  update_document: sharepoint
+  create_workbook: sharepoint
+  update_workbook: sharepoint
+  create_presentation: sharepoint
+  update_presentation: sharepoint
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint

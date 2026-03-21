@@ -224,6 +224,48 @@ actions:
   - Files.ReadWrite.All
   mutating: true
   status: implemented
+- action: create_document
+  resource: document
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: update_document
+  resource: document
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: create_workbook
+  resource: workbook
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: update_workbook
+  resource: workbook
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: create_presentation
+  resource: presentation
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
+- action: update_presentation
+  resource: presentation
+  domain: productivity
+  required_permissions:
+  - Files.ReadWrite.All
+  mutating: true
+  status: implemented
 - action: list_channels
   resource: channel
   domain: teams

@@ -680,12 +680,72 @@ The following actions are implemented as part of `E2C`. They share the same dete
 | **Result shape** \(\mathcal{S}_{\texttt{create\_plan\_task}}\) | `{ "task": object, "status": "created" }` |
 | **Error cases** | Missing plan, bucket, or title; invalid `percentComplete`; Graph not configured; mutations disabled. |
 
+### 67. create_document
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_document` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `remotePath` or `path` or `fileName` (string, required). Explicit drive context may be supplied via `driveId`, `groupId`, `siteId`, `userId`, or `userPrincipalName`; otherwise delegated `/me` must be available. Optional `title`, `paragraphs`, `content`, `conflictBehavior`. If the provided path has no extension, `.docx` is appended. If it has an extension, it must be `.docx`. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_document}}\) | `{ "document": object, "status": "created" }` |
+| **Error cases** | Missing remote path; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
+### 68. update_document
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `update_document` |
+| **Mutating** | Yes |
+| **Preconditions** | Same as `create_document`. The target document is regenerated deterministically from the provided title/content payload and uploaded over the existing path. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{update\_document}}\) | `{ "document": object, "status": "updated" }` |
+| **Error cases** | Missing remote path; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
+### 69. create_workbook
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_workbook` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `remotePath` or `path` or `fileName` (string, required). Explicit drive context may be supplied via `driveId`, `groupId`, `siteId`, `userId`, or `userPrincipalName`; otherwise delegated `/me` must be available. Either `worksheets` (non-empty list of worksheet objects) or `rows` must be supplied. Optional `sheetName`, `conflictBehavior`. If the provided path has no extension, `.xlsx` is appended. If it has an extension, it must be `.xlsx`. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_workbook}}\) | `{ "workbook": object, "status": "created" }` |
+| **Error cases** | Missing remote path; missing worksheet data; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
+### 70. update_workbook
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `update_workbook` |
+| **Mutating** | Yes |
+| **Preconditions** | Same as `create_workbook`. The target workbook is regenerated deterministically from the provided worksheet payload and uploaded over the existing path. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{update\_workbook}}\) | `{ "workbook": object, "status": "updated" }` |
+| **Error cases** | Missing remote path; missing worksheet data; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
+### 71. create_presentation
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_presentation` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `remotePath` or `path` or `fileName` (string, required). Explicit drive context may be supplied via `driveId`, `groupId`, `siteId`, `userId`, or `userPrincipalName`; otherwise delegated `/me` must be available. Optional `title`; either `slides` (non-empty list of slide objects) or `bullets`/`items` must be supplied. Optional `conflictBehavior`. If the provided path has no extension, `.pptx` is appended. If it has an extension, it must be `.pptx`. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_presentation}}\) | `{ "presentation": object, "status": "created" }` |
+| **Error cases** | Missing remote path; invalid slide payload; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
+### 72. update_presentation
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `update_presentation` |
+| **Mutating** | Yes |
+| **Preconditions** | Same as `create_presentation`. The target presentation is regenerated deterministically from the provided slide payload and uploaded over the existing path. Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{update\_presentation}}\) | `{ "presentation": object, "status": "updated" }` |
+| **Error cases** | Missing remote path; invalid slide payload; invalid extension; no usable drive context; Graph not configured; mutations disabled. |
+
 ---
 
 ## Canonical sets
 
-- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
-- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
 
 ---
 

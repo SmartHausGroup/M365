@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Generator
 from typing import Any
 
 import pytest
-
 from provisioning_api.routers import m365 as m365_router
 from smarthaus_common.approval_risk import (
     reload_approval_risk_registry,
@@ -17,7 +17,7 @@ from smarthaus_common.executor_routing import (
 
 
 @pytest.fixture(autouse=True)
-def _reload_registries() -> None:
+def _reload_registries() -> Generator[None, None, None]:
     reload_executor_routing_registry()
     reload_auth_model_registry()
     reload_approval_risk_registry()

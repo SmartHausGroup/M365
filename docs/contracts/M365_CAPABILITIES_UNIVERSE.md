@@ -158,6 +158,17 @@
 
 ---
 
+## Documents, spreadsheets, and presentations
+
+- create_document
+- update_document
+- create_workbook
+- update_workbook
+- create_presentation
+- update_presentation
+
+---
+
 ## SharePoint (sites, lists, pages)
 
 - list_sites

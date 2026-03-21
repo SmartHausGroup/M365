@@ -292,6 +292,30 @@ exact_action_policies:
     risk_class: medium
     approval_profile: medium-operational
     approval_requirement: never
+  create_document:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  update_document:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_workbook:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  update_workbook:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_presentation:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  update_presentation:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
   create_group:
     risk_class: high
     approval_profile: high-impact

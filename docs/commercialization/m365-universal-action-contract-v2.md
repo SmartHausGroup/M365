@@ -13,7 +13,7 @@ Define one canonical action contract that can represent the expanded workforce a
 The repo currently has one workforce goal but multiple action languages:
 
 - [CAIO_M365_CONTRACT.md](/Users/smarthaus/Projects/GitHub/M365/docs/CAIO_M365_CONTRACT.md) exposes a narrow request envelope with `9` supported snake_case actions
-- [capability_registry.yaml](/Users/smarthaus/Projects/GitHub/M365/registry/capability_registry.yaml) tracks a `260`-action capability universe, also mostly snake_case
+- [capability_registry.yaml](/Users/smarthaus/Projects/GitHub/M365/registry/capability_registry.yaml) tracks a `270`-action capability universe, also mostly snake_case
 - [agents.yaml](/Users/smarthaus/Projects/GitHub/M365/registry/agents.yaml) exposes `184` distinct allowed actions, mostly dotted, with some snake_case and hyphenated legacy names
 
 Without a universal contract, later phases would have to keep translating ad hoc between those surfaces.

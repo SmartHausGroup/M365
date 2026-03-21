@@ -83,6 +83,12 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `get_drive_item` | Get a drive item by drive and item id | No | `driveId` or `drive_id`, `itemId` or `item_id` or `id` |
 | `create_folder` | Create a folder in a drive, site drive, group drive, or delegated self drive | Yes | `name` or `folderName`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `parentId?`, `conflictBehavior?` |
 | `upload_file` | Upload a local file into a drive, site drive, group drive, or delegated self drive | Yes | `filePath` or `localPath`, `remotePath` or `path` or `fileName`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?`, `contentType?` |
+| `create_document` | Generate and upload a DOCX document into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `paragraphs?` or `content?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `update_document` | Regenerate and upload a DOCX document into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `paragraphs?` or `content?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `create_workbook` | Generate and upload an XLSX workbook into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `worksheets?` or `rows?`, `sheetName?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `update_workbook` | Regenerate and upload an XLSX workbook into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `worksheets?` or `rows?`, `sheetName?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `create_presentation` | Generate and upload a PPTX presentation into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `slides?` or `bullets?` or `items?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
+| `update_presentation` | Regenerate and upload a PPTX presentation into a drive, site drive, group drive, or delegated self drive | Yes | `remotePath` or `path` or `fileName`, `title?`, `slides?` or `bullets?` or `items?`, `driveId?`, `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `conflictBehavior?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -152,6 +158,12 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **get_drive_item:** `{ "item": { ... } }`
 - **create_folder:** `{ "folder": { ... }, "status": "created" }`
 - **upload_file:** `{ "file": { ... }, "status": "uploaded" }`
+- **create_document:** `{ "document": { ... }, "status": "created" }`
+- **update_document:** `{ "document": { ... }, "status": "updated" }`
+- **create_workbook:** `{ "workbook": { ... }, "status": "created" }`
+- **update_workbook:** `{ "workbook": { ... }, "status": "updated" }`
+- **create_presentation:** `{ "presentation": { ... }, "status": "created" }`
+- **update_presentation:** `{ "presentation": { ... }, "status": "updated" }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

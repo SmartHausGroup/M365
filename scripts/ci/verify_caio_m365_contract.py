@@ -85,6 +85,12 @@ RESULT_SHAPES = {
     "get_drive_item": ["item"],
     "create_folder": ["folder", "status"],
     "upload_file": ["file", "status"],
+    "create_document": ["document", "status"],
+    "update_document": ["document", "status"],
+    "create_workbook": ["workbook", "status"],
+    "update_workbook": ["workbook", "status"],
+    "create_presentation": ["presentation", "status"],
+    "update_presentation": ["presentation", "status"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -249,6 +255,30 @@ def verify_with_mock() -> dict:
         ("get_drive_item", {"ok": True, "result": {"item": {}}}),
         ("create_folder", {"ok": True, "result": {"folder": {}, "status": "created"}}),
         ("upload_file", {"ok": True, "result": {"file": {}, "status": "uploaded"}}),
+        (
+            "create_document",
+            {"ok": True, "result": {"document": {}, "status": "created"}},
+        ),
+        (
+            "update_document",
+            {"ok": True, "result": {"document": {}, "status": "updated"}},
+        ),
+        (
+            "create_workbook",
+            {"ok": True, "result": {"workbook": {}, "status": "created"}},
+        ),
+        (
+            "update_workbook",
+            {"ok": True, "result": {"workbook": {}, "status": "updated"}},
+        ),
+        (
+            "create_presentation",
+            {"ok": True, "result": {"presentation": {}, "status": "created"}},
+        ),
+        (
+            "update_presentation",
+            {"ok": True, "result": {"presentation": {}, "status": "updated"}},
+        ),
         (
             "create_site",
             {

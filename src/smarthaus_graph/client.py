@@ -1449,6 +1449,31 @@ class GraphClient:
         file_path = Path(local_path)
         if not file_path.exists():
             raise GraphRequestError(f"Local file not found: {local_path}")
+        return self.upload_bytes(
+            file_bytes=file_path.read_bytes(),
+            remote_path=remote_path,
+            drive_id=drive_id,
+            group_id=group_id,
+            site_id=site_id,
+            user_id_or_upn=user_id_or_upn,
+            conflict_behavior=conflict_behavior,
+            content_type=content_type,
+            source_name=file_path.name,
+        )
+
+    def upload_bytes(
+        self,
+        *,
+        file_bytes: bytes,
+        remote_path: str,
+        drive_id: str | None = None,
+        group_id: str | None = None,
+        site_id: str | None = None,
+        user_id_or_upn: str | None = None,
+        conflict_behavior: str = "replace",
+        content_type: str | None = None,
+        source_name: str = "generated.bin",
+    ) -> dict[str, Any]:
         normalized_remote_path = remote_path.strip("/")
         if not normalized_remote_path:
             raise GraphRequestError("remote_path is required")
@@ -1464,7 +1489,6 @@ class GraphClient:
         if content_type:
             headers["Content-Type"] = content_type
 
-        file_bytes = file_path.read_bytes()
         encoded_path = quote(normalized_remote_path, safe="/")
         if len(file_bytes) <= 4 * 1024 * 1024:
             upload_url = f"{self.base_url}{base_path}/root:/{encoded_path}:/content"
@@ -1491,7 +1515,7 @@ class GraphClient:
             json={
                 "item": {
                     "@microsoft.graph.conflictBehavior": conflict_behavior,
-                    "name": file_path.name,
+                    "name": source_name,
                 }
             },
             timeout=60,
