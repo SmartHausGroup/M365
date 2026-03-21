@@ -93,7 +93,7 @@ def main() -> None:
     ]
     actual_ids = [p["id"] for p in phases]
     if actual_ids != expected_ids:
-        print(f"FAILED: phase IDs mismatch")
+        print("FAILED: phase IDs mismatch")
         sys.exit(1)
 
     # Validate governance rules
@@ -174,9 +174,7 @@ def main() -> None:
         "overall_verdict": "certified",
     }
 
-    output_path = (
-        repo_root / "configs" / "generated" / "persona_certification_v1_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "persona_certification_v1_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 

@@ -1,0 +1,19 @@
+{
+  "lemma_id": "L65",
+  "title": "M365 Department Certification v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BM-department-certification-v1.ipynb",
+    "notebooks/lemma_proofs/L65_m365_department_certification_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L65_m365_department_certification_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "All 10 departments pass four-phase certification",
+    "39 personas distributed correctly across departments",
+    "Every department has non-empty workflow families"
+  ]
+}

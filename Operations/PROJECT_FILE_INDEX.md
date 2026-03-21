@@ -1282,3 +1282,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_persona_certification_v1.py` | CI verifier for the persona certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
 | `configs/generated/persona_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
 | `tests/test_persona_certification_v1.py` | Tests for the persona certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8B` |
+
+## Active E8C Department Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/department_certification_v1.yaml` | Authoritative department certification contract. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `docs/commercialization/m365-department-certification-v1.md` | Human-readable department certification contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `docs/ma/lemmas/L65_m365_department_certification_v1.md` | Lemma doc for L65. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `invariants/lemmas/L65_m365_department_certification_v1.yaml` | Invariant metadata for L65. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `notebooks/m365/INV-M365-BM-department-certification-v1.ipynb` | Primary notebook for L65. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `notebooks/lemma_proofs/L65_m365_department_certification_v1.ipynb` | Proof notebook for L65. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `artifacts/scorecards/scorecard_l65.json` | Scorecard for L65. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `scripts/ci/verify_department_certification_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `configs/generated/department_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |
+| `tests/test_department_certification_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8C` |

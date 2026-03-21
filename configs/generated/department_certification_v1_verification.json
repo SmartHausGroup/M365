@@ -1,0 +1,19 @@
+{
+  "certification_phase_count": 4,
+  "contract_id": "department-certification",
+  "departments": [
+    "communication",
+    "design",
+    "engineering",
+    "hr",
+    "marketing",
+    "operations",
+    "product",
+    "project-management",
+    "studio-operations",
+    "testing"
+  ],
+  "governance_rule_count": 5,
+  "total_department_personas": 39,
+  "total_departments": 10
+}

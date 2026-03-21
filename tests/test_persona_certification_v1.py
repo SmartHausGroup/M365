@@ -108,13 +108,13 @@ def test_e8b_coverage_partition_and_approval_alignment() -> None:
     rb = 0
     co = 0
     for pid, p in personas.items():
-        assert p["approval_profile"] in VALID_APPROVAL_PROFILES, (
-            f"{pid}: invalid approval_profile {p['approval_profile']}"
-        )
+        assert (
+            p["approval_profile"] in VALID_APPROVAL_PROFILES
+        ), f"{pid}: invalid approval_profile {p['approval_profile']}"
         baseline = RISK_BASELINE[p["risk_tier"]]
-        assert APPROVAL_STRICTNESS[p["approval_profile"]] >= APPROVAL_STRICTNESS[baseline], (
-            f"{pid}: approval less strict than baseline: {p['approval_profile']} < {baseline}"
-        )
+        assert (
+            APPROVAL_STRICTNESS[p["approval_profile"]] >= APPROVAL_STRICTNESS[baseline]
+        ), f"{pid}: approval less strict than baseline: {p['approval_profile']} < {baseline}"
         if p["coverage_status"] == "registry-backed":
             assert p["action_count"] > 0
             rb += 1

@@ -1,0 +1,25 @@
+lemma_id: L65
+title: M365 Department Certification v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E8C"
+status: green
+invariant: >
+  Four ordered certification phases (pack_presence, persona_count_alignment,
+  workflow_family_coverage, bounded_claim_consistency) and five governance rules
+  (fail_closed, audit_completeness, bounded_claims, determinism, exhaustive_coverage)
+  so that all 10 departments are certified with correct persona counts and
+  non-empty workflow families.
+proof_obligations:
+  - "Department certification authority file exists and validates"
+  - "All 10 department packs exist with required root keys"
+  - "Per-department persona counts match persona registry"
+  - "Every department has non-empty workflow and workload families"
+  - "Sum of department personas equals total personas"
+failure_boundaries:
+  - "Missing certification authority file"
+  - "Missing department pack file"
+  - "Persona count mismatch"
+  - "Zero workflow families"
+  - "Persona sum mismatch"
+test_bindings:
+  - tests/test_department_certification_v1.py
+ci_gate: scripts/ci/verify_department_certification_v1.py
