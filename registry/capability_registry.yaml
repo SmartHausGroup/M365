@@ -1,3 +1,7 @@
+# M365 Capability Registry — full O (master calculus)
+# Generated from M365_CAPABILITIES_UNIVERSE.md. Do not edit by hand; run scripts/ci/build_capability_registry.py
+# Verification: scripts/ci/verify_capability_registry.py
+
 schema_version: '1.0'
 source:
 - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
@@ -2263,3 +2267,140 @@ actions:
   status: implemented
   result_shape_keys:
   - dashboard
+- action: get_approval_solution
+  resource: approvalSolution
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolution.Read
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - solution
+- action: list_approval_items
+  resource: approvalItem
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolution.Read
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - approvals
+  - count
+- action: get_approval_item
+  resource: approvalItem
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolution.Read
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - approval
+- action: create_approval_item
+  resource: approvalItem
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolution.ReadWrite
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - status
+  - displayName
+- action: list_approval_item_requests
+  resource: approvalItemRequest
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolution.Read
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - requests
+  - count
+- action: respond_to_approval_item
+  resource: approvalItemResponse
+  domain: powerplatform
+  required_permissions:
+  - ApprovalSolutionResponse.ReadWrite
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - status
+  - approvalId
+  - response
+- action: list_external_connections
+  resource: externalConnection
+  domain: knowledge
+  required_permissions:
+  - ExternalConnection.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - connections
+  - count
+- action: get_external_connection
+  resource: externalConnection
+  domain: knowledge
+  required_permissions:
+  - ExternalConnection.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - connection
+- action: create_external_connection
+  resource: externalConnection
+  domain: knowledge
+  required_permissions:
+  - ExternalConnection.ReadWrite.OwnedBy
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - connection
+- action: register_external_connection_schema
+  resource: externalConnectionSchema
+  domain: knowledge
+  required_permissions:
+  - ExternalConnection.ReadWrite.OwnedBy
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - connectionId
+  - status
+- action: get_external_item
+  resource: externalItem
+  domain: knowledge
+  required_permissions:
+  - ExternalItem.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - item
+- action: upsert_external_item
+  resource: externalItem
+  domain: knowledge
+  required_permissions:
+  - ExternalItem.ReadWrite.OwnedBy
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - itemId
+  - status
+- action: create_external_group
+  resource: externalGroup
+  domain: knowledge
+  required_permissions:
+  - ExternalItem.ReadWrite.OwnedBy
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - group
+  - status
+- action: add_external_group_member
+  resource: externalGroupMember
+  domain: knowledge
+  required_permissions:
+  - ExternalItem.ReadWrite.OwnedBy
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - groupId
+  - memberId
+  - status

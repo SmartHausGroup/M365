@@ -27,6 +27,7 @@ SECTION_TO_DOMAIN = {
     "Power Automate": "powerplatform",
     "Power Apps": "powerplatform",
     "Power BI": "reports",
+    "Forms / Approvals / Connectors": "powerplatform",
     "OneNote": "onenote",
     "To Do / tasks (Microsoft To Do)": "todo",
     "Subscriptions & webhooks": "subscriptions",
@@ -58,6 +59,8 @@ MUTATING_VERBS = (
     "disable",
     "refresh",
     "restore",
+    "respond",
+    "register",
     "publish",
     "reply",
     "cancel",
@@ -71,6 +74,7 @@ MUTATING_VERBS = (
     "check_in",
     "complete",
     "record",
+    "upsert",
     "provision",
     "offboard",
 )
@@ -85,6 +89,24 @@ def is_mutating(action: str) -> bool:
 
 def action_to_resource(action: str, domain: str) -> str:
     """Infer Graph resource from action name and domain."""
+    if "external_" in action:
+        if "group_member" in action:
+            return "externalGroupMember"
+        if "group" in action:
+            return "externalGroup"
+        if "item" in action:
+            return "externalItem"
+        if "schema" in action:
+            return "externalConnectionSchema"
+        return "externalConnection"
+    if action.startswith("get_approval_solution"):
+        return "approvalSolution"
+    if action.startswith("respond_to_approval_item"):
+        return "approvalItemResponse"
+    if action.startswith("list_approval_item_requests"):
+        return "approvalItemRequest"
+    if "approval_item" in action:
+        return "approvalItem"
     if "user" in action and domain == "identity":
         return "user"
     if "group" in action and domain == "identity":
@@ -247,6 +269,8 @@ def main() -> None:
     for action, domain in universe_actions:
         if action in seen:
             continue
+        if "external_" in action:
+            domain = "knowledge"
         seen.add(action)
         entry = {
             "action": action,

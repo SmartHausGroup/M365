@@ -315,6 +315,29 @@
 
 ---
 
+## Forms / Approvals / Connectors
+
+Direct Microsoft Forms authoring and native response APIs are not claimed as implemented runtime
+actions in E3D. The bounded E3D slice formalizes that boundary and implements approval and
+connector-backed surfaces instead.
+
+- get_approval_solution
+- list_approval_items
+- get_approval_item
+- create_approval_item
+- list_approval_item_requests
+- respond_to_approval_item
+- list_external_connections
+- get_external_connection
+- create_external_connection
+- register_external_connection_schema
+- get_external_item
+- upsert_external_item
+- create_external_group
+- add_external_group_member
+
+---
+
 ## OneNote
 
 - list_notebooks

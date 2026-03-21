@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
+from smarthaus_common.forms_approvals_connectors_client import FormsApprovalsConnectorsClient
 from smarthaus_common.office_generation import (
     DOCUMENT_CONTENT_TYPE,
     PRESENTATION_CONTENT_TYPE,
@@ -103,6 +104,20 @@ _SUPPORTED_ACTIONS = {
     "list_powerbi_dataset_refreshes",
     "list_powerbi_dashboards",
     "get_powerbi_dashboard",
+    "get_approval_solution",
+    "list_approval_items",
+    "get_approval_item",
+    "create_approval_item",
+    "list_approval_item_requests",
+    "respond_to_approval_item",
+    "list_external_connections",
+    "get_external_connection",
+    "create_external_connection",
+    "register_external_connection_schema",
+    "get_external_item",
+    "upsert_external_item",
+    "create_external_group",
+    "add_external_group_member",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -194,6 +209,13 @@ _MUTATING_ACTIONS = {
     "set_powerapp_environment_role_assignment",
     "remove_powerapp_environment_role_assignment",
     "refresh_powerbi_dataset",
+    "create_approval_item",
+    "respond_to_approval_item",
+    "create_external_connection",
+    "register_external_connection_schema",
+    "upsert_external_item",
+    "create_external_group",
+    "add_external_group_member",
 }
 
 
@@ -302,6 +324,77 @@ def _normalize_string_map(value: Any, field_name: str) -> dict[str, str]:
     if len(normalized) != len(value):
         raise HTTPException(status_code=400, detail=f"Invalid '{field_name}' entries")
     return normalized
+
+
+def _normalize_string_list_field(
+    params: dict[str, Any],
+    *keys: str,
+    required: bool = False,
+) -> list[str]:
+    for key in keys:
+        if key not in params:
+            continue
+        value = params.get(key)
+        if not isinstance(value, list):
+            raise HTTPException(status_code=400, detail=f"'{key}' must be a list of strings")
+        cleaned = [str(item).strip() for item in value if str(item).strip()]
+        if required and not cleaned:
+            raise HTTPException(
+                status_code=400, detail=f"'{key}' must contain at least one non-empty value"
+            )
+        return cleaned
+    if required:
+        joined = "', '".join(keys)
+        raise HTTPException(status_code=400, detail=f"Missing '{joined}'")
+    return []
+
+
+def _normalize_dict_field(
+    params: dict[str, Any],
+    *keys: str,
+    required: bool = False,
+) -> dict[str, Any] | None:
+    for key in keys:
+        if key not in params:
+            continue
+        value = params.get(key)
+        if not isinstance(value, dict):
+            raise HTTPException(status_code=400, detail=f"'{key}' must be an object")
+        return value
+    if required:
+        joined = "', '".join(keys)
+        raise HTTPException(status_code=400, detail=f"Missing '{joined}'")
+    return None
+
+
+def _normalize_dict_list_field(
+    params: dict[str, Any],
+    *keys: str,
+    required: bool = False,
+) -> list[dict[str, Any]]:
+    for key in keys:
+        if key not in params:
+            continue
+        value = params.get(key)
+        if not isinstance(value, list) or any(not isinstance(item, dict) for item in value):
+            raise HTTPException(status_code=400, detail=f"'{key}' must be a list of objects")
+        if required and not value:
+            raise HTTPException(status_code=400, detail=f"'{key}' must not be empty")
+        return value
+    if required:
+        joined = "', '".join(keys)
+        raise HTTPException(status_code=400, detail=f"Missing '{joined}'")
+    return []
+
+
+def _normalize_bool_field(params: dict[str, Any], *keys: str, default: bool) -> bool:
+    for key in keys:
+        if key in params:
+            value = params.get(key)
+            if not isinstance(value, bool):
+                raise HTTPException(status_code=400, detail=f"'{key}' must be a boolean")
+            return value
+    return default
 
 
 def _normalize_user_context(params: dict[str, Any]) -> str | None:
@@ -1058,6 +1151,205 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 )
             return {"workspace_id": workspace_id, "dashboard_id": dashboard_id}
         raise HTTPException(status_code=400, detail=f"Unknown Power BI action: {action}")
+    if action in {
+        "get_approval_solution",
+        "list_approval_items",
+        "get_approval_item",
+        "create_approval_item",
+        "list_approval_item_requests",
+        "respond_to_approval_item",
+        "list_external_connections",
+        "get_external_connection",
+        "create_external_connection",
+        "register_external_connection_schema",
+        "get_external_item",
+        "upsert_external_item",
+        "create_external_group",
+        "add_external_group_member",
+    }:
+        if action == "get_approval_solution":
+            return {}
+        if action in {"list_approval_items", "list_external_connections"}:
+            return {"top": _normalize_top(params, default=50)}
+        if action == "get_approval_item":
+            approval_id = _first_str(params, "approvalId", "approval_id", "id")
+            if not approval_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'approvalId', 'approval_id', or 'id'",
+                )
+            return {"approval_id": approval_id}
+        if action == "create_approval_item":
+            display_name = _first_str(params, "displayName", "display_name", "title")
+            description = _first_str(params, "description", "details", "body")
+            if not display_name or not description:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'displayName'/'title' or 'description'/'details'",
+                )
+            return {
+                "display_name": display_name,
+                "description": description,
+                "approver_user_ids": _normalize_string_list_field(
+                    params,
+                    "approverUserIds",
+                    "approver_user_ids",
+                    required=True,
+                ),
+                "approver_group_ids": _normalize_string_list_field(
+                    params,
+                    "approverGroupIds",
+                    "approver_group_ids",
+                ),
+                "approval_type": _first_str(params, "approvalType", "approval_type") or "basic",
+                "allow_email_notification": _normalize_bool_field(
+                    params,
+                    "allowEmailNotification",
+                    "allow_email_notification",
+                    default=True,
+                ),
+            }
+        if action == "list_approval_item_requests":
+            approval_id = _first_str(params, "approvalId", "approval_id", "id")
+            if not approval_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'approvalId', 'approval_id', or 'id'",
+                )
+            return {"approval_id": approval_id, "top": _normalize_top(params, default=50)}
+        if action == "respond_to_approval_item":
+            approval_id = _first_str(params, "approvalId", "approval_id", "id")
+            response_value = _first_str(params, "response", "decision")
+            if not approval_id or not response_value:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'approvalId'/'id' or 'response'/'decision'",
+                )
+            return {
+                "approval_id": approval_id,
+                "response": response_value,
+                "comments": _first_str(params, "comments", "comment"),
+            }
+        connection_id = _first_str(params, "connectionId", "connection_id", "id")
+        if action == "get_external_connection":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id', or 'id'",
+                )
+            return {"connection_id": connection_id}
+        if action == "create_external_connection":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id', or 'id'",
+                )
+            name = _first_str(params, "name", "displayName", "display_name", "title")
+            if not name:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'name', 'displayName', 'display_name', or 'title'",
+                )
+            return {
+                "connection_id": connection_id,
+                "name": name,
+                "description": _first_str(params, "description"),
+            }
+        if action == "register_external_connection_schema":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id', or 'id'",
+                )
+            schema = _normalize_dict_field(params, "schema")
+            if schema is None:
+                schema_properties = _normalize_dict_list_field(params, "properties", required=True)
+                schema = {
+                    "baseType": _first_str(params, "baseType", "base_type")
+                    or "microsoft.graph.externalItem",
+                    "properties": schema_properties,
+                }
+            return {"connection_id": connection_id, "schema": schema}
+        if action == "get_external_item":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id'",
+                )
+            item_id = _first_str(params, "itemId", "item_id", "id")
+            if not item_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'itemId', 'item_id', or 'id'",
+                )
+            return {"connection_id": connection_id, "item_id": item_id}
+        if action == "upsert_external_item":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id'",
+                )
+            item_id = _first_str(params, "itemId", "item_id", "id")
+            if not item_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'itemId', 'item_id', or 'id'",
+                )
+            properties = _normalize_dict_field(params, "properties", required=True)
+            return {
+                "connection_id": connection_id,
+                "item_id": item_id,
+                "acl": _normalize_dict_list_field(params, "acl", required=True),
+                "properties": properties or {},
+                "content": _normalize_dict_field(params, "content"),
+            }
+        if action == "create_external_group":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id'",
+                )
+            group_id = _first_str(params, "groupId", "group_id", "id")
+            if not group_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'groupId', 'group_id', or 'id'",
+                )
+            return {
+                "connection_id": connection_id,
+                "group_id": group_id,
+                "display_name": _first_str(params, "displayName", "display_name", "name"),
+                "description": _first_str(params, "description"),
+            }
+        if action == "add_external_group_member":
+            if not connection_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'connectionId', 'connection_id'",
+                )
+            group_id = _first_str(params, "groupId", "group_id")
+            member_id = _first_str(params, "memberId", "member_id", "id")
+            if not group_id or not member_id:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'groupId'/'group_id' or 'memberId'/'member_id'/'id'",
+                )
+            return {
+                "connection_id": connection_id,
+                "group_id": group_id,
+                "member_id": member_id,
+                "member_type": _first_str(params, "memberType", "member_type") or "user",
+                "identity_source": _first_str(
+                    params,
+                    "identitySource",
+                    "identity_source",
+                )
+                or "azureActiveDirectory",
+            }
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unknown Forms/Approvals/Connectors action: {action}",
+        )
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1416,6 +1708,25 @@ def _power_bi_client(action: str | None = None) -> PowerBIClient:
 
     config = AppConfig()
     return PowerBIClient(legacy_config=config)
+
+
+def _forms_approvals_connectors_client(
+    action: str | None = None,
+) -> FormsApprovalsConnectorsClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return FormsApprovalsConnectorsClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return FormsApprovalsConnectorsClient(legacy_config=config)
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -1853,6 +2164,97 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 params["dashboard_id"],
             )
         }
+    if action == "get_approval_solution":
+        fac_client = _forms_approvals_connectors_client(action)
+        return {"solution": fac_client.get_approval_solution()}
+    if action == "list_approval_items":
+        fac_client = _forms_approvals_connectors_client(action)
+        value = fac_client.list_approval_items(top=params["top"])
+        return {"approvals": value, "count": len(value)}
+    if action == "get_approval_item":
+        fac_client = _forms_approvals_connectors_client(action)
+        return {"approval": fac_client.get_approval_item(params["approval_id"])}
+    if action == "create_approval_item":
+        fac_client = _forms_approvals_connectors_client(action)
+        return fac_client.create_approval_item(
+            display_name=params["display_name"],
+            description=params["description"],
+            approver_user_ids=params["approver_user_ids"],
+            approver_group_ids=params.get("approver_group_ids") or [],
+            approval_type=params.get("approval_type", "basic"),
+            allow_email_notification=params.get("allow_email_notification", True),
+        )
+    if action == "list_approval_item_requests":
+        fac_client = _forms_approvals_connectors_client(action)
+        value = fac_client.list_approval_item_requests(
+            params["approval_id"],
+            top=params["top"],
+        )
+        return {"requests": value, "count": len(value)}
+    if action == "respond_to_approval_item":
+        fac_client = _forms_approvals_connectors_client(action)
+        return fac_client.respond_to_approval_item(
+            params["approval_id"],
+            response=params["response"],
+            comments=params.get("comments"),
+        )
+    if action == "list_external_connections":
+        fac_client = _forms_approvals_connectors_client(action)
+        value = fac_client.list_external_connections(top=params["top"])
+        return {"connections": value, "count": len(value)}
+    if action == "get_external_connection":
+        fac_client = _forms_approvals_connectors_client(action)
+        return {"connection": fac_client.get_external_connection(params["connection_id"])}
+    if action == "create_external_connection":
+        fac_client = _forms_approvals_connectors_client(action)
+        return {
+            "connection": fac_client.create_external_connection(
+                connection_id=params["connection_id"],
+                name=params["name"],
+                description=params.get("description"),
+            )
+        }
+    if action == "register_external_connection_schema":
+        fac_client = _forms_approvals_connectors_client(action)
+        return fac_client.register_external_connection_schema(
+            params["connection_id"],
+            schema=params["schema"],
+        )
+    if action == "get_external_item":
+        fac_client = _forms_approvals_connectors_client(action)
+        return {
+            "item": fac_client.get_external_item(
+                params["connection_id"],
+                params["item_id"],
+            )
+        }
+    if action == "upsert_external_item":
+        fac_client = _forms_approvals_connectors_client(action)
+        return fac_client.upsert_external_item(
+            params["connection_id"],
+            params["item_id"],
+            acl=params["acl"],
+            properties=params["properties"],
+            content=params.get("content"),
+        )
+    if action == "create_external_group":
+        fac_client = _forms_approvals_connectors_client(action)
+        group = fac_client.create_external_group(
+            params["connection_id"],
+            group_id=params["group_id"],
+            display_name=params.get("display_name"),
+            description=params.get("description"),
+        )
+        return {"group": group, "status": "created"}
+    if action == "add_external_group_member":
+        fac_client = _forms_approvals_connectors_client(action)
+        return fac_client.add_external_group_member(
+            params["connection_id"],
+            params["group_id"],
+            member_id=params["member_id"],
+            member_type=params.get("member_type", "user"),
+            identity_source=params.get("identity_source", "azureActiveDirectory"),
+        )
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -2787,6 +3189,118 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "description": "Get a Power BI dashboard for a workspace",
         "params": ["workspaceId|workspace_id|groupId|group_id", "dashboardId|dashboard_id|id"],
         "mutating": False,
+    },
+    {
+        "action": "get_approval_solution",
+        "description": "Get the tenant approval-solution provisioning state",
+        "params": [],
+        "mutating": False,
+    },
+    {
+        "action": "list_approval_items",
+        "description": "List approval items from the Teams Approvals app",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_approval_item",
+        "description": "Get an approval item from the Teams Approvals app",
+        "params": ["approvalId|approval_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_approval_item",
+        "description": "Create an approval item in the Teams Approvals app",
+        "params": [
+            "displayName|display_name|title",
+            "description|details|body",
+            "approverUserIds|approver_user_ids",
+            "approverGroupIds?|approver_group_ids?",
+            "approvalType?",
+            "allowEmailNotification?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "list_approval_item_requests",
+        "description": "List request records associated with an approval item",
+        "params": ["approvalId|approval_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "respond_to_approval_item",
+        "description": "Submit an approval response for an approval item",
+        "params": ["approvalId|approval_id|id", "response|decision", "comments?"],
+        "mutating": True,
+    },
+    {
+        "action": "list_external_connections",
+        "description": "List Microsoft 365 Copilot connector connections",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_external_connection",
+        "description": "Get a Microsoft 365 Copilot connector connection",
+        "params": ["connectionId|connection_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_external_connection",
+        "description": "Create a Microsoft 365 Copilot connector connection",
+        "params": [
+            "connectionId|connection_id|id",
+            "name|displayName|display_name|title",
+            "description?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "register_external_connection_schema",
+        "description": "Register or update the schema for a connector connection",
+        "params": ["connectionId|connection_id|id", "schema?|properties", "baseType?"],
+        "mutating": True,
+    },
+    {
+        "action": "get_external_item",
+        "description": "Get an indexed external item from a connector connection",
+        "params": ["connectionId|connection_id", "itemId|item_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "upsert_external_item",
+        "description": "Create or update an indexed external item for a connector connection",
+        "params": [
+            "connectionId|connection_id",
+            "itemId|item_id|id",
+            "acl",
+            "properties",
+            "content?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "create_external_group",
+        "description": "Create an external group for connector ACL management",
+        "params": [
+            "connectionId|connection_id",
+            "groupId|group_id|id",
+            "displayName?|display_name?|name?",
+            "description?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "add_external_group_member",
+        "description": "Add a member to an external group for connector ACL management",
+        "params": [
+            "connectionId|connection_id",
+            "groupId|group_id",
+            "memberId|member_id|id",
+            "memberType?",
+            "identitySource?",
+        ],
+        "mutating": True,
     },
     {
         "action": "get_user",

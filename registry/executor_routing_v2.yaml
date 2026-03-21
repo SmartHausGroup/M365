@@ -124,6 +124,20 @@ exact_action_routes:
   list_powerbi_dataset_refreshes: powerplatform
   list_powerbi_dashboards: powerplatform
   get_powerbi_dashboard: powerplatform
+  get_approval_solution: powerplatform
+  list_approval_items: powerplatform
+  get_approval_item: powerplatform
+  create_approval_item: powerplatform
+  list_approval_item_requests: powerplatform
+  respond_to_approval_item: powerplatform
+  list_external_connections: knowledge
+  get_external_connection: knowledge
+  create_external_connection: knowledge
+  register_external_connection_schema: knowledge
+  get_external_item: knowledge
+  upsert_external_item: knowledge
+  create_external_group: knowledge
+  add_external_group_member: knowledge
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint
@@ -143,8 +157,10 @@ prefix_routes:
   "service_principals.": directory
   "admin.": directory
   "flows.": powerplatform
+  "approvals.": powerplatform
   "powerapp.": powerplatform
   "powerbi.": powerplatform
+  "external.": knowledge
 agent_action_overrides:
   website-manager:
     deployment.preview: sharepoint

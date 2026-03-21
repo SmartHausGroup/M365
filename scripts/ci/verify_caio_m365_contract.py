@@ -129,6 +129,20 @@ RESULT_SHAPES = {
     "list_powerbi_dataset_refreshes": ["refreshes", "count"],
     "list_powerbi_dashboards": ["dashboards", "count"],
     "get_powerbi_dashboard": ["dashboard"],
+    "get_approval_solution": ["solution"],
+    "list_approval_items": ["approvals", "count"],
+    "get_approval_item": ["approval"],
+    "create_approval_item": ["status", "displayName"],
+    "list_approval_item_requests": ["requests", "count"],
+    "respond_to_approval_item": ["status", "approvalId", "response"],
+    "list_external_connections": ["connections", "count"],
+    "get_external_connection": ["connection"],
+    "create_external_connection": ["connection"],
+    "register_external_connection_schema": ["connectionId", "status"],
+    "get_external_item": ["item"],
+    "upsert_external_item": ["itemId", "status"],
+    "create_external_group": ["group", "status"],
+    "add_external_group_member": ["groupId", "memberId", "status"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -439,6 +453,67 @@ def verify_with_mock() -> dict:
             {"ok": True, "result": {"dashboards": [], "count": 0}},
         ),
         ("get_powerbi_dashboard", {"ok": True, "result": {"dashboard": {}}}),
+        ("get_approval_solution", {"ok": True, "result": {"solution": {"state": "provisioned"}}}),
+        ("list_approval_items", {"ok": True, "result": {"approvals": [], "count": 0}}),
+        ("get_approval_item", {"ok": True, "result": {"approval": {}}}),
+        (
+            "create_approval_item",
+            {
+                "ok": True,
+                "result": {
+                    "status": "accepted",
+                    "displayName": "Approve spend",
+                    "operationId": "op-1",
+                },
+            },
+        ),
+        (
+            "list_approval_item_requests",
+            {"ok": True, "result": {"requests": [], "count": 0}},
+        ),
+        (
+            "respond_to_approval_item",
+            {
+                "ok": True,
+                "result": {
+                    "status": "accepted",
+                    "approvalId": "approval-1",
+                    "response": "approve",
+                },
+            },
+        ),
+        (
+            "list_external_connections",
+            {"ok": True, "result": {"connections": [], "count": 0}},
+        ),
+        ("get_external_connection", {"ok": True, "result": {"connection": {}}}),
+        (
+            "create_external_connection",
+            {"ok": True, "result": {"connection": {"id": "conn-1", "name": "Tickets"}}},
+        ),
+        (
+            "register_external_connection_schema",
+            {
+                "ok": True,
+                "result": {"connectionId": "conn-1", "status": "registered"},
+            },
+        ),
+        ("get_external_item", {"ok": True, "result": {"item": {}}}),
+        (
+            "upsert_external_item",
+            {"ok": True, "result": {"itemId": "item-1", "status": "upserted"}},
+        ),
+        (
+            "create_external_group",
+            {"ok": True, "result": {"group": {"id": "group-1"}, "status": "created"}},
+        ),
+        (
+            "add_external_group_member",
+            {
+                "ok": True,
+                "result": {"groupId": "group-1", "memberId": "user-1", "status": "added"},
+            },
+        ),
         (
             "create_site",
             {

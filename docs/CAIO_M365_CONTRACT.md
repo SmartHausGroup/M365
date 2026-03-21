@@ -122,6 +122,20 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `list_powerbi_dataset_refreshes` | List Power BI dataset refresh history | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `datasetId` or `dataset_id`, `top?` |
 | `list_powerbi_dashboards` | List Power BI dashboards for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id`, `top?` |
 | `get_powerbi_dashboard` | Get a Power BI dashboard for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `dashboardId` or `dashboard_id` or `id` |
+| `get_approval_solution` | Get the tenant approval-solution provisioning state | No | none |
+| `list_approval_items` | List approval items from the Teams Approvals app | No | `top?` |
+| `get_approval_item` | Get a Teams Approvals approval item | No | `approvalId` or `approval_id` or `id` |
+| `create_approval_item` | Create an approval item in the Teams Approvals app | Yes | `displayName` or `display_name` or `title`, `description` or `details` or `body`, `approverUserIds` or `approver_user_ids`, `approverGroupIds?` or `approver_group_ids?`, `approvalType?`, `allowEmailNotification?` |
+| `list_approval_item_requests` | List request records associated with an approval item | No | `approvalId` or `approval_id` or `id`, `top?` |
+| `respond_to_approval_item` | Submit an approval response for an approval item | Yes | `approvalId` or `approval_id` or `id`, `response` or `decision`, `comments?` |
+| `list_external_connections` | List Microsoft 365 Copilot connector connections | No | `top?` |
+| `get_external_connection` | Get a Microsoft 365 Copilot connector connection | No | `connectionId` or `connection_id` or `id` |
+| `create_external_connection` | Create a Microsoft 365 Copilot connector connection | Yes | `connectionId` or `connection_id` or `id`, `name` or `displayName` or `display_name` or `title`, `description?` |
+| `register_external_connection_schema` | Register or update the schema for a connector connection | Yes | `connectionId` or `connection_id` or `id`, `schema?` or `properties`, `baseType?` |
+| `get_external_item` | Get an indexed external item from a connector connection | No | `connectionId` or `connection_id`, `itemId` or `item_id` or `id` |
+| `upsert_external_item` | Create or update an indexed external item for a connector connection | Yes | `connectionId` or `connection_id`, `itemId` or `item_id` or `id`, `acl`, `properties`, `content?` |
+| `create_external_group` | Create an external group for connector ACL management | Yes | `connectionId` or `connection_id`, `groupId` or `group_id` or `id`, `displayName?` or `display_name?` or `name?`, `description?` |
+| `add_external_group_member` | Add a member to an external group for connector ACL management | Yes | `connectionId` or `connection_id`, `groupId` or `group_id`, `memberId` or `member_id` or `id`, `memberType?`, `identitySource?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -230,6 +244,20 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **list_powerbi_dataset_refreshes:** `{ "refreshes": [ ... ], "count": N }`
 - **list_powerbi_dashboards:** `{ "dashboards": [ ... ], "count": N }`
 - **get_powerbi_dashboard:** `{ "dashboard": { ... } }`
+- **get_approval_solution:** `{ "solution": { ... } }`
+- **list_approval_items:** `{ "approvals": [ ... ], "count": N }`
+- **get_approval_item:** `{ "approval": { ... } }`
+- **create_approval_item:** `{ "status": "accepted", "displayName": "<name>", "location"?: "<url>", "operationId"?: "<id>", "requestId"?: "<id>" }`
+- **list_approval_item_requests:** `{ "requests": [ ... ], "count": N }`
+- **respond_to_approval_item:** `{ "status": "accepted", "approvalId": "<id>", "response": "<decision>", "location"?: "<url>", "operationId"?: "<id>", "requestId"?: "<id>" }`
+- **list_external_connections:** `{ "connections": [ ... ], "count": N }`
+- **get_external_connection:** `{ "connection": { ... } }`
+- **create_external_connection:** `{ "connection": { ... } }`
+- **register_external_connection_schema:** `{ "connectionId": "<id>", "status": "registered", ... }`
+- **get_external_item:** `{ "item": { ... } }`
+- **upsert_external_item:** `{ "itemId": "<id>", "status": "upserted", ... }`
+- **create_external_group:** `{ "group": { ... }, "status": "created" }`
+- **add_external_group_member:** `{ "groupId": "<id>", "memberId": "<id>", "status": "added" }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

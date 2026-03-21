@@ -358,10 +358,10 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E3D"
+    "next_act": "E3E"
   },
   "open_blockers": [
-    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Automate, and bounded Power Apps, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
+    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Automate, bounded Power Apps, bounded Power BI, and bounded approvals/connectors, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
     "No department pack beyond the standalone v1 surface has been certified or released."
   ],
   "requirements": [
@@ -623,14 +623,14 @@
           "code": "E3D",
           "slug": "forms-approvals-connectors-expansion",
           "title": "Forms / Approvals / Connectors Expansion",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface."
         },
         {
           "code": "E3E",
           "slug": "cross-workload-automation-recipes",
           "title": "Cross-Workload Automation Recipes",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Define reusable end-to-end recipes spanning multiple M365 workloads."
         }
       ]

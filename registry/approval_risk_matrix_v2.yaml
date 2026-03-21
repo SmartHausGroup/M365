@@ -370,6 +370,64 @@ exact_action_policies:
     risk_class: low
     approval_profile: low-observe-create
     approval_requirement: never
+  get_approval_solution:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_approval_items:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_approval_item:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_approval_item:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  list_approval_item_requests:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  respond_to_approval_item:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: never
+  list_external_connections:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_external_connection:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_external_connection:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  register_external_connection_schema:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
+  get_external_item:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  upsert_external_item:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  create_external_group:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
+  add_external_group_member:
+    risk_class: medium
+    approval_profile: medium-operational
+    approval_requirement: never
   create_user:
     risk_class: high
     approval_profile: high-impact

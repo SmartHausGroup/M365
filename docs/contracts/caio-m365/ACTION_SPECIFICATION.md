@@ -1070,12 +1070,152 @@ The following actions are implemented as part of `E2C`. They share the same dete
 | **Result shape** \(\mathcal{S}_{\texttt{get\_powerbi\_dashboard}}\) | `{ "dashboard": object }` |
 | **Error cases** | Missing workspace or dashboard selector; Power BI identity missing; token acquisition failure; Power BI REST request failure. |
 
+### 106. get_approval_solution
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_approval_solution` |
+| **Mutating** | No |
+| **Preconditions** | `params`: none. Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_approval\_solution}}\) | `{ "solution": object }` |
+| **Error cases** | Delegated identity missing; approval-solution API unavailable; Graph beta request failure. |
+
+### 107. list_approval_items
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_approval_items` |
+| **Mutating** | No |
+| **Preconditions** | `params`: optional `top` (integer). Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_approval\_items}}\) | `{ "approvals": array, "count": number }` |
+| **Error cases** | Delegated identity missing; invalid `top`; approval-items API unavailable; Graph beta request failure. |
+
+### 108. get_approval_item
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_approval_item` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `approvalId` or `approval_id` or `id` (string, required). Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_approval\_item}}\) | `{ "approval": object }` |
+| **Error cases** | Missing approval selector; delegated identity missing; approval-item API unavailable; Graph beta request failure. |
+
+### 109. create_approval_item
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_approval_item` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `displayName` or `display_name` or `title` (string, required), `description` (string, required), `approverUserIds` or `approver_user_ids` (array[string], required), optional `approverGroupIds` or `approver_group_ids` (array[string]), optional `approvalType` or `approval_type` (string), and optional `allowEmailNotification` or `allow_email_notification` (boolean). Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_approval\_item}}\) | `{ "status": string, "displayName": string, "operationId"?: string, "location"?: string, "requestId"?: string }` |
+| **Error cases** | Missing display name, description, or approver list; delegated identity missing; approval creation rejected; Graph beta request failure. |
+
+### 110. list_approval_item_requests
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_approval_item_requests` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `approvalId` or `approval_id` or `id` (string, required), plus optional `top` (integer). Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_approval\_item\_requests}}\) | `{ "requests": array, "count": number }` |
+| **Error cases** | Missing approval selector; invalid `top`; delegated identity missing; approval-requests API unavailable; Graph beta request failure. |
+
+### 111. respond_to_approval_item
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `respond_to_approval_item` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `approvalId` or `approval_id` or `id` (string, required), `response` (string, required), and optional `comments` (string). Runtime must execute in delegated or hybrid auth mode. |
+| **Result shape** \(\mathcal{S}_{\texttt{respond\_to\_approval\_item}}\) | `{ "status": string, "approvalId": string, "response": string, "operationId"?: string, "location"?: string, "requestId"?: string }` |
+| **Error cases** | Missing approval selector or response; delegated identity missing; approval-response API unavailable; Graph beta request failure. |
+
+### 112. list_external_connections
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_external_connections` |
+| **Mutating** | No |
+| **Preconditions** | `params`: optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_external\_connections}}\) | `{ "connections": array, "count": number }` |
+| **Error cases** | Invalid `top`; connector identity missing; Graph request failure. |
+
+### 113. get_external_connection
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_external_connection` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `connectionId` or `connection_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_external\_connection}}\) | `{ "connection": object }` |
+| **Error cases** | Missing connection selector; connector identity missing; Graph request failure. |
+
+### 114. create_external_connection
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_external_connection` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `connectionId` or `connection_id` or `id` (string, required), `name` or `displayName` or `display_name` or `title` (string, required), and optional `description` (string). |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_external\_connection}}\) | `{ "connection": object }` |
+| **Error cases** | Missing connection selector or name; connector identity missing; external-connection create failure; Graph request failure. |
+
+### 115. register_external_connection_schema
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `register_external_connection_schema` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `connectionId` or `connection_id` or `id` (string, required) and `schema` (object, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{register\_external\_connection\_schema}}\) | `{ "connectionId": string, "status": string }` |
+| **Error cases** | Missing connection selector or schema; connector identity missing; schema registration failure; Graph request failure. |
+
+### 116. get_external_item
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_external_item` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `connectionId` or `connection_id` (string, required), plus `itemId` or `item_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_external\_item}}\) | `{ "item": object }` |
+| **Error cases** | Missing connection or item selector; connector identity missing; Graph request failure. |
+
+### 117. upsert_external_item
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `upsert_external_item` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `connectionId` or `connection_id` (string, required), `itemId` or `item_id` or `id` (string, required), `acl` (array[object], required), `properties` (object, required), and optional `content` (object). |
+| **Result shape** \(\mathcal{S}_{\texttt{upsert\_external\_item}}\) | `{ "itemId": string, "status": string }` |
+| **Error cases** | Missing connection or item selector; missing ACL or properties; connector identity missing; external-item upsert failure; Graph request failure. |
+
+### 118. create_external_group
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_external_group` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `connectionId` or `connection_id` (string, required), `groupId` or `group_id` or `id` (string, required), optional `displayName` or `display_name` or `name`, and optional `description`. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_external\_group}}\) | `{ "group": object, "status": string }` |
+| **Error cases** | Missing connection or group selector; connector identity missing; external-group create failure; Graph beta request failure. |
+
+### 119. add_external_group_member
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `add_external_group_member` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `connectionId` or `connection_id` (string, required), `groupId` or `group_id` (string, required), `memberId` or `member_id` or `id` (string, required), and optional `memberType` or `member_type` plus optional `identitySource` or `identity_source`. |
+| **Result shape** \(\mathcal{S}_{\texttt{add\_external\_group\_member}}\) | `{ "groupId": string, "memberId": string, "status": string }` |
+| **Error cases** | Missing connection, group, or member selector; connector identity missing; external-group membership add failure; Graph beta request failure. |
+
 ---
 
 ## Canonical sets
 
-- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, `get_powerbi_dashboard`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
-- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `refresh_powerbi_dataset`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, `get_powerbi_dashboard`, `get_approval_solution`, `list_approval_items`, `get_approval_item`, `create_approval_item`, `list_approval_item_requests`, `respond_to_approval_item`, `list_external_connections`, `get_external_connection`, `create_external_connection`, `register_external_connection_schema`, `get_external_item`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `refresh_powerbi_dataset`, `create_approval_item`, `respond_to_approval_item`, `create_external_connection`, `register_external_connection_schema`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
 
 ---
 

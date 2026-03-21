@@ -218,6 +218,40 @@ exact_action_policies:
     auth_class: app_only
   get_powerbi_dashboard:
     auth_class: app_only
+  get_approval_solution:
+    auth_class: delegated
+    delegated_preference: always
+  list_approval_items:
+    auth_class: delegated
+    delegated_preference: always
+  get_approval_item:
+    auth_class: delegated
+    delegated_preference: always
+  create_approval_item:
+    auth_class: delegated
+    delegated_preference: always
+  list_approval_item_requests:
+    auth_class: delegated
+    delegated_preference: always
+  respond_to_approval_item:
+    auth_class: delegated
+    delegated_preference: always
+  list_external_connections:
+    auth_class: app_only
+  get_external_connection:
+    auth_class: app_only
+  create_external_connection:
+    auth_class: app_only
+  register_external_connection_schema:
+    auth_class: app_only
+  get_external_item:
+    auth_class: app_only
+  upsert_external_item:
+    auth_class: app_only
+  create_external_group:
+    auth_class: app_only
+  add_external_group_member:
+    auth_class: app_only
   create_site:
     auth_class: app_only
   get_team:
