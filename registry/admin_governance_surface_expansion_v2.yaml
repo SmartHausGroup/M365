@@ -1,0 +1,95 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T04:30:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E4EAdminGovernanceSurfaceExpansion(action) = InstructionBacked(action) ∧
+  CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=executor_domain(action) ∧
+  AuthClass(action)=app_only.
+supported_actions:
+  get_report:
+    canonical_action_key: reports.report.read
+    agent_alias: reports.get
+    executor_domain: reports
+    runtime_handler: AdminGovernanceClient.get_report
+    mutating: false
+    result_shape_keys: [report]
+    required_permissions: [Reports.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_report
+  get_usage_reports:
+    canonical_action_key: reports.usage_report.read
+    agent_alias: reports.usage
+    executor_domain: reports
+    runtime_handler: AdminGovernanceClient.get_usage_reports
+    mutating: false
+    result_shape_keys: [report]
+    required_permissions: [Reports.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_usage_reports
+  get_activity_reports:
+    canonical_action_key: reports.activity_report.read
+    agent_alias: reports.activity
+    executor_domain: reports
+    runtime_handler: AdminGovernanceClient.get_activity_reports
+    mutating: false
+    result_shape_keys: [report]
+    required_permissions: [Reports.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_activity_reports
+  list_access_reviews:
+    canonical_action_key: access_reviews.review.list
+    agent_alias: access_reviews.list
+    executor_domain: access_reviews
+    runtime_handler: AdminGovernanceClient.list_access_reviews
+    mutating: false
+    result_shape_keys: [reviews, count]
+    required_permissions: [AccessReview.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_access_reviews
+  get_access_review:
+    canonical_action_key: access_reviews.review.read
+    agent_alias: access_reviews.get
+    executor_domain: access_reviews
+    runtime_handler: AdminGovernanceClient.get_access_review
+    mutating: false
+    result_shape_keys: [review]
+    required_permissions: [AccessReview.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_access_review
+  create_access_review:
+    canonical_action_key: access_reviews.review.create
+    agent_alias: access_reviews.create
+    executor_domain: access_reviews
+    runtime_handler: AdminGovernanceClient.create_access_review
+    mutating: true
+    result_shape_keys: [review, status]
+    required_permissions: [AccessReview.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: create_access_review
+  list_access_review_decisions:
+    canonical_action_key: access_reviews.review_decision.list
+    agent_alias: access_reviews.decisions
+    executor_domain: access_reviews
+    runtime_handler: AdminGovernanceClient.list_access_review_decisions
+    mutating: false
+    result_shape_keys: [decisions, count]
+    required_permissions: [AccessReview.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_access_review_decisions
+  record_access_review_decision:
+    canonical_action_key: access_reviews.review_decision.record
+    agent_alias: access_reviews.record_decision
+    executor_domain: access_reviews
+    runtime_handler: AdminGovernanceClient.record_access_review_decision
+    mutating: true
+    result_shape_keys: [updated, reviewId, instanceId, decisionId]
+    required_permissions: [AccessReview.ReadWrite.All]
+    approval_profile: high-impact
+    capability_registry_alias: record_access_review_decision

@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E4D` are complete; `E4E` is the active next act; `E4` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E4E` are complete; `E5A` is the active next act; `E5` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -81,8 +81,9 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E4B` is complete.
 - `E4C` is complete.
 - `E4D` is complete.
-- `E4E` is the active next act.
-- `E4` through `E9E` are prepared but blocked by prerequisite work.
+- `E4E` is complete.
+- `E5A` is the active next act.
+- `E5` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
@@ -353,7 +354,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E4E — Admin and Governance Surface Expansion
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Unify remaining admin-center and governance controls into the workforce plane.
 
@@ -633,4 +634,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E4C` is complete. It locked the workload authority at `registry/compliance_retention_ediscovery_expansion_v2.yaml`, added the bounded compliance / retention / eDiscovery runtime in `src/smarthaus_common/compliance_ediscovery_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_ediscovery_cases`, `get_ediscovery_case`, `create_ediscovery_case`, `list_ediscovery_case_searches`, `get_ediscovery_case_search`, `create_ediscovery_case_search`, `list_ediscovery_case_custodians`, and `list_ediscovery_case_legal_holds`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded compliance slice, and added the notebook-backed `L40` evidence chain with generated verification at `configs/generated/compliance_retention_ediscovery_expansion_verification.json`.
 
-`E4D` is complete. It locked the workload authority at `registry/conditional_access_identity_protection_expansion_v2.yaml`, added the bounded conditional-access and identity-protection runtime in `src/smarthaus_common/identity_security_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_conditional_access_policies`, `get_conditional_access_policy`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `list_named_locations`, and `list_risk_detections`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded identity-security slice, and added the notebook-backed `L41` evidence chain with generated verification at `configs/generated/conditional_access_identity_protection_expansion_verification.json`. `E4E` is now the active next act and must unify the remaining admin-center and governance controls into the same enterprise-control plane.
+`E4D` is complete. It locked the workload authority at `registry/conditional_access_identity_protection_expansion_v2.yaml`, added the bounded conditional-access and identity-protection runtime in `src/smarthaus_common/identity_security_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_conditional_access_policies`, `get_conditional_access_policy`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `list_named_locations`, and `list_risk_detections`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded identity-security slice, and added the notebook-backed `L41` evidence chain with generated verification at `configs/generated/conditional_access_identity_protection_expansion_verification.json`.
+
+`E4E` is complete. It locked the workload authority at `registry/admin_governance_surface_expansion_v2.yaml`, added the bounded admin-reports and access-review runtime in `src/smarthaus_common/admin_governance_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `get_report`, `get_usage_reports`, `get_activity_reports`, `list_access_reviews`, `get_access_review`, `create_access_review`, `list_access_review_decisions`, and `record_access_review_decision`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded admin/governance slice, and added the notebook-backed `L42` evidence chain with generated verification at `configs/generated/admin_governance_surface_expansion_verification.json`. `E5A` is now the active next act and must complete the authoritative persona registry before the digital-employee runtime can expand further.

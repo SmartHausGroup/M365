@@ -159,6 +159,11 @@
         "phase": "E4D",
         "date": "2026-03-20",
         "summary": "Expanded Conditional Access / Identity Protection through registry/conditional_access_identity_protection_expansion_v2.yaml and docs/commercialization/m365-conditional-access-identity-protection-expansion-v2.md, projected bounded policy, named-location, and risk-detection actions into src/smarthaus_common/identity_security_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L41 chain and scripts/ci/verify_conditional_access_identity_protection_expansion.py, and proved the bounded E4D slice through contract verifiers plus targeted identity-security regressions."
+      },
+      {
+        "phase": "E4E",
+        "date": "2026-03-20",
+        "summary": "Expanded admin and governance surfaces through registry/admin_governance_surface_expansion_v2.yaml and docs/commercialization/m365-admin-governance-surface-expansion-v2.md, projected bounded reports and access-review actions into src/smarthaus_common/admin_governance_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L42 chain and scripts/ci/verify_admin_governance_surface_expansion.py, and proved the bounded E4E slice through contract verifiers plus targeted admin and governance regressions."
       }
     ],
     "prepared_blocked": [
@@ -176,11 +181,6 @@
         "phase": "E4",
         "blocked_by": "E3E",
         "summary": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries."
-      },
-      {
-        "phase": "E4E",
-        "blocked_by": "E4",
-        "summary": "Unify remaining admin-center and governance controls into the workforce plane."
       },
       {
         "phase": "E5",
@@ -358,7 +358,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E4E"
+    "next_act": "E5A"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -639,7 +639,7 @@
       "code": "E4",
       "title": "Enterprise Admin and Security Expansion",
       "slug": "enterprise-admin-security-expansion",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.",
       "outputs": [
         "device management expansion",
@@ -684,7 +684,7 @@
           "code": "E4E",
           "slug": "admin-governance-surface-expansion",
           "title": "Admin and Governance Surface Expansion",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Unify remaining admin-center and governance controls into the workforce plane."
         }
       ]
@@ -693,7 +693,7 @@
       "code": "E5",
       "title": "Digital Employee Runtime",
       "slug": "digital-employee-runtime",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer.",
       "outputs": [
         "persona registry completion",
@@ -711,7 +711,7 @@
           "code": "E5A",
           "slug": "persona-registry-completion",
           "title": "Persona Registry Completion",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Complete the authoritative persona registry with all required fields, constraints, and runtime projections."
         },
         {

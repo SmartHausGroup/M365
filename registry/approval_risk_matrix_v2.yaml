@@ -51,6 +51,13 @@ executor_domain_defaults:
     risk_class: high
     approval_requirement: always
     approval_profile: high-impact
+  reports:
+    risk_class: low
+    approval_requirement: never
+  access_reviews:
+    risk_class: high
+    approval_requirement: always
+    approval_profile: high-impact
   compliance:
     risk_class: critical
     approval_requirement: always
@@ -378,6 +385,40 @@ exact_action_policies:
     risk_class: low
     approval_profile: low-observe-create
     approval_requirement: never
+  get_report:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_usage_reports:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_activity_reports:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_access_reviews:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_access_review:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_access_review:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [security-team, it-director]
+  list_access_review_decisions:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  record_access_review_decision:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [security-team, it-director]
   list_automation_recipes:
     risk_class: low
     approval_profile: low-observe-create

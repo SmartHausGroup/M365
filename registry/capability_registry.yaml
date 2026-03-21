@@ -1852,58 +1852,80 @@ actions:
   resource: report
   domain: reports
   required_permissions:
-  - See permissions reference
+  - Reports.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - report
 - action: get_usage_reports
   resource: report
   domain: reports
   required_permissions:
-  - See permissions reference
+  - Reports.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - report
 - action: get_activity_reports
   resource: report
   domain: reports
   required_permissions:
-  - See permissions reference
+  - Reports.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - report
 - action: list_access_reviews
   resource: accessReview
   domain: access_reviews
   required_permissions:
-  - See permissions reference
+  - AccessReview.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - reviews
+  - count
 - action: get_access_review
   resource: accessReview
   domain: access_reviews
   required_permissions:
-  - See permissions reference
+  - AccessReview.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - review
 - action: create_access_review
   resource: accessReview
   domain: access_reviews
   required_permissions:
-  - See permissions reference
+  - AccessReview.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - review
+  - status
 - action: list_access_review_decisions
   resource: accessReview
   domain: access_reviews
   required_permissions:
-  - See permissions reference
+  - AccessReview.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - decisions
+  - count
 - action: record_access_review_decision
   resource: accessReview
   domain: access_reviews
   required_permissions:
-  - See permissions reference
+  - AccessReview.ReadWrite.All
   mutating: true
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - updated
+  - reviewId
+  - instanceId
+  - decisionId
 - action: list_risk_detections
   resource: riskDetection
   domain: identity_security

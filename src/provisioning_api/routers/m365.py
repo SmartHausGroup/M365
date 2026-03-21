@@ -10,6 +10,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
+from smarthaus_common.admin_governance_client import AdminGovernanceClient
 from smarthaus_common.automation_recipe_client import AutomationRecipeClient
 from smarthaus_common.compliance_ediscovery_client import ComplianceEDiscoveryClient
 from smarthaus_common.config import AppConfig, has_selected_tenant
@@ -109,6 +110,14 @@ _SUPPORTED_ACTIONS = {
     "list_powerbi_dataset_refreshes",
     "list_powerbi_dashboards",
     "get_powerbi_dashboard",
+    "get_report",
+    "get_usage_reports",
+    "get_activity_reports",
+    "list_access_reviews",
+    "get_access_review",
+    "create_access_review",
+    "list_access_review_decisions",
+    "record_access_review_decision",
     "get_approval_solution",
     "list_approval_items",
     "get_approval_item",
@@ -242,6 +251,8 @@ _MUTATING_ACTIONS = {
     "set_powerapp_environment_role_assignment",
     "remove_powerapp_environment_role_assignment",
     "refresh_powerbi_dataset",
+    "create_access_review",
+    "record_access_review_decision",
     "create_approval_item",
     "respond_to_approval_item",
     "create_external_connection",
@@ -1192,6 +1203,74 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             return {"workspace_id": workspace_id, "dashboard_id": dashboard_id}
         raise HTTPException(status_code=400, detail=f"Unknown Power BI action: {action}")
     if action in {
+        "get_report",
+        "get_usage_reports",
+        "get_activity_reports",
+        "list_access_reviews",
+        "get_access_review",
+        "create_access_review",
+        "list_access_review_decisions",
+        "record_access_review_decision",
+    }:
+        if action in {"get_report", "get_usage_reports", "get_activity_reports"}:
+            report_name = _first_str(params, "reportName", "report_name", "name")
+            if not report_name:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Missing 'reportName', 'report_name', or 'name'",
+                )
+            normalized_report = {
+                "report_name": report_name,
+                "period": (_first_str(params, "period") or "D7"),
+            }
+            if action == "get_report":
+                category = _first_str(params, "category")
+                if category:
+                    normalized_report["category"] = category
+            return normalized_report
+        if action == "list_access_reviews":
+            return {"top": _normalize_top(params, default=50)}
+        if action == "create_access_review":
+            request_body = params.get("body")
+            if not isinstance(request_body, dict) or not request_body:
+                raise HTTPException(status_code=400, detail="Missing or invalid 'body' object")
+            return {"body": request_body}
+        review_id = _first_str(params, "reviewId", "review_id", "id")
+        if not review_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'reviewId', 'review_id', or 'id'",
+            )
+        if action == "get_access_review":
+            return {"review_id": review_id}
+        instance_id = _first_str(params, "instanceId", "instance_id")
+        if not instance_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'instanceId' or 'instance_id'",
+            )
+        if action == "list_access_review_decisions":
+            return {
+                "review_id": review_id,
+                "instance_id": instance_id,
+                "top": _normalize_top(params, default=50),
+            }
+        decision_id = _first_str(params, "decisionId", "decision_id")
+        if not decision_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'decisionId' or 'decision_id'",
+            )
+        request_body = params.get("body")
+        if not isinstance(request_body, dict) or not request_body:
+            raise HTTPException(status_code=400, detail="Missing or invalid 'body' object")
+        return {
+            "review_id": review_id,
+            "instance_id": instance_id,
+            "decision_id": decision_id,
+            "body": request_body,
+        }
+    if action in {
         "get_approval_solution",
         "list_approval_items",
         "get_approval_item",
@@ -1453,7 +1532,7 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 status_code=400,
                 detail="Missing 'incidentId', 'incident_id', or 'id'",
             )
-        body: dict[str, Any] = {}
+        update_body: dict[str, Any] = {}
         for source_key, target_key in (
             ("status", "status"),
             ("assignedTo", "assignedTo"),
@@ -1464,13 +1543,13 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
         ):
             value = _optional_str(params, source_key)
             if value:
-                body[target_key] = value
-        if not body:
+                update_body[target_key] = value
+        if not update_body:
             raise HTTPException(
                 status_code=400,
                 detail="Provide at least one of 'status', 'assignedTo', 'classification', 'determination', or 'comments'",
             )
-        return {"incident_id": incident_id, "body": body}
+        return {"incident_id": incident_id, "body": update_body}
     if action == "list_conditional_access_policies":
         return {"top": _normalize_top(params, default=50)}
     if action == "get_conditional_access_policy":
@@ -1930,6 +2009,23 @@ def _power_bi_client(action: str | None = None) -> PowerBIClient:
 
     config = AppConfig()
     return PowerBIClient(legacy_config=config)
+
+
+def _admin_governance_client(action: str | None = None) -> AdminGovernanceClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return AdminGovernanceClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return AdminGovernanceClient(legacy_config=config)
 
 
 def _forms_approvals_connectors_client(
@@ -2458,6 +2554,58 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 params["dashboard_id"],
             )
         }
+    if action == "get_report":
+        admin_client = _admin_governance_client(action)
+        return {
+            "report": admin_client.get_report(
+                params["report_name"],
+                period=params.get("period"),
+                category=params.get("category"),
+            )
+        }
+    if action == "get_usage_reports":
+        admin_client = _admin_governance_client(action)
+        return {
+            "report": admin_client.get_usage_reports(
+                params["report_name"],
+                period=params.get("period"),
+            )
+        }
+    if action == "get_activity_reports":
+        admin_client = _admin_governance_client(action)
+        return {
+            "report": admin_client.get_activity_reports(
+                params["report_name"],
+                period=params.get("period"),
+            )
+        }
+    if action == "list_access_reviews":
+        admin_client = _admin_governance_client(action)
+        value = admin_client.list_access_reviews(top=params["top"])
+        return {"reviews": value, "count": len(value)}
+    if action == "get_access_review":
+        admin_client = _admin_governance_client(action)
+        return {"review": admin_client.get_access_review(params["review_id"])}
+    if action == "create_access_review":
+        admin_client = _admin_governance_client(action)
+        review = admin_client.create_access_review(body=params["body"])
+        return {"review": review, "status": "created"}
+    if action == "list_access_review_decisions":
+        admin_client = _admin_governance_client(action)
+        value = admin_client.list_access_review_decisions(
+            params["review_id"],
+            params["instance_id"],
+            top=params["top"],
+        )
+        return {"decisions": value, "count": len(value)}
+    if action == "record_access_review_decision":
+        admin_client = _admin_governance_client(action)
+        return admin_client.record_access_review_decision(
+            params["review_id"],
+            params["instance_id"],
+            params["decision_id"],
+            body=params["body"],
+        )
     if action == "get_approval_solution":
         fac_client = _forms_approvals_connectors_client(action)
         return {"solution": fac_client.get_approval_solution()}
@@ -3616,6 +3764,59 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "description": "Get a Power BI dashboard for a workspace",
         "params": ["workspaceId|workspace_id|groupId|group_id", "dashboardId|dashboard_id|id"],
         "mutating": False,
+    },
+    {
+        "action": "get_report",
+        "description": "Get a bounded Microsoft 365 admin report",
+        "params": ["reportName|report_name|name", "period?", "category?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_usage_reports",
+        "description": "Get a bounded Microsoft 365 usage report",
+        "params": ["reportName|report_name|name", "period?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_activity_reports",
+        "description": "Get a bounded Microsoft 365 activity report",
+        "params": ["reportName|report_name|name", "period?"],
+        "mutating": False,
+    },
+    {
+        "action": "list_access_reviews",
+        "description": "List identity-governance access reviews",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_access_review",
+        "description": "Get an identity-governance access review definition",
+        "params": ["reviewId|review_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_access_review",
+        "description": "Create an identity-governance access review definition",
+        "params": ["body"],
+        "mutating": True,
+    },
+    {
+        "action": "list_access_review_decisions",
+        "description": "List decision records for an access review instance",
+        "params": ["reviewId|review_id|id", "instanceId|instance_id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "record_access_review_decision",
+        "description": "Record a decision for an access review instance decision item",
+        "params": [
+            "reviewId|review_id|id",
+            "instanceId|instance_id",
+            "decisionId|decision_id",
+            "body",
+        ],
+        "mutating": True,
     },
     {
         "action": "get_approval_solution",

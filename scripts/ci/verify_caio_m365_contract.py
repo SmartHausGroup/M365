@@ -129,6 +129,14 @@ RESULT_SHAPES = {
     "list_powerbi_dataset_refreshes": ["refreshes", "count"],
     "list_powerbi_dashboards": ["dashboards", "count"],
     "get_powerbi_dashboard": ["dashboard"],
+    "get_report": ["report"],
+    "get_usage_reports": ["report"],
+    "get_activity_reports": ["report"],
+    "list_access_reviews": ["reviews", "count"],
+    "get_access_review": ["review"],
+    "create_access_review": ["review", "status"],
+    "list_access_review_decisions": ["decisions", "count"],
+    "record_access_review_decision": ["updated", "reviewId", "instanceId", "decisionId"],
     "get_approval_solution": ["solution"],
     "list_approval_items": ["approvals", "count"],
     "get_approval_item": ["approval"],
@@ -481,6 +489,79 @@ def verify_with_mock() -> dict:
             {"ok": True, "result": {"dashboards": [], "count": 0}},
         ),
         ("get_powerbi_dashboard", {"ok": True, "result": {"dashboard": {}}}),
+        (
+            "get_report",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "office365_active_user_detail",
+                        "category": "usage",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        (
+            "get_usage_reports",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "office365_active_user_detail",
+                        "category": "usage",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        (
+            "get_activity_reports",
+            {
+                "ok": True,
+                "result": {
+                    "report": {
+                        "name": "email_activity_user_detail",
+                        "category": "activity",
+                        "period": "D7",
+                        "format": "csv",
+                        "rows": [],
+                        "count": 0,
+                    }
+                },
+            },
+        ),
+        ("list_access_reviews", {"ok": True, "result": {"reviews": [], "count": 0}}),
+        ("get_access_review", {"ok": True, "result": {"review": {"id": "review-1"}}}),
+        (
+            "create_access_review",
+            {
+                "ok": True,
+                "result": {"review": {"id": "review-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_access_review_decisions",
+            {"ok": True, "result": {"decisions": [], "count": 0}},
+        ),
+        (
+            "record_access_review_decision",
+            {
+                "ok": True,
+                "result": {
+                    "updated": True,
+                    "reviewId": "review-1",
+                    "instanceId": "instance-1",
+                    "decisionId": "decision-1",
+                },
+            },
+        ),
         ("get_approval_solution", {"ok": True, "result": {"solution": {"state": "provisioned"}}}),
         ("list_approval_items", {"ok": True, "result": {"approvals": [], "count": 0}}),
         ("get_approval_item", {"ok": True, "result": {"approval": {}}}),

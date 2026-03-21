@@ -1490,12 +1490,92 @@ The following actions are implemented as part of `E2C`. They share the same dete
 | **Result shape** \(\mathcal{S}_{\texttt{list\_risk\_detections}}\) | `{ "riskDetections": array, "count": number }` |
 | **Error cases** | Invalid `top`; Graph not configured; identity-security executor not configured. |
 
+### 148. get_report
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_report` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `reportName` or `report_name` or `name` (string, required), optional `period` (`D7`, `D30`, `D90`, `D180`), and optional `category` (`usage` or `activity`). The selected `reports` executor must be configured for Microsoft 365 admin reports. |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_report}}\) | `{ "report": { "name": string, "category": string, "period": string, "format": "csv", "rows": array, "count": number } }` |
+| **Error cases** | Missing report name; unsupported period or category; Graph not configured; reports executor not configured. |
+
+### 149. get_usage_reports
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_usage_reports` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `reportName` or `report_name` or `name` (string, required) and optional `period` (`D7`, `D30`, `D90`, `D180`). The selected `reports` executor must be configured for Microsoft 365 usage reports. |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_usage\_reports}}\) | `{ "report": { "name": string, "category": "usage", "period": string, "format": "csv", "rows": array, "count": number } }` |
+| **Error cases** | Missing report name; unsupported period; Graph not configured; reports executor not configured. |
+
+### 150. get_activity_reports
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_activity_reports` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `reportName` or `report_name` or `name` (string, required) and optional `period` (`D7`, `D30`, `D90`, `D180`). The selected `reports` executor must be configured for Microsoft 365 activity reports. |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_activity\_reports}}\) | `{ "report": { "name": string, "category": "activity", "period": string, "format": "csv", "rows": array, "count": number } }` |
+| **Error cases** | Missing report name; unsupported period; Graph not configured; reports executor not configured. |
+
+### 151. list_access_reviews
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_access_reviews` |
+| **Mutating** | No |
+| **Preconditions** | Optional `params`: `top` (integer). The selected `access_reviews` executor must be configured for Entra identity-governance access-review inspection. |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_access\_reviews}}\) | `{ "reviews": array, "count": number }` |
+| **Error cases** | Invalid `top`; Graph not configured; access-reviews executor not configured. |
+
+### 152. get_access_review
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `get_access_review` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `reviewId` or `review_id` or `id` (string, required). |
+| **Result shape** \(\mathcal{S}_{\texttt{get\_access\_review}}\) | `{ "review": object }` |
+| **Error cases** | Missing review identifier; Graph not configured; access-reviews executor not configured. |
+
+### 153. create_access_review
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `create_access_review` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `body` (object, required). Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{create\_access\_review}}\) | `{ "review": object, "status": "created" }` |
+| **Error cases** | Missing or invalid body; Graph not configured; mutations disabled; access-reviews executor not configured. |
+
+### 154. list_access_review_decisions
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `list_access_review_decisions` |
+| **Mutating** | No |
+| **Preconditions** | `params`: `reviewId` or `review_id` or `id` (string, required), `instanceId` or `instance_id` (string, required), and optional `top` (integer). |
+| **Result shape** \(\mathcal{S}_{\texttt{list\_access\_review\_decisions}}\) | `{ "decisions": array, "count": number }` |
+| **Error cases** | Missing review or instance identifier; invalid `top`; Graph not configured; access-reviews executor not configured. |
+
+### 155. record_access_review_decision
+
+| Field | Specification |
+|-------|----------------|
+| **action** | `record_access_review_decision` |
+| **Mutating** | Yes |
+| **Preconditions** | `params`: `reviewId` or `review_id` or `id` (string, required), `instanceId` or `instance_id` (string, required), `decisionId` or `decision_id` (string, required), and `body` (object, required). Mutations must be enabled. |
+| **Result shape** \(\mathcal{S}_{\texttt{record\_access\_review\_decision}}\) | `{ "updated": true, "reviewId": string, "instanceId": string, "decisionId": string }` |
+| **Error cases** | Missing review, instance, or decision identifier; missing or invalid body; Graph not configured; mutations disabled; access-reviews executor not configured. |
+
 ---
 
 ## Canonical sets
 
-- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, `get_powerbi_dashboard`, `get_approval_solution`, `list_approval_items`, `get_approval_item`, `create_approval_item`, `list_approval_item_requests`, `respond_to_approval_item`, `list_external_connections`, `get_external_connection`, `create_external_connection`, `register_external_connection_schema`, `get_external_item`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `list_automation_recipes`, `get_automation_recipe`, `list_devices`, `get_device`, `list_device_compliance_summaries`, `execute_device_action`, `list_security_alerts`, `get_security_alert`, `list_security_incidents`, `get_security_incident`, `list_secure_scores`, `get_secure_score_profile`, `update_security_incident`, `list_conditional_access_policies`, `get_conditional_access_policy`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `list_named_locations`, `list_risk_detections`, `list_ediscovery_cases`, `get_ediscovery_case`, `create_ediscovery_case`, `list_ediscovery_case_searches`, `get_ediscovery_case_search`, `create_ediscovery_case_search`, `list_ediscovery_case_custodians`, `list_ediscovery_case_legal_holds`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
-- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `refresh_powerbi_dataset`, `create_approval_item`, `respond_to_approval_item`, `create_external_connection`, `register_external_connection_schema`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `execute_device_action`, `update_security_incident`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `create_ediscovery_case`, `create_ediscovery_case_search`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}\) (implemented in router):** `list_users`, `list_teams`, `get_team`, `list_channels`, `create_channel`, `list_plans`, `create_plan`, `list_plan_buckets`, `create_plan_bucket`, `create_plan_task`, `list_sites`, `get_site`, `list_site_lists`, `get_list`, `list_list_items`, `create_list_item`, `list_drives`, `get_drive`, `list_drive_items`, `get_drive_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `list_flows_admin`, `get_flow_admin`, `list_http_flows`, `list_flow_owners`, `list_flow_runs`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `list_powerapps_admin`, `get_powerapp_admin`, `list_powerapp_role_assignments`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `list_powerapp_environments`, `get_powerapp_environment`, `list_powerapp_environment_role_assignments`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, `get_powerbi_dashboard`, `get_report`, `get_usage_reports`, `get_activity_reports`, `list_access_reviews`, `get_access_review`, `create_access_review`, `list_access_review_decisions`, `record_access_review_decision`, `get_approval_solution`, `list_approval_items`, `get_approval_item`, `create_approval_item`, `list_approval_item_requests`, `respond_to_approval_item`, `list_external_connections`, `get_external_connection`, `create_external_connection`, `register_external_connection_schema`, `get_external_item`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `list_automation_recipes`, `get_automation_recipe`, `list_devices`, `get_device`, `list_device_compliance_summaries`, `execute_device_action`, `list_security_alerts`, `get_security_alert`, `list_security_incidents`, `get_security_incident`, `list_secure_scores`, `get_secure_score_profile`, `update_security_incident`, `list_conditional_access_policies`, `get_conditional_access_policy`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `list_named_locations`, `list_risk_detections`, `list_ediscovery_cases`, `get_ediscovery_case`, `create_ediscovery_case`, `list_ediscovery_case_searches`, `get_ediscovery_case_search`, `create_ediscovery_case_search`, `list_ediscovery_case_custodians`, `list_ediscovery_case_legal_holds`, `get_user`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `list_groups`, `get_group`, `create_group`, `list_group_members`, `add_group_member`, `remove_group_member`, `assign_user_license`, `list_directory_roles`, `list_directory_role_members`, `list_domains`, `get_organization`, `list_applications`, `get_application`, `update_application`, `list_service_principals`, `list_messages`, `get_message`, `send_mail`, `move_message`, `delete_message`, `list_mail_folders`, `get_mailbox_settings`, `update_mailbox_settings`, `list_events`, `create_event`, `get_event`, `update_event`, `delete_event`, `get_schedule`, `list_contacts`, `get_contact`, `create_contact`, `update_contact`, `delete_contact`, `list_contact_folders`, `create_site`, `create_team`, `add_channel`, `provision_service`.
+- **\(\mathcal{A}_m\) (mutating):** `create_channel`, `create_plan`, `create_plan_bucket`, `create_plan_task`, `create_list_item`, `create_folder`, `upload_file`, `create_document`, `update_document`, `create_workbook`, `update_workbook`, `create_presentation`, `update_presentation`, `set_flow_owner_role`, `remove_flow_owner_role`, `enable_flow`, `disable_flow`, `delete_flow`, `restore_flow`, `invoke_flow_callback`, `set_powerapp_owner`, `remove_powerapp_role_assignment`, `delete_powerapp`, `set_powerapp_environment_role_assignment`, `remove_powerapp_environment_role_assignment`, `refresh_powerbi_dataset`, `create_access_review`, `record_access_review_decision`, `create_approval_item`, `respond_to_approval_item`, `create_external_connection`, `register_external_connection_schema`, `upsert_external_item`, `create_external_group`, `add_external_group_member`, `execute_device_action`, `update_security_incident`, `create_conditional_access_policy`, `update_conditional_access_policy`, `delete_conditional_access_policy`, `create_ediscovery_case`, `create_ediscovery_case_search`, `reset_user_password`, `create_user`, `update_user`, `disable_user`, `create_group`, `add_group_member`, `remove_group_member`, `assign_user_license`, `update_application`, `send_mail`, `move_message`, `delete_message`, `update_mailbox_settings`, `create_event`, `update_event`, `delete_event`, `create_contact`, `update_contact`, `delete_contact`, `create_site`, `create_team`, `add_channel`, `provision_service`.
 
 ---
 

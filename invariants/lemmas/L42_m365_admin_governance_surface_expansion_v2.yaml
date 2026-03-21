@@ -1,0 +1,16 @@
+lemma_id: L42_m365_admin_governance_surface_expansion_v2
+title: M365 admin and governance surface expansion v2
+status: active
+proof_obligations:
+  - registry/admin_governance_surface_expansion_v2.yaml exists and enumerates the bounded E4E action family
+  - src/smarthaus_common/admin_governance_client.py exposes the bounded report and access-review runtime methods
+  - src/provisioning_api/routers/m365.py exposes the bounded E4E action family in supported actions and instruction schema
+  - registry/executor_routing_v2.yaml routes E4E actions to reports or access_reviews deterministically
+  - registry/auth_model_v2.yaml binds E4E actions to app_only auth
+  - registry/approval_risk_matrix_v2.yaml binds E4E reads to low-observe-create and E4E mutations to high-impact
+  - scripts/ci/verify_admin_governance_surface_expansion.py passes
+test_bindings:
+  - tests/test_admin_governance_surface_expansion_v2.py
+  - scripts/ci/verify_admin_governance_surface_expansion.py
+failure_boundary: fail_closed
+ci_gate: E4E

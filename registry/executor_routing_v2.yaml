@@ -14,6 +14,8 @@ canonical_executor_domains:
   - workmanagement
   - knowledge
   - powerplatform
+  - reports
+  - access_reviews
   - compliance
   - security
   - identity_security
@@ -126,6 +128,14 @@ exact_action_routes:
   list_powerbi_dataset_refreshes: powerplatform
   list_powerbi_dashboards: powerplatform
   get_powerbi_dashboard: powerplatform
+  get_report: reports
+  get_usage_reports: reports
+  get_activity_reports: reports
+  list_access_reviews: access_reviews
+  get_access_review: access_reviews
+  create_access_review: access_reviews
+  list_access_review_decisions: access_reviews
+  record_access_review_decision: access_reviews
   get_approval_solution: powerplatform
   list_approval_items: powerplatform
   get_approval_item: powerplatform
@@ -190,6 +200,8 @@ prefix_routes:
   "approvals.": powerplatform
   "powerapp.": powerplatform
   "powerbi.": powerplatform
+  "reports.": reports
+  "access_reviews.": access_reviews
   "compliance.": compliance
   "devices.": devices
   "security.": security

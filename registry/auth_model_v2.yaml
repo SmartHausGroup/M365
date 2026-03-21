@@ -39,6 +39,12 @@ executor_domain_defaults:
   powerplatform:
     auth_class: mixed
     delegated_preference: never
+  reports:
+    auth_class: app_only
+    delegated_preference: never
+  access_reviews:
+    auth_class: app_only
+    delegated_preference: never
   compliance:
     auth_class: mixed
     delegated_preference: never
@@ -223,6 +229,22 @@ exact_action_policies:
   list_powerbi_dashboards:
     auth_class: app_only
   get_powerbi_dashboard:
+    auth_class: app_only
+  get_report:
+    auth_class: app_only
+  get_usage_reports:
+    auth_class: app_only
+  get_activity_reports:
+    auth_class: app_only
+  list_access_reviews:
+    auth_class: app_only
+  get_access_review:
+    auth_class: app_only
+  create_access_review:
+    auth_class: app_only
+  list_access_review_decisions:
+    auth_class: app_only
+  record_access_review_decision:
     auth_class: app_only
   list_automation_recipes:
     auth_class: app_only

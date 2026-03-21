@@ -122,6 +122,14 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `list_powerbi_dataset_refreshes` | List Power BI dataset refresh history | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `datasetId` or `dataset_id`, `top?` |
 | `list_powerbi_dashboards` | List Power BI dashboards for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id` or `id`, `top?` |
 | `get_powerbi_dashboard` | Get a Power BI dashboard for a workspace | No | `workspaceId` or `workspace_id` or `groupId` or `group_id`, `dashboardId` or `dashboard_id` or `id` |
+| `get_report` | Get a bounded Microsoft 365 admin report | No | `reportName` or `report_name` or `name`, `period?`, `category?` |
+| `get_usage_reports` | Get a bounded Microsoft 365 usage report | No | `reportName` or `report_name` or `name`, `period?` |
+| `get_activity_reports` | Get a bounded Microsoft 365 activity report | No | `reportName` or `report_name` or `name`, `period?` |
+| `list_access_reviews` | List identity-governance access review definitions | No | `top?` |
+| `get_access_review` | Get an identity-governance access review definition | No | `reviewId` or `review_id` or `id` |
+| `create_access_review` | Create an identity-governance access review definition | Yes | `body` |
+| `list_access_review_decisions` | List decision records for an access review instance | No | `reviewId` or `review_id` or `id`, `instanceId` or `instance_id`, `top?` |
+| `record_access_review_decision` | Record a decision for an access review instance decision item | Yes | `reviewId` or `review_id` or `id`, `instanceId` or `instance_id`, `decisionId` or `decision_id`, `body` |
 | `get_approval_solution` | Get the tenant approval-solution provisioning state | No | none |
 | `list_approval_items` | List approval items from the Teams Approvals app | No | `top?` |
 | `get_approval_item` | Get a Teams Approvals approval item | No | `approvalId` or `approval_id` or `id` |
@@ -272,6 +280,14 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **list_powerbi_dataset_refreshes:** `{ "refreshes": [ ... ], "count": N }`
 - **list_powerbi_dashboards:** `{ "dashboards": [ ... ], "count": N }`
 - **get_powerbi_dashboard:** `{ "dashboard": { ... } }`
+- **get_report:** `{ "report": { "name": "<report>", "category": "<usage|activity>", "period": "<period>", "format": "csv", "rows": [ ... ], "count": N } }`
+- **get_usage_reports:** `{ "report": { "name": "<report>", "category": "usage", "period": "<period>", "format": "csv", "rows": [ ... ], "count": N } }`
+- **get_activity_reports:** `{ "report": { "name": "<report>", "category": "activity", "period": "<period>", "format": "csv", "rows": [ ... ], "count": N } }`
+- **list_access_reviews:** `{ "reviews": [ ... ], "count": N }`
+- **get_access_review:** `{ "review": { ... } }`
+- **create_access_review:** `{ "review": { ... }, "status": "created" }`
+- **list_access_review_decisions:** `{ "decisions": [ ... ], "count": N }`
+- **record_access_review_decision:** `{ "updated": true, "reviewId": "<id>", "instanceId": "<id>", "decisionId": "<id>" }`
 - **get_approval_solution:** `{ "solution": { ... } }`
 - **list_approval_items:** `{ "approvals": [ ... ], "count": N }`
 - **get_approval_item:** `{ "approval": { ... } }`
