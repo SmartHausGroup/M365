@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E6G` are complete; `E6H` is the active next act; `E6I` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E6H` are complete; `E6I` is the active next act; `E6J` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -94,14 +94,15 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E6E` is complete.
 - `E6F` is complete.
 - `E6G` is complete.
-- `E6H` is the active next act.
-- `E6I` through `E9E` are prepared but blocked by prerequisite work.
+- `E6H` is complete.
+- `E6I` is the active next act.
+- `E6J` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
 - The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, bounded cross-workload recipe discovery, and bounded Intune / devices remain unimplemented.
-- The Operations, HR, Communication, Engineering, Marketing, Product, and Project Management department packs are now runtime-bounded; Engineering, Marketing, Product, and Project Management remain intentionally blocked while their personas stay contract-only, and the remaining department packs are still unimplemented and uncertified.
+- The Operations, HR, Communication, Engineering, Marketing, Product, Project Management, and Studio Operations department packs are now runtime-bounded; Engineering, Marketing, Product, Project Management, and Studio Operations remain intentionally blocked while their personas stay contract-only, and the remaining department packs are still unimplemented and uncertified.
 
 ## Scope
 
@@ -473,13 +474,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E6H — Studio Operations Department Pack
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Build the Studio Operations department capability pack.
 
 #### E6I — Testing Department Pack
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Build the Testing department capability pack.
 
@@ -673,3 +674,5 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 `E6F` is complete. It locked the Product pack authority at `registry/department_pack_product_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-product-department-pack-v1.md`, added the notebook-backed `L53` evidence chain, reused the generalized shared department-pack runtime in `src/smarthaus_common/department_pack.py`, proved the blocked Product pack projection through targeted regressions in `tests/test_product_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_product_department_pack_v1.py`, and emitted generated proof at `configs/generated/product_department_pack_v1_verification.json`. `E6G` is now the active next act and must build the Project Management department pack.
 
 `E6G` is complete. It locked the Project Management pack authority at `registry/department_pack_project_management_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-project-management-department-pack-v1.md`, added the notebook-backed `L54` evidence chain, reused the generalized shared department-pack runtime in `src/smarthaus_common/department_pack.py`, proved the blocked Project Management pack projection through targeted regressions in `tests/test_project_management_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_project_management_department_pack_v1.py`, and emitted generated proof at `configs/generated/project_management_department_pack_v1_verification.json`. `E6H` is now the active next act and must build the Studio Operations department pack.
+
+`E6H` is complete. It locked the Studio Operations pack authority at `registry/department_pack_studio_operations_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-studio-operations-department-pack-v1.md`, added the notebook-backed `L55` evidence chain, reused the generalized shared department-pack runtime in `src/smarthaus_common/department_pack.py`, proved the blocked Studio Operations pack projection through targeted regressions in `tests/test_studio_operations_department_pack_v1.py`, added deterministic verifier coverage at `scripts/ci/verify_studio_operations_department_pack_v1.py`, and emitted generated proof at `configs/generated/studio_operations_department_pack_v1_verification.json`. `E6I` is now the active next act and must build the Testing department pack.

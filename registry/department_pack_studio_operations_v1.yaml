@@ -1,0 +1,192 @@
+version: 1.0.0
+last_updated: '2026-03-21T06:12:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: studio-operations
+  display_name: Studio Operations
+  wave: W7
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Studio Operations digital employees into one bounded department
+    contract covering reporting, finance controls, infrastructure upkeep,
+    compliance review, and support coordination responsibilities that are
+    defined but not yet action-backed.
+  bounded_claim: >-
+    The Studio Operations department pack may only claim the authoritative
+    contract personas, capability families, approval posture, and blocked
+    readiness state declared here. It may not claim implemented finance,
+    infrastructure, compliance, or support execution coverage until later acts
+    activate those personas.
+workflow_families:
+  - reporting_and_operational_visibility
+  - finance_and_control_review
+  - infrastructure_reliability_and_compliance_support
+  - support_and_case_coordination
+workload_families:
+  - Low-code, workflow, and analytics
+  - Security, compliance, and data governance
+  - Devices, endpoint management, and adjacent Windows admin surfaces
+  - Mail, calendar, contacts, and bookings
+  - Knowledge, search, and employee experience
+  - Documents, notes, and workspace productivity
+  - Content, intranet, and files
+  - Collaboration, meetings, and communities
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the studio-operations lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:studio-operations
+  department_lead: department-lead:studio-operations
+  profiles:
+    critical-regulated:
+      approvers:
+        - department-owner:studio-operations
+      personas:
+        - legal-compliance-checker
+      rule: >-
+        Legal, policy, and compliance-sensitive changes require explicit
+        department-owner review when later acts activate the Studio Operations
+        personas.
+    high-impact:
+      approvers:
+        - department-owner:studio-operations
+      personas:
+        - finance-tracker
+      rule: >-
+        Finance controls, budget-affecting changes, and externally consequential
+        financial updates require human approval before execution.
+    medium-operational:
+      approvers:
+        - department-owner:studio-operations
+      personas:
+        - infrastructure-maintainer
+      rule: >-
+        Environment reliability, backup, and operational changes require
+        department-owner review when later acts activate the Studio Operations
+        personas.
+    low-observe-create:
+      approvers:
+        - department-owner:studio-operations
+      personas:
+        - analytics-reporter
+        - support-responder
+      rule: >-
+        Reporting, response drafting, and support preparation may proceed in
+        observe/create mode until later acts activate mutating Studio
+        Operations execution surfaces.
+kpis:
+  required_personas: 5
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 4
+  supported_action_count: 0
+personas:
+  analytics-reporter:
+    display_name: Amanda Foster
+    title: Data Scientist
+    role_type: reporting_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - dashboard and report generation
+      - metric review
+      - reporting pack creation
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Knowledge, search, and employee experience
+      - Documents, notes, and workspace productivity
+    workflow_families:
+      - reporting_and_operational_visibility
+    supported_actions: []
+  finance-tracker:
+    display_name: Lisa Chang
+    title: Chief Financial Officer
+    role_type: finance_anchor
+    coverage_status: persona-contract-only
+    risk_tier: high
+    approval_profile: high-impact
+    capability_families:
+      - budget and expense tracking
+      - invoice and report preparation
+      - finance control updates
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Documents, notes, and workspace productivity
+      - Security, compliance, and data governance
+    workflow_families:
+      - finance_and_control_review
+      - reporting_and_operational_visibility
+    supported_actions: []
+  infrastructure-maintainer:
+    display_name: Jennifer Liu
+    title: Site Reliability Engineer
+    role_type: operations_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - system upkeep
+      - backup and restore coordination
+      - environment reliability tracking
+    workload_families:
+      - Devices, endpoint management, and adjacent Windows admin surfaces
+      - Security, compliance, and data governance
+      - Content, intranet, and files
+    workflow_families:
+      - infrastructure_reliability_and_compliance_support
+    supported_actions: []
+  legal-compliance-checker:
+    display_name: Robert Kim
+    title: Legal Counsel
+    role_type: governance_anchor
+    coverage_status: persona-contract-only
+    risk_tier: high
+    approval_profile: critical-regulated
+    capability_families:
+      - policy validation
+      - compliance review
+      - legal risk checks
+    workload_families:
+      - Security, compliance, and data governance
+      - Documents, notes, and workspace productivity
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - infrastructure_reliability_and_compliance_support
+      - finance_and_control_review
+    supported_actions: []
+  support-responder:
+    display_name: Mike Rodriguez
+    title: Customer Success Manager
+    role_type: support_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - support triage
+      - response drafting
+      - case coordination
+    workload_families:
+      - Mail, calendar, contacts, and bookings
+      - Knowledge, search, and employee experience
+      - Collaboration, meetings, and communities
+    workflow_families:
+      - support_and_case_coordination
+    supported_actions: []
+bounded_claims:
+  supported:
+    - studio-operations persona census and capability-family contract
+    - approval and escalation semantics for future studio-operations activation
+    - deterministic blocked-state projection while studio-operations remains contract-only
+  unsupported:
+    - claims that studio-operations personas are currently action-backed
+    - live finance, compliance, infrastructure, or support mutations beyond later activation acts
+    - HR, design, or engineering work outside the studio-operations contract

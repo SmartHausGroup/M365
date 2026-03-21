@@ -22,9 +22,7 @@ def test_e6g_builds_blocked_project_management_contract_pack(
     assert pack["summary"]["registry_backed_persona_count"] == 0
     assert pack["summary"]["supported_action_count"] == 0
     assert pack["summary"]["pack_state"] == "blocked"
-    assert {persona["coverage_status"] for persona in pack["personas"]} == {
-        "persona-contract-only"
-    }
+    assert {persona["coverage_status"] for persona in pack["personas"]} == {"persona-contract-only"}
 
 
 def test_e6g_contract_only_pack_remains_blocked_even_without_queue_pressure(
@@ -69,6 +67,7 @@ def test_e6g_fails_closed_on_declared_coverage_status_mismatch(
     overridden.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
 
     with pytest.raises(
-        ValueError, match="department_pack_persona_registry_backed_missing_actions:experiment-tracker"
+        ValueError,
+        match="department_pack_persona_registry_backed_missing_actions:experiment-tracker",
     ):
         build_department_pack("project-management", path=overridden)
