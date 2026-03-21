@@ -164,34 +164,14 @@
         "phase": "E4E",
         "date": "2026-03-20",
         "summary": "Expanded admin and governance surfaces through registry/admin_governance_surface_expansion_v2.yaml and docs/commercialization/m365-admin-governance-surface-expansion-v2.md, projected bounded reports and access-review actions into src/smarthaus_common/admin_governance_client.py and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed L42 chain and scripts/ci/verify_admin_governance_surface_expansion.py, and proved the bounded E4E slice through contract verifiers plus targeted admin and governance regressions."
-      }
-    ],
-    "prepared_blocked": [
-      {
-        "phase": "E0",
-        "blocked_by": "Closed `m365-enterprise-readiness-master-plan`",
-        "summary": "Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands."
-      },
-      {
-        "phase": "E3",
-        "blocked_by": "E2E",
-        "summary": "Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane."
-      },
-      {
-        "phase": "E4",
-        "blocked_by": "E3E",
-        "summary": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries."
-      },
-      {
-        "phase": "E5",
-        "blocked_by": "E1E",
-        "summary": "Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer."
       },
       {
         "phase": "E5A",
-        "blocked_by": "E5",
-        "summary": "Complete the authoritative persona registry with all required fields, constraints, and runtime projections."
-      },
+        "date": "2026-03-20",
+        "summary": "Completed the authoritative persona registry through registry/persona_registry_v2.yaml and docs/commercialization/m365-persona-registry-v2.md, added the shared persona loader and validator in src/ops_adapter/personas.py, constrained runtime persona resolution to the roster-bound 39 personas instead of the mixed 59-entry inventory, added the notebook-backed L43 chain and the deterministic builder/verifier commands at scripts/ci/build_persona_registry_v2.py and scripts/ci/verify_persona_registry_v2.py, and proved the bounded E5A slice through targeted persona-registry regressions plus generated proof at configs/generated/persona_registry_v2_verification.json."
+      }
+    ],
+    "prepared_blocked": [
       {
         "phase": "E5B",
         "blocked_by": "E5",
@@ -358,7 +338,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E5A"
+    "next_act": "E5B"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
@@ -711,14 +691,14 @@
           "code": "E5A",
           "slug": "persona-registry-completion",
           "title": "Persona Registry Completion",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Complete the authoritative persona registry with all required fields, constraints, and runtime projections."
         },
         {
           "code": "E5B",
           "slug": "humanized-delegation-interface",
           "title": "Humanized Delegation Interface",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Support natural requests like talking to Elena Rodriguez instead of targeting raw agents."
         },
         {

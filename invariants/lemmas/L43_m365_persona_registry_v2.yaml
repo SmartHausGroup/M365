@@ -1,0 +1,19 @@
+invariant_id: L43
+title: M365 persona registry v2 remains authoritative and fail-closed
+lemma_reference: docs/ma/lemmas/L43_m365_persona_registry_v2.md
+proof_obligations:
+  - registry/persona_registry_v2.yaml must exist and validate
+  - runtime persona loading must resolve exactly the authoritative roster
+  - non-authoritative registry-only agents must not appear in runtime persona resolution
+  - summary counts must remain aligned with the authoritative roster
+failure_boundaries:
+  - missing persona registry artifact
+  - missing required persona fields
+  - alias collision
+  - count drift
+  - registry-backed persona not active
+  - contract-only persona marked active
+test_bindings:
+  - tests/test_persona_registry_v2.py
+  - scripts/ci/verify_persona_registry_v2.py
+ci_gate: persona-registry-v2

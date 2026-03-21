@@ -4,10 +4,11 @@ import csv
 from io import StringIO
 from typing import Any
 
+from smarthaus_graph.client import GraphClient
+
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import GraphRequestError
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
-from smarthaus_graph.client import GraphClient
 
 _REPORT_DEFINITIONS: dict[str, dict[str, str]] = {
     "office365_active_user_detail": {
@@ -59,8 +60,7 @@ class AdminGovernanceClient:
             normalized_report = _REPORT_CATEGORY_DEFAULTS.get(normalized_category)
         if not normalized_report or normalized_report not in _REPORT_DEFINITIONS:
             raise GraphRequestError(
-                "Unsupported reportName. Expected one of: "
-                + ", ".join(sorted(_REPORT_DEFINITIONS))
+                "Unsupported reportName. Expected one of: " + ", ".join(sorted(_REPORT_DEFINITIONS))
             )
         if normalized_category:
             report_category = _REPORT_DEFINITIONS[normalized_report]["category"]
@@ -74,8 +74,7 @@ class AdminGovernanceClient:
         normalized = (period or "D7").strip().upper()
         if normalized not in _ALLOWED_REPORT_PERIODS:
             raise GraphRequestError(
-                "Unsupported period. Expected one of: "
-                + ", ".join(sorted(_ALLOWED_REPORT_PERIODS))
+                "Unsupported period. Expected one of: " + ", ".join(sorted(_ALLOWED_REPORT_PERIODS))
             )
         return normalized
 

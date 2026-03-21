@@ -13,7 +13,9 @@ from smarthaus_common.executor_routing import executor_route_for_action
 REPO_ROOT = Path(__file__).resolve().parents[2]
 REGISTRY_PATH = REPO_ROOT / "registry" / "admin_governance_surface_expansion_v2.yaml"
 CAPABILITY_REGISTRY_PATH = REPO_ROOT / "registry" / "capability_registry.yaml"
-ARTIFACT_PATH = REPO_ROOT / "configs" / "generated" / "admin_governance_surface_expansion_verification.json"
+ARTIFACT_PATH = (
+    REPO_ROOT / "configs" / "generated" / "admin_governance_surface_expansion_verification.json"
+)
 ROUTER_PATH = REPO_ROOT / "src" / "provisioning_api" / "routers" / "m365.py"
 
 
