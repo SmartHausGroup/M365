@@ -484,6 +484,12 @@ execution_status:
     summary: Defined the executive oversight contract through registry/executive_oversight_contract_v1.yaml
       with five oversight queries, five intervention primitives, three escalation paths,
       and five governance rules. Section 7 (Claude / UCP Workforce Experience) is now complete.
+  - phase: E8A
+    date: '2026-03-21'
+    summary: Defined the workload certification contract through registry/workload_certification_v1.yaml
+      with four ordered certification phases, five governance rules, and per-domain
+      certification verdicts. 13 of 15 executor domains pass certification; 2 domains
+      (workmanagement, publishing) are explicitly not-yet-certified.
   prepared_blocked:
   - phase: E8B
     blocked_by: E8
@@ -542,7 +548,7 @@ execution_status:
     summary: 'Issue the final release decision for the full workforce program.
 
       '
-  next_act: E8A
+  next_act: E8B
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files,
   collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
@@ -1074,7 +1080,7 @@ phase_stack:
   - code: E8A
     slug: workload-certification
     title: Workload Certification
-    status: Pending
+    status: Complete
     goal: 'Certify each workload surface against the live tenant and the bounded executor
       model.
 

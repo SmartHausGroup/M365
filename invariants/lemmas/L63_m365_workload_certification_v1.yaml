@@ -1,0 +1,29 @@
+lemma_id: L63
+title: M365 Workload Certification v1
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E8A"
+status: green
+invariant: >
+  Four ordered certification phases (schema_validation, action_coverage_audit,
+  auth_posture_alignment, bounded_claim_consistency) and five governance rules
+  (fail_closed, audit_completeness, bounded_claims, determinism, wave_alignment)
+  so that every executor domain receives a deterministic certification verdict
+  of certified or not-yet-certified, zero-action domains are fail-closed, and
+  no certification claim exceeds the actual routed action surface.
+proof_obligations:
+  - "Workload certification authority file exists and validates"
+  - "Certification phases are ordered and complete with inputs/outputs/failure_mode"
+  - "Five governance rules are present: fail_closed, audit_completeness, bounded_claims, determinism, wave_alignment"
+  - "Per-domain certification verdicts match routing table domain list"
+  - "Zero-action domains are not-yet-certified"
+  - "Certified count plus not-yet-certified count equals total domain count"
+  - "Total routed action count matches sum of per-domain routed action counts"
+failure_boundaries:
+  - "Missing certification authority file"
+  - "Missing or disordered certification phase"
+  - "Missing governance rule"
+  - "Zero-action domain marked certified"
+  - "Certified plus not-yet-certified count mismatch"
+  - "Routed action count mismatch"
+test_bindings:
+  - tests/test_workload_certification_v1.py
+ci_gate: scripts/ci/verify_workload_certification_v1.py

@@ -1252,3 +1252,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_executive_oversight_contract_v1.py` | CI verifier for the oversight contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
 | `configs/generated/executive_oversight_contract_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
 | `tests/test_executive_oversight_contract_v1.py` | Tests for the oversight contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+
+## Active E8A Workload Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/workload_certification_v1.yaml` | Authoritative workload certification contract with four phases, five governance rules, and per-domain verdicts. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `docs/commercialization/m365-workload-certification-v1.md` | Human-readable workload certification contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `docs/ma/lemmas/L63_m365_workload_certification_v1.md` | Lemma doc for L63. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `invariants/lemmas/L63_m365_workload_certification_v1.yaml` | Invariant metadata for L63. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `notebooks/m365/INV-M365-BK-workload-certification-v1.ipynb` | Primary notebook for L63. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `notebooks/lemma_proofs/L63_m365_workload_certification_v1.ipynb` | Proof notebook for L63. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `artifacts/scorecards/scorecard_l63.json` | Scorecard for L63. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `scripts/ci/verify_workload_certification_v1.py` | CI verifier for the workload certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `configs/generated/workload_certification_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
+| `tests/test_workload_certification_v1.py` | Tests for the workload certification contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E8A` |
