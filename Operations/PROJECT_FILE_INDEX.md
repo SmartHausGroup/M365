@@ -1177,3 +1177,78 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_design_department_pack_v1.py` | Bounded verifier for the Design pack authority, blocked-state summary, and generated proof artifact. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6J` |
 | `configs/generated/design_department_pack_v1_verification.json` | Generated proof artifact showing the Design pack authority and shared runtime remain aligned on the contract-only baseline state. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6J` |
 | `tests/test_design_department_pack_v1.py` | Targeted regressions proving blocked contract-only Design pack behavior and fail-closed zero-action enforcement. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6J` |
+
+## Active E7A UCP Delegation Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/ucp_delegation_contract_v1.yaml` | Authoritative Claude-to-UCP delegation contract defining six ordered phases, five governance rules, and deterministic contract-only persona handling. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `docs/commercialization/m365-ucp-delegation-contract-v1.md` | Human-readable delegation contract describing the end-to-end path from intent through audited execution. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `docs/ma/lemmas/L58_m365_ucp_delegation_contract_v1.md` | Lemma doc for L58. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `invariants/lemmas/L58_m365_ucp_delegation_contract_v1.yaml` | Machine-enforced invariant metadata for L58. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `notebooks/m365/INV-M365-BF-ucp-delegation-contract-v1.ipynb` | Primary notebook for L58. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `notebooks/lemma_proofs/L58_m365_ucp_delegation_contract_v1.ipynb` | Proof notebook for L58. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `artifacts/scorecards/scorecard_l58.json` | Scorecard for L58. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `scripts/ci/verify_ucp_delegation_contract_v1.py` | CI verifier for the delegation contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `configs/generated/ucp_delegation_contract_v1_verification.json` | Generated verification proof for the delegation contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+| `tests/test_ucp_delegation_contract_v1.py` | Tests for the delegation contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7A` |
+
+## Active E7B Persona Discovery Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/persona_discovery_contract_v1.yaml` | Authoritative persona discovery contract with six dimensions and selection rules. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `docs/commercialization/m365-persona-discovery-contract-v1.md` | Human-readable discovery contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `docs/ma/lemmas/L59_m365_persona_discovery_contract_v1.md` | Lemma doc for L59. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `invariants/lemmas/L59_m365_persona_discovery_contract_v1.yaml` | Invariant metadata for L59. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `notebooks/m365/INV-M365-BG-persona-discovery-contract-v1.ipynb` | Primary notebook for L59. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `notebooks/lemma_proofs/L59_m365_persona_discovery_contract_v1.ipynb` | Proof notebook for L59. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `artifacts/scorecards/scorecard_l59.json` | Scorecard for L59. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `scripts/ci/verify_persona_discovery_contract_v1.py` | CI verifier for the discovery contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `configs/generated/persona_discovery_contract_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+| `tests/test_persona_discovery_contract_v1.py` | Tests for the discovery contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7B` |
+
+## Active E7C Task Orchestration Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/task_orchestration_contract_v1.yaml` | Authoritative multi-step task orchestration contract with four primitives and step lifecycle. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `docs/commercialization/m365-task-orchestration-contract-v1.md` | Human-readable orchestration contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `docs/ma/lemmas/L60_m365_task_orchestration_contract_v1.md` | Lemma doc for L60. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `invariants/lemmas/L60_m365_task_orchestration_contract_v1.yaml` | Invariant metadata for L60. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `notebooks/m365/INV-M365-BH-task-orchestration-contract-v1.ipynb` | Primary notebook for L60. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `notebooks/lemma_proofs/L60_m365_task_orchestration_contract_v1.ipynb` | Proof notebook for L60. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `artifacts/scorecards/scorecard_l60.json` | Scorecard for L60. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `scripts/ci/verify_task_orchestration_contract_v1.py` | CI verifier for the orchestration contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `configs/generated/task_orchestration_contract_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+| `tests/test_task_orchestration_contract_v1.py` | Tests for the orchestration contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7C` |
+
+## Active E7D Cross-Persona Collaboration Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/cross_persona_collaboration_contract_v1.yaml` | Authoritative cross-persona collaboration contract with four primitives and accountability semantics. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `docs/commercialization/m365-cross-persona-collaboration-contract-v1.md` | Human-readable collaboration contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `docs/ma/lemmas/L61_m365_cross_persona_collaboration_contract_v1.md` | Lemma doc for L61. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `invariants/lemmas/L61_m365_cross_persona_collaboration_contract_v1.yaml` | Invariant metadata for L61. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `notebooks/m365/INV-M365-BI-cross-persona-collaboration-contract-v1.ipynb` | Primary notebook for L61. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `notebooks/lemma_proofs/L61_m365_cross_persona_collaboration_contract_v1.ipynb` | Proof notebook for L61. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `artifacts/scorecards/scorecard_l61.json` | Scorecard for L61. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `scripts/ci/verify_cross_persona_collaboration_contract_v1.py` | CI verifier for the collaboration contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `configs/generated/cross_persona_collaboration_contract_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+| `tests/test_cross_persona_collaboration_contract_v1.py` | Tests for the collaboration contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7D` |
+
+## Active E7E Executive Oversight Contract Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/executive_oversight_contract_v1.yaml` | Authoritative executive oversight contract with five queries, five interventions, and three escalation paths. | `Mission Statement`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `docs/commercialization/m365-executive-oversight-contract-v1.md` | Human-readable oversight contract. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `docs/ma/lemmas/L62_m365_executive_oversight_contract_v1.md` | Lemma doc for L62. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `invariants/lemmas/L62_m365_executive_oversight_contract_v1.yaml` | Invariant metadata for L62. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `notebooks/m365/INV-M365-BJ-executive-oversight-contract-v1.ipynb` | Primary notebook for L62. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `notebooks/lemma_proofs/L62_m365_executive_oversight_contract_v1.ipynb` | Proof notebook for L62. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `artifacts/scorecards/scorecard_l62.json` | Scorecard for L62. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `scripts/ci/verify_executive_oversight_contract_v1.py` | CI verifier for the oversight contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `configs/generated/executive_oversight_contract_v1_verification.json` | Generated verification proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |
+| `tests/test_executive_oversight_contract_v1.py` | Tests for the oversight contract. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E7E` |

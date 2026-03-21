@@ -239,39 +239,34 @@
         "phase": "E6J",
         "date": "2026-03-21",
         "summary": "Completed the Design department pack through registry/department_pack_design_v1.yaml and docs/commercialization/m365-design-department-pack-v1.md, added the notebook-backed L57 chain, reused the generalized shared pack runtime in src/smarthaus_common/department_pack.py, added the deterministic verifier at scripts/ci/verify_design_department_pack_v1.py, and proved the bounded E6J slice through targeted pack-state regressions plus generated proof at configs/generated/design_department_pack_v1_verification.json. Section 6 (Department Packs) is now fully complete across all 10 departments."
-      }
-    ],
-    "prepared_blocked": [
-      {
-        "phase": "E7",
-        "blocked_by": "E6",
-        "summary": "Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control."
       },
       {
         "phase": "E7A",
-        "blocked_by": "E7",
-        "summary": "Define the top-level delegation contract between Claude, UCP, and the workforce runtime."
+        "date": "2026-03-21",
+        "summary": "Defined the Claude-to-UCP delegation contract through registry/ucp_delegation_contract_v1.yaml with six ordered delegation phases, five governance rules, and deterministic contract-only persona handling."
       },
       {
         "phase": "E7B",
-        "blocked_by": "E7",
-        "summary": "Make it easy to find and target the right digital employee for a request."
+        "date": "2026-03-21",
+        "summary": "Defined the persona discovery and selection contract through registry/persona_discovery_contract_v1.yaml with six discovery dimensions, four selection rules, and coverage of all 39 personas."
       },
       {
         "phase": "E7C",
-        "blocked_by": "E7",
-        "summary": "Support composed multi-step work across workload and persona boundaries."
+        "date": "2026-03-21",
+        "summary": "Defined the multi-step task orchestration contract through registry/task_orchestration_contract_v1.yaml with four orchestration primitives, six step states, and four governance rules."
       },
       {
         "phase": "E7D",
-        "blocked_by": "E7",
-        "summary": "Allow digital employees to hand off, collaborate, and coordinate within governed bounds."
+        "date": "2026-03-21",
+        "summary": "Defined the cross-persona collaboration contract through registry/cross_persona_collaboration_contract_v1.yaml with four collaboration primitives, five handoff rules, and four governance rules."
       },
       {
         "phase": "E7E",
-        "blocked_by": "E7",
-        "summary": "Give executives visibility and intervention controls across the workforce runtime."
-      },
+        "date": "2026-03-21",
+        "summary": "Defined the executive oversight contract through registry/executive_oversight_contract_v1.yaml with five oversight queries, five intervention primitives, three escalation paths, and five governance rules. Section 7 (Claude / UCP Workforce Experience) is now complete."
+      }
+    ],
+    "prepared_blocked": [
       {
         "phase": "E8",
         "blocked_by": "E7E",
@@ -333,7 +328,7 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E7A"
+    "next_act": "E8A"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
