@@ -429,12 +429,15 @@ execution_status:
       added the deterministic verifier at scripts/ci/verify_product_department_pack_v1.py,
       and proved the bounded E6F slice through targeted pack-state regressions plus
       generated proof at configs/generated/product_department_pack_v1_verification.json.
+  - phase: E6G
+    date: '2026-03-21'
+    summary: Completed the Project Management department pack through registry/department_pack_project_management_v1.yaml
+      and docs/commercialization/m365-project-management-department-pack-v1.md, added
+      the notebook-backed L54 chain, reused the generalized shared pack runtime in
+      src/smarthaus_common/department_pack.py, added the deterministic verifier at
+      scripts/ci/verify_project_management_department_pack_v1.py, and proved the bounded
+      E6G slice through targeted pack-state regressions plus generated proof at configs/generated/project_management_department_pack_v1_verification.json.
   prepared_blocked:
-  - phase: E6H
-    blocked_by: E6
-    summary: 'Build the Studio Operations department capability pack.
-
-      '
   - phase: E6I
     blocked_by: E6
     summary: 'Build the Testing department capability pack.
@@ -548,17 +551,17 @@ execution_status:
     summary: 'Issue the final release decision for the full workforce program.
 
       '
-  next_act: E6G
+  next_act: E6H
 open_blockers:
 - The implemented action surface now covers directory, messaging, SharePoint/files,
   collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
   bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded
   security/Defender work, but most workload families and live-certification layers
   remain beyond the previously shipped v1 slice.
-- The Operations, HR, Communication, Engineering, Marketing, and Product department
-  packs are now runtime-bounded; Engineering, Marketing, and Product remain intentionally
-  blocked while their personas stay contract-only, and the remaining department packs
-  are still unimplemented and uncertified.
+- The Operations, HR, Communication, Engineering, Marketing, Product, and Project
+  Management department packs are now runtime-bounded; Engineering, Marketing, Product,
+  and Project Management remain intentionally blocked while their personas stay contract-only,
+  and the remaining department packs are still unimplemented and uncertified.
 requirements:
 - id: R1
   name: Integrated workforce-expansion control plane
@@ -979,14 +982,14 @@ phase_stack:
   - code: E6G
     slug: project-management-department-pack
     title: Project Management Department Pack
-    status: Active
+    status: Complete
     goal: 'Build the Project Management department capability pack.
 
       '
   - code: E6H
     slug: studio-operations-department-pack
     title: Studio Operations Department Pack
-    status: Pending
+    status: Active
     goal: 'Build the Studio Operations department capability pack.
 
       '
