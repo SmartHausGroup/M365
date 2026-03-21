@@ -1,0 +1,19 @@
+lemma_id: L71
+title: M365 Support Boundary v2
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E9D"
+status: green
+invariant: >
+  Four support layers and five governance rules with three support tiers
+  and deterministic escalation paths.
+proof_obligations:
+  - "Support authority file exists and validates"
+  - "Four support layers present"
+  - "Three support tiers defined"
+  - "Escalation paths deterministic"
+failure_boundaries:
+  - "Missing support authority file"
+  - "Missing support layer"
+  - "Missing support tier"
+test_bindings:
+  - tests/test_support_boundary_v2.py
+ci_gate: scripts/ci/verify_support_boundary_v2.py
