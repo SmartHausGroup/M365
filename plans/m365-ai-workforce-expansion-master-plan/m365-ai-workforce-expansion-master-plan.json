@@ -194,14 +194,14 @@
         "phase": "E6A",
         "date": "2026-03-21",
         "summary": "Completed the Operations department pack through registry/department_pack_operations_v1.yaml and docs/commercialization/m365-operations-department-pack-v1.md, added the notebook-backed L48 chain, extracted the shared pack runtime into src/smarthaus_common/department_pack.py from notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb, added the deterministic verifier at scripts/ci/verify_operations_department_pack_v1.py, and proved the bounded E6A slice through targeted pack-state regressions plus generated proof at configs/generated/operations_department_pack_v1_verification.json."
+      },
+      {
+        "phase": "E6B",
+        "date": "2026-03-21",
+        "summary": "Completed the HR department pack through registry/department_pack_hr_v1.yaml and docs/commercialization/m365-hr-department-pack-v1.md, added the notebook-backed L49 chain, reused and type-hardened the shared pack runtime in src/smarthaus_common/department_pack.py, added the deterministic verifier at scripts/ci/verify_hr_department_pack_v1.py, and proved the bounded E6B slice through targeted pack-state regressions plus generated proof at configs/generated/hr_department_pack_v1_verification.json."
       }
     ],
     "prepared_blocked": [
-      {
-        "phase": "E6C",
-        "blocked_by": "E6",
-        "summary": "Build the Communication department capability pack."
-      },
       {
         "phase": "E6D",
         "blocked_by": "E6",
@@ -328,11 +328,11 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E6B"
+    "next_act": "E6C"
   },
   "open_blockers": [
     "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
-    "Only the Operations department pack is now runtime-bounded; the remaining department packs are still unimplemented and uncertified."
+    "Only the Operations and HR department packs are now runtime-bounded; the remaining department packs are still unimplemented and uncertified."
   ],
   "requirements": [
     {
@@ -741,14 +741,14 @@
           "code": "E6B",
           "slug": "hr-department-pack",
           "title": "HR Department Pack",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Build the HR department capability pack."
         },
         {
           "code": "E6C",
           "slug": "communication-department-pack",
           "title": "Communication Department Pack",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Build the Communication department capability pack."
         },
         {

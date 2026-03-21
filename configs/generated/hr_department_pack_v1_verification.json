@@ -1,0 +1,18 @@
+{
+  "active_persona_count": 1,
+  "department": "hr",
+  "pack_state": "ready",
+  "persona_count": 1,
+  "personas": [
+    {
+      "accountability_state": "on_track",
+      "action_count": 5,
+      "persona_id": "hr-generalist",
+      "status": "active"
+    }
+  ],
+  "registry_backed_persona_count": 1,
+  "supported_action_count": 5,
+  "workflow_family_count": 3,
+  "workload_family_count": 4
+}

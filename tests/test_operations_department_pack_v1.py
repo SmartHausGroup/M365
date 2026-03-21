@@ -9,9 +9,7 @@ from smarthaus_common.json_store import JsonStore
 from smarthaus_common.persona_task_queue import create_persona_task, update_persona_task
 
 
-def test_e6a_builds_ready_operations_pack(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_e6a_builds_ready_operations_pack(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))
     store = JsonStore(tmp_path)
 
@@ -68,7 +66,9 @@ def test_e6a_marks_pack_attention_required_when_operations_work_is_blocked(
     pack = build_department_pack("operations", store=store)
 
     assert pack["summary"]["pack_state"] == "attention_required"
-    admin = next(persona for persona in pack["personas"] if persona["persona_id"] == "m365-administrator")
+    admin = next(
+        persona for persona in pack["personas"] if persona["persona_id"] == "m365-administrator"
+    )
     assert admin["accountability_state"] == "escalated"
 
 

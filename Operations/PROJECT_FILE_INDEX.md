@@ -1040,3 +1040,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_operations_department_pack_v1.py` | Bounded verifier for the Operations pack authority, runtime summary, and generated proof artifact. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6A` |
 | `configs/generated/operations_department_pack_v1_verification.json` | Generated proof artifact showing the Operations pack authority and extracted runtime remain aligned on the bounded baseline state. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6A` |
 | `tests/test_operations_department_pack_v1.py` | Targeted regressions proving ready, watch, attention-required, and fail-closed Operations pack behavior. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6A` |
+
+## Active E6B HR Department Pack Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/department_pack_hr_v1.yaml` | Machine-readable authority defining the bounded HR department pack, its regulated persona anchor, workflow families, approval profile, KPIs, and supported action total. | `Mission Statement`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `docs/commercialization/m365-hr-department-pack-v1.md` | Human-readable HR pack contract describing scope, bounded claims, pack-state semantics, and the regulated HR workforce boundary. | `Operational Model: Self-Service & Self-Sufficient`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `docs/ma/lemmas/L49_m365_hr_department_pack_v1.md` | Lemma doc asserting that the HR department may be treated as one pack only when persona, actions, approvals, and readiness state project from one authority. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `invariants/lemmas/L49_m365_hr_department_pack_v1.yaml` | Machine-enforced invariant metadata for `L49`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `notebooks/m365/INV-M365-AY-hr-department-pack-v1.ipynb` | Primary notebook-backed governance source for the HR department-pack authority and deterministic runtime projection. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `notebooks/lemma_proofs/L49_m365_hr_department_pack_v1.ipynb` | Projected lemma-proof notebook for `L49`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `artifacts/scorecards/scorecard_l49.json` | Determinism and notebook-backing scorecard for the `L49` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `scripts/ci/verify_hr_department_pack_v1.py` | Bounded verifier for the HR pack authority, runtime summary, and generated proof artifact. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `configs/generated/hr_department_pack_v1_verification.json` | Generated proof artifact showing the HR pack authority and shared runtime remain aligned on the bounded baseline state. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |
+| `tests/test_hr_department_pack_v1.py` | Targeted regressions proving ready, watch, attention-required, and fail-closed HR pack behavior. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E6B` |

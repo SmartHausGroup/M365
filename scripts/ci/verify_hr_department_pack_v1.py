@@ -9,15 +9,15 @@ from smarthaus_common.department_pack import build_department_pack, load_departm
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[2]
     authority = load_department_pack_authority(
-        "operations", path=repo_root / "registry" / "department_pack_operations_v1.yaml"
+        "hr", path=repo_root / "registry" / "department_pack_hr_v1.yaml"
     )
-    pack = build_department_pack("operations")
+    pack = build_department_pack("hr")
 
     summary = pack["summary"]
-    if summary["persona_count"] != 2:
-        raise SystemExit("operations_department_pack_persona_count_mismatch")
-    if summary["supported_action_count"] != 43:
-        raise SystemExit("operations_department_pack_supported_action_count_mismatch")
+    if summary["persona_count"] != 1:
+        raise SystemExit("hr_department_pack_persona_count_mismatch")
+    if summary["supported_action_count"] != 5:
+        raise SystemExit("hr_department_pack_supported_action_count_mismatch")
 
     payload = {
         "department": authority["department"]["id"],
@@ -39,9 +39,7 @@ def main() -> int:
         ],
     }
 
-    output_path = (
-        repo_root / "configs" / "generated" / "operations_department_pack_v1_verification.json"
-    )
+    output_path = repo_root / "configs" / "generated" / "hr_department_pack_v1_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
