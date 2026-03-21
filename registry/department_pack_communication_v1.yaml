@@ -1,0 +1,94 @@
+version: 1.0.0
+last_updated: '2026-03-21T05:12:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: communication
+  display_name: Communication
+  wave: W6
+  wave_track: Wave A
+  status: registry-backed
+  purpose: >-
+    Package the Communication digital employee into one bounded workforce
+    contract for outbound email, meeting coordination, follow-up orchestration,
+    and campaign launch operations.
+  bounded_claim: >-
+    The Communication department pack may only claim the action-backed David Park
+    workflows plus the explicit approval, escalation, and external-communication
+    safeguards declared in this authority.
+workflow_families:
+  - outbound_email_and_mailbox_campaigns
+  - meeting_and_followup_coordination
+  - campaign_launch_and_communication_operations
+workload_families:
+  - Mail, calendar, contacts, and bookings
+  - Collaboration, meetings, and communities
+  - Media, publishing, and extended communications
+  - Tasks, scheduling, and work management
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the communication lead must intervene.
+  blocked: An expected persona is missing, inactive, or outside the declared authority.
+approval_model:
+  department_owner: marketing-lead
+  department_lead: department-lead:communication
+  profiles:
+    high-impact:
+      approvers:
+        - marketing-lead
+      personas:
+        - outreach-coordinator
+      rule: >-
+        Bulk outbound mail, campaign launches, and externally visible
+        communication changes require human review before execution.
+kpis:
+  required_personas: 1
+  required_active_personas: 1
+  required_registry_backed_personas: 1
+  required_workflow_families: 3
+  supported_action_count: 7
+personas:
+  outreach-coordinator:
+    display_name: David Park
+    title: Communications Manager
+    role_type: department_anchor
+    risk_tier: high
+    approval_profile: high-impact
+    capability_families:
+      - outbound email and mailbox campaigns
+      - meeting coordination
+      - follow-up orchestration
+      - campaign launch coordination
+    workload_families:
+      - Mail, calendar, contacts, and bookings
+      - Collaboration, meetings, and communities
+      - Media, publishing, and extended communications
+      - Tasks, scheduling, and work management
+    workflow_families:
+      - outbound_email_and_mailbox_campaigns
+      - meeting_and_followup_coordination
+      - campaign_launch_and_communication_operations
+    supported_actions:
+      - email.send_individual
+      - email.send_bulk
+      - email.schedule
+      - meeting.schedule
+      - followup.create
+      - campaign.create
+      - mail.send
+bounded_claims:
+  supported:
+    - outbound email and mailbox campaigns
+    - meeting scheduling and follow-up coordination
+    - campaign launch preparation and communication operations
+    - human-reviewed external communication changes for the declared persona
+  unsupported:
+    - finance or HR approval workflows
+    - website publishing and SEO operations
+    - general legal or security case management
+    - social publishing beyond the declared communication action surface
