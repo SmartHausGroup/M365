@@ -573,11 +573,10 @@ open_blockers:
   bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded
   security/Defender work, but most workload families and live-certification layers
   remain beyond the previously shipped v1 slice.
-- The Operations, HR, Communication, Engineering, Marketing, Product, Project Management,
-  and Studio Operations department packs are now runtime-bounded; Engineering, Marketing,
-  Product, Project Management, and Studio Operations remain intentionally blocked
-  while their personas stay contract-only, and the remaining department packs are
-  still unimplemented and uncertified.
+- All 10 department packs are now runtime-bounded. Operations, HR, and Communication
+  are registry-backed, while Engineering, Marketing, Product, Project Management,
+  Studio Operations, Testing, and Design remain intentionally blocked while their
+  personas stay contract-only.
 requirements:
 - id: R1
   name: Integrated workforce-expansion control plane

@@ -105,7 +105,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 ## Open Expansion Blockers
 
 - The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, bounded cross-workload recipe discovery, and bounded Intune / devices remain unimplemented.
-- The Operations, HR, Communication, Engineering, Marketing, Product, Project Management, and Studio Operations department packs are now runtime-bounded; Engineering, Marketing, Product, Project Management, and Studio Operations remain intentionally blocked while their personas stay contract-only, and the remaining department packs are still unimplemented and uncertified.
+- All 10 department packs are now runtime-bounded. Operations, HR, and Communication are registry-backed, while Engineering, Marketing, Product, Project Management, Studio Operations, Testing, and Design remain intentionally blocked while their personas stay contract-only.
 
 ## Scope
 
