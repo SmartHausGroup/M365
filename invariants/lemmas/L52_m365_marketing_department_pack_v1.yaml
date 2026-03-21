@@ -1,0 +1,22 @@
+lemma_id: L52
+title: M365 Marketing Department Pack v1
+invariant: >
+  The Marketing department pack must be projected from one declared Marketing
+  authority, one authoritative persona registry, and one deterministic
+  pack-state rule so the department boundary, coverage status, zero-action
+  claim, and blocked readiness posture cannot drift between runtime surfaces.
+proof_obligations:
+  - marketing department pack authority file exists and validates
+  - declared Marketing personas all exist in the authoritative persona registry
+  - contract-only Marketing personas declare zero supported actions
+  - projected coverage statuses match the declared pack authority
+  - pack state is derived deterministically from persona status and accountability state
+failure_boundaries:
+  - missing Marketing department pack authority file
+  - missing expected persona
+  - contract-only persona declares supported actions
+  - coverage-status mismatch between authority and runtime projection
+  - marketing pack returns ready while personas remain planned-only
+test_bindings:
+  - tests/test_marketing_department_pack_v1.py
+ci_gate: scripts/ci/verify_marketing_department_pack_v1.py

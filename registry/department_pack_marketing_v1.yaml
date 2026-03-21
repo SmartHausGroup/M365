@@ -1,0 +1,217 @@
+version: 1.0.0
+last_updated: '2026-03-21T05:40:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  persona_accountability: registry/persona_accountability_v1.yaml
+  persona_memory: registry/persona_memory_work_history_v1.yaml
+  runtime: src/smarthaus_common/department_pack.py
+department:
+  id: marketing
+  display_name: Marketing
+  wave: W7
+  wave_track: Wave A
+  status: persona-contract-only
+  purpose: >-
+    Package the Marketing digital employees into one bounded department
+    contract covering growth experimentation, content planning, social-channel
+    operations, and community engagement responsibilities that are defined but
+    not yet action-backed.
+  bounded_claim: >-
+    The Marketing department pack may only claim the authoritative contract
+    personas, capability families, approval posture, and blocked readiness
+    state declared here. It may not claim implemented external publishing,
+    campaign execution, or channel-operation coverage until later acts activate
+    those personas.
+workflow_families:
+  - content_strategy_and_asset_preparation
+  - growth_experimentation_and_campaign_analysis
+  - social_channel_curation_and_publication_support
+  - community_engagement_and_feedback_harvesting
+workload_families:
+  - Media, publishing, and extended communications
+  - Low-code, workflow, and analytics
+  - Documents, notes, and workspace productivity
+  - Knowledge, search, and employee experience
+  - Content, intranet, and files
+  - Mail, calendar, contacts, and bookings
+  - Collaboration, meetings, and communities
+pack_states:
+  ready: Every pack persona is active and no accountability state requires intervention.
+  watch: At least one pack persona is in warning state but none are escalated.
+  attention_required: At least one pack persona is escalated and the marketing lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+approval_model:
+  department_owner: department-owner:marketing
+  department_lead: department-lead:marketing
+  profiles:
+    medium-operational:
+      approvers:
+        - department-owner:marketing
+      personas:
+        - growth-hacker
+      rule: >-
+        Growth experiments, funnel mutations, and campaign-analysis decisions
+        require department-owner review when later acts activate the Marketing
+        personas.
+    low-observe-create:
+      approvers:
+        - department-owner:marketing
+      personas:
+        - app-store-optimizer
+        - content-creator
+        - instagram-curator
+        - reddit-community-builder
+        - tiktok-strategist
+        - twitter-engager
+      rule: >-
+        Draft, asset-preparation, and social-planning work may proceed in
+        observe/create mode until later acts activate outbound publication and
+        community execution surfaces.
+kpis:
+  required_personas: 7
+  required_active_personas: 0
+  required_registry_backed_personas: 0
+  required_workflow_families: 4
+  supported_action_count: 0
+personas:
+  app-store-optimizer:
+    display_name: Jake Thompson
+    title: ASO Specialist
+    role_type: growth_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - store listing optimization
+      - metadata experiments
+      - performance analysis
+    workload_families:
+      - Media, publishing, and extended communications
+      - Low-code, workflow, and analytics
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - content_strategy_and_asset_preparation
+      - growth_experimentation_and_campaign_analysis
+    supported_actions: []
+  content-creator:
+    display_name: Taylor Swift
+    title: Content Strategist
+    role_type: content_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - content drafting
+      - asset preparation
+      - publication support
+    workload_families:
+      - Media, publishing, and extended communications
+      - Documents, notes, and workspace productivity
+      - Content, intranet, and files
+    workflow_families:
+      - content_strategy_and_asset_preparation
+      - social_channel_curation_and_publication_support
+    supported_actions: []
+  growth-hacker:
+    display_name: Morgan Davis
+    title: Growth Lead
+    role_type: strategy_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+      - growth experiment design
+      - campaign analysis
+      - funnel automation
+    workload_families:
+      - Low-code, workflow, and analytics
+      - Media, publishing, and extended communications
+      - Mail, calendar, contacts, and bookings
+    workflow_families:
+      - growth_experimentation_and_campaign_analysis
+    supported_actions: []
+  instagram-curator:
+    display_name: Zoe Martinez
+    title: Visual Content Specialist
+    role_type: channel_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - social content curation
+      - asset scheduling
+      - outbound publishing preparation
+    workload_families:
+      - Media, publishing, and extended communications
+      - Content, intranet, and files
+      - Mail, calendar, contacts, and bookings
+    workflow_families:
+      - social_channel_curation_and_publication_support
+    supported_actions: []
+  reddit-community-builder:
+    display_name: Priya Singh
+    title: Community Manager
+    role_type: community_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - community engagement planning
+      - post drafting
+      - feedback harvesting
+    workload_families:
+      - Media, publishing, and extended communications
+      - Collaboration, meetings, and communities
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - community_engagement_and_feedback_harvesting
+      - social_channel_curation_and_publication_support
+    supported_actions: []
+  tiktok-strategist:
+    display_name: Ryan O'Connor
+    title: Short-form Video Expert
+    role_type: channel_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - short-form content planning
+      - asset experimentation
+      - channel performance analysis
+    workload_families:
+      - Media, publishing, and extended communications
+      - Content, intranet, and files
+      - Low-code, workflow, and analytics
+    workflow_families:
+      - content_strategy_and_asset_preparation
+      - social_channel_curation_and_publication_support
+    supported_actions: []
+  twitter-engager:
+    display_name: Jamie Lee
+    title: Social Media Director
+    role_type: channel_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+      - social response drafting
+      - channel monitoring
+      - outbound posting support
+    workload_families:
+      - Media, publishing, and extended communications
+      - Mail, calendar, contacts, and bookings
+      - Knowledge, search, and employee experience
+    workflow_families:
+      - community_engagement_and_feedback_harvesting
+      - social_channel_curation_and_publication_support
+    supported_actions: []
+bounded_claims:
+  supported:
+    - marketing persona census and capability-family contract
+    - approval and escalation semantics for future marketing activation
+    - deterministic blocked-state projection while marketing remains contract-only
+  unsupported:
+    - claims that marketing personas are currently action-backed
+    - outbound publishing, campaign execution, or community mutations beyond later activation acts
+    - finance, HR, or engineering work outside the marketing contract

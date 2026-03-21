@@ -1,1049 +1,1166 @@
 plan_id: m365-ai-workforce-expansion-master-plan
 status: Active
-date: "2026-03-20"
+date: '2026-03-20'
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-ai-workforce-expansion-master-plan:R1
 north_star: Operations/NORTHSTAR.md
 historical_lineage: m365-enterprise-readiness-master-plan
 ma_process_required: false
+objective: 'Define and execute the full SMARTHAUS agentic workforce expansion program
+  so Claude can delegate through UCP into a governed M365 pack that covers the full
+  explicitly-inventoried Microsoft 365 capability universe across all departments
+  and personas.
 
-objective: >
-  Define and execute the full SMARTHAUS agentic workforce expansion program so Claude can delegate through UCP into a governed M365 pack that covers the full explicitly-inventoried Microsoft 365 capability universe across all departments and personas.
+  '
+decision_rule: 'The workforce is not complete until the full department/persona universe,
+  the full governable M365 capability universe, the bounded executor and auth model,
+  the digital-employee runtime, the department packs, the Claude/UCP delegation layer,
+  the live certification evidence, and the final release decision are all green. Documentation
+  or isolated slices alone are not sufficient.
 
-decision_rule: >
-  The workforce is not complete until the full department/persona universe, the full governable M365 capability universe, the bounded executor and auth model, the digital-employee runtime, the department packs, the Claude/UCP delegation layer, the live certification evidence, and the final release decision are all green. Documentation or isolated slices alone are not sufficient.
+  '
+prompt_discipline: 'Every grouped phase and every child act in this plan must have
+  one formal MATHS prompt pair under docs/prompts/. Prompt files must follow the MATHS
+  template structure and the repo two-file prompt rule.
 
-prompt_discipline: >
-  Every grouped phase and every child act in this plan must have one formal MATHS prompt pair under docs/prompts/. Prompt files must follow the MATHS template structure and the repo two-file prompt rule.
-
+  '
 persona_count_target: 39
 department_count_target: 10
 source_roster: registry/ai_team.json
 department_targets:
-  - operations
-  - hr
-  - communication
-  - engineering
-  - marketing
-  - product
-  - project-management
-  - studio-operations
-  - testing
-  - design
+- operations
+- hr
+- communication
+- engineering
+- marketing
+- product
+- project-management
+- studio-operations
+- testing
+- design
 workload_universe_targets:
-  - "Identity, directory, and tenant administration"
-  - "Mail, calendar, contacts, and bookings"
-  - "Collaboration, meetings, and communities"
-  - "Content, intranet, and files"
-  - "Tasks, scheduling, and work management"
-  - "Documents, notes, and workspace productivity"
-  - "Knowledge, search, and employee experience"
-  - "Low-code, workflow, and analytics"
-  - "Security, compliance, and data governance"
-  - "Devices, endpoint management, and adjacent Windows admin surfaces"
-  - "Media, publishing, and extended communications"
-
+- Identity, directory, and tenant administration
+- Mail, calendar, contacts, and bookings
+- Collaboration, meetings, and communities
+- Content, intranet, and files
+- Tasks, scheduling, and work management
+- Documents, notes, and workspace productivity
+- Knowledge, search, and employee experience
+- Low-code, workflow, and analytics
+- Security, compliance, and data governance
+- Devices, endpoint management, and adjacent Windows admin surfaces
+- Media, publishing, and extended communications
 execution_status:
   completed:
-    - phase: E0A
-      date: "2026-03-20"
-      summary: >
-        Locked the authoritative department and persona census by removing the stray
-        non-authoritative bonus department from registry/ai_team.json, proving the
-        resulting roster resolves to 39 personas across 10 departments, cross-checking
-        all roster agent IDs against registry/agents.yaml, and recording the locked
-        census in docs/commercialization/m365-department-persona-census.md.
-    - phase: E0B
-      date: "2026-03-20"
-      summary: >
-        Locked the workload universe at the family level in
-        docs/commercialization/m365-workload-universe-inventory.md by grounding the
-        expansion target in official Microsoft workload references, the repo's current
-        184-action registry surface, and an explicit family inventory that now drives
-        downstream capability taxonomy and routing work.
-    - phase: E0C
-      date: "2026-03-20"
-      summary: >
-        Normalized the locked workload-family inventory into
-        docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md by
-        defining canonical implementation-status, feasibility, auth, and licensing
-        classes that downstream persona, routing, and certification phases must use.
-    - phase: E0D
-      date: "2026-03-20"
-      summary: >
-        Bound the authoritative 39-persona roster to explicit workload families,
-        capability families, risk tiers, approval profiles, and coverage statuses in
-        registry/persona_capability_map.yaml and
-        docs/commercialization/m365-persona-capability-and-risk-map.md, while
-        explicitly documenting the 20 non-authoritative overflow registry agents as
-        inventory rather than workforce authority.
-    - phase: E0E
-      date: "2026-03-20"
-      summary: >
-        Converted the authority wave into an explicit execution sequence through
-        registry/workforce_release_wave_map.yaml and
-        docs/commercialization/m365-workforce-release-wave-and-completion-map.md,
-        defining bounded program waves, exit criteria, unlocks, and claim limits so
-        the remaining workforce build-out proceeds in deterministic increments.
-    - phase: E1A
-      date: "2026-03-20"
-      summary: >
-        Defined the canonical workforce action contract in
-        registry/universal_action_contract_v2.yaml and
-        docs/commercialization/m365-universal-action-contract-v2.md, proving through
-        the notebook-backed L23 chain that the repo's CAIO, capability-registry, and
-        agent-registry action dialects can project deterministically into one v2
-        identity, semantics, execution, governance, and evidence envelope.
-    - phase: E1B
-      date: "2026-03-20"
-      summary: >
-        Replaced the scattered hardcoded executor tables with
-        registry/executor_routing_v2.yaml and the shared
-        src/smarthaus_common/executor_routing.py resolver, then projected that
-        authority into ops-adapter routing, persona-domain derivation, and the
-        instruction router so canonical v2 actions and current legacy aliases all
-        resolve deterministically to one bounded executor domain.
-    - phase: E1C
-      date: "2026-03-20"
-      summary: >
-        Defined the machine-readable auth authority in registry/auth_model_v2.yaml,
-        added the shared src/smarthaus_common/auth_model.py resolver, extended
-        src/ops_adapter/actions.py so delegated, app_only, and hybrid execution
-        preferences are projected through the shared routing surface for user-context
-        actions, and proved the resulting contract through the notebook-backed L25
-        chain plus targeted auth-model regressions.
-    - phase: E1D
-      date: "2026-03-20"
-      summary: >
-        Defined the machine-readable approval and risk authority in
-        registry/approval_risk_matrix_v2.yaml, added the shared
-        src/smarthaus_common/approval_risk.py resolver, projected deterministic
-        risk_class, approval_profile, approvers, and matrix-enforced approval
-        metadata into src/ops_adapter/main.py and src/ops_adapter/approvals.py,
-        and proved the resulting fail-closed governance contract through the
-        notebook-backed L26 chain plus targeted approval-risk regressions.
-    - phase: E1E
-      date: "2026-03-20"
-      summary: >
-        Defined the machine-readable unified audit authority in
-        registry/unified_audit_schema_v2.yaml, added the shared
-        src/smarthaus_common/audit_schema.py builder, projected the canonical audit
-        envelope into src/ops_adapter/audit.py and src/provisioning_api/audit.py,
-        updated the bounded instruction-audit verifier to the v2 schema, and
-        proved the shared evidence contract through the notebook-backed L27 chain
-        plus targeted audit-schema regressions.
-    - phase: E2A
-      date: "2026-03-20"
-      summary: >
-        Expanded the first post-control-plane workload slice through
-        registry/entra_directory_expansion_v2.yaml and
-        docs/commercialization/m365-entra-directory-expansion-v2.md, projected
-        deterministic Entra and directory actions into src/smarthaus_graph/client.py
-        and src/provisioning_api/routers/m365.py, aligned the v2 routing/auth/approval
-        registries and CAIO/capability contracts, and proved the slice through the
-        notebook-backed L28 chain, scripts/ci/verify_entra_directory_expansion.py,
-        and targeted E2A regressions.
-    - phase: E2B
-      date: "2026-03-20"
-      summary: >
-        Expanded Outlook / Exchange messaging through
-        registry/outlook_exchange_expansion_v2.yaml and
-        docs/commercialization/m365-outlook-exchange-expansion-v2.md, projected
-        mail, calendar, mailbox, shared-mailbox, and contact actions into the shared
-        Graph client and instruction router, aligned the CAIO/capability/routing/auth/
-        approval contracts, added the notebook-backed L29 chain and
-        scripts/ci/verify_outlook_exchange_expansion.py, and proved the bounded E2B
-        slice through contract verifiers plus targeted messaging regressions.
-    - phase: E2C
-      date: "2026-03-20"
-      summary: >
-        Expanded SharePoint / OneDrive / files work through
-        registry/sharepoint_onedrive_files_expansion_v2.yaml and
-        docs/commercialization/m365-sharepoint-onedrive-files-expansion-v2.md,
-        projected deterministic site, list, drive, and drive-item actions into
-        src/smarthaus_graph/client.py and src/provisioning_api/routers/m365.py,
-        aligned the CAIO/capability/routing/auth/approval contracts, added the
-        notebook-backed L30 chain and
-        scripts/ci/verify_sharepoint_onedrive_files_expansion.py, and proved the
-        bounded E2C slice through contract verifiers plus targeted SharePoint/files
-        regressions.
-    - phase: E2D
-      date: "2026-03-20"
-      summary: >
-        Expanded Teams / Groups / Planner work through
-        registry/teams_groups_planner_expansion_v2.yaml and
-        docs/commercialization/m365-teams-groups-planner-expansion-v2.md,
-        projected deterministic team, channel, plan, bucket, and task actions
-        into src/smarthaus_graph/client.py and src/provisioning_api/routers/m365.py,
-        aligned the CAIO/capability/routing/auth/approval contracts, added the
-        notebook-backed L31 chain and
-        scripts/ci/verify_teams_groups_planner_expansion.py, and proved the
-        bounded E2D slice through contract verifiers plus targeted collaboration
-        and Planner regressions.
-    - phase: E2E
-      date: "2026-03-20"
-      summary: >
-        Expanded documents / spreadsheets / presentations work through
-        registry/documents_spreadsheets_presentations_expansion_v2.yaml and
-        docs/commercialization/m365-documents-spreadsheets-presentations-expansion-v2.md,
-        projected deterministic DOCX/XLSX/PPTX generation into
-        src/smarthaus_common/office_generation.py, extended the shared Graph client
-        and instruction router for create/update document/workbook/presentation
-        actions, aligned the CAIO/capability/routing/auth/approval contracts,
-        added the notebook-backed L32 chain and
-        scripts/ci/verify_documents_spreadsheets_presentations_expansion.py, and
-        proved the bounded E2E slice through contract verifiers plus targeted
-        productivity regressions.
-    - phase: E3A
-      date: "2026-03-20"
-      summary: >
-        Expanded Power Automate through registry/power_automate_expansion_v2.yaml
-        and docs/commercialization/m365-power-automate-expansion-v2.md, projected
-        bounded flow discovery, owner governance, lifecycle control, run-history,
-        and explicit callback actions into src/smarthaus_common/power_automate_client.py
-        and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
-        contracts, added the notebook-backed L33 chain and
-        scripts/ci/verify_power_automate_expansion.py, and proved the bounded E3A slice
-        through contract verifiers plus targeted Power Automate regressions.
-    - phase: E3B
-      date: "2026-03-20"
-      summary: >
-        Expanded Power Apps through registry/power_apps_expansion_v2.yaml and
-        docs/commercialization/m365-power-apps-expansion-v2.md, projected bounded app,
-        role, ownership, environment, and environment-role actions into
-        src/smarthaus_common/power_apps_client.py and src/provisioning_api/routers/m365.py,
-        aligned the CAIO/capability/routing/auth/approval contracts, added the
-        notebook-backed L34 chain and scripts/ci/verify_power_apps_expansion.py,
-        and proved the bounded E3B slice through contract verifiers plus targeted
-        Power Apps regressions.
-    - phase: E3C
-      date: "2026-03-20"
-      summary: >
-        Expanded Power BI through registry/power_bi_expansion_v2.yaml and
-        docs/commercialization/m365-power-bi-expansion-v2.md, projected bounded
-        workspace, report, dataset, dataset-refresh, and dashboard actions into
-        src/smarthaus_common/power_bi_client.py and src/provisioning_api/routers/m365.py,
-        aligned the CAIO/capability/routing/auth/approval contracts, added the
-        notebook-backed L35 chain and scripts/ci/verify_power_bi_expansion.py,
-        and proved the bounded E3C slice through contract verifiers plus targeted
-        Power BI regressions.
-    - phase: E3D
-      date: "2026-03-20"
-      summary: >
-        Expanded Forms / approvals / connectors through
-        registry/forms_approvals_connectors_expansion_v2.yaml and
-        docs/commercialization/m365-forms-approvals-connectors-expansion-v2.md,
-        projected bounded approval-item, connector, external-item, and external-group
-        actions into src/smarthaus_common/forms_approvals_connectors_client.py and
-        src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
-        contracts, added the notebook-backed L36 chain and
-        scripts/ci/verify_forms_approvals_connectors_expansion.py, and proved the
-        bounded E3D slice through contract verifiers plus targeted connector and
-        approval regressions.
-    - phase: E3E
-      date: "2026-03-20"
-      summary: >
-        Expanded cross-workload recipes through
-        registry/cross_workload_automation_recipes_v2.yaml and
-        docs/commercialization/m365-cross-workload-automation-recipes-v2.md,
-        projected bounded recipe-catalog discovery into
-        src/smarthaus_common/automation_recipe_client.py and
-        src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
-        contracts, added the notebook-backed L37 chain and
-        scripts/ci/verify_cross_workload_automation_recipes.py, and proved the
-        bounded E3E slice through contract verifiers plus targeted recipe-catalog
-        regressions.
-    - phase: E4A
-      date: "2026-03-20"
-      summary: >
-        Expanded Intune / devices through registry/intune_devices_expansion_v2.yaml
-        and docs/commercialization/m365-intune-devices-expansion-v2.md, projected
-        bounded managed-device inventory, compliance-summary, and action operations
-        into src/smarthaus_common/intune_devices_client.py and
-        src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
-        contracts, added the notebook-backed L38 chain and
-        scripts/ci/verify_intune_devices_expansion.py, and proved the bounded E4A
-        slice through contract verifiers plus targeted Intune regressions.
-    - phase: E4B
-      date: "2026-03-20"
-      summary: >
-        Expanded security / Defender through registry/security_defender_expansion_v2.yaml
-        and docs/commercialization/m365-security-defender-expansion-v2.md,
-        projected bounded alert, incident, secure-score, and incident-update actions
-        into src/smarthaus_common/security_defender_client.py and
-        src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
-        contracts, added the notebook-backed L39 chain and
-        scripts/ci/verify_security_defender_expansion.py, and proved the bounded
-        E4B slice through contract verifiers plus targeted security regressions.
-    - phase: E4C
-      date: "2026-03-20"
-      summary: >
-        Expanded compliance / retention / eDiscovery through
-        registry/compliance_retention_ediscovery_expansion_v2.yaml and
-        docs/commercialization/m365-compliance-retention-ediscovery-expansion-v2.md,
-        projected bounded eDiscovery case, search, custodian, and legal-hold
-        actions into src/smarthaus_common/compliance_ediscovery_client.py and
-        src/provisioning_api/routers/m365.py, aligned the
-        CAIO/capability/routing/auth/approval contracts, added the notebook-backed
-        L40 chain and scripts/ci/verify_compliance_retention_ediscovery_expansion.py,
-        and proved the bounded E4C slice through contract verifiers plus targeted
-        compliance regressions.
-    - phase: E4D
-      date: "2026-03-20"
-      summary: >
-        Expanded Conditional Access / Identity Protection through
-        registry/conditional_access_identity_protection_expansion_v2.yaml and
-        docs/commercialization/m365-conditional-access-identity-protection-expansion-v2.md,
-        projected bounded policy, named-location, and risk-detection actions into
-        src/smarthaus_common/identity_security_client.py and
-        src/provisioning_api/routers/m365.py, aligned the
-        CAIO/capability/routing/auth/approval contracts, added the notebook-backed
-        L41 chain and
-        scripts/ci/verify_conditional_access_identity_protection_expansion.py, and
-        proved the bounded E4D slice through contract verifiers plus targeted
-        identity-security regressions.
-    - phase: E4E
-      date: "2026-03-20"
-      summary: >
-        Expanded admin and governance surfaces through
-        registry/admin_governance_surface_expansion_v2.yaml and
-        docs/commercialization/m365-admin-governance-surface-expansion-v2.md,
-        projected bounded reports and access-review actions into
-        src/smarthaus_common/admin_governance_client.py and
-        src/provisioning_api/routers/m365.py, aligned the
-        CAIO/capability/routing/auth/approval contracts, added the notebook-backed
-        L42 chain and scripts/ci/verify_admin_governance_surface_expansion.py,
-        and proved the bounded E4E slice through contract verifiers plus targeted
-        admin and governance regressions.
-    - phase: E5A
-      date: "2026-03-20"
-      summary: >
-        Completed the authoritative persona registry through
-        registry/persona_registry_v2.yaml and
-        docs/commercialization/m365-persona-registry-v2.md, added the shared
-        persona loader and validator in src/ops_adapter/personas.py, constrained
-        runtime persona resolution to the roster-bound 39 personas instead of the
-        mixed 59-entry inventory, added the notebook-backed L43 chain and the
-        deterministic builder/verifier commands at
-        scripts/ci/build_persona_registry_v2.py and
-        scripts/ci/verify_persona_registry_v2.py, and proved the bounded E5A
-        slice through targeted persona-registry regressions plus generated proof
-        at configs/generated/persona_registry_v2_verification.json.
-    - phase: E5B
-      date: "2026-03-20"
-      summary: >
-        Completed the humanized delegation interface through
-        registry/humanized_delegation_interface_v1.yaml and
-        docs/commercialization/m365-humanized-delegation-interface-v1.md,
-        extended src/ops_adapter/personas.py with natural delegation parsing,
-        department-hint handling, and fail-closed ambiguity detection, exposed
-        bounded resolution endpoints in src/ops_adapter/main.py and
-        src/ops_adapter/app.py, added the notebook-backed L44 chain and the
-        deterministic verifier at
-        scripts/ci/verify_humanized_delegation_interface_v1.py, and proved the
-        bounded E5B slice through targeted delegation regressions plus generated
-        proof at configs/generated/humanized_delegation_interface_v1_verification.json.
-    - phase: E5C
-      date: "2026-03-21"
-      summary: >
-        Completed the persona task queue and state layer through
-        registry/persona_task_queue_state_v1.yaml and
-        docs/commercialization/m365-persona-task-queues-and-state-v1.md,
-        promoted the append-only JSON store into src/smarthaus_common/json_store.py,
-        added the shared deterministic queue projection runtime in
-        src/smarthaus_common/persona_task_queue.py, projected that runtime into
-        src/provisioning_api/routers/agent_dashboard.py plus bounded persona
-        task/state endpoints in src/ops_adapter/main.py and src/ops_adapter/app.py,
-        added the notebook-backed L45 chain and the deterministic verifier at
-        scripts/ci/verify_persona_task_queue_state_v1.py, and proved the bounded
-        E5C slice through targeted queue-state regressions plus generated proof
-        at configs/generated/persona_task_queue_state_v1_verification.json.
-    - phase: E5D
-      date: "2026-03-21"
-      summary: >
-        Completed the persona accountability layer through
-        registry/persona_accountability_v1.yaml and
-        docs/commercialization/m365-persona-accountability-v1.md, added the shared
-        accountability runtime in src/smarthaus_common/persona_accountability.py,
-        projected ownership, KPI thresholds, accountability state, and escalation
-        targets into src/provisioning_api/routers/agent_dashboard.py plus bounded
-        persona state/accountability endpoints in src/ops_adapter/main.py and
-        src/ops_adapter/app.py, added the notebook-backed L46 chain and the
-        deterministic verifier at scripts/ci/verify_persona_accountability_v1.py,
-        and proved the bounded E5D slice through targeted accountability
-        regressions plus generated proof at
-        configs/generated/persona_accountability_v1_verification.json.
-    - phase: E5E
-      date: "2026-03-21"
-      summary: >
-        Completed the persona memory and work-history layer through
-        registry/persona_memory_work_history_v1.yaml and
-        docs/commercialization/m365-persona-memory-work-history-v1.md, added the
-        shared bounded memory/history runtime in src/smarthaus_common/persona_memory.py,
-        corrected same-second queue-event ordering in
-        src/smarthaus_common/persona_task_queue.py so replay stays deterministic,
-        projected memory and history into src/provisioning_api/routers/agent_dashboard.py
-        plus bounded persona memory/history endpoints in src/ops_adapter/main.py
-        and src/ops_adapter/app.py, added the notebook-backed L47 chain and the
-        deterministic verifier at scripts/ci/verify_persona_memory_work_history_v1.py,
-        and proved the bounded E5E slice through targeted memory/history
-        regressions plus generated proof at
-        configs/generated/persona_memory_work_history_v1_verification.json.
-    - phase: E6A
-      date: "2026-03-21"
-      summary: >
-        Completed the Operations department pack through
-        registry/department_pack_operations_v1.yaml and
-        docs/commercialization/m365-operations-department-pack-v1.md, added the
-        notebook-backed L48 chain, extracted the shared pack runtime into
-        src/smarthaus_common/department_pack.py from
-        notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb, added
-        the deterministic verifier at
-        scripts/ci/verify_operations_department_pack_v1.py, and proved the
-        bounded E6A slice through targeted pack-state regressions plus generated
-        proof at configs/generated/operations_department_pack_v1_verification.json.
-    - phase: E6B
-      date: "2026-03-21"
-      summary: >
-        Completed the HR department pack through registry/department_pack_hr_v1.yaml
-        and docs/commercialization/m365-hr-department-pack-v1.md, added the
-        notebook-backed L49 chain, reused and type-hardened the shared pack runtime in
-        src/smarthaus_common/department_pack.py, added the deterministic
-        verifier at scripts/ci/verify_hr_department_pack_v1.py, and proved the
-        bounded E6B slice through targeted pack-state regressions plus generated
-        proof at configs/generated/hr_department_pack_v1_verification.json.
-    - phase: E6C
-      date: "2026-03-21"
-      summary: >
-        Completed the Communication department pack through
-        registry/department_pack_communication_v1.yaml and
-        docs/commercialization/m365-communication-department-pack-v1.md, added
-        the notebook-backed L50 chain, reused the shared pack runtime in
-        src/smarthaus_common/department_pack.py, added the deterministic
-        verifier at scripts/ci/verify_communication_department_pack_v1.py, and
-        proved the bounded E6C slice through targeted pack-state regressions
-        plus generated proof at
-        configs/generated/communication_department_pack_v1_verification.json.
-    - phase: E6D
-      date: "2026-03-21"
-      summary: >
-        Completed the Engineering department pack through
-        registry/department_pack_engineering_v1.yaml and
-        docs/commercialization/m365-engineering-department-pack-v1.md, added
-        the notebook-backed L51 chain, generalized the shared pack runtime in
-        src/smarthaus_common/department_pack.py from
-        notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb so
-        contract-only zero-action packs validate and fail closed correctly,
-        added the deterministic verifier at
-        scripts/ci/verify_engineering_department_pack_v1.py, and proved the
-        bounded E6D slice through targeted pack-state regressions plus generated
-        proof at configs/generated/engineering_department_pack_v1_verification.json.
+  - phase: E0A
+    date: '2026-03-20'
+    summary: 'Locked the authoritative department and persona census by removing the
+      stray non-authoritative bonus department from registry/ai_team.json, proving
+      the resulting roster resolves to 39 personas across 10 departments, cross-checking
+      all roster agent IDs against registry/agents.yaml, and recording the locked
+      census in docs/commercialization/m365-department-persona-census.md.
+
+      '
+  - phase: E0B
+    date: '2026-03-20'
+    summary: 'Locked the workload universe at the family level in docs/commercialization/m365-workload-universe-inventory.md
+      by grounding the expansion target in official Microsoft workload references,
+      the repo''s current 184-action registry surface, and an explicit family inventory
+      that now drives downstream capability taxonomy and routing work.
+
+      '
+  - phase: E0C
+    date: '2026-03-20'
+    summary: 'Normalized the locked workload-family inventory into docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
+      by defining canonical implementation-status, feasibility, auth, and licensing
+      classes that downstream persona, routing, and certification phases must use.
+
+      '
+  - phase: E0D
+    date: '2026-03-20'
+    summary: 'Bound the authoritative 39-persona roster to explicit workload families,
+      capability families, risk tiers, approval profiles, and coverage statuses in
+      registry/persona_capability_map.yaml and docs/commercialization/m365-persona-capability-and-risk-map.md,
+      while explicitly documenting the 20 non-authoritative overflow registry agents
+      as inventory rather than workforce authority.
+
+      '
+  - phase: E0E
+    date: '2026-03-20'
+    summary: 'Converted the authority wave into an explicit execution sequence through
+      registry/workforce_release_wave_map.yaml and docs/commercialization/m365-workforce-release-wave-and-completion-map.md,
+      defining bounded program waves, exit criteria, unlocks, and claim limits so
+      the remaining workforce build-out proceeds in deterministic increments.
+
+      '
+  - phase: E1A
+    date: '2026-03-20'
+    summary: 'Defined the canonical workforce action contract in registry/universal_action_contract_v2.yaml
+      and docs/commercialization/m365-universal-action-contract-v2.md, proving through
+      the notebook-backed L23 chain that the repo''s CAIO, capability-registry, and
+      agent-registry action dialects can project deterministically into one v2 identity,
+      semantics, execution, governance, and evidence envelope.
+
+      '
+  - phase: E1B
+    date: '2026-03-20'
+    summary: 'Replaced the scattered hardcoded executor tables with registry/executor_routing_v2.yaml
+      and the shared src/smarthaus_common/executor_routing.py resolver, then projected
+      that authority into ops-adapter routing, persona-domain derivation, and the
+      instruction router so canonical v2 actions and current legacy aliases all resolve
+      deterministically to one bounded executor domain.
+
+      '
+  - phase: E1C
+    date: '2026-03-20'
+    summary: 'Defined the machine-readable auth authority in registry/auth_model_v2.yaml,
+      added the shared src/smarthaus_common/auth_model.py resolver, extended src/ops_adapter/actions.py
+      so delegated, app_only, and hybrid execution preferences are projected through
+      the shared routing surface for user-context actions, and proved the resulting
+      contract through the notebook-backed L25 chain plus targeted auth-model regressions.
+
+      '
+  - phase: E1D
+    date: '2026-03-20'
+    summary: 'Defined the machine-readable approval and risk authority in registry/approval_risk_matrix_v2.yaml,
+      added the shared src/smarthaus_common/approval_risk.py resolver, projected deterministic
+      risk_class, approval_profile, approvers, and matrix-enforced approval metadata
+      into src/ops_adapter/main.py and src/ops_adapter/approvals.py, and proved the
+      resulting fail-closed governance contract through the notebook-backed L26 chain
+      plus targeted approval-risk regressions.
+
+      '
+  - phase: E1E
+    date: '2026-03-20'
+    summary: 'Defined the machine-readable unified audit authority in registry/unified_audit_schema_v2.yaml,
+      added the shared src/smarthaus_common/audit_schema.py builder, projected the
+      canonical audit envelope into src/ops_adapter/audit.py and src/provisioning_api/audit.py,
+      updated the bounded instruction-audit verifier to the v2 schema, and proved
+      the shared evidence contract through the notebook-backed L27 chain plus targeted
+      audit-schema regressions.
+
+      '
+  - phase: E2A
+    date: '2026-03-20'
+    summary: 'Expanded the first post-control-plane workload slice through registry/entra_directory_expansion_v2.yaml
+      and docs/commercialization/m365-entra-directory-expansion-v2.md, projected deterministic
+      Entra and directory actions into src/smarthaus_graph/client.py and src/provisioning_api/routers/m365.py,
+      aligned the v2 routing/auth/approval registries and CAIO/capability contracts,
+      and proved the slice through the notebook-backed L28 chain, scripts/ci/verify_entra_directory_expansion.py,
+      and targeted E2A regressions.
+
+      '
+  - phase: E2B
+    date: '2026-03-20'
+    summary: 'Expanded Outlook / Exchange messaging through registry/outlook_exchange_expansion_v2.yaml
+      and docs/commercialization/m365-outlook-exchange-expansion-v2.md, projected
+      mail, calendar, mailbox, shared-mailbox, and contact actions into the shared
+      Graph client and instruction router, aligned the CAIO/capability/routing/auth/
+      approval contracts, added the notebook-backed L29 chain and scripts/ci/verify_outlook_exchange_expansion.py,
+      and proved the bounded E2B slice through contract verifiers plus targeted messaging
+      regressions.
+
+      '
+  - phase: E2C
+    date: '2026-03-20'
+    summary: 'Expanded SharePoint / OneDrive / files work through registry/sharepoint_onedrive_files_expansion_v2.yaml
+      and docs/commercialization/m365-sharepoint-onedrive-files-expansion-v2.md, projected
+      deterministic site, list, drive, and drive-item actions into src/smarthaus_graph/client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L30 chain and scripts/ci/verify_sharepoint_onedrive_files_expansion.py,
+      and proved the bounded E2C slice through contract verifiers plus targeted SharePoint/files
+      regressions.
+
+      '
+  - phase: E2D
+    date: '2026-03-20'
+    summary: 'Expanded Teams / Groups / Planner work through registry/teams_groups_planner_expansion_v2.yaml
+      and docs/commercialization/m365-teams-groups-planner-expansion-v2.md, projected
+      deterministic team, channel, plan, bucket, and task actions into src/smarthaus_graph/client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L31 chain and scripts/ci/verify_teams_groups_planner_expansion.py,
+      and proved the bounded E2D slice through contract verifiers plus targeted collaboration
+      and Planner regressions.
+
+      '
+  - phase: E2E
+    date: '2026-03-20'
+    summary: 'Expanded documents / spreadsheets / presentations work through registry/documents_spreadsheets_presentations_expansion_v2.yaml
+      and docs/commercialization/m365-documents-spreadsheets-presentations-expansion-v2.md,
+      projected deterministic DOCX/XLSX/PPTX generation into src/smarthaus_common/office_generation.py,
+      extended the shared Graph client and instruction router for create/update document/workbook/presentation
+      actions, aligned the CAIO/capability/routing/auth/approval contracts, added
+      the notebook-backed L32 chain and scripts/ci/verify_documents_spreadsheets_presentations_expansion.py,
+      and proved the bounded E2E slice through contract verifiers plus targeted productivity
+      regressions.
+
+      '
+  - phase: E3A
+    date: '2026-03-20'
+    summary: 'Expanded Power Automate through registry/power_automate_expansion_v2.yaml
+      and docs/commercialization/m365-power-automate-expansion-v2.md, projected bounded
+      flow discovery, owner governance, lifecycle control, run-history, and explicit
+      callback actions into src/smarthaus_common/power_automate_client.py and src/provisioning_api/routers/m365.py,
+      aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed
+      L33 chain and scripts/ci/verify_power_automate_expansion.py, and proved the
+      bounded E3A slice through contract verifiers plus targeted Power Automate regressions.
+
+      '
+  - phase: E3B
+    date: '2026-03-20'
+    summary: 'Expanded Power Apps through registry/power_apps_expansion_v2.yaml and
+      docs/commercialization/m365-power-apps-expansion-v2.md, projected bounded app,
+      role, ownership, environment, and environment-role actions into src/smarthaus_common/power_apps_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L34 chain and scripts/ci/verify_power_apps_expansion.py,
+      and proved the bounded E3B slice through contract verifiers plus targeted Power
+      Apps regressions.
+
+      '
+  - phase: E3C
+    date: '2026-03-20'
+    summary: 'Expanded Power BI through registry/power_bi_expansion_v2.yaml and docs/commercialization/m365-power-bi-expansion-v2.md,
+      projected bounded workspace, report, dataset, dataset-refresh, and dashboard
+      actions into src/smarthaus_common/power_bi_client.py and src/provisioning_api/routers/m365.py,
+      aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed
+      L35 chain and scripts/ci/verify_power_bi_expansion.py, and proved the bounded
+      E3C slice through contract verifiers plus targeted Power BI regressions.
+
+      '
+  - phase: E3D
+    date: '2026-03-20'
+    summary: 'Expanded Forms / approvals / connectors through registry/forms_approvals_connectors_expansion_v2.yaml
+      and docs/commercialization/m365-forms-approvals-connectors-expansion-v2.md,
+      projected bounded approval-item, connector, external-item, and external-group
+      actions into src/smarthaus_common/forms_approvals_connectors_client.py and src/provisioning_api/routers/m365.py,
+      aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed
+      L36 chain and scripts/ci/verify_forms_approvals_connectors_expansion.py, and
+      proved the bounded E3D slice through contract verifiers plus targeted connector
+      and approval regressions.
+
+      '
+  - phase: E3E
+    date: '2026-03-20'
+    summary: 'Expanded cross-workload recipes through registry/cross_workload_automation_recipes_v2.yaml
+      and docs/commercialization/m365-cross-workload-automation-recipes-v2.md, projected
+      bounded recipe-catalog discovery into src/smarthaus_common/automation_recipe_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L37 chain and scripts/ci/verify_cross_workload_automation_recipes.py,
+      and proved the bounded E3E slice through contract verifiers plus targeted recipe-catalog
+      regressions.
+
+      '
+  - phase: E4A
+    date: '2026-03-20'
+    summary: 'Expanded Intune / devices through registry/intune_devices_expansion_v2.yaml
+      and docs/commercialization/m365-intune-devices-expansion-v2.md, projected bounded
+      managed-device inventory, compliance-summary, and action operations into src/smarthaus_common/intune_devices_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L38 chain and scripts/ci/verify_intune_devices_expansion.py,
+      and proved the bounded E4A slice through contract verifiers plus targeted Intune
+      regressions.
+
+      '
+  - phase: E4B
+    date: '2026-03-20'
+    summary: 'Expanded security / Defender through registry/security_defender_expansion_v2.yaml
+      and docs/commercialization/m365-security-defender-expansion-v2.md, projected
+      bounded alert, incident, secure-score, and incident-update actions into src/smarthaus_common/security_defender_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L39 chain and scripts/ci/verify_security_defender_expansion.py,
+      and proved the bounded E4B slice through contract verifiers plus targeted security
+      regressions.
+
+      '
+  - phase: E4C
+    date: '2026-03-20'
+    summary: 'Expanded compliance / retention / eDiscovery through registry/compliance_retention_ediscovery_expansion_v2.yaml
+      and docs/commercialization/m365-compliance-retention-ediscovery-expansion-v2.md,
+      projected bounded eDiscovery case, search, custodian, and legal-hold actions
+      into src/smarthaus_common/compliance_ediscovery_client.py and src/provisioning_api/routers/m365.py,
+      aligned the CAIO/capability/routing/auth/approval contracts, added the notebook-backed
+      L40 chain and scripts/ci/verify_compliance_retention_ediscovery_expansion.py,
+      and proved the bounded E4C slice through contract verifiers plus targeted compliance
+      regressions.
+
+      '
+  - phase: E4D
+    date: '2026-03-20'
+    summary: 'Expanded Conditional Access / Identity Protection through registry/conditional_access_identity_protection_expansion_v2.yaml
+      and docs/commercialization/m365-conditional-access-identity-protection-expansion-v2.md,
+      projected bounded policy, named-location, and risk-detection actions into src/smarthaus_common/identity_security_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L41 chain and scripts/ci/verify_conditional_access_identity_protection_expansion.py,
+      and proved the bounded E4D slice through contract verifiers plus targeted identity-security
+      regressions.
+
+      '
+  - phase: E4E
+    date: '2026-03-20'
+    summary: 'Expanded admin and governance surfaces through registry/admin_governance_surface_expansion_v2.yaml
+      and docs/commercialization/m365-admin-governance-surface-expansion-v2.md, projected
+      bounded reports and access-review actions into src/smarthaus_common/admin_governance_client.py
+      and src/provisioning_api/routers/m365.py, aligned the CAIO/capability/routing/auth/approval
+      contracts, added the notebook-backed L42 chain and scripts/ci/verify_admin_governance_surface_expansion.py,
+      and proved the bounded E4E slice through contract verifiers plus targeted admin
+      and governance regressions.
+
+      '
+  - phase: E5A
+    date: '2026-03-20'
+    summary: 'Completed the authoritative persona registry through registry/persona_registry_v2.yaml
+      and docs/commercialization/m365-persona-registry-v2.md, added the shared persona
+      loader and validator in src/ops_adapter/personas.py, constrained runtime persona
+      resolution to the roster-bound 39 personas instead of the mixed 59-entry inventory,
+      added the notebook-backed L43 chain and the deterministic builder/verifier commands
+      at scripts/ci/build_persona_registry_v2.py and scripts/ci/verify_persona_registry_v2.py,
+      and proved the bounded E5A slice through targeted persona-registry regressions
+      plus generated proof at configs/generated/persona_registry_v2_verification.json.
+
+      '
+  - phase: E5B
+    date: '2026-03-20'
+    summary: 'Completed the humanized delegation interface through registry/humanized_delegation_interface_v1.yaml
+      and docs/commercialization/m365-humanized-delegation-interface-v1.md, extended
+      src/ops_adapter/personas.py with natural delegation parsing, department-hint
+      handling, and fail-closed ambiguity detection, exposed bounded resolution endpoints
+      in src/ops_adapter/main.py and src/ops_adapter/app.py, added the notebook-backed
+      L44 chain and the deterministic verifier at scripts/ci/verify_humanized_delegation_interface_v1.py,
+      and proved the bounded E5B slice through targeted delegation regressions plus
+      generated proof at configs/generated/humanized_delegation_interface_v1_verification.json.
+
+      '
+  - phase: E5C
+    date: '2026-03-21'
+    summary: 'Completed the persona task queue and state layer through registry/persona_task_queue_state_v1.yaml
+      and docs/commercialization/m365-persona-task-queues-and-state-v1.md, promoted
+      the append-only JSON store into src/smarthaus_common/json_store.py, added the
+      shared deterministic queue projection runtime in src/smarthaus_common/persona_task_queue.py,
+      projected that runtime into src/provisioning_api/routers/agent_dashboard.py
+      plus bounded persona task/state endpoints in src/ops_adapter/main.py and src/ops_adapter/app.py,
+      added the notebook-backed L45 chain and the deterministic verifier at scripts/ci/verify_persona_task_queue_state_v1.py,
+      and proved the bounded E5C slice through targeted queue-state regressions plus
+      generated proof at configs/generated/persona_task_queue_state_v1_verification.json.
+
+      '
+  - phase: E5D
+    date: '2026-03-21'
+    summary: 'Completed the persona accountability layer through registry/persona_accountability_v1.yaml
+      and docs/commercialization/m365-persona-accountability-v1.md, added the shared
+      accountability runtime in src/smarthaus_common/persona_accountability.py, projected
+      ownership, KPI thresholds, accountability state, and escalation targets into
+      src/provisioning_api/routers/agent_dashboard.py plus bounded persona state/accountability
+      endpoints in src/ops_adapter/main.py and src/ops_adapter/app.py, added the notebook-backed
+      L46 chain and the deterministic verifier at scripts/ci/verify_persona_accountability_v1.py,
+      and proved the bounded E5D slice through targeted accountability regressions
+      plus generated proof at configs/generated/persona_accountability_v1_verification.json.
+
+      '
+  - phase: E5E
+    date: '2026-03-21'
+    summary: 'Completed the persona memory and work-history layer through registry/persona_memory_work_history_v1.yaml
+      and docs/commercialization/m365-persona-memory-work-history-v1.md, added the
+      shared bounded memory/history runtime in src/smarthaus_common/persona_memory.py,
+      corrected same-second queue-event ordering in src/smarthaus_common/persona_task_queue.py
+      so replay stays deterministic, projected memory and history into src/provisioning_api/routers/agent_dashboard.py
+      plus bounded persona memory/history endpoints in src/ops_adapter/main.py and
+      src/ops_adapter/app.py, added the notebook-backed L47 chain and the deterministic
+      verifier at scripts/ci/verify_persona_memory_work_history_v1.py, and proved
+      the bounded E5E slice through targeted memory/history regressions plus generated
+      proof at configs/generated/persona_memory_work_history_v1_verification.json.
+
+      '
+  - phase: E6A
+    date: '2026-03-21'
+    summary: 'Completed the Operations department pack through registry/department_pack_operations_v1.yaml
+      and docs/commercialization/m365-operations-department-pack-v1.md, added the
+      notebook-backed L48 chain, extracted the shared pack runtime into src/smarthaus_common/department_pack.py
+      from notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb, added the
+      deterministic verifier at scripts/ci/verify_operations_department_pack_v1.py,
+      and proved the bounded E6A slice through targeted pack-state regressions plus
+      generated proof at configs/generated/operations_department_pack_v1_verification.json.
+
+      '
+  - phase: E6B
+    date: '2026-03-21'
+    summary: 'Completed the HR department pack through registry/department_pack_hr_v1.yaml
+      and docs/commercialization/m365-hr-department-pack-v1.md, added the notebook-backed
+      L49 chain, reused and type-hardened the shared pack runtime in src/smarthaus_common/department_pack.py,
+      added the deterministic verifier at scripts/ci/verify_hr_department_pack_v1.py,
+      and proved the bounded E6B slice through targeted pack-state regressions plus
+      generated proof at configs/generated/hr_department_pack_v1_verification.json.
+
+      '
+  - phase: E6C
+    date: '2026-03-21'
+    summary: 'Completed the Communication department pack through registry/department_pack_communication_v1.yaml
+      and docs/commercialization/m365-communication-department-pack-v1.md, added the
+      notebook-backed L50 chain, reused the shared pack runtime in src/smarthaus_common/department_pack.py,
+      added the deterministic verifier at scripts/ci/verify_communication_department_pack_v1.py,
+      and proved the bounded E6C slice through targeted pack-state regressions plus
+      generated proof at configs/generated/communication_department_pack_v1_verification.json.
+
+      '
+  - phase: E6D
+    date: '2026-03-21'
+    summary: 'Completed the Engineering department pack through registry/department_pack_engineering_v1.yaml
+      and docs/commercialization/m365-engineering-department-pack-v1.md, added the
+      notebook-backed L51 chain, generalized the shared pack runtime in src/smarthaus_common/department_pack.py
+      from notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb so contract-only
+      zero-action packs validate and fail closed correctly, added the deterministic
+      verifier at scripts/ci/verify_engineering_department_pack_v1.py, and proved
+      the bounded E6D slice through targeted pack-state regressions plus generated
+      proof at configs/generated/engineering_department_pack_v1_verification.json.
+
+      '
+  - phase: E6E
+    date: '2026-03-21'
+    summary: Completed the Marketing department pack through registry/department_pack_marketing_v1.yaml
+      and docs/commercialization/m365-marketing-department-pack-v1.md, added the notebook-backed
+      L52 chain, reused the generalized shared pack runtime in src/smarthaus_common/department_pack.py,
+      added the deterministic verifier at scripts/ci/verify_marketing_department_pack_v1.py,
+      and proved the bounded E6E slice through targeted pack-state regressions plus
+      generated proof at configs/generated/marketing_department_pack_v1_verification.json.
   prepared_blocked:
-    - phase: E6F
-      blocked_by: "E6"
-      summary: >
-        Build the Product department capability pack.
-    - phase: E6G
-      blocked_by: "E6"
-      summary: >
-        Build the Project Management department capability pack.
-    - phase: E6H
-      blocked_by: "E6"
-      summary: >
-        Build the Studio Operations department capability pack.
-    - phase: E6I
-      blocked_by: "E6"
-      summary: >
-        Build the Testing department capability pack.
-    - phase: E6J
-      blocked_by: "E6"
-      summary: >
-        Build the Design department capability pack.
-    - phase: E7
-      blocked_by: "E6"
-      summary: >
-        Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control.
-    - phase: E7A
-      blocked_by: "E7"
-      summary: >
-        Define the top-level delegation contract between Claude, UCP, and the workforce runtime.
-    - phase: E7B
-      blocked_by: "E7"
-      summary: >
-        Make it easy to find and target the right digital employee for a request.
-    - phase: E7C
-      blocked_by: "E7"
-      summary: >
-        Support composed multi-step work across workload and persona boundaries.
-    - phase: E7D
-      blocked_by: "E7"
-      summary: >
-        Allow digital employees to hand off, collaborate, and coordinate within governed bounds.
-    - phase: E7E
-      blocked_by: "E7"
-      summary: >
-        Give executives visibility and intervention controls across the workforce runtime.
-    - phase: E8
-      blocked_by: "E7E"
-      summary: >
-        Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made.
-    - phase: E8A
-      blocked_by: "E8"
-      summary: >
-        Certify each workload surface against the live tenant and the bounded executor model.
-    - phase: E8B
-      blocked_by: "E8"
-      summary: >
-        Certify each persona class against its allowed domains and approval posture.
-    - phase: E8C
-      blocked_by: "E8"
-      summary: >
-        Certify each department pack against its target workflows and responsibilities.
-    - phase: E8D
-      blocked_by: "E8"
-      summary: >
-        Certify cross-functional workflows spanning multiple departments and personas.
-    - phase: E8E
-      blocked_by: "E8"
-      summary: >
-        Close the formal workforce release gate with live evidence and explicit sign-off.
-    - phase: E9
-      blocked_by: "E8E"
-      summary: >
-        Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.
-    - phase: E9A
-      blocked_by: "E9"
-      summary: >
-        Package the full workforce offering and supported capability sets for customers.
-    - phase: E9B
-      blocked_by: "E9"
-      summary: >
-        Define the onboarding path for the expanded workforce product.
-    - phase: E9C
-      blocked_by: "E9"
-      summary: >
-        Define rollout phases, acceptance, and expansion across customers and departments.
-    - phase: E9D
-      blocked_by: "E9"
-      summary: >
-        Define the final operating, support, and customer-ownership boundaries for the full workforce.
-    - phase: E9E
-      blocked_by: "E9"
-      summary: >
-        Issue the final release decision for the full workforce program.
-  next_act: E6E
+  - phase: E6G
+    blocked_by: E6
+    summary: 'Build the Project Management department capability pack.
 
+      '
+  - phase: E6H
+    blocked_by: E6
+    summary: 'Build the Studio Operations department capability pack.
+
+      '
+  - phase: E6I
+    blocked_by: E6
+    summary: 'Build the Testing department capability pack.
+
+      '
+  - phase: E6J
+    blocked_by: E6
+    summary: 'Build the Design department capability pack.
+
+      '
+  - phase: E7
+    blocked_by: E6
+    summary: 'Make the full workforce actually usable through Claude and UCP with
+      humanized delegation, orchestration, and executive control.
+
+      '
+  - phase: E7A
+    blocked_by: E7
+    summary: 'Define the top-level delegation contract between Claude, UCP, and the
+      workforce runtime.
+
+      '
+  - phase: E7B
+    blocked_by: E7
+    summary: 'Make it easy to find and target the right digital employee for a request.
+
+      '
+  - phase: E7C
+    blocked_by: E7
+    summary: 'Support composed multi-step work across workload and persona boundaries.
+
+      '
+  - phase: E7D
+    blocked_by: E7
+    summary: 'Allow digital employees to hand off, collaborate, and coordinate within
+      governed bounds.
+
+      '
+  - phase: E7E
+    blocked_by: E7
+    summary: 'Give executives visibility and intervention controls across the workforce
+      runtime.
+
+      '
+  - phase: E8
+    blocked_by: E7E
+    summary: 'Prove the expanded workforce in the live tenant, by workload, persona,
+      department, and cross-department workflows, before release claims are made.
+
+      '
+  - phase: E8A
+    blocked_by: E8
+    summary: 'Certify each workload surface against the live tenant and the bounded
+      executor model.
+
+      '
+  - phase: E8B
+    blocked_by: E8
+    summary: 'Certify each persona class against its allowed domains and approval
+      posture.
+
+      '
+  - phase: E8C
+    blocked_by: E8
+    summary: 'Certify each department pack against its target workflows and responsibilities.
+
+      '
+  - phase: E8D
+    blocked_by: E8
+    summary: 'Certify cross-functional workflows spanning multiple departments and
+      personas.
+
+      '
+  - phase: E8E
+    blocked_by: E8
+    summary: 'Close the formal workforce release gate with live evidence and explicit
+      sign-off.
+
+      '
+  - phase: E9
+    blocked_by: E8E
+    summary: 'Package, onboard, launch, and support the complete workforce with an
+      explicit commercial and operational model.
+
+      '
+  - phase: E9A
+    blocked_by: E9
+    summary: 'Package the full workforce offering and supported capability sets for
+      customers.
+
+      '
+  - phase: E9B
+    blocked_by: E9
+    summary: 'Define the onboarding path for the expanded workforce product.
+
+      '
+  - phase: E9C
+    blocked_by: E9
+    summary: 'Define rollout phases, acceptance, and expansion across customers and
+      departments.
+
+      '
+  - phase: E9D
+    blocked_by: E9
+    summary: 'Define the final operating, support, and customer-ownership boundaries
+      for the full workforce.
+
+      '
+  - phase: E9E
+    blocked_by: E9
+    summary: 'Issue the final release decision for the full workforce program.
+
+      '
+  next_act: E6F
 open_blockers:
-  - "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded security/Defender work, but most workload families and live-certification layers remain beyond the previously shipped v1 slice."
-  - "The Operations, HR, Communication, and Engineering department packs are now runtime-bounded; Engineering remains intentionally blocked while its personas stay contract-only, and the remaining department packs are still unimplemented and uncertified."
-
+- The implemented action surface now covers directory, messaging, SharePoint/files,
+  collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics,
+  bounded cross-workload recipe discovery, bounded Intune/devices work, and bounded
+  security/Defender work, but most workload families and live-certification layers
+  remain beyond the previously shipped v1 slice.
+- The Operations, HR, Communication, Engineering, and Marketing department packs are
+  now runtime-bounded; Engineering and Marketing remain intentionally blocked while
+  their personas stay contract-only, and the remaining department packs are still
+  unimplemented and uncertified.
 requirements:
-  - id: R1
-    name: "Integrated workforce-expansion control plane"
-  - id: R2
-    name: "Authoritative department and persona census"
-  - id: R3
-    name: "Full M365 workload and capability universe inventory"
-  - id: R4
-    name: "Canonical capability, licensing, API, and auth taxonomy"
-  - id: R5
-    name: "Universal action contract and bounded executor routing"
-  - id: R6
-    name: "Core workload expansion across identity, messaging, files, and collaboration"
-  - id: R7
-    name: "Power Platform, analytics, and connector expansion"
-  - id: R8
-    name: "Enterprise admin, security, and compliance expansion"
-  - id: R9
-    name: "Digital-employee runtime completion"
-  - id: R10
-    name: "Department-pack implementation"
-  - id: R11
-    name: "Claude and UCP workforce experience"
-  - id: R12
-    name: "Live validation, certification, and release closure"
-  - id: R13
-    name: "Governance synchronization and prompt inventory completeness"
-
+- id: R1
+  name: Integrated workforce-expansion control plane
+- id: R2
+  name: Authoritative department and persona census
+- id: R3
+  name: Full M365 workload and capability universe inventory
+- id: R4
+  name: Canonical capability, licensing, API, and auth taxonomy
+- id: R5
+  name: Universal action contract and bounded executor routing
+- id: R6
+  name: Core workload expansion across identity, messaging, files, and collaboration
+- id: R7
+  name: Power Platform, analytics, and connector expansion
+- id: R8
+  name: Enterprise admin, security, and compliance expansion
+- id: R9
+  name: Digital-employee runtime completion
+- id: R10
+  name: Department-pack implementation
+- id: R11
+  name: Claude and UCP workforce experience
+- id: R12
+  name: Live validation, certification, and release closure
+- id: R13
+  name: Governance synchronization and prompt inventory completeness
 phase_stack:
-  - code: E0
-    title: "Universe Definition and Boundary Lock"
-    slug: universe-definition-boundary-lock
+- code: E0
+  title: Universe Definition and Boundary Lock
+  slug: universe-definition-boundary-lock
+  status: Complete
+  goal: 'Inventory the full M365 capability universe, lock the department and persona
+    census, and define what complete workforce coverage actually means before implementation
+    expands.
+
+    '
+  outputs:
+  - department and persona census
+  - workload universe inventory
+  - capability taxonomy
+  - persona-to-capability map
+  - release-wave map
+  dependencies:
+  - Closed `m365-enterprise-readiness-master-plan`
+  children:
+  - code: E0A
+    slug: department-persona-census
+    title: Department and Persona Census
     status: Complete
-    goal: >
-      Inventory the full M365 capability universe, lock the department and persona census, and define what complete workforce coverage actually means before implementation expands.
-    outputs:
-      - "department and persona census"
-      - "workload universe inventory"
-      - "capability taxonomy"
-      - "persona-to-capability map"
-      - "release-wave map"
-    dependencies:
-      - "Closed `m365-enterprise-readiness-master-plan`"
-    children:
-      - code: E0A
-        slug: department-persona-census
-        title: "Department and Persona Census"
-        status: Complete
-        goal: >
-          Lock the authoritative department roster and all digital-employee personas that the workforce must support.
-      - code: E0B
-        slug: m365-workload-universe-inventory
-        title: "M365 Workload Universe Inventory"
-        status: Complete
-        goal: >
-          Enumerate every M365 workload and adjacent Microsoft admin surface relevant to the workforce target.
-      - code: E0C
-        slug: capability-taxonomy-and-feasibility-map
-        title: "Capability Taxonomy and Feasibility Map"
-        status: Complete
-        goal: >
-          Normalize all identified capabilities into one taxonomy with implementation feasibility, licensing, and exposure status.
-      - code: E0D
-        slug: persona-to-capability-and-risk-mapping
-        title: "Persona-to-Capability and Risk Mapping"
-        status: Complete
-        goal: >
-          Bind personas and departments to required capabilities, risk classes, and approval posture.
-      - code: E0E
-        slug: release-wave-and-completion-map
-        title: "Release-Wave and Completion Map"
-        status: Complete
-        goal: >
-          Define the executable wave structure and completion criteria for the full workforce program.
-  - code: E1
-    title: "Universal M365 Control Plane"
-    slug: universal-m365-control-plane
+    goal: 'Lock the authoritative department roster and all digital-employee personas
+      that the workforce must support.
+
+      '
+  - code: E0B
+    slug: m365-workload-universe-inventory
+    title: M365 Workload Universe Inventory
     status: Complete
-    goal: >
-      Extend the control plane so the pack can absorb the full M365 capability universe through deterministic action contracts, executor routing, and unified audit/governance rules.
-    outputs:
-      - "universal action schema"
-      - "executor routing v2"
-      - "auth model v2"
-      - "approval/risk matrix"
-      - "unified audit schema"
-    dependencies:
-      - "E0E"
-    children:
-      - code: E1A
-        slug: universal-action-contract-v2
-        title: "Universal Action Contract v2"
-        status: Complete
-        goal: >
-          Define the canonical action contract that can represent the expanded workforce action surface.
-      - code: E1B
-        slug: executor-routing-v2
-        title: "Executor Routing v2"
-        status: Complete
-        goal: >
-          Route actions by workload and domain through bounded executors instead of monolithic identities.
-      - code: E1C
-        slug: auth-model-v2
-        title: "Auth Model v2"
-        status: Complete
-        goal: >
-          Define app-only, delegated, and hybrid execution rules per capability and workload.
-      - code: E1D
-        slug: approval-risk-matrix-v2
-        title: "Approval and Risk Matrix v2"
-        status: Complete
-        goal: >
-          Classify the expanded action universe into deterministic approval and risk classes.
-      - code: E1E
-        slug: unified-audit-schema-v2
-        title: "Unified Audit Schema v2"
-        status: Complete
-        goal: >
-          Normalize actor, persona, executor, approval, and result evidence across the expanded workforce.
-  - code: E2
-    title: "Core M365 Workload Expansion"
-    slug: core-m365-workload-expansion
+    goal: 'Enumerate every M365 workload and adjacent Microsoft admin surface relevant
+      to the workforce target.
+
+      '
+  - code: E0C
+    slug: capability-taxonomy-and-feasibility-map
+    title: Capability Taxonomy and Feasibility Map
     status: Complete
-    goal: >
-      Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
-    outputs:
-      - "directory expansion"
-      - "messaging expansion"
-      - "file and site expansion"
-      - "collaboration expansion"
-      - "document productivity expansion"
-    dependencies:
-      - "E1E"
-    children:
-      - code: E2A
-        slug: entra-directory-expansion
-        title: "Entra / Directory Expansion"
-        status: Complete
-        goal: >
-          Expand identity, group, license, and directory administration capabilities.
-      - code: E2B
-        slug: outlook-exchange-expansion
-        title: "Outlook / Exchange Expansion"
-        status: Complete
-        goal: >
-          Expand mail, calendar, shared mailbox, contact, and messaging operations.
-      - code: E2C
-        slug: sharepoint-onedrive-files-expansion
-        title: "SharePoint / OneDrive / Files Expansion"
-        status: Complete
-        goal: >
-          Expand site, list, library, file, record, and permission operations.
-      - code: E2D
-        slug: teams-groups-planner-expansion
-        title: "Teams / Groups / Planner Expansion"
-        status: Complete
-        goal: >
-          Expand team, channel, membership, group, and task-management operations.
-      - code: E2E
-        slug: documents-spreadsheets-presentations-expansion
-        title: "Documents / Spreadsheets / Presentations Expansion"
-        status: Ready
-        goal: >
-          Expand Word, Excel, and PowerPoint workflows through deterministic generation and update paths.
-  - code: E3
-    title: "Power Platform and Analytics Expansion"
-    slug: power-platform-analytics-expansion
+    goal: 'Normalize all identified capabilities into one taxonomy with implementation
+      feasibility, licensing, and exposure status.
+
+      '
+  - code: E0D
+    slug: persona-to-capability-and-risk-mapping
+    title: Persona-to-Capability and Risk Mapping
     status: Complete
-    goal: >
-      Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
-    outputs:
-      - "Power Automate expansion"
-      - "Power Apps expansion"
-      - "Power BI expansion"
-      - "Forms/connectors expansion"
-      - "cross-workload recipes"
-    dependencies:
-      - "E2E"
-    children:
-      - code: E3A
-        slug: power-automate-expansion
-        title: "Power Automate Expansion"
-        status: Complete
-        goal: >
-          Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
-      - code: E3B
-        slug: power-apps-expansion
-        title: "Power Apps Expansion"
-        status: Complete
-        goal: >
-          Add governed Power Apps interaction and administration surfaces.
-      - code: E3C
-        slug: power-bi-expansion
-        title: "Power BI Expansion"
-        status: Complete
-        goal: >
-          Add governed report, dataset, workspace, and analytics surfaces.
-      - code: E3D
-        slug: forms-approvals-connectors-expansion
-        title: "Forms / Approvals / Connectors Expansion"
-        status: Complete
-        goal: >
-          Bring forms, connector-backed workflow triggers, and approval integrations into the canonical action surface.
-      - code: E3E
-        slug: cross-workload-automation-recipes
-        title: "Cross-Workload Automation Recipes"
-        status: Complete
-        goal: >
-          Define reusable end-to-end recipes spanning multiple M365 workloads.
-  - code: E4
-    title: "Enterprise Admin and Security Expansion"
-    slug: enterprise-admin-security-expansion
+    goal: 'Bind personas and departments to required capabilities, risk classes, and
+      approval posture.
+
+      '
+  - code: E0E
+    slug: release-wave-and-completion-map
+    title: Release-Wave and Completion Map
     status: Complete
-    goal: >
-      Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.
-    outputs:
-      - "device management expansion"
-      - "security expansion"
-      - "compliance expansion"
-      - "conditional access expansion"
-      - "admin/governance expansion"
-    dependencies:
-      - "E3E"
-    children:
-      - code: E4A
-        slug: intune-devices-expansion
-        title: "Intune / Devices Expansion"
-        status: Complete
-        goal: >
-          Add governed device inventory, compliance, and lifecycle operations.
-      - code: E4B
-        slug: security-defender-expansion
-        title: "Security / Defender Expansion"
-        status: Complete
-        goal: >
-          Add governed security alert, incident, score, and response operations.
-      - code: E4C
-        slug: compliance-retention-ediscovery-expansion
-        title: "Compliance / Retention / eDiscovery Expansion"
-        status: Complete
-        goal: >
-          Add governed compliance, policy, and discovery operations.
-      - code: E4D
-        slug: conditional-access-identity-protection-expansion
-        title: "Conditional Access / Identity Protection Expansion"
-        status: Complete
-        goal: >
-          Add governed identity-protection and conditional-access administration.
-      - code: E4E
-        slug: admin-governance-surface-expansion
-        title: "Admin and Governance Surface Expansion"
-        status: Complete
-        goal: >
-          Unify remaining admin-center and governance controls into the workforce plane.
-  - code: E5
-    title: "Digital Employee Runtime"
-    slug: digital-employee-runtime
+    goal: 'Define the executable wave structure and completion criteria for the full
+      workforce program.
+
+      '
+- code: E1
+  title: Universal M365 Control Plane
+  slug: universal-m365-control-plane
+  status: Complete
+  goal: 'Extend the control plane so the pack can absorb the full M365 capability
+    universe through deterministic action contracts, executor routing, and unified
+    audit/governance rules.
+
+    '
+  outputs:
+  - universal action schema
+  - executor routing v2
+  - auth model v2
+  - approval/risk matrix
+  - unified audit schema
+  dependencies:
+  - E0E
+  children:
+  - code: E1A
+    slug: universal-action-contract-v2
+    title: Universal Action Contract v2
     status: Complete
-    goal: >
-      Turn the persona model into an actual digital workforce runtime that can own work, hold queues, preserve state, and act like a managed staff layer.
-    outputs:
-      - "persona registry completion"
-      - "delegation UX"
-      - "task queues"
-      - "KPIs/escalation"
-      - "memory/work history"
-    dependencies:
-      - "E1E"
-      - "E2E"
-    children:
-      - code: E5A
-        slug: persona-registry-completion
-        title: "Persona Registry Completion"
-        status: Complete
-        goal: >
-          Complete the authoritative persona registry with all required fields, constraints, and runtime projections.
-      - code: E5B
-        slug: humanized-delegation-interface
-        title: "Humanized Delegation Interface"
-        status: Complete
-        goal: >
-          Support natural requests like talking to Elena Rodriguez instead of targeting raw agents.
-      - code: E5C
-        slug: persona-task-queues-and-state
-        title: "Persona Task Queues and State"
-        status: Complete
-        goal: >
-          Give personas deterministic task queues, state, and lifecycle management.
-      - code: E5D
-        slug: persona-kpis-ownership-escalation
-        title: "Persona KPIs, Ownership, and Escalation"
-        status: Complete
-        goal: >
-          Bind performance, ownership, accountability, and escalation into the runtime contract.
-      - code: E5E
-        slug: persona-memory-and-work-history
-        title: "Persona Memory and Work History"
-        status: Complete
-        goal: >
-          Define bounded, auditable persona memory and work-history semantics.
-  - code: E6
-    title: "Department Packs"
-    slug: department-packs
+    goal: 'Define the canonical action contract that can represent the expanded workforce
+      action surface.
+
+      '
+  - code: E1B
+    slug: executor-routing-v2
+    title: Executor Routing v2
+    status: Complete
+    goal: 'Route actions by workload and domain through bounded executors instead
+      of monolithic identities.
+
+      '
+  - code: E1C
+    slug: auth-model-v2
+    title: Auth Model v2
+    status: Complete
+    goal: 'Define app-only, delegated, and hybrid execution rules per capability and
+      workload.
+
+      '
+  - code: E1D
+    slug: approval-risk-matrix-v2
+    title: Approval and Risk Matrix v2
+    status: Complete
+    goal: 'Classify the expanded action universe into deterministic approval and risk
+      classes.
+
+      '
+  - code: E1E
+    slug: unified-audit-schema-v2
+    title: Unified Audit Schema v2
+    status: Complete
+    goal: 'Normalize actor, persona, executor, approval, and result evidence across
+      the expanded workforce.
+
+      '
+- code: E2
+  title: Core M365 Workload Expansion
+  slug: core-m365-workload-expansion
+  status: Complete
+  goal: 'Implement the foundational business and admin workloads that make the workforce
+    broadly useful across identity, communication, files, and collaboration.
+
+    '
+  outputs:
+  - directory expansion
+  - messaging expansion
+  - file and site expansion
+  - collaboration expansion
+  - document productivity expansion
+  dependencies:
+  - E1E
+  children:
+  - code: E2A
+    slug: entra-directory-expansion
+    title: Entra / Directory Expansion
+    status: Complete
+    goal: 'Expand identity, group, license, and directory administration capabilities.
+
+      '
+  - code: E2B
+    slug: outlook-exchange-expansion
+    title: Outlook / Exchange Expansion
+    status: Complete
+    goal: 'Expand mail, calendar, shared mailbox, contact, and messaging operations.
+
+      '
+  - code: E2C
+    slug: sharepoint-onedrive-files-expansion
+    title: SharePoint / OneDrive / Files Expansion
+    status: Complete
+    goal: 'Expand site, list, library, file, record, and permission operations.
+
+      '
+  - code: E2D
+    slug: teams-groups-planner-expansion
+    title: Teams / Groups / Planner Expansion
+    status: Complete
+    goal: 'Expand team, channel, membership, group, and task-management operations.
+
+      '
+  - code: E2E
+    slug: documents-spreadsheets-presentations-expansion
+    title: Documents / Spreadsheets / Presentations Expansion
+    status: Ready
+    goal: 'Expand Word, Excel, and PowerPoint workflows through deterministic generation
+      and update paths.
+
+      '
+- code: E3
+  title: Power Platform and Analytics Expansion
+  slug: power-platform-analytics-expansion
+  status: Complete
+  goal: 'Bring workflow automation, app surfaces, forms, and analytics into the same
+    governed workforce control plane.
+
+    '
+  outputs:
+  - Power Automate expansion
+  - Power Apps expansion
+  - Power BI expansion
+  - Forms/connectors expansion
+  - cross-workload recipes
+  dependencies:
+  - E2E
+  children:
+  - code: E3A
+    slug: power-automate-expansion
+    title: Power Automate Expansion
+    status: Complete
+    goal: 'Add governed automation-flow discovery, invocation, lifecycle, and monitoring.
+
+      '
+  - code: E3B
+    slug: power-apps-expansion
+    title: Power Apps Expansion
+    status: Complete
+    goal: 'Add governed Power Apps interaction and administration surfaces.
+
+      '
+  - code: E3C
+    slug: power-bi-expansion
+    title: Power BI Expansion
+    status: Complete
+    goal: 'Add governed report, dataset, workspace, and analytics surfaces.
+
+      '
+  - code: E3D
+    slug: forms-approvals-connectors-expansion
+    title: Forms / Approvals / Connectors Expansion
+    status: Complete
+    goal: 'Bring forms, connector-backed workflow triggers, and approval integrations
+      into the canonical action surface.
+
+      '
+  - code: E3E
+    slug: cross-workload-automation-recipes
+    title: Cross-Workload Automation Recipes
+    status: Complete
+    goal: 'Define reusable end-to-end recipes spanning multiple M365 workloads.
+
+      '
+- code: E4
+  title: Enterprise Admin and Security Expansion
+  slug: enterprise-admin-security-expansion
+  status: Complete
+  goal: 'Extend the workforce to the enterprise-control workloads that require the
+    strictest governance, approvals, and minimum-permission boundaries.
+
+    '
+  outputs:
+  - device management expansion
+  - security expansion
+  - compliance expansion
+  - conditional access expansion
+  - admin/governance expansion
+  dependencies:
+  - E3E
+  children:
+  - code: E4A
+    slug: intune-devices-expansion
+    title: Intune / Devices Expansion
+    status: Complete
+    goal: 'Add governed device inventory, compliance, and lifecycle operations.
+
+      '
+  - code: E4B
+    slug: security-defender-expansion
+    title: Security / Defender Expansion
+    status: Complete
+    goal: 'Add governed security alert, incident, score, and response operations.
+
+      '
+  - code: E4C
+    slug: compliance-retention-ediscovery-expansion
+    title: Compliance / Retention / eDiscovery Expansion
+    status: Complete
+    goal: 'Add governed compliance, policy, and discovery operations.
+
+      '
+  - code: E4D
+    slug: conditional-access-identity-protection-expansion
+    title: Conditional Access / Identity Protection Expansion
+    status: Complete
+    goal: 'Add governed identity-protection and conditional-access administration.
+
+      '
+  - code: E4E
+    slug: admin-governance-surface-expansion
+    title: Admin and Governance Surface Expansion
+    status: Complete
+    goal: 'Unify remaining admin-center and governance controls into the workforce
+      plane.
+
+      '
+- code: E5
+  title: Digital Employee Runtime
+  slug: digital-employee-runtime
+  status: Complete
+  goal: 'Turn the persona model into an actual digital workforce runtime that can
+    own work, hold queues, preserve state, and act like a managed staff layer.
+
+    '
+  outputs:
+  - persona registry completion
+  - delegation UX
+  - task queues
+  - KPIs/escalation
+  - memory/work history
+  dependencies:
+  - E1E
+  - E2E
+  children:
+  - code: E5A
+    slug: persona-registry-completion
+    title: Persona Registry Completion
+    status: Complete
+    goal: 'Complete the authoritative persona registry with all required fields, constraints,
+      and runtime projections.
+
+      '
+  - code: E5B
+    slug: humanized-delegation-interface
+    title: Humanized Delegation Interface
+    status: Complete
+    goal: 'Support natural requests like talking to Elena Rodriguez instead of targeting
+      raw agents.
+
+      '
+  - code: E5C
+    slug: persona-task-queues-and-state
+    title: Persona Task Queues and State
+    status: Complete
+    goal: 'Give personas deterministic task queues, state, and lifecycle management.
+
+      '
+  - code: E5D
+    slug: persona-kpis-ownership-escalation
+    title: Persona KPIs, Ownership, and Escalation
+    status: Complete
+    goal: 'Bind performance, ownership, accountability, and escalation into the runtime
+      contract.
+
+      '
+  - code: E5E
+    slug: persona-memory-and-work-history
+    title: Persona Memory and Work History
+    status: Complete
+    goal: 'Define bounded, auditable persona memory and work-history semantics.
+
+      '
+- code: E6
+  title: Department Packs
+  slug: department-packs
+  status: Active
+  goal: 'Package the workforce into department-operable capability sets so each department
+    has its own governed digital team and workflows.
+
+    '
+  outputs:
+  - department capability packs
+  - department workflow maps
+  - department approval models
+  - department KPIs
+  dependencies:
+  - E5E
+  children:
+  - code: E6A
+    slug: operations-department-pack
+    title: Operations Department Pack
+    status: Complete
+    goal: 'Build the Operations department capability pack.
+
+      '
+  - code: E6B
+    slug: hr-department-pack
+    title: HR Department Pack
+    status: Complete
+    goal: 'Build the HR department capability pack.
+
+      '
+  - code: E6C
+    slug: communication-department-pack
+    title: Communication Department Pack
+    status: Complete
+    goal: 'Build the Communication department capability pack.
+
+      '
+  - code: E6D
+    slug: engineering-department-pack
+    title: Engineering Department Pack
+    status: Complete
+    goal: 'Build the Engineering department capability pack.
+
+      '
+  - code: E6E
+    slug: marketing-department-pack
+    title: Marketing Department Pack
+    status: Complete
+    goal: 'Build the Marketing department capability pack.
+
+      '
+  - code: E6F
+    slug: product-department-pack
+    title: Product Department Pack
     status: Active
-    goal: >
-      Package the workforce into department-operable capability sets so each department has its own governed digital team and workflows.
-    outputs:
-      - "department capability packs"
-      - "department workflow maps"
-      - "department approval models"
-      - "department KPIs"
-    dependencies:
-      - "E5E"
-    children:
-      - code: E6A
-        slug: operations-department-pack
-        title: "Operations Department Pack"
-        status: Complete
-        goal: >
-          Build the Operations department capability pack.
-      - code: E6B
-        slug: hr-department-pack
-        title: "HR Department Pack"
-        status: Complete
-        goal: >
-          Build the HR department capability pack.
-      - code: E6C
-        slug: communication-department-pack
-        title: "Communication Department Pack"
-        status: Complete
-        goal: >
-          Build the Communication department capability pack.
-      - code: E6D
-        slug: engineering-department-pack
-        title: "Engineering Department Pack"
-        status: Complete
-        goal: >
-          Build the Engineering department capability pack.
-      - code: E6E
-        slug: marketing-department-pack
-        title: "Marketing Department Pack"
-        status: Active
-        goal: >
-          Build the Marketing department capability pack.
-      - code: E6F
-        slug: product-department-pack
-        title: "Product Department Pack"
-        status: Pending
-        goal: >
-          Build the Product department capability pack.
-      - code: E6G
-        slug: project-management-department-pack
-        title: "Project Management Department Pack"
-        status: Pending
-        goal: >
-          Build the Project Management department capability pack.
-      - code: E6H
-        slug: studio-operations-department-pack
-        title: "Studio Operations Department Pack"
-        status: Pending
-        goal: >
-          Build the Studio Operations department capability pack.
-      - code: E6I
-        slug: testing-department-pack
-        title: "Testing Department Pack"
-        status: Pending
-        goal: >
-          Build the Testing department capability pack.
-      - code: E6J
-        slug: design-department-pack
-        title: "Design Department Pack"
-        status: Pending
-        goal: >
-          Build the Design department capability pack.
-  - code: E7
-    title: "Claude / UCP Workforce Experience"
-    slug: claude-ucp-workforce-experience
+    goal: 'Build the Product department capability pack.
+
+      '
+  - code: E6G
+    slug: project-management-department-pack
+    title: Project Management Department Pack
     status: Pending
-    goal: >
-      Make the full workforce actually usable through Claude and UCP with humanized delegation, orchestration, and executive control.
-    outputs:
-      - "Claude/UCP delegation contract"
-      - "persona selection"
-      - "multi-step orchestration"
-      - "cross-persona collaboration"
-      - "executive controls"
-    dependencies:
-      - "E5E"
-      - "E6J"
-    children:
-      - code: E7A
-        slug: claude-ucp-universal-delegation-contract
-        title: "Claude to UCP Universal Delegation Contract"
-        status: Pending
-        goal: >
-          Define the top-level delegation contract between Claude, UCP, and the workforce runtime.
-      - code: E7B
-        slug: persona-discovery-and-selection
-        title: "Persona Discovery and Selection"
-        status: Pending
-        goal: >
-          Make it easy to find and target the right digital employee for a request.
-      - code: E7C
-        slug: multi-step-task-orchestration
-        title: "Multi-Step Task Orchestration"
-        status: Pending
-        goal: >
-          Support composed multi-step work across workload and persona boundaries.
-      - code: E7D
-        slug: cross-persona-collaboration
-        title: "Cross-Persona Collaboration"
-        status: Pending
-        goal: >
-          Allow digital employees to hand off, collaborate, and coordinate within governed bounds.
-      - code: E7E
-        slug: executive-oversight-intervention-controls
-        title: "Executive Oversight and Intervention Controls"
-        status: Pending
-        goal: >
-          Give executives visibility and intervention controls across the workforce runtime.
-  - code: E8
-    title: "Live Validation and Workforce Certification"
-    slug: live-validation-workforce-certification
+    goal: 'Build the Project Management department capability pack.
+
+      '
+  - code: E6H
+    slug: studio-operations-department-pack
+    title: Studio Operations Department Pack
     status: Pending
-    goal: >
-      Prove the expanded workforce in the live tenant, by workload, persona, department, and cross-department workflows, before release claims are made.
-    outputs:
-      - "workload certification"
-      - "persona certification"
-      - "department certification"
-      - "cross-department certification"
-      - "release gate v2"
-    dependencies:
-      - "E7E"
-    children:
-      - code: E8A
-        slug: workload-certification
-        title: "Workload Certification"
-        status: Pending
-        goal: >
-          Certify each workload surface against the live tenant and the bounded executor model.
-      - code: E8B
-        slug: persona-certification
-        title: "Persona Certification"
-        status: Pending
-        goal: >
-          Certify each persona class against its allowed domains and approval posture.
-      - code: E8C
-        slug: department-certification
-        title: "Department Certification"
-        status: Pending
-        goal: >
-          Certify each department pack against its target workflows and responsibilities.
-      - code: E8D
-        slug: cross-department-workflow-certification
-        title: "Cross-Department Workflow Certification"
-        status: Pending
-        goal: >
-          Certify cross-functional workflows spanning multiple departments and personas.
-      - code: E8E
-        slug: enterprise-release-gate-v2
-        title: "Enterprise Release Gate v2"
-        status: Pending
-        goal: >
-          Close the formal workforce release gate with live evidence and explicit sign-off.
-  - code: E9
-    title: "Launch and Operating Model"
-    slug: launch-operating-model
+    goal: 'Build the Studio Operations department capability pack.
+
+      '
+  - code: E6I
+    slug: testing-department-pack
+    title: Testing Department Pack
     status: Pending
-    goal: >
-      Package, onboard, launch, and support the complete workforce with an explicit commercial and operational model.
-    outputs:
-      - "workforce packaging"
-      - "customer onboarding v2"
-      - "pilot/rollout model"
-      - "support boundary v2"
-      - "release decision"
-    dependencies:
-      - "E8E"
-    children:
-      - code: E9A
-        slug: workforce-packaging
-        title: "Workforce Packaging"
-        status: Pending
-        goal: >
-          Package the full workforce offering and supported capability sets for customers.
-      - code: E9B
-        slug: customer-onboarding-v2
-        title: "Customer Onboarding v2"
-        status: Pending
-        goal: >
-          Define the onboarding path for the expanded workforce product.
-      - code: E9C
-        slug: pilot-rollout-model-v2
-        title: "Pilot and Rollout Model v2"
-        status: Pending
-        goal: >
-          Define rollout phases, acceptance, and expansion across customers and departments.
-      - code: E9D
-        slug: support-boundary-v2
-        title: "Support Boundary v2"
-        status: Pending
-        goal: >
-          Define the final operating, support, and customer-ownership boundaries for the full workforce.
-      - code: E9E
-        slug: workforce-expansion-release-decision
-        title: "Workforce Expansion Release Decision"
-        status: Pending
-        goal: >
-          Issue the final release decision for the full workforce program.
+    goal: 'Build the Testing department capability pack.
+
+      '
+  - code: E6J
+    slug: design-department-pack
+    title: Design Department Pack
+    status: Pending
+    goal: 'Build the Design department capability pack.
+
+      '
+- code: E7
+  title: Claude / UCP Workforce Experience
+  slug: claude-ucp-workforce-experience
+  status: Pending
+  goal: 'Make the full workforce actually usable through Claude and UCP with humanized
+    delegation, orchestration, and executive control.
+
+    '
+  outputs:
+  - Claude/UCP delegation contract
+  - persona selection
+  - multi-step orchestration
+  - cross-persona collaboration
+  - executive controls
+  dependencies:
+  - E5E
+  - E6J
+  children:
+  - code: E7A
+    slug: claude-ucp-universal-delegation-contract
+    title: Claude to UCP Universal Delegation Contract
+    status: Pending
+    goal: 'Define the top-level delegation contract between Claude, UCP, and the workforce
+      runtime.
+
+      '
+  - code: E7B
+    slug: persona-discovery-and-selection
+    title: Persona Discovery and Selection
+    status: Pending
+    goal: 'Make it easy to find and target the right digital employee for a request.
+
+      '
+  - code: E7C
+    slug: multi-step-task-orchestration
+    title: Multi-Step Task Orchestration
+    status: Pending
+    goal: 'Support composed multi-step work across workload and persona boundaries.
+
+      '
+  - code: E7D
+    slug: cross-persona-collaboration
+    title: Cross-Persona Collaboration
+    status: Pending
+    goal: 'Allow digital employees to hand off, collaborate, and coordinate within
+      governed bounds.
+
+      '
+  - code: E7E
+    slug: executive-oversight-intervention-controls
+    title: Executive Oversight and Intervention Controls
+    status: Pending
+    goal: 'Give executives visibility and intervention controls across the workforce
+      runtime.
+
+      '
+- code: E8
+  title: Live Validation and Workforce Certification
+  slug: live-validation-workforce-certification
+  status: Pending
+  goal: 'Prove the expanded workforce in the live tenant, by workload, persona, department,
+    and cross-department workflows, before release claims are made.
+
+    '
+  outputs:
+  - workload certification
+  - persona certification
+  - department certification
+  - cross-department certification
+  - release gate v2
+  dependencies:
+  - E7E
+  children:
+  - code: E8A
+    slug: workload-certification
+    title: Workload Certification
+    status: Pending
+    goal: 'Certify each workload surface against the live tenant and the bounded executor
+      model.
+
+      '
+  - code: E8B
+    slug: persona-certification
+    title: Persona Certification
+    status: Pending
+    goal: 'Certify each persona class against its allowed domains and approval posture.
+
+      '
+  - code: E8C
+    slug: department-certification
+    title: Department Certification
+    status: Pending
+    goal: 'Certify each department pack against its target workflows and responsibilities.
+
+      '
+  - code: E8D
+    slug: cross-department-workflow-certification
+    title: Cross-Department Workflow Certification
+    status: Pending
+    goal: 'Certify cross-functional workflows spanning multiple departments and personas.
+
+      '
+  - code: E8E
+    slug: enterprise-release-gate-v2
+    title: Enterprise Release Gate v2
+    status: Pending
+    goal: 'Close the formal workforce release gate with live evidence and explicit
+      sign-off.
+
+      '
+- code: E9
+  title: Launch and Operating Model
+  slug: launch-operating-model
+  status: Pending
+  goal: 'Package, onboard, launch, and support the complete workforce with an explicit
+    commercial and operational model.
+
+    '
+  outputs:
+  - workforce packaging
+  - customer onboarding v2
+  - pilot/rollout model
+  - support boundary v2
+  - release decision
+  dependencies:
+  - E8E
+  children:
+  - code: E9A
+    slug: workforce-packaging
+    title: Workforce Packaging
+    status: Pending
+    goal: 'Package the full workforce offering and supported capability sets for customers.
+
+      '
+  - code: E9B
+    slug: customer-onboarding-v2
+    title: Customer Onboarding v2
+    status: Pending
+    goal: 'Define the onboarding path for the expanded workforce product.
+
+      '
+  - code: E9C
+    slug: pilot-rollout-model-v2
+    title: Pilot and Rollout Model v2
+    status: Pending
+    goal: 'Define rollout phases, acceptance, and expansion across customers and departments.
+
+      '
+  - code: E9D
+    slug: support-boundary-v2
+    title: Support Boundary v2
+    status: Pending
+    goal: 'Define the final operating, support, and customer-ownership boundaries
+      for the full workforce.
+
+      '
+  - code: E9E
+    slug: workforce-expansion-release-decision
+    title: Workforce Expansion Release Decision
+    status: Pending
+    goal: 'Issue the final release decision for the full workforce program.
+
+      '

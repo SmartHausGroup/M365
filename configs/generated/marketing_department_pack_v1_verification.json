@@ -1,0 +1,61 @@
+{
+  "active_persona_count": 0,
+  "department": "marketing",
+  "pack_state": "blocked",
+  "persona_count": 7,
+  "personas": [
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "app-store-optimizer",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "content-creator",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "growth-hacker",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "instagram-curator",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "reddit-community-builder",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "tiktok-strategist",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "twitter-engager",
+      "status": "planned"
+    }
+  ],
+  "registry_backed_persona_count": 0,
+  "supported_action_count": 0,
+  "workflow_family_count": 4,
+  "workload_family_count": 7
+}
