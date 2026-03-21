@@ -1,0 +1,9 @@
+{
+  "contract_id": "workforce-release-decision",
+  "decision_input_count": 5,
+  "follow_on_count": 4,
+  "governance_rule_count": 5,
+  "program_status": "complete",
+  "release_verdict": "GO",
+  "residual_gap_count": 4
+}

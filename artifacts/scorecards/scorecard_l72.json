@@ -1,0 +1,13 @@
+{
+  "lemma_id": "L72",
+  "title": "M365 Workforce Expansion Release Decision v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BT-workforce-release-decision-v1.ipynb",
+    "notebooks/lemma_proofs/L72_m365_workforce_release_decision_v1.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L72_m365_workforce_release_decision_v1.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": ["Final release decision GO with 4 documented residual gaps", "Program closure: 10 sections, 50 acts, 72 lemmas"]
+}
