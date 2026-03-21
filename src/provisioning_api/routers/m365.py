@@ -15,6 +15,7 @@ from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
 from smarthaus_common.forms_approvals_connectors_client import FormsApprovalsConnectorsClient
+from smarthaus_common.intune_devices_client import IntuneDevicesClient
 from smarthaus_common.office_generation import (
     DOCUMENT_CONTENT_TYPE,
     PRESENTATION_CONTENT_TYPE,
@@ -121,6 +122,10 @@ _SUPPORTED_ACTIONS = {
     "add_external_group_member",
     "list_automation_recipes",
     "get_automation_recipe",
+    "list_devices",
+    "get_device",
+    "list_device_compliance_summaries",
+    "execute_device_action",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -219,6 +224,7 @@ _MUTATING_ACTIONS = {
     "upsert_external_item",
     "create_external_group",
     "add_external_group_member",
+    "execute_device_action",
 }
 
 
@@ -1365,6 +1371,23 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
         if not recipe_id:
             raise HTTPException(status_code=400, detail="Missing 'recipeId', 'recipe_id', or 'id'")
         return {"recipe_id": recipe_id}
+    if action == "list_devices":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "get_device":
+        device_id = _first_str(params, "deviceId", "device_id", "id")
+        if not device_id:
+            raise HTTPException(status_code=400, detail="Missing 'deviceId', 'device_id', or 'id'")
+        return {"device_id": device_id}
+    if action == "list_device_compliance_summaries":
+        return {}
+    if action == "execute_device_action":
+        device_id = _first_str(params, "deviceId", "device_id", "id")
+        if not device_id:
+            raise HTTPException(status_code=400, detail="Missing 'deviceId', 'device_id', or 'id'")
+        return {
+            "device_id": device_id,
+            "device_action": _first_str(params, "action", "deviceAction") or "syncDevice",
+        }
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1746,6 +1769,23 @@ def _forms_approvals_connectors_client(
 
 def _automation_recipe_client() -> AutomationRecipeClient:
     return AutomationRecipeClient()
+
+
+def _intune_devices_client(action: str | None = None) -> IntuneDevicesClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return IntuneDevicesClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return IntuneDevicesClient(legacy_config=config)
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -2286,6 +2326,23 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if action == "get_automation_recipe":
         recipe_client = _automation_recipe_client()
         return {"recipe": recipe_client.get_recipe(params["recipe_id"])}
+    if action == "list_devices":
+        devices_client = _intune_devices_client(action)
+        value = devices_client.list_devices(top=params["top"])
+        return {"devices": value, "count": len(value)}
+    if action == "get_device":
+        devices_client = _intune_devices_client(action)
+        return {"device": devices_client.get_device(params["device_id"])}
+    if action == "list_device_compliance_summaries":
+        devices_client = _intune_devices_client(action)
+        value = devices_client.list_device_compliance_summaries()
+        return {"summaries": value, "count": len(value)}
+    if action == "execute_device_action":
+        devices_client = _intune_devices_client(action)
+        return devices_client.execute_device_action(
+            params["device_id"],
+            action=params["device_action"],
+        )
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -3344,6 +3401,30 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "description": "Get one bounded cross-workload automation recipe by id",
         "params": ["recipeId|recipe_id|id"],
         "mutating": False,
+    },
+    {
+        "action": "list_devices",
+        "description": "List Intune managed devices",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_device",
+        "description": "Get an Intune managed device by id",
+        "params": ["deviceId|device_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "list_device_compliance_summaries",
+        "description": "List Intune device compliance summaries",
+        "params": [],
+        "mutating": False,
+    },
+    {
+        "action": "execute_device_action",
+        "description": "Execute a bounded Intune managed-device action",
+        "params": ["deviceId|device_id|id", "action|deviceAction?"],
+        "mutating": True,
     },
     {
         "action": "get_user",

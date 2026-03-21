@@ -5,8 +5,9 @@ from typing import Any
 
 import yaml
 
-
-_REGISTRY_PATH = Path(__file__).resolve().parents[2] / "registry" / "cross_workload_automation_recipes_v2.yaml"
+_REGISTRY_PATH = (
+    Path(__file__).resolve().parents[2] / "registry" / "cross_workload_automation_recipes_v2.yaml"
+)
 
 
 class AutomationRecipeClient:
@@ -42,7 +43,9 @@ class AutomationRecipeClient:
     ) -> list[dict[str, Any]]:
         recipes = self._recipes
         if department:
-            recipes = [recipe for recipe in recipes if department in (recipe.get("departments") or [])]
+            recipes = [
+                recipe for recipe in recipes if department in (recipe.get("departments") or [])
+            ]
         if persona:
             recipes = [
                 recipe for recipe in recipes if persona in (recipe.get("primaryPersonas") or [])

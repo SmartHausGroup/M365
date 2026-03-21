@@ -145,6 +145,10 @@ RESULT_SHAPES = {
     "add_external_group_member": ["groupId", "memberId", "status"],
     "list_automation_recipes": ["recipes", "count"],
     "get_automation_recipe": ["recipe"],
+    "list_devices": ["devices", "count"],
+    "get_device": ["device"],
+    "list_device_compliance_summaries": ["summaries", "count"],
+    "execute_device_action": ["executed", "deviceId", "action"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -520,6 +524,23 @@ def verify_with_mock() -> dict:
         (
             "get_automation_recipe",
             {"ok": True, "result": {"recipe": {"recipeId": "incident_response_war_room"}}},
+        ),
+        ("list_devices", {"ok": True, "result": {"devices": [], "count": 0}}),
+        ("get_device", {"ok": True, "result": {"device": {"id": "device-1"}}}),
+        (
+            "list_device_compliance_summaries",
+            {"ok": True, "result": {"summaries": [], "count": 0}},
+        ),
+        (
+            "execute_device_action",
+            {
+                "ok": True,
+                "result": {
+                    "executed": True,
+                    "deviceId": "device-1",
+                    "action": "syncDevice",
+                },
+            },
         ),
         (
             "create_site",

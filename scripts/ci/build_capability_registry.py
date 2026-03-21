@@ -35,6 +35,7 @@ SECTION_TO_DOMAIN = {
     "Reports & analytics": "reports",
     "Access reviews & governance": "access_reviews",
     "Security & compliance (where exposed via Graph)": "security",
+    "Devices / endpoint management": "devices",
     "Provisioning / composite (our conveniences)": "provisioning",
 }
 
@@ -118,6 +119,10 @@ def action_to_resource(action: str, domain: str) -> str:
     if "organization" in action and domain == "identity":
         return "organization"
     if "device" in action:
+        if "device_compliance" in action:
+            return "deviceComplianceSummary"
+        if "device_action" in action or action.startswith("execute_device_action"):
+            return "managedDeviceAction"
         return "device"
     if "application" in action:
         return "application"

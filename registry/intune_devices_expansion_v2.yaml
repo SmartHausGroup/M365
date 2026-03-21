@@ -1,0 +1,51 @@
+schema_version: "2.0"
+last_updated: "2026-03-21T03:10:00Z"
+authority_inputs:
+  - docs/CAIO_M365_CONTRACT.md
+  - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+  - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+  - registry/capability_registry.yaml
+  - registry/executor_routing_v2.yaml
+  - registry/auth_model_v2.yaml
+  - registry/approval_risk_matrix_v2.yaml
+deterministic_rule: >
+  E4AIntuneDevicesExpansion(action) = InstructionBacked(action) ∧
+  CapabilityRegistryImplemented(action) ∧ ExecutorRoute(action)=devices ∧
+  AuthClass(action)=app_only.
+supported_actions:
+  list_devices:
+    canonical_action_key: devices.managed_device.list
+    agent_alias: devices.list
+    runtime_handler: IntuneDevicesClient.list_devices
+    mutating: false
+    result_shape_keys: [devices, count]
+    required_permissions: [DeviceManagementManagedDevices.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_devices
+  get_device:
+    canonical_action_key: devices.managed_device.read
+    agent_alias: devices.get
+    runtime_handler: IntuneDevicesClient.get_device
+    mutating: false
+    result_shape_keys: [device]
+    required_permissions: [DeviceManagementManagedDevices.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: get_device
+  list_device_compliance_summaries:
+    canonical_action_key: devices.compliance_summary.list
+    agent_alias: devices.compliance
+    runtime_handler: IntuneDevicesClient.list_device_compliance_summaries
+    mutating: false
+    result_shape_keys: [summaries, count]
+    required_permissions: [DeviceManagementConfiguration.Read.All]
+    approval_profile: low-observe-create
+    capability_registry_alias: list_device_compliance_summaries
+  execute_device_action:
+    canonical_action_key: devices.managed_device.action
+    agent_alias: devices.actions
+    runtime_handler: IntuneDevicesClient.execute_device_action
+    mutating: true
+    result_shape_keys: [executed, deviceId, action]
+    required_permissions: [DeviceManagementManagedDevices.PrivilegedOperations.All]
+    approval_profile: high-impact
+    capability_registry_alias: execute_device_action

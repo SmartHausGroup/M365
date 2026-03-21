@@ -378,6 +378,23 @@ exact_action_policies:
     risk_class: low
     approval_profile: low-observe-create
     approval_requirement: never
+  list_devices:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_device:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_device_compliance_summaries:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  execute_device_action:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [platform_admin]
   get_approval_solution:
     risk_class: low
     approval_profile: low-observe-create

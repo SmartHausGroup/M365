@@ -2,11 +2,18 @@ from __future__ import annotations
 
 from collections.abc import Generator
 
+import pytest
 from provisioning_api.routers import m365 as m365_router
-from smarthaus_common.approval_risk import reload_approval_risk_registry, resolve_action_approval_risk
+from smarthaus_common.approval_risk import (
+    reload_approval_risk_registry,
+    resolve_action_approval_risk,
+)
 from smarthaus_common.auth_model import reload_auth_model_registry, resolve_action_auth
 from smarthaus_common.automation_recipe_client import AutomationRecipeClient
-from smarthaus_common.executor_routing import executor_route_for_action, reload_executor_routing_registry
+from smarthaus_common.executor_routing import (
+    executor_route_for_action,
+    reload_executor_routing_registry,
+)
 
 
 def _reload() -> None:
@@ -20,10 +27,7 @@ def _catalog_actions() -> set[str]:
 
 
 def _supported_schema_actions() -> set[str]:
-    return {item["action"] for item in m365_router.INSTRUCTION_ACTIONS_SCHEMA}
-
-
-import pytest
+    return {str(item["action"]) for item in m365_router.INSTRUCTION_ACTIONS_SCHEMA}
 
 
 @pytest.fixture(autouse=True)
@@ -81,6 +85,8 @@ def test_e3e_instruction_contract_executes_catalog_actions() -> None:
 
     assert list_payload["ok"] is True
     assert list_payload["result"]["count"] <= 3
-    assert all("operations" in recipe["departments"] for recipe in list_payload["result"]["recipes"])
+    assert all(
+        "operations" in recipe["departments"] for recipe in list_payload["result"]["recipes"]
+    )
     assert get_payload["ok"] is True
     assert get_payload["result"]["recipe"]["recipeId"] == "incident_response_war_room"

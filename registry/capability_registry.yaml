@@ -443,18 +443,23 @@ actions:
   status: planned
 - action: list_devices
   resource: device
-  domain: identity
+  domain: devices
   required_permissions:
-  - See permissions reference
+  - DeviceManagementManagedDevices.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - devices
+  - count
 - action: get_device
   resource: device
-  domain: identity
+  domain: devices
   required_permissions:
-  - See permissions reference
+  - DeviceManagementManagedDevices.Read.All
   mutating: false
-  status: planned
+  status: implemented
+  result_shape_keys:
+  - device
 - action: create_device
   resource: device
   domain: identity
@@ -476,6 +481,27 @@ actions:
   - See permissions reference
   mutating: true
   status: planned
+- action: list_device_compliance_summaries
+  resource: deviceComplianceSummary
+  domain: devices
+  required_permissions:
+  - DeviceManagementConfiguration.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - summaries
+  - count
+- action: execute_device_action
+  resource: managedDeviceAction
+  domain: devices
+  required_permissions:
+  - DeviceManagementManagedDevices.PrivilegedOperations.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - executed
+  - deviceId
+  - action
 - action: list_applications
   resource: application
   domain: identity

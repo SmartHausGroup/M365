@@ -420,6 +420,15 @@ connector-backed surfaces instead.
 
 ---
 
+## Devices / endpoint management
+
+- list_devices
+- get_device
+- list_device_compliance_summaries
+- execute_device_action
+
+---
+
 ## Provisioning / composite (our conveniences)
 
 - provision_service

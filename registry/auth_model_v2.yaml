@@ -222,6 +222,14 @@ exact_action_policies:
     auth_class: app_only
   get_automation_recipe:
     auth_class: app_only
+  list_devices:
+    auth_class: app_only
+  get_device:
+    auth_class: app_only
+  list_device_compliance_summaries:
+    auth_class: app_only
+  execute_device_action:
+    auth_class: app_only
   get_approval_solution:
     auth_class: delegated
     delegated_preference: always

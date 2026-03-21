@@ -138,6 +138,10 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `add_external_group_member` | Add a member to an external group for connector ACL management | Yes | `connectionId` or `connection_id`, `groupId` or `group_id`, `memberId` or `member_id` or `id`, `memberType?`, `identitySource?` |
 | `list_automation_recipes` | List the bounded cross-workload automation recipes available to Claude/UCP | No | `department?`, `persona?`, `workload?`, `top?` |
 | `get_automation_recipe` | Get one bounded cross-workload automation recipe by id | No | `recipeId` or `recipe_id` or `id` |
+| `list_devices` | List Intune managed devices | No | `top?` |
+| `get_device` | Get an Intune managed device by id | No | `deviceId` or `device_id` or `id` |
+| `list_device_compliance_summaries` | List Intune device compliance summaries | No | none |
+| `execute_device_action` | Execute a bounded Intune managed-device action | Yes | `deviceId` or `device_id` or `id`, `action?` or `deviceAction?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -262,6 +266,10 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **add_external_group_member:** `{ "groupId": "<id>", "memberId": "<id>", "status": "added" }`
 - **list_automation_recipes:** `{ "recipes": [ ... ], "count": N }`
 - **get_automation_recipe:** `{ "recipe": { ... } }`
+- **list_devices:** `{ "devices": [ ... ], "count": N }`
+- **get_device:** `{ "device": { ... } }`
+- **list_device_compliance_summaries:** `{ "summaries": [ ... ], "count": N }`
+- **execute_device_action:** `{ "executed": true, "deviceId": "<id>", "action": "<action>" }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`
