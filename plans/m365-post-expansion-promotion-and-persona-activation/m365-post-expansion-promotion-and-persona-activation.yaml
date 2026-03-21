@@ -1,0 +1,154 @@
+plan_id: m365-post-expansion-promotion-and-persona-activation
+status: Active
+date: '2026-03-21'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-post-expansion-promotion-and-persona-activation:R1
+north_star: Operations/NORTHSTAR.md
+historical_lineage: m365-ai-workforce-expansion-master-plan
+ma_process_required: false
+objective: 'Move the completed workforce program from development into staging and then main, then execute a bounded
+  follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially
+  claimable digital employees.
+
+  '
+decision_rule: 'PromotionReady = DevelopmentMerged AND StagingAligned AND StagingValidated AND MainAligned.
+  PersonaActivated = RegistryBacked AND ActionSurfaceImplemented AND AllowedDomainsBound AND ApprovalPolicyBound
+  AND NotebookEvidenceGreen AND ScorecardGreen AND RuntimeRoutingGreen. CommercialActivationReady = PromotionReady
+  AND Wave1ActivationGreen.
+
+  '
+prompt_discipline: 'Maintain a formal prompt pair for the branch-promotion track and the persona-activation
+  follow-on track under docs/prompts/, following the repo two-file prompt rule and the MATHS prompt template
+  where execution details are delegated to Codex or Claude.
+
+  '
+simple_follow_on_plan:
+  activation_meaning:
+  - Move personas from persona-contract-only to registry-backed with real allowed actions.
+  - Bind each activated persona to bounded executor domains, auth rules, approvals, and audit semantics.
+  - Produce notebook-backed evidence, tests, and scorecards so delegation claims remain honest.
+  - Make the persona truly reachable through Claude -> UCP -> M365, not just present in the registry.
+  activate_first:
+  - persona_id: backend-architect
+    why: Unlocks service architecture, API, and governance-aware backend planning for later waves.
+  - persona_id: devops-automator
+    why: Unlocks safer release, environment, and CI/CD execution for the rest of the workforce.
+  - persona_id: api-tester
+    why: Unlocks fast certification loops and regression proof for every new persona action surface.
+  - persona_id: analytics-reporter
+    why: Unlocks reporting, ROI evidence, and customer-facing proof of value.
+  - persona_id: project-shipper
+    why: Unlocks release coordination, launch control, and delivery discipline.
+  - persona_id: support-responder
+    why: Unlocks live customer support handling and post-launch operational credibility.
+  order:
+  - phase: P1
+    description: Promote development to staging, validate staging, then promote staging to main.
+  - phase: P2B
+    description: Activate the foundation operators first.
+  - phase: P2C
+    description: Activate the commercial growth and experience personas second.
+  - phase: P2D
+    description: Activate the specialist and regulated personas last.
+  - phase: P2E
+    description: Certify the activated waves and update commercial packaging.
+  commercial_unlocks:
+  - P1 unlocks governed release promotion out of development.
+  - P2B unlocks a credible build, ship, validate, report, and support workforce core.
+  - P2C unlocks stronger product, design, and growth packages customers can buy.
+  - P2D unlocks the higher-value specialist workforce story only after safer layers are live.
+  - P2E unlocks honest commercial claims that persona activation has materially advanced.
+execution_status:
+  completed: []
+  in_progress: P1A
+  next_act: P1A
+  prepared_blocked:
+  - P1B
+  - P1C
+  - P2A
+  - P2B
+  - P2C
+  - P2D
+  - P2E
+scope:
+  in:
+  - Define the governed branch-promotion path from development to staging to main.
+  - Define the plain-language persona-activation follow-on program.
+  - Lock the first activation wave and its commercial rationale.
+  - Create prompt pairs for promotion and activation.
+  - Synchronize EXECUTION_PLAN, ACTION_LOG, and PROJECT_FILE_INDEX.
+  out:
+  - Directly activating personas in this planning step.
+  - Claiming all 39 personas are already live.
+  - Expanding outside the M365-only, policy-gated North Star.
+  - Executing branch promotions during plan creation.
+requirements:
+- id: R1
+  title: Governed post-closeout promotion path
+- id: R2
+  title: Plain-language persona activation definition
+- id: R3
+  title: First-wave persona roster and rationale
+- id: R4
+  title: Activation order and dependency model
+- id: R5
+  title: Commercial unlock mapping
+- id: R6
+  title: Prompt-pair coverage for promotion and activation
+- id: R7
+  title: Governance synchronization
+phase_stack:
+- phase: P1
+  title: Branch Promotion
+  status: Active
+  goal: Promote the completed workforce program from development into staging and then main through a
+    deterministic, governed branch path.
+  outputs:
+  - staging promotion prompt pair
+  - explicit development to staging to main sequence
+  - promotion gate and blocker rules
+  children:
+  - act: P1A
+    title: Promote development to staging
+    status: Active
+    goal: Create or align staging from the merged development tip and push it as the release-candidate branch.
+  - act: P1B
+    title: Validate staging candidate
+    status: Pending
+    goal: Confirm staging is aligned, replay-safe, and ready for production promotion.
+  - act: P1C
+    title: Promote staging to main
+    status: Pending
+    goal: Advance the validated release candidate from staging into main and close the promotion track.
+- phase: P2
+  title: Persona Activation Follow-On
+  status: Pending
+  goal: Turn selected contract-only personas into action-backed, commercially claimable digital employees
+    in bounded waves.
+  outputs:
+  - activation-definition contract
+  - first-wave activation roster
+  - activation-wave order
+  - commercial unlock map
+  children:
+  - act: P2A
+    title: Activation contract and first-wave lock
+    status: Pending
+    goal: Define activation entry criteria and lock the first-wave roster against the current authoritative
+      persona registry.
+  - act: P2B
+    title: Foundation operators activation
+    status: Pending
+    goal: Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable.
+  - act: P2C
+    title: Commercial growth and experience activation
+    status: Pending
+    goal: Activate the next wave of product, design, and growth personas that strengthen the external commercial story.
+  - act: P2D
+    title: Specialist and regulated persona activation
+    status: Pending
+    goal: Activate the higher-risk, long-tail, and specialist personas only after the first two waves are proven.
+  - act: P2E
+    title: Activation certification and commercial closeout
+    status: Pending
+    goal: Certify the activated persona waves and update the product packaging to match the new live surface.

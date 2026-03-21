@@ -25,6 +25,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-ai-workforce-expansion-master-plan.md` | Overview MATHS prompt for the active workforce-expansion program; paired with the generated grouped-phase and child-act prompt inventory under the same prefix. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
 | `docs/prompts/codex-m365-ai-workforce-expansion-master-plan-prompt.txt` | Kick-off text for the active workforce-expansion master prompt, following the repo two-file prompt rule. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:R13` |
 
+## Active Post-Expansion Promotion and Persona Activation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-post-expansion-promotion-and-persona-activation/m365-post-expansion-promotion-and-persona-activation.md` | Human-readable active follow-on plan covering branch promotion and persona activation. | `Mission Statement`, `What SmartHaus M365 AI Workforce Is — and Isn't` | `plan:m365-post-expansion-promotion-and-persona-activation:R1` |
+| `plans/m365-post-expansion-promotion-and-persona-activation/m365-post-expansion-promotion-and-persona-activation.yaml` | Structured YAML authority for the post-expansion promotion and persona-activation program. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:R1` |
+| `plans/m365-post-expansion-promotion-and-persona-activation/m365-post-expansion-promotion-and-persona-activation.json` | Structured JSON authority for automation and governance tooling on the follow-on program. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:R1` |
+| `docs/prompts/codex-m365-staging-main-promotion.md` | Detailed MATHS prompt for the governed `development -> staging -> main` promotion path. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P1A` |
+| `docs/prompts/codex-m365-staging-main-promotion-prompt.txt` | Kick-off text for the branch-promotion prompt. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P1A` |
+| `docs/prompts/codex-m365-persona-activation-follow-on.md` | Detailed MATHS prompt for the next persona-activation planning and first-wave lock. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
+| `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt` | Kick-off text for the persona-activation follow-on prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

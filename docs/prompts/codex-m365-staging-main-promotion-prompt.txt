@@ -1,0 +1,7 @@
+Execute P1 Branch Promotion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-staging-main-promotion.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P1A
+
+You are approved to execute only the governed `development -> staging -> main` promotion path. Stop on any divergence or governance-blocked step and do not start persona activation.

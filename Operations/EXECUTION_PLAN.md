@@ -239,6 +239,23 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 ---
 
+## Initiative: Post-Expansion Promotion and Persona Activation
+
+**Initiative:** Promote the closed workforce-expansion program from `development` into `staging` and then `main`, then run the next bounded program that turns selected contract-only personas into live, action-backed workers in commercial priority order.
+
+**Plan:** `plans/m365-post-expansion-promotion-and-persona-activation/m365-post-expansion-promotion-and-persona-activation.md`
+
+**Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
+
+**Status:** 🟢 Active — the closed workforce-expansion program is already merged into `development`, the branch-promotion path and persona-activation follow-on program are now formally defined, and the current next act is the promotion of `development` to `staging`.
+**Current next act:** `P1A` — promote `development` to `staging`.
+
+**Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-staging-main-promotion.md`, `docs/prompts/codex-m365-staging-main-promotion-prompt.txt`, `docs/prompts/codex-m365-persona-activation-follow-on.md`, `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt`
+
+---
+
 ## Internal Ops: SmartHaus UCP Setup-Token Delivery Flow
 
 **Reference:** `plan:EXECUTION_PLAN:UCP-TD1`

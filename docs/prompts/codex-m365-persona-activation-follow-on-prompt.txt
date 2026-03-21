@@ -1,0 +1,7 @@
+Execute P2 Persona Activation Follow-On
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-persona-activation-follow-on.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P2A
+
+You are approved to execute only the follow-on activation-planning track. Start with the activation contract and first-wave roster, and do not claim personas are live until the runtime surface is actually implemented and proven.
