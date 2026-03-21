@@ -20,6 +20,7 @@ from smarthaus_common.permission_enforcer import (
     get_confirmation_override,
     get_user_tier_info,
 )
+from smarthaus_common.persona_accountability import build_persona_accountability
 from smarthaus_common.persona_task_queue import (
     build_persona_state,
     create_persona_task,
@@ -254,8 +255,19 @@ def _resolve_task_queue_target(agent_target: str) -> tuple[str, dict[str, Any]]:
 async def get_persona_state(agent_target: str) -> dict[str, Any]:
     canonical_agent, persona = _resolve_task_queue_target(agent_target)
     state = build_persona_state(canonical_agent)
+    state["accountability"] = build_persona_accountability(canonical_agent)
     state["persona"] = persona
     return state
+
+
+@app.get("/personas/{agent_target}/accountability")
+async def get_persona_accountability(agent_target: str) -> dict[str, Any]:
+    canonical_agent, persona = _resolve_task_queue_target(agent_target)
+    return {
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "accountability": build_persona_accountability(canonical_agent),
+    }
 
 
 @app.get("/personas/{agent_target}/tasks")

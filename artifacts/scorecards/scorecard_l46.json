@@ -1,0 +1,23 @@
+{
+  "lemma_id": "L46",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AV-persona-accountability-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L46_m365_persona_accountability_v1.ipynb",
+  "invariant": "invariants/lemmas/L46_m365_persona_accountability_v1.yaml",
+  "seed_lock": true,
+  "determinism": "shared queue metrics, fixed persona ownership fields, explicit threshold profiles, and ordered escalation targets project one bounded accountability snapshot",
+  "checks": [
+    {
+      "id": "ownership_projection",
+      "status": "passed"
+    },
+    {
+      "id": "threshold_projection",
+      "status": "passed"
+    },
+    {
+      "id": "escalation_projection",
+      "status": "passed"
+    }
+  ]
+}

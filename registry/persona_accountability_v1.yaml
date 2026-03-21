@@ -1,0 +1,43 @@
+version: 1.0.0
+last_updated: '2026-03-21T04:15:00Z'
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  queue_state: registry/persona_task_queue_state_v1.yaml
+  runtime: src/smarthaus_common/persona_accountability.py
+profiles:
+  low:
+    target_queue_depth: 2
+    max_queue_depth: 4
+    max_open_tasks: 3
+    blocked_task_threshold: 1
+    failed_task_threshold: 1
+  medium:
+    target_queue_depth: 3
+    max_queue_depth: 6
+    max_open_tasks: 4
+    blocked_task_threshold: 1
+    failed_task_threshold: 1
+  high:
+    target_queue_depth: 2
+    max_queue_depth: 4
+    max_open_tasks: 3
+    blocked_task_threshold: 1
+    failed_task_threshold: 1
+  critical:
+    target_queue_depth: 1
+    max_queue_depth: 2
+    max_open_tasks: 2
+    blocked_task_threshold: 1
+    failed_task_threshold: 1
+accountability_states:
+  on_track: Persona queue and completion posture are within the approved operating envelope.
+  warning: Persona queue depth has reached the target operating envelope and requires managerial attention.
+  escalated: Persona queue, blocked work, or failed work breached the approved operating envelope and must escalate.
+rules:
+  escalation_target_order:
+    - escalation_owner
+    - manager
+    - approval_owner
+  warning_when_queue_depth_reaches_target: true
+  escalate_on_failed_tasks: true
+  escalate_on_blocked_tasks: true

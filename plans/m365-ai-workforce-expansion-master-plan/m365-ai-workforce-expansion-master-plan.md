@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E5C` are complete; `E5D` is the active next act; `E5E` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E5D` are complete; `E5E` is the active next act; `E6A` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -85,8 +85,9 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E5A` is complete.
 - `E5B` is complete.
 - `E5C` is complete.
-- `E5D` is the active next act.
-- `E5E` through `E9E` are prepared but blocked by prerequisite work.
+- `E5D` is complete.
+- `E5E` is the active next act.
+- `E6A` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
@@ -396,13 +397,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E5D — Persona KPIs, Ownership, and Escalation
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Bind performance, ownership, accountability, and escalation into the runtime contract.
 
 #### E5E — Persona Memory and Work History
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Define bounded, auditable persona memory and work-history semantics.
 
@@ -645,4 +646,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E5B` is complete. It locked the humanized delegation authority at `registry/humanized_delegation_interface_v1.yaml`, extended the shared persona runtime in `src/ops_adapter/personas.py` to resolve natural delegation phrases, department hints, and alias matching with fail-closed ambiguity handling, exposed bounded resolution endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-humanized-delegation-interface-v1.md` plus the notebook-backed `L44` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_humanized_delegation_interface_v1.py` with generated proof at `configs/generated/humanized_delegation_interface_v1_verification.json`.
 
-`E5C` is complete. It locked the shared task/state authority at `registry/persona_task_queue_state_v1.yaml`, promoted the append-only JSON store into common runtime code at `src/smarthaus_common/json_store.py`, added the deterministic queue projection engine in `src/smarthaus_common/persona_task_queue.py`, projected that runtime into `src/provisioning_api/routers/agent_dashboard.py` plus bounded persona task/state endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-persona-task-queues-and-state-v1.md` plus the notebook-backed `L45` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_persona_task_queue_state_v1.py` with generated proof at `configs/generated/persona_task_queue_state_v1_verification.json`. `E5D` is now the active next act and must bind ownership, KPIs, and escalation semantics into the runtime that now holds delegated work deterministically.
+`E5C` is complete. It locked the shared task/state authority at `registry/persona_task_queue_state_v1.yaml`, promoted the append-only JSON store into common runtime code at `src/smarthaus_common/json_store.py`, added the deterministic queue projection engine in `src/smarthaus_common/persona_task_queue.py`, projected that runtime into `src/provisioning_api/routers/agent_dashboard.py` plus bounded persona task/state endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-persona-task-queues-and-state-v1.md` plus the notebook-backed `L45` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_persona_task_queue_state_v1.py` with generated proof at `configs/generated/persona_task_queue_state_v1_verification.json`.
+
+`E5D` is complete. It locked the accountability authority at `registry/persona_accountability_v1.yaml`, added the shared accountability builder in `src/smarthaus_common/persona_accountability.py`, projected ownership, KPI thresholds, accountability state, and escalation targets into `src/provisioning_api/routers/agent_dashboard.py` plus bounded persona state/accountability endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-persona-accountability-v1.md` plus the notebook-backed `L46` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_persona_accountability_v1.py` with generated proof at `configs/generated/persona_accountability_v1_verification.json`. `E5E` is now the active next act and must define bounded, auditable persona memory and work-history semantics on top of the now-accountable digital-employee runtime.

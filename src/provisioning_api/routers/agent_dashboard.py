@@ -9,6 +9,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
+from smarthaus_common.persona_accountability import build_persona_accountability
 from smarthaus_common.persona_task_queue import (
     build_persona_state,
     create_persona_instruction,
@@ -741,6 +742,7 @@ def _find_agent(agent_id: str) -> dict[str, Any]:
 async def agent_status(agent_id: str) -> dict:
     agent_record = _find_agent(agent_id)
     queue_state = build_persona_state(agent_id)
+    accountability = build_persona_accountability(agent_id)
     return {
         "agent": agent_id,
         "name": agent_record.get("name"),
@@ -751,6 +753,8 @@ async def agent_status(agent_id: str) -> dict:
         "last_activity": queue_state["last_activity_ts"],
         "active_task_id": queue_state["active_task_id"],
         "queue_depth": queue_state["queue_depth"],
+        "ownership": dict(accountability["ownership"]),
+        "accountability": accountability,
     }
 
 
@@ -794,6 +798,7 @@ async def send_instructions(agent_id: str, body: dict[str, Any]) -> dict[str, An
 async def get_performance(agent_id: str) -> dict[str, Any]:
     _find_agent(agent_id)
     queue_state = build_persona_state(agent_id)
+    accountability = build_persona_accountability(agent_id)
     total = int(queue_state["task_counts"]["total"])
     completed = int(queue_state["task_counts"]["completed"])
     failed = int(queue_state["task_counts"]["failed"])
@@ -806,7 +811,10 @@ async def get_performance(agent_id: str) -> dict[str, Any]:
             "failed": failed,
             "total": total,
             "queue_depth": queue_state["queue_depth"],
+            "accountability_state": accountability["accountability_state"],
         },
+        "ownership": dict(accountability["ownership"]),
+        "escalation": dict(accountability["escalation"]),
     }
 
 

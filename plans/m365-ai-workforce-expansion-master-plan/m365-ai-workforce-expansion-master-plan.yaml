@@ -358,11 +358,22 @@ execution_status:
         scripts/ci/verify_persona_task_queue_state_v1.py, and proved the bounded
         E5C slice through targeted queue-state regressions plus generated proof
         at configs/generated/persona_task_queue_state_v1_verification.json.
-  prepared_blocked:
     - phase: E5D
-      blocked_by: "E5"
+      date: "2026-03-21"
       summary: >
-        Bind performance, ownership, accountability, and escalation into the runtime contract.
+        Completed the persona accountability layer through
+        registry/persona_accountability_v1.yaml and
+        docs/commercialization/m365-persona-accountability-v1.md, added the shared
+        accountability runtime in src/smarthaus_common/persona_accountability.py,
+        projected ownership, KPI thresholds, accountability state, and escalation
+        targets into src/provisioning_api/routers/agent_dashboard.py plus bounded
+        persona state/accountability endpoints in src/ops_adapter/main.py and
+        src/ops_adapter/app.py, added the notebook-backed L46 chain and the
+        deterministic verifier at scripts/ci/verify_persona_accountability_v1.py,
+        and proved the bounded E5D slice through targeted accountability
+        regressions plus generated proof at
+        configs/generated/persona_accountability_v1_verification.json.
+  prepared_blocked:
     - phase: E5E
       blocked_by: "E5"
       summary: >
@@ -780,13 +791,13 @@ phase_stack:
       - code: E5D
         slug: persona-kpis-ownership-escalation
         title: "Persona KPIs, Ownership, and Escalation"
-        status: Active
+        status: Complete
         goal: >
           Bind performance, ownership, accountability, and escalation into the runtime contract.
       - code: E5E
         slug: persona-memory-and-work-history
         title: "Persona Memory and Work History"
-        status: Pending
+        status: Active
         goal: >
           Define bounded, auditable persona memory and work-history semantics.
   - code: E6

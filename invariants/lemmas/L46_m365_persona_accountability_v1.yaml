@@ -1,0 +1,21 @@
+lemma_id: L46
+title: M365 Persona Accountability v1
+invariant: >
+  Dashboard and persona-runtime accountability must be projected from one authoritative
+  accountability contract, one authoritative persona registry, and one deterministic shared queue
+  runtime so ownership, KPI thresholds, and escalation targets remain aligned.
+proof_obligations:
+  - accountability authority file exists and validates
+  - accountability snapshots fail closed for unknown personas
+  - queue-depth thresholds deterministically drive warning and escalation states
+  - blocked or failed work deterministically escalates to the declared target order
+  - dashboard and persona runtime project the same accountability snapshot
+failure_boundaries:
+  - missing accountability authority
+  - missing persona registry ownership fields
+  - escalation target order drift
+  - dashboard/runtime accountability drift
+test_bindings:
+  - tests/test_persona_accountability_v1.py
+  - tests/test_agent_api.py
+ci_gate: scripts/ci/verify_persona_accountability_v1.py
