@@ -20,7 +20,9 @@ from smarthaus_common.persona_task_queue import (
 def main() -> None:
     root = Path(__file__).resolve().parents[2]
     authority_path = root / "registry" / "persona_memory_work_history_v1.yaml"
-    output_path = root / "configs" / "generated" / "persona_memory_work_history_v1_verification.json"
+    output_path = (
+        root / "configs" / "generated" / "persona_memory_work_history_v1_verification.json"
+    )
 
     authority = load_persona_memory_authority(authority_path)
     with TemporaryDirectory() as temp_dir:

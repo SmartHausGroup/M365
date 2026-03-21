@@ -45,7 +45,9 @@ def validate_persona_memory_authority(payload: dict[str, Any]) -> None:
         raise ValueError(f"persona_memory_authority_missing_keys:{','.join(missing)}")
     if not isinstance(payload.get("memory_types"), dict) or not payload.get("memory_types"):
         raise ValueError("persona_memory_authority_invalid_memory_types")
-    if not isinstance(payload.get("visibility_levels"), dict) or not payload.get("visibility_levels"):
+    if not isinstance(payload.get("visibility_levels"), dict) or not payload.get(
+        "visibility_levels"
+    ):
         raise ValueError("persona_memory_authority_invalid_visibility_levels")
     retention = payload.get("retention")
     if not isinstance(retention, dict):

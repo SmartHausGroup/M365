@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
 from ops_adapter.app import create_app
 from provisioning_api.routers.agent_dashboard import router as agent_dashboard_router
 from smarthaus_common.json_store import JsonStore
@@ -60,12 +59,19 @@ def test_e5e_builds_work_history_from_tasks_instructions_and_memory(
     )
     create_persona_instruction(
         "website-manager",
-        {"instruction": "Keep the investor page unchanged", "created_by": "owner@smarthausgroup.com"},
+        {
+            "instruction": "Keep the investor page unchanged",
+            "created_by": "owner@smarthausgroup.com",
+        },
         store,
     )
     create_persona_memory(
         "website-manager",
-        {"memory_type": "summary", "content": "Leadership wants the launch this week", "created_by": "owner"},
+        {
+            "memory_type": "summary",
+            "content": "Leadership wants the launch this week",
+            "created_by": "owner",
+        },
         store,
     )
 

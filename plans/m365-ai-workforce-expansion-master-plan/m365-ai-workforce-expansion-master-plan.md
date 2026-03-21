@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E5E` are complete; `E6A` is the active next act; `E6B` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E6A` are complete; `E6B` is the active next act; `E6C` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -87,14 +87,15 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E5C` is complete.
 - `E5D` is complete.
 - `E5E` is complete.
-- `E6A` is the active next act.
-- `E6B` through `E9E` are prepared but blocked by prerequisite work.
+- `E6A` is complete.
+- `E6B` is the active next act.
+- `E6C` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
 - The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, bounded cross-workload recipe discovery, and bounded Intune / devices remain unimplemented.
-- No department pack beyond the standalone v1 surface has been certified or released.
+- Only the Operations department pack is now runtime-bounded; the remaining department packs are still unimplemented and uncertified.
 
 ## Scope
 
@@ -230,7 +231,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ### E2 — Core M365 Workload Expansion
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.
 
@@ -430,7 +431,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E6B — HR Department Pack
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Build the HR department capability pack.
 
@@ -652,3 +653,5 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 `E5D` is complete. It locked the accountability authority at `registry/persona_accountability_v1.yaml`, added the shared accountability builder in `src/smarthaus_common/persona_accountability.py`, projected ownership, KPI thresholds, accountability state, and escalation targets into `src/provisioning_api/routers/agent_dashboard.py` plus bounded persona state/accountability endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-persona-accountability-v1.md` plus the notebook-backed `L46` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_persona_accountability_v1.py` with generated proof at `configs/generated/persona_accountability_v1_verification.json`.
 
 `E5E` is complete. It locked the memory/work-history authority at `registry/persona_memory_work_history_v1.yaml`, added the shared bounded memory and deterministic history runtime in `src/smarthaus_common/persona_memory.py`, corrected same-second event ordering in `src/smarthaus_common/persona_task_queue.py` so queue replay remains stable when work-history projection is enabled, projected memory and history surfaces into `src/provisioning_api/routers/agent_dashboard.py` plus bounded persona memory/history endpoints in `src/ops_adapter/main.py` and `src/ops_adapter/app.py`, aligned the human-readable contract in `docs/commercialization/m365-persona-memory-work-history-v1.md` plus the notebook-backed `L47` evidence chain, and added deterministic verifier coverage at `scripts/ci/verify_persona_memory_work_history_v1.py` with generated proof at `configs/generated/persona_memory_work_history_v1_verification.json`. `E6A` is now the active next act and must start packaging the runtime into the first department-operable workforce pack.
+
+`E6A` is complete. It locked the Operations pack authority at `registry/department_pack_operations_v1.yaml`, added the human-readable pack contract at `docs/commercialization/m365-operations-department-pack-v1.md`, added the notebook-backed `L48` evidence chain, extracted the shared Operations pack runtime into `src/smarthaus_common/department_pack.py` from `notebooks/m365/INV-M365-AX-operations-department-pack-v1.ipynb`, added deterministic verifier coverage at `scripts/ci/verify_operations_department_pack_v1.py`, emitted generated proof at `configs/generated/operations_department_pack_v1_verification.json`, and proved the bounded pack-state semantics through targeted regressions in `tests/test_operations_department_pack_v1.py`. `E6B` is now the active next act and must build the HR department pack on top of the same department-pack contract surface.

@@ -1,0 +1,24 @@
+{
+  "active_persona_count": 2,
+  "department": "operations",
+  "pack_state": "ready",
+  "persona_count": 2,
+  "personas": [
+    {
+      "accountability_state": "on_track",
+      "action_count": 37,
+      "persona_id": "m365-administrator",
+      "status": "active"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 6,
+      "persona_id": "website-manager",
+      "status": "active"
+    }
+  ],
+  "registry_backed_persona_count": 2,
+  "supported_action_count": 43,
+  "workflow_family_count": 5,
+  "workload_family_count": 5
+}
