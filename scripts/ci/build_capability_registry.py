@@ -28,6 +28,7 @@ SECTION_TO_DOMAIN = {
     "Power Apps": "powerplatform",
     "Power BI": "reports",
     "Forms / Approvals / Connectors": "powerplatform",
+    "Compliance / retention / eDiscovery": "compliance",
     "OneNote": "onenote",
     "To Do / tasks (Microsoft To Do)": "todo",
     "Subscriptions & webhooks": "subscriptions",
@@ -241,6 +242,14 @@ def action_to_resource(action: str, domain: str) -> str:
         if "score_profile" in action:
             return "secureScoreControlProfile"
         return "secureScore" if "score" in action else "riskDetection"
+    if domain == "compliance":
+        if "legal_hold" in action:
+            return "ediscoveryLegalHold"
+        if "custodian" in action:
+            return "ediscoveryCustodian"
+        if "case_search" in action:
+            return "ediscoverySearch"
+        return "ediscoveryCase"
     if domain == "provisioning":
         return "composite"
     return "unknown"

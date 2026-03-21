@@ -156,6 +156,14 @@ RESULT_SHAPES = {
     "list_secure_scores": ["scores", "count"],
     "get_secure_score_profile": ["profile"],
     "update_security_incident": ["updated", "incidentId"],
+    "list_ediscovery_cases": ["cases", "count"],
+    "get_ediscovery_case": ["case"],
+    "create_ediscovery_case": ["case", "status"],
+    "list_ediscovery_case_searches": ["searches", "count"],
+    "get_ediscovery_case_search": ["search"],
+    "create_ediscovery_case_search": ["search", "status"],
+    "list_ediscovery_case_custodians": ["custodians", "count"],
+    "list_ediscovery_case_legal_holds": ["legalHolds", "count"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -567,6 +575,38 @@ def verify_with_mock() -> dict:
         (
             "update_security_incident",
             {"ok": True, "result": {"updated": True, "incidentId": "incident-1"}},
+        ),
+        ("list_ediscovery_cases", {"ok": True, "result": {"cases": [], "count": 0}}),
+        ("get_ediscovery_case", {"ok": True, "result": {"case": {"id": "case-1"}}}),
+        (
+            "create_ediscovery_case",
+            {
+                "ok": True,
+                "result": {"case": {"id": "case-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_ediscovery_case_searches",
+            {"ok": True, "result": {"searches": [], "count": 0}},
+        ),
+        (
+            "get_ediscovery_case_search",
+            {"ok": True, "result": {"search": {"id": "search-1"}}},
+        ),
+        (
+            "create_ediscovery_case_search",
+            {
+                "ok": True,
+                "result": {"search": {"id": "search-1"}, "status": "created"},
+            },
+        ),
+        (
+            "list_ediscovery_case_custodians",
+            {"ok": True, "result": {"custodians": [], "count": 0}},
+        ),
+        (
+            "list_ediscovery_case_legal_holds",
+            {"ok": True, "result": {"legalHolds": [], "count": 0}},
         ),
         (
             "create_site",

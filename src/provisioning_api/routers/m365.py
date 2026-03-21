@@ -11,6 +11,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 from smarthaus_common.automation_recipe_client import AutomationRecipeClient
+from smarthaus_common.compliance_ediscovery_client import ComplianceEDiscoveryClient
 from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
@@ -134,6 +135,14 @@ _SUPPORTED_ACTIONS = {
     "list_secure_scores",
     "get_secure_score_profile",
     "update_security_incident",
+    "list_ediscovery_cases",
+    "get_ediscovery_case",
+    "create_ediscovery_case",
+    "list_ediscovery_case_searches",
+    "get_ediscovery_case_search",
+    "create_ediscovery_case_search",
+    "list_ediscovery_case_custodians",
+    "list_ediscovery_case_legal_holds",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -234,6 +243,8 @@ _MUTATING_ACTIONS = {
     "add_external_group_member",
     "execute_device_action",
     "update_security_incident",
+    "create_ediscovery_case",
+    "create_ediscovery_case_search",
 }
 
 
@@ -1449,6 +1460,65 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 detail="Provide at least one of 'status', 'assignedTo', 'classification', 'determination', or 'comments'",
             )
         return {"incident_id": incident_id, "body": body}
+    if action == "list_ediscovery_cases":
+        return {"top": _normalize_top(params, default=50)}
+    if action == "get_ediscovery_case":
+        case_id = _first_str(params, "caseId", "case_id", "id")
+        if not case_id:
+            raise HTTPException(status_code=400, detail="Missing 'caseId', 'case_id', or 'id'")
+        return {"case_id": case_id}
+    if action == "create_ediscovery_case":
+        body_payload = params.get("body")
+        if body_payload is not None:
+            if not isinstance(body_payload, dict) or not body_payload:
+                raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
+            create_case_body: dict[str, Any] = body_payload
+            return {"body": create_case_body}
+        display_name = _first_str(params, "displayName", "display_name", "name", "title")
+        if not display_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'displayName', 'display_name', 'name', 'title', or valid 'body'",
+            )
+        return {"body": {"displayName": display_name}}
+    if action == "list_ediscovery_case_searches":
+        case_id = _first_str(params, "caseId", "case_id", "id")
+        if not case_id:
+            raise HTTPException(status_code=400, detail="Missing 'caseId', 'case_id', or 'id'")
+        return {"case_id": case_id, "top": _normalize_top(params, default=50)}
+    if action == "get_ediscovery_case_search":
+        case_id = _first_str(params, "caseId", "case_id")
+        search_id = _first_str(params, "searchId", "search_id", "id")
+        if not case_id or not search_id:
+            raise HTTPException(status_code=400, detail="Missing caseId or searchId")
+        return {"case_id": case_id, "search_id": search_id}
+    if action == "create_ediscovery_case_search":
+        case_id = _first_str(params, "caseId", "case_id", "id")
+        if not case_id:
+            raise HTTPException(status_code=400, detail="Missing 'caseId', 'case_id', or 'id'")
+        body_payload = params.get("body")
+        if body_payload is not None:
+            if not isinstance(body_payload, dict) or not body_payload:
+                raise HTTPException(status_code=400, detail="Missing or invalid 'body'")
+            create_search_body: dict[str, Any] = body_payload
+            return {"case_id": case_id, "body": create_search_body}
+        display_name = _first_str(params, "displayName", "display_name", "name", "title")
+        if not display_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'displayName', 'display_name', 'name', 'title', or valid 'body'",
+            )
+        return {"case_id": case_id, "body": {"displayName": display_name}}
+    if action == "list_ediscovery_case_custodians":
+        case_id = _first_str(params, "caseId", "case_id", "id")
+        if not case_id:
+            raise HTTPException(status_code=400, detail="Missing 'caseId', 'case_id', or 'id'")
+        return {"case_id": case_id, "top": _normalize_top(params, default=50)}
+    if action == "list_ediscovery_case_legal_holds":
+        case_id = _first_str(params, "caseId", "case_id", "id")
+        if not case_id:
+            raise HTTPException(status_code=400, detail="Missing 'caseId', 'case_id', or 'id'")
+        return {"case_id": case_id, "top": _normalize_top(params, default=50)}
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1866,6 +1936,23 @@ def _security_defender_client(action: str | None = None) -> SecurityDefenderClie
 
     config = AppConfig()
     return SecurityDefenderClient(legacy_config=config)
+
+
+def _compliance_ediscovery_client(action: str | None = None) -> ComplianceEDiscoveryClient:
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        if action:
+            route_key = executor_route_for_action(None, action)
+            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+                executor_name = tenant_cfg.resolve_executor_name(
+                    route_key,
+                    fallback_keys=[route_key],
+                )
+                tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return ComplianceEDiscoveryClient(tenant_config=tenant_cfg)
+
+    config = AppConfig()
+    return ComplianceEDiscoveryClient(legacy_config=config)
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -2450,6 +2537,53 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             params["incident_id"],
             body=params["body"],
         )
+    if action == "list_ediscovery_cases":
+        compliance_client = _compliance_ediscovery_client(action)
+        value = compliance_client.list_ediscovery_cases(top=params["top"])
+        return {"cases": value, "count": len(value)}
+    if action == "get_ediscovery_case":
+        compliance_client = _compliance_ediscovery_client(action)
+        return {"case": compliance_client.get_ediscovery_case(params["case_id"])}
+    if action == "create_ediscovery_case":
+        compliance_client = _compliance_ediscovery_client(action)
+        case = compliance_client.create_ediscovery_case(body=params["body"])
+        return {"case": case, "status": "created"}
+    if action == "list_ediscovery_case_searches":
+        compliance_client = _compliance_ediscovery_client(action)
+        value = compliance_client.list_ediscovery_case_searches(
+            params["case_id"],
+            top=params["top"],
+        )
+        return {"searches": value, "count": len(value)}
+    if action == "get_ediscovery_case_search":
+        compliance_client = _compliance_ediscovery_client(action)
+        return {
+            "search": compliance_client.get_ediscovery_case_search(
+                params["case_id"],
+                params["search_id"],
+            )
+        }
+    if action == "create_ediscovery_case_search":
+        compliance_client = _compliance_ediscovery_client(action)
+        search = compliance_client.create_ediscovery_case_search(
+            params["case_id"],
+            body=params["body"],
+        )
+        return {"search": search, "status": "created"}
+    if action == "list_ediscovery_case_custodians":
+        compliance_client = _compliance_ediscovery_client(action)
+        value = compliance_client.list_ediscovery_case_custodians(
+            params["case_id"],
+            top=params["top"],
+        )
+        return {"custodians": value, "count": len(value)}
+    if action == "list_ediscovery_case_legal_holds":
+        compliance_client = _compliance_ediscovery_client(action)
+        value = compliance_client.list_ediscovery_case_legal_holds(
+            params["case_id"],
+            top=params["top"],
+        )
+        return {"legalHolds": value, "count": len(value)}
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -3577,6 +3711,54 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "status?|assignedTo?|classification?|determination?|comments?",
         ],
         "mutating": True,
+    },
+    {
+        "action": "list_ediscovery_cases",
+        "description": "List Microsoft 365 eDiscovery cases",
+        "params": ["top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_ediscovery_case",
+        "description": "Get a Microsoft 365 eDiscovery case by id",
+        "params": ["caseId|case_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_ediscovery_case",
+        "description": "Create a bounded Microsoft 365 eDiscovery case",
+        "params": ["displayName|display_name|name|title or body"],
+        "mutating": True,
+    },
+    {
+        "action": "list_ediscovery_case_searches",
+        "description": "List eDiscovery searches for a case",
+        "params": ["caseId|case_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_ediscovery_case_search",
+        "description": "Get an eDiscovery search for a case by id",
+        "params": ["caseId|case_id", "searchId|search_id|id"],
+        "mutating": False,
+    },
+    {
+        "action": "create_ediscovery_case_search",
+        "description": "Create a bounded eDiscovery search for a case",
+        "params": ["caseId|case_id|id", "displayName|display_name|name|title or body"],
+        "mutating": True,
+    },
+    {
+        "action": "list_ediscovery_case_custodians",
+        "description": "List custodians for an eDiscovery case",
+        "params": ["caseId|case_id|id", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "list_ediscovery_case_legal_holds",
+        "description": "List legal holds for an eDiscovery case",
+        "params": ["caseId|case_id|id", "top?"],
+        "mutating": False,
     },
     {
         "action": "get_user",

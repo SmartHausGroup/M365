@@ -14,6 +14,7 @@ canonical_executor_domains:
   - workmanagement
   - knowledge
   - powerplatform
+  - compliance
   - security
   - devices
   - publishing
@@ -151,6 +152,14 @@ exact_action_routes:
   list_secure_scores: security
   get_secure_score_profile: security
   update_security_incident: security
+  list_ediscovery_cases: compliance
+  get_ediscovery_case: compliance
+  create_ediscovery_case: compliance
+  list_ediscovery_case_searches: compliance
+  get_ediscovery_case_search: compliance
+  create_ediscovery_case_search: compliance
+  list_ediscovery_case_custodians: compliance
+  list_ediscovery_case_legal_holds: compliance
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint
@@ -173,6 +182,7 @@ prefix_routes:
   "approvals.": powerplatform
   "powerapp.": powerplatform
   "powerbi.": powerplatform
+  "compliance.": compliance
   "devices.": devices
   "security.": security
   "external.": knowledge

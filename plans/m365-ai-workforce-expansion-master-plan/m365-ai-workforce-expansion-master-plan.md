@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E4B` are complete; `E4C` is the active next act; `E4` through `E9E` remain planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E4C` are complete; `E4D` is the active next act; `E4` through `E9E` remain planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -79,7 +79,8 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E3E` is complete.
 - `E4A` is complete.
 - `E4B` is complete.
-- `E4C` is the active next act.
+- `E4C` is complete.
+- `E4D` is the active next act.
 - `E4` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
@@ -339,7 +340,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E4C — Compliance / Retention / eDiscovery Expansion
 
-**Status:** ⏳ Active next act
+**Status:** ✅ Complete
 
 **Goal:** Add governed compliance, policy, and discovery operations.
 
@@ -627,4 +628,6 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 `E4A` is complete. It locked the workload authority at `registry/intune_devices_expansion_v2.yaml`, added the bounded Intune / managed-devices runtime in `src/smarthaus_common/intune_devices_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_devices`, `get_device`, `list_device_compliance_summaries`, and `execute_device_action`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded devices slice, and added the notebook-backed `L38` evidence chain with generated verification at `configs/generated/intune_devices_expansion_verification.json`.
 
-`E4B` is complete. It locked the workload authority at `registry/security_defender_expansion_v2.yaml`, added the bounded security / Defender runtime in `src/smarthaus_common/security_defender_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_security_alerts`, `get_security_alert`, `list_security_incidents`, `get_security_incident`, `list_secure_scores`, `get_secure_score_profile`, and `update_security_incident`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded security slice, and added the notebook-backed `L39` evidence chain with generated verification at `configs/generated/security_defender_expansion_verification.json`. `E4C` is now the active next act and must bring compliance, retention, and eDiscovery into the same enterprise-control plane.
+`E4B` is complete. It locked the workload authority at `registry/security_defender_expansion_v2.yaml`, added the bounded security / Defender runtime in `src/smarthaus_common/security_defender_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_security_alerts`, `get_security_alert`, `list_security_incidents`, `get_security_incident`, `list_secure_scores`, `get_secure_score_profile`, and `update_security_incident`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded security slice, and added the notebook-backed `L39` evidence chain with generated verification at `configs/generated/security_defender_expansion_verification.json`.
+
+`E4C` is complete. It locked the workload authority at `registry/compliance_retention_ediscovery_expansion_v2.yaml`, added the bounded compliance / retention / eDiscovery runtime in `src/smarthaus_common/compliance_ediscovery_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_ediscovery_cases`, `get_ediscovery_case`, `create_ediscovery_case`, `list_ediscovery_case_searches`, `get_ediscovery_case_search`, `create_ediscovery_case_search`, `list_ediscovery_case_custodians`, and `list_ediscovery_case_legal_holds`, aligned the CAIO, capability, routing, auth, and approval contracts for the bounded compliance slice, and added the notebook-backed `L40` evidence chain with generated verification at `configs/generated/compliance_retention_ediscovery_expansion_verification.json`. `E4D` is now the active next act and must add governed conditional-access and identity-protection administration to the same enterprise-control plane.

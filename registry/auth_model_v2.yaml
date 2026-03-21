@@ -39,6 +39,9 @@ executor_domain_defaults:
   powerplatform:
     auth_class: mixed
     delegated_preference: never
+  compliance:
+    auth_class: mixed
+    delegated_preference: never
   security:
     auth_class: mixed
     delegated_preference: never
@@ -243,6 +246,22 @@ exact_action_policies:
   get_secure_score_profile:
     auth_class: app_only
   update_security_incident:
+    auth_class: app_only
+  list_ediscovery_cases:
+    auth_class: app_only
+  get_ediscovery_case:
+    auth_class: app_only
+  create_ediscovery_case:
+    auth_class: app_only
+  list_ediscovery_case_searches:
+    auth_class: app_only
+  get_ediscovery_case_search:
+    auth_class: app_only
+  create_ediscovery_case_search:
+    auth_class: app_only
+  list_ediscovery_case_custodians:
+    auth_class: app_only
+  list_ediscovery_case_legal_holds:
     auth_class: app_only
   get_approval_solution:
     auth_class: delegated

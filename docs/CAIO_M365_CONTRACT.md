@@ -149,6 +149,14 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `list_secure_scores` | List Microsoft secure-score snapshots | No | `top?` |
 | `get_secure_score_profile` | Get a Microsoft secure-score control profile by id | No | `profileId` or `profile_id` or `id` |
 | `update_security_incident` | Apply a bounded response update to a Microsoft 365 security incident | Yes | `incidentId` or `incident_id` or `id`, `status?`, `assignedTo?`, `classification?`, `determination?`, `comments?` |
+| `list_ediscovery_cases` | List Microsoft 365 eDiscovery cases | No | `top?` |
+| `get_ediscovery_case` | Get a Microsoft 365 eDiscovery case by id | No | `caseId` or `case_id` or `id` |
+| `create_ediscovery_case` | Create a bounded Microsoft 365 eDiscovery case | Yes | `displayName` or `display_name` or `name` or `title`, or `body` |
+| `list_ediscovery_case_searches` | List eDiscovery searches for a case | No | `caseId` or `case_id` or `id`, `top?` |
+| `get_ediscovery_case_search` | Get an eDiscovery search for a case by id | No | `caseId` or `case_id`, `searchId` or `search_id` or `id` |
+| `create_ediscovery_case_search` | Create a bounded eDiscovery search for a case | Yes | `caseId` or `case_id` or `id`, `displayName` or `display_name` or `name` or `title`, or `body` |
+| `list_ediscovery_case_custodians` | List custodians for an eDiscovery case | No | `caseId` or `case_id` or `id`, `top?` |
+| `list_ediscovery_case_legal_holds` | List legal holds for an eDiscovery case | No | `caseId` or `case_id` or `id`, `top?` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -284,6 +292,14 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **list_secure_scores:** `{ "scores": [ ... ], "count": N }`
 - **get_secure_score_profile:** `{ "profile": { ... } }`
 - **update_security_incident:** `{ "updated": true, "incidentId": "<id>" }`
+- **list_ediscovery_cases:** `{ "cases": [ ... ], "count": N }`
+- **get_ediscovery_case:** `{ "case": { ... } }`
+- **create_ediscovery_case:** `{ "case": { ... }, "status": "created" }`
+- **list_ediscovery_case_searches:** `{ "searches": [ ... ], "count": N }`
+- **get_ediscovery_case_search:** `{ "search": { ... } }`
+- **create_ediscovery_case_search:** `{ "search": { ... }, "status": "created" }`
+- **list_ediscovery_case_custodians:** `{ "custodians": [ ... ], "count": N }`
+- **list_ediscovery_case_legal_holds:** `{ "legalHolds": [ ... ], "count": N }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

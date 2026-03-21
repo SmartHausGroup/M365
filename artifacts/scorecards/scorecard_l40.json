@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L40",
+  "name": "M365 Compliance / Retention / eDiscovery expansion v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AP-compliance-retention-ediscovery-expansion-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L40_m365_compliance_retention_ediscovery_expansion_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L40_m365_compliance_retention_ediscovery_expansion_v2"
+  ]
+}

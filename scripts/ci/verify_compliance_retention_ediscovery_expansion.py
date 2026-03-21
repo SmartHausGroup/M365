@@ -11,10 +11,10 @@ from smarthaus_common.auth_model import resolve_action_auth
 from smarthaus_common.executor_routing import executor_route_for_action
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-REGISTRY_PATH = REPO_ROOT / "registry" / "security_defender_expansion_v2.yaml"
+REGISTRY_PATH = REPO_ROOT / "registry" / "compliance_retention_ediscovery_expansion_v2.yaml"
 CAPABILITY_REGISTRY_PATH = REPO_ROOT / "registry" / "capability_registry.yaml"
 ARTIFACT_PATH = (
-    REPO_ROOT / "configs" / "generated" / "security_defender_expansion_verification.json"
+    REPO_ROOT / "configs" / "generated" / "compliance_retention_ediscovery_expansion_verification.json"
 )
 ROUTER_PATH = REPO_ROOT / "src" / "provisioning_api" / "routers" / "m365.py"
 
@@ -80,14 +80,14 @@ def main() -> int:
         if not capability_entry or capability_entry.get("status") != "implemented":
             capability_mismatches.append(action)
 
-        if executor_route_for_action(None, action) != "security":
+        if executor_route_for_action(None, action) != "compliance":
             route_mismatches.append(action)
 
-        auth = resolve_action_auth("security-operations", action, {})
-        if auth.auth_class != "app_only" or auth.executor_domain != "security":
+        auth = resolve_action_auth("compliance-monitoring-agent", action, {})
+        if auth.auth_class != "app_only" or auth.executor_domain != "compliance":
             auth_mismatches.append(action)
 
-        approval = resolve_action_approval_risk("security-operations", action, {})
+        approval = resolve_action_approval_risk("compliance-monitoring-agent", action, {})
         if approval.approval_profile != str(definition.get("approval_profile") or ""):
             approval_mismatches.append(action)
 
@@ -114,7 +114,7 @@ def main() -> int:
     ARTIFACT_PATH.parent.mkdir(parents=True, exist_ok=True)
     ARTIFACT_PATH.write_text(json.dumps(artifact, indent=2), encoding="utf-8")
     print(
-        "verify_security_defender_expansion:",
+        "verify_compliance_retention_ediscovery_expansion:",
         "PASSED" if passed else "FAILED",
         f"({len(supported_actions)} actions)",
     )

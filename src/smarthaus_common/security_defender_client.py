@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
+from smarthaus_graph.client import GraphClient
+
 from smarthaus_common.config import AppConfig
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
-from smarthaus_graph.client import GraphClient
 
 
 class SecurityDefenderClient:

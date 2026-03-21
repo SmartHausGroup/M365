@@ -97,7 +97,9 @@ def test_e4b_instruction_contract_executes_security_actions(
             assert profile_id == "profile-1"
             return {"id": profile_id}
 
-        def update_security_incident(self, incident_id: str, *, body: dict[str, Any]) -> dict[str, Any]:
+        def update_security_incident(
+            self, incident_id: str, *, body: dict[str, Any]
+        ) -> dict[str, Any]:
             assert incident_id == "incident-1"
             assert body == {"status": "resolved"}
             return {"updated": True, "incidentId": incident_id}

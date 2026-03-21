@@ -425,6 +425,19 @@ connector-backed surfaces instead.
 
 ---
 
+## Compliance / retention / eDiscovery
+
+- list_ediscovery_cases
+- get_ediscovery_case
+- create_ediscovery_case
+- list_ediscovery_case_searches
+- get_ediscovery_case_search
+- create_ediscovery_case_search
+- list_ediscovery_case_custodians
+- list_ediscovery_case_legal_holds
+
+---
+
 ## Devices / endpoint management
 
 - list_devices

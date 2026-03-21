@@ -2500,3 +2500,81 @@ actions:
   result_shape_keys:
   - updated
   - incidentId
+- action: list_ediscovery_cases
+  resource: ediscoveryCase
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - cases
+  - count
+- action: get_ediscovery_case
+  resource: ediscoveryCase
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - case
+- action: create_ediscovery_case
+  resource: ediscoveryCase
+  domain: compliance
+  required_permissions:
+  - eDiscovery.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - case
+  - status
+- action: list_ediscovery_case_searches
+  resource: ediscoverySearch
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - searches
+  - count
+- action: get_ediscovery_case_search
+  resource: ediscoverySearch
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - search
+- action: create_ediscovery_case_search
+  resource: ediscoverySearch
+  domain: compliance
+  required_permissions:
+  - eDiscovery.ReadWrite.All
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - search
+  - status
+- action: list_ediscovery_case_custodians
+  resource: ediscoveryCustodian
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - custodians
+  - count
+- action: list_ediscovery_case_legal_holds
+  resource: ediscoveryLegalHold
+  domain: compliance
+  required_permissions:
+  - eDiscovery.Read.All
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - legalHolds
+  - count

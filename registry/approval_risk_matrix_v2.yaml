@@ -51,6 +51,10 @@ executor_domain_defaults:
     risk_class: high
     approval_requirement: always
     approval_profile: high-impact
+  compliance:
+    risk_class: critical
+    approval_requirement: always
+    approval_profile: critical-regulated
   security:
     risk_class: critical
     approval_requirement: always
@@ -424,6 +428,40 @@ exact_action_policies:
     approval_profile: critical-regulated
     approval_requirement: always
     approvers: [security-team, platform_admin]
+  list_ediscovery_cases:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_ediscovery_case:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_ediscovery_case_searches:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_ediscovery_case_search:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_ediscovery_case_custodians:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  list_ediscovery_case_legal_holds:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  create_ediscovery_case:
+    risk_class: critical
+    approval_profile: critical-regulated
+    approval_requirement: always
+    approvers: [legal, compliance]
+  create_ediscovery_case_search:
+    risk_class: critical
+    approval_profile: critical-regulated
+    approval_requirement: always
+    approvers: [legal, compliance]
   get_approval_solution:
     risk_class: low
     approval_profile: low-observe-create
