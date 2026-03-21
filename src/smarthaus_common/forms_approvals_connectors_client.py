@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
+from smarthaus_graph.client import GraphClient
+
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import AuthConfigurationError, SmarthausError
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
-from smarthaus_graph.client import GraphClient
 
 _GRAPH_V1 = "https://graph.microsoft.com/v1.0"
 _GRAPH_BETA = "https://graph.microsoft.com/beta"
@@ -104,8 +105,8 @@ class FormsApprovalsConnectorsClient:
         if location:
             result["location"] = location
             result["operationId"] = location.rstrip("/").rsplit("/", 1)[-1]
-        request_id = headers.get("request-id") or headers.get("Request-Id") or headers.get(
-            "x-ms-request-id"
+        request_id = (
+            headers.get("request-id") or headers.get("Request-Id") or headers.get("x-ms-request-id")
         )
         if request_id:
             result["requestId"] = request_id
@@ -179,7 +180,9 @@ class FormsApprovalsConnectorsClient:
             extra={"displayName": display_name},
         )
 
-    def list_approval_item_requests(self, approval_id: str, *, top: int = 50) -> list[dict[str, Any]]:
+    def list_approval_item_requests(
+        self, approval_id: str, *, top: int = 50
+    ) -> list[dict[str, Any]]:
         self._require_delegated_approvals()
         payload, _ = self._graph_request(
             "GET",

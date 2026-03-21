@@ -370,6 +370,14 @@ exact_action_policies:
     risk_class: low
     approval_profile: low-observe-create
     approval_requirement: never
+  list_automation_recipes:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
+  get_automation_recipe:
+    risk_class: low
+    approval_profile: low-observe-create
+    approval_requirement: never
   get_approval_solution:
     risk_class: low
     approval_profile: low-observe-create

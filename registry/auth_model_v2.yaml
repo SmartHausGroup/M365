@@ -218,6 +218,10 @@ exact_action_policies:
     auth_class: app_only
   get_powerbi_dashboard:
     auth_class: app_only
+  list_automation_recipes:
+    auth_class: app_only
+  get_automation_recipe:
+    auth_class: app_only
   get_approval_solution:
     auth_class: delegated
     delegated_preference: always

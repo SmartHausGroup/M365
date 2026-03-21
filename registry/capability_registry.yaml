@@ -2404,3 +2404,20 @@ actions:
   - groupId
   - memberId
   - status
+- action: list_automation_recipes
+  resource: composite
+  domain: provisioning
+  required_permissions: []
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - recipes
+  - count
+- action: get_automation_recipe
+  resource: composite
+  domain: provisioning
+  required_permissions: []
+  mutating: false
+  status: implemented
+  result_shape_keys:
+  - recipe

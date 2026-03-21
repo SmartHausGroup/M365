@@ -1,7 +1,7 @@
 # Plan: M365 Repo — AI Workforce Expansion Master Plan
 
 **Plan ID:** `m365-ai-workforce-expansion-master-plan`
-**Status:** Active (`E0A` through `E3D` are complete; `E3E` is the active next act; `E3` through `E9E` are planned and blocked by predecessor work)
+**Status:** Active (`E0A` through `E3E` are complete; `E4A` is the active next act; `E4` through `E9E` are planned and blocked by predecessor work)
 **Date:** 2026-03-20
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-ai-workforce-expansion-master-plan:R1`
@@ -76,13 +76,14 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 - `E3B` is complete.
 - `E3C` is complete.
 - `E3D` is complete.
-- `E3E` is the active next act.
-- `E3` through `E9E` are prepared but blocked by prerequisite work.
+- `E3E` is complete.
+- `E4A` is the active next act.
+- `E4` through `E9E` are prepared but blocked by prerequisite work.
 - No implementation or certification act beyond the old standalone v1 surface may proceed until `E0` closes the authoritative universe and release-wave map.
 
 ## Open Expansion Blockers
 
-- The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Automate, bounded Power Apps, bounded Power BI, and bounded approvals / connectors remain unimplemented.
+- The implemented action surface is now broader than the old standalone v1 slice, but most workload families beyond directory, messaging, SharePoint / files, collaboration / Planner, bounded Office productivity, bounded Power Platform / analytics, and bounded cross-workload recipe discovery remain unimplemented.
 - No department pack beyond the standalone v1 surface has been certified or released.
 
 ## Scope
@@ -264,7 +265,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 ### E3 — Power Platform and Analytics Expansion
 
-**Status:** 🚧 In progress
+**Status:** ✅ Complete
 
 **Goal:** Bring workflow automation, app surfaces, forms, and analytics into the same governed workforce control plane.
 
@@ -303,13 +304,13 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E3E — Cross-Workload Automation Recipes
 
-**Status:** ⏳ Active next act
+**Status:** ✅ Complete
 
 **Goal:** Define reusable end-to-end recipes spanning multiple M365 workloads.
 
 ### E4 — Enterprise Admin and Security Expansion
 
-**Status:** ⏳ Pending
+**Status:** 🚧 Active phase
 
 **Goal:** Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.
 
@@ -324,7 +325,7 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 
 #### E4A — Intune / Devices Expansion
 
-**Status:** ⏳ Pending
+**Status:** ⏳ Active next act
 
 **Goal:** Add governed device inventory, compliance, and lifecycle operations.
 
@@ -619,3 +620,5 @@ If any term is false, the workforce remains `NO-GO` for complete-release claims.
 `E3C` is complete. It locked the workload authority at `registry/power_bi_expansion_v2.yaml`, added the bounded Power BI runtime in `src/smarthaus_common/power_bi_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py`, aligned the CAIO, capability, routing, auth, and approval contracts for `list_powerbi_workspaces`, `get_powerbi_workspace`, `list_powerbi_reports`, `get_powerbi_report`, `list_powerbi_datasets`, `get_powerbi_dataset`, `refresh_powerbi_dataset`, `list_powerbi_dataset_refreshes`, `list_powerbi_dashboards`, and `get_powerbi_dashboard`, and added the notebook-backed `L35` evidence chain with generated verification at `configs/generated/power_bi_expansion_verification.json`. `E3D` is now the active next act and must bring Forms, approvals, and connector-backed workflow triggers into the same bounded control plane.
 
 `E3D` is complete. It locked the workload authority at `registry/forms_approvals_connectors_expansion_v2.yaml`, added the bounded approvals / connectors runtime in `src/smarthaus_common/forms_approvals_connectors_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `get_approval_solution`, `list_approval_items`, `get_approval_item`, `create_approval_item`, `list_approval_item_requests`, `respond_to_approval_item`, `list_external_connections`, `get_external_connection`, `create_external_connection`, `register_external_connection_schema`, `get_external_item`, `upsert_external_item`, `create_external_group`, and `add_external_group_member`, aligned the CAIO, capability, routing, auth, and approval contracts for that bounded action family, documented the direct-Forms boundary while keeping approvals and connectors inside the implemented surface, and added the notebook-backed `L36` evidence chain with generated verification at `configs/generated/forms_approvals_connectors_expansion_verification.json`. `E3E` is now the active next act and must define the first reusable cross-workload automation recipes on top of the completed `E1` through `E3D` control plane.
+
+`E3E` is complete. It locked the recipe authority at `registry/cross_workload_automation_recipes_v2.yaml`, added the bounded recipe-catalog runtime in `src/smarthaus_common/automation_recipe_client.py`, extended the instruction runtime in `src/provisioning_api/routers/m365.py` for `list_automation_recipes` and `get_automation_recipe`, aligned the CAIO, capability, routing, auth, and approval contracts for that bounded discovery surface, and added the notebook-backed `L37` evidence chain with generated verification at `configs/generated/cross_workload_automation_recipes_verification.json`. `E4A` is now the active next act and must open the enterprise-control workload family with the Intune / devices slice.

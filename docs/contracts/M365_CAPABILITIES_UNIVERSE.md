@@ -423,6 +423,8 @@ connector-backed surfaces instead.
 ## Provisioning / composite (our conveniences)
 
 - provision_service
+- list_automation_recipes
+- get_automation_recipe
 - provision_user_and_license
 - offboard_user
 

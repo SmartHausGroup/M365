@@ -143,6 +143,8 @@ RESULT_SHAPES = {
     "upsert_external_item": ["itemId", "status"],
     "create_external_group": ["group", "status"],
     "add_external_group_member": ["groupId", "memberId", "status"],
+    "list_automation_recipes": ["recipes", "count"],
+    "get_automation_recipe": ["recipe"],
     "create_site": ["site_id", "site_url", "group_created", "libraries_created"],
     "create_team": ["team_id", "team_url", "channels_created"],
     "add_channel": ["team", "channel"],
@@ -513,6 +515,11 @@ def verify_with_mock() -> dict:
                 "ok": True,
                 "result": {"groupId": "group-1", "memberId": "user-1", "status": "added"},
             },
+        ),
+        ("list_automation_recipes", {"ok": True, "result": {"recipes": [], "count": 0}}),
+        (
+            "get_automation_recipe",
+            {"ok": True, "result": {"recipe": {"recipeId": "incident_response_war_room"}}},
         ),
         (
             "create_site",

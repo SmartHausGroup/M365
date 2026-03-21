@@ -138,6 +138,8 @@ exact_action_routes:
   upsert_external_item: knowledge
   create_external_group: knowledge
   add_external_group_member: knowledge
+  list_automation_recipes: composite
+  get_automation_recipe: composite
 prefix_routes:
   "sites.": sharepoint
   "lists.": sharepoint
@@ -161,6 +163,7 @@ prefix_routes:
   "powerapp.": powerplatform
   "powerbi.": powerplatform
   "external.": knowledge
+  "automation.": composite
 agent_action_overrides:
   website-manager:
     deployment.preview: sharepoint

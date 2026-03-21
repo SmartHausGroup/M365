@@ -136,6 +136,8 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `upsert_external_item` | Create or update an indexed external item for a connector connection | Yes | `connectionId` or `connection_id`, `itemId` or `item_id` or `id`, `acl`, `properties`, `content?` |
 | `create_external_group` | Create an external group for connector ACL management | Yes | `connectionId` or `connection_id`, `groupId` or `group_id` or `id`, `displayName?` or `display_name?` or `name?`, `description?` |
 | `add_external_group_member` | Add a member to an external group for connector ACL management | Yes | `connectionId` or `connection_id`, `groupId` or `group_id`, `memberId` or `member_id` or `id`, `memberType?`, `identitySource?` |
+| `list_automation_recipes` | List the bounded cross-workload automation recipes available to Claude/UCP | No | `department?`, `persona?`, `workload?`, `top?` |
+| `get_automation_recipe` | Get one bounded cross-workload automation recipe by id | No | `recipeId` or `recipe_id` or `id` |
 | `get_user` | Get single user by id or UPN | No | `userPrincipalName` or `user_id` or `id` |
 | `reset_user_password` | Set temporary password; force change at next sign-in | Yes | `userPrincipalName` or `user_id`, `temporary_password` or `password`, `force_change_next_sign_in?` |
 | `create_user` | Create an Entra user | Yes | `userPrincipalName`, `displayName?`, `mailNickname?`, `password`, `accountEnabled?`, `jobTitle?`, `department?` |
@@ -258,6 +260,8 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **upsert_external_item:** `{ "itemId": "<id>", "status": "upserted", ... }`
 - **create_external_group:** `{ "group": { ... }, "status": "created" }`
 - **add_external_group_member:** `{ "groupId": "<id>", "memberId": "<id>", "status": "added" }`
+- **list_automation_recipes:** `{ "recipes": [ ... ], "count": N }`
+- **get_automation_recipe:** `{ "recipe": { ... } }`
 - **get_user:** `{ "user": { ... } }`
 - **reset_user_password:** `{ "user": "<id|upn>", "password_reset": true }`
 - **create_user:** `{ "user": { ... }, "temporaryPassword": "<password>" }`

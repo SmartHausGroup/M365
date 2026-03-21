@@ -358,10 +358,10 @@
         "summary": "Issue the final release decision for the full workforce program."
       }
     ],
-    "next_act": "E3E"
+    "next_act": "E4A"
   },
   "open_blockers": [
-    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Automate, bounded Power Apps, bounded Power BI, and bounded approvals/connectors, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
+    "The implemented action surface now covers directory, messaging, SharePoint/files, collaboration/Planner, bounded Office productivity, bounded Power Platform and analytics, and bounded cross-workload recipe discovery, but most workload families and live-certification layers remain beyond the previously shipped v1 slice.",
     "No department pack beyond the standalone v1 surface has been certified or released."
   ],
   "requirements": [
@@ -531,7 +531,7 @@
       "code": "E2",
       "title": "Core M365 Workload Expansion",
       "slug": "core-m365-workload-expansion",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Implement the foundational business and admin workloads that make the workforce broadly useful across identity, communication, files, and collaboration.",
       "outputs": [
         "directory expansion",
@@ -630,7 +630,7 @@
           "code": "E3E",
           "slug": "cross-workload-automation-recipes",
           "title": "Cross-Workload Automation Recipes",
-          "status": "Active",
+          "status": "Complete",
           "goal": "Define reusable end-to-end recipes spanning multiple M365 workloads."
         }
       ]
@@ -639,7 +639,7 @@
       "code": "E4",
       "title": "Enterprise Admin and Security Expansion",
       "slug": "enterprise-admin-security-expansion",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Extend the workforce to the enterprise-control workloads that require the strictest governance, approvals, and minimum-permission boundaries.",
       "outputs": [
         "device management expansion",
@@ -656,7 +656,7 @@
           "code": "E4A",
           "slug": "intune-devices-expansion",
           "title": "Intune / Devices Expansion",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Add governed device inventory, compliance, and lifecycle operations."
         },
         {

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "catalog_action_count": 2,
+  "recipe_count": 5,
+  "missing_catalog_supported": [],
+  "missing_catalog_schema": [],
+  "capability_mismatches": [],
+  "route_mismatches": [],
+  "auth_mismatches": [],
+  "approval_mismatches": [],
+  "invalid_recipe_ids": [],
+  "non_cross_workload_recipes": [],
+  "step_action_mismatches": []
+}

@@ -5,11 +5,11 @@ from typing import Any
 
 import httpx
 from msal import ConfidentialClientApplication
+from smarthaus_graph.client import _load_client_certificate_credential
 
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import AuthConfigurationError, SmarthausError
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
-from smarthaus_graph.client import _load_client_certificate_credential
 
 _POWER_BI_SCOPE = "https://analysis.windows.net/powerbi/api/.default"
 _POWER_BI_BASE_URL = "https://api.powerbi.com/v1.0/myorg"
@@ -48,9 +48,7 @@ class PowerBIClient:
 
         cfg = self._tenant_config.azure
         if not cfg.tenant_id or not cfg.client_id:
-            raise AuthConfigurationError(
-                "Power BI not configured: missing tenant_id or client_id."
-            )
+            raise AuthConfigurationError("Power BI not configured: missing tenant_id or client_id.")
         if cfg.client_certificate_path:
             return (
                 cfg.tenant_id,

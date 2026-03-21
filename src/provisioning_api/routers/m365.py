@@ -10,6 +10,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from pydantic import BaseModel, Field
+from smarthaus_common.automation_recipe_client import AutomationRecipeClient
 from smarthaus_common.config import AppConfig, has_selected_tenant
 from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
@@ -118,6 +119,8 @@ _SUPPORTED_ACTIONS = {
     "upsert_external_item",
     "create_external_group",
     "add_external_group_member",
+    "list_automation_recipes",
+    "get_automation_recipe",
     "get_user",
     "reset_user_password",
     "create_user",
@@ -1350,6 +1353,18 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             status_code=400,
             detail=f"Unknown Forms/Approvals/Connectors action: {action}",
         )
+    if action == "list_automation_recipes":
+        return {
+            "department": _first_str(params, "department"),
+            "persona": _first_str(params, "persona"),
+            "workload": _first_str(params, "workload"),
+            "top": _normalize_top(params, default=50),
+        }
+    if action == "get_automation_recipe":
+        recipe_id = _first_str(params, "recipeId", "recipe_id", "id")
+        if not recipe_id:
+            raise HTTPException(status_code=400, detail="Missing 'recipeId', 'recipe_id', or 'id'")
+        return {"recipe_id": recipe_id}
     if action == "get_user":
         user_id_or_upn = _first_str(params, "userPrincipalName", "user_id", "id")
         if not user_id_or_upn:
@@ -1727,6 +1742,10 @@ def _forms_approvals_connectors_client(
 
     config = AppConfig()
     return FormsApprovalsConnectorsClient(legacy_config=config)
+
+
+def _automation_recipe_client() -> AutomationRecipeClient:
+    return AutomationRecipeClient()
 
 
 def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -2255,6 +2274,18 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             member_type=params.get("member_type", "user"),
             identity_source=params.get("identity_source", "azureActiveDirectory"),
         )
+    if action == "list_automation_recipes":
+        recipe_client = _automation_recipe_client()
+        value = recipe_client.list_recipes(
+            department=params.get("department"),
+            persona=params.get("persona"),
+            workload=params.get("workload"),
+            top=params["top"],
+        )
+        return {"recipes": value, "count": len(value)}
+    if action == "get_automation_recipe":
+        recipe_client = _automation_recipe_client()
+        return {"recipe": recipe_client.get_recipe(params["recipe_id"])}
     if action == "get_user":
         client = _graph_client(action)
         user = client.get_user(params["user_id_or_upn"])
@@ -3301,6 +3332,18 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "identitySource?",
         ],
         "mutating": True,
+    },
+    {
+        "action": "list_automation_recipes",
+        "description": "List the bounded cross-workload automation recipes available in the catalog",
+        "params": ["department?", "persona?", "workload?", "top?"],
+        "mutating": False,
+    },
+    {
+        "action": "get_automation_recipe",
+        "description": "Get one bounded cross-workload automation recipe by id",
+        "params": ["recipeId|recipe_id|id"],
+        "mutating": False,
     },
     {
         "action": "get_user",

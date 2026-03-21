@@ -1,0 +1,12 @@
+{
+  "lemma_id": "L37",
+  "name": "M365 Cross-Workload Automation Recipes v2",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-AM-cross-workload-automation-recipes-v2.ipynb",
+  "proof_notebook": "notebooks/lemma_proofs/L37_m365_cross_workload_automation_recipes_v2.ipynb",
+  "determinism_certified": true,
+  "seed_lock_verified": true,
+  "invariants_passed": [
+    "L37_m365_cross_workload_automation_recipes_v2"
+  ]
+}

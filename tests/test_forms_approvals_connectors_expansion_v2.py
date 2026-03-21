@@ -84,9 +84,7 @@ def test_e3d_actions_route_and_auth_to_expected_domains() -> None:
 
 
 def test_e3d_risk_profiles_match_expected_posture() -> None:
-    create_approval = resolve_action_approval_risk(
-        "m365-administrator", "create_approval_item", {}
-    )
+    create_approval = resolve_action_approval_risk("m365-administrator", "create_approval_item", {})
     respond_approval = resolve_action_approval_risk(
         "m365-administrator", "respond_to_approval_item", {}
     )
