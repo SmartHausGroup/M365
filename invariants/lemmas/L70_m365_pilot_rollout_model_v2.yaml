@@ -1,0 +1,19 @@
+lemma_id: L70
+title: M365 Pilot and Rollout Model v2
+plan_ref: "plan:m365-ai-workforce-expansion-master-plan:E9C"
+status: green
+invariant: >
+  Four rollout phases and five governance rules with three sequential
+  waves so that expansion is gated by pilot acceptance.
+proof_obligations:
+  - "Rollout authority file exists and validates"
+  - "Four rollout phases present"
+  - "Three rollout waves defined"
+  - "Pilot acceptance gates expansion"
+failure_boundaries:
+  - "Missing rollout authority file"
+  - "Missing rollout phase"
+  - "Wave skipping"
+test_bindings:
+  - tests/test_pilot_rollout_model_v2.py
+ci_gate: scripts/ci/verify_pilot_rollout_model_v2.py
