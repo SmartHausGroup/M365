@@ -4,4 +4,6 @@ Read and execute the detailed prompt at docs/prompts/codex-m365-persona-activati
 
 Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P2A
 
+Branch discipline: do all new implementation on a dedicated feature branch first; do not land persona-activation implementation on development until explicit review/merge approval.
+
 You are approved to execute only the follow-on activation-planning track. Start with the activation contract and first-wave roster, and do not claim personas are live until the runtime surface is actually implemented and proven.

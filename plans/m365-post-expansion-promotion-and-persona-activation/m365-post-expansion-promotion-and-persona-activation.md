@@ -10,6 +10,8 @@
 
 **Prompt discipline:** Maintain a formal prompt pair for the branch-promotion track and the persona-activation follow-on track under `docs/prompts/`, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex/Claude.
 
+**Branch discipline:** All new persona-activation implementation work must execute on a dedicated future/feature branch first. `development` is the integration branch only after human review and explicit approval. Do not land persona-activation implementation directly on `development`, `staging`, or `main` unless the scoped act is explicitly a merge or promotion step.
+
 ## Objective
 
 Move the completed workforce program from `development` into `staging` and then `main`, then execute a bounded follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially claimable digital employees.

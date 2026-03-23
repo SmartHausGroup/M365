@@ -13,6 +13,10 @@
 
 - Run checks `M365-PERSONA-P2-C0` -> `M365-PERSONA-P2-C10` in strict order.
 - Stop on first `FAIL` or `BLOCKED`.
+- Branch discipline is mandatory:
+  - perform all new persona-activation implementation on a dedicated feature branch
+  - treat `development` as integration-only after human review and explicit approval
+  - do not land implementation on `development`, `staging`, or `main` unless the scoped act is explicitly a merge or promotion step
 - Output each check exactly:
   - `CHECK:<id> STATUS:<PASS|FAIL|BLOCKED> EVIDENCE:<path/command> NOTE:<one line>`
 - Final outputs exactly:
@@ -41,6 +45,7 @@
 
 - Task name: `Define and begin the next persona-activation program`
 - Domain: `governance`
+- Branch model: `feature-branch first; development only after review-approved merge`
 - Dependencies: `the workforce expansion master plan is closed; branch-promotion track should be completed or explicitly deferred by approval`
 - Allowlist:
   - `plans/m365-post-expansion-promotion-and-persona-activation/*`
