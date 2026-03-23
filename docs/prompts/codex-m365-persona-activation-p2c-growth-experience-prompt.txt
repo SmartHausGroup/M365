@@ -1,0 +1,9 @@
+Execute P2C Commercial Growth and Experience Activation
+
+I previously told you to land persona-activation work on development. That was my mistake.
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-persona-activation-p2c-growth-experience.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P2C
+
+Branch discipline: execute only on feature/m365_personas. Do not merge into development and do not start P2D or P2E.

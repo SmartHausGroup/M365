@@ -36,6 +36,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-staging-main-promotion-prompt.txt` | Kick-off text for the branch-promotion prompt. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P1A` |
 | `docs/prompts/codex-m365-persona-activation-follow-on.md` | Detailed MATHS prompt for the next persona-activation planning and first-wave lock. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
 | `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt` | Kick-off text for the persona-activation follow-on prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
+| `docs/prompts/codex-m365-persona-activation-p2c-growth-experience.md` | Detailed MATHS prompt for the P2C commercial growth and experience activation wave on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `docs/prompts/codex-m365-persona-activation-p2c-growth-experience-prompt.txt` | Kick-off text for the P2C commercial growth and experience activation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
 
 ## Internal UCP Onboarding Automation Artifacts
 
