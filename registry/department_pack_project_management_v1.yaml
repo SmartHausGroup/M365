@@ -12,27 +12,23 @@ department:
   wave: W7
   wave_track: Wave A
   status: partial-activation
-  purpose: >-
-    Package the Project Management digital employees into one bounded
-    department pack. Project-shipper is now a registry-backed foundation
-    operator; the remaining two personas are defined but not yet action-backed.
-  bounded_claim: >-
-    The Project Management department pack may claim registry-backed execution
-    coverage for project-shipper (9 actions) only. The remaining two personas
-    (experiment-tracker, studio-producer) retain contract-only status until
-    later activation acts.
+  purpose: Package the Project Management digital employees into one bounded department pack. Project-shipper is now a registry-backed
+    foundation operator; the remaining two personas are defined but not yet action-backed.
+  bounded_claim: The Project Management department pack may claim registry-backed execution coverage for project-shipper (9
+    actions) only. The remaining two personas (experiment-tracker, studio-producer) retain contract-only status until later
+    activation acts.
 workflow_families:
-  - release_coordination_and_handoff_management
-  - experiment_tracking_and_status_reporting
-  - cross_functional_schedule_and_delivery_planning
+- release_coordination_and_handoff_management
+- experiment_tracking_and_status_reporting
+- cross_functional_schedule_and_delivery_planning
 workload_families:
-  - Tasks, scheduling, and work management
-  - Collaboration, meetings, and communities
-  - Documents, notes, and workspace productivity
-  - Low-code, workflow, and analytics
-  - Knowledge, search, and employee experience
-  - Content, intranet, and files
-  - Media, publishing, and extended communications
+- Tasks, scheduling, and work management
+- Collaboration, meetings, and communities
+- Documents, notes, and workspace productivity
+- Low-code, workflow, and analytics
+- Knowledge, search, and employee experience
+- Content, intranet, and files
+- Media, publishing, and extended communications
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
@@ -44,29 +40,25 @@ approval_model:
   profiles:
     medium-operational:
       approvers:
-        - department-owner:project-management
+      - department-owner:project-management
       personas:
-        - project-shipper
-      rule: >-
-        Release coordination, handoff orchestration, and launch-checklist
-        changes require department-owner review when later acts activate the
-        Project Management personas.
+      - project-shipper
+      rule: Release coordination, handoff orchestration, and launch-checklist changes require department-owner review when
+        later acts activate the Project Management personas.
     low-observe-create:
       approvers:
-        - department-owner:project-management
+      - department-owner:project-management
       personas:
-        - experiment-tracker
-        - studio-producer
-      rule: >-
-        Experiment logging, production planning, and scheduling preparation may
-        proceed in observe/create mode until later acts activate mutating
-        Project Management execution surfaces.
+      - experiment-tracker
+      - studio-producer
+      rule: Experiment logging, production planning, and scheduling preparation may proceed in observe/create mode until later
+        acts activate mutating Project Management execution surfaces.
 kpis:
   required_personas: 3
-  required_active_personas: 1
-  required_registry_backed_personas: 1
+  required_active_personas: 2
+  required_registry_backed_personas: 2
   required_workflow_families: 3
-  supported_action_count: 9
+  supported_action_count: 18
 personas:
   experiment-tracker:
     display_name: Emily Carter
@@ -76,15 +68,15 @@ personas:
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
-      - experiment tracking
-      - KPI logging
-      - status reporting
+    - experiment tracking
+    - KPI logging
+    - status reporting
     workload_families:
-      - Tasks, scheduling, and work management
-      - Low-code, workflow, and analytics
-      - Knowledge, search, and employee experience
+    - Tasks, scheduling, and work management
+    - Low-code, workflow, and analytics
+    - Knowledge, search, and employee experience
     workflow_families:
-      - experiment_tracking_and_status_reporting
+    - experiment_tracking_and_status_reporting
     supported_actions: []
   project-shipper:
     display_name: Ben Foster
@@ -94,51 +86,60 @@ personas:
     risk_tier: low
     approval_profile: medium-operational
     capability_families:
-      - release coordination
-      - handoff orchestration
-      - launch checklist management
+    - release coordination
+    - handoff orchestration
+    - launch checklist management
     workload_families:
-      - Tasks, scheduling, and work management
-      - Collaboration, meetings, and communities
-      - Content, intranet, and files
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Content, intranet, and files
     workflow_families:
-      - release_coordination_and_handoff_management
-      - cross_functional_schedule_and_delivery_planning
+    - release_coordination_and_handoff_management
+    - cross_functional_schedule_and_delivery_planning
     supported_actions:
-      - list_plans
-      - list_buckets
-      - create_bucket
-      - create_task
-      - task.create
-      - task.assign
-      - deadline.track
-      - status.update
-      - report.generate
+    - list_plans
+    - list_buckets
+    - create_bucket
+    - create_task
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
   studio-producer:
     display_name: Olivia Park
     title: Studio Producer
     role_type: planning_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
-      - cross-functional production planning
-      - schedule coordination
-      - creative delivery tracking
+    - cross-functional production planning
+    - schedule coordination
+    - creative delivery tracking
     workload_families:
-      - Tasks, scheduling, and work management
-      - Collaboration, meetings, and communities
-      - Media, publishing, and extended communications
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Media, publishing, and extended communications
     workflow_families:
-      - cross_functional_schedule_and_delivery_planning
-    supported_actions: []
+    - cross_functional_schedule_and_delivery_planning
+    supported_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
 bounded_claims:
   supported:
-    - project-management persona census and capability-family contract
-    - approval and escalation semantics for project-management activation
-    - registry-backed execution coverage for project-shipper (9 actions)
-    - deterministic pack-state projection with partial activation
+  - project-management persona census and capability-family contract
+  - approval and escalation semantics for project-management activation
+  - registry-backed execution coverage for project-shipper (9 actions)
+  - deterministic pack-state projection with partial activation
   unsupported:
-    - claims that experiment-tracker or studio-producer are action-backed
-    - live experiment-state or production-planning mutations beyond later activation acts
-    - engineering, marketing, or finance work outside the project-management contract
+  - claims that experiment-tracker or studio-producer are action-backed
+  - live experiment-state or production-planning mutations beyond later activation acts
+  - engineering, marketing, or finance work outside the project-management contract

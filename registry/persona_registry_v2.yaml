@@ -37,10 +37,8 @@ status_definitions:
   inactive: Persona is explicitly unavailable for delegation or execution.
 external_presence_policies:
   internal_only: Persona may only be used for internal delegation and non-public channels.
-  review_required: Persona may operate in constrained external channels only with
-    human review.
-  public_disclosed: Persona may operate publicly only with explicit AI disclosure
-    and brand controls.
+  review_required: Persona may operate in constrained external channels only with human review.
+  public_disclosed: Persona may operate publicly only with explicit AI disclosure and brand controls.
 personas:
   ai-engineer:
     persona_id: ai-engineer
@@ -260,19 +258,28 @@ personas:
     - brand policy review
     - asset approval
     - outward-facing consistency checks
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - brand-guardian
     - isabella rossi
     - isabella-rossi
-    action_count: 0
+    action_count: 8
     workload_families:
     - Media, publishing, and extended communications
     - Content, intranet, and files
@@ -294,19 +301,28 @@ personas:
     - content drafting
     - asset preparation
     - publication support
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:marketing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - content-creator
     - taylor swift
     - taylor-swift
-    action_count: 0
+    action_count: 8
     workload_families:
     - Media, publishing, and extended communications
     - Documents, notes, and workspace productivity
@@ -408,19 +424,28 @@ personas:
     - feedback synthesis
     - customer signal consolidation
     - insight brief preparation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    allowed_domains:
+    - messaging
+    - sharepoint
     approval_owner: department-owner:product
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - feedback-synthesizer
     - maya patel
     - maya-patel
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Mail, calendar, contacts, and bookings
@@ -510,19 +535,32 @@ personas:
     - growth experiment design
     - campaign analysis
     - funnel automation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - mail.list
+    - mail.read
+    - mail.send
+    - calendar.list
+    - reports.email_activity
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - messaging
+    - reports
     approval_owner: department-owner:marketing
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - growth-hacker
     - morgan davis
     - morgan-davis
-    action_count: 0
+    action_count: 10
     workload_families:
     - Low-code, workflow, and analytics
     - Media, publishing, and extended communications
@@ -991,19 +1029,29 @@ personas:
     - backlog prioritization
     - sprint planning
     - cross-team task sequencing
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - channels.create
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.availability
+    allowed_domains:
+    - collaboration
+    - messaging
     approval_owner: department-owner:product
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - sam chen
     - sam-chen
     - sprint-prioritizer
-    action_count: 0
+    action_count: 8
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1025,19 +1073,31 @@ personas:
     - cross-functional production planning
     - schedule coordination
     - creative delivery tracking
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
+    allowed_domains:
+    - collaboration
+    - messaging
+    - sharepoint
     approval_owner: department-owner:project-management
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - olivia park
     - olivia-park
     - studio-producer
-    action_count: 0
+    action_count: 9
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1306,19 +1366,27 @@ personas:
     - interface design
     - component specs
     - interaction polishing
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - noah anderson
     - noah-anderson
     - ui-designer
-    action_count: 0
+    action_count: 7
     workload_families:
     - Documents, notes, and workspace productivity
     - Content, intranet, and files
@@ -1340,19 +1408,28 @@ personas:
     - user research synthesis
     - insight capture
     - interview and study coordination
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - calendar.list
+    - calendar.create
+    - sites.list
+    - files.list
+    - files.get
+    allowed_domains:
+    - messaging
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - mila novak
     - mila-novak
     - ux-researcher
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Documents, notes, and workspace productivity

@@ -1,0 +1,27 @@
+lemma_id: L74
+name: M365 commercial growth and experience activation v1
+plan_ref: plan:m365-post-expansion-promotion-and-persona-activation:P2C
+source_notebook: notebooks/m365/INV-M365-BV-growth-experience-activation-v1.ipynb
+evidence:
+  artifacts:
+    - registry/agents.yaml
+    - registry/persona_registry_v2.yaml
+    - registry/persona_capability_map.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/department_pack_marketing_v1.yaml
+    - registry/department_pack_design_v1.yaml
+    - registry/department_pack_product_v1.yaml
+    - registry/department_pack_project_management_v1.yaml
+  checks:
+    - content-creator has 8 allowed actions in agents.yaml and is registry-backed in persona registry
+    - growth-hacker has 10 allowed actions in agents.yaml and is registry-backed in persona registry
+    - ui-designer has 7 allowed actions in agents.yaml and is registry-backed in persona registry
+    - brand-guardian has 8 allowed actions in agents.yaml and is registry-backed in persona registry
+    - feedback-synthesizer has 7 allowed actions in agents.yaml and is registry-backed in persona registry
+    - sprint-prioritizer has 8 allowed actions in agents.yaml and is registry-backed in persona registry
+    - ux-researcher has 7 allowed actions in agents.yaml and is registry-backed in persona registry
+    - studio-producer has 9 allowed actions in agents.yaml and is registry-backed in persona registry
+    - all 8 persona action counts match between agents.yaml, persona_registry_v2.yaml, and persona_capability_map.yaml
+    - all actions route via executor_routing_v2.yaml prefix routes
+    - department pack files reflect updated activation status for 4 departments
+status: green

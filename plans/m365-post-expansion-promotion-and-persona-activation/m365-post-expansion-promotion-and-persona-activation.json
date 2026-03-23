@@ -101,11 +101,16 @@
         "date": "2026-03-23",
         "summary": "Foundation operators activated: backend-architect (13 actions), devops-automator (10), api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8). Total 57 new actions across 4 departments. All pass 6-point activation test. L73 lemma, scorecard green, 25 tests passed, 4 CI verifiers passed. Registry-backed personas: 10/39."
       }
+      ,
+      {
+        "phase": "P2C",
+        "date": "2026-03-23",
+        "summary": "Commercial growth and experience personas activated: content-creator (8 actions), growth-hacker (10), ui-designer (7), brand-guardian (8), feedback-synthesizer (7), sprint-prioritizer (8), ux-researcher (7), studio-producer (9). Total 64 new actions across 4 departments. All pass 6-point activation test. L74 lemma, scorecard green, 7 tests passed, CI verifier passed. Registry-backed personas: 18/39."
+      }
     ],
     "in_progress": null,
-    "next_act": "P2C",
+    "next_act": "P2D",
     "prepared_blocked": [
-      "P2D",
       "P2E"
     ]
   },
@@ -213,7 +218,7 @@
         {
           "act": "P2C",
           "title": "Commercial growth and experience activation",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Activate the next wave of product, design, and growth personas that strengthen the external commercial story."
         },
         {

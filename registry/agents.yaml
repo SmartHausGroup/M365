@@ -530,13 +530,36 @@ agents:
     name: "Content Creator"
     department: "marketing"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "sites.list"
+      - "sites.get"
+      - "lists.list"
+      - "lists.items"
+      - "lists.create_item"
+      - "files.list"
+      - "files.get"
+      - "drives.list"
 
   growth-hacker:
     name: "Growth Hacker"
     department: "marketing"
     risk_tier: "medium"
-    allowed_actions: []
+    allowed_actions:
+      - "sites.list"
+      - "lists.list"
+      - "lists.items"
+      - "lists.create_item"
+      - "mail.list"
+      - "mail.read"
+      - "mail.send"
+      - "calendar.list"
+      - "reports.email_activity"
+      - "reports.teams_activity"
+    approval_rules:
+      - action: "mail.send"
+        approvers: ["department-owner:marketing"]
+      - action: "lists.create_item"
+        approvers: ["department-owner:marketing"]
 
   instagram-curator:
     name: "Instagram Curator"
@@ -567,13 +590,28 @@ agents:
     name: "Sprint Prioritizer"
     department: "product"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "teams.list"
+      - "teams.get"
+      - "channels.list"
+      - "channels.create"
+      - "calendar.list"
+      - "calendar.create"
+      - "calendar.get"
+      - "calendar.availability"
 
   feedback-synthesizer:
     name: "Feedback Synthesizer"
     department: "product"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "mail.list"
+      - "mail.read"
+      - "sites.list"
+      - "lists.list"
+      - "lists.items"
+      - "lists.create_item"
+      - "files.list"
 
   trend-researcher:
     name: "Trend Researcher"
@@ -611,7 +649,16 @@ agents:
     name: "Studio Producer"
     department: "project-management"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "teams.list"
+      - "teams.get"
+      - "channels.list"
+      - "calendar.list"
+      - "calendar.create"
+      - "calendar.get"
+      - "sites.list"
+      - "lists.list"
+      - "lists.items"
 
   # Studio Operations Department (5)
   analytics-reporter:
@@ -709,19 +756,41 @@ agents:
     name: "Brand Guardian"
     department: "design"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "sites.list"
+      - "sites.get"
+      - "lists.list"
+      - "lists.items"
+      - "files.list"
+      - "files.get"
+      - "files.search"
+      - "drives.list"
 
   ui-designer:
     name: "UI Designer"
     department: "design"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "sites.list"
+      - "sites.get"
+      - "files.list"
+      - "files.get"
+      - "files.search"
+      - "files.create_folder"
+      - "drives.list"
 
   ux-researcher:
     name: "UX Researcher"
     department: "design"
     risk_tier: "low"
-    allowed_actions: []
+    allowed_actions:
+      - "mail.list"
+      - "mail.read"
+      - "calendar.list"
+      - "calendar.create"
+      - "sites.list"
+      - "files.list"
+      - "files.get"
 
   visual-storyteller:
     name: "Visual Storyteller"
