@@ -62,27 +62,35 @@ execution_status:
   completed:
   - phase: P1A
     date: '2026-03-21'
-    summary: 'Created and pushed staging directly from the approved development tip 2b738e5 so the release-candidate
+    summary: 'Created and pushed staging directly from the approved development tip so the release-candidate
       branch carries the exact post-expansion promotion and persona-activation plan state.
 
       '
   - phase: P1B
     date: '2026-03-21'
     summary: 'Validated staging branch parity and deterministic replay by confirming development, staging,
-      origin/development, and origin/staging all resolve to commit 2b738e5 with clean branch state and
+      origin/development, and origin/staging all resolve to the same commit with clean branch state and
       git diff --check green.
 
       '
   - phase: P1C
     date: '2026-03-21'
-    summary: 'Created and pushed main directly from the validated staging tip so development, staging,
-      and main now all resolve to commit 2b738e5, closing the branch-promotion track without divergence.
+    summary: 'Created and pushed main directly from the validated staging tip, closing the branch-promotion
+      track without divergence. Branches subsequently advanced to f967ef6 after P1 closeout commit.
 
       '
-  in_progress: P2A
-  next_act: P2A
+  - phase: P2A
+    date: '2026-03-22'
+    summary: 'Activation definition locked (6-point runtime state change), first-wave roster locked
+      (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper,
+      support-responder), wave order locked (P2B foundation, P2C growth/experience, P2D specialist/regulated,
+      P2E certification closeout, fail-closed), commercial unlock mapping locked per wave. All 11 MATHS
+      checks passed (C0-C10). Gate GO.
+
+      '
+  in_progress: P2B
+  next_act: P2B
   prepared_blocked:
-  - P2B
   - P2C
   - P2D
   - P2E
@@ -149,12 +157,12 @@ phase_stack:
   children:
   - act: P2A
     title: Activation contract and first-wave lock
-    status: Active
+    status: Complete
     goal: Define activation entry criteria and lock the first-wave roster against the current authoritative
       persona registry.
   - act: P2B
     title: Foundation operators activation
-    status: Pending
+    status: Active
     goal: Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable.
   - act: P2C
     title: Commercial growth and experience activation

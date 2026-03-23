@@ -97,9 +97,10 @@ Why these first:
 - `P1A` is complete.
 - `P1B` is complete.
 - `P1C` is complete.
-- Branch promotion is complete: `development`, `staging`, and `main` all resolve to commit `2b738e5`.
-- `P2A` is the active next act.
-- `P2B` through `P2E` remain blocked by `P2A`.
+- Branch promotion is complete: `development`, `staging`, and `main` all resolve to commit `f967ef6`.
+- `P2A` is complete: activation definition locked, first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B → P2C → P2D → P2E, fail-closed), commercial unlock mapping locked.
+- `P2B` is the active next act.
+- `P2C` through `P2E` remain blocked by `P2B`.
 
 ## Scope
 
@@ -179,13 +180,15 @@ Why these first:
 
 #### P2A — Activation Contract and First-Wave Lock
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Define activation entry criteria and lock the first-wave roster against the current authoritative persona registry.
 
+**Completion summary:** Activation defined as a 6-point runtime state change (registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B (foundation) → P2C (growth/experience) → P2D (specialist/regulated) → P2E (certification). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO.
+
 #### P2B — Foundation Operators Activation
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable.
 

@@ -247,14 +247,16 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — the closed workforce-expansion program is now promoted cleanly across `development`, `staging`, and `main`, and the persona-activation follow-on program is now the active critical path.
-**Current next act:** `P2A` — activation contract and first-wave lock.
+**Status:** 🟢 Active — the closed workforce-expansion program is promoted cleanly across `development`, `staging`, and `main`, the activation contract is locked, and the foundation-operators activation program is now the active critical path.
+**Current next act:** `P2B` — foundation operators activation.
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-staging-main-promotion.md`, `docs/prompts/codex-m365-staging-main-promotion-prompt.txt`, `docs/prompts/codex-m365-persona-activation-follow-on.md`, `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt`
 
-**Status update (2026-03-21 13:52 EDT):** `P1A` through `P1C` are complete. The approved post-expansion promotion and persona-activation plan was first committed to `development` at `2b738e5`, then `staging` was created and pushed directly from that exact tip, staging parity was validated by proving `development`, `staging`, `origin/development`, and `origin/staging` all resolve to `2b738e5` with `git diff --check` clean, and `main` was then created and pushed directly from the validated `staging` tip. The branch-promotion track is closed without divergence. `P2A` is now the active next act.
+**Status update (2026-03-21 13:52 EDT):** `P1A` through `P1C` are complete. The branch-promotion track is closed without divergence. Branches subsequently advanced to `f967ef6` after the P1 closeout commit.
+
+**Status update (2026-03-22):** `P2A` is complete. Activation definition locked (6-point runtime state change: registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B → P2C → P2D → P2E (fail-closed). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO. `P2B` is now the active next act but has NOT been started.
 
 ---
 
