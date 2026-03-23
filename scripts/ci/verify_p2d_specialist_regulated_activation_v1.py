@@ -1,4 +1,5 @@
 """CI verifier for P2D specialist and regulated persona activation."""
+
 from __future__ import annotations
 
 import json
@@ -11,15 +12,10 @@ def main() -> int:
     repo = Path(__file__).resolve().parents[2]
 
     agents = yaml.safe_load((repo / "registry" / "agents.yaml").read_text())["agents"]
-    persona_reg = yaml.safe_load(
-        (repo / "registry" / "persona_registry_v2.yaml").read_text()
-    )["personas"]
-    cap_map = yaml.safe_load(
-        (repo / "registry" / "persona_capability_map.yaml").read_text()
-    )
-    routing = yaml.safe_load(
-        (repo / "registry" / "executor_routing_v2.yaml").read_text()
-    )
+    persona_reg_full = yaml.safe_load((repo / "registry" / "persona_registry_v2.yaml").read_text())
+    persona_reg = persona_reg_full["personas"]
+    cap_map = yaml.safe_load((repo / "registry" / "persona_capability_map.yaml").read_text())
+    routing = yaml.safe_load((repo / "registry" / "executor_routing_v2.yaml").read_text())
     prefix_routes = routing["prefix_routes"]
 
     ACTIVATED: dict[str, tuple[int, str]] = {
@@ -54,9 +50,7 @@ def main() -> int:
         a = agents[pid]
         c = cap_map["departments"][dept]["personas"][pid]
         actual = len(a["allowed_actions"])
-        routable = all(
-            act.split(".")[0] + "." in prefix_routes for act in a["allowed_actions"]
-        )
+        routable = all(act.split(".")[0] + "." in prefix_routes for act in a["allowed_actions"])
         ok = (
             p["coverage_status"] == "registry-backed"
             and p["status"] == "active"
@@ -90,6 +84,31 @@ def main() -> int:
             print(f"FAILED blocked check: {pid}")
             return 1
 
+    # --- Verify authoritative registry summary counts ---
+    reg_summary = persona_reg_full["summary"]
+    if reg_summary.get("registry_backed_personas") != 34:
+        print(
+            f"FAILED persona_registry summary: registry_backed={reg_summary.get('registry_backed_personas')} expected=34"
+        )
+        return 1
+    if reg_summary.get("persona_contract_only_personas") != 5:
+        print(
+            f"FAILED persona_registry summary: contract_only={reg_summary.get('persona_contract_only_personas')} expected=5"
+        )
+        return 1
+
+    cap_summary = cap_map["summary"]
+    if cap_summary.get("current_registry_backed_personas") != 34:
+        print(
+            f"FAILED capability_map summary: registry_backed={cap_summary.get('current_registry_backed_personas')} expected=34"
+        )
+        return 1
+    if cap_summary.get("persona_contract_only_personas") != 5:
+        print(
+            f"FAILED capability_map summary: contract_only={cap_summary.get('persona_contract_only_personas')} expected=5"
+        )
+        return 1
+
     total = sum(r["actual_actions"] for r in results)
     verification = {
         "plan_ref": "plan:m365-post-expansion-promotion-and-persona-activation:P2D",
@@ -101,7 +120,9 @@ def main() -> int:
         "blocked": blocked_results,
     }
 
-    out = repo / "configs" / "generated" / "p2d_specialist_regulated_activation_v1_verification.json"
+    out = (
+        repo / "configs" / "generated" / "p2d_specialist_regulated_activation_v1_verification.json"
+    )
     out.write_text(json.dumps(verification, indent=2) + "\n")
 
     print(

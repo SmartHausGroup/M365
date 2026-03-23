@@ -7,10 +7,10 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  active_personas: 10
-  planned_personas: 29
-  registry_backed_personas: 10
-  persona_contract_only_personas: 29
+  active_personas: 34
+  planned_personas: 5
+  registry_backed_personas: 34
+  persona_contract_only_personas: 5
 required_fields:
 - persona_id
 - canonical_agent

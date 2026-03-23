@@ -8,7 +8,7 @@ summary:
   total_personas: 39
   total_departments: 10
   current_registry_backed_personas: 34
-  persona_contract_only_personas: 29
+  persona_contract_only_personas: 5
   non_authoritative_registry_agents: 20
   non_authoritative_registry_departments:
   - collaboration

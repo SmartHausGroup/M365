@@ -247,8 +247,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — foundation operators, commercial growth/experience, and specialist/regulated personas activated (34/39 personas now registry-backed on `feature/m365_personas`; 5 blocked due to external API dependency). Certification closeout is the next critical path.
-**Current next act:** `P2E` — activation certification and commercial packaging closeout.
+**Status:** 🟢 Active — foundation operators, commercial growth/experience, and specialist/regulated personas activated (34/39 personas now registry-backed on `feature/m365_personas`; 5 blocked due to external API dependency). P2D remains open until blocked personas are resolved.
+**Current next act:** `P2D` — specialist and regulated persona activation (5 blocked personas remaining).
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
@@ -262,7 +262,7 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-03-23):** `P2C` is complete on `feature/m365_personas`. 8 commercial growth and experience personas activated: content-creator (8 actions), growth-hacker (10), ui-designer (7), brand-guardian (8), feedback-synthesizer (7), sprint-prioritizer (8), ux-researcher (7), studio-producer (9). Total 64 new actions across 4 departments (marketing, design, product, project-management). All pass the 6-point activation test. L74 lemma, scorecard green, 7 tests passed, CI verifier passed. Registry-backed personas: 18/39.
 
-**Status update (2026-03-23):** `P2D` is complete on `feature/m365_personas`. 16 specialist and regulated personas activated across 6 departments. 5 personas blocked (instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer) due to non-M365 external-platform API dependencies. Total 122 new actions. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39. `P2E` is now the active next act but has NOT been started.
+**Status update (2026-03-23):** `P2D` advanced materially on `feature/m365_personas`: 16 of 21 specialist and regulated personas activated across 6 departments with 122 new actions. 5 personas remain blocked (instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer) because they require non-M365 external-platform APIs not available in this repo. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39. P2D remains active (not complete). P2E remains blocked by P2D.
 
 ---
 

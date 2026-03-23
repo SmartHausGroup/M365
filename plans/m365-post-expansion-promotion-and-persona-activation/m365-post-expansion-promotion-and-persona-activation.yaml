@@ -115,9 +115,10 @@ execution_status:
       L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed: 34/39.
 
       '
-  in_progress: null
-  next_act: P2E
-  prepared_blocked: []
+  in_progress: P2D
+  next_act: P2D
+  prepared_blocked:
+  - P2E
 scope:
   in:
   - Define the governed branch-promotion path from development to staging to main.
@@ -194,7 +195,7 @@ phase_stack:
     goal: Activate the next wave of product, design, and growth personas that strengthen the external commercial story.
   - act: P2D
     title: Specialist and regulated persona activation
-    status: Complete
+    status: Active
     goal: Activate the higher-risk, long-tail, and specialist personas only after the first two waves are proven.
   - act: P2E
     title: Activation certification and commercial closeout
