@@ -99,8 +99,9 @@ Why these first:
 - `P1C` is complete.
 - Branch promotion is complete: `development`, `staging`, and `main` all resolve to commit `f967ef6`.
 - `P2A` is complete: activation definition locked, first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B → P2C → P2D → P2E, fail-closed), commercial unlock mapping locked.
-- `P2B` is the active next act.
-- `P2C` through `P2E` remain blocked by `P2B`.
+- `P2B` is complete: 6 foundation operators activated (backend-architect 13 actions, devops-automator 10, api-tester 8, analytics-reporter 9, project-shipper 9, support-responder 8 = 57 total new actions). All pass the 6-point activation test. Total registry-backed personas: 10.
+- `P2C` is the active next act.
+- `P2D` and `P2E` remain blocked by `P2C`.
 
 ## Scope
 
@@ -188,13 +189,15 @@ Why these first:
 
 #### P2B — Foundation Operators Activation
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable.
 
+**Completion summary:** 6 foundation operators activated across 4 departments: backend-architect (13 actions, engineering), devops-automator (10 actions, engineering), api-tester (8 actions, testing), analytics-reporter (9 actions, studio-operations), project-shipper (9 actions, project-management), support-responder (8 actions, studio-operations). Total: 57 new actions. All pass the 6-point activation test. L73 lemma/invariant, scorecard green. CI verifiers and tests updated and passing (25 passed). Total registry-backed personas: 10/39.
+
 #### P2C — Commercial Growth and Experience Activation
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Activate the next wave of product, design, and growth personas that strengthen the external commercial story.
 

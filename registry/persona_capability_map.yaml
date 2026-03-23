@@ -7,8 +7,8 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  current_registry_backed_personas: 4
-  persona_contract_only_personas: 35
+  current_registry_backed_personas: 10
+  persona_contract_only_personas: 29
   non_authoritative_registry_agents: 20
   non_authoritative_registry_departments:
     - collaboration
@@ -143,8 +143,8 @@ departments:
         title: "Principal Backend Engineer"
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 13
         workload_families:
           - "Low-code, workflow, and analytics"
           - "Identity, directory, and tenant administration"
@@ -158,8 +158,8 @@ departments:
         title: "DevOps Engineer"
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
           - "Devices, endpoint management, and adjacent Windows admin surfaces"
           - "Low-code, workflow, and analytics"
@@ -417,8 +417,8 @@ departments:
         title: "Release Manager"
         current_risk_tier: low
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
           - "Tasks, scheduling, and work management"
           - "Collaboration, meetings, and communities"
@@ -454,8 +454,8 @@ departments:
         title: "Data Scientist"
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
           - "Low-code, workflow, and analytics"
           - "Knowledge, search, and employee experience"
@@ -514,8 +514,8 @@ departments:
         title: "Customer Success Manager"
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
           - "Mail, calendar, contacts, and bookings"
           - "Knowledge, search, and employee experience"
@@ -535,8 +535,8 @@ departments:
         title: "QA Automation Lead"
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
           - "Low-code, workflow, and analytics"
           - "Tasks, scheduling, and work management"

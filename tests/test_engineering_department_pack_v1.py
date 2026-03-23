@@ -18,11 +18,12 @@ def test_e6d_builds_blocked_engineering_contract_pack(
 
     assert pack["department"]["id"] == "engineering"
     assert pack["summary"]["persona_count"] == 7
-    assert pack["summary"]["active_persona_count"] == 0
-    assert pack["summary"]["registry_backed_persona_count"] == 0
-    assert pack["summary"]["supported_action_count"] == 0
+    assert pack["summary"]["active_persona_count"] == 2
+    assert pack["summary"]["registry_backed_persona_count"] == 2
+    assert pack["summary"]["supported_action_count"] == 23
     assert pack["summary"]["pack_state"] == "blocked"
-    assert {persona["coverage_status"] for persona in pack["personas"]} == {"persona-contract-only"}
+    coverage_statuses = {persona["coverage_status"] for persona in pack["personas"]}
+    assert coverage_statuses == {"registry-backed", "persona-contract-only"}
 
 
 def test_e6d_contract_only_pack_remains_blocked_even_without_queue_pressure(
@@ -33,7 +34,10 @@ def test_e6d_contract_only_pack_remains_blocked_even_without_queue_pressure(
     pack = build_department_pack("engineering", store=JsonStore(tmp_path))
 
     assert pack["summary"]["pack_state"] == "blocked"
-    assert all(persona["status"] == "planned" for persona in pack["personas"])
+    statuses = {persona["persona_id"]: persona["status"] for persona in pack["personas"]}
+    assert statuses["backend-architect"] == "active"
+    assert statuses["devops-automator"] == "active"
+    assert statuses["frontend-developer"] == "planned"
 
 
 def test_e6d_fails_closed_when_contract_only_persona_declares_actions(

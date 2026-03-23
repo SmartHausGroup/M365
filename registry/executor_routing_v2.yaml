@@ -220,3 +220,13 @@ agent_action_overrides:
     email.send_individual: messaging
   calendar-management-agent:
     meeting.organize: messaging
+  support-responder:
+    client.follow-up: composite
+    satisfaction.survey: composite
+    feedback.analyze: composite
+  project-shipper:
+    task.create: workmanagement
+    task.assign: workmanagement
+    deadline.track: workmanagement
+    status.update: workmanagement
+    report.generate: workmanagement
