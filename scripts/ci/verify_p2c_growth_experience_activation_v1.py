@@ -1,8 +1,8 @@
 """CI verifier for P2C commercial growth and experience activation."""
+
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import yaml
@@ -12,12 +12,10 @@ def main() -> int:
     repo = Path(__file__).resolve().parents[2]
 
     agents = yaml.safe_load((repo / "registry" / "agents.yaml").read_text())["agents"]
-    persona_reg = yaml.safe_load(
-        (repo / "registry" / "persona_registry_v2.yaml").read_text()
-    )["personas"]
-    cap_map = yaml.safe_load(
-        (repo / "registry" / "persona_capability_map.yaml").read_text()
-    )
+    persona_reg = yaml.safe_load((repo / "registry" / "persona_registry_v2.yaml").read_text())[
+        "personas"
+    ]
+    cap_map = yaml.safe_load((repo / "registry" / "persona_capability_map.yaml").read_text())
 
     P2C = {
         "content-creator": (8, "marketing"),

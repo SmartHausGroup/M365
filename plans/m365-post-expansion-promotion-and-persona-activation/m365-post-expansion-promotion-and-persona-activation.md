@@ -99,7 +99,7 @@ Why these first:
 - `P1A` is complete.
 - `P1B` is complete.
 - `P1C` is complete.
-- Branch promotion completed on 2026-03-21: `development`, `staging`, and `main` were aligned at commit `f967ef6` at P1 closeout. `development` has since advanced with P2A and P2B work.
+- Branch promotion completed on 2026-03-21: `development`, `staging`, and `main` were aligned at commit `f967ef6` at P1 closeout. P2A closeout advanced `development` to `20b366a`; P2B and P2C implementation work lives on `feature/m365_personas` pending review-approved merge.
 - `P2A` is complete: activation definition locked, first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B → P2C → P2D → P2E, fail-closed), commercial unlock mapping locked.
 - `P2B` is complete: 6 foundation operators activated (backend-architect 13 actions, devops-automator 10, api-tester 8, analytics-reporter 9, project-shipper 9, support-responder 8 = 57 total new actions). All pass the 6-point activation test. Total registry-backed personas: 10.
 - `P2C` is complete: 8 commercial growth and experience personas activated (content-creator 8 actions, growth-hacker 10, ui-designer 7, brand-guardian 8, feedback-synthesizer 7, sprint-prioritizer 8, ux-researcher 7, studio-producer 9 = 64 total new actions). All pass the 6-point activation test. L74 lemma/invariant, scorecard green. 7 tests passed, CI verifier passed. Total registry-backed personas: 18/39.
