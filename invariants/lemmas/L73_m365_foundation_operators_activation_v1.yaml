@@ -1,7 +1,7 @@
 lemma_id: L73
 name: M365 foundation operators activation v1
 plan_ref: plan:m365-post-expansion-promotion-and-persona-activation:P2B
-source_notebook: null
+source_notebook: notebooks/m365/INV-M365-BU-foundation-operators-activation-v1.ipynb
 evidence:
   artifacts:
     - registry/agents.yaml
@@ -23,4 +23,4 @@ evidence:
     - all actions route via executor_routing_v2.yaml prefix routes or agent_action_overrides
     - remaining 29 personas stay persona-contract-only with 0 actions
     - department pack files reflect partial-activation status for 4 departments
-status: projected
+status: green

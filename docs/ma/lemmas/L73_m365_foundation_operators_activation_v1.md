@@ -25,7 +25,7 @@ For each of the 6 foundation personas:
 2. **Action-surfaced**: `agents.yaml` shows `allowed_actions` populated (not empty `[]`).
 3. **Domain-bound**: Each action routes to an executor domain via `executor_routing_v2.yaml` prefix routes or agent_action_overrides.
 4. **Approval-wired**: `agents.yaml` shows `approval_rules` matching the persona's `approval_profile` from the capability map.
-5. **Notebook-evidenced**: This lemma and its invariant provide the evidence chain.
+5. **Notebook-evidenced**: Primary notebook `notebooks/m365/INV-M365-BU-foundation-operators-activation-v1.ipynb` and lemma proof `notebooks/lemma_proofs/L73_m365_foundation_operators_activation_v1.ipynb` provide the evidence chain.
 6. **Runtime-routed**: Actions are delegatable through the Claude -> UCP -> M365 pipeline via the existing tool surface.
 
 ## Activated Personas
