@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` is next; persona-activation track is the active critical path)
+**Status:** 🟢 Active (`P1` is complete; `P2A` is next; persona-activation track is now the active critical path)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -97,10 +97,10 @@ Why these first:
 - `P1A` is complete.
 - `P1B` is complete.
 - `P1C` is complete.
-- Branch promotion completed on 2026-03-21: `development`, `staging`, and `main` were aligned at commit `f967ef6` at P1 closeout. `development` has since advanced with P2A and P2B work.
+- Branch promotion is complete: `development`, `staging`, and `main` all resolve to commit `f967ef6`.
 - `P2A` is complete: activation definition locked, first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B → P2C → P2D → P2E, fail-closed), commercial unlock mapping locked.
 - `P2B` is complete: 6 foundation operators activated (backend-architect 13 actions, devops-automator 10, api-tester 8, analytics-reporter 9, project-shipper 9, support-responder 8 = 57 total new actions). All pass the 6-point activation test. Total registry-backed personas: 10.
-- `P2C` is next but has NOT been started.
+- `P2C` is the active next act.
 - `P2D` and `P2E` remain blocked by `P2C`.
 
 ## Scope
@@ -197,7 +197,7 @@ Why these first:
 
 #### P2C — Commercial Growth and Experience Activation
 
-**Status:** ⏳ Pending (next)
+**Status:** 🟢 Active
 
 **Goal:** Activate the next wave of product, design, and growth personas that strengthen the external commercial story.
 

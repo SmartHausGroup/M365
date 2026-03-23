@@ -1414,13 +1414,3 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_workforce_release_decision_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
 | `configs/generated/workforce_release_decision_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
 | `tests/test_workforce_release_decision_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
-
-## P2B Foundation Operators Activation Artifacts
-
-| Path | Purpose | North Star Clause | Execution Plan Reference |
-| --- | --- | --- | --- |
-| `docs/ma/lemmas/L73_m365_foundation_operators_activation_v1.md` | Lemma doc for L73: 6 foundation operators activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
-| `invariants/lemmas/L73_m365_foundation_operators_activation_v1.yaml` | Invariant for L73. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
-| `notebooks/m365/INV-M365-BU-foundation-operators-activation-v1.ipynb` | Primary notebook for L73. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
-| `notebooks/lemma_proofs/L73_m365_foundation_operators_activation_v1.ipynb` | Proof replay notebook for L73. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
-| `artifacts/scorecards/scorecard_l73.json` | Scorecard for L73. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
