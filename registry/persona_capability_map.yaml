@@ -7,7 +7,7 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  current_registry_backed_personas: 18
+  current_registry_backed_personas: 34
   persona_contract_only_personas: 29
   non_authoritative_registry_agents: 20
   non_authoritative_registry_departments:
@@ -132,8 +132,8 @@ departments:
         title: ML Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
         - Low-code, workflow, and analytics
         - Knowledge, search, and employee experience
@@ -177,8 +177,8 @@ departments:
         title: UI/UX Developer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Content, intranet, and files
         - Documents, notes, and workspace productivity
@@ -192,8 +192,8 @@ departments:
         title: Mobile Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Documents, notes, and workspace productivity
         - Content, intranet, and files
@@ -207,8 +207,8 @@ departments:
         title: Prototype Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Documents, notes, and workspace productivity
         - Low-code, workflow, and analytics
@@ -222,8 +222,8 @@ departments:
         title: Test Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Tasks, scheduling, and work management
         - Low-code, workflow, and analytics
@@ -385,8 +385,8 @@ departments:
         title: Market Analyst
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Knowledge, search, and employee experience
         - Low-code, workflow, and analytics
@@ -406,8 +406,8 @@ departments:
         title: Experimentation PM
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Tasks, scheduling, and work management
         - Low-code, workflow, and analytics
@@ -473,8 +473,8 @@ departments:
         title: Chief Financial Officer
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Low-code, workflow, and analytics
         - Documents, notes, and workspace productivity
@@ -488,8 +488,8 @@ departments:
         title: Site Reliability Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Devices, endpoint management, and adjacent Windows admin surfaces
         - Security, compliance, and data governance
@@ -503,8 +503,8 @@ departments:
         title: Legal Counsel
         current_risk_tier: high
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Security, compliance, and data governance
         - Documents, notes, and workspace productivity
@@ -554,8 +554,8 @@ departments:
         title: Performance Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Low-code, workflow, and analytics
         - Documents, notes, and workspace productivity
@@ -569,8 +569,8 @@ departments:
         title: Quality Analyst
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Knowledge, search, and employee experience
         - Documents, notes, and workspace productivity
@@ -584,8 +584,8 @@ departments:
         title: Dev Tools Strategist
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Knowledge, search, and employee experience
         - Low-code, workflow, and analytics
@@ -599,8 +599,8 @@ departments:
         title: Process Engineer
         current_risk_tier: low
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
         - Tasks, scheduling, and work management
         - Low-code, workflow, and analytics
@@ -666,8 +666,8 @@ departments:
         title: Visual Storyteller
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Media, publishing, and extended communications
         - Documents, notes, and workspace productivity
@@ -681,8 +681,8 @@ departments:
         title: Delight Designer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
         - Media, publishing, and extended communications
         - Documents, notes, and workspace productivity

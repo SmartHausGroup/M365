@@ -49,10 +49,10 @@ approval_model:
         Product execution surfaces.
 kpis:
   required_personas: 3
-  required_active_personas: 2
-  required_registry_backed_personas: 2
+  required_active_personas: 3
+  required_registry_backed_personas: 3
   required_workflow_families: 3
-  supported_action_count: 15
+  supported_action_count: 22
 personas:
   sprint-prioritizer:
     display_name: Sam Chen
@@ -109,7 +109,7 @@ personas:
     display_name: Chris Wong
     title: Market Analyst
     role_type: research_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -122,7 +122,14 @@ personas:
     - Media, publishing, and extended communications
     workflow_families:
     - market_research_and_opportunity_analysis
-    supported_actions: []
+    supported_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
 bounded_claims:
   supported:
   - product persona census and capability-family contract

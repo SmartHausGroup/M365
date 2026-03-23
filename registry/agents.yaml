@@ -1,817 +1,918 @@
-version: "1.0.0"
+version: 1.0.0
 metadata:
-  environment: "sandbox"
-  last_updated: "2026-03-11"
-
+  environment: sandbox
+  last_updated: '2026-03-11'
 agents:
   m365-administrator:
-    name: "M365 Administrator"
-    department: "operations"
-    risk_tier: "high"
+    name: M365 Administrator
+    department: operations
+    risk_tier: high
     allowed_actions:
-      # User management
-      - "users.list"
-      - "users.read"
-      - "users.create"
-      - "users.update"
-      - "users.disable"
-      - "licenses.assign"
-      # Group management
-      - "groups.list"
-      - "groups.get"
-      - "groups.create"
-      - "groups.add_member"
-      - "groups.remove_member"
-      - "groups.list_members"
-      # SharePoint sites
-      - "sites.list"
-      - "sites.get"
-      - "sites.root"
-      - "sites.provision"
-      - "lists.list"
-      - "lists.get"
-      - "lists.items"
-      - "lists.create_item"
-      # Files (OneDrive / SharePoint)
-      - "files.list"
-      - "files.get"
-      - "files.search"
-      - "files.create_folder"
-      - "files.upload"
-      - "files.share"
-      - "drives.list"
-      # Directory (Azure AD)
-      - "directory.roles"
-      - "directory.role_members"
-      - "directory.domains"
-      - "directory.org"
-      - "apps.list"
-      - "apps.get"
-      - "apps.update"
-      - "service_principals.list"
-      # Legacy
-      - "teams.create"
-      - "teams.add_channel"
+    - users.list
+    - users.read
+    - users.create
+    - users.update
+    - users.disable
+    - licenses.assign
+    - groups.list
+    - groups.get
+    - groups.create
+    - groups.add_member
+    - groups.remove_member
+    - groups.list_members
+    - sites.list
+    - sites.get
+    - sites.root
+    - sites.provision
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - files.upload
+    - files.share
+    - drives.list
+    - directory.roles
+    - directory.role_members
+    - directory.domains
+    - directory.org
+    - apps.list
+    - apps.get
+    - apps.update
+    - service_principals.list
+    - teams.create
+    - teams.add_channel
     approval_rules:
-      - action: "users.create"
-        approvers: ["global_admin"]
-      - action: "users.update"
-        approvers: ["global_admin"]
-      - action: "users.disable"
-        approvers: ["hr-team", "security-team"]
-      - action: "groups.create"
-        approvers: ["global_admin"]
-      - action: "groups.add_member"
-        approvers: ["global_admin"]
-      - action: "teams.create"
-        approvers: ["global_admin"]
-      - action: "teams.add_channel"
-        approvers: ["global_admin"]
-      - action: "sites.provision"
-        approvers: ["global_admin"]
-      - action: "licenses.assign"
-        approvers: ["global_admin"]
-
+    - action: users.create
+      approvers:
+      - global_admin
+    - action: users.update
+      approvers:
+      - global_admin
+    - action: users.disable
+      approvers:
+      - hr-team
+      - security-team
+    - action: groups.create
+      approvers:
+      - global_admin
+    - action: groups.add_member
+      approvers:
+      - global_admin
+    - action: teams.create
+      approvers:
+      - global_admin
+    - action: teams.add_channel
+      approvers:
+      - global_admin
+    - action: sites.provision
+      approvers:
+      - global_admin
+    - action: licenses.assign
+      approvers:
+      - global_admin
   website-manager:
-    name: "Website Manager"
-    department: "operations"
-    risk_tier: "medium"
+    name: Website Manager
+    department: operations
+    risk_tier: medium
     allowed_actions:
-      - "deployment.preview"
-      - "deployment.production"
-      - "content.update"
-      - "content.create"
-      - "analytics.read"
-      - "seo.update"
+    - deployment.preview
+    - deployment.production
+    - content.update
+    - content.create
+    - analytics.read
+    - seo.update
     approval_rules:
-      - action: "deployment.production"
-        approvers: ["engineering-lead"]
-
+    - action: deployment.production
+      approvers:
+      - engineering-lead
   hr-generalist:
-    name: "HR Generalist"
-    department: "hr"
-    risk_tier: "critical"
+    name: HR Generalist
+    department: hr
+    risk_tier: critical
     allowed_actions:
-      - "employee.onboard"
-      - "employee.update_info"
-      - "employee.offboard"
-      - "policy.create"
-      - "review.initiate"
+    - employee.onboard
+    - employee.update_info
+    - employee.offboard
+    - policy.create
+    - review.initiate
     approval_rules:
-      - action: "employee.offboard"
-        approvers: ["hr-manager", "department-head"]
-
+    - action: employee.offboard
+      approvers:
+      - hr-manager
+      - department-head
   outreach-coordinator:
-    name: "Outreach Coordinator"
-    department: "communication"
-    risk_tier: "high"
+    name: Outreach Coordinator
+    department: communication
+    risk_tier: high
     allowed_actions:
-      - "email.send_individual"
-      - "email.send_bulk"
-      - "email.schedule"
-      - "meeting.schedule"
-      - "followup.create"
-      - "campaign.create"
-      # Graph API action (used via m365_email tool)
-      - "mail.send"
+    - email.send_individual
+    - email.send_bulk
+    - email.schedule
+    - meeting.schedule
+    - followup.create
+    - campaign.create
+    - mail.send
     approval_rules:
-      - action: "email.send_bulk"
-        condition: "recipients > 100"
-        approvers: ["marketing-lead"]
-
+    - action: email.send_bulk
+      condition: recipients > 100
+      approvers:
+      - marketing-lead
   project-manager:
-    name: "Project Manager"
-    department: "project-management"
-    risk_tier: "medium"
+    name: Project Manager
+    department: project-management
+    risk_tier: medium
     allowed_actions:
-      - "create-project"
-      - "list-projects"
-      - "update-project-status"
-      - "archive-project"
-
+    - create-project
+    - list-projects
+    - update-project-status
+    - archive-project
   platform-manager:
-    name: "Platform Manager"
-    department: "operations"
-    risk_tier: "medium"
+    name: Platform Manager
+    department: operations
+    risk_tier: medium
     allowed_actions:
-      - "provision-client-services"
-      - "deprovision-client-services"
-      - "get-client-status"
-
+    - provision-client-services
+    - deprovision-client-services
+    - get-client-status
   teams-manager:
-    name: "Teams Manager"
-    department: "collaboration"
-    risk_tier: "medium"
+    name: Teams Manager
+    department: collaboration
+    risk_tier: medium
     allowed_actions:
-      # Graph API actions
-      - "teams.list"
-      - "teams.get"
-      - "teams.create"
-      - "teams.archive"
-      - "teams.add_member"
-      - "teams.remove_member"
-      - "channels.list"
-      - "channels.create"
-      - "channels.send_message"
-      - "chat.create"
-      - "chat.send_message"
-      - "chat.send"
-      - "chat.list"
-      # Legacy actions
-      - "create-workspace"
-      - "add-workspace-members"
-      - "create-channels"
-      - "get-team-status"
+    - teams.list
+    - teams.get
+    - teams.create
+    - teams.archive
+    - teams.add_member
+    - teams.remove_member
+    - channels.list
+    - channels.create
+    - channels.send_message
+    - chat.create
+    - chat.send_message
+    - chat.send
+    - chat.list
+    - create-workspace
+    - add-workspace-members
+    - create-channels
+    - get-team-status
     approval_rules:
-      - action: "teams.archive"
-        approvers: ["it-director"]
-      - action: "teams.remove_member"
-        approvers: ["teams-admin"]
-
-  # IT Operations Team
+    - action: teams.archive
+      approvers:
+      - it-director
+    - action: teams.remove_member
+      approvers:
+      - teams-admin
   it-operations-manager:
-    name: "IT Operations Manager"
-    department: "operations"
-    risk_tier: "high"
+    name: IT Operations Manager
+    department: operations
+    risk_tier: high
     allowed_actions:
-      - "infrastructure.monitor"
-      - "system.health-check"
-      - "alerts.respond"
-      - "backup.verify"
-      - "security.scan"
+    - infrastructure.monitor
+    - system.health-check
+    - alerts.respond
+    - backup.verify
+    - security.scan
     approval_rules:
-      - action: "security.scan"
-        approvers: ["ciso"]
-
+    - action: security.scan
+      approvers:
+      - ciso
   website-operations-specialist:
-    name: "Website Operations Specialist"
-    department: "operations"
-    risk_tier: "medium"
+    name: Website Operations Specialist
+    department: operations
+    risk_tier: medium
     allowed_actions:
-      - "website.deploy"
-      - "cdn.purge"
-      - "dns.update"
-      - "ssl.renew"
-      - "performance.optimize"
-      - "backup.restore"
+    - website.deploy
+    - cdn.purge
+    - dns.update
+    - ssl.renew
+    - performance.optimize
+    - backup.restore
     approval_rules:
-      - action: "dns.update"
-        approvers: ["it-director"]
-      - action: "backup.restore"
-        approvers: ["it-director"]
-
-  # Agent Consultants (AI-Powered Internal Operations)
+    - action: dns.update
+      approvers:
+      - it-director
+    - action: backup.restore
+      approvers:
+      - it-director
   email-processing-agent:
-    name: "Email Processing Agent"
-    department: "communication"
-    risk_tier: "medium"
+    name: Email Processing Agent
+    department: communication
+    risk_tier: medium
     allowed_actions:
-      # Graph API actions (used by m365_email tool)
-      - "mail.list"
-      - "mail.read"
-      - "mail.send"
-      - "mail.reply"
-      - "mail.forward"
-      - "mail.move"
-      - "mail.delete"
-      - "mail.folders"
-      - "mailbox.settings"
-      # Business-level actions
-      - "email.classify"
-      - "email.respond"
-      - "email.forward"
-      - "email.archive"
-      - "follow-up.schedule"
+    - mail.list
+    - mail.read
+    - mail.send
+    - mail.reply
+    - mail.forward
+    - mail.move
+    - mail.delete
+    - mail.folders
+    - mailbox.settings
+    - email.classify
+    - email.respond
+    - email.forward
+    - email.archive
+    - follow-up.schedule
     approval_rules:
-      - action: "email.respond"
-        condition: "priority == 'high' OR contains_sensitive_info == true"
-        approvers: ["legal", "compliance"]
-
+    - action: email.respond
+      condition: priority == 'high' OR contains_sensitive_info == true
+      approvers:
+      - legal
+      - compliance
   calendar-management-agent:
-    name: "Calendar Management Agent"
-    department: "operations"
-    risk_tier: "low"
+    name: Calendar Management Agent
+    department: operations
+    risk_tier: low
     allowed_actions:
-      # Graph API actions (used by m365_calendar tool)
-      - "calendar.list"
-      - "calendar.create"
-      - "calendar.get"
-      - "calendar.update"
-      - "calendar.delete"
-      - "calendar.availability"
-      # Legacy/business-level actions
-      - "calendar.schedule"
-      - "meeting.organize"
-      - "availability.check"
-      - "reminder.send"
-      - "conflict.resolve"
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.update
+    - calendar.delete
+    - calendar.availability
+    - calendar.schedule
+    - meeting.organize
+    - availability.check
+    - reminder.send
+    - conflict.resolve
     approval_rules:
-      - action: "meeting.organize"
-        condition: "attendees_count > 10 OR external_attendees > 0"
-        approvers: ["executive-assistant"]
-
+    - action: meeting.organize
+      condition: attendees_count > 10 OR external_attendees > 0
+      approvers:
+      - executive-assistant
   project-coordination-agent:
-    name: "Project Coordination Agent"
-    department: "project-management"
-    risk_tier: "medium"
+    name: Project Coordination Agent
+    department: project-management
+    risk_tier: medium
     allowed_actions:
-      # Business-level actions (used by m365_projects tool)
-      - "task.create"
-      - "task.assign"
-      - "deadline.track"
-      - "status.update"
-      - "report.generate"
-      # Planner actions (used by m365_planner tool)
-      - "list_plans"
-      - "create_plan"
-      - "list_buckets"
-      - "create_bucket"
-      - "create_task"
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
+    - list_plans
+    - create_plan
+    - list_buckets
+    - create_bucket
+    - create_task
     approval_rules:
-      - action: "task.assign"
-        condition: "estimated_hours > 40 OR priority == 'critical'"
-        approvers: ["project-manager"]
-
+    - action: task.assign
+      condition: estimated_hours > 40 OR priority == 'critical'
+      approvers:
+      - project-manager
   client-relationship-agent:
-    name: "Client Relationship Agent"
-    department: "crm"
-    risk_tier: "medium"
+    name: Client Relationship Agent
+    department: crm
+    risk_tier: medium
     allowed_actions:
-      - "client.follow-up"
-      - "satisfaction.survey"
-      - "feedback.analyze"
-      - "relationship.score"
-      - "engagement.plan"
+    - client.follow-up
+    - satisfaction.survey
+    - feedback.analyze
+    - relationship.score
+    - engagement.plan
     approval_rules:
-      - action: "engagement.plan"
-        condition: "client_value > 100000 OR relationship_risk == 'high'"
-        approvers: ["account-manager"]
-
+    - action: engagement.plan
+      condition: client_value > 100000 OR relationship_risk == 'high'
+      approvers:
+      - account-manager
   compliance-monitoring-agent:
-    name: "Compliance Monitoring Agent"
-    department: "legal"
-    risk_tier: "critical"
+    name: Compliance Monitoring Agent
+    department: legal
+    risk_tier: critical
     allowed_actions:
-      - "compliance.check"
-      - "policy.validate"
-      - "audit.prepare"
-      - "violation.report"
-      - "remediation.plan"
+    - compliance.check
+    - policy.validate
+    - audit.prepare
+    - violation.report
+    - remediation.plan
     approval_rules:
-      - action: "violation.report"
-        approvers: ["legal", "ciso"]
-
+    - action: violation.report
+      approvers:
+      - legal
+      - ciso
   recruitment-assistance-agent:
-    name: "Recruitment Assistance Agent"
-    department: "hr"
-    risk_tier: "high"
+    name: Recruitment Assistance Agent
+    department: hr
+    risk_tier: high
     allowed_actions:
-      - "candidate.screen"
-      - "interview.schedule"
-      - "feedback.collect"
-      - "offer.prepare"
-      - "onboarding.initiate"
+    - candidate.screen
+    - interview.schedule
+    - feedback.collect
+    - offer.prepare
+    - onboarding.initiate
     approval_rules:
-      - action: "offer.prepare"
-        condition: "salary > 150000 OR equity_grant > 0"
-        approvers: ["hr-director", "ceo"]
-
+    - action: offer.prepare
+      condition: salary > 150000 OR equity_grant > 0
+      approvers:
+      - hr-director
+      - ceo
   financial-operations-agent:
-    name: "Financial Operations Agent"
-    department: "finance"
-    risk_tier: "critical"
+    name: Financial Operations Agent
+    department: finance
+    risk_tier: critical
     allowed_actions:
-      - "invoice.process"
-      - "expense.approve"
-      - "budget.track"
-      - "forecast.update"
-      - "audit.prepare"
+    - invoice.process
+    - expense.approve
+    - budget.track
+    - forecast.update
+    - audit.prepare
     approval_rules:
-      - action: "expense.approve"
-        condition: "amount > 5000 OR category == 'travel'"
-        approvers: ["finance-director"]
-
+    - action: expense.approve
+      condition: amount > 5000 OR category == 'travel'
+      approvers:
+      - finance-director
   knowledge-management-agent:
-    name: "Knowledge Management Agent"
-    department: "operations"
-    risk_tier: "low"
+    name: Knowledge Management Agent
+    department: operations
+    risk_tier: low
     allowed_actions:
-      - "document.index"
-      - "search.optimize"
-      - "content.curate"
-      - "training.recommend"
-      - "expert.connect"
-
-  # ---- UCP Administration ----
+    - document.index
+    - search.optimize
+    - content.curate
+    - training.recommend
+    - expert.connect
   ucp-administrator:
-    name: "UCP Administrator"
-    department: "governance"
-    risk_tier: "critical"
+    name: UCP Administrator
+    department: governance
+    risk_tier: critical
     allowed_actions:
-      # Tier management
-      - "admin.list_tiers"
-      - "admin.get_tier"
-      - "admin.list_users"
-      - "admin.get_user_tier"
-      - "admin.set_user_tier"
-      - "admin.remove_user_tier"
-      # Tenant config
-      - "admin.get_tenant_config"
-      - "admin.reload_config"
-      # Audit
-      - "admin.audit_log"
+    - admin.list_tiers
+    - admin.get_tier
+    - admin.list_users
+    - admin.get_user_tier
+    - admin.set_user_tier
+    - admin.remove_user_tier
+    - admin.get_tenant_config
+    - admin.reload_config
+    - admin.audit_log
     approval_rules:
-      - action: "admin.set_user_tier"
-        approvers: ["global_admin"]
-      - action: "admin.remove_user_tier"
-        approvers: ["global_admin"]
-
-  # ---- NEW AGENTS (previously missing from registry) ----
-
+    - action: admin.set_user_tier
+      approvers:
+      - global_admin
+    - action: admin.remove_user_tier
+      approvers:
+      - global_admin
   security-operations:
-    name: "Security Operations"
-    department: "security"
-    risk_tier: "high"
+    name: Security Operations
+    department: security
+    risk_tier: high
     allowed_actions:
-      - "security.alerts"
-      - "security.alert_get"
-      - "security.alert_update"
-      - "security.incidents"
-      - "security.incident_get"
-      - "security.secure_score"
+    - security.alerts
+    - security.alert_get
+    - security.alert_update
+    - security.incidents
+    - security.incident_get
+    - security.secure_score
     approval_rules:
-      - action: "security.alert_update"
-        approvers: ["ciso", "security-team"]
-
+    - action: security.alert_update
+      approvers:
+      - ciso
+      - security-team
   audit-operations:
-    name: "Audit Operations"
-    department: "security"
-    risk_tier: "high"
+    name: Audit Operations
+    department: security
+    risk_tier: high
     allowed_actions:
-      - "audit.directory"
-      - "audit.signins"
-      - "audit.provisioning"
-
+    - audit.directory
+    - audit.signins
+    - audit.provisioning
   service-health:
-    name: "Service Health Monitor"
-    department: "operations"
-    risk_tier: "low"
+    name: Service Health Monitor
+    department: operations
+    risk_tier: low
     allowed_actions:
-      - "health.overview"
-      - "health.issues"
-      - "health.issue_get"
-      - "health.messages"
-
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - health.messages
   identity-security:
-    name: "Identity & Access Security"
-    department: "security"
-    risk_tier: "critical"
+    name: Identity & Access Security
+    department: security
+    risk_tier: critical
     allowed_actions:
-      - "ca.policies"
-      - "ca.policy_get"
-      - "ca.policy_create"
-      - "ca.policy_update"
-      - "ca.policy_delete"
-      - "ca.named_locations"
+    - ca.policies
+    - ca.policy_get
+    - ca.policy_create
+    - ca.policy_update
+    - ca.policy_delete
+    - ca.named_locations
     approval_rules:
-      - action: "ca.policy_create"
-        approvers: ["ciso", "it-director"]
-      - action: "ca.policy_update"
-        approvers: ["ciso", "it-director"]
-      - action: "ca.policy_delete"
-        approvers: ["ciso", "it-director"]
-
+    - action: ca.policy_create
+      approvers:
+      - ciso
+      - it-director
+    - action: ca.policy_update
+      approvers:
+      - ciso
+      - it-director
+    - action: ca.policy_delete
+      approvers:
+      - ciso
+      - it-director
   reports:
-    name: "Reports & Analytics"
-    department: "operations"
-    risk_tier: "low"
+    name: Reports & Analytics
+    department: operations
+    risk_tier: low
     allowed_actions:
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-      - "reports.sharepoint_usage"
-      - "reports.onedrive_usage"
-
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
   device-management:
-    name: "Device Management"
-    department: "operations"
-    risk_tier: "medium"
+    name: Device Management
+    department: operations
+    risk_tier: medium
     allowed_actions:
-      - "devices.list"
-      - "devices.get"
-      - "devices.compliance"
-      - "devices.actions"
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - devices.actions
     approval_rules:
-      - action: "devices.actions"
-        approvers: ["it-operations-manager"]
-
-  # ---- SPECIALIST TEAM MEMBERS (no M365 actions yet) ----
-
-  # Engineering Department (7)
+    - action: devices.actions
+      approvers:
+      - it-operations-manager
   ai-engineer:
-    name: "AI Engineer"
-    department: "engineering"
-    risk_tier: "medium"
-    allowed_actions: []
-
+    name: AI Engineer
+    department: engineering
+    risk_tier: medium
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - reports.users_active
+    - reports.teams_activity
+    approval_rules:
+    - action: lists.create_item
+      approvers:
+      - department-owner:engineering
   backend-architect:
-    name: "Backend Architect"
-    department: "engineering"
-    risk_tier: "medium"
+    name: Backend Architect
+    department: engineering
+    risk_tier: medium
     allowed_actions:
-      - "apps.list"
-      - "apps.get"
-      - "service_principals.list"
-      - "sites.list"
-      - "sites.get"
-      - "lists.list"
-      - "lists.get"
-      - "lists.items"
-      - "lists.create_item"
-      - "files.list"
-      - "files.get"
-      - "files.search"
-      - "drives.list"
+    - apps.list
+    - apps.get
+    - service_principals.list
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
     approval_rules:
-      - action: "lists.create_item"
-        approvers: ["department-owner:engineering"]
-
+    - action: lists.create_item
+      approvers:
+      - department-owner:engineering
   devops-automator:
-    name: "DevOps Automator"
-    department: "engineering"
-    risk_tier: "medium"
+    name: DevOps Automator
+    department: engineering
+    risk_tier: medium
     allowed_actions:
-      - "devices.list"
-      - "devices.get"
-      - "devices.compliance"
-      - "health.overview"
-      - "health.issues"
-      - "health.issue_get"
-      - "health.messages"
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - health.messages
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
     approval_rules:
-      - action: "devices.compliance"
-        approvers: ["department-owner:engineering"]
-
+    - action: devices.compliance
+      approvers:
+      - department-owner:engineering
   frontend-developer:
-    name: "Frontend Developer"
-    department: "engineering"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Frontend Developer
+    department: engineering
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
   mobile-app-builder:
-    name: "Mobile App Builder"
-    department: "engineering"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Mobile App Builder
+    department: engineering
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - files.list
+    - files.get
+    - files.create_folder
+    - drives.list
+    - teams.list
+    - channels.list
   rapid-prototyper:
-    name: "Rapid Prototyper"
-    department: "engineering"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Rapid Prototyper
+    department: engineering
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - teams.list
+    - channels.list
   test-writer-fixer:
-    name: "Test Writer/Fixer"
-    department: "engineering"
-    risk_tier: "low"
-    allowed_actions: []
-
-  # Marketing Department (7)
+    name: Test Writer/Fixer
+    department: engineering
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
   app-store-optimizer:
-    name: "App Store Optimizer"
-    department: "marketing"
-    risk_tier: "low"
+    name: App Store Optimizer
+    department: marketing
+    risk_tier: low
     allowed_actions: []
-
   content-creator:
-    name: "Content Creator"
-    department: "marketing"
-    risk_tier: "low"
+    name: Content Creator
+    department: marketing
+    risk_tier: low
     allowed_actions:
-      - "sites.list"
-      - "sites.get"
-      - "lists.list"
-      - "lists.items"
-      - "lists.create_item"
-      - "files.list"
-      - "files.get"
-      - "drives.list"
-
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - drives.list
   growth-hacker:
-    name: "Growth Hacker"
-    department: "marketing"
-    risk_tier: "medium"
+    name: Growth Hacker
+    department: marketing
+    risk_tier: medium
     allowed_actions:
-      - "sites.list"
-      - "lists.list"
-      - "lists.items"
-      - "lists.create_item"
-      - "mail.list"
-      - "mail.read"
-      - "mail.send"
-      - "calendar.list"
-      - "reports.email_activity"
-      - "reports.teams_activity"
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - mail.list
+    - mail.read
+    - mail.send
+    - calendar.list
+    - reports.email_activity
+    - reports.teams_activity
     approval_rules:
-      - action: "mail.send"
-        approvers: ["department-owner:marketing"]
-      - action: "lists.create_item"
-        approvers: ["department-owner:marketing"]
-
+    - action: mail.send
+      approvers:
+      - department-owner:marketing
+    - action: lists.create_item
+      approvers:
+      - department-owner:marketing
   instagram-curator:
-    name: "Instagram Curator"
-    department: "marketing"
-    risk_tier: "low"
+    name: Instagram Curator
+    department: marketing
+    risk_tier: low
     allowed_actions: []
-
   reddit-community-builder:
-    name: "Reddit Community Builder"
-    department: "marketing"
-    risk_tier: "low"
+    name: Reddit Community Builder
+    department: marketing
+    risk_tier: low
     allowed_actions: []
-
   tiktok-strategist:
-    name: "TikTok Strategist"
-    department: "marketing"
-    risk_tier: "low"
+    name: TikTok Strategist
+    department: marketing
+    risk_tier: low
     allowed_actions: []
-
   twitter-engager:
-    name: "Twitter Engager"
-    department: "marketing"
-    risk_tier: "low"
+    name: Twitter Engager
+    department: marketing
+    risk_tier: low
     allowed_actions: []
-
-  # Product Department (3)
   sprint-prioritizer:
-    name: "Sprint Prioritizer"
-    department: "product"
-    risk_tier: "low"
+    name: Sprint Prioritizer
+    department: product
+    risk_tier: low
     allowed_actions:
-      - "teams.list"
-      - "teams.get"
-      - "channels.list"
-      - "channels.create"
-      - "calendar.list"
-      - "calendar.create"
-      - "calendar.get"
-      - "calendar.availability"
-
+    - teams.list
+    - teams.get
+    - channels.list
+    - channels.create
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.availability
   feedback-synthesizer:
-    name: "Feedback Synthesizer"
-    department: "product"
-    risk_tier: "low"
+    name: Feedback Synthesizer
+    department: product
+    risk_tier: low
     allowed_actions:
-      - "mail.list"
-      - "mail.read"
-      - "sites.list"
-      - "lists.list"
-      - "lists.items"
-      - "lists.create_item"
-      - "files.list"
-
+    - mail.list
+    - mail.read
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
   trend-researcher:
-    name: "Trend Researcher"
-    department: "product"
-    risk_tier: "low"
-    allowed_actions: []
-
-  # Project Management Department (3)
+    name: Trend Researcher
+    department: product
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
   experiment-tracker:
-    name: "Experiment Tracker"
-    department: "project-management"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Experiment Tracker
+    department: project-management
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - teams.list
+    - channels.list
+    - reports.users_active
+    - reports.teams_activity
   project-shipper:
-    name: "Project Shipper"
-    department: "project-management"
-    risk_tier: "low"
+    name: Project Shipper
+    department: project-management
+    risk_tier: low
     allowed_actions:
-      - "list_plans"
-      - "list_buckets"
-      - "create_bucket"
-      - "create_task"
-      - "task.create"
-      - "task.assign"
-      - "deadline.track"
-      - "status.update"
-      - "report.generate"
+    - list_plans
+    - list_buckets
+    - create_bucket
+    - create_task
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
     approval_rules:
-      - action: "task.assign"
-        condition: "estimated_hours > 40 OR priority == 'critical'"
-        approvers: ["department-owner:project-management"]
-
+    - action: task.assign
+      condition: estimated_hours > 40 OR priority == 'critical'
+      approvers:
+      - department-owner:project-management
   studio-producer:
-    name: "Studio Producer"
-    department: "project-management"
-    risk_tier: "low"
+    name: Studio Producer
+    department: project-management
+    risk_tier: low
     allowed_actions:
-      - "teams.list"
-      - "teams.get"
-      - "channels.list"
-      - "calendar.list"
-      - "calendar.create"
-      - "calendar.get"
-      - "sites.list"
-      - "lists.list"
-      - "lists.items"
-
-  # Studio Operations Department (5)
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
   analytics-reporter:
-    name: "Analytics Reporter"
-    department: "studio-operations"
-    risk_tier: "low"
+    name: Analytics Reporter
+    department: studio-operations
+    risk_tier: low
     allowed_actions:
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-      - "reports.sharepoint_usage"
-      - "reports.onedrive_usage"
-      - "sites.list"
-      - "lists.list"
-      - "lists.get"
-      - "lists.items"
-
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    - sites.list
+    - lists.list
+    - lists.get
+    - lists.items
   finance-tracker:
-    name: "Finance Tracker"
-    department: "studio-operations"
-    risk_tier: "high"
-    allowed_actions: []
-
-  infrastructure-maintainer:
-    name: "Infrastructure Maintainer"
-    department: "studio-operations"
-    risk_tier: "medium"
-    allowed_actions: []
-
-  legal-compliance-checker:
-    name: "Legal Compliance Checker"
-    department: "studio-operations"
-    risk_tier: "high"
-    allowed_actions: []
-
-  support-responder:
-    name: "Support Responder"
-    department: "studio-operations"
-    risk_tier: "low"
+    name: Finance Tracker
+    department: studio-operations
+    risk_tier: high
     allowed_actions:
-      - "mail.list"
-      - "mail.read"
-      - "mail.send"
-      - "mail.reply"
-      - "mail.folders"
-      - "client.follow-up"
-      - "satisfaction.survey"
-      - "feedback.analyze"
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
     approval_rules:
-      - action: "mail.send"
-        condition: "priority == 'high' OR contains_sensitive_info == true"
-        approvers: ["department-owner:studio-operations"]
-
-  # Testing Department (5)
+    - action: lists.create_item
+      approvers:
+      - department-owner:studio-operations
+  infrastructure-maintainer:
+    name: Infrastructure Maintainer
+    department: studio-operations
+    risk_tier: medium
+    allowed_actions:
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - security.alerts
+    - security.alert_get
+    - sites.list
+    - files.list
+    - files.get
+    approval_rules:
+    - action: devices.compliance
+      approvers:
+      - department-owner:studio-operations
+  legal-compliance-checker:
+    name: Legal Compliance Checker
+    department: studio-operations
+    risk_tier: high
+    allowed_actions:
+    - compliance.check
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    approval_rules:
+    - action: compliance.check
+      approvers:
+      - department-owner:studio-operations
+      - legal-counsel
+  support-responder:
+    name: Support Responder
+    department: studio-operations
+    risk_tier: low
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - mail.send
+    - mail.reply
+    - mail.folders
+    - client.follow-up
+    - satisfaction.survey
+    - feedback.analyze
+    approval_rules:
+    - action: mail.send
+      condition: priority == 'high' OR contains_sensitive_info == true
+      approvers:
+      - department-owner:studio-operations
   api-tester:
-    name: "API Tester"
-    department: "testing"
-    risk_tier: "low"
+    name: API Tester
+    department: testing
+    risk_tier: low
     allowed_actions:
-      - "health.overview"
-      - "health.issues"
-      - "health.issue_get"
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-      - "reports.sharepoint_usage"
-      - "reports.onedrive_usage"
-
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
   performance-benchmarker:
-    name: "Performance Benchmarker"
-    department: "testing"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Performance Benchmarker
+    department: testing
+    risk_tier: low
+    allowed_actions:
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    - sites.list
+    - lists.list
+    - lists.items
   test-results-analyzer:
-    name: "Test Results Analyzer"
-    department: "testing"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Test Results Analyzer
+    department: testing
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    - reports.users_active
   tool-evaluator:
-    name: "Tool Evaluator"
-    department: "testing"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Tool Evaluator
+    department: testing
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
   workflow-optimizer:
-    name: "Workflow Optimizer"
-    department: "testing"
-    risk_tier: "low"
-    allowed_actions: []
-
-  # Design Department (5)
+    name: Workflow Optimizer
+    department: testing
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.teams_activity
+    - reports.email_activity
+    - reports.sharepoint_usage
   brand-guardian:
-    name: "Brand Guardian"
-    department: "design"
-    risk_tier: "low"
+    name: Brand Guardian
+    department: design
+    risk_tier: low
     allowed_actions:
-      - "sites.list"
-      - "sites.get"
-      - "lists.list"
-      - "lists.items"
-      - "files.list"
-      - "files.get"
-      - "files.search"
-      - "drives.list"
-
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
   ui-designer:
-    name: "UI Designer"
-    department: "design"
-    risk_tier: "low"
+    name: UI Designer
+    department: design
+    risk_tier: low
     allowed_actions:
-      - "sites.list"
-      - "sites.get"
-      - "files.list"
-      - "files.get"
-      - "files.search"
-      - "files.create_folder"
-      - "drives.list"
-
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
   ux-researcher:
-    name: "UX Researcher"
-    department: "design"
-    risk_tier: "low"
+    name: UX Researcher
+    department: design
+    risk_tier: low
     allowed_actions:
-      - "mail.list"
-      - "mail.read"
-      - "calendar.list"
-      - "calendar.create"
-      - "sites.list"
-      - "files.list"
-      - "files.get"
-
+    - mail.list
+    - mail.read
+    - calendar.list
+    - calendar.create
+    - sites.list
+    - files.list
+    - files.get
   visual-storyteller:
-    name: "Visual Storyteller"
-    department: "design"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Visual Storyteller
+    department: design
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
   whimsy-injector:
-    name: "Whimsy Injector"
-    department: "design"
-    risk_tier: "low"
-    allowed_actions: []
-
+    name: Whimsy Injector
+    department: design
+    risk_tier: low
+    allowed_actions:
+    - sites.list
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    - lists.list
+    - lists.items
 policies:
   throttling:
     global_rpm: 100
     burst_multiplier: 1.5
-
 integrations:
   graph_api:
     license_aliases:
-      E3: ["ENTERPRISEPACK", "SPE_E3", "M365_E3"]
-      E5: ["ENTERPRISEPREMIUM", "SPE_E5", "M365_E5"]
-      Developer: ["DEVELOPERPACK", "DEVELOPERPACK_E5", "M365_DEVELOPER"]
+      E3:
+      - ENTERPRISEPACK
+      - SPE_E3
+      - M365_E3
+      E5:
+      - ENTERPRISEPREMIUM
+      - SPE_E5
+      - M365_E5
+      Developer:
+      - DEVELOPERPACK
+      - DEVELOPERPACK_E5
+      - M365_DEVELOPER

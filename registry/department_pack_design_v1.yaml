@@ -50,10 +50,10 @@ approval_model:
         until later acts activate mutating Design execution surfaces.
 kpis:
   required_personas: 5
-  required_active_personas: 3
-  required_registry_backed_personas: 3
+  required_active_personas: 5
+  required_registry_backed_personas: 5
   required_workflow_families: 4
-  supported_action_count: 22
+  supported_action_count: 36
 personas:
   brand-guardian:
     display_name: Isabella Rossi
@@ -135,7 +135,7 @@ personas:
     display_name: Diego Alvarez
     title: Visual Storyteller
     role_type: creative_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -148,12 +148,19 @@ personas:
     - Content, intranet, and files
     workflow_families:
     - visual_narrative_and_creative_production
-    supported_actions: []
+    supported_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
   whimsy-injector:
     display_name: Luna Park
     title: Delight Designer
     role_type: delight_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -166,7 +173,14 @@ personas:
     - Content, intranet, and files
     workflow_families:
     - visual_narrative_and_creative_production
-    supported_actions: []
+    supported_actions:
+    - sites.list
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    - lists.list
+    - lists.items
 bounded_claims:
   supported:
   - design persona census and capability-family contract

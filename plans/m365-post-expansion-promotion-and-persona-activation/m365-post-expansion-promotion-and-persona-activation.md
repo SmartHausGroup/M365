@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` is next; persona-activation track is the active critical path)
+**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete; `P2E` is next; persona-activation track is the active critical path)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -103,8 +103,8 @@ Why these first:
 - `P2A` is complete: activation definition locked, first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B → P2C → P2D → P2E, fail-closed), commercial unlock mapping locked.
 - `P2B` is complete: 6 foundation operators activated (backend-architect 13 actions, devops-automator 10, api-tester 8, analytics-reporter 9, project-shipper 9, support-responder 8 = 57 total new actions). All pass the 6-point activation test. Total registry-backed personas: 10.
 - `P2C` is complete: 8 commercial growth and experience personas activated (content-creator 8 actions, growth-hacker 10, ui-designer 7, brand-guardian 8, feedback-synthesizer 7, sprint-prioritizer 8, ux-researcher 7, studio-producer 9 = 64 total new actions). All pass the 6-point activation test. L74 lemma/invariant, scorecard green. 7 tests passed, CI verifier passed. Total registry-backed personas: 18/39.
-- `P2D` is next but has NOT been started.
-- `P2E` remains blocked by `P2D`.
+- `P2D` is complete: 16 specialist and regulated personas activated (ai-engineer 10, frontend-developer 7, mobile-app-builder 7, rapid-prototyper 8, test-writer-fixer 7, performance-benchmarker 8, test-results-analyzer 7, tool-evaluator 7, workflow-optimizer 8, finance-tracker 8, infrastructure-maintainer 8, legal-compliance-checker 8, visual-storyteller 7, whimsy-injector 7, experiment-tracker 8, trend-researcher 7 = 122 total new actions). 5 personas blocked (instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer) due to non-M365 external API dependency. L75 lemma/invariant, scorecard green. 8 tests passed, CI verifier passed. Total registry-backed personas: 34/39.
+- `P2E` is next but has NOT been started.
 
 ## Scope
 
@@ -208,9 +208,11 @@ Why these first:
 
 #### P2D — Specialist and Regulated Persona Activation
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Activate the higher-risk, long-tail, and specialist personas only after the first two waves are proven.
+
+**Completion summary:** 16 specialist and regulated personas activated across 6 departments. 5 personas blocked (instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer) due to non-M365 external-platform API dependencies documented as residual scope. Total: 122 new actions. High-risk personas (finance-tracker, infrastructure-maintainer, legal-compliance-checker) have explicit approval rules. L75 lemma/invariant, scorecard green. CI verifier and tests passing (8 passed). Total registry-backed personas: 34/39.
 
 #### P2E — Activation Certification and Commercial Closeout
 

@@ -1,0 +1,175 @@
+{
+  "plan_ref": "plan:m365-post-expansion-promotion-and-persona-activation:P2D",
+  "activated_count": 16,
+  "blocked_count": 5,
+  "total_new_actions": 122,
+  "registry_backed_total": 34,
+  "activated": [
+    {
+      "persona": "ai-engineer",
+      "department": "engineering",
+      "expected_actions": 10,
+      "actual_actions": 10,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "frontend-developer",
+      "department": "engineering",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "mobile-app-builder",
+      "department": "engineering",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "rapid-prototyper",
+      "department": "engineering",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "test-writer-fixer",
+      "department": "engineering",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "performance-benchmarker",
+      "department": "testing",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "test-results-analyzer",
+      "department": "testing",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "tool-evaluator",
+      "department": "testing",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "workflow-optimizer",
+      "department": "testing",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "finance-tracker",
+      "department": "studio-operations",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "infrastructure-maintainer",
+      "department": "studio-operations",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "legal-compliance-checker",
+      "department": "studio-operations",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "visual-storyteller",
+      "department": "design",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "whimsy-injector",
+      "department": "design",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "experiment-tracker",
+      "department": "project-management",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    },
+    {
+      "persona": "trend-researcher",
+      "department": "product",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "routable": true,
+      "status": "passed"
+    }
+  ],
+  "blocked": [
+    {
+      "persona": "instagram-curator",
+      "contract_only": true
+    },
+    {
+      "persona": "tiktok-strategist",
+      "contract_only": true
+    },
+    {
+      "persona": "reddit-community-builder",
+      "contract_only": true
+    },
+    {
+      "persona": "twitter-engager",
+      "contract_only": true
+    },
+    {
+      "persona": "app-store-optimizer",
+      "contract_only": true
+    }
+  ]
+}

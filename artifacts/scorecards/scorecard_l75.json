@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L75",
+  "title": "M365 Specialist and Regulated Persona Activation v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BW-specialist-regulated-activation-v1.ipynb",
+    "notebooks/lemma_proofs/L75_m365_specialist_regulated_activation_v1.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L75_m365_specialist_regulated_activation_v1.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "16 P2D personas activated across 6 departments, 122 total new actions",
+    "5 personas blocked: instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer (require non-M365 external APIs)",
+    "High-risk personas (finance-tracker, legal-compliance-checker) have explicit approval rules",
+    "Registry-backed personas: 34/39 (10 P2B + 8 P2C + 16 P2D)"
+  ]
+}

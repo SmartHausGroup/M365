@@ -1439,3 +1439,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_p2c_growth_experience_activation_v1.py` | CI verifier for P2C activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
 | `configs/generated/p2c_growth_experience_activation_v1_verification.json` | Generated proof for P2C. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
 | `tests/test_p2c_growth_experience_activation_v1.py` | Tests for P2C activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+
+## P2D Specialist and Regulated Persona Activation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/ma/lemmas/L75_m365_specialist_regulated_activation_v1.md` | Lemma doc for L75: 16 specialist/regulated personas activation, 5 blocked. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `invariants/lemmas/L75_m365_specialist_regulated_activation_v1.yaml` | Invariant for L75. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `notebooks/m365/INV-M365-BW-specialist-regulated-activation-v1.ipynb` | Primary notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `notebooks/lemma_proofs/L75_m365_specialist_regulated_activation_v1.ipynb` | Proof replay notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `artifacts/scorecards/scorecard_l75.json` | Scorecard for L75. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `scripts/ci/verify_p2d_specialist_regulated_activation_v1.py` | CI verifier for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `configs/generated/p2d_specialist_regulated_activation_v1_verification.json` | Generated proof for P2D. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `tests/test_p2d_specialist_regulated_activation_v1.py` | Tests for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |

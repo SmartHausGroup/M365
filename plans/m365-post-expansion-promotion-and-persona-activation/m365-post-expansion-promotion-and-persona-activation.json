@@ -106,13 +106,16 @@
         "phase": "P2C",
         "date": "2026-03-23",
         "summary": "Commercial growth and experience personas activated: content-creator (8 actions), growth-hacker (10), ui-designer (7), brand-guardian (8), feedback-synthesizer (7), sprint-prioritizer (8), ux-researcher (7), studio-producer (9). Total 64 new actions across 4 departments. All pass 6-point activation test. L74 lemma, scorecard green, 7 tests passed, CI verifier passed. Registry-backed personas: 18/39."
+      },
+      {
+        "phase": "P2D",
+        "date": "2026-03-23",
+        "summary": "Specialist and regulated personas: 16 activated (ai-engineer 10, frontend-developer 7, mobile-app-builder 7, rapid-prototyper 8, test-writer-fixer 7, performance-benchmarker 8, test-results-analyzer 7, tool-evaluator 7, workflow-optimizer 8, finance-tracker 8, infrastructure-maintainer 8, legal-compliance-checker 8, visual-storyteller 7, whimsy-injector 7, experiment-tracker 8, trend-researcher 7). 5 blocked (external API dependency). Total 122 new actions. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39."
       }
     ],
     "in_progress": null,
-    "next_act": "P2D",
-    "prepared_blocked": [
-      "P2E"
-    ]
+    "next_act": "P2E",
+    "prepared_blocked": []
   },
   "scope": {
     "in": [
@@ -224,7 +227,7 @@
         {
           "act": "P2D",
           "title": "Specialist and regulated persona activation",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Activate the higher-risk, long-tail, and specialist personas only after the first two waves are proven."
         },
         {
