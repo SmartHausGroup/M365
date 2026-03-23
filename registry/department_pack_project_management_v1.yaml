@@ -11,18 +11,16 @@ department:
   display_name: Project Management
   wave: W7
   wave_track: Wave A
-  status: persona-contract-only
+  status: partial-activation
   purpose: >-
-    Package the Project Management digital employees into one bounded department
-    contract covering release coordination, experiment tracking, and
-    cross-functional production planning responsibilities that are defined but
-    not yet action-backed.
+    Package the Project Management digital employees into one bounded
+    department pack. Project-shipper is now a registry-backed foundation
+    operator; the remaining two personas are defined but not yet action-backed.
   bounded_claim: >-
-    The Project Management department pack may only claim the authoritative
-    contract personas, capability families, approval posture, and blocked
-    readiness state declared here. It may not claim implemented release,
-    scheduling, or production execution coverage until later acts activate
-    those personas.
+    The Project Management department pack may claim registry-backed execution
+    coverage for project-shipper (9 actions) only. The remaining two personas
+    (experiment-tracker, studio-producer) retain contract-only status until
+    later activation acts.
 workflow_families:
   - release_coordination_and_handoff_management
   - experiment_tracking_and_status_reporting
@@ -65,10 +63,10 @@ approval_model:
         Project Management execution surfaces.
 kpis:
   required_personas: 3
-  required_active_personas: 0
-  required_registry_backed_personas: 0
+  required_active_personas: 1
+  required_registry_backed_personas: 1
   required_workflow_families: 3
-  supported_action_count: 0
+  supported_action_count: 9
 personas:
   experiment-tracker:
     display_name: Emily Carter
@@ -92,7 +90,7 @@ personas:
     display_name: Ben Foster
     title: Release Manager
     role_type: release_anchor
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: medium-operational
     capability_families:
@@ -106,7 +104,16 @@ personas:
     workflow_families:
       - release_coordination_and_handoff_management
       - cross_functional_schedule_and_delivery_planning
-    supported_actions: []
+    supported_actions:
+      - list_plans
+      - list_buckets
+      - create_bucket
+      - create_task
+      - task.create
+      - task.assign
+      - deadline.track
+      - status.update
+      - report.generate
   studio-producer:
     display_name: Olivia Park
     title: Studio Producer
@@ -128,9 +135,10 @@ personas:
 bounded_claims:
   supported:
     - project-management persona census and capability-family contract
-    - approval and escalation semantics for future project-management activation
-    - deterministic blocked-state projection while project-management remains contract-only
+    - approval and escalation semantics for project-management activation
+    - registry-backed execution coverage for project-shipper (9 actions)
+    - deterministic pack-state projection with partial activation
   unsupported:
-    - claims that project-management personas are currently action-backed
-    - live release mutations, launch execution, or experiment-state changes beyond later activation acts
+    - claims that experiment-tracker or studio-producer are action-backed
+    - live experiment-state or production-planning mutations beyond later activation acts
     - engineering, marketing, or finance work outside the project-management contract

@@ -1,0 +1,26 @@
+lemma_id: L73
+name: M365 foundation operators activation v1
+plan_ref: plan:m365-post-expansion-promotion-and-persona-activation:P2B
+source_notebook: null
+evidence:
+  artifacts:
+    - registry/agents.yaml
+    - registry/persona_registry_v2.yaml
+    - registry/persona_capability_map.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/department_pack_engineering_v1.yaml
+    - registry/department_pack_testing_v1.yaml
+    - registry/department_pack_studio_operations_v1.yaml
+    - registry/department_pack_project_management_v1.yaml
+  checks:
+    - backend-architect has 13 allowed actions in agents.yaml and is registry-backed in persona registry
+    - devops-automator has 10 allowed actions in agents.yaml and is registry-backed in persona registry
+    - api-tester has 8 allowed actions in agents.yaml and is registry-backed in persona registry
+    - analytics-reporter has 9 allowed actions in agents.yaml and is registry-backed in persona registry
+    - project-shipper has 9 allowed actions in agents.yaml and is registry-backed in persona registry
+    - support-responder has 8 allowed actions in agents.yaml and is registry-backed in persona registry
+    - all 6 persona action counts match between agents.yaml, persona_registry_v2.yaml, and persona_capability_map.yaml
+    - all actions route via executor_routing_v2.yaml prefix routes or agent_action_overrides
+    - remaining 29 personas stay persona-contract-only with 0 actions
+    - department pack files reflect partial-activation status for 4 departments
+status: projected

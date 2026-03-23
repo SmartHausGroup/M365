@@ -88,10 +88,17 @@ execution_status:
       checks passed (C0-C10). Gate GO.
 
       '
-  in_progress: P2B
-  next_act: P2B
+  - phase: P2B
+    date: '2026-03-23'
+    summary: 'Foundation operators activated: backend-architect (13 actions), devops-automator (10),
+      api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8). Total 57
+      new actions across 4 departments. All pass 6-point activation test. L73 lemma, scorecard green,
+      25 tests passed, 4 CI verifiers passed. Registry-backed personas: 10/39.
+
+      '
+  in_progress: P2C
+  next_act: P2C
   prepared_blocked:
-  - P2C
   - P2D
   - P2E
 scope:
@@ -162,11 +169,11 @@ phase_stack:
       persona registry.
   - act: P2B
     title: Foundation operators activation
-    status: Active
+    status: Complete
     goal: Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable.
   - act: P2C
     title: Commercial growth and experience activation
-    status: Pending
+    status: Active
     goal: Activate the next wave of product, design, and growth personas that strengthen the external commercial story.
   - act: P2D
     title: Specialist and regulated persona activation
