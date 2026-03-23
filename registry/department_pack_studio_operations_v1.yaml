@@ -11,18 +11,18 @@ department:
   display_name: Studio Operations
   wave: W7
   wave_track: Wave A
-  status: partial-activation
+  status: persona-contract-only
   purpose: >-
     Package the Studio Operations digital employees into one bounded department
-    pack. Analytics-reporter and support-responder are now registry-backed
-    foundation operators; the remaining three personas are defined but not yet
-    action-backed.
+    contract covering reporting, finance controls, infrastructure upkeep,
+    compliance review, and support coordination responsibilities that are
+    defined but not yet action-backed.
   bounded_claim: >-
-    The Studio Operations department pack may claim registry-backed execution
-    coverage for analytics-reporter (9 actions) and support-responder (8
-    actions) only. The remaining three personas (finance-tracker,
-    infrastructure-maintainer, legal-compliance-checker) retain contract-only
-    status until later activation acts.
+    The Studio Operations department pack may only claim the authoritative
+    contract personas, capability families, approval posture, and blocked
+    readiness state declared here. It may not claim implemented finance,
+    infrastructure, compliance, or support execution coverage until later acts
+    activate those personas.
 workflow_families:
   - reporting_and_operational_visibility
   - finance_and_control_review
@@ -84,16 +84,16 @@ approval_model:
         Operations execution surfaces.
 kpis:
   required_personas: 5
-  required_active_personas: 2
-  required_registry_backed_personas: 2
+  required_active_personas: 0
+  required_registry_backed_personas: 0
   required_workflow_families: 4
-  supported_action_count: 17
+  supported_action_count: 0
 personas:
   analytics-reporter:
     display_name: Amanda Foster
     title: Data Scientist
     role_type: reporting_operator
-    coverage_status: registry-backed
+    coverage_status: persona-contract-only
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -106,16 +106,7 @@ personas:
       - Documents, notes, and workspace productivity
     workflow_families:
       - reporting_and_operational_visibility
-    supported_actions:
-      - reports.users_active
-      - reports.email_activity
-      - reports.teams_activity
-      - reports.sharepoint_usage
-      - reports.onedrive_usage
-      - sites.list
-      - lists.list
-      - lists.get
-      - lists.items
+    supported_actions: []
   finance-tracker:
     display_name: Lisa Chang
     title: Chief Financial Officer
@@ -176,7 +167,7 @@ personas:
     display_name: Mike Rodriguez
     title: Customer Success Manager
     role_type: support_operator
-    coverage_status: registry-backed
+    coverage_status: persona-contract-only
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -189,22 +180,13 @@ personas:
       - Collaboration, meetings, and communities
     workflow_families:
       - support_and_case_coordination
-    supported_actions:
-      - mail.list
-      - mail.read
-      - mail.send
-      - mail.reply
-      - mail.folders
-      - client.follow-up
-      - satisfaction.survey
-      - feedback.analyze
+    supported_actions: []
 bounded_claims:
   supported:
     - studio-operations persona census and capability-family contract
-    - approval and escalation semantics for studio-operations activation
-    - registry-backed execution coverage for analytics-reporter (9 actions) and support-responder (8 actions)
-    - deterministic pack-state projection with partial activation
+    - approval and escalation semantics for future studio-operations activation
+    - deterministic blocked-state projection while studio-operations remains contract-only
   unsupported:
-    - claims that finance-tracker, infrastructure-maintainer, or legal-compliance-checker are action-backed
-    - live finance, compliance, or infrastructure mutations beyond later activation acts
+    - claims that studio-operations personas are currently action-backed
+    - live finance, compliance, infrastructure, or support mutations beyond later activation acts
     - HR, design, or engineering work outside the studio-operations contract

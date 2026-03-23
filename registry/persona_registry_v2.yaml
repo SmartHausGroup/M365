@@ -7,10 +7,10 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  active_personas: 10
-  planned_personas: 29
-  registry_backed_personas: 10
-  persona_contract_only_personas: 29
+  active_personas: 4
+  planned_personas: 35
+  registry_backed_personas: 4
+  persona_contract_only_personas: 35
 required_fields:
 - persona_id
 - canonical_agent
@@ -89,30 +89,19 @@ personas:
     - dashboard and report generation
     - metric review
     - reporting pack creation
-    allowed_actions:
-    - reports.users_active
-    - reports.email_activity
-    - reports.teams_activity
-    - reports.sharepoint_usage
-    - reports.onedrive_usage
-    - sites.list
-    - lists.list
-    - lists.get
-    - lists.items
-    allowed_domains:
-    - reports
-    - sharepoint
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - amanda foster
     - amanda-foster
     - analytics-reporter
-    action_count: 9
+    action_count: 0
     workload_families:
     - Low-code, workflow, and analytics
     - Knowledge, search, and employee experience
@@ -134,28 +123,19 @@ personas:
     - API validation
     - service certification
     - regression execution
-    allowed_actions:
-    - health.overview
-    - health.issues
-    - health.issue_get
-    - reports.users_active
-    - reports.email_activity
-    - reports.teams_activity
-    - reports.sharepoint_usage
-    - reports.onedrive_usage
-    allowed_domains:
-    - reports
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:testing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - api-tester
     - nina shah
     - nina-shah
-    action_count: 8
+    action_count: 0
     workload_families:
     - Low-code, workflow, and analytics
     - Tasks, scheduling, and work management
@@ -211,34 +191,19 @@ personas:
     - service architecture and integration contracts
     - API and data-model design
     - governance-aware backend change planning
-    allowed_actions:
-    - apps.list
-    - apps.get
-    - service_principals.list
-    - sites.list
-    - sites.get
-    - lists.list
-    - lists.get
-    - lists.items
-    - lists.create_item
-    - files.list
-    - files.get
-    - files.search
-    - drives.list
-    allowed_domains:
-    - directory
-    - sharepoint
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - backend-architect
     - jordan kim
     - jordan-kim
-    action_count: 13
+    action_count: 0
     workload_families:
     - Low-code, workflow, and analytics
     - Identity, directory, and tenant administration
@@ -328,31 +293,19 @@ personas:
     - environment automation
     - CI/CD orchestration
     - infrastructure and release automation
-    allowed_actions:
-    - devices.list
-    - devices.get
-    - devices.compliance
-    - health.overview
-    - health.issues
-    - health.issue_get
-    - health.messages
-    - reports.users_active
-    - reports.email_activity
-    - reports.teams_activity
-    allowed_domains:
-    - devices
-    - reports
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - casey johnson
     - casey-johnson
     - devops-automator
-    action_count: 10
+    action_count: 0
     workload_families:
     - Devices, endpoint management, and adjacent Windows admin surfaces
     - Low-code, workflow, and analytics
@@ -878,30 +831,19 @@ personas:
     - release coordination
     - handoff orchestration
     - launch checklist management
-    allowed_actions:
-    - list_plans
-    - list_buckets
-    - create_bucket
-    - create_task
-    - task.create
-    - task.assign
-    - deadline.track
-    - status.update
-    - report.generate
-    allowed_domains:
-    - collaboration
-    - workmanagement
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:project-management
     approval_profile: medium-operational
     risk_tier: low
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - ben foster
     - ben-foster
     - project-shipper
-    action_count: 9
+    action_count: 0
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1059,28 +1001,19 @@ personas:
     - support triage
     - response drafting
     - case coordination
-    allowed_actions:
-    - mail.list
-    - mail.read
-    - mail.send
-    - mail.reply
-    - mail.folders
-    - client.follow-up
-    - satisfaction.survey
-    - feedback.analyze
-    allowed_domains:
-    - messaging
+    allowed_actions: []
+    allowed_domains: []
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: registry-backed
-    status: active
+    coverage_status: persona-contract-only
+    status: planned
     external_presence_policy: internal_only
     aliases:
     - mike rodriguez
     - mike-rodriguez
     - support-responder
-    action_count: 8
+    action_count: 0
     workload_families:
     - Mail, calendar, contacts, and bookings
     - Knowledge, search, and employee experience

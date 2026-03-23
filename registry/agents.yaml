@@ -458,42 +458,13 @@ agents:
     name: "Backend Architect"
     department: "engineering"
     risk_tier: "medium"
-    allowed_actions:
-      - "apps.list"
-      - "apps.get"
-      - "service_principals.list"
-      - "sites.list"
-      - "sites.get"
-      - "lists.list"
-      - "lists.get"
-      - "lists.items"
-      - "lists.create_item"
-      - "files.list"
-      - "files.get"
-      - "files.search"
-      - "drives.list"
-    approval_rules:
-      - action: "lists.create_item"
-        approvers: ["department-owner:engineering"]
+    allowed_actions: []
 
   devops-automator:
     name: "DevOps Automator"
     department: "engineering"
     risk_tier: "medium"
-    allowed_actions:
-      - "devices.list"
-      - "devices.get"
-      - "devices.compliance"
-      - "health.overview"
-      - "health.issues"
-      - "health.issue_get"
-      - "health.messages"
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-    approval_rules:
-      - action: "devices.compliance"
-        approvers: ["department-owner:engineering"]
+    allowed_actions: []
 
   frontend-developer:
     name: "Frontend Developer"
@@ -592,20 +563,7 @@ agents:
     name: "Project Shipper"
     department: "project-management"
     risk_tier: "low"
-    allowed_actions:
-      - "list_plans"
-      - "list_buckets"
-      - "create_bucket"
-      - "create_task"
-      - "task.create"
-      - "task.assign"
-      - "deadline.track"
-      - "status.update"
-      - "report.generate"
-    approval_rules:
-      - action: "task.assign"
-        condition: "estimated_hours > 40 OR priority == 'critical'"
-        approvers: ["department-owner:project-management"]
+    allowed_actions: []
 
   studio-producer:
     name: "Studio Producer"
@@ -618,16 +576,7 @@ agents:
     name: "Analytics Reporter"
     department: "studio-operations"
     risk_tier: "low"
-    allowed_actions:
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-      - "reports.sharepoint_usage"
-      - "reports.onedrive_usage"
-      - "sites.list"
-      - "lists.list"
-      - "lists.get"
-      - "lists.items"
+    allowed_actions: []
 
   finance-tracker:
     name: "Finance Tracker"
@@ -651,34 +600,14 @@ agents:
     name: "Support Responder"
     department: "studio-operations"
     risk_tier: "low"
-    allowed_actions:
-      - "mail.list"
-      - "mail.read"
-      - "mail.send"
-      - "mail.reply"
-      - "mail.folders"
-      - "client.follow-up"
-      - "satisfaction.survey"
-      - "feedback.analyze"
-    approval_rules:
-      - action: "mail.send"
-        condition: "priority == 'high' OR contains_sensitive_info == true"
-        approvers: ["department-owner:studio-operations"]
+    allowed_actions: []
 
   # Testing Department (5)
   api-tester:
     name: "API Tester"
     department: "testing"
     risk_tier: "low"
-    allowed_actions:
-      - "health.overview"
-      - "health.issues"
-      - "health.issue_get"
-      - "reports.users_active"
-      - "reports.email_activity"
-      - "reports.teams_activity"
-      - "reports.sharepoint_usage"
-      - "reports.onedrive_usage"
+    allowed_actions: []
 
   performance-benchmarker:
     name: "Performance Benchmarker"

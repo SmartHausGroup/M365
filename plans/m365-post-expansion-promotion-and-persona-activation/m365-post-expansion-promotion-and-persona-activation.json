@@ -95,16 +95,12 @@
         "phase": "P2A",
         "date": "2026-03-22",
         "summary": "Activation definition locked (6-point runtime state change), first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B foundation, P2C growth/experience, P2D specialist/regulated, P2E certification closeout, fail-closed), commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0-C10). Gate GO."
-      },
-      {
-        "phase": "P2B",
-        "date": "2026-03-23",
-        "summary": "Foundation operators activated: backend-architect (13 actions), devops-automator (10), api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8). Total 57 new actions across 4 departments. All pass 6-point activation test. L73 lemma, scorecard green, 25 tests passed, 4 CI verifiers passed. Registry-backed personas: 10/39."
       }
     ],
-    "in_progress": "P2C",
-    "next_act": "P2C",
+    "in_progress": "P2B",
+    "next_act": "P2B",
     "prepared_blocked": [
+      "P2C",
       "P2D",
       "P2E"
     ]
@@ -207,13 +203,13 @@
         {
           "act": "P2B",
           "title": "Foundation operators activation",
-          "status": "Complete",
+          "status": "Active",
           "goal": "Activate the build, release, QA, reporting, and support personas that make the rest of the workforce operable."
         },
         {
           "act": "P2C",
           "title": "Commercial growth and experience activation",
-          "status": "Active",
+          "status": "Pending",
           "goal": "Activate the next wave of product, design, and growth personas that strengthen the external commercial story."
         },
         {

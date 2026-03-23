@@ -11,17 +11,17 @@ department:
   display_name: Engineering
   wave: W6
   wave_track: Wave A
-  status: partial-activation
+  status: persona-contract-only
   purpose: >-
     Package the Engineering digital employees into one bounded department
-    pack. Backend-architect and devops-automator are now registry-backed
-    foundation operators; the remaining five personas are defined but not yet
+    contract covering service architecture, automation, prototyping, frontend,
+    mobile, and testing responsibilities that are defined but not yet
     action-backed.
   bounded_claim: >-
-    The Engineering department pack may claim registry-backed execution
-    coverage for backend-architect (13 actions) and devops-automator (10
-    actions) only. The remaining five personas retain contract-only status
-    until later activation acts.
+    The Engineering department pack may only claim the authoritative contract
+    personas, capability families, and governance posture declared here. It may
+    not claim implemented execution coverage until later acts activate those
+    personas.
 workflow_families:
   - architecture_and_integration_design
   - automation_and_release_engineering
@@ -67,10 +67,10 @@ approval_model:
         mode until later acts activate their bounded action surfaces.
 kpis:
   required_personas: 7
-  required_active_personas: 2
-  required_registry_backed_personas: 2
+  required_active_personas: 0
+  required_registry_backed_personas: 0
   required_workflow_families: 4
-  supported_action_count: 23
+  supported_action_count: 0
 personas:
   ai-engineer:
     display_name: Alex Thompson
@@ -95,7 +95,7 @@ personas:
     display_name: Jordan Kim
     title: Principal Backend Engineer
     role_type: architecture_anchor
-    coverage_status: registry-backed
+    coverage_status: persona-contract-only
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
@@ -108,25 +108,12 @@ personas:
       - Content, intranet, and files
     workflow_families:
       - architecture_and_integration_design
-    supported_actions:
-      - apps.list
-      - apps.get
-      - service_principals.list
-      - sites.list
-      - sites.get
-      - lists.list
-      - lists.get
-      - lists.items
-      - lists.create_item
-      - files.list
-      - files.get
-      - files.search
-      - drives.list
+    supported_actions: []
   devops-automator:
     display_name: Casey Johnson
     title: DevOps Engineer
     role_type: automation_operator
-    coverage_status: registry-backed
+    coverage_status: persona-contract-only
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
@@ -139,17 +126,7 @@ personas:
       - Security, compliance, and data governance
     workflow_families:
       - automation_and_release_engineering
-    supported_actions:
-      - devices.list
-      - devices.get
-      - devices.compliance
-      - health.overview
-      - health.issues
-      - health.issue_get
-      - health.messages
-      - reports.users_active
-      - reports.email_activity
-      - reports.teams_activity
+    supported_actions: []
   frontend-developer:
     display_name: Riley Martinez
     title: UI/UX Developer

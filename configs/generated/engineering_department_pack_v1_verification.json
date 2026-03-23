@@ -1,5 +1,5 @@
 {
-  "active_persona_count": 2,
+  "active_persona_count": 0,
   "department": "engineering",
   "pack_state": "blocked",
   "persona_count": 7,
@@ -13,17 +13,17 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 13,
-      "coverage_status": "registry-backed",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
       "persona_id": "backend-architect",
-      "status": "active"
+      "status": "planned"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 10,
-      "coverage_status": "registry-backed",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
       "persona_id": "devops-automator",
-      "status": "active"
+      "status": "planned"
     },
     {
       "accountability_state": "on_track",
@@ -54,8 +54,8 @@
       "status": "planned"
     }
   ],
-  "registry_backed_persona_count": 2,
-  "supported_action_count": 23,
+  "registry_backed_persona_count": 0,
+  "supported_action_count": 0,
   "workflow_family_count": 4,
   "workload_family_count": 7
 }

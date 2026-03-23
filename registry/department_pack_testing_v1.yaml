@@ -11,15 +11,18 @@ department:
   display_name: Testing
   wave: W7
   wave_track: Wave A
-  status: partial-activation
+  status: persona-contract-only
   purpose: >-
-    Package the Testing digital employees into one bounded department pack.
-    Api-tester is now a registry-backed foundation operator; the remaining
-    four personas are defined but not yet action-backed.
+    Package the Testing digital employees into one bounded department contract
+    covering QA automation, performance benchmarking, test analysis, tool
+    evaluation, and workflow optimization responsibilities that are defined but
+    not yet action-backed.
   bounded_claim: >-
-    The Testing department pack may claim registry-backed execution coverage
-    for api-tester (8 actions) only. The remaining four personas retain
-    contract-only status until later activation acts.
+    The Testing department pack may only claim the authoritative contract
+    personas, capability families, approval posture, and blocked readiness
+    state declared here. It may not claim implemented QA, benchmarking,
+    analysis, or optimization execution coverage until later acts activate
+    those personas.
 workflow_families:
   - qa_automation_and_regression
   - performance_measurement_and_benchmarking
@@ -62,16 +65,16 @@ approval_model:
         Testing execution surfaces.
 kpis:
   required_personas: 5
-  required_active_personas: 1
-  required_registry_backed_personas: 1
+  required_active_personas: 0
+  required_registry_backed_personas: 0
   required_workflow_families: 4
-  supported_action_count: 8
+  supported_action_count: 0
 personas:
   api-tester:
     display_name: Nina Shah
     title: QA Automation Lead
     role_type: qa_operator
-    coverage_status: registry-backed
+    coverage_status: persona-contract-only
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -84,15 +87,7 @@ personas:
       - Knowledge, search, and employee experience
     workflow_families:
       - qa_automation_and_regression
-    supported_actions:
-      - health.overview
-      - health.issues
-      - health.issue_get
-      - reports.users_active
-      - reports.email_activity
-      - reports.teams_activity
-      - reports.sharepoint_usage
-      - reports.onedrive_usage
+    supported_actions: []
   performance-benchmarker:
     display_name: Omar Haddad
     title: Performance Engineer

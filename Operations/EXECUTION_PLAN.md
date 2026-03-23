@@ -247,8 +247,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — foundation operators activated (10/39 personas now registry-backed), and the commercial growth and experience activation program is now the active critical path.
-**Current next act:** `P2C` — commercial growth and experience activation.
+**Status:** 🟢 Active — the closed workforce-expansion program is promoted cleanly across `development`, `staging`, and `main`, the activation contract is locked, and the foundation-operators activation program is now the active critical path.
+**Current next act:** `P2B` — foundation operators activation.
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
@@ -256,9 +256,7 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-03-21 13:52 EDT):** `P1A` through `P1C` are complete. The branch-promotion track is closed without divergence. Branches subsequently advanced to `f967ef6` after the P1 closeout commit.
 
-**Status update (2026-03-22):** `P2A` is complete. Activation definition locked (6-point runtime state change: registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B → P2C → P2D → P2E (fail-closed). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO.
-
-**Status update (2026-03-23):** `P2B` is complete. 6 foundation operators activated: backend-architect (13 actions), devops-automator (10), api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8). Total 57 new actions across 4 departments (engineering, testing, studio-operations, project-management). All pass the 6-point activation test. L73 lemma, scorecard green, 25 tests passed, 4 CI verifiers passed. Registry-backed personas: 10/39. `P2C` is now the active next act but has NOT been started.
+**Status update (2026-03-22):** `P2A` is complete. Activation definition locked (6-point runtime state change: registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B → P2C → P2D → P2E (fail-closed). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO. `P2B` is now the active next act but has NOT been started.
 
 ---
 
@@ -322,23 +320,6 @@ outside this repo slice.
 **Historical lineage:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md` remains for traceability but is now absorbed and no longer the active execution plan.
 
 **Prompt artifacts:** master prompt pair plus full act-level MATHS prompt inventory under `docs/prompts/`
-
----
-
-## Initiative: UCP Live Activation Repair
-
-**Initiative:** Repair the live Claude -> UCP -> M365 activation path so activation admission, session-state, and first-hop M365 execution remain truthful and consistent across the real runtime surface.
-
-**Plan:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md`
-
-**Reference:** `plan:m365-ucp-live-activation-repair:R1`
-
-**Status:** 🟢 Active — this bounded repair slice addresses the post-certification live regression where `m365_*` tools are visible but `activate_session` is blocked by `policy_pack`, which then cascades into `session_not_activated` for real M365 actions.
-**Current next act:** `P0A` — baseline capture and repair intent lock.
-
-**Status update (2026-03-23 10:59 EDT):** The repair plan and prompt pair are now created. Baseline truth is locked: the live server reports `m365_pack` enabled, fresh MCP sessions list `m365_action` and `m365_sites`, `activate_session(confirm=true)` is rejected by `policy_pack`, and the blocked activation state cascades into `session_not_activated` for `m365_sites sites.root` and `m365_action directory.org`. The next implementation acts are `P1A` activation admission repair, `P1B` session-state projection repair, `P2A` stdio/HTTP tool-surface parity, and `P3A`/`P3B` live reproof.
-
-**Prompt artifacts:** `docs/prompts/codex-m365-ucp-live-activation-repair.md`, `docs/prompts/codex-m365-ucp-live-activation-repair-prompt.txt`
 
 ---
 
