@@ -1,0 +1,9 @@
+Execute M365 Token Provider Path Diagnosis
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-token-provider-path-diagnosis.md.
+
+Plan Reference: plan:m365-token-provider-path-diagnosis:R1
+
+P2A ownership boundary: credential-source/auth-mode/provider-path truth ONLY. Do not repair runtime/bootstrap/dependency/health issues (P1A scope). If the blocker is P1A-scoped, reopen P1A and stop.
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only this phase, and do not auto-advance to the next phase.

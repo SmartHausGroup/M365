@@ -351,6 +351,53 @@ outside this repo slice.
 
 ---
 
+## Initiative: M365 Repo — UCP Live Activation Repair
+
+**Initiative:** Repair the live activation path so a user-approved Claude/Codex MCP session can activate truthfully, admit governed tools consistently, and execute real M365 actions.
+
+**Plan:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md`
+
+**Reference:** `plan:m365-ucp-live-activation-repair:R1`
+
+**Status:** 🟢 Active — planning authority established. Implementation targets the sibling UCP repo; this M365 artifact is the planning/governance authority only.
+
+**Prompt artifacts:** pending per-phase prompt creation
+
+---
+
+## Initiative: M365 Service-Mode Token Acquisition Remediation
+
+**Initiative:** Move the remaining service-runtime, token-acquisition, and downstream Microsoft-classification work into a single M365-governed execution program with strict phase sequencing and explicit approval gates.
+
+**Plan:** `plans/m365-service-mode-token-acquisition-remediation/m365-service-mode-token-acquisition-remediation.md`
+
+**Reference:** `plan:m365-service-mode-token-acquisition-remediation:R1`
+
+**Status:** 🟢 Active — parent initiative is active with P0A as the current next act. All 6 child phases (P0A through P5A) start in **Draft** and transition to Active only after their predecessor gate is green and the operator presents the approval packet and receives "go". No child phase may auto-advance.
+
+**Canonical predecessor:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md` (M365-local). The sibling UCP repo is historical implementation lineage only.
+
+**Phase ownership boundaries:**
+- **P1A** owns local runtime/bootstrap/dependency/env/health truth only.
+- **P2A** owns credential-source/auth-mode/provider-path truth only.
+- If evidence shows the issue belongs to the other phase's domain, the current phase must stop (NO-GO) or reopen the correct phase rather than drift scope.
+
+**Closure authority:**
+- **P4A** only classifies live token acquisition and decides advance-or-reopen.
+- **P5A** alone may issue the final remediation GO/NO-GO after live `sites.root` and `directory.org` acceptance evidence.
+
+**Prompt artifacts:** parent coordination prompt pair under `docs/prompts/codex-m365-service-mode-token-acquisition-remediation*` plus full MATHS prompt pairs for all 6 child phases under `docs/prompts/codex-m365-service-runtime-authority-and-baseline-lock*`, `codex-m365-service-runtime-readiness-and-health*`, `codex-m365-token-provider-path-diagnosis*`, `codex-m365-token-provider-runtime-repair*`, `codex-m365-live-token-acquisition-classification*`, `codex-m365-service-mode-end-to-end-acceptance*`
+
+**Status update (2026-03-23 21:18 EDT):** Applied a bounded M365-side token-provider/runtime repair in `src/ops_adapter/actions.py` so tenant-aware provider init and acquisition failures no longer fall through to generic `credentials_missing`. The runtime now surfaces truthful local classes (`tenant_config_missing`, `tenant_config_invalid`, `auth_configuration_error`, `token_provider_init_failed`, `token_provider_failed`) while preserving legacy env-var fallback only when no tenant-aware context is active. Added focused regressions in `tests/test_ops_adapter.py`; targeted token-path tests are green and `tests/test_auth_model_v2.py` remains green.
+
+**Status update (2026-03-23 21:18 EDT):** Validation exposed runtime-environment drift that belongs to the readiness boundary: the system Python used by `/opt/homebrew/bin/pytest` lacks `msal`, while the repo `.venv` has `msal` but a pyproject-built environment was missing declared runtime packages required by the ops adapter. `pyproject.toml` has been aligned with `requirements.txt` for `PyJWT[crypto]`, `PyYAML`, `prometheus-client`, and `aiofiles`, and upgraded to `uvicorn[standard]`. The next dependency boundary is truthful P1A runtime readiness under the intended interpreter, then live token classification.
+
+**Status update (2026-03-23 21:50 EDT):** The M365-side service-mode runtime/token blocker is now repaired in the intended system runtime. `src/m365_server/__main__.py` now bootstraps `UCP_TENANT` from the local tenant catalog when the service starts without an explicit tenant; `src/smarthaus_graph/client.py` now supports direct app-only certificate assertions and retry behavior without requiring `msal` or `tenacity`; and the tenant-aware certificate path now correctly wins over invalid env secrets when both are present. Added bounded regressions in `tests/test_graph_client.py` and `tests/test_m365_server_main.py`. Live proof passed under `python3` with no manual tenant selection: the service bootstrapped `UCP_TENANT=smarthaus`, routed `sites.root` through the `sharepoint` executor and `directory.org` through the `directory` executor, and both live Graph reads returned success. The remaining work after this repair is governance phase-closeout and any broader environment packaging follow-through, not M365 token acquisition failure.
+
+**Cross-repo dependency truth:** M365 remains the authority for the service-runtime and token-path initiative in this repo. The sibling UCP repo keeps only the consumer-side `plan:ucp-m365-token-acquisition-validation` and `plan:ucp-m365-service-mode-end-to-end-acceptance` acts after the M365-side runtime path is green in the intended launch posture.
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.

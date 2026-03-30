@@ -15,23 +15,123 @@ Auth modes:
 
 from __future__ import annotations
 
+import base64
+import json
 import os
 import re
 import time
+import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
+from functools import wraps
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 from urllib.parse import quote
 
 import httpx
 from cryptography import x509
-from cryptography.hazmat.primitives import hashes
-from msal import ConfidentialClientApplication, PublicClientApplication, SerializableTokenCache
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding
 from smarthaus_common.config import AppConfig
 from smarthaus_common.errors import AuthConfigurationError, GraphRequestError
 from smarthaus_common.logging import get_logger
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
-from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+
+try:
+    from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
+except ImportError:
+    F = TypeVar("F", bound=Callable[..., Any])
+
+    class _WaitExponential:
+        def __init__(self, *, multiplier: float, min: float, max: float):
+            self.multiplier = multiplier
+            self.min = min
+            self.max = max
+
+        def delay(self, attempt: int) -> float:
+            computed = self.multiplier * (2 ** max(0, attempt - 1))
+            return min(self.max, max(self.min, computed))
+
+    def retry_if_exception_type(exc_type: type[BaseException]) -> tuple[type[BaseException], ...]:
+        return (exc_type,)
+
+    def wait_exponential(*, multiplier: float, min: float, max: float) -> _WaitExponential:
+        return _WaitExponential(multiplier=multiplier, min=min, max=max)
+
+    def stop_after_attempt(attempts: int) -> int:
+        return attempts
+
+    def retry(
+        *, retry: tuple[type[BaseException], ...], wait: _WaitExponential, stop: int, reraise: bool
+    ) -> Callable[[F], F]:
+        exc_types = retry
+        max_attempts = int(stop)
+
+        def decorator(func: F) -> F:
+            @wraps(func)
+            def wrapped(*args: Any, **kwargs: Any) -> Any:
+                last_error: BaseException | None = None
+                for attempt in range(1, max_attempts + 1):
+                    try:
+                        return func(*args, **kwargs)
+                    except exc_types as exc:  # pragma: no cover - exercised in live runtime
+                        last_error = exc
+                        if attempt >= max_attempts:
+                            if reraise:
+                                raise
+                            raise exc
+                        time.sleep(wait.delay(attempt))
+                if last_error is not None:
+                    raise last_error
+                return func(*args, **kwargs)
+
+            return wrapped  # type: ignore[return-value]
+
+        return decorator
+
+
+try:
+    from msal import (
+        ConfidentialClientApplication,
+        PublicClientApplication,
+    )
+    from msal import (
+        SerializableTokenCache as MsalSerializableTokenCache,
+    )
+
+    _MSAL_IMPORT_ERROR: ImportError | None = None
+except ImportError as exc:
+    ConfidentialClientApplication = None
+    PublicClientApplication = None
+    _MSAL_IMPORT_ERROR = exc
+
+    class _FallbackSerializableTokenCache:
+        """Minimal fallback so app-only token flow can run without msal installed."""
+
+        has_state_changed = False
+
+        def deserialize(self, _state: str) -> None:
+            return None
+
+        def serialize(self) -> str:
+            return "{}"
+
+        def add(self, _event: dict[str, Any], **_kwargs: Any) -> None:
+            return None
+
+        def modify(
+            self,
+            _credential_type: str,
+            _old_entry: dict[str, Any],
+            _new_key_value_pairs: dict[str, Any] | None = None,
+        ) -> None:
+            return None
+
+        def remove(self, _credential_type: str, _target: dict[str, Any]) -> None:
+            return None
+
+    MsalSerializableTokenCache = _FallbackSerializableTokenCache
+
 
 log = get_logger(__name__)
 _PRIVATE_KEY_PATTERN = re.compile(
@@ -86,6 +186,55 @@ def _load_client_certificate_credential(cert_path: str) -> dict[str, Any]:
     }
 
 
+def _base64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
+
+
+def _build_client_assertion(
+    *,
+    cert_credential: dict[str, Any],
+    client_id: str,
+    token_url: str,
+) -> str:
+    private_key_pem = cert_credential.get("private_key")
+    thumbprint = cert_credential.get("thumbprint")
+    if not private_key_pem or not thumbprint:
+        raise AuthConfigurationError(
+            "Direct certificate app auth requires a PEM certificate containing a private key."
+        )
+
+    private_key = serialization.load_pem_private_key(
+        private_key_pem.encode("utf-8"),
+        password=None,
+    )
+    now = int(time.time())
+    header = {
+        "alg": "RS256",
+        "typ": "JWT",
+        "x5t": _base64url_encode(bytes.fromhex(str(thumbprint))),
+    }
+    payload = {
+        "aud": token_url,
+        "iss": client_id,
+        "sub": client_id,
+        "jti": str(uuid.uuid4()),
+        "nbf": now - 60,
+        "exp": now + 600,
+    }
+    signing_input = ".".join(
+        [
+            _base64url_encode(json.dumps(header, separators=(",", ":")).encode("utf-8")),
+            _base64url_encode(json.dumps(payload, separators=(",", ":")).encode("utf-8")),
+        ]
+    )
+    signature = private_key.sign(
+        signing_input.encode("ascii"),
+        padding.PKCS1v15(),
+        hashes.SHA256(),
+    )
+    return f"{signing_input}.{_base64url_encode(signature)}"
+
+
 # ---------------------------------------------------------------------------
 # Token wrapper
 # ---------------------------------------------------------------------------
@@ -106,7 +255,7 @@ class Token:
 # ---------------------------------------------------------------------------
 
 
-class PersistentTokenCache(SerializableTokenCache):
+class PersistentTokenCache(MsalSerializableTokenCache):
     """MSAL token cache that persists to disk.
 
     Token cache files are per-tenant and stored in ~/.ucp/tokens/.
@@ -183,7 +332,69 @@ class GraphTokenProvider:
 
     # --- App-only (client credentials) ---
 
+    def _acquire_app_token_direct(self, scope: str) -> Token:
+        cfg = self._tenant_config.azure
+        if not (cfg.tenant_id and cfg.client_id):
+            raise AuthConfigurationError(
+                "Tenant config missing azure.tenant_id and/or azure.client_id. "
+                "Set these in your tenant YAML or via environment variables."
+            )
+
+        token_url = f"https://login.microsoftonline.com/{cfg.tenant_id}/oauth2/v2.0/token"
+        request_data: dict[str, str] = {
+            "client_id": cfg.client_id,
+            "grant_type": "client_credentials",
+            "scope": scope,
+        }
+        if cfg.client_certificate_path and os.path.exists(cfg.client_certificate_path):
+            cert_credential = _load_client_certificate_credential(cfg.client_certificate_path)
+            request_data["client_assertion_type"] = (
+                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+            )
+            request_data["client_assertion"] = _build_client_assertion(
+                cert_credential=cert_credential,
+                client_id=cfg.client_id,
+                token_url=token_url,
+            )
+        elif cfg.client_certificate_path:
+            raise AuthConfigurationError(
+                "Tenant config certificate path does not exist. "
+                "Set azure.client_certificate_path to a readable PEM file."
+            )
+        elif cfg.client_secret:
+            request_data["client_secret"] = cfg.client_secret
+        else:
+            raise AuthConfigurationError(
+                "Tenant config missing azure.client_secret or azure.client_certificate_path. "
+                "Set these in your tenant YAML or via environment variables."
+            )
+
+        with httpx.Client(timeout=30.0) as client:
+            response = client.post(token_url, data=request_data)
+
+        try:
+            payload = response.json()
+        except ValueError:
+            payload = {}
+
+        if response.status_code >= 400 or "access_token" not in payload:
+            raise AuthConfigurationError(
+                f"Failed to acquire app token: "
+                f"{payload.get('error_description') or response.text or response.reason_phrase}"
+            )
+
+        return Token(
+            access_token=payload["access_token"],
+            expires_at=time.time() + int(payload.get("expires_in", 3600)),
+            auth_mode="app_only",
+        )
+
     def _ensure_cca(self) -> ConfidentialClientApplication:
+        if ConfidentialClientApplication is None:
+            raise AuthConfigurationError(
+                "App-only auth via msal is unavailable in this runtime. "
+                "Install msal or use client-secret direct app-only fallback."
+            )
         if self._cca is not None:
             return self._cca
 
@@ -219,8 +430,13 @@ class GraphTokenProvider:
         if self._app_token and self._app_token.valid():
             return self._app_token.access_token
 
-        cca = self._ensure_cca()
         scopes = [self._tenant_config.auth.app_only.scope]
+
+        if ConfidentialClientApplication is None:
+            self._app_token = self._acquire_app_token_direct(scopes[0])
+            return self._app_token.access_token
+
+        cca = self._ensure_cca()
 
         result = cca.acquire_token_silent(scopes=scopes, account=None)
         if not result:
@@ -240,6 +456,11 @@ class GraphTokenProvider:
     # --- Delegated (device code flow) ---
 
     def _ensure_pca(self) -> PublicClientApplication:
+        if PublicClientApplication is None:
+            raise AuthConfigurationError(
+                "Delegated auth requires msal in this runtime. "
+                "Install msal or use app_only auth mode."
+            ) from _MSAL_IMPORT_ERROR
         if self._pca is not None:
             return self._pca
 

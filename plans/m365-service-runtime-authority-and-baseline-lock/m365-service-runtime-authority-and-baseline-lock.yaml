@@ -1,0 +1,60 @@
+plan_id: m365-service-runtime-authority-and-baseline-lock
+parent_plan_id: m365-service-mode-token-acquisition-remediation
+status: Draft
+date: '2026-03-23'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-service-runtime-authority-and-baseline-lock:R1
+canonical_predecessor: plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md (M365-local artifact; sibling UCP repo is historical implementation lineage only)
+draft_vs_active_semantics: Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before any mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to the next phase
+objective: Lock M365 repo authority for the remaining service-mode/token-acquisition work and freeze the current baseline.
+scope:
+  in:
+    - Publish M365-native authority boundary.
+    - Capture current failure baseline.
+    - Define entry gate for readiness phase.
+  out:
+    - Runtime code changes.
+    - Sibling UCP edits.
+    - Token-provider repair.
+allowlist:
+  - plans/m365-service-runtime-authority-and-baseline-lock/**
+  - docs/commercialization/m365-service-runtime-authority-and-baseline-lock.md
+  - artifacts/diagnostics/m365_service_runtime_authority_and_baseline_lock.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - src/**
+  - tests/**
+  - ../UCP/**
+requirements:
+  - id: R1
+    title: M365 runtime authority lock
+  - id: R2
+    title: Exact baseline capture
+  - id: R3
+    title: Next-phase gate definition
+  - id: R4
+    title: Diagnostic artifact or authority doc
+  - id: R5
+    title: Truthful governance closure
+tasks:
+  - id: T1
+    description: Define M365 runtime authority boundary.
+  - id: T2
+    description: Capture current baseline blocking facts.
+  - id: T3
+    description: Publish authority doc and diagnostics artifact.
+  - id: T4
+    description: Define readiness-phase entry criteria.
+  - id: T5
+    description: Update governance surfaces and stop.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-service-runtime-authority-and-baseline-lock.md
+  kickoff: docs/prompts/codex-m365-service-runtime-authority-and-baseline-lock-prompt.txt

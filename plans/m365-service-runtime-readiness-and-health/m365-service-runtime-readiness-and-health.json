@@ -1,0 +1,57 @@
+{
+  "plan_id": "m365-service-runtime-readiness-and-health",
+  "parent_plan_id": "m365-service-mode-token-acquisition-remediation",
+  "status": "Draft",
+  "date": "2026-03-23",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-service-runtime-readiness-and-health:R1",
+  "draft_vs_active_semantics": "Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft.",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "do not auto-advance to the next phase"
+  ],
+  "ownership_boundary": "local runtime/bootstrap/dependency/env-loading/health truth only; if credential-source/auth-mode/provider-path ownership is proven, stop and hand off to P2A",
+  "objective": "Repair or confirm the local M365 service bootstrap, dependency envelope, and health contract.",
+  "allowlist": [
+    "plans/m365-service-runtime-readiness-and-health/**",
+    "pyproject.toml",
+    "src/m365_server/__main__.py",
+    "src/ops_adapter/main.py",
+    "src/provisioning_api/auth.py",
+    "scripts/check_env_credentials.py",
+    "scripts/monitor-health.sh",
+    "tests/test_api_health.py",
+    "tests/test_ops_adapter.py",
+    "docs/commercialization/m365-service-runtime-readiness-and-health.md",
+    "artifacts/diagnostics/m365_service_runtime_readiness_and_health.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": [
+    "src/ops_adapter/actions.py",
+    "src/smarthaus_graph/client.py",
+    "../UCP/**"
+  ],
+  "requirements": [
+    {"id": "R1", "title": "Supported local runtime envelope"},
+    {"id": "R2", "title": "Truthful health classification"},
+    {"id": "R3", "title": "Explicit env/bootstrap loading"},
+    {"id": "R4", "title": "Focused validation and diagnostics"},
+    {"id": "R5", "title": "Stop if token semantics are still the blocker"}
+  ],
+  "tasks": [
+    {"id": "T1", "description": "Capture Python, deps, env, and health gap."},
+    {"id": "T2", "description": "Repair bootstrap or health contract."},
+    {"id": "T3", "description": "Add readiness tests and diagnostics."},
+    {"id": "T4", "description": "Run readiness gate."},
+    {"id": "T5", "description": "Update governance surfaces and stop."}
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-service-runtime-readiness-and-health.md",
+    "kickoff": "docs/prompts/codex-m365-service-runtime-readiness-and-health-prompt.txt"
+  }
+}

@@ -1,0 +1,52 @@
+plan_id: m365-service-mode-end-to-end-acceptance
+parent_plan_id: m365-service-mode-token-acquisition-remediation
+status: Draft
+date: '2026-03-23'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-service-mode-end-to-end-acceptance:R1
+draft_vs_active_semantics: Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before any mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to the next phase
+closure_authority: sole authority for final remediation GO/NO-GO after live sites.root and directory.org acceptance evidence
+objective: Run final live sites.root and directory.org acceptance and emit GO or NO-GO.
+allowlist:
+  - plans/m365-service-mode-end-to-end-acceptance/**
+  - tests/test_ops_adapter.py
+  - tests/test_graph_client.py
+  - docs/commercialization/m365-service-mode-end-to-end-acceptance.md
+  - artifacts/diagnostics/m365_service_mode_end_to_end_acceptance.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - src/**
+  - ../UCP/**
+requirements:
+  - id: R1
+    title: Repaired service-mode path only
+  - id: R2
+    title: Live sites.root and directory.org proof
+  - id: R3
+    title: Explicit final GO or NO-GO
+  - id: R4
+    title: Truthful downstream Microsoft classification
+  - id: R5
+    title: Governance closeout and operator handoff
+tasks:
+  - id: T1
+    description: Define final acceptance matrix.
+  - id: T2
+    description: Run live sites.root acceptance.
+  - id: T3
+    description: Run live directory.org acceptance and classify result.
+  - id: T4
+    description: Decide final GO or NO-GO.
+  - id: T5
+    description: Update governance surfaces and close initiative.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-service-mode-end-to-end-acceptance.md
+  kickoff: docs/prompts/codex-m365-service-mode-end-to-end-acceptance-prompt.txt

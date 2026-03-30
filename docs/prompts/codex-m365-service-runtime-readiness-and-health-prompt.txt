@@ -1,0 +1,9 @@
+Execute M365 Service Runtime Readiness and Health
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-service-runtime-readiness-and-health.md.
+
+Plan Reference: plan:m365-service-runtime-readiness-and-health:R1
+
+P1A ownership boundary: local runtime/bootstrap/dependency/env/health truth ONLY. Do not diagnose credential-source/auth-mode/provider-path issues (P2A scope). If the blocker is P2A-scoped, emit NO-GO and stop.
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only this phase, and do not auto-advance to the next phase.

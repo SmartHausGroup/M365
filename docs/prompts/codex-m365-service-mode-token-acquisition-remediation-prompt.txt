@@ -1,0 +1,8 @@
+Execute M365 Service-Mode Token Acquisition Remediation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-service-mode-token-acquisition-remediation.md.
+
+Plan Reference: plan:m365-service-mode-token-acquisition-remediation:R1
+
+This is the parent coordination surface only.
+Confirm the current next M365 act, restate the cross-repo M365 versus UCP boundary, present the approval packet, wait for "go", and hand execution to the correct child phase only.

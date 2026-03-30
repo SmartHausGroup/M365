@@ -1,0 +1,52 @@
+{
+  "plan_id": "m365-token-provider-runtime-repair",
+  "parent_plan_id": "m365-service-mode-token-acquisition-remediation",
+  "status": "Draft",
+  "date": "2026-03-23",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-token-provider-runtime-repair:R1",
+  "draft_vs_active_semantics": "Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft.",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "do not auto-advance to the next phase"
+  ],
+  "objective": "Apply the minimal M365-side runtime or token-provider repair identified by diagnosis.",
+  "allowlist": [
+    "plans/m365-token-provider-runtime-repair/**",
+    "pyproject.toml",
+    "src/ops_adapter/actions.py",
+    "src/smarthaus_graph/client.py",
+    "src/smarthaus_common/auth_model.py",
+    "src/provisioning_api/auth.py",
+    "tests/test_ops_adapter.py",
+    "tests/test_graph_client.py",
+    "tests/test_env_loading.py",
+    "docs/commercialization/m365-token-provider-runtime-repair.md",
+    "artifacts/diagnostics/m365_token_provider_runtime_repair.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": ["../UCP/**", "registry/**"],
+  "requirements": [
+    {"id": "R1", "title": "Fix diagnosed token-provider/runtime defect"},
+    {"id": "R2", "title": "Preserve fail-closed behavior"},
+    {"id": "R3", "title": "Focused regression proof"},
+    {"id": "R4", "title": "Preserve truthful Microsoft-side failures"},
+    {"id": "R5", "title": "Stop at live-classification boundary"}
+  ],
+  "tasks": [
+    {"id": "T1", "description": "Restate root cause from diagnosis phase."},
+    {"id": "T2", "description": "Implement bounded runtime/auth repair."},
+    {"id": "T3", "description": "Add focused regression tests and diagnostics."},
+    {"id": "T4", "description": "Run repair gate."},
+    {"id": "T5", "description": "Update governance surfaces and stop."}
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+    "kickoff": "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt"
+  }
+}

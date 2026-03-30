@@ -1,0 +1,7 @@
+Execute UCP Live Activation Repair
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-ucp-live-activation-repair.md.
+
+Plan Reference: plan:m365-ucp-live-activation-repair:R1
+
+You are approved to execute only the live activation repair slice. Repair activation admission first, then reprove sites.root and directory.org on the live Claude -> UCP -> M365 path without masking downstream Graph permission truth.
