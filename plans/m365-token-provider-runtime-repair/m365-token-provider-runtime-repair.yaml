@@ -2,7 +2,7 @@ plan_id: "plan:m365-token-provider-runtime-repair"
 parent_plan_id: "plan:m365-service-mode-token-acquisition-remediation"
 title: "Repair the M365 service-auth/runtime boundary in the active repair path"
 version: "2.0"
-status: draft
+status: blocked
 owner: "SMARTHAUS"
 date_created: "2026-03-23"
 date_updated: "2026-03-31"
@@ -402,11 +402,36 @@ governance_closure:
   completion_rule: "Do not mark the phase complete until governance surfaces, diagnostics, and plan artifacts are synchronized."
 
 execution_outcome:
-  task_checklist: []
-  gate_checklist: []
-  final_decision: null
-  approved_by: null
-  completion_timestamp: null
+  task_checklist:
+    - task_id: "T1"
+      complete: true
+      evidence: "docs/commercialization/m365-token-provider-runtime-repair.md locks the root cause to the local M365 JWT gate and the sibling UCP caller contract mismatch."
+    - task_id: "T2"
+      complete: false
+      evidence: "No bounded M365-only repair can satisfy the contract without weakening JWT-backed actor identity because the sibling UCP caller still sends no bearer token."
+    - task_id: "T3"
+      complete: true
+      evidence: "artifacts/diagnostics/m365_token_provider_runtime_repair.json records the bounded failure classification and preserved truth boundary."
+    - task_id: "T4"
+      complete: true
+      evidence: "The phase decision is NO-GO before live classification."
+    - task_id: "T5"
+      complete: true
+      evidence: "Operations/ACTION_LOG.md, Operations/EXECUTION_PLAN.md, and Operations/PROJECT_FILE_INDEX.md were synchronized without auto-advancing the next act."
+  gate_checklist:
+    - gate_id: "CHECK:C0"
+      result: "pass"
+    - gate_id: "CHECK:C1"
+      result: "pass"
+    - gate_id: "CHECK:C2"
+      result: null
+    - gate_id: "CHECK:C3"
+      result: "pass"
+    - gate_id: "CHECK:C4"
+      result: "pass"
+  final_decision: "NO-GO"
+  approved_by: "user_go"
+  completion_timestamp: "2026-03-31 09:49:39 EDT"
 
 when_blocked:
   format: "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}"

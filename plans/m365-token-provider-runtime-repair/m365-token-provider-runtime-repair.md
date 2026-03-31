@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `plan:m365-service-mode-token-acquisition-remediation`
 - **Title:** `Repair the M365 service-auth/runtime boundary in the active repair path`
 - **Version:** `2.0`
-- **Status:** `draft`
+- **Status:** `blocked`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-03-23`
 - **Date Updated:** `2026-03-31`
@@ -243,11 +243,21 @@ Agent must STOP and re-scope if the repair requires UCP-side caller changes, Mic
 
 ## Section 19: Execution Outcome
 
-- **Task checklist:** `pending`
-- **Gate checklist:** `pending`
-- **Final decision:** `pending`
-- **Approved by:** `pending`
-- **Completion timestamp:** `pending`
+- **Task checklist:**
+  - `T1 complete — root cause locked to the local M365 JWT gate and sibling UCP caller mismatch`
+  - `T2 blocked — no bounded M365-only repair can satisfy the contract without weakening JWT-backed actor identity`
+  - `T3 complete — diagnostics recorded`
+  - `T4 complete — decision locked as NO-GO before live classification`
+  - `T5 complete — governance synchronized without auto-advancing the next act`
+- **Gate checklist:**
+  - `CHECK:C0 pass`
+  - `CHECK:C1 pass`
+  - `CHECK:C2 not_applicable`
+  - `CHECK:C3 pass`
+  - `CHECK:C4 pending_validation`
+- **Final decision:** `NO-GO`
+- **Approved by:** `user_go`
+- **Completion timestamp:** `2026-03-31 09:49:39 EDT`
 
 ## Section 20: When Blocked
 

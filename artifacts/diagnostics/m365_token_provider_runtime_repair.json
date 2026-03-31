@@ -1,0 +1,41 @@
+{
+  "plan_ref": "plan:m365-token-provider-runtime-repair",
+  "parent_plan_ref": "plan:m365-service-mode-token-acquisition-remediation",
+  "observed_at_local": "2026-03-31 09:49:39 EDT",
+  "branch": "codex/m365-token-acquisition-validation",
+  "decision": "NO-GO",
+  "status": "blocked",
+  "truth_boundary": "The M365 service remains fail-closed at the JWT gate because the sibling UCP HTTP caller does not send a bearer token on /actions/*.",
+  "m365_service_contract": {
+    "path": "src/ops_adapter/main.py",
+    "required_auth_header": "Authorization: Bearer <token>",
+    "accepted_validation_modes": [
+      "HS256 shared secret",
+      "issuer + audience + JWKS"
+    ],
+    "preserved_fail_closed_errors": [
+      "missing_bearer_token",
+      "invalid_token_header",
+      "jwks_unavailable",
+      "jwks_key_not_found",
+      "token_expired",
+      "invalid_token:*",
+      "entra_actor_identity_required"
+    ]
+  },
+  "ucp_caller_observation": {
+    "path": "../UCP/packs/m365_pack/client.py",
+    "http_headers_sent": [
+      "Content-Type",
+      "X-Correlation-ID"
+    ],
+    "authorization_header_sent": false,
+    "actor_headers_sent": false
+  },
+  "observed_outcome_class": "scope_drift_requires_ucp_caller_alignment",
+  "downstream_truth_preserved": true,
+  "go_to_live_classification": false,
+  "go_to_end_to_end_acceptance": false,
+  "reopen_reason": "No bounded M365-only patch can satisfy the existing service-auth contract while preserving JWT-backed actor identity. The sibling UCP caller must align first.",
+  "next_valid_boundary": "Sibling UCP caller alignment before rerunning token validation."
+}

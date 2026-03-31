@@ -373,7 +373,7 @@ outside this repo slice.
 
 **Reference:** `plan:m365-service-mode-token-acquisition-remediation:R1`
 
-**Status:** 🟢 Active — parent initiative remains active, and the current next repair boundary is the normalized `plan:m365-token-provider-runtime-repair` child package. All child phases remain **Draft** until their predecessor gate is green and the operator presents the approval packet and receives "go". No child phase may auto-advance.
+**Status:** 🟢 Active — parent initiative remains active, but `plan:m365-token-provider-runtime-repair` is now **Blocked** after live root-cause execution proved the sibling UCP caller still sends no bearer token to the M365 service. The next valid dependency boundary is cross-repo UCP caller alignment, not more M365-local repair. No child phase may auto-advance.
 
 **Canonical predecessor:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md` (M365-local). The sibling UCP repo is historical implementation lineage only.
 
@@ -397,6 +397,8 @@ outside this repo slice.
 **Cross-repo dependency truth:** M365 remains the authority for the service-runtime and token-path initiative in this repo. The sibling UCP repo keeps only the consumer-side `plan:ucp-m365-token-acquisition-validation` and `plan:ucp-m365-service-mode-end-to-end-acceptance` acts after the M365-side runtime path is green in the intended launch posture.
 
 **Status update (2026-03-31 09:19 EDT):** Normalized the `plan:m365-token-provider-runtime-repair` child package to the current master plan/prompt structure and realigned its phase wording to the active M365 service-auth/runtime boundary exposed by the current `401 missing_bearer_token` truth. Added notebook-backed governance evidence at `notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb` so the package normalization is grounded in explicit evidence instead of metadata-only gate appeasement, then captured the green schema/prompt proof in `configs/generated/service_mode_repair_package_governance_alignment_verification.json`. No runtime code changed in this normalization slice; the child phase remains Draft until explicitly approved for execution.
+
+**Status update (2026-03-31 09:49 EDT):** Executed the bounded `plan:m365-token-provider-runtime-repair` phase and closed it `NO-GO / Blocked`. The local M365 service contract remains correct and fail-closed: `/actions/*` requires `Authorization: Bearer <token>`, and the sibling UCP HTTP caller still sends neither bearer nor actor headers. Added `docs/commercialization/m365-token-provider-runtime-repair.md` plus `artifacts/diagnostics/m365_token_provider_runtime_repair.json` to freeze that truth. No M365 runtime code changed, because any local patch that made the current caller pass would have weakened JWT-backed actor identity. The next valid act is sibling UCP caller alignment before token validation can resume.
 
 ---
 
