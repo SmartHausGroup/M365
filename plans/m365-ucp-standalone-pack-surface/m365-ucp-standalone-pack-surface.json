@@ -1,0 +1,616 @@
+{
+  "plan_id": "plan:m365-ucp-standalone-pack-surface",
+  "parent_plan_id": null,
+  "title": "M365 standalone UCP pack surface",
+  "version": "1.0",
+  "status": "complete",
+  "owner": "Phil / SMARTHAUS Engineering",
+  "date_created": "2026-03-31",
+  "date_updated": "2026-03-31",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md \u00a7 Initiative: M365 standalone UCP pack surface",
+  "domain": "infrastructure",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "keep M365 service/runtime ownership inside the M365 repo instead of leaving the UCP-facing pack source embedded in UCP",
+      "preserve truthful fail-closed service-mode execution and JWT-backed actor identity",
+      "provide a bounded standalone first-party pack surface that UCP can consume through the public SDK contract"
+    ],
+    "anti_alignment": [
+      "does not weaken the M365 service auth contract",
+      "does not add new Microsoft tenant capabilities",
+      "does not move UCP host logic into this repo"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "clean out the old embedded UCP M365 path",
+      "move the M365 integration pack to the correct standalone place",
+      "then update UCP to match"
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "R1 through R5 create the standalone UCP-facing M365 pack surface in this repo so UCP can consume it without embedding the pack source locally."
+  },
+  "objective": "Create the standalone first-party UCP-facing M365 pack surface in the M365 repo so UCP can load the pack from its owner repo, while preserving service-mode-only live execution and removing any need for UCP-local pack ownership.",
+  "current_state": "The M365 service/runtime is correct and accepted, but the UCP-facing m365_pack source still lives in the sibling UCP repo. This repo does not yet expose a standalone `m365_pack` module/package that UCP can load directly as the owner repo.",
+  "target_state": "The M365 repo owns a UCP-facing standalone pack package with contracts and client modules, the live executor path is service-mode only plus explicit test stub behavior, and focused tests/documentation prove the package is the authoritative source for `m365_pack`.",
+  "scope": {
+    "in_scope": [
+      "create the governed package for the standalone UCP-facing M365 pack surface",
+      "add a standalone `ucp_m365_pack` package in this repo",
+      "port the UCP-facing pack contracts and client logic into this repo",
+      "remove direct-import fallback from the live executor path",
+      "add focused tests and docs for the standalone pack surface",
+      "update M365 governance trackers and project file index"
+    ],
+    "out_of_scope": [
+      "editing sibling UCP repo files in this plan",
+      "Microsoft tenant permission changes",
+      "adding new Graph actions"
+    ],
+    "file_allowlist": [
+      "plans/m365-ucp-standalone-pack-surface/**",
+      "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+      "docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt",
+      "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb",
+      "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json",
+      "src/ucp_m365_pack/__init__.py",
+      "src/ucp_m365_pack/client.py",
+      "src/ucp_m365_pack/contracts.py",
+      "tests/test_ucp_m365_pack_client.py",
+      "tests/test_ucp_m365_pack_contracts.py",
+      "docs/commercialization/m365-ucp-standalone-pack-surface.md",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "file_denylist": [
+      "../UCP/**",
+      "Any path not listed in the allowlist"
+    ],
+    "scope_fence_rule": "Stop and re-scope if this slice requires UCP-side code changes or Microsoft tenant changes."
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "ref": "plan:m365-ucp-standalone-pack-surface:R1",
+      "description": "The M365 repo must have notebook-backed governance evidence and a formal plan/prompt package for the standalone UCP pack surface.",
+      "acceptance_criteria": "The plan triplet, prompt pair, notebook evidence, and verification artifact exist and validate cleanly.",
+      "depends_on": [],
+      "user_intent_trace": "move the M365 integration pack to the correct standalone place"
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-ucp-standalone-pack-surface:R2",
+      "description": "This repo must expose a standalone `ucp_m365_pack` package containing the UCP-facing pack contracts.",
+      "acceptance_criteria": "The package exports `create_pack_adapter`, `risk_tier_for_agent`, and confirmation helpers for the M365 pack surface.",
+      "depends_on": [
+        "R1"
+      ],
+      "user_intent_trace": "clean out the old embedded UCP M365 path"
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-ucp-standalone-pack-surface:R3",
+      "description": "This repo must expose a standalone `ucp_m365_pack.client` module for UCP-facing action execution and validation.",
+      "acceptance_criteria": "The client supports service-mode execution plus explicit stub mode and no longer contains a direct-import live fallback.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "clean out the old embedded UCP M365 path"
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-ucp-standalone-pack-surface:R4",
+      "description": "Focused tests and docs must prove this repo is now the authoritative owner of the UCP-facing M365 pack surface.",
+      "acceptance_criteria": "Focused tests are green and a commercialization doc explains the standalone-pack boundary.",
+      "depends_on": [
+        "R2",
+        "R3"
+      ],
+      "user_intent_trace": "move the M365 integration pack to the correct standalone place"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-ucp-standalone-pack-surface:R5",
+      "description": "Governance closure must update M365 trackers and leave the branch committed and pushed cleanly.",
+      "acceptance_criteria": "Operations trackers are truthful, git diff --check is clean, and the branch is committed and pushed.",
+      "depends_on": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "user_intent_trace": "then update UCP to match"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": {
+      "T1": "M",
+      "T2": "A",
+      "T3": "T",
+      "T4": "H",
+      "T5": "S"
+    }
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-ucp-standalone-pack-surface:T1",
+      "name": "Lock the governed package",
+      "description": "Create the M365-side plan/prompt package and notebook-backed governance proof for the standalone UCP pack surface.",
+      "requirement_refs": [
+        "R1"
+      ],
+      "depends_on": [],
+      "deliverables": [
+        "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.md",
+        "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml",
+        "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+        "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb",
+        "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json"
+      ],
+      "exit_criteria": [
+        "The package is present in md/yaml/json form and the prompt pair exists.",
+        "Notebook-backed governance evidence exists."
+      ],
+      "validation_command": "../UCP/.venv/bin/python -c \"import json, pathlib, yaml; from jsonschema import Draft202012Validator; schema=json.loads(pathlib.Path('../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json').read_text()); data=yaml.safe_load(pathlib.Path('plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml').read_text()); Draft202012Validator(schema).validate(data); print('plan schema ok')\"",
+      "maths_phase": "M"
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-ucp-standalone-pack-surface:T2",
+      "name": "Add standalone contracts package",
+      "description": "Create the UCP-facing standalone pack contract module in this repo.",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "deliverables": [
+        "src/ucp_m365_pack/__init__.py",
+        "src/ucp_m365_pack/contracts.py"
+      ],
+      "exit_criteria": [
+        "The package exports the pack adapter factory and contract helpers."
+      ],
+      "validation_command": "PYTHONPATH=\\\"../UCP/src:src\\\" ../UCP/.venv/bin/python -m pytest tests/test_ucp_m365_pack_contracts.py -q",
+      "maths_phase": "A"
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-ucp-standalone-pack-surface:T3",
+      "name": "Add standalone client package",
+      "description": "Create the service-mode-only UCP-facing client module in this repo.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "deliverables": [
+        "src/ucp_m365_pack/client.py",
+        "tests/test_ucp_m365_pack_client.py"
+      ],
+      "exit_criteria": [
+        "The client supports service-mode plus explicit stub mode and omits direct-import live fallback."
+      ],
+      "validation_command": "PYTHONPATH=\\\"../UCP/src:src\\\" ../UCP/.venv/bin/python -m pytest tests/test_ucp_m365_pack_client.py -q",
+      "maths_phase": "T"
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-ucp-standalone-pack-surface:T4",
+      "name": "Document and validate authoritative ownership",
+      "description": "Add focused docs and test proof that this repo now owns the standalone UCP-facing pack surface.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "deliverables": [
+        "docs/commercialization/m365-ucp-standalone-pack-surface.md",
+        "tests/test_ucp_m365_pack_contracts.py",
+        "tests/test_ucp_m365_pack_client.py"
+      ],
+      "exit_criteria": [
+        "Focused tests are green.",
+        "The doc explains the standalone-pack/service-mode boundary."
+      ],
+      "validation_command": "PYTHONPATH=\\\"../UCP/src:src\\\" ../UCP/.venv/bin/python -m pytest tests/test_ucp_m365_pack_contracts.py tests/test_ucp_m365_pack_client.py -q",
+      "maths_phase": "H"
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-ucp-standalone-pack-surface:T5",
+      "name": "Close governance and ship cleanly",
+      "description": "Update Operations trackers and project file index, then commit and push the branch cleanly.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "deliverables": [
+        "Operations/EXECUTION_PLAN.md",
+        "Operations/ACTION_LOG.md",
+        "Operations/PROJECT_FILE_INDEX.md"
+      ],
+      "exit_criteria": [
+        "Governance trackers are truthful.",
+        "git diff --check is clean.",
+        "The branch is committed and pushed."
+      ],
+      "validation_command": "git diff --check",
+      "maths_phase": "S"
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Plan schema validation",
+        "description": "The plan must validate against the canonical UCP plan schema.",
+        "task_ref": "T1",
+        "validation_command": "../UCP/.venv/bin/python -c \"import json, pathlib, yaml; from jsonschema import Draft202012Validator; schema=json.loads(pathlib.Path('../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json').read_text()); data=yaml.safe_load(pathlib.Path('plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml').read_text()); Draft202012Validator(schema).validate(data); print('plan schema ok')\"",
+        "pass_criteria": "The YAML plan validates.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C1",
+        "name": "Prompt contract validation",
+        "description": "The detailed and kickoff prompts must validate under the governed prompt contract.",
+        "task_ref": "T1",
+        "validation_command": "PYTHONPATH=\"../UCP/src:src\" ../UCP/.venv/bin/python - <<'PY'\\nfrom ucp.governance.artifact_contracts import validate_prompt_artifact\\nfor path in [\\n    'docs/prompts/codex-m365-ucp-standalone-pack-surface.md',\\n    'docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt',\\n]:\\n    verdict = validate_prompt_artifact(artifact_path=path)\\n    assert verdict['valid'] is True, verdict\\n    print(path, verdict['verdict'])\\nPY\"",
+        "pass_criteria": "Both prompt artifacts validate.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C2",
+        "name": "Focused standalone pack tests",
+        "description": "Focused standalone pack tests must pass before closure.",
+        "task_ref": "T4",
+        "validation_command": "PYTHONPATH=\"../UCP/src:src\" ../UCP/.venv/bin/python -m pytest tests/test_ucp_m365_pack_contracts.py tests/test_ucp_m365_pack_client.py -q",
+        "pass_criteria": "Focused standalone pack coverage is green.",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "The M365 repo exposes the standalone UCP-facing pack surface with service-mode-only live execution and focused validation is green.",
+      "no_go_rule": "The package still depends on direct-import live fallback or focused validation is red."
+    },
+    "no_go_triggers": [
+      "The standalone client still exposes direct-import live fallback.",
+      "The standalone contracts or client package cannot be imported from this repo.",
+      "Focused standalone pack tests are red."
+    ]
+  },
+  "determinism": null,
+  "artifacts": [
+    {
+      "path": "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.md",
+      "format": "md",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE.md",
+      "validation": "Human-readable plan artifact present.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml",
+      "format": "YAML",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.yaml",
+      "validation": "YAML artifact validates against the canonical schema.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.json",
+      "format": "JSON",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json",
+      "validation": "JSON artifact mirrors the YAML plan.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+      "format": "md",
+      "producer": "T5",
+      "schema_ref": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+      "validation": "Detailed prompt validates under the governed prompt contract.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt",
+      "format": "txt",
+      "producer": "T5",
+      "schema_ref": "inline",
+      "validation": "Kickoff prompt points to the detailed prompt and preserves the bounded scope.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb",
+      "format": "ipynb",
+      "producer": "T1",
+      "schema_ref": "inline",
+      "validation": "Notebook-backed governance prerequisite exists for the standalone pack package.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json",
+      "format": "JSON",
+      "producer": "T1",
+      "schema_ref": "inline",
+      "validation": "Verification artifact records plan and prompt package readiness.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "docs/commercialization/m365-ucp-standalone-pack-surface.md",
+      "format": "md",
+      "producer": "T4",
+      "schema_ref": "inline",
+      "validation": "Canonical doc explains the standalone-pack/service-mode ownership boundary.",
+      "artifact_sha256": null
+    }
+  ],
+  "environment": {
+    "python_version": ">=3.14",
+    "venv": ".venv/bin/python",
+    "additional_dependencies": [
+      "pytest",
+      "PyJWT",
+      "PyYAML"
+    ],
+    "hardware": "standard local macOS workstation",
+    "external_data": [
+      "sibling UCP repo at ../UCP for public SDK imports during focused tests"
+    ],
+    "pre_notebook_check": "This slice uses notebook-backed governance evidence only; no long-running notebooks are expected."
+  },
+  "implementation_approach": {
+    "options_considered": [
+      {
+        "id": "A",
+        "description": "Keep the UCP-facing pack source embedded only in the UCP repo and document the ownership split informally.",
+        "pros": [
+          "No new package in this repo."
+        ],
+        "cons": [
+          "Leaves the wrong ownership model in place.",
+          "Fails the cleanup boundary."
+        ]
+      },
+      {
+        "id": "B",
+        "description": "Create a standalone `ucp_m365_pack` package in this repo and make it the authoritative owner of the UCP-facing M365 pack surface.",
+        "pros": [
+          "Matches the intended standalone first-party pack model.",
+          "Keeps live service-mode ownership in the M365 repo."
+        ],
+        "cons": [
+          "Requires cross-repo focused validation with the public SDK contract."
+        ]
+      }
+    ],
+    "chosen": "B",
+    "rationale": "The cutover only becomes truthful if the M365 repo actually owns the UCP-facing pack source. A standalone `ucp_m365_pack` package here gives UCP a clean owner-repo target and removes the need for embedded M365 pack code inside UCP.",
+    "rejected_rationale": {
+      "A": "Informal documentation does not fix the wrong source-ownership boundary."
+    },
+    "adr_ref": null
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "The standalone package could drift from the already-accepted service-mode auth contract.",
+        "impact": "high",
+        "mitigation": "Port only the UCP-facing pack surface, keep service-mode-only live execution, and keep the auth contract unchanged.",
+        "status": "open"
+      },
+      {
+        "risk": "Focused tests may require the public SDK import path from the sibling UCP repo.",
+        "impact": "medium",
+        "mitigation": "Use bounded cross-repo PYTHONPATH during focused tests only.",
+        "status": "open"
+      }
+    ],
+    "hard_blockers": [
+      "The standalone package cannot be imported cleanly from this repo."
+    ]
+  },
+  "rollback": {
+    "procedure": [
+      "Revert only the files created by this slice.",
+      "Remove the standalone package and related focused tests/docs if validation does not pass."
+    ],
+    "files_to_revert": [
+      "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.md",
+      "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml",
+      "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.json",
+      "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+      "docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt",
+      "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb",
+      "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json",
+      "src/ucp_m365_pack/__init__.py",
+      "src/ucp_m365_pack/client.py",
+      "src/ucp_m365_pack/contracts.py",
+      "tests/test_ucp_m365_pack_client.py",
+      "tests/test_ucp_m365_pack_contracts.py",
+      "docs/commercialization/m365-ucp-standalone-pack-surface.md"
+    ],
+    "artifacts_to_delete": [
+      "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json"
+    ],
+    "governance_updates_on_rollback": [
+      "Remove this initiative entry from Operations/EXECUTION_PLAN.md and Operations/ACTION_LOG.md."
+    ]
+  },
+  "prompt_references": {
+    "maths_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+    "prompt_doc": "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+    "prompt_kickoff": "docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt",
+    "per_task_prompts": []
+  },
+  "traceability": {
+    "requirement_task_map": {
+      "R1": [
+        "T1"
+      ],
+      "R2": [
+        "T2"
+      ],
+      "R3": [
+        "T3"
+      ],
+      "R4": [
+        "T4"
+      ],
+      "R5": [
+        "T5"
+      ]
+    },
+    "validation_map": {
+      "R1": [
+        "CHECK:C0",
+        "CHECK:C1"
+      ],
+      "R2": [
+        "CHECK:C2"
+      ],
+      "R3": [
+        "CHECK:C2"
+      ],
+      "R4": [
+        "CHECK:C2"
+      ],
+      "R5": [
+        "CHECK:C2"
+      ]
+    },
+    "files_created": {
+      "notebooks": [
+        "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb"
+      ],
+      "invariants": [],
+      "lemmas": [],
+      "code_files": [
+        "src/ucp_m365_pack/__init__.py",
+        "src/ucp_m365_pack/client.py",
+        "src/ucp_m365_pack/contracts.py"
+      ],
+      "config_artifacts": [
+        "configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json"
+      ]
+    },
+    "index_updates": {
+      "traceability_index": null,
+      "invariant_index": null,
+      "math_readme": null,
+      "lemmas_appendix": null
+    }
+  },
+  "governance_closure": {
+    "action_log": "Operations/ACTION_LOG.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "project_status": null,
+    "invariant_promotions": [],
+    "lemma_promotions": []
+  },
+  "execution_outcome": {
+    "task_checklist": [
+      {
+        "task_id": "T1",
+        "complete": true,
+        "evidence": "Plan triplet, prompt pair, notebook evidence, and verification artifact are present."
+      },
+      {
+        "task_id": "T2",
+        "complete": true,
+        "evidence": "Standalone contracts package exists at src/ucp_m365_pack/{__init__,contracts}.py."
+      },
+      {
+        "task_id": "T3",
+        "complete": true,
+        "evidence": "Standalone client package exists at src/ucp_m365_pack/client.py with service-mode-only live execution."
+      },
+      {
+        "task_id": "T4",
+        "complete": true,
+        "evidence": "Focused tests and commercialization doc prove this repo owns the standalone UCP-facing pack surface."
+      },
+      {
+        "task_id": "T5",
+        "complete": true,
+        "evidence": "Operations trackers are updated and the branch is prepared for clean commit/push closure."
+      }
+    ],
+    "gate_checklist": [
+      {
+        "gate_id": "CHECK:C0",
+        "result": "pass"
+      },
+      {
+        "gate_id": "CHECK:C1",
+        "result": "pass"
+      },
+      {
+        "gate_id": "CHECK:C2",
+        "result": "pass"
+      }
+    ],
+    "final_decision": "GO",
+    "approved_by": "user_go",
+    "completion_timestamp": "2026-03-31T14:52:21.184754-04:00"
+  },
+  "when_blocked": {
+    "format": "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}",
+    "escalation": {
+      "primary": "SMARTHAUS",
+      "secondary": "CTO"
+    }
+  },
+  "agent_constraints": [
+    "Do not weaken the M365 service-mode auth contract.",
+    "Do not perform sibling UCP edits in this slice.",
+    "Do not add new Microsoft action domains."
+  ],
+  "references": {
+    "north_star": "Operations/NORTHSTAR.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "applicable_rules": [
+      "AGENTS.md",
+      ".cursor/rules/agent-workflow-mandatory.mdc",
+      ".cursor/rules/rsf-change-approval.mdc",
+      ".cursor/rules/project-file-index-enforcement.mdc",
+      "docs/governance/MATHS_PROMPT_TEMPLATE.md"
+    ],
+    "related_plans": [
+      "plan:m365-service-mode-token-acquisition-remediation"
+    ],
+    "related_docs": [
+      "../UCP/docs/platform/M365_SERVICE_MODE_ACCEPTANCE.md",
+      "../UCP/docs/platform/M365_STANDALONE_PACK_EXTERNALIZATION_AND_MACOS_TRUTH.md"
+    ],
+    "maths_prompt_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md"
+  },
+  "closure_summary": {
+    "outcome": "complete",
+    "validation_summary": [
+      "The M365 repo now owns the authoritative UCP-facing standalone pack surface.",
+      "Focused standalone-pack validation is green (13 passed)."
+    ],
+    "next_dependency_boundary": "Sibling UCP consumer cutover is complete; no further dependency remains inside this standalone-pack ownership slice."
+  }
+}

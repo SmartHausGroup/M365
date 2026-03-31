@@ -1,0 +1,19 @@
+{
+  "plan_id": "plan:m365-ucp-standalone-pack-surface",
+  "verified_at": "2026-03-31T14:52:21.184754-04:00",
+  "verdict": "green",
+  "checks": {
+    "plan_triplet_present": true,
+    "prompt_pair_present": true,
+    "notebook_evidence_present": true,
+    "standalone_surface_present": true
+  },
+  "artifacts": {
+    "plan": "plans/m365-ucp-standalone-pack-surface/m365-ucp-standalone-pack-surface.yaml",
+    "prompt": "docs/prompts/codex-m365-ucp-standalone-pack-surface.md",
+    "kickoff": "docs/prompts/codex-m365-ucp-standalone-pack-surface-prompt.txt",
+    "notebook": "notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb",
+    "contracts": "src/ucp_m365_pack/contracts.py",
+    "client": "src/ucp_m365_pack/client.py"
+  }
+}

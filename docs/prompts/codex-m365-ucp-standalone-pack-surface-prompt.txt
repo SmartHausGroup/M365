@@ -1,0 +1,6 @@
+Read and execute the detailed prompt at `docs/prompts/codex-m365-ucp-standalone-pack-surface.md`.
+
+Plan Reference: `plan:m365-ucp-standalone-pack-surface:R1`
+
+This slice is approved for execution in the current session.
+Keep the work bounded to the standalone UCP-facing pack surface in the M365 repo.

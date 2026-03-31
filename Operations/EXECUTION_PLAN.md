@@ -402,6 +402,8 @@ outside this repo slice.
 
 **Status update (2026-03-31 13:25 EDT):** The sibling UCP repo has now completed the caller-alignment, token-validation, and end-to-end acceptance acts on `feature/governance-ui-constraint-visibility` at `b7bd2462c90600b4326994500815c4dae2659f56`. The executed `plan:m365-token-provider-runtime-repair` phase remains historically `NO-GO` for the correct bounded reason, but it is no longer an active blocker for merge readiness because the cross-repo defect was resolved on the UCP caller side instead of by weakening the M365-local JWT gate. Added notebook-backed merge-readiness evidence at `notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb` plus `configs/generated/service_mode_merge_readiness_alignment_verification.json` to freeze that truth explicitly.
 
+**Status update (2026-03-31 14:49 EDT):** `plan:m365-ucp-standalone-pack-surface` is complete. This repo now owns the authoritative UCP-facing standalone pack surface in `src/ucp_m365_pack/{contracts,client}.py`, the live path remains service-mode-only plus explicit stub mode, and UCP now consumes the pack from this owner repo instead of embedding the source locally. Added the commercialization boundary note at `docs/commercialization/m365-ucp-standalone-pack-surface.md`, notebook-backed governance evidence at `notebooks/m365/INV-M365-BV-ucp-standalone-pack-surface-governance-alignment.ipynb`, and the generated verification artifact at `configs/generated/ucp_standalone_pack_surface_governance_alignment_verification.json`. Focused standalone-pack validation is green (`13 passed`).
+
 ---
 
 ## Notes
