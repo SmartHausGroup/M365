@@ -1,0 +1,179 @@
+plan_id: m365-ucp-live-activation-repair
+status: Active
+date: '2026-03-23'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-ucp-live-activation-repair:R1
+north_star: Operations/NORTHSTAR.md
+historical_lineage: Section 7 Claude/UCP workforce experience plus m365-enterprise-readiness-master-plan
+ma_process_required: true
+objective: 'Repair the live activation path so a user-approved Claude or Codex MCP session can activate truthfully,
+  admit governed tools consistently, and execute real M365 actions without collapsing into contradictory policy_pack,
+  session_not_activated, or fake-credentials failure states.
+
+  '
+decision_rule: 'ActivationPathHealthy = PackEnabled AND ActivationAllowed AND SessionStateReachable.
+  LiveToolPathHealthy = ActivationPathHealthy AND ToolRegistrationConsistent AND PolicyAdmissionConsistent.
+  LiveM365Callable = LiveToolPathHealthy AND TenantContextReachable AND SitesRootGreen AND (DirectoryOrgGreen
+  OR RealGraphPermissionError). RepairReady = LiveM365Callable.
+
+  '
+prompt_discipline: 'Maintain a formal prompt pair under docs/prompts/ following the repo two-file prompt rule and
+  the MATHS prompt template. The M365 repo is the planning authority; the sibling UCP repo is the implementation
+  target for the runtime repair.
+
+  '
+intent_definition:
+  build: Repair the live Claude -> UCP -> M365 control plane so activation, governance admission, and tool execution agree on the same session state.
+  why: The current runtime says M365 tools exist while blocking activate_session, which cascades into session_not_activated for real M365 calls.
+  problem: Remove the broken state machine where discovery says available, policy says forbidden, and execution says not activated.
+  boundaries:
+  - Repair activation and tool-surface truthfulness only.
+  - Do not loosen Microsoft tenant permissions or relabel downstream Graph authorization failures as connector bugs.
+  guarantees:
+  - User-approved activation succeeds or fails with the true blocking reason.
+  - Stdio and HTTP surfaces do not disagree about callable M365 reality.
+  - sites.root executes live once activation is green.
+  - directory.org either succeeds or fails with a real Graph permission error, never credentials_missing or session_not_activated after activation.
+  success_criteria:
+  - activate_session(confirm=true) succeeds on the live path.
+  - session_status reports active immediately afterward.
+  - validate_action and constraint_status remain callable after activation.
+  - m365_sites action=sites.root executes live.
+  - m365_action agent=m365-administrator action=directory.org reaches real Graph auth and returns either success or a real Graph-side permission error.
+  determinism: For fixed runtime config, license, tenant contract, and client identity, repeated activation and first-hop M365 calls produce the same admission decisions and outcome class.
+simple_follow_on_plan:
+  observed_failure:
+  - The live UCP server reports m365_pack enabled.
+  - Fresh MCP stdio sessions list m365_action and m365_sites.
+  - The same sessions reject activate_session because policy_pack says the tool is not allowed.
+  - Because activation is blocked, downstream M365 calls fail with session_not_activated.
+  - The generic HTTP tool route does not currently expose validate_action and has shown parity gaps for M365 tool IDs.
+  repair_order:
+  - phase: P0A
+    description: Freeze the failure signatures and lock deterministic success criteria.
+  - phase: P1A
+    description: Repair policy admission for activation bypass tools.
+  - phase: P1B
+    description: Repair session-state projection after activation.
+  - phase: P2A
+    description: Repair or document stdio and HTTP tool-surface parity.
+  - phase: P3A
+    description: Reprove activation, session_status, validate_action, and constraint_status.
+  - phase: P3B
+    description: Reprove sites.root and directory.org on the live runtime.
+  - phase: P4A
+    description: Synchronize governance and close the slice truthfully.
+  non_goals:
+  - Do not reopen already-fixed tenant-context work unless regression evidence proves it.
+  - Do not add non-M365 channels or alternate auth stories.
+  - Do not claim live parity is green before retained evidence exists.
+execution_status:
+  completed: []
+  in_progress: P0A
+  next_act: P0A
+  prepared_blocked:
+  - P1A
+  - P1B
+  - P2A
+  - P3A
+  - P3B
+  - P4A
+scope:
+  in:
+  - Capture the exact live failure baseline for activation, session-state, and first-hop M365 calls.
+  - Repair activation admission in the sibling UCP runtime.
+  - Repair or document stdio and HTTP tool-surface parity.
+  - Reprove activate_session, session_status, validate_action, sites.root, and directory.org.
+  - Synchronize M365 governance docs and prompt artifacts.
+  out:
+  - Changing Microsoft Graph tenant permissions except to classify downstream failures truthfully.
+  - Reopening already-fixed tenant-context work without regression evidence.
+  - Adding non-M365 execution channels.
+  - Claiming live parity is green before retained evidence exists.
+requirements:
+- id: R1
+  title: Formal repair-plan authority
+- id: R2
+  title: Formal MATHS prompt pair
+- id: R3
+  title: Activation admission repair
+- id: R4
+  title: Session-state and tool-surface parity
+- id: R5
+  title: Live M365 reproof
+- id: R6
+  title: Governance synchronization
+phase_stack:
+- phase: P0
+  title: Failure baseline and intent lock
+  status: Active
+  goal: Freeze the observed live failure signatures, exact boundaries, and deterministic success criteria before implementation.
+  outputs:
+  - retained activation and session-state error signatures
+  - explicit activation-state decision rule
+  - bounded implementation target list
+  children:
+  - act: P0A
+    title: Baseline capture and repair intent lock
+    status: Active
+    goal: Record the exact policy_pack activation rejection and session_not_activated cascade as the authoritative starting state.
+- phase: P1
+  title: Activation admission repair
+  status: Pending
+  goal: Repair the live activation path so user-approved session activation is admitted consistently through the actual runtime.
+  outputs:
+  - repaired activation path
+  - consistent activate_session and session_status behavior
+  - bounded policy admission logic
+  children:
+  - act: P1A
+    title: Policy-pack admission repair
+    status: Pending
+    goal: Fix the policy and allowlist path so activation bypass tools are not contradicted by pack-level admission.
+  - act: P1B
+    title: Session-state projection repair
+    status: Pending
+    goal: Ensure activation state is visible and consistent to governed tools immediately after activation.
+- phase: P2
+  title: Tool-surface parity repair
+  status: Pending
+  goal: Ensure stdio and HTTP surfaces project the same callable reality for the M365 runtime.
+  outputs:
+  - consistent tool registration
+  - documented or repaired HTTP parity
+  - bounded live smoke contract
+  children:
+  - act: P2A
+    title: HTTP and stdio parity
+    status: Pending
+    goal: Remove or document the mismatch where the pack is enabled but some live tool surfaces do not expose the same callable IDs.
+- phase: P3
+  title: Live M365 reproof
+  status: Pending
+  goal: Re-run the live first-hop M365 proofs after activation and parity are repaired.
+  outputs:
+  - green activation transcript
+  - green sites.root transcript
+  - truthful directory.org transcript
+  children:
+  - act: P3A
+    title: Live activation and governance reproof
+    status: Pending
+    goal: Reprove activate_session, session_status, constraint_status, and validate_action on the repaired runtime.
+  - act: P3B
+    title: Live M365 first-hop reproof
+    status: Pending
+    goal: Reprove m365_sites sites.root and m365_action directory.org, classifying any remaining failure as real downstream Microsoft auth and permission behavior.
+- phase: P4
+  title: Governance closeout
+  status: Pending
+  goal: Synchronize the retained evidence and final status across M365 and UCP governance surfaces.
+  outputs:
+  - updated execution-plan and action-log state
+  - prompt artifacts aligned to retained evidence
+  - explicit GO or NO-GO closeout
+  children:
+  - act: P4A
+    title: Repair closeout and operator handoff
+    status: Pending
+    goal: Close the repair slice with a truthful live-state summary and the next required action, if any.

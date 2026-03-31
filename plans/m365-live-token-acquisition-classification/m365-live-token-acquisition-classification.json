@@ -1,0 +1,47 @@
+{
+  "plan_id": "m365-live-token-acquisition-classification",
+  "parent_plan_id": "m365-service-mode-token-acquisition-remediation",
+  "status": "Draft",
+  "date": "2026-03-23",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-live-token-acquisition-classification:R1",
+  "draft_vs_active_semantics": "Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft.",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "do not auto-advance to the next phase"
+  ],
+  "closure_authority": "classify live token acquisition and decide advance-or-reopen only; final remediation GO/NO-GO belongs to P5A",
+  "objective": "Run the repaired live token-acquisition path and classify the result truthfully.",
+  "allowlist": [
+    "plans/m365-live-token-acquisition-classification/**",
+    "tests/test_ops_adapter.py",
+    "tests/test_graph_client.py",
+    "docs/commercialization/m365-live-token-acquisition-classification.md",
+    "artifacts/diagnostics/m365_live_token_acquisition_classification.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": ["src/**", "../UCP/**"],
+  "requirements": [
+    {"id": "R1", "title": "Exercise repaired live token acquisition"},
+    {"id": "R2", "title": "Truthful outcome classes"},
+    {"id": "R3", "title": "Explicit M365-versus-Microsoft boundary"},
+    {"id": "R4", "title": "Focused evidence and diagnostics"},
+    {"id": "R5", "title": "Authorize acceptance or reopen a prior phase"}
+  ],
+  "tasks": [
+    {"id": "T1", "description": "Define outcome classes and evidence matrix."},
+    {"id": "T2", "description": "Add focused live-classification coverage."},
+    {"id": "T3", "description": "Run live and targeted classification path."},
+    {"id": "T4", "description": "Decide whether acceptance may begin."},
+    {"id": "T5", "description": "Update governance surfaces and stop."}
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-live-token-acquisition-classification.md",
+    "kickoff": "docs/prompts/codex-m365-live-token-acquisition-classification-prompt.txt"
+  }
+}

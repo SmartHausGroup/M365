@@ -1,20 +1,23 @@
 from __future__ import annotations
 
 import json
+import sys
 from collections.abc import Iterator
 from pathlib import Path
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 from typing import Any
 
 import jwt
 import pytest
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient
+from ops_adapter import actions as actions_module
 from ops_adapter.approvals import ApprovalsStore
 from ops_adapter.audit import Auditor
 from ops_adapter.main import app
 from ops_adapter.personas import build_persona_registry
 from smarthaus_common import permission_enforcer as permission_enforcer_module
+from smarthaus_common import tenant_config as tenant_config_module
 from smarthaus_common.permission_enforcer import check_user_permission
 from smarthaus_common.tenant_config import reload_tenant_config
 
@@ -540,6 +543,145 @@ def test_b7b_routes_directory_actions_to_directory_executor(
     assert payload["result"]["executor_name"] == "directory"
     assert payload["result"]["executor_identity"]["domain"] == "directory"
     assert payload["result"]["executor_identity"]["client_id"] == "directory-client"
+
+
+def test_graph_token_surfaces_missing_tenant_config(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake_graph_client: Any = ModuleType("smarthaus_graph.client")
+
+    class _DummyGraphTokenProvider:
+        def __init__(self, *_args: Any, **_kwargs: Any) -> None:
+            return None
+
+    fake_graph_client.GraphTokenProvider = _DummyGraphTokenProvider
+
+    tenant_root = tmp_path / "ucp"
+    (tenant_root / "tenants").mkdir(parents=True)
+
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("UCP_TENANT", "missing-tenant")
+    monkeypatch.delenv("AZURE_TENANT_ID", raising=False)
+    monkeypatch.delenv("AZURE_CLIENT_ID", raising=False)
+    monkeypatch.delenv("AZURE_CLIENT_SECRET", raising=False)
+    monkeypatch.setitem(sys.modules, "smarthaus_graph.client", fake_graph_client)
+    tenant_config_module._cached_config = None
+    tenant_config_module._cached_slug = None
+    actions_module._token_providers.clear()
+
+    with pytest.raises(actions_module.GraphAPIError) as excinfo:
+        actions_module._graph_token()
+
+    assert excinfo.value.code == "tenant_config_missing"
+    assert "missing-tenant.yaml" in excinfo.value.message
+
+
+def test_graph_token_surfaces_auth_configuration_error(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake_graph_client: Any = ModuleType("smarthaus_graph.client")
+
+    class _DummyGraphTokenProvider:
+        def __init__(self, *_args: Any, **_kwargs: Any) -> None:
+            return None
+
+        def get_token(self, prefer_delegated: bool = False) -> str:
+            del prefer_delegated
+            raise actions_module.AuthConfigurationError(
+                "Tenant config missing azure.client_secret or azure.client_certificate_path."
+            )
+
+    fake_graph_client.GraphTokenProvider = _DummyGraphTokenProvider
+
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-alpha.yaml").write_text(
+        """
+tenant:
+  id: tenant-alpha
+azure:
+  tenant_id: tenant-guid-alpha
+  client_id: client-alpha
+auth:
+  mode: app_only
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+    monkeypatch.setenv("UCP_TENANT", "tenant-alpha")
+    monkeypatch.delenv("AZURE_CLIENT_SECRET", raising=False)
+    monkeypatch.delenv("AZURE_CLIENT_CERTIFICATE_PATH", raising=False)
+    monkeypatch.setitem(sys.modules, "smarthaus_graph.client", fake_graph_client)
+    tenant_config_module._cached_config = None
+    tenant_config_module._cached_slug = None
+    actions_module._token_providers.clear()
+
+    with pytest.raises(actions_module.GraphAPIError) as excinfo:
+        actions_module._graph_token()
+
+    assert excinfo.value.code == "auth_configuration_error"
+    assert "client_secret" in excinfo.value.message
+
+
+def test_graph_token_preserves_legacy_env_fallback_without_tenant_context(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class _DummyClientSecretCredential:
+        def __init__(self, tenant_id: str, client_id: str, client_secret: str) -> None:
+            assert tenant_id == "legacy-tenant"
+            assert client_id == "legacy-client"
+            assert client_secret == "legacy-secret"
+
+        def get_token(self, scope: str) -> SimpleNamespace:
+            assert scope == actions_module.GRAPH_SCOPE
+            return SimpleNamespace(token="legacy-token")
+
+    fake_azure_identity: Any = ModuleType("azure.identity")
+    fake_azure_identity.ClientSecretCredential = _DummyClientSecretCredential
+
+    monkeypatch.delenv("UCP_TENANT", raising=False)
+    monkeypatch.delenv("UCP_ROOT", raising=False)
+    monkeypatch.setenv("AZURE_TENANT_ID", "legacy-tenant")
+    monkeypatch.setenv("AZURE_CLIENT_ID", "legacy-client")
+    monkeypatch.setenv("AZURE_CLIENT_SECRET", "legacy-secret")
+    monkeypatch.setitem(sys.modules, "azure.identity", fake_azure_identity)
+    monkeypatch.setattr(actions_module, "_get_token_provider", lambda: None)
+
+    assert actions_module._graph_token() == "legacy-token"
+
+
+def test_graph_token_skips_tenant_provider_without_ucp_tenant(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class _DummyClientSecretCredential:
+        def __init__(self, tenant_id: str, client_id: str, client_secret: str) -> None:
+            assert tenant_id == "legacy-tenant"
+            assert client_id == "legacy-client"
+            assert client_secret == "legacy-secret"
+
+        def get_token(self, scope: str) -> SimpleNamespace:
+            assert scope == actions_module.GRAPH_SCOPE
+            return SimpleNamespace(token="legacy-token")
+
+    fake_azure_identity: Any = ModuleType("azure.identity")
+    fake_azure_identity.ClientSecretCredential = _DummyClientSecretCredential
+
+    monkeypatch.delenv("UCP_TENANT", raising=False)
+    monkeypatch.delenv("UCP_ROOT", raising=False)
+    monkeypatch.setenv("AZURE_TENANT_ID", "legacy-tenant")
+    monkeypatch.setenv("AZURE_CLIENT_ID", "legacy-client")
+    monkeypatch.setenv("AZURE_CLIENT_SECRET", "legacy-secret")
+    monkeypatch.setitem(sys.modules, "azure.identity", fake_azure_identity)
+
+    def _unexpected_provider() -> None:
+        raise AssertionError("tenant-aware provider should be skipped without UCP_TENANT")
+
+    monkeypatch.setattr(actions_module, "_get_token_provider", _unexpected_provider)
+
+    assert actions_module._graph_token() == "legacy-token"
 
 
 def test_b7b_preserves_routed_executor_identity_in_pending_approval(

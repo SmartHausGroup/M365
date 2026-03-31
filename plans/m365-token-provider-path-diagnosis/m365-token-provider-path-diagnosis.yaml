@@ -1,0 +1,55 @@
+plan_id: m365-token-provider-path-diagnosis
+parent_plan_id: m365-service-mode-token-acquisition-remediation
+status: Draft
+date: '2026-03-23'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-token-provider-path-diagnosis:R1
+draft_vs_active_semantics: Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before any mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to the next phase
+ownership_boundary: credential-source/auth-mode/provider-path truth only; if runtime/bootstrap/health ownership is proven, reopen P1A rather than drift scope
+objective: Determine exactly where the M365 token-acquisition path fails.
+allowlist:
+  - plans/m365-token-provider-path-diagnosis/**
+  - src/ops_adapter/actions.py
+  - src/smarthaus_graph/client.py
+  - src/smarthaus_common/auth_model.py
+  - tests/test_ops_adapter.py
+  - tests/test_auth_model_v2.py
+  - docs/commercialization/m365-token-provider-path-diagnosis.md
+  - artifacts/diagnostics/m365_token_provider_path_diagnosis.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - src/m365_server/__main__.py
+  - ../UCP/**
+requirements:
+  - id: R1
+    title: Prove credential source
+  - id: R2
+    title: Prove provider path and auth mode
+  - id: R3
+    title: Eliminate ambiguous credential-missing classification
+  - id: R4
+    title: Focused tests and diagnostics
+  - id: R5
+    title: Explicit repair-boundary handoff
+tasks:
+  - id: T1
+    description: Inventory token-provider path and outcome classes.
+  - id: T2
+    description: Add bounded diagnostic surfacing.
+  - id: T3
+    description: Re-run local and live checks.
+  - id: T4
+    description: Decide repair boundary.
+  - id: T5
+    description: Update governance surfaces and stop.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-token-provider-path-diagnosis.md
+  kickoff: docs/prompts/codex-m365-token-provider-path-diagnosis-prompt.txt

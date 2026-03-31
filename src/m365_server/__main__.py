@@ -36,12 +36,51 @@ def _find_app_root() -> Path:
     return cwd
 
 
+def _tenant_search_dirs(app_root: Path) -> list[Path]:
+    dirs: list[Path] = []
+    ucp_root = os.getenv("UCP_ROOT")
+    repos_root = os.getenv("REPOS_ROOT") or os.getenv("UCP_REPOS_ROOT")
+    if ucp_root:
+        dirs.append((Path(ucp_root) / "tenants").resolve())
+    if repos_root:
+        dirs.append((Path(repos_root) / "SMARTHAUS_MCPSERVER_core" / "tenants").resolve())
+    dirs.append((app_root.parent / "UCP" / "tenants").resolve())
+    dirs.append((app_root.parent / "SMARTHAUS_MCPSERVER_core" / "tenants").resolve())
+    return dirs
+
+
+def _discover_bootstrap_tenant(app_root: Path) -> str | None:
+    explicit_default = os.getenv("M365_DEFAULT_TENANT", "").strip()
+    if explicit_default:
+        return explicit_default
+
+    candidates: set[str] = set()
+    for tenant_dir in _tenant_search_dirs(app_root):
+        if not tenant_dir.is_dir():
+            continue
+        for yaml_path in tenant_dir.glob("*.yaml"):
+            name = yaml_path.name
+            if name.startswith((".", "_")):
+                continue
+            candidates.add(yaml_path.stem)
+
+    if "smarthaus" in candidates:
+        return "smarthaus"
+    if len(candidates) == 1:
+        return next(iter(candidates))
+    return None
+
+
 def _load_env(app_root: Path) -> None:
     """Load .env from app root or ~/.smarthaus/m365 if present."""
     load_bootstrap_env(
         app_root / ".env",
         Path.home() / ".smarthaus" / "m365" / ".env",
     )
+    if not os.getenv("UCP_TENANT", "").strip():
+        bootstrap_tenant = _discover_bootstrap_tenant(app_root)
+        if bootstrap_tenant:
+            os.environ["UCP_TENANT"] = bootstrap_tenant
 
 
 def _run_server(host: str, port: int, app_root: Path) -> None:

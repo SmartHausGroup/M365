@@ -1,0 +1,9 @@
+Execute M365 Service-Mode End-to-End Acceptance
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-service-mode-end-to-end-acceptance.md.
+
+Plan Reference: plan:m365-service-mode-end-to-end-acceptance:R1
+
+P5A closure boundary: P5A is the SOLE authority for the final remediation GO/NO-GO. Only P5A may issue that decision, and only after live sites.root and directory.org acceptance evidence exists.
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only this phase. This is the final phase — no further advancement.

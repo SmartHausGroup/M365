@@ -1,0 +1,162 @@
+{
+  "plan_id": "m365-service-mode-token-acquisition-remediation",
+  "status": "Active",
+  "date": "2026-03-23",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-service-mode-token-acquisition-remediation:R1",
+  "north_star": "Operations/NORTHSTAR.md",
+  "historical_lineage": "follows the completed UCP-side activation/admission repair; this repo now owns the remaining service-runtime and token-acquisition work",
+  "ma_process_required": true,
+  "canonical_predecessor": "plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md (M365-local artifact; sibling UCP repo is historical implementation lineage only)",
+  "draft_vs_active_semantics": "The parent initiative remains Active while all child acts begin in Draft. A child act becomes Active only after its predecessor gate is green and the operator approves execution with explicit go. A child act becomes Complete only after its own gate emits GO.",
+  "objective": "Create the M365-governed master remediation program for the remaining service-mode runtime and token-acquisition work so future execution happens in the correct repo under strict phase-gated MATHS prompts.",
+  "decision_rule": "ServiceRuntimeReady = SupportedPython AND RequiredDependenciesPresent AND HealthReachable. TokenPathKnown = ServiceRuntimeReady AND CredentialSourceResolved AND AuthModeResolved AND ProviderPathObserved. TokenAcquisitionHealthy = TokenPathKnown AND (TokenGranted OR TruthfulDownstreamFailure). LiveM365Ready = TokenAcquisitionHealthy AND SitesRootGreen AND (DirectoryOrgGreen OR RealGraphPermissionError). RemediationReady = LiveM365Ready.",
+  "prompt_discipline": "One detailed MATHS prompt plus one kickoff prompt per phase under docs/prompts/. No phase may advance until its active validation gate is green.",
+  "intent_definition": {
+    "build": "M365-native remediation authority for the remaining runtime/token-acquisition work.",
+    "why": "The unresolved defect now belongs to the M365 runtime and token-provider path, not UCP.",
+    "problem": "Remove repo-authority drift and define one sequential execution program for the remaining work.",
+    "boundaries": [
+      "Plan and prompt creation only in this slice.",
+      "No runtime implementation in this slice.",
+      "No edits to the sibling UCP repo."
+    ],
+    "guarantees": [
+      "M365 is the planning authority for the remaining work.",
+      "Each phase is independently testable and stop-on-red.",
+      "Token outcomes are classified truthfully."
+    ],
+    "success_criteria": [
+      "Parent plan exists.",
+      "Child phase plans exist.",
+      "One prompt pair exists per phase.",
+      "Governance and file index are synchronized."
+    ],
+    "determinism": "Fixed code, config, and tenant posture produce the same phase gate and outcome class."
+  },
+  "scope": {
+    "in": [
+      "Create the parent plan triplet.",
+      "Create child phase plan triplets.",
+      "Create one prompt pair per phase.",
+      "Update execution plan, action log, and project file index."
+    ],
+    "out": [
+      "Runtime implementation.",
+      "Sibling UCP edits.",
+      "Secret rotation or tenant permission changes."
+    ]
+  },
+  "requirements": [
+    {"id": "R1", "title": "Formal M365 plan authority"},
+    {"id": "R2", "title": "Runtime authority and baseline lock phase"},
+    {"id": "R3", "title": "Runtime readiness and health phase"},
+    {"id": "R4", "title": "Token-provider diagnosis phase"},
+    {"id": "R5", "title": "Token-provider repair phase"},
+    {"id": "R6", "title": "Live token-acquisition classification phase"},
+    {"id": "R7", "title": "End-to-end acceptance phase"},
+    {"id": "R8", "title": "Per-phase prompt pairs"},
+    {"id": "R9", "title": "Stop-on-red sequencing"},
+    {"id": "R10", "title": "Governance and file-index synchronization"}
+  ],
+  "execution_status": {
+    "completed": [],
+    "in_progress": null,
+    "next_act": "P0A",
+    "prepared_blocked": ["P1A", "P2A", "P3A", "P4A", "P5A"]
+  },
+  "phase_stack": [
+    {
+      "phase": "P0",
+      "title": "Service Runtime Authority and Baseline Lock",
+      "status": "Draft",
+      "goal": "Lock M365 repo authority and freeze the remaining failure baseline.",
+      "children": [
+        {
+          "act": "P0A",
+          "title": "Authority and baseline lock",
+          "status": "Draft",
+          "goal": "Record the exact remaining failure boundary and make M365 the formal execution authority."
+        }
+      ]
+    },
+    {
+      "phase": "P1",
+      "title": "Service Runtime Readiness and Health",
+      "status": "Draft",
+      "goal": "Make runtime bootstrap, dependency, and health truth testable.",
+      "children": [
+        {
+          "act": "P1A",
+          "title": "Runtime readiness and health",
+          "status": "Draft",
+          "goal": "Repair local runtime readiness and health truth if needed."
+        }
+      ]
+    },
+    {
+      "phase": "P2",
+      "title": "Token Provider Path Diagnosis",
+      "status": "Draft",
+      "goal": "Determine the exact sink/source/path that blocks token acquisition.",
+      "children": [
+        {
+          "act": "P2A",
+          "title": "Token-provider path diagnosis",
+          "status": "Draft",
+          "goal": "Prove the exact credential, auth-mode, and provider-path boundary."
+        }
+      ]
+    },
+    {
+      "phase": "P3",
+      "title": "Token Provider Runtime Repair",
+      "status": "Draft",
+      "goal": "Repair the diagnosed M365-side runtime/token defect.",
+      "children": [
+        {
+          "act": "P3A",
+          "title": "Token-provider runtime repair",
+          "status": "Draft",
+          "goal": "Implement the minimal M365-side runtime/auth fix."
+        }
+      ]
+    },
+    {
+      "phase": "P4",
+      "title": "Live Token Acquisition Classification",
+      "status": "Draft",
+      "goal": "Re-run live token acquisition and classify the result truthfully.",
+      "children": [
+        {
+          "act": "P4A",
+          "title": "Live token-acquisition classification",
+          "status": "Draft",
+          "goal": "Prove whether live token acquisition succeeds or fails downstream."
+        }
+      ]
+    },
+    {
+      "phase": "P5",
+      "title": "Service-Mode End-to-End Acceptance",
+      "status": "Draft",
+      "goal": "Run final sites.root and directory.org acceptance and close truthfully.",
+      "children": [
+        {
+          "act": "P5A",
+          "title": "End-to-end acceptance and closeout",
+          "status": "Draft",
+          "goal": "Emit final GO or NO-GO and operator handoff."
+        }
+      ]
+    }
+  ],
+  "phase_boundaries": {
+    "P1A": "local runtime/bootstrap/dependency/env-loading/health truth only; if auth or credential ownership is proven, stop and hand off to P2A",
+    "P2A": "credential-source/auth-mode/provider-path truth only; if runtime/bootstrap/health ownership is proven, reopen P1A rather than drift scope"
+  },
+  "closure_authority": {
+    "P4A": "classify live token acquisition and decide advance-or-reopen only; no final remediation GO or NO-GO",
+    "P5A": "sole authority for final remediation GO or NO-GO after live sites.root and directory.org acceptance evidence"
+  }
+}

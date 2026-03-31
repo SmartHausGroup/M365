@@ -12,6 +12,7 @@ from typing import Any
 import httpx
 import yaml
 from smarthaus_common.auth_model import AuthResolution, resolve_action_auth
+from smarthaus_common.errors import AuthConfigurationError
 from smarthaus_common.executor_routing import executor_route_for_action as resolve_route_for_action
 
 from .audit import recent_admin_events, record_admin_event
@@ -62,6 +63,58 @@ def build_executor_identity(tenant_config: Any, executor_name: str) -> dict[str,
     }
 
 
+def _tenant_aware_context_active(executor_name: str | None = None) -> bool:
+    del executor_name
+    return bool(os.getenv("UCP_TENANT", "").strip())
+
+
+def _graph_auth_error(exc: Exception, *, init_failure: bool = False) -> GraphAPIError:
+    if isinstance(exc, GraphAPIError):
+        return exc
+    if isinstance(exc, FileNotFoundError):
+        code = "tenant_config_missing"
+    elif isinstance(exc, ValueError):
+        code = "tenant_config_invalid"
+    elif isinstance(exc, AuthConfigurationError):
+        code = "auth_configuration_error"
+    else:
+        code = "token_provider_init_failed" if init_failure else "token_provider_failed"
+    return GraphAPIError(500, code, str(exc))
+
+
+def _direct_client_secret_token(
+    tenant_id: str,
+    client_id: str,
+    client_secret: str,
+    scope: str,
+) -> str:
+    token_url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
+    with httpx.Client(timeout=30.0) as client:
+        response = client.post(
+            token_url,
+            data={
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "grant_type": "client_credentials",
+                "scope": scope,
+            },
+        )
+
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = {}
+
+    if response.status_code >= 400 or "access_token" not in payload:
+        raise GraphAPIError(
+            500,
+            "auth_configuration_error",
+            payload.get("error_description") or response.text or response.reason_phrase,
+        )
+
+    return str(payload["access_token"])
+
+
 def _get_token_provider(executor_name: str | None = None) -> Any | None:
     """Get or create the tenant-aware token provider."""
     try:
@@ -84,7 +137,9 @@ def _get_token_provider(executor_name: str | None = None) -> Any | None:
             provider = GraphTokenProvider(tenant_config=projected_cfg)
             _token_providers[cache_key] = provider
         return provider
-    except Exception:
+    except Exception as exc:
+        if _tenant_aware_context_active(executor_name):
+            raise _graph_auth_error(exc, init_failure=True) from exc
         return None
 
 
@@ -120,12 +175,13 @@ def _graph_token(prefer_delegated: bool | None = None) -> str | None:
     # Try tenant-aware provider first
     effective_preference = _effective_prefer_delegated(prefer_delegated)
 
-    provider = _get_token_provider()
-    if provider is not None:
-        try:
-            return provider.get_token(prefer_delegated=effective_preference)
-        except Exception:
-            pass  # Fall through to legacy
+    if _tenant_aware_context_active():
+        provider = _get_token_provider()
+        if provider is not None:
+            try:
+                return provider.get_token(prefer_delegated=effective_preference)
+            except Exception as exc:
+                raise _graph_auth_error(exc) from exc
 
     # Legacy fallback: resolve credentials from environment variables
     tenant_id = (
@@ -170,8 +226,15 @@ def _graph_token(prefer_delegated: bool | None = None) -> str | None:
             )
             token = cred.get_token(GRAPH_SCOPE)
             return token.token
+        except ImportError:
+            return _direct_client_secret_token(tenant_id, client_id, client_secret, GRAPH_SCOPE)
         except Exception:
-            pass
+            try:
+                return _direct_client_secret_token(tenant_id, client_id, client_secret, GRAPH_SCOPE)
+            except GraphAPIError:
+                raise
+            except Exception:
+                pass
 
     return None
 

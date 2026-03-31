@@ -1,0 +1,9 @@
+Execute M365 Service Runtime Authority and Baseline Lock
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-service-runtime-authority-and-baseline-lock.md.
+
+Plan Reference: plan:m365-service-runtime-authority-and-baseline-lock:R1
+
+Canonical predecessor: plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md (M365-local). The sibling UCP repo is historical lineage only.
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only this phase, and do not auto-advance to the next phase.
