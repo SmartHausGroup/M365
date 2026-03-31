@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `plan:m365-service-mode-token-acquisition-remediation`
 - **Title:** `Repair the M365 service-auth/runtime boundary in the active repair path`
 - **Version:** `2.0`
-- **Status:** `blocked`
+- **Status:** `complete`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-03-23`
 - **Date Updated:** `2026-03-31`
@@ -146,6 +146,8 @@ Agent must STOP and re-scope if the repair requires UCP-side caller changes, Mic
 - `docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt`
 - `notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb`
 - `configs/generated/service_mode_repair_package_governance_alignment_verification.json`
+- `notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb`
+- `configs/generated/service_mode_merge_readiness_alignment_verification.json`
 - `docs/commercialization/m365-token-provider-runtime-repair.md`
 - `artifacts/diagnostics/m365_token_provider_runtime_repair.json`
 
@@ -249,6 +251,7 @@ Agent must STOP and re-scope if the repair requires UCP-side caller changes, Mic
   - `T3 complete — diagnostics recorded`
   - `T4 complete — decision locked as NO-GO before live classification`
   - `T5 complete — governance synchronized without auto-advancing the next act`
+  - `Merge-readiness closure complete — sibling UCP caller alignment and shared acceptance later resolved the cross-repo blocker without changing the historical M365-local NO-GO result`
 - **Gate checklist:**
   - `CHECK:C0 pass`
   - `CHECK:C1 pass`
@@ -258,6 +261,7 @@ Agent must STOP and re-scope if the repair requires UCP-side caller changes, Mic
 - **Final decision:** `NO-GO`
 - **Approved by:** `user_go`
 - **Completion timestamp:** `2026-03-31 09:49:39 EDT`
+- **Follow-on resolution:** `Sibling UCP caller alignment and end-to-end acceptance are complete on feature/governance-ui-constraint-visibility at b7bd2462c90600b4326994500815c4dae2659f56, so this phase remains historically NO-GO but is no longer an active merge blocker.`
 
 ## Section 20: When Blocked
 

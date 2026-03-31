@@ -2,7 +2,7 @@ plan_id: "plan:m365-token-provider-runtime-repair"
 parent_plan_id: "plan:m365-service-mode-token-acquisition-remediation"
 title: "Repair the M365 service-auth/runtime boundary in the active repair path"
 version: "2.0"
-status: blocked
+status: complete
 owner: "SMARTHAUS"
 date_created: "2026-03-23"
 date_updated: "2026-03-31"
@@ -52,6 +52,8 @@ scope:
     - "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt"
     - "notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb"
     - "configs/generated/service_mode_repair_package_governance_alignment_verification.json"
+    - "notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb"
+    - "configs/generated/service_mode_merge_readiness_alignment_verification.json"
     - "src/ops_adapter/main.py"
     - "src/ops_adapter/app.py"
     - "src/ops_adapter/actions.py"
@@ -272,6 +274,18 @@ artifacts:
     schema_ref: "inline"
     validation: "Diagnostics artifact records repaired boundary truthfully."
     artifact_sha256: null
+  - path: "notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb"
+    format: "ipynb"
+    producer: T5
+    schema_ref: "inline"
+    validation: "Notebook evidence proves the historical NO-GO remains correct while the sibling UCP fix resolves merge readiness."
+    artifact_sha256: null
+  - path: "configs/generated/service_mode_merge_readiness_alignment_verification.json"
+    format: "JSON"
+    producer: T5
+    schema_ref: "inline"
+    validation: "Generated verification artifact records the sibling UCP resolution and merge-readiness truth."
+    artifact_sha256: null
 
 environment:
   python_version: "3.14.3"
@@ -375,11 +389,13 @@ traceability:
   files_created:
     notebooks:
       - "notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb"
+      - "notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb"
     invariants: []
     lemmas: []
     code_files: []
     config_artifacts:
       - "configs/generated/service_mode_repair_package_governance_alignment_verification.json"
+      - "configs/generated/service_mode_merge_readiness_alignment_verification.json"
   index_updates:
     traceability_index: null
     invariant_index: null
@@ -399,6 +415,8 @@ governance_closure:
     - "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.md"
     - "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.yaml"
     - "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.json"
+    - "notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb"
+    - "configs/generated/service_mode_merge_readiness_alignment_verification.json"
   completion_rule: "Do not mark the phase complete until governance surfaces, diagnostics, and plan artifacts are synchronized."
 
 execution_outcome:
@@ -418,6 +436,9 @@ execution_outcome:
     - task_id: "T5"
       complete: true
       evidence: "Operations/ACTION_LOG.md, Operations/EXECUTION_PLAN.md, and Operations/PROJECT_FILE_INDEX.md were synchronized without auto-advancing the next act."
+    - task_id: "merge_readiness"
+      complete: true
+      evidence: "Sibling UCP caller alignment and end-to-end acceptance completed on feature/governance-ui-constraint-visibility at b7bd2462c90600b4326994500815c4dae2659f56, so this bounded M365 phase is no longer an active blocker."
   gate_checklist:
     - gate_id: "CHECK:C0"
       result: "pass"
@@ -432,6 +453,7 @@ execution_outcome:
   final_decision: "NO-GO"
   approved_by: "user_go"
   completion_timestamp: "2026-03-31 09:49:39 EDT"
+  follow_on_resolution: "Sibling UCP caller alignment and end-to-end acceptance are complete on feature/governance-ui-constraint-visibility at b7bd2462c90600b4326994500815c4dae2659f56, so this phase remains historically NO-GO but is no longer an active merge blocker."
 
 when_blocked:
   format: "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}"

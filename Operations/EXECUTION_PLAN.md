@@ -400,6 +400,8 @@ outside this repo slice.
 
 **Status update (2026-03-31 09:49 EDT):** Executed the bounded `plan:m365-token-provider-runtime-repair` phase and closed it `NO-GO / Blocked`. The local M365 service contract remains correct and fail-closed: `/actions/*` requires `Authorization: Bearer <token>`, and the sibling UCP HTTP caller still sends neither bearer nor actor headers. Added `docs/commercialization/m365-token-provider-runtime-repair.md` plus `artifacts/diagnostics/m365_token_provider_runtime_repair.json` to freeze that truth. No M365 runtime code changed, because any local patch that made the current caller pass would have weakened JWT-backed actor identity. The next valid act is sibling UCP caller alignment before token validation can resume.
 
+**Status update (2026-03-31 13:25 EDT):** The sibling UCP repo has now completed the caller-alignment, token-validation, and end-to-end acceptance acts on `feature/governance-ui-constraint-visibility` at `b7bd2462c90600b4326994500815c4dae2659f56`. The executed `plan:m365-token-provider-runtime-repair` phase remains historically `NO-GO` for the correct bounded reason, but it is no longer an active blocker for merge readiness because the cross-repo defect was resolved on the UCP caller side instead of by weakening the M365-local JWT gate. Added notebook-backed merge-readiness evidence at `notebooks/m365/INV-M365-BU-service-mode-merge-readiness-alignment.ipynb` plus `configs/generated/service_mode_merge_readiness_alignment_verification.json` to freeze that truth explicitly.
+
 ---
 
 ## Notes
