@@ -1,52 +1,600 @@
 {
-  "plan_id": "m365-token-provider-runtime-repair",
-  "parent_plan_id": "m365-service-mode-token-acquisition-remediation",
-  "status": "Draft",
-  "date": "2026-03-23",
+  "plan_id": "plan:m365-token-provider-runtime-repair",
+  "parent_plan_id": "plan:m365-service-mode-token-acquisition-remediation",
+  "title": "Repair the M365 service-auth/runtime boundary in the active repair path",
+  "version": "2.0",
+  "status": "draft",
   "owner": "SMARTHAUS",
-  "execution_plan_reference": "plan:m365-token-provider-runtime-repair:R1",
-  "draft_vs_active_semantics": "Draft until approval packet plus explicit go; the parent initiative may be Active while this child remains Draft.",
-  "approval_governance_gates": [
-    "present approval packet first",
-    "wait for explicit go",
-    "call MCP validate_action before any mutating action and obey the verdict",
-    "stop on first red",
-    "do not auto-advance to the next phase"
-  ],
-  "objective": "Apply the minimal M365-side runtime or token-provider repair identified by diagnosis.",
-  "allowlist": [
-    "plans/m365-token-provider-runtime-repair/**",
-    "pyproject.toml",
-    "src/ops_adapter/actions.py",
-    "src/smarthaus_graph/client.py",
-    "src/smarthaus_common/auth_model.py",
-    "src/provisioning_api/auth.py",
-    "tests/test_ops_adapter.py",
-    "tests/test_graph_client.py",
-    "tests/test_env_loading.py",
-    "docs/commercialization/m365-token-provider-runtime-repair.md",
-    "artifacts/diagnostics/m365_token_provider_runtime_repair.json",
-    "Operations/EXECUTION_PLAN.md",
-    "Operations/ACTION_LOG.md",
-    "Operations/PROJECT_FILE_INDEX.md"
-  ],
-  "denylist": ["../UCP/**", "registry/**"],
+  "date_created": "2026-03-23",
+  "date_updated": "2026-03-31",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md \u00a7 Initiative: M365 Service-Mode Token Acquisition Remediation",
+  "domain": "infrastructure",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "M365-only tooling with truthful governed execution.",
+      "Self-service posture without repo-authority drift.",
+      "Fail-closed security and actor-identity enforcement on governed action paths."
+    ],
+    "anti_alignment": [
+      "Does NOT weaken the M365 JWT-backed actor identity requirement.",
+      "Does NOT relabel local service-auth failures as Microsoft-side failures.",
+      "Does NOT execute the sibling UCP consumer-side validation or acceptance acts."
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Set up the M365 integration path the correct way per Microsoft standards.",
+      "Align UCP to that contract instead of probing blindly from both ends.",
+      "Make the next proper implementation step formal and governed before execution."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "R1 through R5 capture the bounded M365-side repair required before UCP can rerun consumer-side validation truthfully."
+  },
+  "objective": "Repair the bounded M365-side service-auth/runtime defect on governed /actions/* calls so the service can enforce JWT-backed actor identity correctly and pass truthful downstream outcomes back to UCP.",
+  "current_state": "UCP reaches the M365 service reliably, but the M365 service still fails locally at the JWT gate with `401 missing_bearer_token` before Graph token acquisition. The historical child package existed in a sparse format and framed the repair too narrowly around token-provider behavior instead of the now-proven service-auth/runtime boundary.",
+  "target_state": "One bounded M365-side repair phase can execute against the real service-auth/runtime boundary, preserve fail-closed JWT enforcement, and stop with truthful live-classification readiness rather than speculative success claims.",
+  "scope": {
+    "in_scope": [
+      "Repair the bounded M365-side service-auth/runtime defect in the active repair path.",
+      "Preserve the governed actor-identity contract on `/actions/*`.",
+      "Update focused regressions and repair diagnostics.",
+      "Stop at the point where live classification is the next dependency boundary."
+    ],
+    "out_of_scope": [
+      "UCP-side caller alignment.",
+      "Microsoft tenant permission changes.",
+      "Final live classification.",
+      "Final end-to-end acceptance.",
+      "Weakening bearer/JWT requirements to force green."
+    ],
+    "file_allowlist": [
+      "plans/m365-token-provider-runtime-repair/**",
+      "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+      "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt",
+      "notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb",
+      "configs/generated/service_mode_repair_package_governance_alignment_verification.json",
+      "src/ops_adapter/main.py",
+      "src/ops_adapter/app.py",
+      "src/ops_adapter/actions.py",
+      "src/smarthaus_common/auth_model.py",
+      "src/provisioning_api/auth.py",
+      "tests/test_ops_adapter.py",
+      "tests/test_graph_client.py",
+      "tests/test_env_loading.py",
+      "docs/commercialization/m365-token-provider-runtime-repair.md",
+      "artifacts/diagnostics/m365_token_provider_runtime_repair.json",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "file_denylist": [
+      "../UCP/src/**",
+      "../UCP/tests/**",
+      "registry/**",
+      "Any path not listed in the allowlist"
+    ],
+    "scope_fence_rule": "Stop and re-scope if the repair requires UCP-side caller changes, Microsoft tenant permission changes, or any file outside the allowlist."
+  },
   "requirements": [
-    {"id": "R1", "title": "Fix diagnosed token-provider/runtime defect"},
-    {"id": "R2", "title": "Preserve fail-closed behavior"},
-    {"id": "R3", "title": "Focused regression proof"},
-    {"id": "R4", "title": "Preserve truthful Microsoft-side failures"},
-    {"id": "R5", "title": "Stop at live-classification boundary"}
+    {
+      "id": "R1",
+      "ref": "plan:m365-token-provider-runtime-repair:R1",
+      "description": "Repair the diagnosed M365 service-auth/runtime defect.",
+      "acceptance_criteria": "Governed `/actions/*` requests no longer fail locally with `missing_bearer_token` once the repair is correctly applied.",
+      "depends_on": [],
+      "user_intent_trace": "Set up the M365 integration path the correct way per Microsoft standards."
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-token-provider-runtime-repair:R2",
+      "description": "Preserve fail-closed JWT actor identity.",
+      "acceptance_criteria": "Bearer/JWT enforcement remains explicit and fail-closed after the repair.",
+      "depends_on": [
+        "R1"
+      ],
+      "user_intent_trace": "Align UCP to that contract instead of probing blindly from both ends."
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-token-provider-runtime-repair:R3",
+      "description": "Prove the repaired boundary with focused regressions.",
+      "acceptance_criteria": "Focused tests cover missing-bearer, valid-bearer, and actor-identity-required paths.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "Make the next proper implementation step formal and governed before execution."
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-token-provider-runtime-repair:R4",
+      "description": "Preserve truthful downstream Microsoft behavior.",
+      "acceptance_criteria": "Local repair does not mask real Microsoft-side invalid-credential or permission outcomes.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "Set up the M365 integration path the correct way per Microsoft standards."
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-token-provider-runtime-repair:R5",
+      "description": "Stop at live-classification readiness.",
+      "acceptance_criteria": "The phase ends when M365 is ready for live classification rather than continuing into end-to-end acceptance.",
+      "depends_on": [
+        "R1",
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "user_intent_trace": "Align UCP to that contract instead of probing blindly from both ends."
+    }
   ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
   "tasks": [
-    {"id": "T1", "description": "Restate root cause from diagnosis phase."},
-    {"id": "T2", "description": "Implement bounded runtime/auth repair."},
-    {"id": "T3", "description": "Add focused regression tests and diagnostics."},
-    {"id": "T4", "description": "Run repair gate."},
-    {"id": "T5", "description": "Update governance surfaces and stop."}
+    {
+      "id": "T1",
+      "ref": "plan:m365-token-provider-runtime-repair:T1",
+      "name": "Lock the current root cause",
+      "description": "Restate the live truth boundary from the M365 auth gate and the cross-repo contract note.",
+      "requirement_refs": [
+        "R1"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "docs/commercialization/m365-token-provider-runtime-repair.md"
+      ],
+      "exit_criteria": [
+        "The current repair target is the local M365 service-auth/runtime boundary.",
+        "The phase does not drift into UCP-side caller alignment."
+      ],
+      "validation_command": "rg -n \"missing_bearer_token|service-auth|JWT|actor identity\" docs/commercialization/m365-token-provider-runtime-repair.md src/ops_adapter/main.py",
+      "implementation_notes": null
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-token-provider-runtime-repair:T2",
+      "name": "Apply the bounded service-auth/runtime repair",
+      "description": "Implement the minimal M365-side repair required by the diagnosed `/actions/*` auth boundary.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/ops_adapter/main.py",
+        "src/ops_adapter/app.py",
+        "src/ops_adapter/actions.py"
+      ],
+      "exit_criteria": [
+        "The M365 service can accept the intended governed caller shape.",
+        "Fail-closed JWT actor-identity enforcement remains intact."
+      ],
+      "validation_command": "python3 -m py_compile src/ops_adapter/main.py src/ops_adapter/app.py src/ops_adapter/actions.py",
+      "implementation_notes": null
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-token-provider-runtime-repair:T3",
+      "name": "Add focused regression coverage and diagnostics",
+      "description": "Add or update bounded regression tests and repair diagnostics.",
+      "requirement_refs": [
+        "R3",
+        "R4"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "tests/test_ops_adapter.py",
+        "tests/test_graph_client.py",
+        "tests/test_env_loading.py",
+        "artifacts/diagnostics/m365_token_provider_runtime_repair.json"
+      ],
+      "exit_criteria": [
+        "Missing-bearer, valid-bearer, and actor-identity-required paths are covered.",
+        "Repair diagnostics capture the repaired boundary truthfully."
+      ],
+      "validation_command": "PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_graph_client.py tests/test_env_loading.py",
+      "implementation_notes": null
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-token-provider-runtime-repair:T4",
+      "name": "Run the repair gate",
+      "description": "Run the bounded validation suite and confirm the boundary is ready for live classification.",
+      "requirement_refs": [
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "artifacts/diagnostics/m365_token_provider_runtime_repair.json"
+      ],
+      "exit_criteria": [
+        "Local service-auth failures are repaired.",
+        "The next dependency boundary is live classification, not more speculative repair."
+      ],
+      "validation_command": "PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_graph_client.py tests/test_env_loading.py && git diff --check",
+      "implementation_notes": null
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-token-provider-runtime-repair:T5",
+      "name": "Close governance truthfully",
+      "description": "Synchronize the action log, execution plan, file index, and plan status without auto-advancing the next phase.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Operations/ACTION_LOG.md",
+        "Operations/EXECUTION_PLAN.md",
+        "Operations/PROJECT_FILE_INDEX.md"
+      ],
+      "exit_criteria": [
+        "Governance surfaces are synchronized.",
+        "The next act is still explicitly approved before execution."
+      ],
+      "validation_command": "git diff --check",
+      "implementation_notes": null
+    }
   ],
-  "prompt_refs": {
-    "detailed": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
-    "kickoff": "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt"
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Root-cause remains explicit",
+        "description": "The phase must still target the local M365 service-auth/runtime boundary.",
+        "task_ref": "T1",
+        "validation_command": "rg -n \"missing_bearer_token|service-auth|JWT|actor identity\" docs/commercialization/m365-token-provider-runtime-repair.md src/ops_adapter/main.py",
+        "pass_criteria": "The repair target is explicitly the local M365 service-auth/runtime boundary.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C1",
+        "name": "Fail-closed auth gate preserved",
+        "description": "The repair must keep JWT-backed actor identity explicit and fail-closed.",
+        "task_ref": "T2",
+        "validation_command": "python3 -m py_compile src/ops_adapter/main.py src/ops_adapter/app.py src/ops_adapter/actions.py",
+        "pass_criteria": "The bounded auth/runtime files parse cleanly.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C2",
+        "name": "Focused regressions green",
+        "description": "Targeted ops/graph/env tests must pass.",
+        "task_ref": "T3",
+        "validation_command": "PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_graph_client.py tests/test_env_loading.py",
+        "pass_criteria": "The bounded regression suite exits 0.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C3",
+        "name": "Downstream truth preserved",
+        "description": "Microsoft-side failures must remain distinguishable from local service-auth failures.",
+        "task_ref": "T4",
+        "validation_command": "python3 - <<'PY'\nfrom pathlib import Path\ntext = Path('artifacts/diagnostics/m365_token_provider_runtime_repair.json').read_text(encoding='utf-8')\nassert 'missing_bearer_token' not in text or 'microsoft_permission_failure' in text or 'downstream_truth_preserved' in text\nprint('diagnostic truth check ok')\nPY",
+        "pass_criteria": "Diagnostics do not collapse Microsoft-side failures into local success claims.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C4",
+        "name": "Diff hygiene",
+        "description": "Patch hygiene must be clean.",
+        "task_ref": "T5",
+        "validation_command": "git diff --check",
+        "pass_criteria": "The command exits 0.",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All checks pass and the next dependency boundary is live classification.",
+      "no_go_rule": "Any check fails or the repair drifts into UCP-side caller alignment."
+    },
+    "no_go_triggers": [
+      "The repair weakens the JWT-backed actor-identity requirement.",
+      "The repair masks Microsoft-side failures.",
+      "The phase continues beyond live-classification readiness."
+    ]
+  },
+  "determinism": null,
+  "artifacts": [
+    {
+      "path": "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.md",
+      "format": "md",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE.md",
+      "validation": "Human-readable plan artifact present.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.yaml",
+      "format": "YAML",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.yaml",
+      "validation": "YAML artifact matches the current master plan structure.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.json",
+      "format": "JSON",
+      "producer": "T5",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json",
+      "validation": "JSON artifact mirrors the YAML plan.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+      "format": "md",
+      "producer": "T5",
+      "schema_ref": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+      "validation": "Detailed prompt present in the current governance-locked MATHS structure.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt",
+      "format": "txt",
+      "producer": "T5",
+      "schema_ref": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+      "validation": "Kickoff prompt present in the repo two-file prompt format.",
+      "artifact_sha256": null
+    },
+    {
+      "path": "artifacts/diagnostics/m365_token_provider_runtime_repair.json",
+      "format": "JSON",
+      "producer": "T4",
+      "schema_ref": "inline",
+      "validation": "Diagnostics artifact records repaired boundary truthfully.",
+      "artifact_sha256": null
+    }
+  ],
+  "environment": {
+    "python_version": "3.14.3",
+    "venv": ".venv/bin/python",
+    "additional_dependencies": [
+      "fastapi",
+      "PyJWT",
+      "httpx"
+    ],
+    "hardware": "N/A \u2014 local developer workstation",
+    "external_data": [
+      "local M365 tenant configuration"
+    ],
+    "pre_notebook_check": null
+  },
+  "implementation_approach": {
+    "options_considered": [
+      {
+        "id": "option_a",
+        "description": "Repair the bounded M365 service-auth/runtime defect inside the existing M365 service.",
+        "pros": [
+          "Matches the current live failure location at the M365 `/actions/*` JWT gate.",
+          "Preserves the correct cross-repo order: M365 service repair first, UCP caller alignment second.",
+          "Keeps the phase bounded to the resident FastAPI/ops-adapter runtime."
+        ],
+        "cons": [
+          "Still requires careful scope control to avoid drifting into UCP-side work."
+        ]
+      },
+      {
+        "id": "option_b",
+        "description": "Shift the next repair into UCP-side caller alignment first.",
+        "pros": [
+          "Could reduce future caller/service mismatch if the M365 service contract were already green."
+        ],
+        "cons": [
+          "Inverts the current contract order and ignores the fact that the local M365 service gate is the first failing boundary.",
+          "Would make M365-side service-auth truth ambiguous again."
+        ]
+      }
+    ],
+    "chosen": "Repair the bounded M365 service-auth/runtime defect inside the existing M365 service.",
+    "rationale": "The current live failure is local to the M365 service JWT gate before Graph token acquisition, so the next repair must stay inside the M365 service boundary. This preserves truthful sequencing, keeps JWT-backed actor identity fail-closed, and leaves UCP-side caller alignment as the dependent next act rather than an overlapping guess.",
+    "rejected_rationale": {
+      "option_b": "Shifting to UCP-side caller alignment first would reintroduce middle-out probing and weaken the cross-repo contract order locked by the current service-auth note."
+    },
+    "adr_ref": null
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "The repair could drift into UCP-side caller work.",
+        "impact": "high",
+        "mitigation": "Fail closed if the change requires UCP-side files or caller alignment.",
+        "status": "open"
+      },
+      {
+        "risk": "The repair could weaken JWT enforcement instead of satisfying the contract correctly.",
+        "impact": "high",
+        "mitigation": "Require explicit fail-closed checks and missing-bearer / actor-identity regressions.",
+        "status": "open"
+      },
+      {
+        "risk": "The repair could hide downstream Microsoft auth or permission failures behind local success claims.",
+        "impact": "high",
+        "mitigation": "Keep a dedicated downstream-truth gate in diagnostics and final classification.",
+        "status": "open"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "rollback": {
+    "procedure": [
+      "Revert only the bounded allowlist files changed by this phase.",
+      "Restore the prior child-package wording if the normalized package cannot be validated honestly.",
+      "Delete the generated normalization verification artifact if it was produced for the failed attempt.",
+      "Update governance trackers to record the rollback state truthfully."
+    ],
+    "files_to_revert": [
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.md",
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.yaml",
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.json",
+      "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+      "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "artifacts_to_delete": [
+      "configs/generated/service_mode_repair_package_governance_alignment_verification.json"
+    ],
+    "governance_updates_on_rollback": [
+      "Operations/ACTION_LOG.md",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ]
+  },
+  "prompt_references": {
+    "maths_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+    "prompt_doc": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+    "prompt_kickoff": "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt",
+    "per_task_prompts": []
+  },
+  "traceability": {
+    "requirement_task_map": {
+      "R1": [
+        "T1",
+        "T2"
+      ],
+      "R2": [
+        "T2",
+        "T3"
+      ],
+      "R3": [
+        "T3",
+        "T4"
+      ],
+      "R4": [
+        "T3",
+        "T4"
+      ],
+      "R5": [
+        "T4",
+        "T5"
+      ]
+    },
+    "validation_map": {
+      "R1": [
+        "CHECK:C0",
+        "CHECK:C1"
+      ],
+      "R2": [
+        "CHECK:C1",
+        "CHECK:C2"
+      ],
+      "R3": [
+        "CHECK:C2"
+      ],
+      "R4": [
+        "CHECK:C3"
+      ],
+      "R5": [
+        "CHECK:C4"
+      ]
+    },
+    "files_created": {
+      "notebooks": [
+        "notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb"
+      ],
+      "invariants": [],
+      "lemmas": [],
+      "code_files": [],
+      "config_artifacts": [
+        "configs/generated/service_mode_repair_package_governance_alignment_verification.json"
+      ]
+    },
+    "index_updates": {
+      "traceability_index": null,
+      "invariant_index": null,
+      "math_readme": null,
+      "lemmas_appendix": null
+    }
+  },
+  "governance_closure": {
+    "action_log": "Operations/ACTION_LOG.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "project_status": null,
+    "invariant_promotions": [],
+    "lemma_promotions": [],
+    "required_updates": [
+      "Operations/ACTION_LOG.md",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.md",
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.yaml",
+      "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.json"
+    ],
+    "completion_rule": "Do not mark the phase complete until governance surfaces, diagnostics, and plan artifacts are synchronized."
+  },
+  "execution_outcome": {
+    "task_checklist": [],
+    "gate_checklist": [],
+    "final_decision": null,
+    "approved_by": null,
+    "completion_timestamp": null
+  },
+  "when_blocked": {
+    "format": "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}",
+    "escalation": {
+      "primary": "SMARTHAUS",
+      "secondary": "CTO"
+    }
+  },
+  "agent_constraints": [
+    "Do not weaken the M365 JWT requirement just to make the phase pass.",
+    "Do not expand the phase into UCP-side caller alignment.",
+    "Do not call Microsoft-side invalid credentials or permission failures a local success.",
+    "Stop if the next correct act becomes live classification rather than more repair code."
+  ],
+  "references": {
+    "north_star": "Operations/NORTHSTAR.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "applicable_rules": [
+      ".cursor/rules/agent-workflow-mandatory.mdc",
+      ".cursor/rules/codex-prompt-creation.mdc",
+      ".cursor/rules/rsf-change-approval.mdc",
+      ".cursor/rules/notebook-first-mandatory.mdc",
+      ".cursor/rules/ma-process-mandatory.mdc",
+      ".cursor/rules/project-file-index-enforcement.mdc"
+    ],
+    "related_plans": [
+      "plans/m365-service-mode-token-acquisition-remediation/m365-service-mode-token-acquisition-remediation.md",
+      "plans/m365-token-provider-path-diagnosis/m365-token-provider-path-diagnosis.md"
+    ],
+    "related_docs": [
+      "../UCP/docs/platform/M365_SERVICE_AUTH_CONTRACT_AND_EXECUTION_ORDER.md",
+      "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "src/ops_adapter/main.py",
+      "tests/test_ops_adapter.py"
+    ],
+    "maths_prompt_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md"
   }
 }

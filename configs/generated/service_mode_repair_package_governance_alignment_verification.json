@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-token-provider-runtime-repair",
+  "purpose": "Verify the normalized M365 child package now satisfies the current master plan and prompt governance checks.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb",
+    "role": "governance_prerequisite_evidence",
+    "sha256": "c4a53782cf509f50cbb3bc1f8bed70b25598cd9883fa675c8eeb9b2e1e368c3e"
+  },
+  "plan_schema": {
+    "path": "plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.yaml",
+    "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json",
+    "verdict": "accepted",
+    "sha256": "f6566d46b7edd16f10d7c96351b57f4dbc8d1ae76b62264711e1acfdb8344a22"
+  },
+  "prompt_detail": {
+    "schema_version": "ucp-governance-artifact-contract-v1",
+    "artifact_ref": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+    "artifact_class": "governed_prompt_detail",
+    "profile_id": "governed_maths_prompt_v1",
+    "valid": true,
+    "verdict": "accepted",
+    "missing_requirements": [],
+    "detected_requirements": [
+      "detail_heading",
+      "plan_reference",
+      "parent_plan_reference",
+      "north_star_reference",
+      "mission",
+      "governance_lock",
+      "agent_instruction_reference",
+      "execution_plan_reference",
+      "maths_template_reference",
+      "phase_anchor_m",
+      "phase_anchor_a",
+      "phase_anchor_t",
+      "phase_anchor_h",
+      "phase_anchor_s"
+    ],
+    "read_only": true,
+    "next_boundary": "G4-B artifact expansion beyond prompt profiles",
+    "rule_model_id": "ucp_native_rule_model_v1",
+    "source_of_truth": "ucp",
+    "applicable_rule_count": 1,
+    "rule_bindings": [
+      {
+        "rule_id": "prompt.maths_structure.required",
+        "rule_class": "hard_invariant",
+        "formalization_status": "formalized",
+        "source_of_truth": "ucp",
+        "applicable": true,
+        "pass": true,
+        "failure_mode": "fail_closed",
+        "validation_surfaces": [
+          "/api/v1/governance/artifacts/prompts/validate"
+        ],
+        "admission_bindings": [
+          "governed_prompt_validation"
+        ],
+        "frontend_surfaces": [
+          "Governance Studio",
+          "Docs"
+        ],
+        "adapter_projection_count": 3
+      }
+    ],
+    "checksum": "767aebe93574afbfbf8528bb444d5a374be186d1c39923a69665c62e601d3adb"
+  },
+  "prompt_kickoff": {
+    "schema_version": "ucp-governance-artifact-contract-v1",
+    "artifact_ref": "docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt",
+    "artifact_class": "governed_prompt_kickoff",
+    "profile_id": "governed_prompt_kickoff_v1",
+    "valid": true,
+    "verdict": "accepted",
+    "missing_requirements": [],
+    "detected_requirements": [
+      "plan_reference",
+      "detail_prompt_pointer",
+      "execution_instruction"
+    ],
+    "detail_prompt_ref": "docs/prompts/codex-m365-token-provider-runtime-repair.md",
+    "read_only": true,
+    "next_boundary": "G4-B artifact expansion beyond prompt profiles",
+    "rule_model_id": "ucp_native_rule_model_v1",
+    "source_of_truth": "ucp",
+    "applicable_rule_count": 0,
+    "rule_bindings": [],
+    "checksum": "d8e141a4540c738cd79ddcef2fb637b5add81854459dbf804b6136974e5547d3"
+  },
+  "normalized_package_ready": true
+}

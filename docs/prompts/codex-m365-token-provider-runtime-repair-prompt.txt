@@ -1,7 +1,7 @@
-Execute M365 Token Provider Runtime Repair
+Execute M365 Service Auth / Runtime Repair
 
 Read and execute the detailed prompt at docs/prompts/codex-m365-token-provider-runtime-repair.md.
 
-Plan Reference: plan:m365-token-provider-runtime-repair:R1
+Plan Reference: plan:m365-token-provider-runtime-repair
 
-This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only this phase, and do not auto-advance to the next phase.
+This phase is draft. Present the formal approval packet first, wait for "go", then execute `plan:m365-token-provider-runtime-repair:T1` through `T5` only. Do not start live classification or any later phase.

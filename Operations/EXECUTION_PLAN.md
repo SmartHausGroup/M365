@@ -373,7 +373,7 @@ outside this repo slice.
 
 **Reference:** `plan:m365-service-mode-token-acquisition-remediation:R1`
 
-**Status:** 🟢 Active — parent initiative is active with P0A as the current next act. All 6 child phases (P0A through P5A) start in **Draft** and transition to Active only after their predecessor gate is green and the operator presents the approval packet and receives "go". No child phase may auto-advance.
+**Status:** 🟢 Active — parent initiative remains active, and the current next repair boundary is the normalized `plan:m365-token-provider-runtime-repair` child package. All child phases remain **Draft** until their predecessor gate is green and the operator presents the approval packet and receives "go". No child phase may auto-advance.
 
 **Canonical predecessor:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md` (M365-local). The sibling UCP repo is historical implementation lineage only.
 
@@ -395,6 +395,8 @@ outside this repo slice.
 **Status update (2026-03-23 21:50 EDT):** The M365-side service-mode runtime/token blocker is now repaired in the intended system runtime. `src/m365_server/__main__.py` now bootstraps `UCP_TENANT` from the local tenant catalog when the service starts without an explicit tenant; `src/smarthaus_graph/client.py` now supports direct app-only certificate assertions and retry behavior without requiring `msal` or `tenacity`; and the tenant-aware certificate path now correctly wins over invalid env secrets when both are present. Added bounded regressions in `tests/test_graph_client.py` and `tests/test_m365_server_main.py`. Live proof passed under `python3` with no manual tenant selection: the service bootstrapped `UCP_TENANT=smarthaus`, routed `sites.root` through the `sharepoint` executor and `directory.org` through the `directory` executor, and both live Graph reads returned success. The remaining work after this repair is governance phase-closeout and any broader environment packaging follow-through, not M365 token acquisition failure.
 
 **Cross-repo dependency truth:** M365 remains the authority for the service-runtime and token-path initiative in this repo. The sibling UCP repo keeps only the consumer-side `plan:ucp-m365-token-acquisition-validation` and `plan:ucp-m365-service-mode-end-to-end-acceptance` acts after the M365-side runtime path is green in the intended launch posture.
+
+**Status update (2026-03-31 09:19 EDT):** Normalized the `plan:m365-token-provider-runtime-repair` child package to the current master plan/prompt structure and realigned its phase wording to the active M365 service-auth/runtime boundary exposed by the current `401 missing_bearer_token` truth. Added notebook-backed governance evidence at `notebooks/m365/INV-M365-BS-service-mode-repair-package-governance-alignment.ipynb` so the package normalization is grounded in explicit evidence instead of metadata-only gate appeasement, then captured the green schema/prompt proof in `configs/generated/service_mode_repair_package_governance_alignment_verification.json`. No runtime code changed in this normalization slice; the child phase remains Draft until explicitly approved for execution.
 
 ---
 

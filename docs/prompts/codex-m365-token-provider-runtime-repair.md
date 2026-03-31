@@ -1,60 +1,103 @@
-# MATHS Prompt: M365 Token Provider Runtime Repair
+# Execution Prompt — MATHS Workstream (Governance Locked)
 
-## Governance Ack
+Plan Reference: `plan:m365-token-provider-runtime-repair`
+Parent Plan: `plan:m365-service-mode-token-acquisition-remediation`
+North Star: `docs/NORTH_STAR.md` (M365 repo equivalent: `Operations/NORTHSTAR.md`)
+Execution Plan: `docs/platform/EXECUTION_PLAN.md` (M365 repo equivalent: `Operations/EXECUTION_PLAN.md`)
+MATHS Template: `docs/governance/MATHS_PROMPT_TEMPLATE.md`
+North Star Reference: `docs/NORTH_STAR.md` and `Operations/NORTHSTAR.md`
+Execution Plan Reference: `docs/platform/EXECUTION_PLAN.md` and `Operations/EXECUTION_PLAN.md`
 
-- `GOVERNANCE_ACK: READ`
-- `GOVERNANCE_ACK: UNDERSTOOD`
-- `GOVERNANCE_ACK: WILL_FOLLOW`
-- `PLAN_REF_ACK: plan:m365-token-provider-runtime-repair:R1`
-- `NORTH_STAR_ACK: Operations/NORTHSTAR.md`
-- `RULES_ACK: .cursor/rules/**/*.mdc`
+**Mission:** Repair the bounded M365-side service-auth/runtime defect on governed `/actions/*` calls so the M365 service satisfies the current cross-repo auth contract without weakening JWT-backed actor identity or masking downstream Microsoft truth.
 
-## Approval and Governance Gates
+This prompt uses the **MATHS Prompt Template** as the formal execution scaffold and remains inside the active M365 repair path. This phase must not perform UCP-side caller alignment, live classification, or end-to-end acceptance.
 
-1. **Present the approval packet first** — before executing any check, present the plan ref, scope, predecessor status, and intended actions to the operator.
-2. **Wait for explicit "go"** — do not begin execution until the operator confirms with "go" in the chat interface.
-3. **Call MCP `validate_action` before any mutating action** — before writing, editing, or creating any file, call `validate_action` and obey the verdict. If the verdict is not `allowed`, stop immediately.
-4. **Stop on first red** — if any check emits `FAIL` or `BLOCKED`, stop the entire phase. Do not continue to subsequent checks.
-5. **Do not auto-advance to the next phase** — even if this phase emits GO, the next phase requires its own approval packet and "go" confirmation.
+## Model Configuration (for prompt runner)
 
-## Draft vs Active Semantics
+- Set temperature to `0`.
+- Set `top_p` to `1.0`.
+- Use precise or deterministic settings when available.
 
-This phase starts in **Draft** status. It transitions to **Active** only after the operator presents the approval packet and receives "go". The parent initiative can be Active while this phase is still Draft.
+## Governance Lock (Mandatory)
 
-## Execution Rules
+Before any write, test, or command:
 
-- Run checks `M365-TOKEN-REPAIR-C0` -> `M365-TOKEN-REPAIR-C10` in strict order.
-- Stop on first `FAIL` or `BLOCKED`.
-- Final outputs:
-  - `GATE:M365-TOKEN-REPAIR STATUS:<GO|NO-GO>`
-  - `FINAL_DECISION:<GO|NO-GO>`
+1. Read:
+- `AGENTS.md`
+- applicable `.cursor/rules/**/*.mdc`
+- `Operations/NORTHSTAR.md`
+- `Operations/EXECUTION_PLAN.md`
+- `Operations/ACTION_LOG.md`
+- `Operations/PROJECT_FILE_INDEX.md`
+- `plans/m365-service-mode-token-acquisition-remediation/m365-service-mode-token-acquisition-remediation.md`
+- `plans/m365-token-provider-runtime-repair/m365-token-provider-runtime-repair.md`
+- `plans/m365-token-provider-path-diagnosis/m365-token-provider-path-diagnosis.md`
+- `docs/governance/MATHS_PROMPT_TEMPLATE.md`
+- `../UCP/docs/platform/M365_SERVICE_AUTH_CONTRACT_AND_EXECUTION_ORDER.md`
+- `src/ops_adapter/main.py`
+- `src/ops_adapter/app.py`
+- `src/ops_adapter/actions.py`
+- `src/provisioning_api/auth.py`
+- `tests/test_ops_adapter.py`
+- `tests/test_graph_client.py`
+- `tests/test_env_loading.py`
 
-## Prompt Run Metadata
+2. Verify alignment + plan linkage:
+- cite `plan:m365-token-provider-runtime-repair:R1` through `R5`
+- cite `plan:m365-token-provider-runtime-repair:T1` through `T5`
+- stop immediately if the work escapes the allowlist or drifts into UCP-side caller alignment
 
-- Prompt version: `1.0`
-- Task ID: `M365-TOKEN-REPAIR`
-- Run ID: `m365-token-provider-runtime-repair`
-- Commit SHA: `<fill-at-run-time>`
-- Plan refs in scope:
-  - `plan:m365-token-provider-runtime-repair:R1`
-  - `plan:m365-token-provider-runtime-repair:R2`
-  - `plan:m365-token-provider-runtime-repair:R3`
-  - `plan:m365-token-provider-runtime-repair:R4`
-  - `plan:m365-token-provider-runtime-repair:R5`
+3. Enforce approval protocol:
+- present the formal approval packet first
+- wait for explicit `go`
+- call `validate_action` before any mutating action and obey the verdict
+- stop on first red
+
+## Required Output Format (Before Approval)
+
+Use this exact structure:
+
+- `Decision Summary`
+- `Options Considered`
+- `Evaluation Criteria`
+- `Why This Choice`
+- `Risks`
+- `Next Steps`
+
+## Execution Order (After Approval Only)
+
+1. Complete **M** (Model).
+2. Complete **A** (Annotate).
+3. Complete **T** (Tie).
+4. Complete **H** (Harness).
+5. Complete **S** (Stress-test).
+6. Update `Operations/ACTION_LOG.md`, `Operations/EXECUTION_PLAN.md`, and `Operations/PROJECT_FILE_INDEX.md` only if the bounded phase actually executes and changes governance state.
+
+## Validator Compatibility Anchors
+
+M:
+A:
+T:
+H:
+S:
 
 ## Context
 
-- Task name: `Repair the diagnosed M365 token-provider/runtime defect`
-- Domain: `runtime`
+- Task name: `Repair the M365 service-auth/runtime boundary in the active repair path`
+- Domain: `infrastructure`
 - Dependencies:
   - `plans/m365-token-provider-path-diagnosis/m365-token-provider-path-diagnosis.md`
+  - `../UCP/docs/platform/M365_SERVICE_AUTH_CONTRACT_AND_EXECUTION_ORDER.md`
+  - `src/ops_adapter/main.py`
+  - `src/ops_adapter/app.py`
   - `src/ops_adapter/actions.py`
-  - `src/smarthaus_graph/client.py`
 - Allowlist:
   - `plans/m365-token-provider-runtime-repair/**`
-  - `pyproject.toml`
+  - `docs/prompts/codex-m365-token-provider-runtime-repair.md`
+  - `docs/prompts/codex-m365-token-provider-runtime-repair-prompt.txt`
+  - `src/ops_adapter/main.py`
+  - `src/ops_adapter/app.py`
   - `src/ops_adapter/actions.py`
-  - `src/smarthaus_graph/client.py`
   - `src/smarthaus_common/auth_model.py`
   - `src/provisioning_api/auth.py`
   - `tests/test_ops_adapter.py`
@@ -66,100 +109,118 @@ This phase starts in **Draft** status. It transitions to **Active** only after t
   - `Operations/ACTION_LOG.md`
   - `Operations/PROJECT_FILE_INDEX.md`
 - Denylist:
-  - `../UCP/**`
+  - `../UCP/src/**`
+  - `../UCP/tests/**`
   - `registry/**`
+  - any path not in the allowlist
 
 ## M - Model
 
-- Problem: `The diagnosis phase identified a bounded M365-side runtime/token defect that still blocks live token acquisition.`
-- Goal: `Repair that exact defect without hiding downstream Microsoft-side truth.`
+- Problem: `UCP now reaches the M365 service, but the M365 service still fail-closes locally on governed /actions/* calls with 401 missing_bearer_token before Graph token acquisition.`
+- Goal: `Repair the bounded M365-side service-auth/runtime defect while preserving JWT-backed actor identity and truthful downstream Microsoft behavior.`
 - Success criteria:
-  - `The diagnosed defect is fixed in the M365 repo.`
-  - `Focused regression tests are green.`
-  - `The next dependency boundary is live classification, not more speculative repair.`
+  - `The M365 service no longer fails locally at the missing-bearer boundary for the intended governed caller shape.`
+  - `Fail-closed JWT actor-identity enforcement remains intact.`
+  - `The next dependency boundary becomes live classification, not more speculative repair.`
+- Out of scope:
+  - `UCP-side caller alignment`
+  - `Microsoft tenant permission changes`
+  - `final live classification`
+  - `end-to-end acceptance`
 
 ## A - Annotate
 
+Required measurable evidence:
+
 - Artifact/schema evidence:
-  - `repair doc and diagnostics artifact`
+  - `docs/commercialization/m365-token-provider-runtime-repair.md`
+  - `artifacts/diagnostics/m365_token_provider_runtime_repair.json`
 - Runtime/test evidence:
-  - `targeted ops/graph/env regression tests`
+  - `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_graph_client.py tests/test_env_loading.py`
 - Governance evidence:
-  - `plan/execution/action-log/file-index sync`
+  - `Operations/ACTION_LOG.md`
+  - `Operations/EXECUTION_PLAN.md`
+  - `Operations/PROJECT_FILE_INDEX.md`
 - Determinism evidence:
-  - `repeat bounded regression on fixed state yields the same pass/fail result`
+  - `repeat the bounded regression suite and require the same pass/fail result for fixed code and config`
 
 ## T - Tie
 
 - Dependency ties:
-  - `Repair must consume the exact diagnosis output.`
-  - `Repair is complete only when live classification is the next boundary.`
+  - `The M365 service auth contract must be satisfied before UCP can rerun consumer-side token validation truthfully.`
+  - `The phase owns only the local M365 service-auth/runtime repair, not the UCP caller change.`
 - Known failure modes:
-  - `over-broad repair`
-  - `masking downstream Microsoft errors`
-  - `changing unrelated registry or UCP surfaces`
+  - `scope drift into UCP-side caller alignment`
+  - `weakening JWT enforcement to force green`
+  - `masking Microsoft-side failures behind local success`
 - GO criteria:
-  - `diagnosed defect fixed, focused regressions green, live classification unblocked`
+  - `local service-auth/runtime defect repaired`
+  - `focused regressions green`
+  - `next dependency boundary is live classification`
 - NO-GO criteria:
-  - `repair drifts, focused regressions fail, or diagnosis is contradicted`
+  - `repair still fails locally`
+  - `JWT actor-identity enforcement weakens`
+  - `downstream Microsoft truth is obscured`
 
 ## H - Harness (ordered checks)
 
-`M365-TOKEN-REPAIR-C0` Preflight
-- Verify prerequisite diagnosis phase is green.
+`M365-TOKEN-REPAIR-C0` Governance preflight
+- Confirm prerequisite reads, plan refs, allowlist, and the current cross-repo contract note.
 
 `M365-TOKEN-REPAIR-C1` Root-cause lock
-- Restate the exact diagnosed defect and bound the repair.
+- Restate the exact service-auth/runtime failure boundary and keep the phase bounded to it.
 
-`M365-TOKEN-REPAIR-C2` Runtime/auth repair
-- Implement the minimal M365-side fix.
+`M365-TOKEN-REPAIR-C2` Bounded repair
+- Implement the minimal M365-side service-auth/runtime repair.
 
-`M365-TOKEN-REPAIR-C3` Regression coverage
-- Add or update focused regression tests.
+`M365-TOKEN-REPAIR-C3` Focused regression coverage
+- Add or update targeted regressions for missing-bearer, valid-bearer, and actor-identity-required behavior.
 
 `M365-TOKEN-REPAIR-C4` Diagnostics artifact
-- Write repair diagnostics and repaired-path evidence.
+- Write the repair diagnostics artifact and capture whether the next boundary is live classification.
 
 `M365-TOKEN-REPAIR-C5` Failure-truth validation
-- Ensure downstream Microsoft-side failures remain explicit.
+- Confirm local service-auth failures remain distinct from downstream Microsoft failures.
 
 `M365-TOKEN-REPAIR-C6` Execute targeted validations
-- Run targeted ops/graph/env regression commands.
+- Run the bounded ops/graph/env regression suite.
 
 `M365-TOKEN-REPAIR-C7` Strict artifact validation
-- Fail if the repaired boundary, tests, or diagnostics are missing.
+- Fail if the diagnostics artifact or required governance updates are missing.
 
 `M365-TOKEN-REPAIR-C8` Deterministic replay
-- Repeat bounded regression and require the same outcome.
+- Repeat the bounded regression suite and require the same outcome.
 
 `M365-TOKEN-REPAIR-C9` Hard gates (strict order)
-1. `targeted regression suite`
-2. `artifact readback`
+1. `python3 -m py_compile src/ops_adapter/main.py src/ops_adapter/app.py src/ops_adapter/actions.py`
+2. `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_graph_client.py tests/test_env_loading.py`
 3. `git diff --check`
 
 `M365-TOKEN-REPAIR-C10` Governance synchronization and final decision
-- Update required docs and emit GO/NO-GO lines.
+- Update the required governance files if the phase executed, then emit GO/NO-GO lines.
 
 ## S - Stress-test
 
 - Adversarial checks:
-  - `If the repair changes unrelated surfaces, fail.`
-  - `If a Microsoft-side permission failure is relabeled as local success, fail.`
+  - `If the repair weakens JWT-backed actor identity, fail.`
+  - `If the repair claims Microsoft-side success without crossing the local auth boundary, fail.`
 - Replay checks:
-  - `Focused regression outcome must match between runs.`
+  - `The bounded regression suite must produce the same outcome on repeated runs.`
+
+## Stop Conditions
+
+- the phase requires UCP-side caller alignment
+- the repair requires Microsoft tenant permission changes
+- the next correct act becomes live classification rather than more M365-local repair
 
 ## Output Contract
 
 - Deliverables:
-  - `bounded M365-side repair`
+  - `bounded M365-side service-auth/runtime repair`
   - `repair diagnostics artifact`
   - `focused regression evidence`
+- Validation results:
+  - `M365-TOKEN-REPAIR-C0` through `M365-TOKEN-REPAIR-C10`
 - Final decision lines:
   - `GATE:M365-TOKEN-REPAIR STATUS:<GO|NO-GO>`
   - `FINAL_DECISION:<GO|NO-GO>`
-
-## No-Go Triggers
-
-- Repair boundary expands beyond diagnosis.
-- Focused regressions are not green.
-- Downstream Microsoft truth is obscured.
