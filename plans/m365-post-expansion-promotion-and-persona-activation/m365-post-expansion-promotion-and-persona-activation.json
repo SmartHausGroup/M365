@@ -126,11 +126,21 @@
         "phase": "P2E",
         "date": "2026-03-31",
         "summary": "Activated persona surface certified for the current M365-backed branch state: 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created registry/activated_persona_surface_v1.yaml, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Added truthful commercialization boundary docs and a branch-specific note in the historical workforce packaging doc. The reviewed-surface release promotion track is now the next act."
+      },
+      {
+        "phase": "P4A",
+        "date": "2026-03-31",
+        "summary": "Merged the reviewed feature/m365_personas activation surface into development as the bounded integration entry to the release-promotion track. The merge required tracker conflict resolution only in Operations/ACTION_LOG.md and Operations/PROJECT_FILE_INDEX.md."
+      },
+      {
+        "phase": "P4B",
+        "date": "2026-03-31",
+        "summary": "Stamped the integrated reviewed-surface runtime to version 0.2.0 in pyproject.toml, src/ops_adapter/app.py, and src/ops_adapter/main.py, with validation green on development."
       }
     ],
     "in_progress": null,
-    "next_act": "P4A",
-    "prepared_blocked": ["P3A", "P3B", "P3C", "P4B", "P4C", "P4D"]
+    "next_act": "P4C",
+    "prepared_blocked": ["P3A", "P3B", "P3C", "P4D"]
   },
   "scope": {
     "in": [
@@ -329,19 +339,19 @@
         {
           "act": "P4A",
           "title": "Merge reviewed persona surface into development",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Integrate the reviewed feature/m365_personas branch into development without touching staging or main."
         },
         {
           "act": "P4B",
           "title": "Stamp versioned runtime release on development",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Update the core Python/API runtime version surfaces to 0.2.0, run validation, and commit the versioned reviewed-surface release on development."
         },
         {
           "act": "P4C",
           "title": "Promote versioned development commit to staging",
-          "status": "Pending",
+          "status": "Active",
           "goal": "Promote the exact validated 0.2.0 reviewed-surface commit from development to staging without divergence."
         },
         {

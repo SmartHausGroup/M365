@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 from collections import Counter
-from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Any
 

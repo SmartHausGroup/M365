@@ -59,7 +59,7 @@ def _normalize_text(value: Any) -> str:
 def _normalize_string_list(value: Any) -> list[str]:
     if value is None:
         return []
-    if isinstance(value, (list, tuple, set)):
+    if isinstance(value, list | tuple | set):
         return [item for item in (_normalize_text(entry) for entry in value) if item]
     text = _normalize_text(value)
     if not text:
@@ -338,9 +338,11 @@ def routing_snapshot() -> dict[str, Any]:
     return {
         "service_mode_configured": service_url is not None,
         "service_url": service_url,
-        "selected_live_path": "http_service"
-        if service_url is not None
-        else ("stub" if _is_stub_mode() else "unavailable"),
+        "selected_live_path": (
+            "http_service"
+            if service_url is not None
+            else ("stub" if _is_stub_mode() else "unavailable")
+        ),
         "direct_import_available": False,
         "direct_import_authority": "removed",
         "fail_closed_when_service_mode_configured": True,

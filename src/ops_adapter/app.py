@@ -63,7 +63,7 @@ def load_registry() -> dict[str, Any]:
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="Ops Adapter", version=os.getenv("OPS_ADAPTER_VERSION", "0.1.0"))
+    app = FastAPI(title="Ops Adapter", version=os.getenv("OPS_ADAPTER_VERSION", "0.2.0"))
 
     opa_url = os.getenv("OPA_URL", "http://opa:8181")
     opa = OPAClient(base_url=opa_url)

@@ -4,7 +4,6 @@ import os
 from unittest import mock
 
 import pytest
-
 from ucp_m365_pack.client import (
     M365ExecutionError,
     _stub_execute,
@@ -70,7 +69,7 @@ def test_configured_service_mode_fails_closed(monkeypatch: pytest.MonkeyPatch) -
 
     monkeypatch.setenv("SMARTHAUS_M365_OPS_ADAPTER_URL", "http://127.0.0.1:9000")
 
-    def _http_execute(*_args, **_kwargs):
+    def _http_execute(*_args: object, **_kwargs: object) -> None:
         raise RuntimeError("connection refused")
 
     monkeypatch.setattr(client_mod, "_http_execute", _http_execute)

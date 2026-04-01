@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P4A` is next; `P4B`, `P4C`, and `P4D` remain blocked by `P4A`; `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes)
+**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P4A` complete; `P4B` complete; `P4C` is next; `P4D` remains blocked by `P4C`; `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -121,7 +121,9 @@ Why these first:
 - `P2C` is complete: 8 commercial growth and experience personas activated (content-creator 8 actions, growth-hacker 10, ui-designer 7, brand-guardian 8, feedback-synthesizer 7, sprint-prioritizer 8, ux-researcher 7, studio-producer 9 = 64 total new actions). All pass the 6-point activation test. L74 lemma/invariant, scorecard green. 7 tests passed, CI verifier passed. Total registry-backed personas: 18/39.
 - `P2D` is complete for the M365-backed specialist and regulated scope: 16 personas activated (122 total new actions). The 5 external-platform personas (`instagram-curator`, `tiktok-strategist`, `reddit-community-builder`, `twitter-engager`, `app-store-optimizer`) are formally descoped from `P2D` and moved into `P3` because they require external APIs not implemented in this repo. L75 lemma/invariant, scorecard green. 8 tests passed, CI verifier passed. Total registry-backed personas: 34/39.
 - `P2E` is complete: the current activated M365-backed persona surface is now formally certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. L76 lemma/invariant, scorecard green. Tests and CI verifier pass. The historical E9A packaging baseline now points to the branch-specific activated-surface commercialization boundary.
-- `P4A` is next and has NOT been started. `P4B`, `P4C`, and `P4D` remain blocked by `P4A`.
+- `P4A` is complete: the reviewed `feature/m365_personas` surface was merged into `development` as the bounded integration entry to the release track.
+- `P4B` is complete: the core Python/API runtime version surfaces (`pyproject.toml`, `src/ops_adapter/app.py`, `src/ops_adapter/main.py`) are now stamped to `0.2.0` on `development`, and validation is green.
+- `P4C` is next and has NOT been started. `P4D` remains blocked by `P4C`.
 - `P3A`, `P3B`, and `P3C` remain deferred until the reviewed-surface release-promotion track (`P4`) is complete.
 
 ## Scope
@@ -301,19 +303,23 @@ Why these first:
 
 #### P4A — Merge Reviewed Persona Surface Into `development`
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Integrate the reviewed `feature/m365_personas` branch into `development` without touching `staging` or `main`.
 
+**Completion summary:** The reviewed `feature/m365_personas` branch is now merged into `development` as the bounded `P4A` integration step. The merge only required tracker conflict resolution in `Operations/ACTION_LOG.md` and `Operations/PROJECT_FILE_INDEX.md`; all reviewed persona-surface runtime, registry, MA, prompt, and commercialization artifacts are now present on `development`.
+
 #### P4B — Stamp Versioned Runtime Release on `development`
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Update the core Python/API runtime version surfaces to `0.2.0`, run validation, and commit the versioned reviewed-surface release on `development`.
 
+**Completion summary:** The integrated reviewed-surface runtime is now versioned as `0.2.0` in `pyproject.toml`, `src/ops_adapter/app.py`, and `src/ops_adapter/main.py`. Validation remains green after the version stamp, and `P4C` is now the active next act.
+
 #### P4C — Promote Versioned `development` Commit to `staging`
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Promote the exact validated `0.2.0` reviewed-surface commit from `development` to `staging` without divergence.
 

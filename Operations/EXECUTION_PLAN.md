@@ -247,8 +247,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — the current M365-backed persona activation track is now certified closed on `feature/m365_personas` at 34 registry-backed personas / 5 deferred external-platform personas, and the next bounded act is `P4A` reviewed-surface integration into `development` followed by governed release promotion.
-**Current next act:** `P4A` — merge the reviewed `feature/m365_personas` surface into `development`, then execute the versioned `P4B` -> `P4D` release path.
+**Status:** 🟢 Active — the current M365-backed persona activation track is now certified closed on `development` at 34 registry-backed personas / 5 deferred external-platform personas, `P4A` and `P4B` are complete, and the next bounded act is `P4C` promotion of the versioned `0.2.0` release to `staging`.
+**Current next act:** `P4C` — promote the validated `0.2.0` reviewed-surface release commit from `development` to `staging`, then advance it to `main`.
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
@@ -269,6 +269,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 **Status update (2026-03-31 20:50 EDT):** `P2E` is complete on `feature/m365_personas`. The current activated persona surface is certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created `registry/activated_persona_surface_v1.yaml`, `docs/commercialization/m365-activated-persona-surface-v1.md`, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Updated the historical `m365-workforce-packaging-v1.md` doc so the branch-specific activated-surface authority is explicit.
 
 **Status update (2026-03-31 21:20 EDT):** Added `P4` as the bounded reviewed-surface integration and release-promotion track. `P4A` is now the active next act: merge `feature/m365_personas` into `development`, stamp version `0.2.0` on the core Python/API runtime surface, promote the exact versioned commit to `staging` and `main`, and publish `m365-workforce-v0.2.0`. `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes.
+
+**Status update (2026-03-31 21:25 EDT):** `P4A` and `P4B` are complete on `development`. The reviewed `feature/m365_personas` surface is now merged into `development`, the core Python/API runtime surface is stamped to version `0.2.0` in `pyproject.toml`, `src/ops_adapter/app.py`, and `src/ops_adapter/main.py`, and validation is green. `P4C` is now the active next act; `P4D` remains blocked by `P4C`; `P3A`, `P3B`, and `P3C` remain deferred until release promotion closes.
 
 ---
 

@@ -52,7 +52,7 @@ from .personas import (
 from .policies import OPAClient
 from .rate_limit import RateLimiter
 
-app = FastAPI(title="SMARTHAUS Ops Adapter", version="0.1.0")
+app = FastAPI(title="SMARTHAUS Ops Adapter", version="0.2.0")
 security = HTTPBearer(auto_error=False)
 SecurityDependency = Annotated[Any | None, Depends(security)]
 
