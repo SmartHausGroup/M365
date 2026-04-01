@@ -1,0 +1,155 @@
+version: "1.0.0"
+last_updated: "2026-04-01T00:50:00Z"
+authority:
+  persona_registry: registry/persona_registry_v2.yaml
+  persona_capability_map: registry/persona_capability_map.yaml
+  workload_certification: registry/workload_certification_v1.yaml
+  persona_certification: registry/persona_certification_v1.yaml
+  department_certification: registry/department_certification_v1.yaml
+  foundation_activation_scorecard: artifacts/scorecards/scorecard_l73.json
+  growth_activation_scorecard: artifacts/scorecards/scorecard_l74.json
+  specialist_activation_scorecard: artifacts/scorecards/scorecard_l75.json
+  packaging_baseline: registry/workforce_packaging_v1.yaml
+
+contract:
+  id: activated-persona-surface
+  display_name: Activated Persona Surface Certification v1
+  status: contract-defined
+  description: >
+    Certifies the current M365-backed activated persona surface on the
+    review feature branch by aggregating the P2B through P2D activation
+    waves into one deterministic commercialization boundary. The deferred
+    external-platform personas are explicitly excluded from the certified
+    active surface and remain out of scope for current claims.
+
+certification_phases:
+  - order: 1
+    id: surface_partition_integrity
+    description: >
+      Verify the authoritative persona registry partitions the workforce
+      into 34 registry-backed personas and 5 deferred external-platform
+      personas with no uncategorized entries.
+    inputs:
+      - registry/persona_registry_v2.yaml
+      - registry/persona_capability_map.yaml
+    outputs:
+      - active/deferred partition verdict
+    failure_mode: >
+      Any mismatch between actual registry state and declared active/deferred
+      counts fails certification.
+
+  - order: 2
+    id: wave_evidence_aggregation
+    description: >
+      Verify the three activation-wave scorecards for P2B, P2C, and P2D
+      exist, are green, and together support the claimed active surface.
+    inputs:
+      - artifacts/scorecards/scorecard_l73.json
+      - artifacts/scorecards/scorecard_l74.json
+      - artifacts/scorecards/scorecard_l75.json
+    outputs:
+      - aggregated wave evidence verdict
+    failure_mode: >
+      Missing or non-green wave scorecard fails certification.
+
+  - order: 3
+    id: deferred_external_exclusion
+    description: >
+      Verify the deferred external-platform personas remain contract-only,
+      have zero allowed actions, and are not counted inside the current
+      active commercialization surface.
+    inputs:
+      - registry/persona_registry_v2.yaml
+      - registry/agents.yaml
+    outputs:
+      - deferred persona exclusion verdict
+    failure_mode: >
+      Any deferred external persona with active status or non-zero actions
+      fails certification.
+
+  - order: 4
+    id: commercial_boundary_lock
+    description: >
+      Verify the commercialization boundary is documented for the current
+      activated surface and the historical packaging baseline points to the
+      branch-specific activated-surface authority.
+    inputs:
+      - docs/commercialization/m365-activated-persona-surface-v1.md
+      - docs/commercialization/m365-workforce-packaging-v1.md
+    outputs:
+      - bounded-claim and packaging-delta verdict
+    failure_mode: >
+      Missing branch-specific activated-surface documentation or misleading
+      packaging language fails certification.
+
+governance_rules:
+  fail_closed:
+    description: >
+      Any missing evidence or count mismatch fails certification.
+  audit_completeness:
+    description: >
+      Certification produces traceable evidence back to the registries,
+      prior wave scorecards, and commercialization boundary docs.
+  bounded_claims:
+    description: >
+      Claims must not exceed the current M365-backed activated surface.
+  determinism:
+    description: >
+      Same branch state must produce the same active/deferred partition.
+  deferred_external_exclusion:
+    description: >
+      Deferred external-platform personas remain explicitly non-active until
+      later P3 preparation and credential-gated runtime work is complete.
+
+kpis:
+  total_personas: 39
+  certified_active_personas: 34
+  deferred_external_personas: 5
+  active_departments: 10
+  total_allowed_persona_actions: 298
+  certification_phase_count: 4
+  governance_rule_count: 5
+
+activated_surface:
+  verdict: certified
+  registry_backed_personas: 34
+  deferred_external_personas: 5
+  active_departments: 10
+  total_allowed_persona_actions: 298
+  active_department_breakdown:
+    operations: 2
+    hr: 1
+    communication: 1
+    engineering: 7
+    marketing: 2
+    product: 3
+    project-management: 3
+    studio-operations: 5
+    testing: 5
+    design: 5
+  deferred_external_persona_ids:
+    - instagram-curator
+    - tiktok-strategist
+    - reddit-community-builder
+    - twitter-engager
+    - app-store-optimizer
+  packaging_boundary:
+    branch: feature/m365_personas
+    historical_baseline: registry/workforce_packaging_v1.yaml
+    current_surface_doc: docs/commercialization/m365-activated-persona-surface-v1.md
+    note: >
+      Workforce Packaging v1 remains the historical E9A baseline. The current
+      activated commercial surface on this review branch is governed by this
+      activated-persona-surface contract.
+
+bounded_claims:
+  supported:
+    - "34 registry-backed personas across all 10 departments on feature/m365_personas"
+    - "298 total allowed persona-actions across the current M365-backed surface"
+    - "5 external-platform personas are explicitly deferred and not active"
+    - "Current commercialization claims are limited to the M365-backed persona surface certified by P2B through P2E"
+  not_supported:
+    - "All 39 personas are active"
+    - "Deferred external-platform personas are action-capable"
+    - "External-platform adapters are implemented and credentialed"
+    - "This activated surface is already merged into development, staging, or main"

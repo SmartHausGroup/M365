@@ -42,6 +42,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout-prompt.txt` | Kick-off text for the P2E certification closeout prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 | `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation.md` | Detailed MATHS prompt for P3 external-platform contract and credentialless preparation on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
 | `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation-prompt.txt` | Kick-off text for the P3 external-platform preparation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
+| `docs/commercialization/m365-activated-persona-surface-v1.md` | Truthful commercialization boundary for the current activated persona surface on the review branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 
 ## Internal UCP Onboarding Automation Artifacts
 
@@ -1456,3 +1457,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_p2d_specialist_regulated_activation_v1.py` | CI verifier for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
 | `configs/generated/p2d_specialist_regulated_activation_v1_verification.json` | Generated proof for P2D. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
 | `tests/test_p2d_specialist_regulated_activation_v1.py` | Tests for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+
+## P2E Activated Persona Surface Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/activated_persona_surface_v1.yaml` | Branch-specific certification/closeout contract for the current activated persona surface. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/commercialization/m365-activated-persona-surface-v1.md` | Human-readable commercialization boundary for the current activated surface. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/ma/lemmas/L76_m365_activated_persona_surface_v1.md` | Lemma doc for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `invariants/lemmas/L76_m365_activated_persona_surface_v1.yaml` | Invariant for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `notebooks/m365/INV-M365-BX-activated-persona-surface-v1.ipynb` | Primary notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `notebooks/lemma_proofs/L76_m365_activated_persona_surface_v1.ipynb` | Proof replay notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `artifacts/scorecards/scorecard_l76.json` | Scorecard for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `scripts/ci/verify_activated_persona_surface_v1.py` | CI verifier for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `configs/generated/activated_persona_surface_v1_verification.json` | Generated proof for P2E. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `tests/test_activated_persona_surface_v1.py` | Tests for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |

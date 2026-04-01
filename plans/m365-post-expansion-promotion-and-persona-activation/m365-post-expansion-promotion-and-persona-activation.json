@@ -116,11 +116,16 @@
         "phase": "P2D",
         "date": "2026-03-23",
         "summary": "M365-backed specialist and regulated personas: 16 activated (ai-engineer 10, frontend-developer 7, mobile-app-builder 7, rapid-prototyper 8, test-writer-fixer 7, performance-benchmarker 8, test-results-analyzer 7, tool-evaluator 7, workflow-optimizer 8, finance-tracker 8, infrastructure-maintainer 8, legal-compliance-checker 8, visual-storyteller 7, whimsy-injector 7, experiment-tracker 8, trend-researcher 7). The 5 external-platform personas were formally moved into later P3 preparation/activation because they require unsupported non-M365 APIs. Total 122 new actions. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39."
+      },
+      {
+        "phase": "P2E",
+        "date": "2026-03-31",
+        "summary": "Activated persona surface certified for the current M365-backed branch state: 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created registry/activated_persona_surface_v1.yaml, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Added truthful commercialization boundary docs and a branch-specific note in the historical workforce packaging doc. P3A is now the next act."
       }
     ],
     "in_progress": null,
-    "next_act": "P2E",
-    "prepared_blocked": ["P3A", "P3B", "P3C"]
+    "next_act": "P3A",
+    "prepared_blocked": ["P3B", "P3C"]
   },
   "scope": {
     "in": [
@@ -219,7 +224,7 @@
     {
       "phase": "P2",
       "title": "Persona Activation Follow-On",
-      "status": "Active",
+      "status": "Complete",
       "goal": "Turn selected contract-only personas into action-backed, commercially claimable digital employees in bounded waves.",
       "outputs": [
         "activation-definition contract",
@@ -255,7 +260,7 @@
         {
           "act": "P2E",
           "title": "Activation certification and commercial closeout",
-          "status": "Pending",
+          "status": "Complete",
           "goal": "Certify the activated M365-backed persona waves and update the product packaging to match the new live surface."
         }
       ]
@@ -263,7 +268,7 @@
     {
       "phase": "P3",
       "title": "External Platform Persona Preparation and Later Activation",
-      "status": "Pending",
+      "status": "Active",
       "goal": "Prepare and later activate the external-platform personas without violating the current M365-only runtime and commercial claim boundaries.",
       "outputs": [
         "credentialless external-platform preparation contract",

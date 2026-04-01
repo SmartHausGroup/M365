@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` is next; `P3` is pending for external-platform preparation and later activation)
+**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P3A` is next; `P3B` and `P3C` remain blocked by `P3A`)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -108,8 +108,8 @@ Why these first:
 - `P2B` is complete: 6 foundation operators activated (backend-architect 13 actions, devops-automator 10, api-tester 8, analytics-reporter 9, project-shipper 9, support-responder 8 = 57 total new actions). All pass the 6-point activation test. Total registry-backed personas: 10.
 - `P2C` is complete: 8 commercial growth and experience personas activated (content-creator 8 actions, growth-hacker 10, ui-designer 7, brand-guardian 8, feedback-synthesizer 7, sprint-prioritizer 8, ux-researcher 7, studio-producer 9 = 64 total new actions). All pass the 6-point activation test. L74 lemma/invariant, scorecard green. 7 tests passed, CI verifier passed. Total registry-backed personas: 18/39.
 - `P2D` is complete for the M365-backed specialist and regulated scope: 16 personas activated (122 total new actions). The 5 external-platform personas (`instagram-curator`, `tiktok-strategist`, `reddit-community-builder`, `twitter-engager`, `app-store-optimizer`) are formally descoped from `P2D` and moved into `P3` because they require external APIs not implemented in this repo. L75 lemma/invariant, scorecard green. 8 tests passed, CI verifier passed. Total registry-backed personas: 34/39.
-- `P2E` is next and has NOT been started.
-- `P3` is pending: it will carry credentialless preparation, credential-gated runtime work, and later certification for the 5 external-platform personas that are not part of the current M365-backed activation claim set.
+- `P2E` is complete: the current activated M365-backed persona surface is now formally certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. L76 lemma/invariant, scorecard green. Tests and CI verifier pass. The historical E9A packaging baseline now points to the branch-specific activated-surface commercialization boundary.
+- `P3A` is next and has NOT been started. `P3B` and `P3C` remain blocked by `P3A`.
 
 ## Scope
 
@@ -180,7 +180,7 @@ Why these first:
 
 ### P2 — Persona Activation Follow-On
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Turn selected contract-only personas into action-backed, commercially claimable digital employees in bounded waves.
 
@@ -229,9 +229,11 @@ Why these first:
 
 #### P2E — Activation Certification and Commercial Closeout
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Certify the activated M365-backed persona waves and update the product packaging to match the current live surface truthfully.
+
+**Completion summary:** The current activated persona surface is certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. `registry/activated_persona_surface_v1.yaml` is now the branch-specific closeout authority for the active M365-backed surface, backed by L76 notebook evidence, scorecard green, CI verifier, generated proof, and tests. `docs/commercialization/m365-activated-persona-surface-v1.md` is the truthful current commercialization boundary, and `docs/commercialization/m365-workforce-packaging-v1.md` now points to that branch-specific activated-surface authority instead of implying the older 4-active-persona baseline is current on this review branch.
 
 ### P3 — External Platform Persona Preparation and Later Activation
 

@@ -9,6 +9,15 @@ Package the full workforce offering into a deterministic product definition with
 - **Contract:** `registry/workforce_packaging_v1.yaml`
 - **Release gate:** `registry/enterprise_release_gate_v2.yaml`
 
+## Feature-Branch Activation Delta
+
+On `feature/m365_personas`, this document remains the historical E9A packaging
+baseline. The truthful branch-specific activated commercial surface is governed
+by:
+
+- `registry/activated_persona_surface_v1.yaml`
+- `docs/commercialization/m365-activated-persona-surface-v1.md`
+
 ## Packaging Layers
 
 1. **Capability Tier Definition** — define tiers from certified workload surface.
