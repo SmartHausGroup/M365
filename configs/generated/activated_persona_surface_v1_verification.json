@@ -1,0 +1,30 @@
+{
+  "active_departments": {
+    "communication": 1,
+    "design": 5,
+    "engineering": 7,
+    "hr": 1,
+    "marketing": 2,
+    "operations": 2,
+    "product": 3,
+    "project-management": 3,
+    "studio-operations": 5,
+    "testing": 5
+  },
+  "active_personas": 34,
+  "contract_id": "activated-persona-surface",
+  "deferred_persona_ids": [
+    "app-store-optimizer",
+    "instagram-curator",
+    "reddit-community-builder",
+    "tiktok-strategist",
+    "twitter-engager"
+  ],
+  "deferred_personas": 5,
+  "scorecards_green": [
+    "l73",
+    "l74",
+    "l75"
+  ],
+  "total_allowed_persona_actions": 298
+}

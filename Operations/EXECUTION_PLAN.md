@@ -247,16 +247,28 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 
-**Status:** 🟢 Active — the closed workforce-expansion program is promoted cleanly across `development`, `staging`, and `main`, the activation contract is locked, and the foundation-operators activation program is now the active critical path.
-**Current next act:** `P2B` — foundation operators activation.
+**Status:** 🟢 Active — the current M365-backed persona activation track is now certified closed on `feature/m365_personas` at 34 registry-backed personas / 5 deferred external-platform personas, and the next bounded act is `P4A` reviewed-surface integration into `development` followed by governed release promotion.
+**Current next act:** `P4A` — merge the reviewed `feature/m365_personas` surface into `development`, then execute the versioned `P4B` -> `P4D` release path.
 
 **Plain-language follow-on definition:** Activating personas means moving them from `persona-contract-only` to registry-backed, action-backed, routed, approved, audited, notebook-backed runtime reality. The recommended first-wave personas are `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, and `support-responder` because they unlock delivery, release, QA, reporting, and customer operations before the more outward-facing and specialist layers.
 
-**Prompt artifacts:** `docs/prompts/codex-m365-staging-main-promotion.md`, `docs/prompts/codex-m365-staging-main-promotion-prompt.txt`, `docs/prompts/codex-m365-persona-activation-follow-on.md`, `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt`
+**Prompt artifacts:** `docs/prompts/codex-m365-staging-main-promotion.md`, `docs/prompts/codex-m365-staging-main-promotion-prompt.txt`, `docs/prompts/codex-m365-persona-activation-follow-on.md`, `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt`, `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout.md`, `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout-prompt.txt`, `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation.md`, `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation-prompt.txt`, `docs/prompts/codex-m365-reviewed-persona-surface-release-promotion.md`, `docs/prompts/codex-m365-reviewed-persona-surface-release-promotion-prompt.txt`
 
 **Status update (2026-03-21 13:52 EDT):** `P1A` through `P1C` are complete. The branch-promotion track is closed without divergence. Branches subsequently advanced to `f967ef6` after the P1 closeout commit.
 
-**Status update (2026-03-22):** `P2A` is complete. Activation definition locked (6-point runtime state change: registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B → P2C → P2D → P2E (fail-closed). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO. `P2B` is now the active next act but has NOT been started.
+**Status update (2026-03-22):** `P2A` is complete. Activation definition locked (6-point runtime state change: registry-backed, action-surfaced, domain-bound, approval-wired, notebook-evidenced, runtime-routed). First-wave roster locked: `backend-architect`, `devops-automator`, `api-tester`, `analytics-reporter`, `project-shipper`, `support-responder`. Wave order locked: P2B → P2C → P2D → P2E (fail-closed). Commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0–C10). Gate: GO.
+
+**Status update (2026-03-23):** `P2B` is complete. 6 foundation operators activated: backend-architect (13 actions), devops-automator (10), api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8). Total 57 new actions across 4 departments (engineering, testing, studio-operations, project-management). All pass the 6-point activation test. L73 lemma, scorecard green, 25 tests passed, 4 CI verifiers passed. Registry-backed personas: 10/39.
+
+**Status update (2026-03-23):** `P2C` is complete on `feature/m365_personas`. 8 commercial growth and experience personas activated: content-creator (8 actions), growth-hacker (10), ui-designer (7), brand-guardian (8), feedback-synthesizer (7), sprint-prioritizer (8), ux-researcher (7), studio-producer (9). Total 64 new actions across 4 departments (marketing, design, product, project-management). All pass the 6-point activation test. L74 lemma, scorecard green, 7 tests passed, CI verifier passed. Registry-backed personas: 18/39.
+
+**Status update (2026-03-23):** `P2D` advanced materially on `feature/m365_personas`: 16 of 21 specialist and regulated personas activated across 6 departments with 122 new actions. 5 personas remain blocked (instagram-curator, tiktok-strategist, reddit-community-builder, twitter-engager, app-store-optimizer) because they require non-M365 external-platform APIs not available in this repo. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39.
+
+**Status update (2026-03-31 20:34 EDT):** `P2D` is now formally complete for the current M365-backed specialist/regulatory scope. The 5 external-platform personas (`instagram-curator`, `tiktok-strategist`, `reddit-community-builder`, `twitter-engager`, `app-store-optimizer`) are explicitly descoped from `P2D` and moved into a later `P3` preparation/activation track because they require non-M365 external APIs not implemented in this repo. `P2E` is now the active next act, and formal prompt pairs now exist for both `P2E` certification closeout and `P3` external-platform credentialless preparation.
+
+**Status update (2026-03-31 20:50 EDT):** `P2E` is complete on `feature/m365_personas`. The current activated persona surface is certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created `registry/activated_persona_surface_v1.yaml`, `docs/commercialization/m365-activated-persona-surface-v1.md`, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Updated the historical `m365-workforce-packaging-v1.md` doc so the branch-specific activated-surface authority is explicit.
+
+**Status update (2026-03-31 21:20 EDT):** Added `P4` as the bounded reviewed-surface integration and release-promotion track. `P4A` is now the active next act: merge `feature/m365_personas` into `development`, stamp version `0.2.0` on the core Python/API runtime surface, promote the exact versioned commit to `staging` and `main`, and publish `m365-workforce-v0.2.0`. `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes.
 
 ---
 
@@ -320,6 +332,23 @@ outside this repo slice.
 **Historical lineage:** `plans/m365-enterprise-commercialization-readiness/m365-enterprise-commercialization-readiness.md` remains for traceability but is now absorbed and no longer the active execution plan.
 
 **Prompt artifacts:** master prompt pair plus full act-level MATHS prompt inventory under `docs/prompts/`
+
+---
+
+## Initiative: UCP Live Activation Repair
+
+**Initiative:** Repair the live Claude -> UCP -> M365 activation path so activation admission, session-state, and first-hop M365 execution remain truthful and consistent across the real runtime surface.
+
+**Plan:** `plans/m365-ucp-live-activation-repair/m365-ucp-live-activation-repair.md`
+
+**Reference:** `plan:m365-ucp-live-activation-repair:R1`
+
+**Status:** 🟢 Active — this bounded repair slice addresses the post-certification live regression where `m365_*` tools are visible but `activate_session` is blocked by `policy_pack`, which then cascades into `session_not_activated` for real M365 actions.
+**Current next act:** `P0A` — baseline capture and repair intent lock.
+
+**Status update (2026-03-23 10:59 EDT):** The repair plan and prompt pair are now created. Baseline truth is locked: the live server reports `m365_pack` enabled, fresh MCP sessions list `m365_action` and `m365_sites`, `activate_session(confirm=true)` is rejected by `policy_pack`, and the blocked activation state cascades into `session_not_activated` for `m365_sites sites.root` and `m365_action directory.org`. The next implementation acts are `P1A` activation admission repair, `P1B` session-state projection repair, `P2A` stdio/HTTP tool-surface parity, and `P3A`/`P3B` live reproof.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-ucp-live-activation-repair.md`, `docs/prompts/codex-m365-ucp-live-activation-repair-prompt.txt`
 
 ---
 

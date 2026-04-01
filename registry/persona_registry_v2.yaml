@@ -7,10 +7,10 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  active_personas: 4
-  planned_personas: 35
-  registry_backed_personas: 4
-  persona_contract_only_personas: 35
+  active_personas: 34
+  planned_personas: 5
+  registry_backed_personas: 34
+  persona_contract_only_personas: 5
 required_fields:
 - persona_id
 - canonical_agent
@@ -37,10 +37,8 @@ status_definitions:
   inactive: Persona is explicitly unavailable for delegation or execution.
 external_presence_policies:
   internal_only: Persona may only be used for internal delegation and non-public channels.
-  review_required: Persona may operate in constrained external channels only with
-    human review.
-  public_disclosed: Persona may operate publicly only with explicit AI disclosure
-    and brand controls.
+  review_required: Persona may operate in constrained external channels only with human review.
+  public_disclosed: Persona may operate publicly only with explicit AI disclosure and brand controls.
 personas:
   ai-engineer:
     persona_id: ai-engineer
@@ -55,19 +53,31 @@ personas:
     - automation and agent workflow design
     - model evaluation and experiment analysis
     - internal knowledge synthesis
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - reports.users_active
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - reports
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - ai-engineer
     - alex thompson
     - alex-thompson
-    action_count: 0
+    action_count: 10
     workload_families:
     - Low-code, workflow, and analytics
     - Knowledge, search, and employee experience
@@ -89,19 +99,30 @@ personas:
     - dashboard and report generation
     - metric review
     - reporting pack creation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    - sites.list
+    - lists.list
+    - lists.get
+    - lists.items
+    allowed_domains:
+    - reports
+    - sharepoint
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - amanda foster
     - amanda-foster
     - analytics-reporter
-    action_count: 0
+    action_count: 9
     workload_families:
     - Low-code, workflow, and analytics
     - Knowledge, search, and employee experience
@@ -123,19 +144,28 @@ personas:
     - API validation
     - service certification
     - regression execution
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    allowed_domains:
+    - reports
     approval_owner: department-owner:testing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - api-tester
     - nina shah
     - nina-shah
-    action_count: 0
+    action_count: 8
     workload_families:
     - Low-code, workflow, and analytics
     - Tasks, scheduling, and work management
@@ -191,19 +221,34 @@ personas:
     - service architecture and integration contracts
     - API and data-model design
     - governance-aware backend change planning
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - apps.list
+    - apps.get
+    - service_principals.list
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    allowed_domains:
+    - directory
+    - sharepoint
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - backend-architect
     - jordan kim
     - jordan-kim
-    action_count: 0
+    action_count: 13
     workload_families:
     - Low-code, workflow, and analytics
     - Identity, directory, and tenant administration
@@ -225,19 +270,28 @@ personas:
     - brand policy review
     - asset approval
     - outward-facing consistency checks
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - brand-guardian
     - isabella rossi
     - isabella-rossi
-    action_count: 0
+    action_count: 8
     workload_families:
     - Media, publishing, and extended communications
     - Content, intranet, and files
@@ -259,19 +313,28 @@ personas:
     - content drafting
     - asset preparation
     - publication support
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:marketing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - content-creator
     - taylor swift
     - taylor-swift
-    action_count: 0
+    action_count: 8
     workload_families:
     - Media, publishing, and extended communications
     - Documents, notes, and workspace productivity
@@ -293,19 +356,31 @@ personas:
     - environment automation
     - CI/CD orchestration
     - infrastructure and release automation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - health.messages
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    allowed_domains:
+    - devices
+    - reports
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - casey johnson
     - casey-johnson
     - devops-automator
-    action_count: 0
+    action_count: 10
     workload_families:
     - Devices, endpoint management, and adjacent Windows admin surfaces
     - Low-code, workflow, and analytics
@@ -327,19 +402,30 @@ personas:
     - experiment tracking
     - KPI logging
     - status reporting
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - teams.list
+    - channels.list
+    - reports.users_active
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - collaboration
+    - reports
     approval_owner: department-owner:project-management
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - emily carter
     - emily-carter
     - experiment-tracker
-    action_count: 0
+    action_count: 8
     workload_families:
     - Tasks, scheduling, and work management
     - Low-code, workflow, and analytics
@@ -361,19 +447,28 @@ personas:
     - feedback synthesis
     - customer signal consolidation
     - insight brief preparation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    allowed_domains:
+    - messaging
+    - sharepoint
     approval_owner: department-owner:product
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - feedback-synthesizer
     - maya patel
     - maya-patel
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Mail, calendar, contacts, and bookings
@@ -395,19 +490,28 @@ personas:
     - budget and expense tracking
     - invoice and report preparation
     - finance control updates
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:studio-operations
     approval_profile: high-impact
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - finance-tracker
     - lisa chang
     - lisa-chang
-    action_count: 0
+    action_count: 8
     workload_families:
     - Low-code, workflow, and analytics
     - Documents, notes, and workspace productivity
@@ -429,19 +533,27 @@ personas:
     - dashboard and UI implementation
     - component and design-system changes
     - frontend release preparation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:engineering
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - frontend-developer
     - riley martinez
     - riley-martinez
-    action_count: 0
+    action_count: 7
     workload_families:
     - Content, intranet, and files
     - Documents, notes, and workspace productivity
@@ -463,19 +575,32 @@ personas:
     - growth experiment design
     - campaign analysis
     - funnel automation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - mail.list
+    - mail.read
+    - mail.send
+    - calendar.list
+    - reports.email_activity
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - messaging
+    - reports
     approval_owner: department-owner:marketing
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - growth-hacker
     - morgan davis
     - morgan-davis
-    action_count: 0
+    action_count: 10
     workload_families:
     - Low-code, workflow, and analytics
     - Media, publishing, and extended communications
@@ -540,19 +665,30 @@ personas:
     - system upkeep
     - backup and restore coordination
     - environment reliability tracking
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - security.alerts
+    - security.alert_get
+    - sites.list
+    - files.list
+    - files.get
+    allowed_domains:
+    - devices
+    - security
+    - sharepoint
     approval_owner: department-owner:studio-operations
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - infrastructure-maintainer
     - jennifer liu
     - jennifer-liu
-    action_count: 0
+    action_count: 8
     workload_families:
     - Devices, endpoint management, and adjacent Windows admin surfaces
     - Security, compliance, and data governance
@@ -608,19 +744,29 @@ personas:
     - policy validation
     - compliance review
     - legal risk checks
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - compliance.check
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    allowed_domains:
+    - compliance
+    - sharepoint
     approval_owner: department-owner:studio-operations
     approval_profile: critical-regulated
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - legal-compliance-checker
     - robert kim
     - robert-kim
-    action_count: 0
+    action_count: 8
     workload_families:
     - Security, compliance, and data governance
     - Documents, notes, and workspace productivity
@@ -718,19 +864,28 @@ personas:
     - mobile workflow implementation
     - app packaging and release preparation
     - device-facing experience changes
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - files.list
+    - files.get
+    - files.create_folder
+    - drives.list
+    - teams.list
+    - channels.list
+    allowed_domains:
+    - sharepoint
+    - collaboration
     approval_owner: department-owner:engineering
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - mobile-app-builder
     - taylor brown
     - taylor-brown
-    action_count: 0
+    action_count: 7
     workload_families:
     - Documents, notes, and workspace productivity
     - Content, intranet, and files
@@ -797,19 +952,29 @@ personas:
     - performance measurement
     - benchmark reporting
     - workload comparison
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    - sites.list
+    - lists.list
+    - lists.items
+    allowed_domains:
+    - reports
+    - sharepoint
     approval_owner: department-owner:testing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - omar haddad
     - omar-haddad
     - performance-benchmarker
-    action_count: 0
+    action_count: 8
     workload_families:
     - Low-code, workflow, and analytics
     - Documents, notes, and workspace productivity
@@ -831,19 +996,30 @@ personas:
     - release coordination
     - handoff orchestration
     - launch checklist management
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - list_plans
+    - list_buckets
+    - create_bucket
+    - create_task
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
+    allowed_domains:
+    - collaboration
+    - workmanagement
     approval_owner: department-owner:project-management
     approval_profile: medium-operational
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - ben foster
     - ben-foster
     - project-shipper
-    action_count: 0
+    action_count: 9
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -865,19 +1041,29 @@ personas:
     - prototype assembly
     - quick workflow validation
     - concept demonstration
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - teams.list
+    - channels.list
+    allowed_domains:
+    - sharepoint
+    - collaboration
     approval_owner: department-owner:engineering
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - ethan rivera
     - ethan-rivera
     - rapid-prototyper
-    action_count: 0
+    action_count: 8
     workload_families:
     - Documents, notes, and workspace productivity
     - Low-code, workflow, and analytics
@@ -933,19 +1119,29 @@ personas:
     - backlog prioritization
     - sprint planning
     - cross-team task sequencing
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - channels.create
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.availability
+    allowed_domains:
+    - collaboration
+    - messaging
     approval_owner: department-owner:product
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - sam chen
     - sam-chen
     - sprint-prioritizer
-    action_count: 0
+    action_count: 8
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -967,19 +1163,31 @@ personas:
     - cross-functional production planning
     - schedule coordination
     - creative delivery tracking
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
+    allowed_domains:
+    - collaboration
+    - messaging
+    - sharepoint
     approval_owner: department-owner:project-management
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - olivia park
     - olivia-park
     - studio-producer
-    action_count: 0
+    action_count: 9
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1001,19 +1209,28 @@ personas:
     - support triage
     - response drafting
     - case coordination
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - mail.send
+    - mail.reply
+    - mail.folders
+    - client.follow-up
+    - satisfaction.survey
+    - feedback.analyze
+    allowed_domains:
+    - messaging
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - mike rodriguez
     - mike-rodriguez
     - support-responder
-    action_count: 0
+    action_count: 8
     workload_families:
     - Mail, calendar, contacts, and bookings
     - Knowledge, search, and employee experience
@@ -1035,19 +1252,28 @@ personas:
     - test evidence synthesis
     - failure clustering
     - QA reporting
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - files.search
+    - reports.users_active
+    allowed_domains:
+    - sharepoint
+    - reports
     approval_owner: department-owner:testing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - sofia alvarez
     - sofia-alvarez
     - test-results-analyzer
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Documents, notes, and workspace productivity
@@ -1069,19 +1295,27 @@ personas:
     - test authoring and remediation
     - regression harness changes
     - workflow validation support
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:engineering
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - grace lee
     - grace-lee
     - test-writer-fixer
-    action_count: 0
+    action_count: 7
     workload_families:
     - Tasks, scheduling, and work management
     - Low-code, workflow, and analytics
@@ -1137,19 +1371,28 @@ personas:
     - tool comparison
     - workflow-fit evaluation
     - adoption recommendations
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - reports
     approval_owner: department-owner:testing
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - liam nguyen
     - liam-nguyen
     - tool-evaluator
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Low-code, workflow, and analytics
@@ -1171,19 +1414,28 @@ personas:
     - market scanning
     - trend analysis
     - opportunity briefs
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
+    allowed_domains:
+    - sharepoint
+    - reports
     approval_owner: department-owner:product
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - chris wong
     - chris-wong
     - trend-researcher
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Low-code, workflow, and analytics
@@ -1239,19 +1491,27 @@ personas:
     - interface design
     - component specs
     - interaction polishing
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - noah anderson
     - noah-anderson
     - ui-designer
-    action_count: 0
+    action_count: 7
     workload_families:
     - Documents, notes, and workspace productivity
     - Content, intranet, and files
@@ -1273,19 +1533,28 @@ personas:
     - user research synthesis
     - insight capture
     - interview and study coordination
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - calendar.list
+    - calendar.create
+    - sites.list
+    - files.list
+    - files.get
+    allowed_domains:
+    - messaging
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - mila novak
     - mila-novak
     - ux-researcher
-    action_count: 0
+    action_count: 7
     workload_families:
     - Knowledge, search, and employee experience
     - Documents, notes, and workspace productivity
@@ -1307,19 +1576,27 @@ personas:
     - visual narrative creation
     - presentation and story asset production
     - campaign visual design
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - sites.get
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - drives.list
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - diego alvarez
     - diego-alvarez
     - visual-storyteller
-    action_count: 0
+    action_count: 7
     workload_families:
     - Media, publishing, and extended communications
     - Documents, notes, and workspace productivity
@@ -1382,19 +1659,27 @@ personas:
     - delight and tone improvements
     - polish passes
     - creative variation generation
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - files.list
+    - files.get
+    - files.search
+    - drives.list
+    - lists.list
+    - lists.items
+    allowed_domains:
+    - sharepoint
     approval_owner: department-owner:design
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - luna park
     - luna-park
     - whimsy-injector
-    action_count: 0
+    action_count: 7
     workload_families:
     - Media, publishing, and extended communications
     - Documents, notes, and workspace productivity
@@ -1416,19 +1701,29 @@ personas:
     - process analysis
     - workflow tuning
     - automation opportunity mapping
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.teams_activity
+    - reports.email_activity
+    - reports.sharepoint_usage
+    allowed_domains:
+    - sharepoint
+    - reports
     approval_owner: department-owner:testing
     approval_profile: medium-operational
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - ava johnson
     - ava-johnson
     - workflow-optimizer
-    action_count: 0
+    action_count: 8
     workload_families:
     - Tasks, scheduling, and work management
     - Low-code, workflow, and analytics

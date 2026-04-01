@@ -1,0 +1,72 @@
+{
+  "plan_ref": "plan:m365-post-expansion-promotion-and-persona-activation:P2C",
+  "persona_count": 8,
+  "total_new_actions": 64,
+  "registry_backed_total": 18,
+  "personas": [
+    {
+      "persona": "content-creator",
+      "department": "marketing",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "growth-hacker",
+      "department": "marketing",
+      "expected_actions": 10,
+      "actual_actions": 10,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "ui-designer",
+      "department": "design",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "brand-guardian",
+      "department": "design",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "feedback-synthesizer",
+      "department": "product",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "sprint-prioritizer",
+      "department": "product",
+      "expected_actions": 8,
+      "actual_actions": 8,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "ux-researcher",
+      "department": "design",
+      "expected_actions": 7,
+      "actual_actions": 7,
+      "registry_backed": true,
+      "status": "passed"
+    },
+    {
+      "persona": "studio-producer",
+      "department": "project-management",
+      "expected_actions": 9,
+      "actual_actions": 9,
+      "registry_backed": true,
+      "status": "passed"
+    }
+  ]
+}

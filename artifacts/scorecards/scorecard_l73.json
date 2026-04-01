@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L73",
+  "title": "M365 Foundation Operators Activation v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BU-foundation-operators-activation-v1.ipynb",
+    "notebooks/lemma_proofs/L73_m365_foundation_operators_activation_v1.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L73_m365_foundation_operators_activation_v1.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "6 foundation operators activated: backend-architect (13), devops-automator (10), api-tester (8), analytics-reporter (9), project-shipper (9), support-responder (8)",
+    "57 total new actions across 4 departments",
+    "All pass 6-point activation test",
+    "29 remaining personas stay contract-only"
+  ]
+}

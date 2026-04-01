@@ -1,0 +1,23 @@
+lemma_id: L76
+name: M365 activated persona surface v1
+plan_ref: plan:m365-post-expansion-promotion-and-persona-activation:P2E
+source_notebook: notebooks/m365/INV-M365-BX-activated-persona-surface-v1.ipynb
+evidence:
+  artifacts:
+    - registry/activated_persona_surface_v1.yaml
+    - registry/persona_registry_v2.yaml
+    - registry/persona_capability_map.yaml
+    - docs/commercialization/m365-activated-persona-surface-v1.md
+    - docs/commercialization/m365-workforce-packaging-v1.md
+    - artifacts/scorecards/scorecard_l73.json
+    - artifacts/scorecards/scorecard_l74.json
+    - artifacts/scorecards/scorecard_l75.json
+  checks:
+    - active persona count is exactly 34
+    - deferred external persona count is exactly 5
+    - deferred external persona set matches the contract exactly
+    - total allowed persona-actions equal 298
+    - all 10 departments have at least one active persona
+    - L73, L74, and L75 scorecards are green
+    - commercialization boundary excludes deferred external personas from active claims
+status: green

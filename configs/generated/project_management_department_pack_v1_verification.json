@@ -1,5 +1,5 @@
 {
-  "active_persona_count": 0,
+  "active_persona_count": 1,
   "department": "project-management",
   "pack_state": "blocked",
   "persona_count": 3,
@@ -13,10 +13,10 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 9,
+      "coverage_status": "registry-backed",
       "persona_id": "project-shipper",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
@@ -26,8 +26,8 @@
       "status": "planned"
     }
   ],
-  "registry_backed_persona_count": 0,
-  "supported_action_count": 0,
+  "registry_backed_persona_count": 1,
+  "supported_action_count": 9,
   "workflow_family_count": 3,
   "workload_family_count": 7
 }

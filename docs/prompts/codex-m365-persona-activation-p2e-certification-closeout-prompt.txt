@@ -1,0 +1,9 @@
+Execute P2E Activation Certification and Commercial Closeout
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-persona-activation-p2e-certification-closeout.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P2E
+
+Branch discipline: execute only on feature/m365_personas. Do not merge into development and do not start P3.
+
+You are approved to certify only the current M365-backed persona surface. Do not claim the 5 deferred external-platform personas are active.

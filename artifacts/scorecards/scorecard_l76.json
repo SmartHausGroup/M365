@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L76",
+  "title": "M365 Activated Persona Surface v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BX-activated-persona-surface-v1.ipynb",
+    "notebooks/lemma_proofs/L76_m365_activated_persona_surface_v1.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L76_m365_activated_persona_surface_v1.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "34 registry-backed personas across all 10 departments on feature/m365_personas",
+    "5 deferred external-platform personas remain non-active and move to P3",
+    "298 total allowed persona-actions across the current M365-backed surface",
+    "L73, L74, and L75 wave scorecards remain green and bound the aggregated certification claim"
+  ]
+}

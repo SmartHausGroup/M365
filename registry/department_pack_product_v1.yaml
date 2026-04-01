@@ -11,28 +11,24 @@ department:
   display_name: Product
   wave: W7
   wave_track: Wave A
-  status: persona-contract-only
-  purpose: >-
-    Package the Product digital employees into one bounded department contract
-    covering backlog prioritization, insight synthesis, and market research
-    responsibilities that are defined but not yet action-backed.
-  bounded_claim: >-
-    The Product department pack may only claim the authoritative contract
-    personas, capability families, approval posture, and blocked readiness
-    state declared here. It may not claim implemented planning, prioritization,
-    or research execution coverage until later acts activate those personas.
+  status: partial-activation
+  purpose: Package the Product digital employees into one bounded department contract covering backlog prioritization, insight
+    synthesis, and market research responsibilities that are defined but not yet action-backed.
+  bounded_claim: The Product department pack may only claim the authoritative contract personas, capability families, approval
+    posture, and blocked readiness state declared here. It may not claim implemented planning, prioritization, or research
+    execution coverage until later acts activate those personas.
 workflow_families:
-  - backlog_planning_and_prioritization
-  - feedback_synthesis_and_insight_briefing
-  - market_research_and_opportunity_analysis
+- backlog_planning_and_prioritization
+- feedback_synthesis_and_insight_briefing
+- market_research_and_opportunity_analysis
 workload_families:
-  - Tasks, scheduling, and work management
-  - Knowledge, search, and employee experience
-  - Low-code, workflow, and analytics
-  - Collaboration, meetings, and communities
-  - Mail, calendar, contacts, and bookings
-  - Documents, notes, and workspace productivity
-  - Media, publishing, and extended communications
+- Tasks, scheduling, and work management
+- Knowledge, search, and employee experience
+- Low-code, workflow, and analytics
+- Collaboration, meetings, and communities
+- Mail, calendar, contacts, and bookings
+- Documents, notes, and workspace productivity
+- Media, publishing, and extended communications
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
@@ -44,82 +40,102 @@ approval_model:
   profiles:
     low-observe-create:
       approvers:
-        - department-owner:product
+      - department-owner:product
       personas:
-        - sprint-prioritizer
-        - feedback-synthesizer
-        - trend-researcher
-      rule: >-
-        Planning, synthesis, and research preparation may proceed in
-        observe/create mode until later acts activate mutating Product
-        execution surfaces.
+      - sprint-prioritizer
+      - feedback-synthesizer
+      - trend-researcher
+      rule: Planning, synthesis, and research preparation may proceed in observe/create mode until later acts activate mutating
+        Product execution surfaces.
 kpis:
   required_personas: 3
-  required_active_personas: 0
-  required_registry_backed_personas: 0
+  required_active_personas: 3
+  required_registry_backed_personas: 3
   required_workflow_families: 3
-  supported_action_count: 0
+  supported_action_count: 22
 personas:
   sprint-prioritizer:
     display_name: Sam Chen
     title: Product Manager
     role_type: strategy_anchor
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
-      - backlog prioritization
-      - sprint planning
-      - cross-team task sequencing
+    - backlog prioritization
+    - sprint planning
+    - cross-team task sequencing
     workload_families:
-      - Tasks, scheduling, and work management
-      - Collaboration, meetings, and communities
-      - Knowledge, search, and employee experience
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Knowledge, search, and employee experience
     workflow_families:
-      - backlog_planning_and_prioritization
-    supported_actions: []
+    - backlog_planning_and_prioritization
+    supported_actions:
+    - teams.list
+    - teams.get
+    - channels.list
+    - channels.create
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.availability
   feedback-synthesizer:
     display_name: Maya Patel
     title: User Research Lead
     role_type: research_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
-      - feedback synthesis
-      - customer signal consolidation
-      - insight brief preparation
+    - feedback synthesis
+    - customer signal consolidation
+    - insight brief preparation
     workload_families:
-      - Knowledge, search, and employee experience
-      - Mail, calendar, contacts, and bookings
-      - Documents, notes, and workspace productivity
+    - Knowledge, search, and employee experience
+    - Mail, calendar, contacts, and bookings
+    - Documents, notes, and workspace productivity
     workflow_families:
-      - feedback_synthesis_and_insight_briefing
-    supported_actions: []
+    - feedback_synthesis_and_insight_briefing
+    supported_actions:
+    - mail.list
+    - mail.read
+    - sites.list
+    - lists.list
+    - lists.items
+    - lists.create_item
+    - files.list
   trend-researcher:
     display_name: Chris Wong
     title: Market Analyst
     role_type: research_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
-      - market scanning
-      - trend analysis
-      - opportunity briefs
+    - market scanning
+    - trend analysis
+    - opportunity briefs
     workload_families:
-      - Knowledge, search, and employee experience
-      - Low-code, workflow, and analytics
-      - Media, publishing, and extended communications
+    - Knowledge, search, and employee experience
+    - Low-code, workflow, and analytics
+    - Media, publishing, and extended communications
     workflow_families:
-      - market_research_and_opportunity_analysis
-    supported_actions: []
+    - market_research_and_opportunity_analysis
+    supported_actions:
+    - sites.list
+    - lists.list
+    - lists.items
+    - files.list
+    - files.get
+    - reports.users_active
+    - reports.teams_activity
 bounded_claims:
   supported:
-    - product persona census and capability-family contract
-    - approval and escalation semantics for future product activation
-    - deterministic blocked-state projection while product remains contract-only
+  - product persona census and capability-family contract
+  - approval and escalation semantics for future product activation
+  - deterministic blocked-state projection while product remains contract-only
   unsupported:
-    - claims that product personas are currently action-backed
-    - live backlog mutation, roadmap execution, or research publication beyond later activation acts
-    - engineering, finance, or HR work outside the product contract
+  - claims that product personas are currently action-backed
+  - live backlog mutation, roadmap execution, or research publication beyond later activation acts
+  - engineering, finance, or HR work outside the product contract

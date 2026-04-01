@@ -18,11 +18,12 @@ def test_e6g_builds_blocked_project_management_contract_pack(
 
     assert pack["department"]["id"] == "project-management"
     assert pack["summary"]["persona_count"] == 3
-    assert pack["summary"]["active_persona_count"] == 0
-    assert pack["summary"]["registry_backed_persona_count"] == 0
-    assert pack["summary"]["supported_action_count"] == 0
+    assert pack["summary"]["active_persona_count"] == 1
+    assert pack["summary"]["registry_backed_persona_count"] == 1
+    assert pack["summary"]["supported_action_count"] == 9
     assert pack["summary"]["pack_state"] == "blocked"
-    assert {persona["coverage_status"] for persona in pack["personas"]} == {"persona-contract-only"}
+    coverage_statuses = {persona["coverage_status"] for persona in pack["personas"]}
+    assert coverage_statuses == {"registry-backed", "persona-contract-only"}
 
 
 def test_e6g_contract_only_pack_remains_blocked_even_without_queue_pressure(
@@ -33,7 +34,9 @@ def test_e6g_contract_only_pack_remains_blocked_even_without_queue_pressure(
     pack = build_department_pack("project-management", store=JsonStore(tmp_path))
 
     assert pack["summary"]["pack_state"] == "blocked"
-    assert all(persona["status"] == "planned" for persona in pack["personas"])
+    statuses = {persona["persona_id"]: persona["status"] for persona in pack["personas"]}
+    assert statuses["project-shipper"] == "active"
+    assert statuses["experiment-tracker"] == "planned"
 
 
 def test_e6g_fails_closed_when_contract_only_persona_declares_actions(
@@ -43,13 +46,14 @@ def test_e6g_fails_closed_when_contract_only_persona_declares_actions(
 
     source = Path("registry/department_pack_project_management_v1.yaml")
     payload = yaml.safe_load(source.read_text(encoding="utf-8"))
-    payload["personas"]["project-shipper"]["supported_actions"] = ["project.create"]
+    payload["personas"]["experiment-tracker"]["supported_actions"] = ["project.create"]
 
     overridden = tmp_path / "department_pack_project_management_v1.yaml"
     overridden.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
 
     with pytest.raises(
-        ValueError, match="department_pack_persona_contract_only_has_actions:project-shipper"
+        ValueError,
+        match="department_pack_persona_contract_only_has_actions:experiment-tracker",
     ):
         build_department_pack("project-management", path=overridden)
 

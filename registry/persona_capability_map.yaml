@@ -1,5 +1,5 @@
-version: "1.0.0"
-last_updated: "2026-03-20T20:53:52Z"
+version: 1.0.0
+last_updated: '2026-03-20T20:53:52Z'
 authority:
   roster: registry/ai_team.json
   registry: registry/agents.yaml
@@ -7,683 +7,687 @@ authority:
 summary:
   total_personas: 39
   total_departments: 10
-  current_registry_backed_personas: 4
-  persona_contract_only_personas: 35
+  current_registry_backed_personas: 34
+  persona_contract_only_personas: 5
   non_authoritative_registry_agents: 20
   non_authoritative_registry_departments:
-    - collaboration
-    - crm
-    - finance
-    - governance
-    - legal
-    - security
+  - collaboration
+  - crm
+  - finance
+  - governance
+  - legal
+  - security
 approval_profiles:
   low-observe-create:
-    default_posture: "No approval for read, research, draft, or internal-prep work; department-owner approval for outbound publication, canonical asset changes, or external sharing."
+    default_posture: No approval for read, research, draft, or internal-prep work; department-owner approval for outbound
+      publication, canonical asset changes, or external sharing.
   medium-operational:
-    default_posture: "Department-owner approval for routine internal mutations; dual control for destructive, cross-department, or externally visible changes."
+    default_posture: Department-owner approval for routine internal mutations; dual control for destructive, cross-department,
+      or externally visible changes.
   high-impact:
-    default_posture: "Human approval for all mutating actions with tenant, identity, public-facing, financial, or organization-wide impact; dual control for destructive or privileged changes."
+    default_posture: Human approval for all mutating actions with tenant, identity, public-facing, financial, or organization-wide
+      impact; dual control for destructive or privileged changes.
   critical-regulated:
-    default_posture: "Dual human approval and explicit sign-off for regulated, personnel-state, legal, security, or compliance-sensitive mutations."
+    default_posture: Dual human approval and explicit sign-off for regulated, personnel-state, legal, security, or compliance-sensitive
+      mutations.
 coverage_statuses:
-  registry-backed: "Persona has explicit allowed actions in registry/agents.yaml."
-  persona-contract-only: "Persona exists in the authoritative roster but still needs later action-surface implementation."
+  registry-backed: Persona has explicit allowed actions in registry/agents.yaml.
+  persona-contract-only: Persona exists in the authoritative roster but still needs later action-surface implementation.
 departments:
   operations:
     dominant_workload_families:
-      - "Identity, directory, and tenant administration"
-      - "Content, intranet, and files"
-      - "Collaboration, meetings, and communities"
-      - "Media, publishing, and extended communications"
+    - Identity, directory, and tenant administration
+    - Content, intranet, and files
+    - Collaboration, meetings, and communities
+    - Media, publishing, and extended communications
     personas:
       m365-administrator:
-        display_name: "Marcus Chen"
-        title: "Senior IT Administrator"
+        display_name: Marcus Chen
+        title: Senior IT Administrator
         current_risk_tier: high
         approval_profile: high-impact
         coverage_status: registry-backed
         current_action_count: 37
         workload_families:
-          - "Identity, directory, and tenant administration"
-          - "Collaboration, meetings, and communities"
-          - "Content, intranet, and files"
+        - Identity, directory, and tenant administration
+        - Collaboration, meetings, and communities
+        - Content, intranet, and files
         capability_families:
-          - "user lifecycle and licensing"
-          - "groups and workspace administration"
-          - "SharePoint site, list, and file administration"
-          - "directory and app governance"
+        - user lifecycle and licensing
+        - groups and workspace administration
+        - SharePoint site, list, and file administration
+        - directory and app governance
       website-manager:
-        display_name: "Elena Rodriguez"
-        title: "Website Manager"
+        display_name: Elena Rodriguez
+        title: Website Manager
         current_risk_tier: medium
         approval_profile: medium-operational
         coverage_status: registry-backed
         current_action_count: 6
         workload_families:
-          - "Content, intranet, and files"
-          - "Media, publishing, and extended communications"
-          - "Low-code, workflow, and analytics"
+        - Content, intranet, and files
+        - Media, publishing, and extended communications
+        - Low-code, workflow, and analytics
         capability_families:
-          - "website publishing and content lifecycle"
-          - "production deployment coordination"
-          - "analytics and SEO changes"
+        - website publishing and content lifecycle
+        - production deployment coordination
+        - analytics and SEO changes
   hr:
     dominant_workload_families:
-      - "Identity, directory, and tenant administration"
-      - "Documents, notes, and workspace productivity"
-      - "Tasks, scheduling, and work management"
-      - "Security, compliance, and data governance"
+    - Identity, directory, and tenant administration
+    - Documents, notes, and workspace productivity
+    - Tasks, scheduling, and work management
+    - Security, compliance, and data governance
     personas:
       hr-generalist:
-        display_name: "Sarah Williams"
-        title: "HR Director"
+        display_name: Sarah Williams
+        title: HR Director
         current_risk_tier: critical
         approval_profile: critical-regulated
         coverage_status: registry-backed
         current_action_count: 5
         workload_families:
-          - "Identity, directory, and tenant administration"
-          - "Documents, notes, and workspace productivity"
-          - "Tasks, scheduling, and work management"
-          - "Security, compliance, and data governance"
+        - Identity, directory, and tenant administration
+        - Documents, notes, and workspace productivity
+        - Tasks, scheduling, and work management
+        - Security, compliance, and data governance
         capability_families:
-          - "onboarding and offboarding"
-          - "employee record updates"
-          - "review orchestration"
-          - "HR policy lifecycle"
+        - onboarding and offboarding
+        - employee record updates
+        - review orchestration
+        - HR policy lifecycle
   communication:
     dominant_workload_families:
-      - "Mail, calendar, contacts, and bookings"
-      - "Collaboration, meetings, and communities"
-      - "Media, publishing, and extended communications"
-      - "Tasks, scheduling, and work management"
+    - Mail, calendar, contacts, and bookings
+    - Collaboration, meetings, and communities
+    - Media, publishing, and extended communications
+    - Tasks, scheduling, and work management
     personas:
       outreach-coordinator:
-        display_name: "David Park"
-        title: "Communications Manager"
+        display_name: David Park
+        title: Communications Manager
         current_risk_tier: high
         approval_profile: high-impact
         coverage_status: registry-backed
         current_action_count: 7
         workload_families:
-          - "Mail, calendar, contacts, and bookings"
-          - "Collaboration, meetings, and communities"
-          - "Media, publishing, and extended communications"
-          - "Tasks, scheduling, and work management"
+        - Mail, calendar, contacts, and bookings
+        - Collaboration, meetings, and communities
+        - Media, publishing, and extended communications
+        - Tasks, scheduling, and work management
         capability_families:
-          - "outbound email and mailbox campaigns"
-          - "meeting coordination"
-          - "follow-up orchestration"
-          - "campaign launch coordination"
+        - outbound email and mailbox campaigns
+        - meeting coordination
+        - follow-up orchestration
+        - campaign launch coordination
   engineering:
     dominant_workload_families:
-      - "Low-code, workflow, and analytics"
-      - "Documents, notes, and workspace productivity"
-      - "Content, intranet, and files"
-      - "Devices, endpoint management, and adjacent Windows admin surfaces"
+    - Low-code, workflow, and analytics
+    - Documents, notes, and workspace productivity
+    - Content, intranet, and files
+    - Devices, endpoint management, and adjacent Windows admin surfaces
     personas:
       ai-engineer:
-        display_name: "Alex Thompson"
-        title: "ML Engineer"
+        display_name: Alex Thompson
+        title: ML Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Knowledge, search, and employee experience"
-          - "Documents, notes, and workspace productivity"
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
         capability_families:
-          - "automation and agent workflow design"
-          - "model evaluation and experiment analysis"
-          - "internal knowledge synthesis"
+        - automation and agent workflow design
+        - model evaluation and experiment analysis
+        - internal knowledge synthesis
       backend-architect:
-        display_name: "Jordan Kim"
-        title: "Principal Backend Engineer"
+        display_name: Jordan Kim
+        title: Principal Backend Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 13
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Identity, directory, and tenant administration"
-          - "Content, intranet, and files"
+        - Low-code, workflow, and analytics
+        - Identity, directory, and tenant administration
+        - Content, intranet, and files
         capability_families:
-          - "service architecture and integration contracts"
-          - "API and data-model design"
-          - "governance-aware backend change planning"
+        - service architecture and integration contracts
+        - API and data-model design
+        - governance-aware backend change planning
       devops-automator:
-        display_name: "Casey Johnson"
-        title: "DevOps Engineer"
+        display_name: Casey Johnson
+        title: DevOps Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
-          - "Devices, endpoint management, and adjacent Windows admin surfaces"
-          - "Low-code, workflow, and analytics"
-          - "Security, compliance, and data governance"
+        - Devices, endpoint management, and adjacent Windows admin surfaces
+        - Low-code, workflow, and analytics
+        - Security, compliance, and data governance
         capability_families:
-          - "environment automation"
-          - "CI/CD orchestration"
-          - "infrastructure and release automation"
+        - environment automation
+        - CI/CD orchestration
+        - infrastructure and release automation
       frontend-developer:
-        display_name: "Riley Martinez"
-        title: "UI/UX Developer"
+        display_name: Riley Martinez
+        title: UI/UX Developer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Content, intranet, and files"
-          - "Documents, notes, and workspace productivity"
-          - "Media, publishing, and extended communications"
+        - Content, intranet, and files
+        - Documents, notes, and workspace productivity
+        - Media, publishing, and extended communications
         capability_families:
-          - "dashboard and UI implementation"
-          - "component and design-system changes"
-          - "frontend release preparation"
+        - dashboard and UI implementation
+        - component and design-system changes
+        - frontend release preparation
       mobile-app-builder:
-        display_name: "Taylor Brown"
-        title: "Mobile Engineer"
+        display_name: Taylor Brown
+        title: Mobile Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Documents, notes, and workspace productivity"
-          - "Content, intranet, and files"
-          - "Collaboration, meetings, and communities"
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
+        - Collaboration, meetings, and communities
         capability_families:
-          - "mobile workflow implementation"
-          - "app packaging and release preparation"
-          - "device-facing experience changes"
+        - mobile workflow implementation
+        - app packaging and release preparation
+        - device-facing experience changes
       rapid-prototyper:
-        display_name: "Ethan Rivera"
-        title: "Prototype Engineer"
+        display_name: Ethan Rivera
+        title: Prototype Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Documents, notes, and workspace productivity"
-          - "Low-code, workflow, and analytics"
-          - "Collaboration, meetings, and communities"
+        - Documents, notes, and workspace productivity
+        - Low-code, workflow, and analytics
+        - Collaboration, meetings, and communities
         capability_families:
-          - "prototype assembly"
-          - "quick workflow validation"
-          - "concept demonstration"
+        - prototype assembly
+        - quick workflow validation
+        - concept demonstration
       test-writer-fixer:
-        display_name: "Grace Lee"
-        title: "Test Engineer"
+        display_name: Grace Lee
+        title: Test Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Low-code, workflow, and analytics"
-          - "Documents, notes, and workspace productivity"
+        - Tasks, scheduling, and work management
+        - Low-code, workflow, and analytics
+        - Documents, notes, and workspace productivity
         capability_families:
-          - "test authoring and remediation"
-          - "regression harness changes"
-          - "workflow validation support"
+        - test authoring and remediation
+        - regression harness changes
+        - workflow validation support
   marketing:
     dominant_workload_families:
-      - "Media, publishing, and extended communications"
-      - "Low-code, workflow, and analytics"
-      - "Documents, notes, and workspace productivity"
-      - "Knowledge, search, and employee experience"
+    - Media, publishing, and extended communications
+    - Low-code, workflow, and analytics
+    - Documents, notes, and workspace productivity
+    - Knowledge, search, and employee experience
     personas:
       app-store-optimizer:
-        display_name: "Jake Thompson"
-        title: "ASO Specialist"
+        display_name: Jake Thompson
+        title: ASO Specialist
         current_risk_tier: low
         approval_profile: low-observe-create
         coverage_status: persona-contract-only
         current_action_count: 0
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Low-code, workflow, and analytics"
-          - "Knowledge, search, and employee experience"
+        - Media, publishing, and extended communications
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
         capability_families:
-          - "store listing optimization"
-          - "metadata experiments"
-          - "performance analysis"
+        - store listing optimization
+        - metadata experiments
+        - performance analysis
       content-creator:
-        display_name: "Taylor Swift"
-        title: "Content Strategist"
+        display_name: Taylor Swift
+        title: Content Strategist
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Documents, notes, and workspace productivity"
-          - "Content, intranet, and files"
+        - Media, publishing, and extended communications
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
         capability_families:
-          - "content drafting"
-          - "asset preparation"
-          - "publication support"
+        - content drafting
+        - asset preparation
+        - publication support
       growth-hacker:
-        display_name: "Morgan Davis"
-        title: "Growth Lead"
+        display_name: Morgan Davis
+        title: Growth Lead
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Media, publishing, and extended communications"
-          - "Mail, calendar, contacts, and bookings"
+        - Low-code, workflow, and analytics
+        - Media, publishing, and extended communications
+        - Mail, calendar, contacts, and bookings
         capability_families:
-          - "growth experiment design"
-          - "campaign analysis"
-          - "funnel automation"
+        - growth experiment design
+        - campaign analysis
+        - funnel automation
       instagram-curator:
-        display_name: "Zoe Martinez"
-        title: "Visual Content Specialist"
+        display_name: Zoe Martinez
+        title: Visual Content Specialist
         current_risk_tier: low
         approval_profile: low-observe-create
         coverage_status: persona-contract-only
         current_action_count: 0
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Content, intranet, and files"
-          - "Mail, calendar, contacts, and bookings"
+        - Media, publishing, and extended communications
+        - Content, intranet, and files
+        - Mail, calendar, contacts, and bookings
         capability_families:
-          - "social content curation"
-          - "asset scheduling"
-          - "outbound publishing preparation"
+        - social content curation
+        - asset scheduling
+        - outbound publishing preparation
       reddit-community-builder:
-        display_name: "Priya Singh"
-        title: "Community Manager"
+        display_name: Priya Singh
+        title: Community Manager
         current_risk_tier: low
         approval_profile: low-observe-create
         coverage_status: persona-contract-only
         current_action_count: 0
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Collaboration, meetings, and communities"
-          - "Knowledge, search, and employee experience"
+        - Media, publishing, and extended communications
+        - Collaboration, meetings, and communities
+        - Knowledge, search, and employee experience
         capability_families:
-          - "community engagement planning"
-          - "post drafting"
-          - "feedback harvesting"
+        - community engagement planning
+        - post drafting
+        - feedback harvesting
       tiktok-strategist:
-        display_name: "Ryan O'Connor"
-        title: "Short-form Video Expert"
+        display_name: Ryan O'Connor
+        title: Short-form Video Expert
         current_risk_tier: low
         approval_profile: low-observe-create
         coverage_status: persona-contract-only
         current_action_count: 0
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Content, intranet, and files"
-          - "Low-code, workflow, and analytics"
+        - Media, publishing, and extended communications
+        - Content, intranet, and files
+        - Low-code, workflow, and analytics
         capability_families:
-          - "short-form content planning"
-          - "asset experimentation"
-          - "channel performance analysis"
+        - short-form content planning
+        - asset experimentation
+        - channel performance analysis
       twitter-engager:
-        display_name: "Jamie Lee"
-        title: "Social Media Director"
+        display_name: Jamie Lee
+        title: Social Media Director
         current_risk_tier: low
         approval_profile: low-observe-create
         coverage_status: persona-contract-only
         current_action_count: 0
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Mail, calendar, contacts, and bookings"
-          - "Knowledge, search, and employee experience"
+        - Media, publishing, and extended communications
+        - Mail, calendar, contacts, and bookings
+        - Knowledge, search, and employee experience
         capability_families:
-          - "social response drafting"
-          - "channel monitoring"
-          - "outbound posting support"
+        - social response drafting
+        - channel monitoring
+        - outbound posting support
   product:
     dominant_workload_families:
-      - "Tasks, scheduling, and work management"
-      - "Knowledge, search, and employee experience"
-      - "Low-code, workflow, and analytics"
+    - Tasks, scheduling, and work management
+    - Knowledge, search, and employee experience
+    - Low-code, workflow, and analytics
     personas:
       sprint-prioritizer:
-        display_name: "Sam Chen"
-        title: "Product Manager"
+        display_name: Sam Chen
+        title: Product Manager
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Collaboration, meetings, and communities"
-          - "Knowledge, search, and employee experience"
+        - Tasks, scheduling, and work management
+        - Collaboration, meetings, and communities
+        - Knowledge, search, and employee experience
         capability_families:
-          - "backlog prioritization"
-          - "sprint planning"
-          - "cross-team task sequencing"
+        - backlog prioritization
+        - sprint planning
+        - cross-team task sequencing
       feedback-synthesizer:
-        display_name: "Maya Patel"
-        title: "User Research Lead"
+        display_name: Maya Patel
+        title: User Research Lead
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Knowledge, search, and employee experience"
-          - "Mail, calendar, contacts, and bookings"
-          - "Documents, notes, and workspace productivity"
+        - Knowledge, search, and employee experience
+        - Mail, calendar, contacts, and bookings
+        - Documents, notes, and workspace productivity
         capability_families:
-          - "feedback synthesis"
-          - "customer signal consolidation"
-          - "insight brief preparation"
+        - feedback synthesis
+        - customer signal consolidation
+        - insight brief preparation
       trend-researcher:
-        display_name: "Chris Wong"
-        title: "Market Analyst"
+        display_name: Chris Wong
+        title: Market Analyst
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Knowledge, search, and employee experience"
-          - "Low-code, workflow, and analytics"
-          - "Media, publishing, and extended communications"
+        - Knowledge, search, and employee experience
+        - Low-code, workflow, and analytics
+        - Media, publishing, and extended communications
         capability_families:
-          - "market scanning"
-          - "trend analysis"
-          - "opportunity briefs"
+        - market scanning
+        - trend analysis
+        - opportunity briefs
   project-management:
     dominant_workload_families:
-      - "Tasks, scheduling, and work management"
-      - "Collaboration, meetings, and communities"
-      - "Documents, notes, and workspace productivity"
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Documents, notes, and workspace productivity
     personas:
       experiment-tracker:
-        display_name: "Emily Carter"
-        title: "Experimentation PM"
+        display_name: Emily Carter
+        title: Experimentation PM
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Low-code, workflow, and analytics"
-          - "Knowledge, search, and employee experience"
+        - Tasks, scheduling, and work management
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
         capability_families:
-          - "experiment tracking"
-          - "KPI logging"
-          - "status reporting"
+        - experiment tracking
+        - KPI logging
+        - status reporting
       project-shipper:
-        display_name: "Ben Foster"
-        title: "Release Manager"
+        display_name: Ben Foster
+        title: Release Manager
         current_risk_tier: low
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Collaboration, meetings, and communities"
-          - "Content, intranet, and files"
+        - Tasks, scheduling, and work management
+        - Collaboration, meetings, and communities
+        - Content, intranet, and files
         capability_families:
-          - "release coordination"
-          - "handoff orchestration"
-          - "launch checklist management"
+        - release coordination
+        - handoff orchestration
+        - launch checklist management
       studio-producer:
-        display_name: "Olivia Park"
-        title: "Studio Producer"
+        display_name: Olivia Park
+        title: Studio Producer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Collaboration, meetings, and communities"
-          - "Media, publishing, and extended communications"
+        - Tasks, scheduling, and work management
+        - Collaboration, meetings, and communities
+        - Media, publishing, and extended communications
         capability_families:
-          - "cross-functional production planning"
-          - "schedule coordination"
-          - "creative delivery tracking"
+        - cross-functional production planning
+        - schedule coordination
+        - creative delivery tracking
   studio-operations:
     dominant_workload_families:
-      - "Low-code, workflow, and analytics"
-      - "Security, compliance, and data governance"
-      - "Devices, endpoint management, and adjacent Windows admin surfaces"
-      - "Mail, calendar, contacts, and bookings"
+    - Low-code, workflow, and analytics
+    - Security, compliance, and data governance
+    - Devices, endpoint management, and adjacent Windows admin surfaces
+    - Mail, calendar, contacts, and bookings
     personas:
       analytics-reporter:
-        display_name: "Amanda Foster"
-        title: "Data Scientist"
+        display_name: Amanda Foster
+        title: Data Scientist
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Knowledge, search, and employee experience"
-          - "Documents, notes, and workspace productivity"
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
         capability_families:
-          - "dashboard and report generation"
-          - "metric review"
-          - "reporting pack creation"
+        - dashboard and report generation
+        - metric review
+        - reporting pack creation
       finance-tracker:
-        display_name: "Lisa Chang"
-        title: "Chief Financial Officer"
+        display_name: Lisa Chang
+        title: Chief Financial Officer
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Documents, notes, and workspace productivity"
-          - "Security, compliance, and data governance"
+        - Low-code, workflow, and analytics
+        - Documents, notes, and workspace productivity
+        - Security, compliance, and data governance
         capability_families:
-          - "budget and expense tracking"
-          - "invoice and report preparation"
-          - "finance control updates"
+        - budget and expense tracking
+        - invoice and report preparation
+        - finance control updates
       infrastructure-maintainer:
-        display_name: "Jennifer Liu"
-        title: "Site Reliability Engineer"
+        display_name: Jennifer Liu
+        title: Site Reliability Engineer
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Devices, endpoint management, and adjacent Windows admin surfaces"
-          - "Security, compliance, and data governance"
-          - "Content, intranet, and files"
+        - Devices, endpoint management, and adjacent Windows admin surfaces
+        - Security, compliance, and data governance
+        - Content, intranet, and files
         capability_families:
-          - "system upkeep"
-          - "backup and restore coordination"
-          - "environment reliability tracking"
+        - system upkeep
+        - backup and restore coordination
+        - environment reliability tracking
       legal-compliance-checker:
-        display_name: "Robert Kim"
-        title: "Legal Counsel"
+        display_name: Robert Kim
+        title: Legal Counsel
         current_risk_tier: high
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Security, compliance, and data governance"
-          - "Documents, notes, and workspace productivity"
-          - "Knowledge, search, and employee experience"
+        - Security, compliance, and data governance
+        - Documents, notes, and workspace productivity
+        - Knowledge, search, and employee experience
         capability_families:
-          - "policy validation"
-          - "compliance review"
-          - "legal risk checks"
+        - policy validation
+        - compliance review
+        - legal risk checks
       support-responder:
-        display_name: "Mike Rodriguez"
-        title: "Customer Success Manager"
+        display_name: Mike Rodriguez
+        title: Customer Success Manager
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Mail, calendar, contacts, and bookings"
-          - "Knowledge, search, and employee experience"
-          - "Collaboration, meetings, and communities"
+        - Mail, calendar, contacts, and bookings
+        - Knowledge, search, and employee experience
+        - Collaboration, meetings, and communities
         capability_families:
-          - "support triage"
-          - "response drafting"
-          - "case coordination"
+        - support triage
+        - response drafting
+        - case coordination
   testing:
     dominant_workload_families:
-      - "Low-code, workflow, and analytics"
-      - "Tasks, scheduling, and work management"
-      - "Knowledge, search, and employee experience"
+    - Low-code, workflow, and analytics
+    - Tasks, scheduling, and work management
+    - Knowledge, search, and employee experience
     personas:
       api-tester:
-        display_name: "Nina Shah"
-        title: "QA Automation Lead"
+        display_name: Nina Shah
+        title: QA Automation Lead
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Tasks, scheduling, and work management"
-          - "Knowledge, search, and employee experience"
+        - Low-code, workflow, and analytics
+        - Tasks, scheduling, and work management
+        - Knowledge, search, and employee experience
         capability_families:
-          - "API validation"
-          - "service certification"
-          - "regression execution"
+        - API validation
+        - service certification
+        - regression execution
       performance-benchmarker:
-        display_name: "Omar Haddad"
-        title: "Performance Engineer"
+        display_name: Omar Haddad
+        title: Performance Engineer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Low-code, workflow, and analytics"
-          - "Documents, notes, and workspace productivity"
-          - "Knowledge, search, and employee experience"
+        - Low-code, workflow, and analytics
+        - Documents, notes, and workspace productivity
+        - Knowledge, search, and employee experience
         capability_families:
-          - "performance measurement"
-          - "benchmark reporting"
-          - "workload comparison"
+        - performance measurement
+        - benchmark reporting
+        - workload comparison
       test-results-analyzer:
-        display_name: "Sofia Alvarez"
-        title: "Quality Analyst"
+        display_name: Sofia Alvarez
+        title: Quality Analyst
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Knowledge, search, and employee experience"
-          - "Documents, notes, and workspace productivity"
-          - "Low-code, workflow, and analytics"
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
+        - Low-code, workflow, and analytics
         capability_families:
-          - "test evidence synthesis"
-          - "failure clustering"
-          - "QA reporting"
+        - test evidence synthesis
+        - failure clustering
+        - QA reporting
       tool-evaluator:
-        display_name: "Liam Nguyen"
-        title: "Dev Tools Strategist"
+        display_name: Liam Nguyen
+        title: Dev Tools Strategist
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Knowledge, search, and employee experience"
-          - "Low-code, workflow, and analytics"
-          - "Documents, notes, and workspace productivity"
+        - Knowledge, search, and employee experience
+        - Low-code, workflow, and analytics
+        - Documents, notes, and workspace productivity
         capability_families:
-          - "tool comparison"
-          - "workflow-fit evaluation"
-          - "adoption recommendations"
+        - tool comparison
+        - workflow-fit evaluation
+        - adoption recommendations
       workflow-optimizer:
-        display_name: "Ava Johnson"
-        title: "Process Engineer"
+        display_name: Ava Johnson
+        title: Process Engineer
         current_risk_tier: low
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Tasks, scheduling, and work management"
-          - "Low-code, workflow, and analytics"
-          - "Knowledge, search, and employee experience"
+        - Tasks, scheduling, and work management
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
         capability_families:
-          - "process analysis"
-          - "workflow tuning"
-          - "automation opportunity mapping"
+        - process analysis
+        - workflow tuning
+        - automation opportunity mapping
   design:
     dominant_workload_families:
-      - "Media, publishing, and extended communications"
-      - "Content, intranet, and files"
-      - "Documents, notes, and workspace productivity"
-      - "Knowledge, search, and employee experience"
+    - Media, publishing, and extended communications
+    - Content, intranet, and files
+    - Documents, notes, and workspace productivity
+    - Knowledge, search, and employee experience
     personas:
       brand-guardian:
-        display_name: "Isabella Rossi"
-        title: "Brand Guardian"
+        display_name: Isabella Rossi
+        title: Brand Guardian
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 8
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Content, intranet, and files"
-          - "Knowledge, search, and employee experience"
+        - Media, publishing, and extended communications
+        - Content, intranet, and files
+        - Knowledge, search, and employee experience
         capability_families:
-          - "brand policy review"
-          - "asset approval"
-          - "outward-facing consistency checks"
+        - brand policy review
+        - asset approval
+        - outward-facing consistency checks
       ui-designer:
-        display_name: "Noah Anderson"
-        title: "UI Designer"
+        display_name: Noah Anderson
+        title: UI Designer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Documents, notes, and workspace productivity"
-          - "Content, intranet, and files"
-          - "Media, publishing, and extended communications"
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
+        - Media, publishing, and extended communications
         capability_families:
-          - "interface design"
-          - "component specs"
-          - "interaction polishing"
+        - interface design
+        - component specs
+        - interaction polishing
       ux-researcher:
-        display_name: "Mila Novak"
-        title: "UX Researcher"
+        display_name: Mila Novak
+        title: UX Researcher
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Knowledge, search, and employee experience"
-          - "Documents, notes, and workspace productivity"
-          - "Mail, calendar, contacts, and bookings"
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
+        - Mail, calendar, contacts, and bookings
         capability_families:
-          - "user research synthesis"
-          - "insight capture"
-          - "interview and study coordination"
+        - user research synthesis
+        - insight capture
+        - interview and study coordination
       visual-storyteller:
-        display_name: "Diego Alvarez"
-        title: "Visual Storyteller"
+        display_name: Diego Alvarez
+        title: Visual Storyteller
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Documents, notes, and workspace productivity"
-          - "Content, intranet, and files"
+        - Media, publishing, and extended communications
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
         capability_families:
-          - "visual narrative creation"
-          - "presentation and story asset production"
-          - "campaign visual design"
+        - visual narrative creation
+        - presentation and story asset production
+        - campaign visual design
       whimsy-injector:
-        display_name: "Luna Park"
-        title: "Delight Designer"
+        display_name: Luna Park
+        title: Delight Designer
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 7
         workload_families:
-          - "Media, publishing, and extended communications"
-          - "Documents, notes, and workspace productivity"
-          - "Content, intranet, and files"
+        - Media, publishing, and extended communications
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
         capability_families:
-          - "delight and tone improvements"
-          - "polish passes"
-          - "creative variation generation"
+        - delight and tone improvements
+        - polish passes
+        - creative variation generation

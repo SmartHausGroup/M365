@@ -1,0 +1,18 @@
+{
+  "lemma_id": "L74",
+  "title": "M365 Commercial Growth and Experience Activation v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BV-growth-experience-activation-v1.ipynb",
+    "notebooks/lemma_proofs/L74_m365_growth_experience_activation_v1.ipynb"
+  ],
+  "invariants": ["invariants/lemmas/L74_m365_growth_experience_activation_v1.yaml"],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "8 P2C personas activated: content-creator (8), growth-hacker (10), ui-designer (7), brand-guardian (8), feedback-synthesizer (7), sprint-prioritizer (8), ux-researcher (7), studio-producer (9)",
+    "64 total new actions across 4 departments",
+    "All pass 6-point activation test",
+    "Registry-backed personas: 18/39 (10 from P2B + 8 from P2C)"
+  ]
+}

@@ -17,8 +17,10 @@ def main() -> int:
     summary = pack["summary"]
     if summary["persona_count"] != 5:
         raise SystemExit("testing_department_pack_persona_count_mismatch")
-    if summary["supported_action_count"] != 0:
+    if summary["supported_action_count"] != 8:
         raise SystemExit("testing_department_pack_supported_action_count_mismatch")
+    if summary["registry_backed_persona_count"] != 1:
+        raise SystemExit("testing_department_pack_registry_backed_count_mismatch")
     if summary["pack_state"] != "blocked":
         raise SystemExit("testing_department_pack_expected_blocked")
 

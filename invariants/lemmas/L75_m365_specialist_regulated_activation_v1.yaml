@@ -1,0 +1,24 @@
+lemma_id: L75
+name: M365 specialist and regulated persona activation v1
+plan_ref: plan:m365-post-expansion-promotion-and-persona-activation:P2D
+source_notebook: notebooks/m365/INV-M365-BW-specialist-regulated-activation-v1.ipynb
+evidence:
+  artifacts:
+    - registry/agents.yaml
+    - registry/persona_registry_v2.yaml
+    - registry/persona_capability_map.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/department_pack_engineering_v1.yaml
+    - registry/department_pack_testing_v1.yaml
+    - registry/department_pack_studio_operations_v1.yaml
+    - registry/department_pack_design_v1.yaml
+    - registry/department_pack_project_management_v1.yaml
+    - registry/department_pack_product_v1.yaml
+  checks:
+    - 16 P2D personas are registry-backed with non-empty allowed_actions
+    - 5 blocked personas remain persona-contract-only (external API dependency)
+    - all activated persona action counts match across agents.yaml, persona_registry, and capability_map
+    - all activated actions route via executor_routing_v2.yaml prefix routes
+    - high-risk personas (finance-tracker, legal-compliance-checker) have explicit approval rules
+    - department pack files reflect updated activation status for 6 departments
+status: green

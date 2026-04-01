@@ -36,6 +36,15 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-staging-main-promotion-prompt.txt` | Kick-off text for the branch-promotion prompt. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P1A` |
 | `docs/prompts/codex-m365-persona-activation-follow-on.md` | Detailed MATHS prompt for the next persona-activation planning and first-wave lock. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
 | `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt` | Kick-off text for the persona-activation follow-on prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
+| `docs/prompts/codex-m365-persona-activation-p2c-growth-experience.md` | Detailed MATHS prompt for the P2C commercial growth and experience activation wave on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `docs/prompts/codex-m365-persona-activation-p2c-growth-experience-prompt.txt` | Kick-off text for the P2C commercial growth and experience activation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout.md` | Detailed MATHS prompt for the P2E certification closeout of the current M365-backed persona surface. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout-prompt.txt` | Kick-off text for the P2E certification closeout prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation.md` | Detailed MATHS prompt for P3 external-platform contract and credentialless preparation on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
+| `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation-prompt.txt` | Kick-off text for the P3 external-platform preparation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
+| `docs/prompts/codex-m365-reviewed-persona-surface-release-promotion.md` | Detailed MATHS prompt for the P4 reviewed-surface merge, versioning, promotion, and release-tag track. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P4A` |
+| `docs/prompts/codex-m365-reviewed-persona-surface-release-promotion-prompt.txt` | Kick-off text for the P4 reviewed-surface release-promotion prompt. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P4A` |
+| `docs/commercialization/m365-activated-persona-surface-v1.md` | Truthful commercialization boundary for the current activated persona surface on the review branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 
 ## Internal UCP Onboarding Automation Artifacts
 
@@ -1414,6 +1423,57 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `scripts/ci/verify_workforce_release_decision_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
 | `configs/generated/workforce_release_decision_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
 | `tests/test_workforce_release_decision_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9E` |
+
+## P2B Foundation Operators Activation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/ma/lemmas/L73_m365_foundation_operators_activation_v1.md` | Lemma doc for L73: 6 foundation operators activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
+| `invariants/lemmas/L73_m365_foundation_operators_activation_v1.yaml` | Invariant for L73. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
+| `notebooks/m365/INV-M365-BU-foundation-operators-activation-v1.ipynb` | Primary notebook for L73. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
+| `notebooks/lemma_proofs/L73_m365_foundation_operators_activation_v1.ipynb` | Proof replay notebook for L73. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
+| `artifacts/scorecards/scorecard_l73.json` | Scorecard for L73. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2B` |
+
+## P2C Commercial Growth and Experience Activation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/ma/lemmas/L74_m365_growth_experience_activation_v1.md` | Lemma doc for L74: 8 commercial growth/experience personas activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `invariants/lemmas/L74_m365_growth_experience_activation_v1.yaml` | Invariant for L74. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `notebooks/m365/INV-M365-BV-growth-experience-activation-v1.ipynb` | Primary notebook for L74. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `notebooks/lemma_proofs/L74_m365_growth_experience_activation_v1.ipynb` | Proof replay notebook for L74. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `artifacts/scorecards/scorecard_l74.json` | Scorecard for L74. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `scripts/ci/verify_p2c_growth_experience_activation_v1.py` | CI verifier for P2C activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `configs/generated/p2c_growth_experience_activation_v1_verification.json` | Generated proof for P2C. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `tests/test_p2c_growth_experience_activation_v1.py` | Tests for P2C activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+
+## P2D Specialist and Regulated Persona Activation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `docs/ma/lemmas/L75_m365_specialist_regulated_activation_v1.md` | Lemma doc for L75: 16 M365-backed specialist/regulated personas activation; external-platform personas moved to the later P3 track. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `invariants/lemmas/L75_m365_specialist_regulated_activation_v1.yaml` | Invariant for L75. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `notebooks/m365/INV-M365-BW-specialist-regulated-activation-v1.ipynb` | Primary notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `notebooks/lemma_proofs/L75_m365_specialist_regulated_activation_v1.ipynb` | Proof replay notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `artifacts/scorecards/scorecard_l75.json` | Scorecard for L75. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `scripts/ci/verify_p2d_specialist_regulated_activation_v1.py` | CI verifier for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `configs/generated/p2d_specialist_regulated_activation_v1_verification.json` | Generated proof for P2D. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `tests/test_p2d_specialist_regulated_activation_v1.py` | Tests for P2D activation. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+
+## P2E Activated Persona Surface Certification Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `registry/activated_persona_surface_v1.yaml` | Branch-specific certification/closeout contract for the current activated persona surface. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/commercialization/m365-activated-persona-surface-v1.md` | Human-readable commercialization boundary for the current activated surface. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/ma/lemmas/L76_m365_activated_persona_surface_v1.md` | Lemma doc for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `invariants/lemmas/L76_m365_activated_persona_surface_v1.yaml` | Invariant for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `notebooks/m365/INV-M365-BX-activated-persona-surface-v1.ipynb` | Primary notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `notebooks/lemma_proofs/L76_m365_activated_persona_surface_v1.ipynb` | Proof replay notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `artifacts/scorecards/scorecard_l76.json` | Scorecard for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `scripts/ci/verify_activated_persona_surface_v1.py` | CI verifier for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `configs/generated/activated_persona_surface_v1_verification.json` | Generated proof for P2E. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `tests/test_activated_persona_surface_v1.py` | Tests for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 
 ## Active UCP Live Activation Repair Artifacts
 
