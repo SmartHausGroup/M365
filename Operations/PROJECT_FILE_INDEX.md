@@ -38,6 +38,10 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-activation-follow-on-prompt.txt` | Kick-off text for the persona-activation follow-on prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2A` |
 | `docs/prompts/codex-m365-persona-activation-p2c-growth-experience.md` | Detailed MATHS prompt for the P2C commercial growth and experience activation wave on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
 | `docs/prompts/codex-m365-persona-activation-p2c-growth-experience-prompt.txt` | Kick-off text for the P2C commercial growth and experience activation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2C` |
+| `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout.md` | Detailed MATHS prompt for the P2E certification closeout of the current M365-backed persona surface. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/prompts/codex-m365-persona-activation-p2e-certification-closeout-prompt.txt` | Kick-off text for the P2E certification closeout prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation.md` | Detailed MATHS prompt for P3 external-platform contract and credentialless preparation on the review feature branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
+| `docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation-prompt.txt` | Kick-off text for the P3 external-platform preparation prompt. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P3A` |
 
 ## Internal UCP Onboarding Automation Artifacts
 
@@ -1444,7 +1448,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `docs/ma/lemmas/L75_m365_specialist_regulated_activation_v1.md` | Lemma doc for L75: 16 specialist/regulated personas activation, 5 blocked. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
+| `docs/ma/lemmas/L75_m365_specialist_regulated_activation_v1.md` | Lemma doc for L75: 16 M365-backed specialist/regulated personas activation; external-platform personas moved to the later P3 track. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
 | `invariants/lemmas/L75_m365_specialist_regulated_activation_v1.yaml` | Invariant for L75. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
 | `notebooks/m365/INV-M365-BW-specialist-regulated-activation-v1.ipynb` | Primary notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |
 | `notebooks/lemma_proofs/L75_m365_specialist_regulated_activation_v1.ipynb` | Proof replay notebook for L75. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2D` |

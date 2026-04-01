@@ -1,0 +1,9 @@
+Execute P3A External Platform Contract and Credentialless Preparation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-persona-activation-p3-external-platform-preparation.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P3A
+
+Branch discipline: execute only on feature/m365_personas. Do not merge into development and do not start P3B or P3C.
+
+You are approved to prepare the 5 external-platform personas without active credentials. Do not claim any of them are active.

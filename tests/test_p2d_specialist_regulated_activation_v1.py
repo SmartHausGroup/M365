@@ -1,4 +1,5 @@
 """Tests for P2D specialist and regulated persona activation."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -36,12 +37,10 @@ P2D_BLOCKED = [
 def _load() -> tuple[dict, dict, dict]:
     repo = Path(__file__).resolve().parents[1]
     agents = yaml.safe_load((repo / "registry" / "agents.yaml").read_text())["agents"]
-    persona_reg = yaml.safe_load(
-        (repo / "registry" / "persona_registry_v2.yaml").read_text()
-    )["personas"]
-    cap_map = yaml.safe_load(
-        (repo / "registry" / "persona_capability_map.yaml").read_text()
-    )
+    persona_reg = yaml.safe_load((repo / "registry" / "persona_registry_v2.yaml").read_text())[
+        "personas"
+    ]
+    cap_map = yaml.safe_load((repo / "registry" / "persona_capability_map.yaml").read_text())
     return agents, persona_reg, cap_map
 
 
@@ -90,9 +89,7 @@ def test_p2d_high_risk_personas_have_approval_rules() -> None:
 def test_p2d_routing_coverage() -> None:
     repo = Path(__file__).resolve().parents[1]
     agents = yaml.safe_load((repo / "registry" / "agents.yaml").read_text())["agents"]
-    routing = yaml.safe_load(
-        (repo / "registry" / "executor_routing_v2.yaml").read_text()
-    )
+    routing = yaml.safe_load((repo / "registry" / "executor_routing_v2.yaml").read_text())
     prefix_routes = routing["prefix_routes"]
     for pid in P2D_ACTIVATED:
         for action in agents[pid]["allowed_actions"]:
@@ -110,7 +107,5 @@ def test_p2d_department_packs_updated() -> None:
         "project_management",
         "product",
     ]:
-        pack = yaml.safe_load(
-            (repo / "registry" / f"department_pack_{dept}_v1.yaml").read_text()
-        )
+        pack = yaml.safe_load((repo / "registry" / f"department_pack_{dept}_v1.yaml").read_text())
         assert pack["kpis"]["supported_action_count"] > 0, dept

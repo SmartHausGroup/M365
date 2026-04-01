@@ -58,19 +58,24 @@
       },
       {
         "phase": "P2D",
-        "description": "Activate the specialist and regulated personas last."
+        "description": "Activate the remaining M365-backed specialist and regulated personas."
       },
       {
         "phase": "P2E",
         "description": "Certify the activated waves and update commercial packaging."
+      },
+      {
+        "phase": "P3",
+        "description": "Prepare external-platform personas without active credentials, then activate them later with bounded runtime surfaces."
       }
     ],
     "commercial_unlocks": [
       "P1 unlocks governed release promotion out of development.",
       "P2B unlocks a credible build, ship, validate, report, and support workforce core.",
       "P2C unlocks stronger product, design, and growth packages customers can buy.",
-      "P2D unlocks the higher-value specialist workforce story only after safer layers are live.",
-      "P2E unlocks honest commercial claims that persona activation has materially advanced."
+      "P2D unlocks the higher-value specialist M365 workforce story only after safer layers are live.",
+      "P2E unlocks honest commercial claims that persona activation has materially advanced across the current M365-backed surface.",
+      "P3 unlocks future external-platform persona expansion only after adapter contracts, credentials, and runtime proof exist."
     ]
   },
   "execution_status": {
@@ -94,7 +99,7 @@
       {
         "phase": "P2A",
         "date": "2026-03-22",
-        "summary": "Activation definition locked (6-point runtime state change), first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked (P2B foundation, P2C growth/experience, P2D specialist/regulated, P2E certification closeout, fail-closed), commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0-C10). Gate GO."
+        "summary": "Activation definition locked (6-point runtime state change), first-wave roster locked (backend-architect, devops-automator, api-tester, analytics-reporter, project-shipper, support-responder), wave order locked and later refined into the current fail-closed sequence (P2B foundation, P2C growth/experience, P2D M365-backed specialist/regulated, P2E certification closeout, then P3 external-platform preparation/activation), commercial unlock mapping locked per wave. All 11 MATHS checks passed (C0-C10). Gate GO."
       },
       {
         "phase": "P2B",
@@ -110,12 +115,12 @@
       {
         "phase": "P2D",
         "date": "2026-03-23",
-        "summary": "Specialist and regulated personas: 16 activated (ai-engineer 10, frontend-developer 7, mobile-app-builder 7, rapid-prototyper 8, test-writer-fixer 7, performance-benchmarker 8, test-results-analyzer 7, tool-evaluator 7, workflow-optimizer 8, finance-tracker 8, infrastructure-maintainer 8, legal-compliance-checker 8, visual-storyteller 7, whimsy-injector 7, experiment-tracker 8, trend-researcher 7). 5 blocked (external API dependency). Total 122 new actions. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39."
+        "summary": "M365-backed specialist and regulated personas: 16 activated (ai-engineer 10, frontend-developer 7, mobile-app-builder 7, rapid-prototyper 8, test-writer-fixer 7, performance-benchmarker 8, test-results-analyzer 7, tool-evaluator 7, workflow-optimizer 8, finance-tracker 8, infrastructure-maintainer 8, legal-compliance-checker 8, visual-storyteller 7, whimsy-injector 7, experiment-tracker 8, trend-researcher 7). The 5 external-platform personas were formally moved into later P3 preparation/activation because they require unsupported non-M365 APIs. Total 122 new actions. L75 lemma, scorecard green, 8 tests passed, CI verifier passed. Registry-backed personas: 34/39."
       }
     ],
-    "in_progress": "P2D",
-    "next_act": "P2D",
-    "prepared_blocked": ["P2E"]
+    "in_progress": null,
+    "next_act": "P2E",
+    "prepared_blocked": ["P3A", "P3B", "P3C"]
   },
   "scope": {
     "in": [
@@ -123,12 +128,13 @@
       "Define the plain-language persona-activation follow-on program.",
       "Lock the first activation wave and its commercial rationale.",
       "Create prompt pairs for promotion and activation.",
+      "Define the later external-platform preparation and activation track for personas that do not fit the current M365-backed surface.",
       "Synchronize EXECUTION_PLAN, ACTION_LOG, and PROJECT_FILE_INDEX."
     ],
     "out": [
       "Directly activating personas in this planning step.",
       "Claiming all 39 personas are already live.",
-      "Expanding outside the M365-only, policy-gated North Star.",
+      "Claiming unsupported external-platform personas are active before credential-gated runtime surfaces exist.",
       "Executing branch promotions during plan creation."
     ]
   },
@@ -160,6 +166,22 @@
     {
       "id": "R7",
       "title": "Governance synchronization"
+    },
+    {
+      "id": "R8",
+      "title": "Re-scope P2D to the M365-backed specialist surface"
+    },
+    {
+      "id": "R9",
+      "title": "Create the later external-platform preparation and activation track"
+    },
+    {
+      "id": "R10",
+      "title": "Advance P2E without over-claiming blocked external-platform personas"
+    },
+    {
+      "id": "R11",
+      "title": "Create formal prompt pairs for P2E and P3"
     }
   ],
   "phase_stack": [
@@ -227,14 +249,45 @@
         {
           "act": "P2D",
           "title": "Specialist and regulated persona activation",
-          "status": "Active",
-          "goal": "Activate the higher-risk, long-tail, and specialist personas only after the first two waves are proven."
+          "status": "Complete",
+          "goal": "Activate the higher-risk, long-tail, and specialist personas that fit inside the current M365-backed runtime after the first two waves are proven."
         },
         {
           "act": "P2E",
           "title": "Activation certification and commercial closeout",
           "status": "Pending",
-          "goal": "Certify the activated persona waves and update the product packaging to match the new live surface."
+          "goal": "Certify the activated M365-backed persona waves and update the product packaging to match the new live surface."
+        }
+      ]
+    },
+    {
+      "phase": "P3",
+      "title": "External Platform Persona Preparation and Later Activation",
+      "status": "Pending",
+      "goal": "Prepare and later activate the external-platform personas without violating the current M365-only runtime and commercial claim boundaries.",
+      "outputs": [
+        "credentialless external-platform preparation contract",
+        "credential-gated runtime implementation plan",
+        "later activation certification and packaging path"
+      ],
+      "children": [
+        {
+          "act": "P3A",
+          "title": "External platform contract and credentialless preparation",
+          "status": "Pending",
+          "goal": "Define env-var credential boundaries, adapter surfaces, and fail-closed not-configured behavior without claiming any persona is active."
+        },
+        {
+          "act": "P3B",
+          "title": "Credential-gated runtime surface implementation",
+          "status": "Pending",
+          "goal": "Implement external-platform runtime surfaces only after bounded credentials, adapters, approvals, and routing exist."
+        },
+        {
+          "act": "P3C",
+          "title": "External platform activation certification and packaging",
+          "status": "Pending",
+          "goal": "Certify and package the external-platform personas only after their runtime surfaces are live, validated, and commercially truthful."
         }
       ]
     }
