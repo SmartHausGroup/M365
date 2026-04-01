@@ -1,7 +1,7 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P4A` complete; `P4B` complete; `P4C` is next; `P4D` remains blocked by `P4C`; `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes)
+**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P4A` complete; `P4B` complete; `P4C` complete; `P4D` complete; `P3A` is next; `P3B` and `P3C` remain blocked by `P3A`)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
@@ -9,8 +9,6 @@
 **Historical lineage:** follows the closed `m365-ai-workforce-expansion-master-plan` after merge into `development` on 2026-03-21.
 
 **Prompt discipline:** Maintain a formal prompt pair for the branch-promotion track, the persona-activation follow-on track, and any approved reviewed-surface release-promotion track under `docs/prompts/`, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex/Claude.
-
-**Branch discipline:** All new persona-activation implementation work must execute on a dedicated future/feature branch first. `development` is the integration branch only after human review and explicit approval. Do not land persona-activation implementation directly on `development`, `staging`, or `main` unless the scoped act is explicitly a merge or promotion step.
 
 **Branch discipline:** All new persona-activation implementation work must execute on a dedicated future/feature branch first. `development` is the integration branch only after human review and explicit approval. Do not land persona-activation implementation directly on `development`, `staging`, or `main` unless the scoped act is explicitly a merge or promotion step.
 
@@ -123,8 +121,9 @@ Why these first:
 - `P2E` is complete: the current activated M365-backed persona surface is now formally certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. L76 lemma/invariant, scorecard green. Tests and CI verifier pass. The historical E9A packaging baseline now points to the branch-specific activated-surface commercialization boundary.
 - `P4A` is complete: the reviewed `feature/m365_personas` surface was merged into `development` as the bounded integration entry to the release track.
 - `P4B` is complete: the core Python/API runtime version surfaces (`pyproject.toml`, `src/ops_adapter/app.py`, `src/ops_adapter/main.py`) are now stamped to `0.2.0` on `development`, and validation is green.
-- `P4C` is next and has NOT been started. `P4D` remains blocked by `P4C`.
-- `P3A`, `P3B`, and `P3C` remain deferred until the reviewed-surface release-promotion track (`P4`) is complete.
+- `P4C` is complete: the exact validated `0.2.0` reviewed-surface release commit was promoted from `development` to `staging` without divergence.
+- `P4D` is complete: the same validated `0.2.0` reviewed-surface release commit was promoted from `staging` to `main`, and the annotated tag `m365-workforce-v0.2.0` was published on release commit `51a5954`.
+- `P3A` is next and has NOT been started. `P3B` and `P3C` remain blocked by `P3A`.
 
 ## Scope
 
@@ -255,7 +254,7 @@ Why these first:
 
 ### P3 — External Platform Persona Preparation and Later Activation
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Prepare and later activate the external-platform personas without violating the current M365-only runtime and commercial claim boundaries.
 
@@ -269,7 +268,7 @@ Why these first:
 
 #### P3A — External Platform Contract and Credentialless Preparation
 
-**Status:** ⏳ Pending
+**Status:** 🟢 Active
 
 **Goal:** Define the external-platform persona contract, env-var credential boundary, adapter surfaces, and fail-closed `not configured` behavior without claiming any persona is active.
 
@@ -287,7 +286,7 @@ Why these first:
 
 ### P4 — Reviewed Persona Surface Integration and Release Promotion
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Merge the reviewed `feature/m365_personas` activation surface into `development`, stamp the integrated runtime surface as version `0.2.0`, promote the exact versioned commit to `staging` and `main`, and publish a deterministic release tag.
 
@@ -297,7 +296,7 @@ Why these first:
 - version `0.2.0` stamped in the core Python/API runtime surfaces
 - governed `development -> staging -> main` promotion of the exact reviewed-surface release commit
 - annotated release tag `m365-workforce-v0.2.0`
-- final tracker sync restoring `P3A` as the next deferred act
+- final tracker sync restoring `P3A` as the next act
 
 **Child Acts:**
 
@@ -315,16 +314,20 @@ Why these first:
 
 **Goal:** Update the core Python/API runtime version surfaces to `0.2.0`, run validation, and commit the versioned reviewed-surface release on `development`.
 
-**Completion summary:** The integrated reviewed-surface runtime is now versioned as `0.2.0` in `pyproject.toml`, `src/ops_adapter/app.py`, and `src/ops_adapter/main.py`. Validation remains green after the version stamp, and `P4C` is now the active next act.
+**Completion summary:** The integrated reviewed-surface runtime is now versioned as `0.2.0` in `pyproject.toml`, `src/ops_adapter/app.py`, and `src/ops_adapter/main.py`. Validation remained green after the version stamp, and this exact commit became the promotion anchor for `P4C` and `P4D`.
 
 #### P4C — Promote Versioned `development` Commit to `staging`
 
-**Status:** 🟢 Active
+**Status:** ✅ Complete
 
 **Goal:** Promote the exact validated `0.2.0` reviewed-surface commit from `development` to `staging` without divergence.
 
+**Completion summary:** `staging` was fast-forwarded to the exact validated `0.2.0` reviewed-surface release commit `51a5954` from `development` with no divergence.
+
 #### P4D — Promote Versioned `staging` Commit to `main` and Tag Release
 
-**Status:** ⏳ Pending
+**Status:** ✅ Complete
 
 **Goal:** Promote the same validated `0.2.0` reviewed-surface commit from `staging` to `main`, publish `m365-workforce-v0.2.0`, and restore `P3A` as the next act.
+
+**Completion summary:** `main` was fast-forwarded to the same validated `0.2.0` reviewed-surface release commit `51a5954`, the annotated release tag `m365-workforce-v0.2.0` was published on that commit, and the next act returned to `P3A`.

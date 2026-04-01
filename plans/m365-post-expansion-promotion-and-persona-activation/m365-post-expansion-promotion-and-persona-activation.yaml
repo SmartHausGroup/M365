@@ -154,13 +154,23 @@ execution_status:
       src/ops_adapter/app.py, and src/ops_adapter/main.py, with validation green on development.
 
       '
+  - phase: P4C
+    date: '2026-03-31'
+    summary: 'Fast-forwarded staging to the exact validated 0.2.0 reviewed-surface release
+      commit 51a5954 from development without divergence.
+
+      '
+  - phase: P4D
+    date: '2026-03-31'
+    summary: 'Fast-forwarded main to the same validated 0.2.0 reviewed-surface release commit
+      51a5954 and published the annotated release tag m365-workforce-v0.2.0 on that commit.
+
+      '
   in_progress: null
-  next_act: P4C
+  next_act: P3A
   prepared_blocked:
-  - P3A
   - P3B
   - P3C
-  - P4D
 scope:
   in:
   - Define the governed branch-promotion path from development to staging to main.
@@ -260,7 +270,7 @@ phase_stack:
     goal: Certify the activated M365-backed persona waves and update the product packaging to match the new live surface.
 - phase: P3
   title: External Platform Persona Preparation and Later Activation
-  status: Pending
+  status: Active
   goal: Prepare and later activate the external-platform personas without violating the current M365-only runtime and commercial claim boundaries.
   outputs:
   - credentialless external-platform preparation contract
@@ -269,7 +279,7 @@ phase_stack:
   children:
   - act: P3A
     title: External platform contract and credentialless preparation
-    status: Pending
+    status: Active
     goal: Define env-var credential boundaries, adapter surfaces, and fail-closed not-configured behavior without claiming any persona is active.
   - act: P3B
     title: Credential-gated runtime surface implementation
@@ -281,7 +291,7 @@ phase_stack:
     goal: Certify and package the external-platform personas only after their runtime surfaces are live, validated, and commercially truthful.
 - phase: P4
   title: Reviewed Persona Surface Integration and Release Promotion
-  status: Active
+  status: Complete
   goal: Merge the reviewed feature/m365_personas activation surface into development, stamp version 0.2.0,
     promote the exact versioned commit to staging and main, and publish a deterministic release tag.
   outputs:
@@ -289,7 +299,7 @@ phase_stack:
   - version 0.2.0 stamped in the core Python/API runtime surfaces
   - governed development to staging to main promotion of the exact reviewed-surface release commit
   - annotated release tag m365-workforce-v0.2.0
-  - final tracker sync restoring P3A as the next deferred act
+  - final tracker sync restoring P3A as the next act
   children:
   - act: P4A
     title: Merge reviewed persona surface into development
@@ -301,9 +311,9 @@ phase_stack:
     goal: Update the core Python/API runtime version surfaces to 0.2.0, run validation, and commit the versioned reviewed-surface release on development.
   - act: P4C
     title: Promote versioned development commit to staging
-    status: Active
+    status: Complete
     goal: Promote the exact validated 0.2.0 reviewed-surface commit from development to staging without divergence.
   - act: P4D
     title: Promote versioned staging commit to main and tag release
-    status: Pending
+    status: Complete
     goal: Promote the same validated 0.2.0 reviewed-surface commit from staging to main, publish m365-workforce-v0.2.0, and restore P3A as the next act.
