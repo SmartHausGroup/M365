@@ -1,0 +1,571 @@
+plan_id: plan:m365-marketplace-bundle-packaging-conformance
+parent_plan_id: plan:m365-ucp-standalone-pack-surface
+title: Package the M365 standalone pack as a conformant marketplace bundle
+version: '1.0'
+status: complete
+owner: SMARTHAUS
+date_created: '2026-04-01'
+date_updated: '2026-04-01'
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: 'Operations/EXECUTION_PLAN.md § Initiative: M365 marketplace bundle
+  packaging and conformance'
+domain: infrastructure
+math_algorithm_scope: false
+north_star_alignment:
+  source: Operations/NORTHSTAR.md
+  principles:
+  - truthful M365-owned pack distribution and release artifact boundaries
+  - fail-closed marketplace trust, signature, and conformance posture
+  - self-service packaging that does not require UCP repo authority drift
+  anti_alignment:
+  - Does NOT redesign UCP-side Marketplace UI or lifecycle gating.
+  - Does NOT weaken service-mode auth or actor-identity rules.
+  - Does NOT claim bundle packaging is complete without a real bundle artifact.
+intent_capture:
+  user_stated_requirements:
+  - real marketplace-installed M365 pack model
+  - first do the formal plan per AGENTS.md rules process and governance
+  - the M365 integration pack should be correctly packaged for the marketplace
+  - ensure all prompts for the plans are following our formal prompt template
+  intent_doc_ref: captured in this plan
+  intent_verification: R1 through R7 capture the pack-side work required so M365 can
+    emit a real marketplace bundle instead of only a runtime-owned source tree.
+objective: Package the standalone ucp_m365_pack surface in this repo as a conformant
+  marketplace bundle that UCP can later consume as a real marketplace artifact.
+current_state: This repo owns the authoritative standalone UCP-facing pack source
+  in src/ucp_m365_pack/, but there is no manifest.json, payload.tar.gz, signatures,
+  evidence folder, or final .ucp.tar.gz bundle artifact.
+target_state: This repo produces a conformant marketplace bundle with manifest, payload,
+  signatures, evidence, and one final bundle artifact that validates against the pack
+  manifest and bundle specs.
+scope:
+  in_scope:
+  - define the canonical M365 marketplace bundle packaging contract
+  - build the concrete bundle structure for ucp_m365_pack
+  - emit manifest, payload, signatures, and evidence artifacts
+  - run conformance validation over the packaged artifact
+  - update commercialization and governance surfaces to truthfully describe the packaged
+    bundle
+  out_of_scope:
+  - sibling UCP repo install or UI consumption changes
+  - Microsoft tenant permission changes
+  - new M365 persona or Graph capability work
+  - commercial pricing or payout flows
+  file_allowlist:
+  - plans/m365-marketplace-bundle-packaging-conformance/**
+  - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt
+  - notebooks/m365/INV-M365-BW-marketplace-bundle-packaging-governance-alignment.ipynb
+  - configs/generated/m365_marketplace_bundle_packaging_governance_alignment_verification.json
+  - src/ucp_m365_pack/**
+  - docs/commercialization/m365-marketplace-bundle-packaging.md
+  - docs/commercialization/USER_MANUAL_M365.md
+  - artifacts/diagnostics/m365_marketplace_bundle_packaging_conformance.json
+  - dist/m365_pack/**
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+  file_denylist:
+  - ../UCP/**
+  - registry/**
+  - Any path not listed in the allowlist
+  scope_fence_rule: Stop and re-scope if the packaging work requires UCP-side Marketplace/UI
+    changes or files outside the allowlist.
+requirements:
+- id: R1
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R1
+  description: One governed package must define the M365 bundle structure, pack identity,
+    compatibility, entitlement, and evidence expectations.
+  acceptance_criteria: The package truthfully defines the required manifest, payload,
+    signatures, evidence, and final bundle identity.
+  depends_on: []
+  user_intent_trace: the M365 integration pack should be correctly packaged for the
+    marketplace
+- id: R2
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R2
+  description: A real manifest.json conforming to the pack manifest schema must exist
+    for the M365 pack bundle.
+  acceptance_criteria: The packaged artifact includes a concrete manifest.json with
+    the required pack identity, compatibility, entitlement, and entrypoint fields.
+  depends_on:
+  - R1
+  user_intent_trace: real marketplace-installed M365 pack model
+- id: R3
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R3
+  description: A real payload.tar.gz must contain the standalone ucp_m365_pack runtime
+    surface and required setup assets.
+  acceptance_criteria: The packaged artifact includes a self-contained payload archive
+    built from the standalone pack surface.
+  depends_on:
+  - R1
+  user_intent_trace: the M365 integration pack should be correctly packaged for the
+    marketplace
+- id: R4
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R4
+  description: The bundle must include signatures and evidence artifacts required
+    by the bundle spec.
+  acceptance_criteria: signatures and evidence material exist concretely and are referenced
+    truthfully.
+  depends_on:
+  - R2
+  - R3
+  user_intent_trace: real marketplace-installed M365 pack model
+- id: R5
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R5
+  description: One final .ucp.tar.gz artifact must be produced for the M365 pack.
+  acceptance_criteria: The bundle assembly emits one final distributable marketplace
+    pack artifact.
+  depends_on:
+  - R2
+  - R3
+  - R4
+  user_intent_trace: the M365 integration pack should be correctly packaged for the
+    marketplace
+- id: R6
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R6
+  description: The packaged artifact must validate against the declared contract and
+    fail closed when incomplete.
+  acceptance_criteria: Conformance validation passes or produces explicit fail-closed
+    reasons.
+  depends_on:
+  - R2
+  - R3
+  - R4
+  - R5
+  user_intent_trace: real marketplace-installed M365 pack model
+- id: R7
+  ref: plan:m365-marketplace-bundle-packaging-conformance:R7
+  description: Plan, prompt, action log, execution plan, and project file index must
+    be synchronized truthfully.
+  acceptance_criteria: Plan schema passes, prompt artifacts validate, project file
+    index is updated, and git diff --check is clean.
+  depends_on:
+  - R1
+  - R2
+  - R3
+  - R4
+  - R5
+  - R6
+  user_intent_trace: AGENTS.md rules process and governance
+execution_sequence:
+  ordering:
+  - T1
+  - T2
+  - T3
+  - T4
+  - T5
+  - T6
+  stop_on_first_failure: true
+  maths_phase_mapping: null
+tasks:
+- id: T1
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T1
+  name: Lock the packaging contract
+  description: Publish the governed package, prompt pair, notebook evidence, and commercialization
+    note for the bundle boundary.
+  requirement_refs:
+  - R1
+  - R7
+  depends_on: []
+  maths_phase: null
+  deliverables:
+  - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+  - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  exit_criteria:
+  - The package explicitly defines manifest, payload, signatures, evidence, and final
+    bundle identity.
+  - The package stays in this repo and does not drift into UCP-side consumption work.
+  validation_command: rg -n "manifest|payload|signatures|evidence|bundle|UCP" plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+    docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  implementation_notes: null
+- id: T2
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T2
+  name: Build manifest and payload
+  description: Create the concrete manifest.json, payload.tar.gz, and bundle-layout
+    source tree for ucp_m365_pack.
+  requirement_refs:
+  - R2
+  - R3
+  depends_on:
+  - T1
+  maths_phase: null
+  deliverables:
+  - dist/m365_pack/manifest.json
+  - dist/m365_pack/payload.tar.gz
+  exit_criteria:
+  - The bundle has a concrete manifest.json.
+  - The bundle has a self-contained payload.tar.gz.
+  validation_command: 'python3 - <<''PY''
+
+    from pathlib import Path
+
+    assert Path(''dist/m365_pack/manifest.json'').is_file()
+
+    assert Path(''dist/m365_pack/payload.tar.gz'').is_file()
+
+    print(''bundle layout ok'')
+
+    PY'
+  implementation_notes: null
+- id: T3
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T3
+  name: Add signatures and evidence
+  description: Create signatures and evidence artifacts required by the bundle spec.
+  requirement_refs:
+  - R4
+  depends_on:
+  - T2
+  maths_phase: null
+  deliverables:
+  - dist/m365_pack/signatures/manifest.sig
+  - dist/m365_pack/signatures/payload.sig
+  - dist/m365_pack/evidence/conformance.json
+  - dist/m365_pack/evidence/sbom.json
+  exit_criteria:
+  - signatures and evidence folders exist
+  - trust material is referenced truthfully
+  validation_command: "python3 - <<'PY'\nfrom pathlib import Path\nrequired = [\n\
+    \    'dist/m365_pack/signatures/manifest.sig',\n    'dist/m365_pack/signatures/payload.sig',\n\
+    \    'dist/m365_pack/evidence/conformance.json',\n    'dist/m365_pack/evidence/sbom.json',\n\
+    ]\nfor path in required:\n    assert Path(path).is_file(), path\nprint('trust\
+    \ material ok')\nPY"
+  implementation_notes: null
+- id: T4
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T4
+  name: Assemble the final marketplace bundle
+  description: Produce the final .ucp.tar.gz artifact.
+  requirement_refs:
+  - R5
+  depends_on:
+  - T3
+  maths_phase: null
+  deliverables:
+  - dist/m365_pack/com.smarthaus.m365-1.0.0.ucp.tar.gz
+  exit_criteria:
+  - the final bundle artifact exists
+  validation_command: 'python3 - <<''PY''
+
+    from pathlib import Path
+
+    assert Path(''dist/m365_pack/com.smarthaus.m365-1.0.0.ucp.tar.gz'').is_file()
+
+    print(''final bundle ok'')
+
+    PY'
+  implementation_notes: null
+- id: T5
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T5
+  name: Run conformance validation
+  description: Validate the packaged artifact and capture diagnostic proof.
+  requirement_refs:
+  - R6
+  depends_on:
+  - T4
+  maths_phase: null
+  deliverables:
+  - artifacts/diagnostics/m365_marketplace_bundle_packaging_conformance.json
+  exit_criteria:
+  - conformance validation passes or fails closed explicitly
+  validation_command: git diff --check
+  implementation_notes: The executed phase must use the real validator once implemented;
+    this planning slice only locks the required gate.
+- id: T6
+  ref: plan:m365-marketplace-bundle-packaging-conformance:T6
+  name: Close governance truthfully
+  description: Synchronize action log, execution plan, project file index, and plan
+    status.
+  requirement_refs:
+  - R7
+  depends_on:
+  - T5
+  maths_phase: null
+  deliverables:
+  - Operations/ACTION_LOG.md
+  - Operations/EXECUTION_PLAN.md
+  - Operations/PROJECT_FILE_INDEX.md
+  exit_criteria:
+  - governance surfaces are synchronized truthfully
+  validation_command: git diff --check
+  implementation_notes: null
+gates:
+  checks:
+  - id: CHECK:C0
+    name: Packaging contract explicit
+    description: The package must explicitly define manifest, payload, signatures,
+      evidence, and final bundle identity.
+    task_ref: T1
+    validation_command: rg -n "manifest|payload|signatures|evidence|bundle|UCP" plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+      docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+    pass_criteria: The contract terms are explicitly present.
+    fail_action: block
+  - id: CHECK:C1
+    name: Plan schema validates
+    description: The YAML plan conforms to the master plan schema.
+    task_ref: T1
+    validation_command: /Users/smarthaus/Projects/GitHub/UCP/.venv/bin/python -c "import
+      json, pathlib, yaml; from jsonschema import Draft202012Validator as V; schema=json.loads(pathlib.Path('/Users/smarthaus/Projects/GitHub/UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json').read_text());
+      data=yaml.safe_load(pathlib.Path('plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.yaml').read_text());
+      V(schema).validate(data); print('plan schema ok')"
+    pass_criteria: The validator prints plan schema ok.
+    fail_action: block
+  - id: CHECK:C2
+    name: Prompt artifacts validate
+    description: The detailed and kickoff prompts satisfy the formal prompt contract.
+    task_ref: T1
+    validation_command: "PYTHONPATH=/Users/smarthaus/Projects/GitHub/UCP/src /Users/smarthaus/Projects/GitHub/UCP/.venv/bin/python\
+      \ - <<'PY'\nfrom pathlib import Path\nfrom ucp.governance.artifact_contracts\
+      \ import validate_prompt_artifact\nroot = Path('/Users/smarthaus/Projects/GitHub/M365')\n\
+      for path in [\n    'docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md',\n\
+      \    'docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt',\n\
+      ]:\n    verdict = validate_prompt_artifact(artifact_path=path, root=root)\n\
+      \    assert verdict['valid'] is True, verdict\nprint('prompt validation ok')\n\
+      PY"
+    pass_criteria: The validator prints prompt validation ok.
+    fail_action: block
+  - id: CHECK:C3
+    name: Project file index updated
+    description: The new governed artifacts are indexed.
+    task_ref: T6
+    validation_command: rg -n "m365-marketplace-bundle-packaging-conformance|codex-m365-marketplace-bundle-packaging-conformance|INV-M365-BW-marketplace-bundle-packaging-governance-alignment"
+      Operations/PROJECT_FILE_INDEX.md
+    pass_criteria: The new workstream artifacts appear in the project file index.
+    fail_action: block
+  - id: CHECK:C4
+    name: Diff hygiene
+    description: Patch hygiene must be clean.
+    task_ref: T6
+    validation_command: git diff --check
+    pass_criteria: The command exits 0.
+    fail_action: block
+  decision:
+    go_rule: All checks pass and the package truthfully defines the bundle/conformance
+      workstream.
+    no_go_rule: Any check fails or the package leaves bundle packaging implicit.
+  no_go_triggers:
+  - The package claims marketplace conformance without a real bundle artifact.
+  - The package drifts into UCP-side consumption work.
+  - The package treats signatures or evidence as optional.
+determinism: null
+artifacts:
+- path: plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+  format: md
+  producer: T1
+  schema_ref: /Users/smarthaus/Projects/GitHub/UCP/agent_governance/PLAN_TEMPLATE.md
+  validation: Human-readable governed plan artifact present.
+  artifact_sha256: null
+- path: plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.yaml
+  format: YAML
+  producer: T1
+  schema_ref: /Users/smarthaus/Projects/GitHub/UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.yaml
+  validation: YAML authority for the governed M365-side workstream.
+  artifact_sha256: null
+- path: plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.json
+  format: JSON
+  producer: T1
+  schema_ref: /Users/smarthaus/Projects/GitHub/UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json
+  validation: JSON mirror of the governed M365-side workstream.
+  artifact_sha256: null
+- path: docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  format: md
+  producer: T1
+  schema_ref: ../UCP/agent_governance/master-maths-prompt-template.md
+  validation: Detailed prompt follows the formal MATHS prompt structure.
+  artifact_sha256: null
+- path: docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt
+  format: txt
+  producer: T1
+  schema_ref: inline
+  validation: Kickoff prompt points to the detailed prompt and plan reference.
+  artifact_sha256: null
+- path: notebooks/m365/INV-M365-BW-marketplace-bundle-packaging-governance-alignment.ipynb
+  format: ipynb
+  producer: T1
+  schema_ref: inline
+  validation: Notebook-backed governance evidence for the planning package.
+  artifact_sha256: null
+- path: configs/generated/m365_marketplace_bundle_packaging_governance_alignment_verification.json
+  format: JSON
+  producer: T1
+  schema_ref: inline
+  validation: Generated verification payload for the planning package.
+  artifact_sha256: null
+environment:
+  python_version: '>=3.11'
+  venv: .venv/bin/python
+  additional_dependencies:
+  - jsonschema
+  - pyyaml
+  hardware: standard local macOS workstation
+  external_data:
+  - ../UCP/docs/platform/PACK_BUNDLE_SPEC_V0_1.md
+  - ../UCP/docs/platform/PACK_MANIFEST_SCHEMA_V0_1.md
+  pre_notebook_check: Planning package creation is governance-only. Bundle packaging
+    execution must stay inside this repo allowlist and the M365-owned standalone pack
+    surface.
+implementation_approach:
+  options_considered:
+  - id: A
+    description: Keep the standalone source tree and let UCP continue installing from
+      transitional owner-repo seed materialization.
+    pros:
+    - No pack-side packaging work.
+    cons:
+    - Not a conformant marketplace bundle.
+    - Cannot honestly satisfy the intended installation model.
+  - id: B
+    description: Package the standalone M365 pack as a real marketplace bundle with
+      manifest, payload, signatures, evidence, and final distributable artifact.
+    pros:
+    - Matches the declared bundle and manifest specs.
+    - Becomes the correct source-of-truth for UCP consumption.
+    cons:
+    - Requires real packaging and conformance work.
+  chosen: B
+  rationale: The runtime pack surface already exists in this repo. The missing boundary
+    is the distributable marketplace artifact, not another runtime refactor.
+  rejected_rationale:
+    A: It preserves the wrong distribution model and leaves UCP dependent on transitional
+      seed materialization.
+  adr_ref: null
+risks:
+  items:
+  - risk: the standalone runtime surface may still depend on UCP-internal assumptions
+      that are not captured in a self-contained payload
+    impact: high
+    mitigation: make bundle conformance fail closed and inventory any remaining host
+      dependencies explicitly
+    status: open
+  - risk: packaging work could stop at documentation instead of producing a real bundle
+      artifact
+    impact: high
+    mitigation: require concrete manifest, payload, signatures, evidence, and final
+      bundle outputs in the requirements and gates
+    status: open
+  - risk: trust material could be implied rather than generated
+    impact: high
+    mitigation: require concrete signatures and evidence artifacts in the bundle structure
+    status: open
+  hard_blockers:
+  - none currently
+rollback:
+  procedure:
+  - revert only the bounded packaging and conformance files in the allowlist
+  - remove the generated bundle artifacts if the slice is withdrawn
+  - update governance trackers to remove the draft workstream truthfully
+  files_to_revert:
+  - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+  - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.yaml
+  - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.json
+  - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt
+  - notebooks/m365/INV-M365-BW-marketplace-bundle-packaging-governance-alignment.ipynb
+  - configs/generated/m365_marketplace_bundle_packaging_governance_alignment_verification.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+  artifacts_to_delete:
+  - configs/generated/m365_marketplace_bundle_packaging_governance_alignment_verification.json
+  governance_updates_on_rollback:
+  - Operations/ACTION_LOG.md
+  - Operations/EXECUTION_PLAN.md
+  - Operations/PROJECT_FILE_INDEX.md
+prompt_references:
+  maths_template: ../UCP/agent_governance/master-maths-prompt-template.md
+  prompt_doc: docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+  prompt_kickoff: docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt
+  per_task_prompts: []
+traceability:
+  files_created:
+    notebooks:
+    - notebooks/m365/INV-M365-BW-marketplace-bundle-packaging-governance-alignment.ipynb
+    invariants: []
+    lemmas: []
+    code_files: []
+    config_artifacts:
+    - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md
+    - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.yaml
+    - plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.json
+    - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md
+    - docs/prompts/codex-m365-marketplace-bundle-packaging-conformance-prompt.txt
+    - configs/generated/m365_marketplace_bundle_packaging_governance_alignment_verification.json
+  index_updates:
+    traceability_index: null
+    invariant_index: null
+    math_readme: null
+    lemmas_appendix: null
+governance_closure:
+  action_log: Operations/ACTION_LOG.md
+  execution_plan: Operations/EXECUTION_PLAN.md
+  project_status: null
+  invariant_promotions: []
+  lemma_promotions: []
+execution_outcome:
+  task_checklist:
+  - task_id: T1
+    complete: true
+    evidence: governed package, prompt pair, notebook evidence, and commercialization
+      note published
+  - task_id: T2
+    complete: true
+    evidence: manifest, payload archive, and bundle-layout source tree built under
+      dist/m365_pack
+  - task_id: T3
+    complete: true
+    evidence: signatures and evidence artifacts created for the bundle spec
+  - task_id: T4
+    complete: true
+    evidence: final distributable com.smarthaus.m365-1.0.0.ucp.tar.gz assembled
+  - task_id: T5
+    complete: true
+    evidence: conformance proof captured in artifacts/diagnostics/m365_marketplace_bundle_packaging_conformance.json
+  - task_id: T6
+    complete: true
+    evidence: Operations governance trackers and project file index synchronized truthfully
+  gate_checklist:
+  - gate_id: CHECK:C0
+    result: pass
+  - gate_id: CHECK:C1
+    result: pass
+  - gate_id: CHECK:C2
+    result: pass
+  - gate_id: CHECK:C3
+    result: pass
+  - gate_id: CHECK:C4
+    result: pass
+  final_decision: GO
+  approved_by: Phil / SMARTHAUS Engineering
+  completion_timestamp: 2026-04-01 13:34:53 EDT
+validation_strategy:
+- validate the M365 packaging YAML against ../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json
+- validate the detailed and kickoff prompt artifacts through ucp.governance.artifact_contracts.validate_prompt_artifact
+  using the UCP governance runtime
+- confirm Operations/PROJECT_FILE_INDEX.md includes the new governed artifacts
+- run git diff --check
+when_blocked:
+  format: 'STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT
+    ALLOWED ACTION: {path}'
+  escalation:
+    primary: Phil / SMARTHAUS Engineering
+    secondary: M365 runtime and commercialization maintainers
+agent_constraints:
+- Do not touch files outside Section 5 file allowlist.
+- Do not drift into sibling UCP Marketplace or Integrations work.
+- Do not claim marketplace conformance without a real bundle artifact.
+- Do not treat signatures or evidence as optional in the final model.
+- Use .venv/bin/python for all Python commands when available.
+references:
+  north_star: Operations/NORTHSTAR.md
+  execution_plan: Operations/EXECUTION_PLAN.md
+  applicable_rules:
+  - AGENTS.md
+  - .cursor/rules/**/*.mdc
+  related_plans:
+  - plan:m365-ucp-standalone-pack-surface
+  - plan:m365-marketplace-bundle-packaging-conformance
+  - plan:ucp-marketplace-consumption-and-integrations-gating
+  related_docs:
+  - ../UCP/docs/platform/PACK_BUNDLE_SPEC_V0_1.md
+  - ../UCP/docs/platform/PACK_MANIFEST_SCHEMA_V0_1.md
+  - src/ucp_m365_pack/contracts.py
+  - src/ucp_m365_pack/client.py
+  maths_prompt_template: ../UCP/agent_governance/master-maths-prompt-template.md

@@ -1,5 +1,16 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+UCP_SRC = REPO_ROOT.parent / "UCP" / "src"
+M365_SRC = REPO_ROOT / "src"
+
+for candidate in (str(M365_SRC), str(UCP_SRC), str(REPO_ROOT)):
+    if candidate not in sys.path:
+        sys.path.insert(0, candidate)
+
 from smarthaus_mcp_sdk.contracts import MCPEvent, PackContext
 from ucp_m365_pack.contracts import (
     M365PackAdapter,

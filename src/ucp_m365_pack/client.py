@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import time
 import uuid
+from pathlib import Path
 from typing import Any
 
 import jwt
@@ -213,9 +214,19 @@ def _resolve_m365_repo_root() -> str:
     configured_root = _env_value(ENV_M365_REPO_ROOT, ENV_M365_REPO_ROOT_SMARTHAUS)
     if configured_root:
         return configured_root
-    candidate = os.path.normpath(os.path.join(_MODULE_DIR, "..", ".."))
-    if os.path.isdir(os.path.join(candidate, "src", "ops_adapter")):
-        return candidate
+    module_dir = Path(_MODULE_DIR).resolve()
+    candidates = [
+        module_dir.parent,
+        module_dir.parents[1] if len(module_dir.parents) > 1 else None,
+        module_dir.parents[2] if len(module_dir.parents) > 2 else None,
+    ]
+    for candidate in candidates:
+        if candidate is None:
+            continue
+        if (candidate / "registry" / "agents.yaml").is_file():
+            return str(candidate)
+        if (candidate / "src" / "ops_adapter").is_dir():
+            return str(candidate)
     return ""
 
 

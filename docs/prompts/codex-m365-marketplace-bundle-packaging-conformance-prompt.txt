@@ -1,0 +1,13 @@
+Execute the governed draft package at `docs/prompts/codex-m365-marketplace-bundle-packaging-conformance.md`.
+
+Plan Reference: `plan:m365-marketplace-bundle-packaging-conformance`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-marketplace-bundle-packaging-conformance/m365-marketplace-bundle-packaging-conformance.md`.
+
+This slice is M365-only. It packages the standalone `ucp_m365_pack` surface as
+one real marketplace bundle and does not widen into sibling UCP consumption work.
+
+Do not implement until explicit owner approval.

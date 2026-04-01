@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SMARTHAUS M365 Pack Setup",
+  "type": "object",
+  "properties": {
+    "M365_OPS_ADAPTER_URL": {
+      "type": "string",
+      "format": "uri",
+      "description": "Base URL for the dedicated M365 service runtime."
+    },
+    "M365_SERVICE_JWT_HS256_SECRET": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Shared HS256 secret used by UCP to mint caller bearer tokens for the M365 service."
+    },
+    "M365_SERVICE_ACTOR_UPN": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Operator or service principal UPN asserted into the caller bearer token."
+    },
+    "M365_SERVICE_JWT_ISSUER": {
+      "type": "string",
+      "description": "Optional JWT issuer claim for the caller bearer token."
+    },
+    "M365_SERVICE_JWT_AUDIENCE": {
+      "type": "string",
+      "description": "Optional JWT audience claim for the caller bearer token."
+    }
+  },
+  "required": [
+    "M365_OPS_ADAPTER_URL",
+    "M365_SERVICE_JWT_HS256_SECRET",
+    "M365_SERVICE_ACTOR_UPN"
+  ],
+  "additionalProperties": true
+}

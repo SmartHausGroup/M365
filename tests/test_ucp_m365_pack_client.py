@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import os
 from unittest import mock
+from pathlib import Path
 
 import pytest
 from ucp_m365_pack.client import (
     M365ExecutionError,
+    _resolve_m365_repo_root,
     _stub_execute,
     execute_m365_action,
     get_agent_config,
@@ -106,3 +108,45 @@ def test_missing_service_fails_closed_without_direct_import_fallback(
         match="Direct import fallback has been removed",
     ):
         execute_m365_action("m365-administrator", "users.read", {"top": 1})
+
+
+def test_resolve_repo_root_prefers_bundle_root_when_registry_is_adjacent(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import ucp_m365_pack.client as client_mod
+
+    bundle_root = tmp_path / "installed-pack"
+    (bundle_root / "ucp_m365_pack").mkdir(parents=True)
+    (bundle_root / "registry").mkdir(parents=True)
+    (bundle_root / "registry" / "agents.yaml").write_text("agents: {}\n", encoding="utf-8")
+
+    monkeypatch.delenv("M365_REPO_ROOT", raising=False)
+    monkeypatch.delenv("SMARTHAUS_M365_REPO_ROOT", raising=False)
+    monkeypatch.setattr(client_mod, "_MODULE_DIR", str(bundle_root / "ucp_m365_pack"))
+
+    assert _resolve_m365_repo_root() == str(bundle_root)
+
+
+def test_get_agent_config_reads_bundle_adjacent_registry(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import ucp_m365_pack.client as client_mod
+
+    bundle_root = tmp_path / "installed-pack"
+    (bundle_root / "ucp_m365_pack").mkdir(parents=True)
+    (bundle_root / "registry").mkdir(parents=True)
+    (bundle_root / "registry" / "agents.yaml").write_text(
+        "agents:\n  m365-administrator:\n    allowed_actions:\n      - directory.org\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.delenv("M365_REPO_ROOT", raising=False)
+    monkeypatch.delenv("SMARTHAUS_M365_REPO_ROOT", raising=False)
+    monkeypatch.setattr(client_mod, "_MODULE_DIR", str(bundle_root / "ucp_m365_pack"))
+    monkeypatch.setattr(client_mod, "_REGISTRY", None)
+
+    cfg = get_agent_config("m365-administrator")
+    assert cfg is not None
+    assert cfg["allowed_actions"] == ["directory.org"]

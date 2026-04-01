@@ -1,0 +1,109 @@
+{
+  "candidate": {
+    "bundle_name": "com.smarthaus.m365-1.0.0.ucp.tar.gz",
+    "current_ucp_version": "1.1.0",
+    "pack_id": "com.smarthaus.m365",
+    "schema_version": "0.1.0",
+    "supported_sdk_major": 1,
+    "version": "1.0.0"
+  },
+  "checks": [
+    {
+      "check": "payload_sources_contract",
+      "detail": "candidate payload sources are present and structurally valid",
+      "status": "pass"
+    },
+    {
+      "check": "manifest_schema_contract",
+      "detail": "manifest schema version, identity, and publisher fields are valid",
+      "status": "pass"
+    },
+    {
+      "check": "public_classification_contract",
+      "detail": "visibility and distribution mode stay within the public pack boundary",
+      "status": "pass"
+    },
+    {
+      "check": "compatibility_contract",
+      "detail": "UCP version, required capabilities, and SDK major are compatible",
+      "status": "pass"
+    },
+    {
+      "check": "entrypoint_contract",
+      "detail": "entrypoint and entitlement declarations stay within the public adapter boundary",
+      "status": "pass"
+    },
+    {
+      "check": "bundle_structure_contract",
+      "detail": "bundle name and required bundle files are valid",
+      "status": "pass"
+    },
+    {
+      "check": "digest_integrity_contract",
+      "detail": "manifest and bundle digests align on sha256 integrity",
+      "status": "pass"
+    },
+    {
+      "check": "signature_contract",
+      "detail": "detached signature metadata is present and digest-aligned",
+      "status": "pass"
+    },
+    {
+      "check": "setup_schema_contract",
+      "detail": "setup schema references stay within the payload boundary",
+      "status": "pass"
+    },
+    {
+      "check": "private_host_boundary",
+      "detail": "payload sources stay within the public SDK boundary",
+      "status": "pass"
+    },
+    {
+      "check": "public_evidence_posture",
+      "detail": "conformance evidence file is present",
+      "status": "pass"
+    }
+  ],
+  "errors": [],
+  "evidence": {
+    "bundle_files": [
+      "assets/README.md",
+      "evidence/conformance.json",
+      "manifest.json",
+      "payload.tar.gz",
+      "signatures/manifest.sig",
+      "signatures/payload.sig"
+    ],
+    "capabilities_exposed": [
+      "m365_directory",
+      "m365_email",
+      "m365_security",
+      "m365_sites",
+      "m365_users"
+    ],
+    "evidence_files": [
+      "evidence/conformance.json"
+    ],
+    "payload_source_paths": [
+      "registry/agents.yaml",
+      "setup_schema.json",
+      "ucp_m365_pack/__init__.py",
+      "ucp_m365_pack/client.py",
+      "ucp_m365_pack/contracts.py"
+    ],
+    "private_host_imports": [],
+    "required_bundle_files": [
+      "manifest.json",
+      "payload.tar.gz",
+      "signatures/manifest.sig",
+      "signatures/payload.sig"
+    ],
+    "required_capabilities": [
+      "agent_comm"
+    ],
+    "setup_schema_ref": "setup_schema.json"
+  },
+  "status": "conformant",
+  "valid": true,
+  "warnings": []
+}

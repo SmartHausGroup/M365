@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "artifact_checks": {
+    "plan_triplet_present": true,
+    "prompt_pair_present": true,
+    "notebook_evidence_present": true,
+    "governance_sync_present": true
+  },
+  "sha256": "d3d01bdd5b2113a80fe38d9bde103ab0a804c5d7ba1f1fd7855c269eaafc699b"
+}

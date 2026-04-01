@@ -1,0 +1,42 @@
+{
+  "capabilities_exposed": [
+    "m365_directory",
+    "m365_sites",
+    "m365_users",
+    "m365_email",
+    "m365_security"
+  ],
+  "category": "integration",
+  "compatibility": {
+    "max_ucp_version": "<2.0.0",
+    "min_ucp_version": "1.0.0",
+    "required_capabilities": [
+      "agent_comm"
+    ],
+    "sdk_contract_major": 1
+  },
+  "content_digest": {
+    "algorithm": "sha256",
+    "value": "4917544cb794d93ecebc19825521edf19f6059c21d70fae4b768801a3a1dac5c"
+  },
+  "description": "Standalone SMARTHAUS M365 integration pack for governed UCP service-mode execution.",
+  "display_name": "Microsoft 365",
+  "distribution_mode": "marketplace",
+  "entitlement": {
+    "mode": "license_required",
+    "sku": "com.smarthaus.m365.enterprise"
+  },
+  "entrypoint": {
+    "adapter_class": "M365PackAdapter",
+    "contract_module": "ucp_m365_pack.contracts"
+  },
+  "pack_id": "com.smarthaus.m365",
+  "publisher": {
+    "contact": "engineering@smarthaus.dev",
+    "name": "SMARTHAUS"
+  },
+  "schema_version": "0.1.0",
+  "setup_schema_ref": "setup_schema.json",
+  "version": "1.0.0",
+  "visibility": "optional"
+}
