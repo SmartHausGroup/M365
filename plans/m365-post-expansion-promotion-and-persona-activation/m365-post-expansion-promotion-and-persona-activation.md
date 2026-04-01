@@ -1,20 +1,20 @@
 # Plan: M365 Repo — Post-Expansion Promotion and Persona Activation
 
 **Plan ID:** `m365-post-expansion-promotion-and-persona-activation`
-**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P3A` is next; `P3B` and `P3C` remain blocked by `P3A`)
+**Status:** 🟢 Active (`P1` complete; `P2A` complete; `P2B` complete; `P2C` complete; `P2D` complete for the M365-backed specialist scope; `P2E` complete; `P4A` is next; `P4B`, `P4C`, and `P4D` remain blocked by `P4A`; `P3A`, `P3B`, and `P3C` remain deferred until `P4` closes)
 **Date:** 2026-03-21
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-post-expansion-promotion-and-persona-activation:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — promote the completed workforce program toward release branches and convert contract-only personas into real M365 workers without leaving the M365-only, policy-gated, auditable model.
 **Historical lineage:** follows the closed `m365-ai-workforce-expansion-master-plan` after merge into `development` on 2026-03-21.
 
-**Prompt discipline:** Maintain a formal prompt pair for the branch-promotion track and the persona-activation follow-on track under `docs/prompts/`, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex/Claude.
+**Prompt discipline:** Maintain a formal prompt pair for the branch-promotion track, the persona-activation follow-on track, and any approved reviewed-surface release-promotion track under `docs/prompts/`, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex/Claude.
 
 **Branch discipline:** All new persona-activation implementation work must execute on a dedicated future/feature branch first. `development` is the integration branch only after human review and explicit approval. Do not land persona-activation implementation directly on `development`, `staging`, or `main` unless the scoped act is explicitly a merge or promotion step.
 
 ## Objective
 
-Move the completed workforce program from `development` into `staging` and then `main`, then execute a bounded follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially claimable digital employees.
+Move the completed workforce program from `development` into `staging` and then `main`, execute the bounded follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially claimable digital employees on a review branch, then integrate that reviewed activation surface back into `development` and promote the exact versioned release to `staging` and `main`.
 
 ## Decision Rule
 
@@ -24,7 +24,9 @@ Move the completed workforce program from `development` into `staging` and then 
 
 `CommercialActivationReady = PromotionReady ∧ Wave1ActivationGreen`
 
-If any term is false, the next release or persona-activation claim remains `NO-GO`.
+`ReviewedSurfaceReleaseReady = FeatureReviewed ∧ DevelopmentMerged ∧ VersionStamped ∧ StagingAligned ∧ MainAligned ∧ TagPublished`
+
+If any term is false, the next release, reviewed-surface promotion, or persona-activation claim remains `NO-GO`.
 
 ## Plain-English Follow-On Plan
 
@@ -86,7 +88,14 @@ Why these first:
 
 5. `P2E` — Activation certification and commercial packaging closeout
 
-6. `P3` — External-platform persona preparation and later activation
+6. `P4` — Reviewed-surface integration and release promotion
+   - merge `feature/m365_personas` into `development`
+   - stamp the integrated runtime surface as version `0.2.0`
+   - promote the exact versioned commit to `staging`
+   - promote the same validated commit to `main`
+   - publish the annotated release tag `m365-workforce-v0.2.0`
+
+7. `P3` — External-platform persona preparation and later activation
    - the blocked external-channel personas move here for credentialless preparation, credential-gated runtime surfaces, and later certification
 
 ### What that would unlock commercially
@@ -96,6 +105,7 @@ Why these first:
 - `P2C` unlocks stronger product, design, and growth packages that customers can buy and understand
 - `P2D` unlocks the higher-value specialist M365 workforce story once the safer and more commercially urgent layers are live
 - `P2E` unlocks honest claims that the workforce is not just packaged and certified, but materially activated across the M365-backed persona surface
+- `P4` unlocks the reviewed persona surface as a governed versioned release on `development`, `staging`, and `main`
 - `P3` unlocks future external-channel persona expansion only after adapter contracts, credentials, and runtime proof exist; it is not part of the current M365-only commercial claim set
 
 ## Execution Status
@@ -109,7 +119,8 @@ Why these first:
 - `P2C` is complete: 8 commercial growth and experience personas activated (content-creator 8 actions, growth-hacker 10, ui-designer 7, brand-guardian 8, feedback-synthesizer 7, sprint-prioritizer 8, ux-researcher 7, studio-producer 9 = 64 total new actions). All pass the 6-point activation test. L74 lemma/invariant, scorecard green. 7 tests passed, CI verifier passed. Total registry-backed personas: 18/39.
 - `P2D` is complete for the M365-backed specialist and regulated scope: 16 personas activated (122 total new actions). The 5 external-platform personas (`instagram-curator`, `tiktok-strategist`, `reddit-community-builder`, `twitter-engager`, `app-store-optimizer`) are formally descoped from `P2D` and moved into `P3` because they require external APIs not implemented in this repo. L75 lemma/invariant, scorecard green. 8 tests passed, CI verifier passed. Total registry-backed personas: 34/39.
 - `P2E` is complete: the current activated M365-backed persona surface is now formally certified at 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. L76 lemma/invariant, scorecard green. Tests and CI verifier pass. The historical E9A packaging baseline now points to the branch-specific activated-surface commercialization boundary.
-- `P3A` is next and has NOT been started. `P3B` and `P3C` remain blocked by `P3A`.
+- `P4A` is next and has NOT been started. `P4B`, `P4C`, and `P4D` remain blocked by `P4A`.
+- `P3A`, `P3B`, and `P3C` remain deferred until the reviewed-surface release-promotion track (`P4`) is complete.
 
 ## Scope
 
@@ -143,6 +154,9 @@ Why these first:
 - **R9 — Create the later external-platform preparation and activation track**
 - **R10 — Advance P2E without over-claiming blocked external-platform personas**
 - **R11 — Create formal prompt pairs for P2E and P3**
+- **R12 — Govern reviewed-surface integration into development**
+- **R13 — Stamp and promote a versioned reviewed-surface release**
+- **R14 — Create a formal prompt pair for P4 reviewed-surface release promotion**
 
 ## Execution Stack
 
@@ -266,3 +280,43 @@ Why these first:
 **Status:** ⏳ Pending
 
 **Goal:** Certify and package the external-platform personas only after their runtime surfaces are live, validated, and commercially truthful.
+
+### P4 — Reviewed Persona Surface Integration and Release Promotion
+
+**Status:** 🟢 Active
+
+**Goal:** Merge the reviewed `feature/m365_personas` activation surface into `development`, stamp the integrated runtime surface as version `0.2.0`, promote the exact versioned commit to `staging` and `main`, and publish a deterministic release tag.
+
+**Outputs:**
+
+- reviewed-surface merge into `development`
+- version `0.2.0` stamped in the core Python/API runtime surfaces
+- governed `development -> staging -> main` promotion of the exact reviewed-surface release commit
+- annotated release tag `m365-workforce-v0.2.0`
+- final tracker sync restoring `P3A` as the next deferred act
+
+**Child Acts:**
+
+#### P4A — Merge Reviewed Persona Surface Into `development`
+
+**Status:** ⏳ Pending
+
+**Goal:** Integrate the reviewed `feature/m365_personas` branch into `development` without touching `staging` or `main`.
+
+#### P4B — Stamp Versioned Runtime Release on `development`
+
+**Status:** ⏳ Pending
+
+**Goal:** Update the core Python/API runtime version surfaces to `0.2.0`, run validation, and commit the versioned reviewed-surface release on `development`.
+
+#### P4C — Promote Versioned `development` Commit to `staging`
+
+**Status:** ⏳ Pending
+
+**Goal:** Promote the exact validated `0.2.0` reviewed-surface commit from `development` to `staging` without divergence.
+
+#### P4D — Promote Versioned `staging` Commit to `main` and Tag Release
+
+**Status:** ⏳ Pending
+
+**Goal:** Promote the same validated `0.2.0` reviewed-surface commit from `staging` to `main`, publish `m365-workforce-v0.2.0`, and restore `P3A` as the next act.

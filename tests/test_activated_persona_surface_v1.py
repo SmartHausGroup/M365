@@ -18,12 +18,18 @@ DEFERRED = {
 
 
 def _load_contract() -> dict:
-    return yaml.safe_load((REPO_ROOT / "registry" / "activated_persona_surface_v1.yaml").read_text())
+    return yaml.safe_load(
+        (REPO_ROOT / "registry" / "activated_persona_surface_v1.yaml").read_text()
+    )
 
 
 def _load_registries() -> tuple[dict, dict, dict]:
-    persona_registry = yaml.safe_load((REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text())
-    capability_map = yaml.safe_load((REPO_ROOT / "registry" / "persona_capability_map.yaml").read_text())
+    persona_registry = yaml.safe_load(
+        (REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text()
+    )
+    capability_map = yaml.safe_load(
+        (REPO_ROOT / "registry" / "persona_capability_map.yaml").read_text()
+    )
     agents = yaml.safe_load((REPO_ROOT / "registry" / "agents.yaml").read_text())["agents"]
     return persona_registry, capability_map, agents
 
@@ -62,7 +68,9 @@ def test_p2e_deferred_persona_set_is_exact() -> None:
 
 def test_p2e_total_allowed_persona_actions_is_298() -> None:
     _persona_registry, _capability_map, agents = _load_registries()
-    persona_registry = yaml.safe_load((REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text())
+    persona_registry = yaml.safe_load(
+        (REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text()
+    )
     active_ids = [
         pid
         for pid, details in persona_registry["personas"].items()
@@ -74,13 +82,19 @@ def test_p2e_total_allowed_persona_actions_is_298() -> None:
 
 def test_p2e_wave_scorecards_are_green() -> None:
     for lemma_id in ("l73", "l74", "l75"):
-        scorecard = json.loads((REPO_ROOT / "artifacts" / "scorecards" / f"scorecard_{lemma_id}.json").read_text())
+        scorecard = json.loads(
+            (REPO_ROOT / "artifacts" / "scorecards" / f"scorecard_{lemma_id}.json").read_text()
+        )
         assert scorecard["status"] == "green"
 
 
 def test_p2e_docs_define_branch_specific_boundary() -> None:
-    surface_doc = (REPO_ROOT / "docs" / "commercialization" / "m365-activated-persona-surface-v1.md").read_text()
-    packaging_doc = (REPO_ROOT / "docs" / "commercialization" / "m365-workforce-packaging-v1.md").read_text()
+    surface_doc = (
+        REPO_ROOT / "docs" / "commercialization" / "m365-activated-persona-surface-v1.md"
+    ).read_text()
+    packaging_doc = (
+        REPO_ROOT / "docs" / "commercialization" / "m365-workforce-packaging-v1.md"
+    ).read_text()
     assert "34 registry-backed personas" in surface_doc
     assert "activated_persona_surface_v1.yaml" in packaging_doc
 

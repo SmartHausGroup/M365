@@ -7,9 +7,9 @@
   "north_star": "Operations/NORTHSTAR.md",
   "historical_lineage": "m365-ai-workforce-expansion-master-plan",
   "ma_process_required": false,
-  "objective": "Move the completed workforce program from development into staging and then main, then execute a bounded follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially claimable digital employees.",
-  "decision_rule": "PromotionReady = DevelopmentMerged AND StagingAligned AND StagingValidated AND MainAligned. PersonaActivated = RegistryBacked AND ActionSurfaceImplemented AND AllowedDomainsBound AND ApprovalPolicyBound AND NotebookEvidenceGreen AND ScorecardGreen AND RuntimeRoutingGreen. CommercialActivationReady = PromotionReady AND Wave1ActivationGreen.",
-  "prompt_discipline": "Maintain a formal prompt pair for the branch-promotion track and the persona-activation follow-on track under docs/prompts/, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex or Claude.",
+  "objective": "Move the completed workforce program from development into staging and then main, execute the bounded follow-on program that turns selected contract-only personas into registry-backed, action-backed, commercially claimable digital employees on a review branch, then integrate that reviewed activation surface back into development and promote the exact versioned release to staging and main.",
+  "decision_rule": "PromotionReady = DevelopmentMerged AND StagingAligned AND StagingValidated AND MainAligned. PersonaActivated = RegistryBacked AND ActionSurfaceImplemented AND AllowedDomainsBound AND ApprovalPolicyBound AND NotebookEvidenceGreen AND ScorecardGreen AND RuntimeRoutingGreen. CommercialActivationReady = PromotionReady AND Wave1ActivationGreen. ReviewedSurfaceReleaseReady = FeatureReviewed AND DevelopmentMerged AND VersionStamped AND StagingAligned AND MainAligned AND TagPublished.",
+  "prompt_discipline": "Maintain a formal prompt pair for the branch-promotion track, the persona-activation follow-on track, and any approved reviewed-surface release-promotion track under docs/prompts/, following the repo two-file prompt rule and the MATHS prompt template where execution details are delegated to Codex or Claude.",
   "simple_follow_on_plan": {
     "activation_meaning": [
       "Move personas from persona-contract-only to registry-backed with real allowed actions.",
@@ -65,6 +65,10 @@
         "description": "Certify the activated waves and update commercial packaging."
       },
       {
+        "phase": "P4",
+        "description": "Merge the reviewed persona activation surface into development, stamp version 0.2.0, and promote the exact reviewed-surface release to staging and main."
+      },
+      {
         "phase": "P3",
         "description": "Prepare external-platform personas without active credentials, then activate them later with bounded runtime surfaces."
       }
@@ -75,6 +79,7 @@
       "P2C unlocks stronger product, design, and growth packages customers can buy.",
       "P2D unlocks the higher-value specialist M365 workforce story only after safer layers are live.",
       "P2E unlocks honest commercial claims that persona activation has materially advanced across the current M365-backed surface.",
+      "P4 unlocks the reviewed persona surface as a governed versioned release on development, staging, and main.",
       "P3 unlocks future external-platform persona expansion only after adapter contracts, credentials, and runtime proof exist."
     ]
   },
@@ -120,12 +125,12 @@
       {
         "phase": "P2E",
         "date": "2026-03-31",
-        "summary": "Activated persona surface certified for the current M365-backed branch state: 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created registry/activated_persona_surface_v1.yaml, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Added truthful commercialization boundary docs and a branch-specific note in the historical workforce packaging doc. P3A is now the next act."
+        "summary": "Activated persona surface certified for the current M365-backed branch state: 34 registry-backed personas, 5 deferred external-platform personas, 298 total allowed persona-actions, and active coverage across all 10 departments. Created registry/activated_persona_surface_v1.yaml, L76 lemma/invariant/notebooks/scorecard, CI verifier, generated proof, and targeted tests. Added truthful commercialization boundary docs and a branch-specific note in the historical workforce packaging doc. The reviewed-surface release promotion track is now the next act."
       }
     ],
     "in_progress": null,
-    "next_act": "P3A",
-    "prepared_blocked": ["P3B", "P3C"]
+    "next_act": "P4A",
+    "prepared_blocked": ["P3A", "P3B", "P3C", "P4B", "P4C", "P4D"]
   },
   "scope": {
     "in": [
@@ -187,6 +192,18 @@
     {
       "id": "R11",
       "title": "Create formal prompt pairs for P2E and P3"
+    },
+    {
+      "id": "R12",
+      "title": "Govern reviewed-surface integration into development"
+    },
+    {
+      "id": "R13",
+      "title": "Stamp and promote a versioned reviewed-surface release"
+    },
+    {
+      "id": "R14",
+      "title": "Create a formal prompt pair for P4 reviewed-surface release promotion"
     }
   ],
   "phase_stack": [
@@ -268,7 +285,7 @@
     {
       "phase": "P3",
       "title": "External Platform Persona Preparation and Later Activation",
-      "status": "Active",
+      "status": "Pending",
       "goal": "Prepare and later activate the external-platform personas without violating the current M365-only runtime and commercial claim boundaries.",
       "outputs": [
         "credentialless external-platform preparation contract",
@@ -293,6 +310,45 @@
           "title": "External platform activation certification and packaging",
           "status": "Pending",
           "goal": "Certify and package the external-platform personas only after their runtime surfaces are live, validated, and commercially truthful."
+        }
+      ]
+    },
+    {
+      "phase": "P4",
+      "title": "Reviewed Persona Surface Integration and Release Promotion",
+      "status": "Active",
+      "goal": "Merge the reviewed feature/m365_personas activation surface into development, stamp version 0.2.0, promote the exact versioned commit to staging and main, and publish a deterministic release tag.",
+      "outputs": [
+        "reviewed-surface merge into development",
+        "version 0.2.0 stamped in the core Python/API runtime surfaces",
+        "governed development to staging to main promotion of the exact reviewed-surface release commit",
+        "annotated release tag m365-workforce-v0.2.0",
+        "final tracker sync restoring P3A as the next deferred act"
+      ],
+      "children": [
+        {
+          "act": "P4A",
+          "title": "Merge reviewed persona surface into development",
+          "status": "Pending",
+          "goal": "Integrate the reviewed feature/m365_personas branch into development without touching staging or main."
+        },
+        {
+          "act": "P4B",
+          "title": "Stamp versioned runtime release on development",
+          "status": "Pending",
+          "goal": "Update the core Python/API runtime version surfaces to 0.2.0, run validation, and commit the versioned reviewed-surface release on development."
+        },
+        {
+          "act": "P4C",
+          "title": "Promote versioned development commit to staging",
+          "status": "Pending",
+          "goal": "Promote the exact validated 0.2.0 reviewed-surface commit from development to staging without divergence."
+        },
+        {
+          "act": "P4D",
+          "title": "Promote versioned staging commit to main and tag release",
+          "status": "Pending",
+          "goal": "Promote the same validated 0.2.0 reviewed-surface commit from staging to main, publish m365-workforce-v0.2.0, and restore P3A as the next act."
         }
       ]
     }

@@ -48,7 +48,9 @@ def main() -> None:
 
     personas = persona_registry["personas"]
     active = {k: v for k, v in personas.items() if v["coverage_status"] == "registry-backed"}
-    deferred = {k: v for k, v in personas.items() if v["coverage_status"] == "persona-contract-only"}
+    deferred = {
+        k: v for k, v in personas.items() if v["coverage_status"] == "persona-contract-only"
+    }
 
     if len(active) != 34:
         print(f"FAILED: expected 34 active personas, got {len(active)}")
@@ -71,12 +73,18 @@ def main() -> None:
         sys.exit(1)
 
     reg_summary = persona_registry["summary"]
-    if reg_summary["registry_backed_personas"] != 34 or reg_summary["persona_contract_only_personas"] != 5:
+    if (
+        reg_summary["registry_backed_personas"] != 34
+        or reg_summary["persona_contract_only_personas"] != 5
+    ):
         print("FAILED: persona_registry summary mismatch")
         sys.exit(1)
 
     cap_summary = capability_map["summary"]
-    if cap_summary["current_registry_backed_personas"] != 34 or cap_summary["persona_contract_only_personas"] != 5:
+    if (
+        cap_summary["current_registry_backed_personas"] != 34
+        or cap_summary["persona_contract_only_personas"] != 5
+    ):
         print("FAILED: capability_map summary mismatch")
         sys.exit(1)
 
@@ -95,12 +103,12 @@ def main() -> None:
             print(f"FAILED: {scorecard_path.name} is not green")
             sys.exit(1)
 
-    doc_text = (repo / "docs" / "commercialization" / "m365-activated-persona-surface-v1.md").read_text(
-        encoding="utf-8"
-    )
-    packaging_text = (repo / "docs" / "commercialization" / "m365-workforce-packaging-v1.md").read_text(
-        encoding="utf-8"
-    )
+    doc_text = (
+        repo / "docs" / "commercialization" / "m365-activated-persona-surface-v1.md"
+    ).read_text(encoding="utf-8")
+    packaging_text = (
+        repo / "docs" / "commercialization" / "m365-workforce-packaging-v1.md"
+    ).read_text(encoding="utf-8")
     if "34 registry-backed personas" not in doc_text:
         print("FAILED: activated persona surface doc missing 34-person boundary")
         sys.exit(1)

@@ -1,0 +1,7 @@
+Execute P4 Reviewed Persona Surface Release Promotion
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-reviewed-persona-surface-release-promotion.md.
+
+Plan Reference: plan:m365-post-expansion-promotion-and-persona-activation:P4A
+
+You are approved to execute only the governed reviewed-surface integration and release-promotion path: merge `feature/m365_personas` into `development`, stamp version `0.2.0`, promote to `staging`, promote to `main`, and publish `m365-workforce-v0.2.0`. Stop on any divergence or governance-blocked step and do not start P3A.
