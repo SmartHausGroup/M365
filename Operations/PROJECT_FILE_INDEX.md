@@ -46,6 +46,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-reviewed-persona-surface-release-promotion-prompt.txt` | Kick-off text for the P4 reviewed-surface release-promotion prompt. | `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-expansion-promotion-and-persona-activation:P4A` |
 | `docs/commercialization/m365-activated-persona-surface-v1.md` | Truthful commercialization boundary for the current activated persona surface on the review branch. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 
+## Active Authoritative Persona Humanization Expansion Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md` | Human-readable governed plan for reopening the authoritative persona census and promoting the `20` extra agents into named digital employees without silently changing runtime truth. | `Mission Statement`, `Core Success Metrics` | `plan:m365-authoritative-persona-humanization-expansion:R1` |
+| `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.yaml` | Structured YAML authority for the authoritative persona humanization expansion initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-humanization-expansion:R1` |
+| `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.json` | Structured JSON mirror for automation and governance tooling on the authoritative persona humanization expansion initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-humanization-expansion:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md` | Detailed formal prompt for the future governed implementation of the authoritative persona humanization expansion. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-humanization-expansion:R3` |
+| `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt` | Kickoff prompt for the authoritative persona humanization expansion initiative. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-humanization-expansion:R3` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

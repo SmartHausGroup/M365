@@ -276,6 +276,29 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 ---
 
+## Initiative: Authoritative Persona Humanization Expansion
+
+**Initiative:** Create the governed path for promoting all `20` currently non-authoritative extra agents into named digital employees with bounded humanization metadata, a rebased authoritative census, and fail-closed activation requirements.
+
+**Plan:** `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md`
+
+**Reference:** `plan:m365-authoritative-persona-humanization-expansion:R1`
+
+**Status:** 🟢 Active — the planning package exists on `codex/m365-authoritative-persona-humanization-expansion-plan`, and this slice intentionally stops at branch creation, plan/prompt creation, and tracker updates. No runtime roster, capability-map, or authoritative registry expansion is authorized in this step.
+**Current next act:** `H1` — lock the authoritative census rebase contract and decide whether the `20` extras can be remapped into the existing `10`-department North Star or require a separate governed department-model change.
+
+**Recommendation:** preserve the current `10`-department North Star by default, remap the `20` extras into those departments where possible, and only open a department-model expansion if H1 proves the remap is impossible without distortion. Humanization metadata should stay bounded to `working_style`, `communication_style`, and `decision_style`; freeform personality schema is out of scope unless separately governed.
+
+**Fail-closed activation rule:** no promoted persona may be marked active until it has a real name, role/title, department placement, manager, escalation owner, capability-map coverage, authoritative registry entry, and rebased certification/count truth.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`, `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+
+**Status update (2026-04-03 18:48 EDT):** Created the governed plan triplet and required prompt pair for `m365-authoritative-persona-humanization-expansion`, updated `Operations/PROJECT_FILE_INDEX.md`, and recorded the initiative as the formal path for reopening the authoritative persona census from the current `39`-persona / `10`-department truth toward a future governed `59`-persona named workforce. This branch-only slice does not modify `registry/ai_team.json`, `registry/persona_registry_v2.yaml`, or `registry/persona_capability_map.yaml`.
+
+**Status update (2026-04-03 19:00 EDT):** The planning slice remains branch/tracking first, but `R5` now explicitly includes the bounded pre-commit remediation set in `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` because the repo's mandatory `pre-commit run --all-files` gate surfaced an existing import-bootstrap lint issue plus formatter-driven import normalization outside the original planning allowlist. All other runtime and test surfaces remain out of scope.
+
+---
+
 ## Internal Ops: SmartHaus UCP Setup-Token Delivery Flow
 
 **Reference:** `plan:EXECUTION_PLAN:UCP-TD1`

@@ -11,8 +11,9 @@ for candidate in (str(M365_SRC), str(UCP_SRC), str(REPO_ROOT)):
     if candidate not in sys.path:
         sys.path.insert(0, candidate)
 
-from smarthaus_mcp_sdk.contracts import MCPEvent, PackContext
-from ucp_m365_pack.contracts import (
+# These imports intentionally follow the local path bootstrap above.
+from smarthaus_mcp_sdk.contracts import MCPEvent, PackContext  # noqa: E402
+from ucp_m365_pack.contracts import (  # noqa: E402
     M365PackAdapter,
     create_pack_adapter,
     requires_confirmation,

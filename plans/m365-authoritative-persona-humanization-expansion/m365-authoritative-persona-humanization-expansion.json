@@ -1,0 +1,534 @@
+{
+  "plan_id": "plan:m365-authoritative-persona-humanization-expansion",
+  "plan_slug": "m365-authoritative-persona-humanization-expansion",
+  "parent_plan_id": "plan:m365-post-expansion-promotion-and-persona-activation",
+  "title": "Promote all 20 extra agents into named digital employees through a governed census rebase",
+  "version": "1.0",
+  "status": "active",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-03",
+  "date_updated": "2026-04-03",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona Humanization Expansion",
+  "domain": "governance",
+  "math_algorithm_scope": false,
+  "current_state": {
+    "repo_clean_on_development": true,
+    "runtime_agent_definitions": 59,
+    "authoritative_named_personas": 39,
+    "persona_registry_total": 39,
+    "persona_registry_active": 34,
+    "expansion_plan_exists_already": false,
+    "runtime_change_authorized_in_this_slice": false
+  },
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "truthful authoritative workforce governance instead of silent runtime expansion",
+      "department-based organization preserved unless a later explicit governed change says otherwise",
+      "policy-gated, auditable, fail-closed persona activation rules"
+    ],
+    "anti_alignment": [
+      "Does NOT silently claim the current 39-persona and 10-department North Star is already rebased to 59.",
+      "Does NOT add freeform personality schema.",
+      "Does NOT activate any new persona in runtime during this planning slice."
+    ]
+  },
+  "decision_summary": {
+    "chosen_option": "preserve_10_department_model_by_default",
+    "bounded_metadata_fields": [
+      "working_style",
+      "communication_style",
+      "decision_style"
+    ],
+    "activation_gate": [
+      "real_name",
+      "title",
+      "department",
+      "manager",
+      "escalation_owner",
+      "capability_map_entry",
+      "authoritative_registry_entry",
+      "rebased_certification_counts"
+    ]
+  },
+  "options_considered": [
+    {
+      "id": "A",
+      "description": "Remap the 20 extras into the existing 10 departments and rebase the authoritative census.",
+      "pros": [
+        "Preserves current North Star claims.",
+        "Minimizes governance drift.",
+        "Avoids needless department proliferation."
+      ],
+      "cons": [
+        "Some personas need careful placement decisions."
+      ]
+    },
+    {
+      "id": "B",
+      "description": "Expand the department model at the same time as the persona census.",
+      "pros": [
+        "Allows cleaner grouping for some extras."
+      ],
+      "cons": [
+        "Widens the change boundary into North Star and operating-model change."
+      ]
+    },
+    {
+      "id": "C",
+      "description": "Add a broader freeform personality schema while rebasing the census.",
+      "pros": [
+        "Maximum expressive flexibility."
+      ],
+      "cons": [
+        "Weakens determinism.",
+        "Complicates validation.",
+        "Adds unnecessary governance surface."
+      ]
+    }
+  ],
+  "complexity_warning": {
+    "statement": "Expanding the census, department model, and personality schema simultaneously adds complexity without improving fail-closed guarantees.",
+    "simpler_path": "Preserve the 10-department model by default and keep the metadata contract bounded."
+  },
+  "scope": {
+    "in_scope": [
+      "create the approved feature branch for this governed planning package",
+      "create the formal plan triplet in Markdown, YAML, and JSON",
+      "create the required prompt pair for the future implementation package",
+      "update Operations/EXECUTION_PLAN.md, Operations/PROJECT_FILE_INDEX.md, and Operations/ACTION_LOG.md",
+      "repair the bounded mandatory pre-commit remediation set in tests/test_ucp_m365_pack_contracts.py and tests/test_ucp_m365_pack_client.py if it prevents R5 closeout",
+      "define future implementation requirements for census rebase, metadata contract, registry rebase, count rebase, and fail-closed activation"
+    ],
+    "out_of_scope": [
+      "editing registry/ai_team.json",
+      "editing registry/persona_registry_v2.yaml",
+      "editing registry/persona_capability_map.yaml",
+      "editing registry/agents.yaml",
+      "changing runtime router, approval, audit, or activation code",
+      "claiming the 20 extra agents are already authoritative or active",
+      "changing the North Star department model without separate approval",
+      "changing any other test or runtime file beyond the bounded pre-commit remediation set"
+    ],
+    "file_allowlist": [
+      "plans/m365-authoritative-persona-humanization-expansion/**",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "Operations/ACTION_LOG.md",
+      "tests/test_ucp_m365_pack_contracts.py",
+      "tests/test_ucp_m365_pack_client.py"
+    ],
+    "file_denylist": [
+      "registry/ai_team.json",
+      "registry/persona_registry_v2.yaml",
+      "registry/persona_capability_map.yaml",
+      "registry/agents.yaml",
+      "src/**",
+      "tests/**"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R0",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R0",
+      "description": "Explicitly record the clean development starting state and the current 59 vs 39 vs 34 persona truths.",
+      "acceptance_criteria": "Plan records the clean branch state, runtime inventory count, authoritative count, active count, and absence of a pre-existing governing initiative.",
+      "depends_on": [],
+      "user_intent_trace": "current repo truth must be acknowledged before any governed expansion"
+    },
+    {
+      "id": "R1",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R1",
+      "description": "Create the approved feature branch only after governance validation is green.",
+      "acceptance_criteria": "Branch codex/m365-authoritative-persona-humanization-expansion-plan exists.",
+      "depends_on": [
+        "R0"
+      ],
+      "user_intent_trace": "branch creation and governance validation"
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R2",
+      "description": "Create the formal Markdown, YAML, and JSON plan artifacts.",
+      "acceptance_criteria": "All three plan artifacts exist and remain parseable.",
+      "depends_on": [
+        "R0"
+      ],
+      "user_intent_trace": "formal plan artifact creation"
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R3",
+      "description": "Create the required prompt pair for future governed implementation.",
+      "acceptance_criteria": "Detailed prompt and kickoff prompt both exist and point to this plan.",
+      "depends_on": [
+        "R2"
+      ],
+      "user_intent_trace": "prompt-pair creation"
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R4",
+      "description": "Update execution plan, project file index, and action log.",
+      "acceptance_criteria": "All three tracker documents mention this initiative truthfully.",
+      "depends_on": [
+        "R2",
+        "R3"
+      ],
+      "user_intent_trace": "tracker synchronization"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R5",
+      "description": "Commit and push the approved feature branch.",
+      "acceptance_criteria": "Feature branch has one commit for the planning package, the mandatory pre-commit gate is green, the contracts-test import-bootstrap lint is fixed, the client-test import order is formatter-normalized, and the branch is pushed to origin.",
+      "depends_on": [
+        "R4"
+      ],
+      "user_intent_trace": "commit and push"
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R6",
+      "description": "Define the future authoritative census rebase from 39 to 59 without silently changing truth in this slice.",
+      "acceptance_criteria": "Future implementation track explicitly covers the census rebase.",
+      "depends_on": [
+        "R2"
+      ],
+      "user_intent_trace": "reopen and rebase the authoritative persona census deliberately"
+    },
+    {
+      "id": "R7",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R7",
+      "description": "Preserve the existing 10-department model by default or stop for a separate governed change if remap proves impossible.",
+      "acceptance_criteria": "Department decision gate exists and defaults to preserving the current model.",
+      "depends_on": [
+        "R6"
+      ],
+      "user_intent_trace": "decide whether to preserve or explicitly expand the department model"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R8",
+      "description": "Keep future humanization metadata bounded to working_style, communication_style, and decision_style.",
+      "acceptance_criteria": "Plan rejects casual freeform personality schema and names the bounded fields explicitly.",
+      "depends_on": [
+        "R2"
+      ],
+      "user_intent_trace": "bounded humanization metadata recommendation"
+    },
+    {
+      "id": "R9",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R9",
+      "description": "Require future roster, capability-map, persona-registry, and certification/count rebases.",
+      "acceptance_criteria": "Future implementation track explicitly lists the rebase surfaces and fail-closed count sync.",
+      "depends_on": [
+        "R6"
+      ],
+      "user_intent_trace": "roster updates, capability-map updates, persona-registry rebase, certification/count rebase"
+    },
+    {
+      "id": "R10",
+      "ref": "plan:m365-authoritative-persona-humanization-expansion:R10",
+      "description": "Fail closed so no promoted persona can be active without name, title, manager, escalation owner, capability-map entry, and authoritative registry entry.",
+      "acceptance_criteria": "Activation gate is explicit and blocks status change until prerequisites are green.",
+      "depends_on": [
+        "R6",
+        "R8",
+        "R9"
+      ],
+      "user_intent_trace": "fail-closed activation rule"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6"
+    ],
+    "stop_on_first_failure": true
+  },
+  "future_implementation_track": {
+    "next_act": "H1",
+    "phases": [
+      {
+        "id": "H1",
+        "name": "Authoritative census and department-model decision",
+        "outputs": [
+          "census_rebase_contract",
+          "department_mapping_decision"
+        ],
+        "stop_condition": "Stop and open a separate governed change if the 20 extras cannot be remapped into the existing 10 departments without distortion."
+      },
+      {
+        "id": "H2",
+        "name": "Humanized employee record completion",
+        "outputs": [
+          "names",
+          "titles",
+          "departments",
+          "managers",
+          "escalation_owners",
+          "bounded_humanization_metadata"
+        ]
+      },
+      {
+        "id": "H3",
+        "name": "Authoritative registry and capability-map rebase",
+        "outputs": [
+          "registry/ai_team.json",
+          "registry/persona_registry_v2.yaml",
+          "registry/persona_capability_map.yaml"
+        ]
+      },
+      {
+        "id": "H4",
+        "name": "Certification and count rebase",
+        "outputs": [
+          "rebased_persona_counts",
+          "commercialization_truth_updates",
+          "fail_closed_count_sync"
+        ]
+      },
+      {
+        "id": "H5",
+        "name": "Activation gate closeout",
+        "outputs": [
+          "active_state_gate",
+          "chain_of_command_gate",
+          "authoritative_claim_alignment"
+        ]
+      }
+    ]
+  },
+  "gates": [
+    {
+      "id": "C0",
+      "description": "Plan explicitly captures the 59 runtime definitions, 39 authoritative personas, 34 active authoritative personas, and the lack of a governing initiative before this slice."
+    },
+    {
+      "id": "C1",
+      "description": "Plan explicitly limits humanization metadata to working_style, communication_style, and decision_style."
+    },
+    {
+      "id": "C2",
+      "description": "Plan preserves the existing 10-department model by default or explicitly stops for a separate governed change."
+    },
+    {
+      "id": "C3",
+      "description": "Plan states that no promoted persona may be active without name, title, manager, escalation owner, capability-map coverage, and authoritative registry entry."
+    },
+    {
+      "id": "C4",
+      "description": "Plan triplet and prompt pair exist and remain parseable."
+    },
+    {
+      "id": "C5",
+      "description": "git diff --check passes before commit."
+    }
+  ],
+  "candidate_personas": [
+    {
+      "agent_id": "audit-operations",
+      "proposed_name": "Naomi Brooks",
+      "recommended_department": "operations",
+      "working_style": "meticulous",
+      "communication_style": "skeptical",
+      "decision_style": "evidence-first"
+    },
+    {
+      "agent_id": "calendar-management-agent",
+      "proposed_name": "Mateo Alvarez",
+      "recommended_department": "communication",
+      "working_style": "organized",
+      "communication_style": "anticipatory",
+      "decision_style": "conflict-averse"
+    },
+    {
+      "agent_id": "client-relationship-agent",
+      "proposed_name": "Priya Mehta",
+      "recommended_department": "studio-operations",
+      "working_style": "warm",
+      "communication_style": "responsive",
+      "decision_style": "follow-through driven"
+    },
+    {
+      "agent_id": "compliance-monitoring-agent",
+      "proposed_name": "Farah Alvi",
+      "recommended_department": "operations",
+      "working_style": "exacting",
+      "communication_style": "policy-first",
+      "decision_style": "calm under pressure"
+    },
+    {
+      "agent_id": "device-management",
+      "proposed_name": "Connor Walsh",
+      "recommended_department": "operations",
+      "working_style": "practical",
+      "communication_style": "methodical",
+      "decision_style": "steady"
+    },
+    {
+      "agent_id": "email-processing-agent",
+      "proposed_name": "Hannah Kim",
+      "recommended_department": "communication",
+      "working_style": "fast",
+      "communication_style": "clear",
+      "decision_style": "triage-oriented"
+    },
+    {
+      "agent_id": "financial-operations-agent",
+      "proposed_name": "Luis Carvalho",
+      "recommended_department": "studio-operations",
+      "working_style": "conservative",
+      "communication_style": "numbers-first",
+      "decision_style": "controls-minded"
+    },
+    {
+      "agent_id": "identity-security",
+      "proposed_name": "Amara Okoye",
+      "recommended_department": "operations",
+      "working_style": "vigilant",
+      "communication_style": "uncompromising",
+      "decision_style": "least-privilege focused"
+    },
+    {
+      "agent_id": "it-operations-manager",
+      "proposed_name": "Peter Novak",
+      "recommended_department": "operations",
+      "working_style": "calm",
+      "communication_style": "decisive",
+      "decision_style": "reliability-first"
+    },
+    {
+      "agent_id": "knowledge-management-agent",
+      "proposed_name": "Leah Goldstein",
+      "recommended_department": "operations",
+      "working_style": "structured",
+      "communication_style": "curious",
+      "decision_style": "documentation-heavy"
+    },
+    {
+      "agent_id": "platform-manager",
+      "proposed_name": "Andre Baptiste",
+      "recommended_department": "engineering",
+      "working_style": "systems-minded",
+      "communication_style": "disciplined",
+      "decision_style": "dependency-aware"
+    },
+    {
+      "agent_id": "project-coordination-agent",
+      "proposed_name": "Sofia Petrova",
+      "recommended_department": "project-management",
+      "working_style": "organized",
+      "communication_style": "diplomatic",
+      "decision_style": "deadline-focused"
+    },
+    {
+      "agent_id": "project-manager",
+      "proposed_name": "Haruto Tanaka",
+      "recommended_department": "project-management",
+      "working_style": "decisive",
+      "communication_style": "scope-protective",
+      "decision_style": "milestone-driven"
+    },
+    {
+      "agent_id": "recruitment-assistance-agent",
+      "proposed_name": "Camila Torres",
+      "recommended_department": "hr",
+      "working_style": "personable",
+      "communication_style": "fair",
+      "decision_style": "process-consistent"
+    },
+    {
+      "agent_id": "reports",
+      "proposed_name": "Youssef Haddad",
+      "recommended_department": "studio-operations",
+      "working_style": "analytical",
+      "communication_style": "succinct",
+      "decision_style": "KPI-focused"
+    },
+    {
+      "agent_id": "security-operations",
+      "proposed_name": "Tunde Adeyemi",
+      "recommended_department": "operations",
+      "working_style": "alert",
+      "communication_style": "no-nonsense",
+      "decision_style": "incident-driven"
+    },
+    {
+      "agent_id": "service-health",
+      "proposed_name": "Chloe Martin",
+      "recommended_department": "operations",
+      "working_style": "watchful",
+      "communication_style": "steady",
+      "decision_style": "escalation-aware"
+    },
+    {
+      "agent_id": "teams-manager",
+      "proposed_name": "Alicia Nguyen",
+      "recommended_department": "communication",
+      "working_style": "collaborative",
+      "communication_style": "structured",
+      "decision_style": "governance-minded"
+    },
+    {
+      "agent_id": "ucp-administrator",
+      "proposed_name": "Omar El-Masry",
+      "recommended_department": "operations",
+      "working_style": "strict",
+      "communication_style": "fail-closed",
+      "decision_style": "control-plane focused"
+    },
+    {
+      "agent_id": "website-operations-specialist",
+      "proposed_name": "Lucia Fernandez",
+      "recommended_department": "marketing",
+      "working_style": "careful",
+      "communication_style": "release-minded",
+      "decision_style": "rollback-ready"
+    }
+  ],
+  "artifacts": [
+    "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md",
+    "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.yaml",
+    "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.json",
+    "docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md",
+    "docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/PROJECT_FILE_INDEX.md",
+    "Operations/ACTION_LOG.md",
+    "tests/test_ucp_m365_pack_contracts.py",
+    "tests/test_ucp_m365_pack_client.py"
+  ],
+  "prompt_references": {
+    "prompt_doc": "docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md",
+    "prompt_kickoff": "docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt",
+    "prompt_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md"
+  },
+  "rollback": {
+    "procedure": [
+      "revert only the planning-package files listed in the allowlist",
+      "remove the new execution-plan initiative block and file-index entries",
+      "remove the action-log entry if the package is withdrawn before merge"
+    ],
+    "files_to_revert": [
+      "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md",
+      "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.yaml",
+      "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.json",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "Operations/ACTION_LOG.md",
+      "tests/test_ucp_m365_pack_contracts.py",
+      "tests/test_ucp_m365_pack_client.py"
+    ]
+  }
+}
