@@ -181,6 +181,14 @@ def _derive_allowed_domains(agent: str, allowed_actions: list[str]) -> list[str]
     return domains
 
 
+def _authoritative_allowed_actions(
+    agent_definition: dict[str, Any], coverage_status: str
+) -> list[str]:
+    if coverage_status == "persona-contract-only":
+        return []
+    return [str(action) for action in (agent_definition.get("allowed_actions") or []) if action]
+
+
 def _approval_owner(agent_definition: dict[str, Any], department: str) -> str:
     for rule in agent_definition.get("approval_rules", []) or []:
         approvers = [str(approver) for approver in (rule.get("approvers") or []) if approver]
@@ -433,10 +441,8 @@ def build_authoritative_persona_registry_document(
             raise ValueError(f"persona_map_missing:{persona_id}")
         department = str(team_entry["department"])
         agent_definition = agent_definitions.get(persona_id, {})
-        allowed_actions = [
-            str(action) for action in (agent_definition.get("allowed_actions") or []) if action
-        ]
         coverage_status = str(map_entry["coverage_status"])
+        allowed_actions = _authoritative_allowed_actions(agent_definition, coverage_status)
         display_name = str(team_entry["display_name"])
         aliases = sorted(_persona_alias_candidates(persona_id, display_name))
         persona = {

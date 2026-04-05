@@ -33,7 +33,12 @@ ALLOWED_DEPARTMENTS = {
 def main() -> None:
     root = Path(__file__).resolve().parents[2]
     artifact_path = root / "registry" / "authoritative_digital_employee_records_v1.yaml"
-    output_path = root / "configs" / "generated" / "authoritative_digital_employee_records_v1_verification.json"
+    output_path = (
+        root
+        / "configs"
+        / "generated"
+        / "authoritative_digital_employee_records_v1_verification.json"
+    )
 
     payload = yaml.safe_load(artifact_path.read_text(encoding="utf-8"))
     records = payload.get("records") or {}
@@ -50,7 +55,7 @@ def main() -> None:
 
     names: set[str] = set()
     slugs: set[str] = set()
-    departments = Counter()
+    departments: Counter[str] = Counter()
     for agent_id, record in records.items():
         keys = set(record.keys())
         if keys != REQUIRED_FIELDS:

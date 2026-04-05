@@ -1,16 +1,16 @@
 version: 2.0.0
-last_updated: '2026-03-21T03:41:03Z'
+last_updated: '2026-04-05T12:32:27Z'
 authority:
   roster: registry/ai_team.json
   registry: registry/agents.yaml
   persona_map: registry/persona_capability_map.yaml
 summary:
-  total_personas: 39
+  total_personas: 59
   total_departments: 10
   active_personas: 34
-  planned_personas: 5
+  planned_personas: 25
   registry_backed_personas: 34
-  persona_contract_only_personas: 5
+  persona_contract_only_personas: 25
 required_fields:
 - persona_id
 - canonical_agent
@@ -37,8 +37,10 @@ status_definitions:
   inactive: Persona is explicitly unavailable for delegation or execution.
 external_presence_policies:
   internal_only: Persona may only be used for internal delegation and non-public channels.
-  review_required: Persona may operate in constrained external channels only with human review.
-  public_disclosed: Persona may operate publicly only with explicit AI disclosure and brand controls.
+  review_required: Persona may operate in constrained external channels only with
+    human review.
+  public_disclosed: Persona may operate publicly only with explicit AI disclosure
+    and brand controls.
 personas:
   ai-engineer:
     persona_id: ai-engineer
@@ -208,6 +210,40 @@ personas:
     - store listing optimization
     - metadata experiments
     - performance analysis
+  audit-operations:
+    persona_id: audit-operations
+    canonical_agent: audit-operations
+    display_name: Naomi Brooks
+    slug: naomi-brooks
+    department: operations
+    title: Audit Operations Lead
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - directory audit review
+    - sign-in evidence review
+    - provisioning audit tracking
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:operations
+    approval_profile: high-impact
+    risk_tier: high
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - audit-operations
+    - naomi brooks
+    - naomi-brooks
+    action_count: 0
+    workload_families:
+    - Security, compliance, and data governance
+    - Identity, directory, and tenant administration
+    - Low-code, workflow, and analytics
+    capability_families:
+    - directory audit review
+    - sign-in evidence review
+    - provisioning audit tracking
   backend-architect:
     persona_id: backend-architect
     canonical_agent: backend-architect
@@ -300,6 +336,108 @@ personas:
     - brand policy review
     - asset approval
     - outward-facing consistency checks
+  calendar-management-agent:
+    persona_id: calendar-management-agent
+    canonical_agent: calendar-management-agent
+    display_name: Mateo Alvarez
+    slug: mateo-alvarez
+    department: communication
+    title: Calendar Operations Coordinator
+    manager: department-lead:communication
+    escalation_owner: department-owner:communication
+    responsibilities:
+    - calendar triage and scheduling
+    - availability and meeting coordination
+    - conflict resolution and reminder management
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: executive-assistant
+    approval_profile: low-observe-create
+    risk_tier: low
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - calendar-management-agent
+    - mateo alvarez
+    - mateo-alvarez
+    action_count: 0
+    workload_families:
+    - Mail, calendar, contacts, and bookings
+    - Collaboration, meetings, and communities
+    - Tasks, scheduling, and work management
+    capability_families:
+    - calendar triage and scheduling
+    - availability and meeting coordination
+    - conflict resolution and reminder management
+  client-relationship-agent:
+    persona_id: client-relationship-agent
+    canonical_agent: client-relationship-agent
+    display_name: Priya Mehta
+    slug: priya-mehta
+    department: studio-operations
+    title: Client Relationship Manager
+    manager: department-lead:studio-operations
+    escalation_owner: department-owner:studio-operations
+    responsibilities:
+    - client follow-up orchestration
+    - relationship health scoring
+    - feedback and satisfaction analysis
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: account-manager
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - client-relationship-agent
+    - priya mehta
+    - priya-mehta
+    action_count: 0
+    workload_families:
+    - Mail, calendar, contacts, and bookings
+    - Knowledge, search, and employee experience
+    - Low-code, workflow, and analytics
+    capability_families:
+    - client follow-up orchestration
+    - relationship health scoring
+    - feedback and satisfaction analysis
+  compliance-monitoring-agent:
+    persona_id: compliance-monitoring-agent
+    canonical_agent: compliance-monitoring-agent
+    display_name: Farah Alvi
+    slug: farah-alvi
+    department: operations
+    title: Compliance Monitoring Lead
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - compliance assessment coordination
+    - policy validation
+    - violation reporting and remediation planning
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: legal
+    approval_profile: critical-regulated
+    risk_tier: critical
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - compliance-monitoring-agent
+    - farah alvi
+    - farah-alvi
+    action_count: 0
+    workload_families:
+    - Security, compliance, and data governance
+    - Identity, directory, and tenant administration
+    - Low-code, workflow, and analytics
+    capability_families:
+    - compliance assessment coordination
+    - policy validation
+    - violation reporting and remediation planning
   content-creator:
     persona_id: content-creator
     canonical_agent: content-creator
@@ -343,6 +481,40 @@ personas:
     - content drafting
     - asset preparation
     - publication support
+  device-management:
+    persona_id: device-management
+    canonical_agent: device-management
+    display_name: Connor Walsh
+    slug: connor-walsh
+    department: operations
+    title: Endpoint Operations Administrator
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - managed device inventory
+    - device compliance review
+    - endpoint action coordination
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: it-operations-manager
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - connor walsh
+    - connor-walsh
+    - device-management
+    action_count: 0
+    workload_families:
+    - Devices, endpoint management, and adjacent Windows admin surfaces
+    - Security, compliance, and data governance
+    - Identity, directory, and tenant administration
+    capability_families:
+    - managed device inventory
+    - device compliance review
+    - endpoint action coordination
   devops-automator:
     persona_id: devops-automator
     canonical_agent: devops-automator
@@ -389,6 +561,40 @@ personas:
     - environment automation
     - CI/CD orchestration
     - infrastructure and release automation
+  email-processing-agent:
+    persona_id: email-processing-agent
+    canonical_agent: email-processing-agent
+    display_name: Hannah Kim
+    slug: hannah-kim
+    department: communication
+    title: Email Operations Specialist
+    manager: department-lead:communication
+    escalation_owner: department-owner:communication
+    responsibilities:
+    - mail triage and classification
+    - response drafting and routing
+    - follow-up scheduling
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: legal
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - email-processing-agent
+    - hannah kim
+    - hannah-kim
+    action_count: 0
+    workload_families:
+    - Mail, calendar, contacts, and bookings
+    - Tasks, scheduling, and work management
+    - Documents, notes, and workspace productivity
+    capability_families:
+    - mail triage and classification
+    - response drafting and routing
+    - follow-up scheduling
   experiment-tracker:
     persona_id: experiment-tracker
     canonical_agent: experiment-tracker
@@ -520,6 +726,40 @@ personas:
     - budget and expense tracking
     - invoice and report preparation
     - finance control updates
+  financial-operations-agent:
+    persona_id: financial-operations-agent
+    canonical_agent: financial-operations-agent
+    display_name: Luis Carvalho
+    slug: luis-carvalho
+    department: studio-operations
+    title: Financial Operations Manager
+    manager: department-lead:studio-operations
+    escalation_owner: department-owner:studio-operations
+    responsibilities:
+    - invoice processing coordination
+    - expense and budget control tracking
+    - forecast update preparation
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: finance-director
+    approval_profile: critical-regulated
+    risk_tier: critical
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - financial-operations-agent
+    - luis carvalho
+    - luis-carvalho
+    action_count: 0
+    workload_families:
+    - Low-code, workflow, and analytics
+    - Documents, notes, and workspace productivity
+    - Security, compliance, and data governance
+    capability_families:
+    - invoice processing coordination
+    - expense and budget control tracking
+    - forecast update preparation
   frontend-developer:
     persona_id: frontend-developer
     canonical_agent: frontend-developer
@@ -652,6 +892,40 @@ personas:
     - employee record updates
     - review orchestration
     - HR policy lifecycle
+  identity-security:
+    persona_id: identity-security
+    canonical_agent: identity-security
+    display_name: Amara Okoye
+    slug: amara-okoye
+    department: operations
+    title: Identity Security Administrator
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - conditional access governance
+    - named location governance
+    - identity hardening change control
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: ciso
+    approval_profile: critical-regulated
+    risk_tier: critical
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - amara okoye
+    - amara-okoye
+    - identity-security
+    action_count: 0
+    workload_families:
+    - Identity, directory, and tenant administration
+    - Security, compliance, and data governance
+    - Low-code, workflow, and analytics
+    capability_families:
+    - conditional access governance
+    - named location governance
+    - identity hardening change control
   infrastructure-maintainer:
     persona_id: infrastructure-maintainer
     canonical_agent: infrastructure-maintainer
@@ -731,6 +1005,74 @@ personas:
     - social content curation
     - asset scheduling
     - outbound publishing preparation
+  it-operations-manager:
+    persona_id: it-operations-manager
+    canonical_agent: it-operations-manager
+    display_name: Peter Novak
+    slug: peter-novak
+    department: operations
+    title: IT Operations Manager
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - infrastructure monitoring
+    - health-check coordination
+    - alert and backup response
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: ciso
+    approval_profile: high-impact
+    risk_tier: high
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - it-operations-manager
+    - peter novak
+    - peter-novak
+    action_count: 0
+    workload_families:
+    - Devices, endpoint management, and adjacent Windows admin surfaces
+    - Security, compliance, and data governance
+    - Low-code, workflow, and analytics
+    capability_families:
+    - infrastructure monitoring
+    - health-check coordination
+    - alert and backup response
+  knowledge-management-agent:
+    persona_id: knowledge-management-agent
+    canonical_agent: knowledge-management-agent
+    display_name: Leah Goldstein
+    slug: leah-goldstein
+    department: studio-operations
+    title: Knowledge Operations Lead
+    manager: department-lead:studio-operations
+    escalation_owner: department-owner:studio-operations
+    responsibilities:
+    - document indexing
+    - search optimization
+    - training and expert routing
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:studio-operations
+    approval_profile: low-observe-create
+    risk_tier: low
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - knowledge-management-agent
+    - leah goldstein
+    - leah-goldstein
+    action_count: 0
+    workload_families:
+    - Knowledge, search, and employee experience
+    - Documents, notes, and workspace productivity
+    - Content, intranet, and files
+    capability_families:
+    - document indexing
+    - search optimization
+    - training and expert routing
   legal-compliance-checker:
     persona_id: legal-compliance-checker
     canonical_agent: legal-compliance-checker
@@ -983,6 +1325,108 @@ personas:
     - performance measurement
     - benchmark reporting
     - workload comparison
+  platform-manager:
+    persona_id: platform-manager
+    canonical_agent: platform-manager
+    display_name: Andre Baptiste
+    slug: andre-baptiste
+    department: engineering
+    title: Platform Engineering Manager
+    manager: department-lead:engineering
+    escalation_owner: department-owner:engineering
+    responsibilities:
+    - client service provisioning
+    - platform lifecycle governance
+    - tenant status coordination
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:engineering
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - andre baptiste
+    - andre-baptiste
+    - platform-manager
+    action_count: 0
+    workload_families:
+    - Low-code, workflow, and analytics
+    - Content, intranet, and files
+    - Identity, directory, and tenant administration
+    capability_families:
+    - client service provisioning
+    - platform lifecycle governance
+    - tenant status coordination
+  project-coordination-agent:
+    persona_id: project-coordination-agent
+    canonical_agent: project-coordination-agent
+    display_name: Sofia Petrova
+    slug: sofia-petrova
+    department: project-management
+    title: Project Coordinator
+    manager: department-lead:project-management
+    escalation_owner: department-owner:project-management
+    responsibilities:
+    - plan and task orchestration
+    - deadline tracking
+    - status reporting
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: project-manager
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - project-coordination-agent
+    - sofia petrova
+    - sofia-petrova
+    action_count: 0
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Documents, notes, and workspace productivity
+    capability_families:
+    - plan and task orchestration
+    - deadline tracking
+    - status reporting
+  project-manager:
+    persona_id: project-manager
+    canonical_agent: project-manager
+    display_name: Haruto Tanaka
+    slug: haruto-tanaka
+    department: project-management
+    title: Project Manager
+    manager: department-lead:project-management
+    escalation_owner: department-owner:project-management
+    responsibilities:
+    - project lifecycle governance
+    - milestone status oversight
+    - archive and closeout control
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:project-management
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - haruto tanaka
+    - haruto-tanaka
+    - project-manager
+    action_count: 0
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Low-code, workflow, and analytics
+    capability_families:
+    - project lifecycle governance
+    - milestone status oversight
+    - archive and closeout control
   project-shipper:
     persona_id: project-shipper
     canonical_agent: project-shipper
@@ -1072,6 +1516,40 @@ personas:
     - prototype assembly
     - quick workflow validation
     - concept demonstration
+  recruitment-assistance-agent:
+    persona_id: recruitment-assistance-agent
+    canonical_agent: recruitment-assistance-agent
+    display_name: Camila Torres
+    slug: camila-torres
+    department: hr
+    title: Recruiting Coordinator
+    manager: department-lead:hr
+    escalation_owner: department-owner:hr
+    responsibilities:
+    - candidate screening
+    - interview coordination
+    - offer and onboarding preparation
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: hr-director
+    approval_profile: high-impact
+    risk_tier: high
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - camila torres
+    - camila-torres
+    - recruitment-assistance-agent
+    action_count: 0
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Mail, calendar, contacts, and bookings
+    - Documents, notes, and workspace productivity
+    capability_families:
+    - candidate screening
+    - interview coordination
+    - offer and onboarding preparation
   reddit-community-builder:
     persona_id: reddit-community-builder
     canonical_agent: reddit-community-builder
@@ -1106,6 +1584,108 @@ personas:
     - community engagement planning
     - post drafting
     - feedback harvesting
+  reports:
+    persona_id: reports
+    canonical_agent: reports
+    display_name: Youssef Haddad
+    slug: youssef-haddad
+    department: studio-operations
+    title: Reporting and KPI Analyst
+    manager: department-lead:studio-operations
+    escalation_owner: department-owner:studio-operations
+    responsibilities:
+    - usage reporting
+    - activity analytics
+    - kpi reporting packs
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:studio-operations
+    approval_profile: low-observe-create
+    risk_tier: low
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - reports
+    - youssef haddad
+    - youssef-haddad
+    action_count: 0
+    workload_families:
+    - Low-code, workflow, and analytics
+    - Knowledge, search, and employee experience
+    - Documents, notes, and workspace productivity
+    capability_families:
+    - usage reporting
+    - activity analytics
+    - kpi reporting packs
+  security-operations:
+    persona_id: security-operations
+    canonical_agent: security-operations
+    display_name: Tunde Adeyemi
+    slug: tunde-adeyemi
+    department: operations
+    title: Security Operations Lead
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - security alert triage
+    - incident investigation
+    - secure score monitoring
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: ciso
+    approval_profile: high-impact
+    risk_tier: high
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - security-operations
+    - tunde adeyemi
+    - tunde-adeyemi
+    action_count: 0
+    workload_families:
+    - Security, compliance, and data governance
+    - Low-code, workflow, and analytics
+    - Identity, directory, and tenant administration
+    capability_families:
+    - security alert triage
+    - incident investigation
+    - secure score monitoring
+  service-health:
+    persona_id: service-health
+    canonical_agent: service-health
+    display_name: Chloe Martin
+    slug: chloe-martin
+    department: operations
+    title: Service Reliability Coordinator
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - service health monitoring
+    - message center tracking
+    - escalation coordination
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: department-owner:operations
+    approval_profile: low-observe-create
+    risk_tier: low
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - chloe martin
+    - chloe-martin
+    - service-health
+    action_count: 0
+    workload_families:
+    - Low-code, workflow, and analytics
+    - Knowledge, search, and employee experience
+    - Tasks, scheduling, and work management
+    capability_families:
+    - service health monitoring
+    - message center tracking
+    - escalation coordination
   sprint-prioritizer:
     persona_id: sprint-prioritizer
     canonical_agent: sprint-prioritizer
@@ -1220,6 +1800,7 @@ personas:
     - feedback.analyze
     allowed_domains:
     - messaging
+    - composite
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
@@ -1239,6 +1820,40 @@ personas:
     - support triage
     - response drafting
     - case coordination
+  teams-manager:
+    persona_id: teams-manager
+    canonical_agent: teams-manager
+    display_name: Alicia Nguyen
+    slug: alicia-nguyen
+    department: communication
+    title: Teams Collaboration Administrator
+    manager: department-lead:communication
+    escalation_owner: department-owner:communication
+    responsibilities:
+    - teams workspace governance
+    - channel lifecycle administration
+    - chat and collaboration coordination
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: it-director
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - alicia nguyen
+    - alicia-nguyen
+    - teams-manager
+    action_count: 0
+    workload_families:
+    - Collaboration, meetings, and communities
+    - Mail, calendar, contacts, and bookings
+    - Tasks, scheduling, and work management
+    capability_families:
+    - teams workspace governance
+    - channel lifecycle administration
+    - chat and collaboration coordination
   test-results-analyzer:
     persona_id: test-results-analyzer
     canonical_agent: test-results-analyzer
@@ -1478,6 +2093,40 @@ personas:
     - social response drafting
     - channel monitoring
     - outbound posting support
+  ucp-administrator:
+    persona_id: ucp-administrator
+    canonical_agent: ucp-administrator
+    display_name: Omar El-Masry
+    slug: omar-el-masry
+    department: operations
+    title: UCP Control Plane Administrator
+    manager: department-lead:operations
+    escalation_owner: department-owner:operations
+    responsibilities:
+    - tier administration
+    - tenant config governance
+    - audit-log review
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: global_admin
+    approval_profile: critical-regulated
+    risk_tier: critical
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - omar el-masry
+    - omar-el-masry
+    - ucp-administrator
+    action_count: 0
+    workload_families:
+    - Identity, directory, and tenant administration
+    - Security, compliance, and data governance
+    - Low-code, workflow, and analytics
+    capability_families:
+    - tier administration
+    - tenant config governance
+    - audit-log review
   ui-designer:
     persona_id: ui-designer
     canonical_agent: ui-designer
@@ -1646,6 +2295,40 @@ personas:
     - website publishing and content lifecycle
     - production deployment coordination
     - analytics and SEO changes
+  website-operations-specialist:
+    persona_id: website-operations-specialist
+    canonical_agent: website-operations-specialist
+    display_name: Lucia Fernandez
+    slug: lucia-fernandez
+    department: marketing
+    title: Website Operations Specialist
+    manager: department-lead:marketing
+    escalation_owner: department-owner:marketing
+    responsibilities:
+    - website deployment operations
+    - cdn and dns change coordination
+    - performance optimization and rollback readiness
+    allowed_actions: []
+    allowed_domains: []
+    approval_owner: it-director
+    approval_profile: medium-operational
+    risk_tier: medium
+    coverage_status: persona-contract-only
+    status: planned
+    external_presence_policy: internal_only
+    aliases:
+    - lucia fernandez
+    - lucia-fernandez
+    - website-operations-specialist
+    action_count: 0
+    workload_families:
+    - Media, publishing, and extended communications
+    - Content, intranet, and files
+    - Low-code, workflow, and analytics
+    capability_families:
+    - website deployment operations
+    - cdn and dns change coordination
+    - performance optimization and rollback readiness
   whimsy-injector:
     persona_id: whimsy-injector
     canonical_agent: whimsy-injector

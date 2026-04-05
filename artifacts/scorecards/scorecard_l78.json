@@ -1,0 +1,20 @@
+{
+  "lemma_id": "L78",
+  "title": "M365 Authoritative Persona Registry Rebase v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BZ-authoritative-persona-registry-rebase-v1.ipynb",
+    "notebooks/lemma_proofs/L78_m365_authoritative_persona_registry_rebase_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "H3 projects the authoritative roster from 39 to 59 personas across the existing 10 departments.",
+    "The staged registry truth remains 34 active personas and 25 planned personas before H5 activation.",
+    "Promoted personas are authoritative in H3 but remain persona-contract-only with zero actions and zero domains.",
+    "The capability map clears the 20-agent non-authoritative overflow set without widening the department model."
+  ]
+}

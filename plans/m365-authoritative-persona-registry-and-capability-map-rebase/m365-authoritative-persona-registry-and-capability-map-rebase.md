@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-authoritative-persona-registry-and-capability-map-rebase`
 **Parent Plan ID:** `m365-authoritative-persona-humanization-expansion`
-**Status:** 🟠 Draft
+**Status:** ✅ Complete
 **Date:** 2026-04-05
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-registry-and-capability-map-rebase:R1`
@@ -42,6 +42,7 @@ If `H3_GO` is false, H3 must emit `NO-GO`, stop, and keep the authoritative regi
 - rebase `registry/persona_capability_map.yaml` to remove the `20` extras from the non-authoritative overflow set
 - update the authoritative runtime loader and verifier surfaces if required by the truthful staged model
 - produce notebook-backed proof, generated verification output, and tests
+- close any bounded repo-wide pre-commit gate remediation required to ship H3, limited to previously created verifier/control-plane surfaces
 
 ### Out of scope
 
@@ -63,6 +64,7 @@ If `H3_GO` is false, H3 must emit `NO-GO`, stop, and keep the authoritative regi
 - `src/ops_adapter/personas.py`
 - `scripts/ci/build_persona_registry_v2.py`
 - `scripts/ci/verify_persona_registry_v2.py`
+- `scripts/ci/verify_authoritative_digital_employee_records_v1.py`
 - `docs/ma/lemmas/L*_m365_authoritative_persona_registry_rebase_v1.md`
 - `invariants/lemmas/L*_m365_authoritative_persona_registry_rebase_v1.yaml`
 - `notebooks/m365/INV-M365-*-authoritative-persona-registry-rebase-v1.ipynb`
@@ -119,20 +121,21 @@ If `H3_GO` is false, H3 must emit `NO-GO`, stop, and keep the authoritative regi
 - verify `registry/persona_registry_v2.yaml` totals `59` personas with `34` active and `25` planned
 - verify `registry/persona_capability_map.yaml` shows `0` non-authoritative overflow agents
 - verify targeted runtime and verifier tests are green
+- run `pre-commit run --all-files`
 - run `git diff --check`
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] This child plan `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] This child plan `status -> complete`
 
 ## Execution Outcome
 
-- **Decision:** `pending`
-- **Approved by:** `pending`
-- **Completion timestamp:** `pending`
+- **Decision:** `GO`
+- **Approved by:** `operator standing GO for the governed H3-H5 sequence`
+- **Completion timestamp:** `2026-04-05 08:34:41 EDT`
 
 ## Agent Constraints
 

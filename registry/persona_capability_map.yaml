@@ -1,38 +1,35 @@
 version: 1.0.0
-last_updated: '2026-03-20T20:53:52Z'
+last_updated: '2026-04-05T13:30:00Z'
 authority:
   roster: registry/ai_team.json
   registry: registry/agents.yaml
   taxonomy: docs/commercialization/m365-capability-taxonomy-and-feasibility-map.md
 summary:
-  total_personas: 39
+  total_personas: 59
   total_departments: 10
   current_registry_backed_personas: 34
-  persona_contract_only_personas: 5
-  non_authoritative_registry_agents: 20
-  non_authoritative_registry_departments:
-  - collaboration
-  - crm
-  - finance
-  - governance
-  - legal
-  - security
+  persona_contract_only_personas: 25
+  non_authoritative_registry_agents: 0
+  non_authoritative_registry_departments: []
 approval_profiles:
   low-observe-create:
-    default_posture: No approval for read, research, draft, or internal-prep work; department-owner approval for outbound
-      publication, canonical asset changes, or external sharing.
+    default_posture: No approval for read, research, draft, or internal-prep work;
+      department-owner approval for outbound publication, canonical asset changes,
+      or external sharing.
   medium-operational:
-    default_posture: Department-owner approval for routine internal mutations; dual control for destructive, cross-department,
-      or externally visible changes.
+    default_posture: Department-owner approval for routine internal mutations; dual
+      control for destructive, cross-department, or externally visible changes.
   high-impact:
-    default_posture: Human approval for all mutating actions with tenant, identity, public-facing, financial, or organization-wide
-      impact; dual control for destructive or privileged changes.
+    default_posture: Human approval for all mutating actions with tenant, identity,
+      public-facing, financial, or organization-wide impact; dual control for destructive
+      or privileged changes.
   critical-regulated:
-    default_posture: Dual human approval and explicit sign-off for regulated, personnel-state, legal, security, or compliance-sensitive
-      mutations.
+    default_posture: Dual human approval and explicit sign-off for regulated, personnel-state,
+      legal, security, or compliance-sensitive mutations.
 coverage_statuses:
   registry-backed: Persona has explicit allowed actions in registry/agents.yaml.
-  persona-contract-only: Persona exists in the authoritative roster but still needs later action-surface implementation.
+  persona-contract-only: Persona exists in the authoritative roster but still needs
+    later action-surface implementation.
 departments:
   operations:
     dominant_workload_families:
@@ -72,6 +69,126 @@ departments:
         - website publishing and content lifecycle
         - production deployment coordination
         - analytics and SEO changes
+      audit-operations:
+        display_name: Naomi Brooks
+        title: Audit Operations Lead
+        current_risk_tier: high
+        approval_profile: high-impact
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Security, compliance, and data governance
+        - Identity, directory, and tenant administration
+        - Low-code, workflow, and analytics
+        capability_families:
+        - directory audit review
+        - sign-in evidence review
+        - provisioning audit tracking
+      compliance-monitoring-agent:
+        display_name: Farah Alvi
+        title: Compliance Monitoring Lead
+        current_risk_tier: critical
+        approval_profile: critical-regulated
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Security, compliance, and data governance
+        - Identity, directory, and tenant administration
+        - Low-code, workflow, and analytics
+        capability_families:
+        - compliance assessment coordination
+        - policy validation
+        - violation reporting and remediation planning
+      device-management:
+        display_name: Connor Walsh
+        title: Endpoint Operations Administrator
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Devices, endpoint management, and adjacent Windows admin surfaces
+        - Security, compliance, and data governance
+        - Identity, directory, and tenant administration
+        capability_families:
+        - managed device inventory
+        - device compliance review
+        - endpoint action coordination
+      identity-security:
+        display_name: Amara Okoye
+        title: Identity Security Administrator
+        current_risk_tier: critical
+        approval_profile: critical-regulated
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Identity, directory, and tenant administration
+        - Security, compliance, and data governance
+        - Low-code, workflow, and analytics
+        capability_families:
+        - conditional access governance
+        - named location governance
+        - identity hardening change control
+      it-operations-manager:
+        display_name: Peter Novak
+        title: IT Operations Manager
+        current_risk_tier: high
+        approval_profile: high-impact
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Devices, endpoint management, and adjacent Windows admin surfaces
+        - Security, compliance, and data governance
+        - Low-code, workflow, and analytics
+        capability_families:
+        - infrastructure monitoring
+        - health-check coordination
+        - alert and backup response
+      security-operations:
+        display_name: Tunde Adeyemi
+        title: Security Operations Lead
+        current_risk_tier: high
+        approval_profile: high-impact
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Security, compliance, and data governance
+        - Low-code, workflow, and analytics
+        - Identity, directory, and tenant administration
+        capability_families:
+        - security alert triage
+        - incident investigation
+        - secure score monitoring
+      service-health:
+        display_name: Chloe Martin
+        title: Service Reliability Coordinator
+        current_risk_tier: low
+        approval_profile: low-observe-create
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
+        - Tasks, scheduling, and work management
+        capability_families:
+        - service health monitoring
+        - message center tracking
+        - escalation coordination
+      ucp-administrator:
+        display_name: Omar El-Masry
+        title: UCP Control Plane Administrator
+        current_risk_tier: critical
+        approval_profile: critical-regulated
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Identity, directory, and tenant administration
+        - Security, compliance, and data governance
+        - Low-code, workflow, and analytics
+        capability_families:
+        - tier administration
+        - tenant config governance
+        - audit-log review
   hr:
     dominant_workload_families:
     - Identity, directory, and tenant administration
@@ -96,6 +213,21 @@ departments:
         - employee record updates
         - review orchestration
         - HR policy lifecycle
+      recruitment-assistance-agent:
+        display_name: Camila Torres
+        title: Recruiting Coordinator
+        current_risk_tier: high
+        approval_profile: high-impact
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Tasks, scheduling, and work management
+        - Mail, calendar, contacts, and bookings
+        - Documents, notes, and workspace productivity
+        capability_families:
+        - candidate screening
+        - interview coordination
+        - offer and onboarding preparation
   communication:
     dominant_workload_families:
     - Mail, calendar, contacts, and bookings
@@ -120,6 +252,51 @@ departments:
         - meeting coordination
         - follow-up orchestration
         - campaign launch coordination
+      calendar-management-agent:
+        display_name: Mateo Alvarez
+        title: Calendar Operations Coordinator
+        current_risk_tier: low
+        approval_profile: low-observe-create
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Mail, calendar, contacts, and bookings
+        - Collaboration, meetings, and communities
+        - Tasks, scheduling, and work management
+        capability_families:
+        - calendar triage and scheduling
+        - availability and meeting coordination
+        - conflict resolution and reminder management
+      email-processing-agent:
+        display_name: Hannah Kim
+        title: Email Operations Specialist
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Mail, calendar, contacts, and bookings
+        - Tasks, scheduling, and work management
+        - Documents, notes, and workspace productivity
+        capability_families:
+        - mail triage and classification
+        - response drafting and routing
+        - follow-up scheduling
+      teams-manager:
+        display_name: Alicia Nguyen
+        title: Teams Collaboration Administrator
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Collaboration, meetings, and communities
+        - Mail, calendar, contacts, and bookings
+        - Tasks, scheduling, and work management
+        capability_families:
+        - teams workspace governance
+        - channel lifecycle administration
+        - chat and collaboration coordination
   engineering:
     dominant_workload_families:
     - Low-code, workflow, and analytics
@@ -232,6 +409,21 @@ departments:
         - test authoring and remediation
         - regression harness changes
         - workflow validation support
+      platform-manager:
+        display_name: Andre Baptiste
+        title: Platform Engineering Manager
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Low-code, workflow, and analytics
+        - Content, intranet, and files
+        - Identity, directory, and tenant administration
+        capability_families:
+        - client service provisioning
+        - platform lifecycle governance
+        - tenant status coordination
   marketing:
     dominant_workload_families:
     - Media, publishing, and extended communications
@@ -344,6 +536,21 @@ departments:
         - social response drafting
         - channel monitoring
         - outbound posting support
+      website-operations-specialist:
+        display_name: Lucia Fernandez
+        title: Website Operations Specialist
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Media, publishing, and extended communications
+        - Content, intranet, and files
+        - Low-code, workflow, and analytics
+        capability_families:
+        - website deployment operations
+        - cdn and dns change coordination
+        - performance optimization and rollback readiness
   product:
     dominant_workload_families:
     - Tasks, scheduling, and work management
@@ -446,6 +653,36 @@ departments:
         - cross-functional production planning
         - schedule coordination
         - creative delivery tracking
+      project-coordination-agent:
+        display_name: Sofia Petrova
+        title: Project Coordinator
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Tasks, scheduling, and work management
+        - Collaboration, meetings, and communities
+        - Documents, notes, and workspace productivity
+        capability_families:
+        - plan and task orchestration
+        - deadline tracking
+        - status reporting
+      project-manager:
+        display_name: Haruto Tanaka
+        title: Project Manager
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Tasks, scheduling, and work management
+        - Collaboration, meetings, and communities
+        - Low-code, workflow, and analytics
+        capability_families:
+        - project lifecycle governance
+        - milestone status oversight
+        - archive and closeout control
   studio-operations:
     dominant_workload_families:
     - Low-code, workflow, and analytics
@@ -528,6 +765,66 @@ departments:
         - support triage
         - response drafting
         - case coordination
+      client-relationship-agent:
+        display_name: Priya Mehta
+        title: Client Relationship Manager
+        current_risk_tier: medium
+        approval_profile: medium-operational
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Mail, calendar, contacts, and bookings
+        - Knowledge, search, and employee experience
+        - Low-code, workflow, and analytics
+        capability_families:
+        - client follow-up orchestration
+        - relationship health scoring
+        - feedback and satisfaction analysis
+      financial-operations-agent:
+        display_name: Luis Carvalho
+        title: Financial Operations Manager
+        current_risk_tier: critical
+        approval_profile: critical-regulated
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Low-code, workflow, and analytics
+        - Documents, notes, and workspace productivity
+        - Security, compliance, and data governance
+        capability_families:
+        - invoice processing coordination
+        - expense and budget control tracking
+        - forecast update preparation
+      knowledge-management-agent:
+        display_name: Leah Goldstein
+        title: Knowledge Operations Lead
+        current_risk_tier: low
+        approval_profile: low-observe-create
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
+        - Content, intranet, and files
+        capability_families:
+        - document indexing
+        - search optimization
+        - training and expert routing
+      reports:
+        display_name: Youssef Haddad
+        title: Reporting and KPI Analyst
+        current_risk_tier: low
+        approval_profile: low-observe-create
+        coverage_status: persona-contract-only
+        current_action_count: 0
+        workload_families:
+        - Low-code, workflow, and analytics
+        - Knowledge, search, and employee experience
+        - Documents, notes, and workspace productivity
+        capability_families:
+        - usage reporting
+        - activity analytics
+        - kpi reporting packs
   testing:
     dominant_workload_families:
     - Low-code, workflow, and analytics

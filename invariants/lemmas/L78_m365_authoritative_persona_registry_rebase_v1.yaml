@@ -1,0 +1,18 @@
+invariant_id: L78
+title: Authoritative persona registry rebase remains staged and fail-closed
+lemma_reference: docs/ma/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.md
+proof_obligations:
+  - the authoritative roster must contain exactly 59 personas across 10 departments
+  - the persona registry must report exactly 34 active personas and 25 planned personas
+  - the capability map must report zero non-authoritative overflow agents after promotion
+  - every promoted persona must remain persona-contract-only with zero allowed actions and zero allowed domains
+failure_boundaries:
+  - promoted persona missing from authoritative roster
+  - promoted persona missing from capability map or persona registry
+  - promoted persona becomes active before H5
+  - staged summary counts drift from 59 total or 34 active / 25 planned
+test_bindings:
+  - tests/test_persona_registry_v2.py
+  - tests/test_authoritative_persona_registry_rebase_v1.py
+  - scripts/ci/verify_persona_registry_v2.py
+ci_gate: authoritative-persona-registry-rebase-v1

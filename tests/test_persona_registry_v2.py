@@ -26,14 +26,18 @@ def test_e5a_authoritative_persona_registry_is_roster_bound() -> None:
     registry, ai_team, persona_map = _load_repo_sources()
     payload = build_authoritative_persona_registry_document(registry, ai_team, persona_map)
 
-    assert payload["summary"]["total_personas"] == 39
+    assert payload["summary"]["total_personas"] == 59
     assert payload["summary"]["total_departments"] == 10
-    assert payload["summary"]["registry_backed_personas"] == 4
-    assert payload["summary"]["persona_contract_only_personas"] == 35
-    assert "teams-manager" not in payload["personas"]
-    assert "calendar-management-agent" not in payload["personas"]
+    assert payload["summary"]["active_personas"] == 34
+    assert payload["summary"]["planned_personas"] == 25
+    assert payload["summary"]["registry_backed_personas"] == 34
+    assert payload["summary"]["persona_contract_only_personas"] == 25
+    assert payload["personas"]["teams-manager"]["status"] == "planned"
+    assert payload["personas"]["teams-manager"]["allowed_actions"] == []
+    assert payload["personas"]["teams-manager"]["action_count"] == 0
+    assert payload["personas"]["calendar-management-agent"]["status"] == "planned"
     assert payload["personas"]["m365-administrator"]["status"] == "active"
-    assert payload["personas"]["ai-engineer"]["status"] == "planned"
+    assert payload["personas"]["ai-engineer"]["status"] == "active"
 
 
 def test_e5a_load_persona_registry_prefers_authoritative_registry_file(tmp_path: Path) -> None:
@@ -48,8 +52,9 @@ def test_e5a_load_persona_registry_prefers_authoritative_registry_file(tmp_path:
 
     personas = load_persona_registry(registry, path=persona_registry_path)
 
-    assert len(personas) == 39
-    assert "teams-manager" not in personas
+    assert len(personas) == 59
+    assert personas["teams-manager"]["display_name"] == "Alicia Nguyen"
+    assert personas["teams-manager"]["status"] == "planned"
     assert personas["website-manager"]["display_name"] == "Elena Rodriguez"
     assert personas["hr-generalist"]["approval_profile"] == "critical-regulated"
 
@@ -67,3 +72,7 @@ def test_e5a_resolve_persona_target_uses_authoritative_aliases() -> None:
     canonical_agent, persona = resolve_persona_target("marcus-chen", personas)
     assert canonical_agent == "m365-administrator"
     assert persona["department"] == "operations"
+
+    canonical_agent, persona = resolve_persona_target("Alicia Nguyen", personas)
+    assert canonical_agent == "teams-manager"
+    assert persona["department"] == "communication"

@@ -12,7 +12,13 @@ def main() -> None:
     registry_path = root / "registry" / "agents.yaml"
     persona_registry_path = root / "registry" / "persona_registry_v2.yaml"
     ai_team_path = root / "registry" / "ai_team.json"
-    output_path = root / "configs" / "generated" / "persona_registry_v2_verification.json"
+    promoted_records_path = root / "registry" / "authoritative_digital_employee_records_v1.yaml"
+    output_path = (
+        root
+        / "configs"
+        / "generated"
+        / "authoritative_persona_registry_rebase_v1_verification.json"
+    )
 
     with registry_path.open(encoding="utf-8") as handle:
         registry = yaml.safe_load(handle)
@@ -20,6 +26,8 @@ def main() -> None:
         payload = yaml.safe_load(handle)
     with ai_team_path.open(encoding="utf-8") as handle:
         ai_team = json.load(handle)
+    with promoted_records_path.open(encoding="utf-8") as handle:
+        promoted_records = yaml.safe_load(handle)["records"]
 
     validate_persona_registry_document(payload)
     personas = load_persona_registry(registry, path=persona_registry_path)
@@ -48,6 +56,30 @@ def main() -> None:
         for persona_id, persona in personas.items()
         if str(persona.get("status")) == "planned"
     )
+    promoted_ids = sorted(promoted_records)
+    for persona_id in promoted_ids:
+        persona = personas.get(persona_id)
+        if persona is None:
+            raise SystemExit(f"Promoted persona missing from authoritative registry: {persona_id}")
+        if str(persona.get("status")) != "planned":
+            raise SystemExit(f"Promoted persona unexpectedly active before H5: {persona_id}")
+        if list(persona.get("allowed_actions") or []):
+            raise SystemExit(f"Promoted persona has actions before H5: {persona_id}")
+        if list(persona.get("allowed_domains") or []):
+            raise SystemExit(f"Promoted persona has domains before H5: {persona_id}")
+
+    expected_summary = {
+        "total_personas": 59,
+        "total_departments": 10,
+        "active_personas": 34,
+        "planned_personas": 25,
+    }
+    for key, expected_value in expected_summary.items():
+        actual_value = payload.get("summary", {}).get(key)
+        if actual_value != expected_value:
+            raise SystemExit(
+                f"Persona registry summary mismatch for {key}: {actual_value} != {expected_value}"
+            )
 
     output = {
         "status": "passed",
@@ -55,6 +87,7 @@ def main() -> None:
         "total_departments": len({str(persona.get("department")) for persona in personas.values()}),
         "active_personas": active,
         "planned_personas": planned,
+        "promoted_personas": promoted_ids,
         "required_fields": payload.get("required_fields") or [],
     }
     output_path.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
