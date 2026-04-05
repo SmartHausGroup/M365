@@ -285,17 +285,23 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 **Reference:** `plan:m365-authoritative-persona-humanization-expansion:R1`
 
 **Status:** 🟢 Active — the planning package exists on `codex/m365-authoritative-persona-humanization-expansion-plan`, and this slice intentionally stops at branch creation, plan/prompt creation, and tracker updates. No runtime roster, capability-map, or authoritative registry expansion is authorized in this step.
-**Current next act:** `H1` — lock the authoritative census rebase contract and decide whether the `20` extras can be remapped into the existing `10`-department North Star or require a separate governed department-model change.
+**Current next act:** `H1` — lock the authoritative census rebase contract and decide whether the `20` extras can be remapped into the existing `10`-department North Star or require a separate governed department-model change. The formal H1 child package now exists and remains draft until its approval packet receives explicit `go`.
 
 **Recommendation:** preserve the current `10`-department North Star by default, remap the `20` extras into those departments where possible, and only open a department-model expansion if H1 proves the remap is impossible without distortion. Humanization metadata should stay bounded to `working_style`, `communication_style`, and `decision_style`; freeform personality schema is out of scope unless separately governed.
 
 **Fail-closed activation rule:** no promoted persona may be marked active until it has a real name, role/title, department placement, manager, escalation owner, capability-map coverage, authoritative registry entry, and rebased certification/count truth.
 
-**Prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`, `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+**Parent prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`, `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+
+**H1 child plan:** `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
+
+**H1 prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`, `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision-prompt.txt`
 
 **Status update (2026-04-03 18:48 EDT):** Created the governed plan triplet and required prompt pair for `m365-authoritative-persona-humanization-expansion`, updated `Operations/PROJECT_FILE_INDEX.md`, and recorded the initiative as the formal path for reopening the authoritative persona census from the current `39`-persona / `10`-department truth toward a future governed `59`-persona named workforce. This branch-only slice does not modify `registry/ai_team.json`, `registry/persona_registry_v2.yaml`, or `registry/persona_capability_map.yaml`.
 
 **Status update (2026-04-03 19:00 EDT):** The planning slice remains branch/tracking first, but `R5` now explicitly includes the bounded pre-commit remediation set in `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` because the repo's mandatory `pre-commit run --all-files` gate surfaced an existing import-bootstrap lint issue plus formatter-driven import normalization outside the original planning allowlist. All other runtime and test surfaces remain out of scope.
+
+**Status update (2026-04-05 06:42 EDT):** Created the draft H1 child-plan triplet and paired prompt artifacts for `m365-authoritative-persona-census-and-department-model-decision`. This formal H1 package locks the baseline `59` / `39` / `34` / `10` counts, records the proposed remap of all `20` extras into the current department set, and defines the fail-closed stop that opens a separate governed department-model change if execution proves the remap invalid. H1 remains draft until the approval packet is presented and receives explicit `go`. No registry, runtime, or North Star files changed in this step.
 
 ---
 
