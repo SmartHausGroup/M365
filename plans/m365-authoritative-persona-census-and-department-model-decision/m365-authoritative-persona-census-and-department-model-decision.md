@@ -2,14 +2,14 @@
 
 **Plan ID:** `m365-authoritative-persona-census-and-department-model-decision`
 **Parent Plan ID:** `m365-authoritative-persona-humanization-expansion`
-**Status:** 🟠 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-05
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-census-and-department-model-decision:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — preserve truthful workforce claims by keeping the current `39`-persona / `10`-department authority explicit until the `20` extra agents are deliberately evaluated, mapped, and approved.
 **Canonical predecessor:** `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md`
 
-**Draft vs Active semantics:** This child plan starts in **Draft**. It transitions to **Active** only when (1) the operator presents the approval packet and receives an explicit "go", and (2) no other child phase in the parent initiative is concurrently active. It transitions to **Complete** only after its own gate emits GO. The parent initiative may remain Active while this child plan is still Draft.
+**Draft vs Active semantics:** This child plan started in **Draft**. It transitioned to **Active** when the operator presented the approval packet and received explicit `go`, and it is now **Complete** because the phase emitted `GO`, the bounded decision artifacts were published, and governance trackers were synchronized.
 
 **Approval and governance gates:** Before execution, the operator must present the approval packet and wait for explicit "go". During execution, call MCP `validate_action` before any mutating action and obey the verdict. Stop on first red. Do not auto-advance to H2.
 
@@ -149,7 +149,7 @@ Projected authoritative total if approved: `59` personas across the same `10` de
 | `financial-operations-agent` | `Luis Carvalho` | `studio-operations` | Financial controls align with the existing finance/reporting studio-operations cluster. |
 | `identity-security` | `Amara Okoye` | `operations` | Identity security is part of the operational admin and security-control plane. |
 | `it-operations-manager` | `Peter Novak` | `operations` | IT operations management belongs inside the operational administration lane. |
-| `knowledge-management-agent` | `Leah Goldstein` | `operations` | Knowledge-control and documentation stewardship fit the operating backbone. |
+| `knowledge-management-agent` | `Leah Goldstein` | `studio-operations` | Knowledge stewardship aligns with enablement, reporting, and support operations already grouped in studio operations. |
 | `platform-manager` | `Andre Baptiste` | `engineering` | Platform stewardship is an engineering function, not a new department. |
 | `project-coordination-agent` | `Sofia Petrova` | `project-management` | Cross-team coordination is a direct project-management responsibility. |
 | `project-manager` | `Haruto Tanaka` | `project-management` | Program ownership is already represented inside project management. |
@@ -176,16 +176,19 @@ The recommended approval-packet decision is: preserve the current `10`-departmen
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] This child plan `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] This child plan `status -> complete`
 
 ## Execution Outcome
 
-- **Decision:** `pending`
-- **Approved by:** `pending`
-- **Completion timestamp:** `pending`
+- **Decision:** `GO`
+- **Approved by:** `operator explicit go`
+- **Completion timestamp:** `2026-04-05 07:46:12 EDT`
+- **Decision artifact:** `docs/commercialization/m365-authoritative-persona-census-and-department-model-decision.md`
+- **Diagnostics artifact:** `artifacts/diagnostics/m365_authoritative_persona_census_and_department_model_decision.json`
+- **Validated next act:** `H2`
 
 ## Agent Constraints
 

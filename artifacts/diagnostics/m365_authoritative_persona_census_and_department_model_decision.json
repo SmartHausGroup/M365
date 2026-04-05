@@ -1,0 +1,187 @@
+{
+  "plan_id": "plan:m365-authoritative-persona-census-and-department-model-decision",
+  "task_id": "H1-CENSUS-DECISION",
+  "decision": "GO",
+  "approved_by": "operator explicit go",
+  "decision_timestamp_local": "2026-04-05 07:46:12 EDT",
+  "decision_timestamp_utc": "2026-04-05T11:46:12Z",
+  "baseline": {
+    "runtime_agents": 59,
+    "authoritative_personas": 39,
+    "registry_total_personas": 39,
+    "registry_active_personas": 34,
+    "registry_planned_personas": 5,
+    "department_count": 10,
+    "department_set": [
+      "operations",
+      "hr",
+      "communication",
+      "engineering",
+      "marketing",
+      "product",
+      "project-management",
+      "studio-operations",
+      "testing",
+      "design"
+    ],
+    "extra_agents": [
+      "audit-operations",
+      "calendar-management-agent",
+      "client-relationship-agent",
+      "compliance-monitoring-agent",
+      "device-management",
+      "email-processing-agent",
+      "financial-operations-agent",
+      "identity-security",
+      "it-operations-manager",
+      "knowledge-management-agent",
+      "platform-manager",
+      "project-coordination-agent",
+      "project-manager",
+      "recruitment-assistance-agent",
+      "reports",
+      "security-operations",
+      "service-health",
+      "teams-manager",
+      "ucp-administrator",
+      "website-operations-specialist"
+    ]
+  },
+  "current_department_counts": {
+    "operations": 2,
+    "hr": 1,
+    "communication": 1,
+    "engineering": 7,
+    "marketing": 7,
+    "product": 3,
+    "project-management": 3,
+    "studio-operations": 5,
+    "testing": 5,
+    "design": 5
+  },
+  "mapping": [
+    {
+      "agent_id": "audit-operations",
+      "proposed_name": "Naomi Brooks",
+      "department": "operations"
+    },
+    {
+      "agent_id": "calendar-management-agent",
+      "proposed_name": "Mateo Alvarez",
+      "department": "communication"
+    },
+    {
+      "agent_id": "client-relationship-agent",
+      "proposed_name": "Priya Mehta",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "compliance-monitoring-agent",
+      "proposed_name": "Farah Alvi",
+      "department": "operations"
+    },
+    {
+      "agent_id": "device-management",
+      "proposed_name": "Connor Walsh",
+      "department": "operations"
+    },
+    {
+      "agent_id": "email-processing-agent",
+      "proposed_name": "Hannah Kim",
+      "department": "communication"
+    },
+    {
+      "agent_id": "financial-operations-agent",
+      "proposed_name": "Luis Carvalho",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "identity-security",
+      "proposed_name": "Amara Okoye",
+      "department": "operations"
+    },
+    {
+      "agent_id": "it-operations-manager",
+      "proposed_name": "Peter Novak",
+      "department": "operations"
+    },
+    {
+      "agent_id": "knowledge-management-agent",
+      "proposed_name": "Leah Goldstein",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "platform-manager",
+      "proposed_name": "Andre Baptiste",
+      "department": "engineering"
+    },
+    {
+      "agent_id": "project-coordination-agent",
+      "proposed_name": "Sofia Petrova",
+      "department": "project-management"
+    },
+    {
+      "agent_id": "project-manager",
+      "proposed_name": "Haruto Tanaka",
+      "department": "project-management"
+    },
+    {
+      "agent_id": "recruitment-assistance-agent",
+      "proposed_name": "Camila Torres",
+      "department": "hr"
+    },
+    {
+      "agent_id": "reports",
+      "proposed_name": "Youssef Haddad",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "security-operations",
+      "proposed_name": "Tunde Adeyemi",
+      "department": "operations"
+    },
+    {
+      "agent_id": "service-health",
+      "proposed_name": "Chloe Martin",
+      "department": "operations"
+    },
+    {
+      "agent_id": "teams-manager",
+      "proposed_name": "Alicia Nguyen",
+      "department": "communication"
+    },
+    {
+      "agent_id": "ucp-administrator",
+      "proposed_name": "Omar El-Masry",
+      "department": "operations"
+    },
+    {
+      "agent_id": "website-operations-specialist",
+      "proposed_name": "Lucia Fernandez",
+      "department": "marketing"
+    }
+  ],
+  "projected_department_counts": {
+    "operations": 10,
+    "hr": 2,
+    "communication": 4,
+    "engineering": 8,
+    "marketing": 8,
+    "product": 3,
+    "project-management": 5,
+    "studio-operations": 9,
+    "testing": 5,
+    "design": 5
+  },
+  "checks": {
+    "baseline_ready": true,
+    "every_extra_mapped_to_existing_department": true,
+    "projected_total_personas": 59,
+    "projected_department_count": 10,
+    "projected_truth_consistent": true,
+    "registry_files_changed": false,
+    "runtime_files_changed": false
+  },
+  "next_act_if_go": "H2",
+  "no_go_trigger_if_reopened": "Open a separate governed department-model and North Star change if any mapped persona later proves to require an eleventh department."
+}
