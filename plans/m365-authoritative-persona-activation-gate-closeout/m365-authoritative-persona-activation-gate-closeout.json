@@ -1,0 +1,108 @@
+{
+  "plan_id": "m365-authoritative-persona-activation-gate-closeout",
+  "parent_plan_id": "m365-authoritative-persona-humanization-expansion",
+  "status": "Draft",
+  "date": "2026-04-05",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-authoritative-persona-activation-gate-closeout:R1",
+  "canonical_predecessor": "plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md",
+  "draft_vs_active_semantics": "Draft until H4 is green, approval packet plus explicit go are received, and no sibling child phase is active",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "this is the final child phase"
+  ],
+  "notebook_first_discipline": "All activation-gate checks and final count truth must be derived in notebooks first before extraction",
+  "objective": "Activate the 20 promoted personas only after H2 through H4 are green and rebase the final post-closeout active surface",
+  "scope": {
+    "in": [
+      "Verify all fail-closed activation prerequisites.",
+      "Promote the 20 personas to the final active state.",
+      "Rebase the final registry summary and active-surface truth.",
+      "Update targeted verifiers and tests.",
+      "Produce notebook-backed proof and generated verification output."
+    ],
+    "out": [
+      "Changing registry/agents.yaml.",
+      "Widening the department model."
+    ]
+  },
+  "allowlist": [
+    "plans/m365-authoritative-persona-activation-gate-closeout/**",
+    "docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md",
+    "docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout-prompt.txt",
+    "registry/persona_registry_v2.yaml",
+    "registry/persona_capability_map.yaml",
+    "registry/activated_persona_surface_v1.yaml",
+    "registry/workforce_packaging_v1.yaml",
+    "docs/commercialization/m365-activated-persona-surface-v1.md",
+    "docs/commercialization/m365-workforce-packaging-v1.md",
+    "docs/commercialization/m365-persona-registry-v2.md",
+    "scripts/ci/build_persona_registry_v2.py",
+    "scripts/ci/verify_persona_registry_v2.py",
+    "scripts/ci/verify_activated_persona_surface_v1.py",
+    "scripts/ci/verify_workforce_packaging_v1.py",
+    "tests/test_persona_registry_v2.py",
+    "tests/test_activated_persona_surface_v1.py",
+    "tests/test_workforce_packaging_v1.py",
+    "docs/ma/lemmas/L*_m365_authoritative_persona_activation_gate_closeout_v1.md",
+    "invariants/lemmas/L*_m365_authoritative_persona_activation_gate_closeout_v1.yaml",
+    "notebooks/m365/INV-M365-*-authoritative-persona-activation-gate-closeout-v1.ipynb",
+    "notebooks/lemma_proofs/L*_m365_authoritative_persona_activation_gate_closeout_v1.ipynb",
+    "artifacts/scorecards/scorecard_*.json",
+    "configs/generated/authoritative_persona_activation_gate_closeout_v1_verification.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": [
+    "registry/agents.yaml",
+    "registry/ai_team.json"
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Verify all H2 through H4 prerequisites"
+    },
+    {
+      "id": "R2",
+      "title": "Activate all 20 promoted personas or fail closed"
+    },
+    {
+      "id": "R3",
+      "title": "Rebase final registry summary to 59 total, 54 active, 5 planned"
+    },
+    {
+      "id": "R4",
+      "title": "Rebase final active-surface and packaging truth"
+    },
+    {
+      "id": "R5",
+      "title": "Update targeted verifiers and tests"
+    },
+    {
+      "id": "R6",
+      "title": "Notebook-backed proof, commit, and push final closeout"
+    }
+  ],
+  "child_acts": [
+    {
+      "id": "H5A",
+      "description": "Verify activation prerequisites."
+    },
+    {
+      "id": "H5B",
+      "description": "Rebase final registry and active-surface truth."
+    },
+    {
+      "id": "H5C",
+      "description": "Validate, commit, and push final closeout."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md",
+    "kickoff": "docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout-prompt.txt"
+  }
+}

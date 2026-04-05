@@ -10,6 +10,18 @@ Prompt Template: `docs/governance/MATHS_PROMPT_TEMPLATE.md`
 
 This prompt is created in the planning slice only. It does not authorize runtime expansion by itself.
 
+## Phase Package Stack
+
+Use the parent initiative only as the coordinator. Execute the child phases through their dedicated packages in this exact order:
+
+1. `H1` — `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
+2. `H2` — `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
+3. `H3` — `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+4. `H4` — `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
+5. `H5` — `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
+
+Each child phase has its own detailed prompt and kickoff prompt. Do not execute broad parent-level runtime changes directly when a child-phase package exists.
+
 ## Governance Lock (Mandatory)
 
 Before any write, test, or mutating command:
@@ -52,6 +64,19 @@ Before any write, test, or mutating command:
 - do not invent freeform personality schema
 - do not mark any promoted persona `active` until chain-of-command, capability-map, registry, and certification-count gates are green
 - do not widen the remediation surface beyond `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` for commit-gate repair
+
+## Sequential Execution Discipline
+
+- execute only one child phase at a time
+- `H2`, `H3`, `H4`, and `H5` are notebook-first / MA-first phases
+- for `H2` through `H5`, enforce MA phases `0` through `7` explicitly:
+  - phase `0` intent definition must be restated in the approval packet and approved before notebook work starts
+  - phases `1` through `4` must establish the formula, calculus, lemmas, and invariants before extraction
+  - phase `6` scorecard green is mandatory before any runtime, registry, verifier, or documentation extraction
+  - phase `7` extraction must mirror notebook-proven logic exactly
+- all iteration for those phases must occur in notebooks first before any extraction into code, registries, tests, verifiers, or docs
+- after each child phase is green, commit and push that child phase before moving to the next one
+- no child phase may start until its predecessor is green, committed, and pushed
 
 ## Candidate Persona Set
 
@@ -96,6 +121,7 @@ Use the bounded style metadata and recommended department placements recorded in
    - rebase all summary counts and commercialization truth surfaces that still assert `39`
 5. **H5 — Activation gate closeout**
    - fail closed if any promoted persona lacks name, title, chain-of-command, capability-map coverage, authoritative registry entry, or certification-count alignment
+   - land the final authoritative state only after H2 through H4 are green and pushed
 
 ## Required Output Format
 

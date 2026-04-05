@@ -1,0 +1,77 @@
+plan_id: m365-authoritative-persona-registry-and-capability-map-rebase
+parent_plan_id: m365-authoritative-persona-humanization-expansion
+status: Draft
+date: '2026-04-05'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-authoritative-persona-registry-and-capability-map-rebase:R1
+canonical_predecessor: plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md
+draft_vs_active_semantics: Draft until H2 is green, approval packet plus explicit go are received, and no sibling child phase is active
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before any mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to H4
+notebook_first_discipline: All roster, registry, and capability-map transformations must be modeled in notebooks first before extraction
+objective: Rebase ai_team, persona_registry_v2, and persona_capability_map to the future 59-persona authoritative truth while preserving the pre-H5 active/planned split
+scope:
+  in:
+    - Rebase registry/ai_team.json to 59 named authoritative personas.
+    - Rebase registry/persona_registry_v2.yaml to 59 total with 34 active and 25 planned.
+    - Rebase registry/persona_capability_map.yaml and clear the 20-agent overflow set.
+    - Update runtime loader and verifier surfaces if required.
+    - Produce notebook-backed proof and tests.
+  out:
+    - Activating promoted personas.
+    - Rebasing active-surface commercialization claims.
+    - Changing registry/agents.yaml.
+allowlist:
+  - plans/m365-authoritative-persona-registry-and-capability-map-rebase/**
+  - docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md
+  - docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase-prompt.txt
+  - registry/ai_team.json
+  - registry/persona_registry_v2.yaml
+  - registry/persona_capability_map.yaml
+  - docs/commercialization/m365-persona-registry-v2.md
+  - docs/commercialization/m365-persona-capability-and-risk-map.md
+  - src/ops_adapter/personas.py
+  - scripts/ci/build_persona_registry_v2.py
+  - scripts/ci/verify_persona_registry_v2.py
+  - docs/ma/lemmas/L*_m365_authoritative_persona_registry_rebase_v1.md
+  - invariants/lemmas/L*_m365_authoritative_persona_registry_rebase_v1.yaml
+  - notebooks/m365/INV-M365-*-authoritative-persona-registry-rebase-v1.ipynb
+  - notebooks/lemma_proofs/L*_m365_authoritative_persona_registry_rebase_v1.ipynb
+  - artifacts/scorecards/scorecard_*.json
+  - configs/generated/authoritative_persona_registry_rebase_v1_verification.json
+  - tests/test_persona_registry_v2.py
+  - tests/test_authoritative_persona_registry_rebase_v1.py
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - registry/agents.yaml
+  - registry/activated_persona_surface_v1.yaml
+  - docs/commercialization/m365-activated-persona-surface-v1.md
+requirements:
+  - id: R1
+    title: Rebase authoritative roster to 59
+  - id: R2
+    title: Rebase persona registry to 59 total and 34 active / 25 planned
+  - id: R3
+    title: Rebase capability map and clear overflow set
+  - id: R4
+    title: Preserve fail-closed activation separation
+  - id: R5
+    title: Notebook-backed proof and tests
+  - id: R6
+    title: Commit and push before H4
+child_acts:
+  - id: H3A
+    description: Rebase authoritative roster.
+  - id: H3B
+    description: Rebase persona registry and runtime loader/validator surfaces.
+  - id: H3C
+    description: Rebase capability map, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md
+  kickoff: docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase-prompt.txt

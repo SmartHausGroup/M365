@@ -297,11 +297,21 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **H1 prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`, `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision-prompt.txt`
 
+**H2 child plan:** `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
+
+**H3 child plan:** `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+
+**H4 child plan:** `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
+
+**H5 child plan:** `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
+
 **Status update (2026-04-03 18:48 EDT):** Created the governed plan triplet and required prompt pair for `m365-authoritative-persona-humanization-expansion`, updated `Operations/PROJECT_FILE_INDEX.md`, and recorded the initiative as the formal path for reopening the authoritative persona census from the current `39`-persona / `10`-department truth toward a future governed `59`-persona named workforce. This branch-only slice does not modify `registry/ai_team.json`, `registry/persona_registry_v2.yaml`, or `registry/persona_capability_map.yaml`.
 
 **Status update (2026-04-03 19:00 EDT):** The planning slice remains branch/tracking first, but `R5` now explicitly includes the bounded pre-commit remediation set in `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` because the repo's mandatory `pre-commit run --all-files` gate surfaced an existing import-bootstrap lint issue plus formatter-driven import normalization outside the original planning allowlist. All other runtime and test surfaces remain out of scope.
 
 **Status update (2026-04-05 06:42 EDT):** Created the draft H1 child-plan triplet and paired prompt artifacts for `m365-authoritative-persona-census-and-department-model-decision`. This formal H1 package locks the baseline `59` / `39` / `34` / `10` counts, records the proposed remap of all `20` extras into the current department set, and defines the fail-closed stop that opens a separate governed department-model change if execution proves the remap invalid. H1 remains draft until the approval packet is presented and receives explicit `go`. No registry, runtime, or North Star files changed in this step.
+
+**Status update (2026-04-05 07:15 EDT):** Expanded the initiative into a full staged execution stack for `H1` through `H5`. The child packages for `H2` humanized employee records, `H3` authoritative registry and capability-map rebase, `H4` certification/count rebase, and `H5` activation gate closeout now exist alongside `H1`. The execution model is now explicit and fail-closed: one child phase at a time, `H2` through `H5` notebook-first, and each child phase must validate, commit, and push before the next may begin. H1 remains the current next act; H2 through H5 remain draft and blocked by predecessor completion.
 
 ---
 

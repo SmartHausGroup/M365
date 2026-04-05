@@ -1,0 +1,8 @@
+Execute H5 Authoritative Persona Activation Gate Closeout
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md.
+
+Plan Reference: plan:m365-authoritative-persona-activation-gate-closeout:R1
+Parent Plan: plan:m365-authoritative-persona-humanization-expansion
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, keep all iteration in notebooks first, execute only H5, commit and push after green, and stop truthfully with the final decision.

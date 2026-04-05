@@ -6,11 +6,11 @@
 - **Plan ID:** `plan:m365-authoritative-persona-humanization-expansion`
 - **Parent Plan ID:** `plan:m365-post-expansion-promotion-and-persona-activation`
 - **Title:** `Promote all 20 extra agents into named digital employees through a governed census rebase`
-- **Version:** `1.0`
+- **Version:** `1.1`
 - **Status:** `active`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-03`
-- **Date Updated:** `2026-04-03`
+- **Date Updated:** `2026-04-05`
 - **North Star Ref:** `Operations/NORTHSTAR.md`
 - **Execution Plan Ref:** `Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona Humanization Expansion`
 - **Domain:** `governance`
@@ -77,7 +77,8 @@
 
 - create the approved feature branch for this governed planning package
 - create the formal plan triplet in Markdown, YAML, and JSON
-- create the required prompt pair for the future implementation package
+- create the remaining H2 through H5 child-phase plan triplets in Markdown, YAML, and JSON
+- create the required prompt pairs for the governed child-phase execution packages
 - update `Operations/EXECUTION_PLAN.md`, `Operations/PROJECT_FILE_INDEX.md`, and `Operations/ACTION_LOG.md`
 - repair the bounded mandatory pre-commit remediation set in `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` if it prevents `R5` closeout
 - define the future implementation requirements for census rebase, metadata contract, registry rebase, count rebase, and fail-closed activation
@@ -98,6 +99,18 @@
 - `plans/m365-authoritative-persona-humanization-expansion/**`
 - `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`
 - `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+- `plans/m365-authoritative-persona-humanized-employee-record-completion/**`
+- `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md`
+- `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion-prompt.txt`
+- `plans/m365-authoritative-persona-registry-and-capability-map-rebase/**`
+- `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`
+- `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase-prompt.txt`
+- `plans/m365-authoritative-persona-certification-and-count-rebase/**`
+- `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
+- `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase-prompt.txt`
+- `plans/m365-authoritative-persona-activation-gate-closeout/**`
+- `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
+- `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout-prompt.txt`
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/PROJECT_FILE_INDEX.md`
 - `Operations/ACTION_LOG.md`
@@ -118,6 +131,14 @@
 
 Stop and re-scope if the work expands beyond branch creation, planning artifacts, prompt artifacts, or tracker synchronization.
 
+### Execution-phase discipline
+
+- the parent initiative may remain `active`, but child phases `H1` through `H5` start in `draft` and must run strictly one at a time
+- `H2` through `H5` are notebook-first / MA-first phases; all iteration must occur in notebooks first before any runtime, registry, verifier, or documentation extraction
+- `H2` through `H5` must explicitly follow MA phases `0` through `7`; phase `0` intent definition must be restated in the approval packet and approved before any notebook or extraction work begins
+- no phase may advance until the predecessor phase is green, committed, and pushed
+- each child phase requires its own approval packet, explicit `go`, full validation, commit, and push before the next child phase begins
+
 ## Section 7: Requirements
 
 - **R0 — Current-state acknowledgment**
@@ -125,9 +146,9 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 - **R1 — Branch creation and governance validation**
   - Create `codex/m365-authoritative-persona-humanization-expansion-plan` only after governance validation is green.
 - **R2 — Plan artifact creation**
-  - Create the Markdown, YAML, and JSON plan artifacts for this initiative.
+  - Create the Markdown, YAML, and JSON artifacts for the parent initiative and the remaining child-phase packages required to complete the governed execution stack.
 - **R3 — Prompt-pair creation**
-  - Create the required detailed prompt plus kickoff prompt for the future implementation package.
+  - Create the required detailed prompt plus kickoff prompt for each newly created child-phase execution package.
 - **R4 — Tracker synchronization**
   - Update `Operations/EXECUTION_PLAN.md`, `Operations/PROJECT_FILE_INDEX.md`, and `Operations/ACTION_LOG.md`.
 - **R5 — Commit and push branch**
@@ -153,9 +174,9 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 - **T1 — Lock current-state truth and create the branch**
   - Confirm the clean starting point on `development`, validate governance, and create the approved feature branch.
 - **T2 — Publish the governed plan triplet**
-  - Create the Markdown, YAML, and JSON plan artifacts for the initiative.
+  - Create the Markdown, YAML, and JSON artifacts for the parent initiative plus the remaining draft child-phase packages needed for the execution stack.
 - **T3 — Publish the prompt pair**
-  - Create the detailed execution prompt and kickoff prompt for the future implementation slice.
+  - Create the detailed execution prompt and kickoff prompt for each newly created child-phase package.
 - **T4 — Synchronize trackers**
   - Update `Operations/EXECUTION_PLAN.md`, `Operations/PROJECT_FILE_INDEX.md`, and `Operations/ACTION_LOG.md`.
 - **T5 — Validate the planning package**
@@ -165,41 +186,52 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ## Section 10: Future Implementation Track
 
+### Parent execution discipline
+
+- **Current next act:** `H1`
+- **Execution model:** one child phase at a time, in order, with no auto-advance
+- **Notebook-first rule:** `H2`, `H3`, `H4`, and `H5` must complete notebook-backed iteration before any code, registry, verifier, or documentation extraction
+- **Landing rule:** each child phase must validate, commit, and push before the next child phase begins
+
 ### H1 — Authoritative census and department-model decision
 
-- Lock the authoritative expansion contract from `39` to `59`.
-- Confirm whether each of the `20` extras can be remapped into the existing `10` departments.
-- If any required placement forces a new department, STOP and open a separate governed North Star and execution-plan change before continuing.
+- **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`
+- **Child acts:** `H1A baseline truth lock`, `H1B mapping matrix`, `H1C decision artifact`
+- **Gate:** stop and open a separate governed change if any of the `20` extras cannot fit inside the current `10` departments without distortion
 
 ### H2 — Humanized employee record completion
 
-- Add or confirm for each promoted persona:
-  - `display_name`
-  - `title`
-  - `department`
-  - `manager`
-  - `escalation_owner`
-  - `working_style`
-  - `communication_style`
-  - `decision_style`
+- **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md`
+- **Child acts:** `H2A field contract`, `H2B notebook-backed employee record artifact`, `H2C verification and closeout`
+- **Goal:** create the deterministic employee-record artifact for all `20` promoted personas with bounded metadata and explicit chain-of-command bindings
 
 ### H3 — Authoritative registry and capability-map rebase
 
-- Rebase `registry/ai_team.json` to include the promoted named personas.
-- Rebase `registry/persona_registry_v2.yaml` to the new authoritative census and status model.
-- Rebase `registry/persona_capability_map.yaml` so all promoted personas have bounded capability coverage and approval posture.
+- **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`
+- **Child acts:** `H3A authoritative roster rebase`, `H3B persona registry rebase`, `H3C capability-map rebase and closeout`
+- **Goal:** rebase the authoritative surfaces to `59` total personas while preserving the pre-H5 staged `34 active / 25 planned` split
 
 ### H4 — Certification and count rebase
 
-- Recompute all persona summary counts that currently assert `39` total / `34` active.
-- Rebase any certification or commercialization truth surfaces that cite the old authoritative census.
-- Fail closed if any public-facing or machine-readable count remains stale.
+- **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
+- **Child acts:** `H4A certification contract rebase`, `H4B census and commercialization truth rebase`, `H4C verifier/test rebase and closeout`
+- **Goal:** rebase certification and count truth to the post-H3 pre-H5 staged state of `59 total / 10 departments / 34 active / 25 planned`
 
 ### H5 — Activation gate closeout
 
-- Ensure no promoted persona is set `active` until H2 through H4 are green.
-- Require manager/escalation chain, capability-map entry, authoritative registry entry, and certification-count alignment before activation.
-- Close only when runtime truth and claim surfaces agree.
+- **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
+- **Child acts:** `H5A activation prerequisite verification`, `H5B final registry and active-surface rebase`, `H5C final validation and branch closeout`
+- **Goal:** close the fail-closed activation gate and land the final authoritative state at `59 total / 54 active / 5 planned`
 
 ## Section 11: Gates
 
@@ -287,6 +319,31 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 - `plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.json`
 - `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`
 - `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+- `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
+- `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.yaml`
+- `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.json`
+- `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`
+- `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision-prompt.txt`
+- `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
+- `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.yaml`
+- `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.json`
+- `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md`
+- `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion-prompt.txt`
+- `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+- `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.yaml`
+- `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.json`
+- `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`
+- `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase-prompt.txt`
+- `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
+- `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.yaml`
+- `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.json`
+- `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
+- `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase-prompt.txt`
+- `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
+- `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.yaml`
+- `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.json`
+- `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
+- `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout-prompt.txt`
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/PROJECT_FILE_INDEX.md`
 - `Operations/ACTION_LOG.md`
@@ -297,4 +354,5 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 - **Prompt doc:** `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`
 - **Prompt kickoff:** `docs/prompts/codex-m365-authoritative-persona-humanization-expansion-prompt.txt`
+- **Child prompt docs:** `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`, `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md`, `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`, `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`, `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
 - **Prompt template:** `docs/governance/MATHS_PROMPT_TEMPLATE.md`
