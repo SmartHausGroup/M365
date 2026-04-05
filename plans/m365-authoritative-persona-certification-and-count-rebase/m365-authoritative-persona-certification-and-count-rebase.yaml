@@ -4,8 +4,8 @@ status: Draft
 date: '2026-04-05'
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-authoritative-persona-certification-and-count-rebase:R1
-canonical_predecessor: plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md
-draft_vs_active_semantics: Draft until H3 is green, approval packet plus explicit go are received, and no sibling child phase is active
+canonical_predecessor: plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md
+draft_vs_active_semantics: Draft until H4S is green and pushed, approval packet plus explicit go are received, and no sibling child phase is active
 approval_governance_gates:
   - present approval packet first
   - wait for explicit go
@@ -13,7 +13,7 @@ approval_governance_gates:
   - stop on first red
   - do not auto-advance to H5
 notebook_first_discipline: All count reconciliations and certification truth updates must be derived in notebooks first before extraction
-objective: Rebase the certification and count surfaces to the truthful post-H3 pre-H5 state of 59 total, 10 departments, 34 active, and 25 planned
+objective: Rebase the certification and count surfaces to the truthful post-H4S pre-H5 state of 59 total, 10 departments, 34 active, and 25 planned
 scope:
   in:
     - Rebase count and certification surfaces that still assert 39 authoritative personas.

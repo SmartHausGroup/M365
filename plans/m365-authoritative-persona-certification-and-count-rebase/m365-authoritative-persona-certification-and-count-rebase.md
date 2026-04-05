@@ -7,9 +7,9 @@
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-certification-and-count-rebase:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — keep certification, census, and commercialization truth aligned with the authoritative workforce state instead of leaving stale `39` / `34` claims in place after the registry rebase.
-**Canonical predecessor:** `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+**Canonical predecessor:** `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
 
-**Draft vs Active semantics:** This child plan starts in **Draft**. It transitions to **Active** only when (1) H3 is green, (2) the operator presents the approval packet and receives explicit "go", and (3) no other child phase under the parent initiative is concurrently active. It transitions to **Complete** only after its own gate emits GO, the phase is committed, and the branch is pushed.
+**Draft vs Active semantics:** This child plan starts in **Draft**. It transitions to **Active** only when (1) H4S is green and pushed, (2) the operator presents the approval packet and receives explicit "go", and (3) no other child phase under the parent initiative is concurrently active. It transitions to **Complete** only after its own gate emits GO, the phase is committed, and the branch is pushed.
 
 **Approval and governance gates:** Before execution, present the approval packet and wait for explicit "go". During execution, call MCP `validate_action` before every mutating action and obey the verdict. Stop on first red. Do not auto-advance to H5.
 
@@ -17,7 +17,7 @@
 
 ## Objective
 
-Rebase the certification and count surfaces to the truthful post-H3 pre-H5 state: `59` total authoritative personas across `10` departments, `34` active personas, and `25` planned personas, with no stale `39`-persona authoritative claims remaining in the scoped surfaces.
+Rebase the certification and count surfaces to the truthful post-H4S pre-H5 state: `59` total authoritative personas across `10` departments, `34` active personas, and `25` planned personas, with no stale `39`-persona authoritative claims remaining in the scoped certification surfaces.
 
 ## Decision Rule
 

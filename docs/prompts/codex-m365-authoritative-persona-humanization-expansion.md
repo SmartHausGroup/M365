@@ -17,8 +17,9 @@ Use the parent initiative only as the coordinator. Execute the child phases thro
 1. `H1` — `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
 2. `H2` — `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
 3. `H3` — `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
-4. `H4` — `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
-5. `H5` — `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
+4. `H4S` — `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
+5. `H4` — `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
+6. `H5` — `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
 
 Each child phase has its own detailed prompt and kickoff prompt. Do not execute broad parent-level runtime changes directly when a child-phase package exists.
 
@@ -68,8 +69,8 @@ Before any write, test, or mutating command:
 ## Sequential Execution Discipline
 
 - execute only one child phase at a time
-- `H2`, `H3`, `H4`, and `H5` are notebook-first / MA-first phases
-- for `H2` through `H5`, enforce MA phases `0` through `7` explicitly:
+- `H2`, `H3`, `H4S`, `H4`, and `H5` are notebook-first / MA-first phases
+- for `H2`, `H3`, `H4S`, `H4`, and `H5`, enforce MA phases `0` through `7` explicitly:
   - phase `0` intent definition must be restated in the approval packet and approved before notebook work starts
   - phases `1` through `4` must establish the formula, calculus, lemmas, and invariants before extraction
   - phase `6` scorecard green is mandatory before any runtime, registry, verifier, or documentation extraction
@@ -117,9 +118,13 @@ Use the bounded style metadata and recommended department placements recorded in
    - update `registry/ai_team.json`
    - update `registry/persona_registry_v2.yaml`
    - update `registry/persona_capability_map.yaml`
-4. **H4 — Certification and count rebase**
+4. **H4S — Department-pack scope correction**
+   - prove the H4 dependency on the department-pack authority surface
+   - rebase all `10` department-pack contracts to the staged post-H3 truth
+   - commit and push before H4 resumes
+5. **H4 — Certification and count rebase**
    - rebase all summary counts and commercialization truth surfaces that still assert `39`
-5. **H5 — Activation gate closeout**
+6. **H5 — Activation gate closeout**
    - fail closed if any promoted persona lacks name, title, chain-of-command, capability-map coverage, authoritative registry entry, or certification-count alignment
    - land the final authoritative state only after H2 through H4 are green and pushed
 

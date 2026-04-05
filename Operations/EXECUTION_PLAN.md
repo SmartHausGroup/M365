@@ -284,8 +284,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-authoritative-persona-humanization-expansion:R1`
 
-**Status:** 🟢 Active — `H1`, `H2`, and `H3` are complete on `codex/m365-authoritative-persona-humanization-expansion-plan`. The authoritative roster, persona registry, and capability map are now rebased to the staged `59 total / 34 active / 25 planned` truth, while certification/count and activation closeout remain outstanding.
-**Current next act:** `H4` — rebase certification and count truth to the staged `59 total / 34 active / 25 planned` authoritative state under the formal H4 child package.
+**Status:** 🟢 Active — `H1`, `H2`, and `H3` are complete on `codex/m365-authoritative-persona-humanization-expansion-plan`. The authoritative roster, persona registry, and capability map are now rebased to the staged `59 total / 34 active / 25 planned` truth. H4 then emitted a preflight `NO-GO` because the department-pack authority surface still encodes the old `39`-persona distribution, so a new blocker package now sits between H3 and H4. Activation closeout remains outstanding.
+**Current next act:** `H4S` — correct H4 scope by rebasing the department-pack authority surface before certification/count rebase resumes.
 
 **Recommendation:** preserve the current `10`-department North Star by default, remap the `20` extras into those departments where possible, and only open a department-model expansion if H1 proves the remap is impossible without distortion. Humanization metadata should stay bounded to `working_style`, `communication_style`, and `decision_style`; freeform personality schema is out of scope unless separately governed.
 
@@ -300,6 +300,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 **H2 child plan:** `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
 
 **H3 child plan:** `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+
+**H4S child plan:** `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
 
 **H4 child plan:** `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
 
@@ -318,6 +320,8 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 **Status update (2026-04-05 08:08 EDT):** Executed `H2` and emitted `GO` under `plan:m365-authoritative-persona-humanized-employee-record-completion:R1` through `R6`. Published the bounded employee-record authority artifact at `registry/authoritative_digital_employee_records_v1.yaml`, the human-readable contract at `docs/commercialization/m365-authoritative-digital-employee-records-v1.md`, the `L77` MA evidence chain, the scorecard at `artifacts/scorecards/scorecard_l77.json`, the verifier at `scripts/ci/verify_authoritative_digital_employee_records_v1.py`, the generated verification output at `configs/generated/authoritative_digital_employee_records_v1_verification.json`, and the focused test at `tests/test_authoritative_digital_employee_records_v1.py`. Validation passed with notebook replay, verifier pass, focused pytest pass, and `git diff --check`. `H3` is now the next governed act.
 
 **Status update (2026-04-05 08:34 EDT):** Executed `H3` and emitted `GO` under `plan:m365-authoritative-persona-registry-and-capability-map-rebase:R1` through `R6`. Rebases completed for `registry/ai_team.json`, `registry/persona_capability_map.yaml`, and `registry/persona_registry_v2.yaml`, lifting the authoritative workforce to `59` personas across `10` departments while preserving the staged `34 active / 25 planned` split. Added the `L78` MA evidence chain, the scorecard at `artifacts/scorecards/scorecard_l78.json`, the focused verifier output at `configs/generated/authoritative_persona_registry_rebase_v1_verification.json`, and the H3-specific regression at `tests/test_authoritative_persona_registry_rebase_v1.py`; updated the commercialization boundary docs so the machine and narrative truth agree on `59 total / 34 active / 25 planned / 0 overflow`; and closed the repo-wide commit gate with a bounded type-annotation remediation in `scripts/ci/verify_authoritative_digital_employee_records_v1.py`. Validation passed with notebook replay, `PYTHONPATH=src python3 scripts/ci/build_persona_registry_v2.py`, `PYTHONPATH=src python3 scripts/ci/verify_persona_registry_v2.py`, `PYTHONPATH=src .venv/bin/pytest -q tests/test_persona_registry_v2.py tests/test_authoritative_persona_registry_rebase_v1.py`, `pre-commit run --all-files`, and `git diff --check`. `H4` is now the next governed act.
+
+**Status update (2026-04-05 08:46 EDT):** H4 emitted a preflight `NO-GO` before execution. Read-only evidence proved that `scripts/ci/verify_department_certification_v1.py` mechanically joins `registry/department_certification_v1.yaml`, `registry/department_pack_*_v1.yaml`, and `registry/persona_registry_v2.yaml`, while the department-pack authorities still encode the old `39`-persona distribution and remain outside the current H4 allowlist. Created the blocker package `m365-authoritative-persona-h4-scope-correction`, its prompt pair, and retargeted H4 so certification/count rebase remains blocked until the department-pack authority surface is rebased and pushed. `H4S` is now the next governed act; `H4` is blocked by predecessor.
 
 ---
 

@@ -51,9 +51,7 @@ def test_h3_promoted_personas_are_authoritative_but_still_planned() -> None:
     ai_team, persona_map, persona_registry, promoted_records = _load_h3_sources()
 
     roster_members = {
-        member["agent"]: member
-        for members in ai_team["departments"].values()
-        for member in members
+        member["agent"]: member for members in ai_team["departments"].values() for member in members
     }
     for agent_id, record in promoted_records.items():
         roster_entry = roster_members[agent_id]

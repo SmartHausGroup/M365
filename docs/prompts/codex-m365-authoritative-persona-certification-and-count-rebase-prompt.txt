@@ -5,4 +5,4 @@ Read and execute the detailed prompt at docs/prompts/codex-m365-authoritative-pe
 Plan Reference: plan:m365-authoritative-persona-certification-and-count-rebase:R1
 Parent Plan: plan:m365-authoritative-persona-humanization-expansion
 
-This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, keep all iteration in notebooks first, execute only H4, commit and push after green, and do not auto-advance to H5.
+This phase starts in Draft. H4 may begin only after H4S is green and pushed. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, keep all iteration in notebooks first, execute only H4, commit and push after green, and do not auto-advance to H5.

@@ -12,7 +12,7 @@
 
 ## Approval and Governance Gates
 
-1. **Present the approval packet first** — summarize the H3 result, the staged `59 / 10 / 34 / 25` truth, and the exact count-surface write set.
+1. **Present the approval packet first** — summarize the H4S result, the staged `59 / 10 / 34 / 25` truth, and the exact count-surface write set.
 2. **Wait for explicit "go"** — do not begin execution until the operator confirms with "go".
 3. **Call MCP `validate_action` before any mutating action** — obey the verdict and stop on red.
 4. **Notebook first** — all count and certification reconciliations occur in notebooks first.
@@ -28,7 +28,7 @@
 
 ## Draft vs Active Semantics
 
-This phase starts in **Draft** status. It transitions to **Active** only after H3 is green and the operator presents the approval packet and receives "go".
+This phase starts in **Draft** status. It transitions to **Active** only after H4S is green and pushed and the operator presents the approval packet and receives "go".
 
 ## Execution Rules
 
@@ -56,10 +56,10 @@ This phase starts in **Draft** status. It transitions to **Active** only after H
 
 ## Context
 
-- Task name: `Rebase certification and count truth to the staged post-H3 state`
+- Task name: `Rebase certification and count truth to the staged post-H4S state`
 - Domain: `governance`
 - Dependencies:
-  - `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
+  - `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
   - `registry/persona_registry_v2.yaml`
 - Allowlist:
   - `registry/persona_certification_v1.yaml`
@@ -82,8 +82,8 @@ This phase starts in **Draft** status. It transitions to **Active** only after H
 
 ## M - Model
 
-- Problem: `Certification and commercialization surfaces still enforce the old 39-persona authoritative truth.`
-- Goal: `Rebase them to the truthful staged post-H3 state without claiming final activation before H5.`
+- Problem: `Certification and commercialization surfaces still enforce the old 39-persona authoritative truth even after H3 rebased the authoritative roster, and H4 may only begin once H4S has corrected the department-pack dependency surface.`
+- Goal: `Rebase them to the truthful staged post-H4S state without claiming final activation before H5.`
 - Success criteria:
   - `All scoped surfaces agree on 59 total personas and 10 departments`
   - `All scoped surfaces agree on 34 active and 25 planned until H5`
@@ -119,7 +119,7 @@ Required measurable evidence:
 ## H - Harness (ordered checks)
 
 `H4-COUNT-REBASE-C0` Preflight
-- Verify H3 is green and governance docs are current.
+- Verify H4S is green and pushed and governance docs are current.
 
 `H4-COUNT-REBASE-C1` Baseline inventory
 - Capture current count claims across the scoped surfaces.

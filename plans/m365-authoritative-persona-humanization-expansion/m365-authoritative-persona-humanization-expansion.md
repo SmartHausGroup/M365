@@ -6,7 +6,7 @@
 - **Plan ID:** `plan:m365-authoritative-persona-humanization-expansion`
 - **Parent Plan ID:** `plan:m365-post-expansion-promotion-and-persona-activation`
 - **Title:** `Promote all 20 extra agents into named digital employees through a governed census rebase`
-- **Version:** `1.1`
+- **Version:** `1.2`
 - **Status:** `active`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-03`
@@ -78,8 +78,10 @@
 - create the approved feature branch for this governed planning package
 - create the formal plan triplet in Markdown, YAML, and JSON
 - create the remaining H2 through H5 child-phase plan triplets in Markdown, YAML, and JSON
+- create additional blocker child-phase packages if later governed `NO-GO` evidence proves an execution-scope gap
 - create the required prompt pairs for the governed child-phase execution packages
 - update `Operations/EXECUTION_PLAN.md`, `Operations/PROJECT_FILE_INDEX.md`, and `Operations/ACTION_LOG.md`
+- accept formatter-only normalization in `tests/test_authoritative_persona_registry_rebase_v1.py` if the mandatory repo gate requires it for H4S package closeout
 - repair the bounded mandatory pre-commit remediation set in `tests/test_ucp_m365_pack_contracts.py` and `tests/test_ucp_m365_pack_client.py` if it prevents `R5` closeout
 - define the future implementation requirements for census rebase, metadata contract, registry rebase, count rebase, and fail-closed activation
 
@@ -105,6 +107,9 @@
 - `plans/m365-authoritative-persona-registry-and-capability-map-rebase/**`
 - `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`
 - `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase-prompt.txt`
+- `plans/m365-authoritative-persona-h4-scope-correction/**`
+- `docs/prompts/codex-m365-authoritative-persona-h4-scope-correction.md`
+- `docs/prompts/codex-m365-authoritative-persona-h4-scope-correction-prompt.txt`
 - `plans/m365-authoritative-persona-certification-and-count-rebase/**`
 - `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
 - `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase-prompt.txt`
@@ -114,6 +119,7 @@
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/PROJECT_FILE_INDEX.md`
 - `Operations/ACTION_LOG.md`
+- `tests/test_authoritative_persona_registry_rebase_v1.py`
 - `tests/test_ucp_m365_pack_contracts.py`
 - `tests/test_ucp_m365_pack_client.py`
 
@@ -133,9 +139,9 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### Execution-phase discipline
 
-- the parent initiative may remain `active`, but child phases `H1` through `H5` start in `draft` and must run strictly one at a time
-- `H2` through `H5` are notebook-first / MA-first phases; all iteration must occur in notebooks first before any runtime, registry, verifier, or documentation extraction
-- `H2` through `H5` must explicitly follow MA phases `0` through `7`; phase `0` intent definition must be restated in the approval packet and approved before any notebook or extraction work begins
+- the parent initiative may remain `active`, but child phases `H1` through `H5` plus blocker phase `H4S` start in `draft` and must run strictly one at a time
+- `H2`, `H3`, `H4S`, `H4`, and `H5` are notebook-first / MA-first phases; all iteration must occur in notebooks first before any runtime, registry, verifier, or documentation extraction
+- `H2`, `H3`, `H4S`, `H4`, and `H5` must explicitly follow MA phases `0` through `7`; phase `0` intent definition must be restated in the approval packet and approved before any notebook or extraction work begins
 - no phase may advance until the predecessor phase is green, committed, and pushed
 - each child phase requires its own approval packet, explicit `go`, full validation, commit, and push before the next child phase begins
 
@@ -188,9 +194,9 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### Parent execution discipline
 
-- **Current next act:** `H1`
+- **Current next act:** `H4S`
 - **Execution model:** one child phase at a time, in order, with no auto-advance
-- **Notebook-first rule:** `H2`, `H3`, `H4`, and `H5` must complete notebook-backed iteration before any code, registry, verifier, or documentation extraction
+- **Notebook-first rule:** `H2`, `H3`, `H4S`, `H4`, and `H5` must complete notebook-backed iteration before any code, registry, verifier, or documentation extraction
 - **Landing rule:** each child phase must validate, commit, and push before the next child phase begins
 
 ### H1 — Authoritative census and department-model decision
@@ -217,13 +223,21 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 - **Child acts:** `H3A authoritative roster rebase`, `H3B persona registry rebase`, `H3C capability-map rebase and closeout`
 - **Goal:** rebase the authoritative surfaces to `59` total personas while preserving the pre-H5 staged `34 active / 25 planned` split
 
-### H4 — Certification and count rebase
+### H4S — Department-pack scope correction
 
 - **Status:** `draft-package-created`
+- **Plan:** `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
+- **Prompt:** `docs/prompts/codex-m365-authoritative-persona-h4-scope-correction.md`
+- **Child acts:** `H4SA dependency and mismatch proof`, `H4SB department-pack authority rebase`, `H4SC validation and H4 unblock`
+- **Goal:** rebase the department-pack authority surface to the staged post-H3 truth so H4 can resume on a truthful dependency base
+
+### H4 — Certification and count rebase
+
+- **Status:** `draft-package-created-and-blocked-by-H4S`
 - **Plan:** `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
 - **Child acts:** `H4A certification contract rebase`, `H4B census and commercialization truth rebase`, `H4C verifier/test rebase and closeout`
-- **Goal:** rebase certification and count truth to the post-H3 pre-H5 staged state of `59 total / 10 departments / 34 active / 25 planned`
+- **Goal:** rebase certification and count truth to the post-H4S pre-H5 staged state of `59 total / 10 departments / 34 active / 25 planned`
 
 ### H5 — Activation gate closeout
 
