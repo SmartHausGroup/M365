@@ -1,5 +1,5 @@
 version: 2.0.0
-last_updated: '2026-04-05T12:32:27Z'
+last_updated: '2026-04-05T17:33:59Z'
 authority:
   roster: registry/ai_team.json
   registry: registry/agents.yaml
@@ -7,10 +7,10 @@ authority:
 summary:
   total_personas: 59
   total_departments: 10
-  active_personas: 34
-  planned_personas: 25
-  registry_backed_personas: 34
-  persona_contract_only_personas: 25
+  active_personas: 54
+  planned_personas: 5
+  registry_backed_personas: 54
+  persona_contract_only_personas: 5
 required_fields:
 - persona_id
 - canonical_agent
@@ -223,19 +223,22 @@ personas:
     - directory audit review
     - sign-in evidence review
     - provisioning audit tracking
-    allowed_actions: []
+    allowed_actions:
+    - audit.directory
+    - audit.signins
+    - audit.provisioning
     allowed_domains: []
     approval_owner: department-owner:operations
     approval_profile: high-impact
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - audit-operations
     - naomi brooks
     - naomi-brooks
-    action_count: 0
+    action_count: 3
     workload_families:
     - Security, compliance, and data governance
     - Identity, directory, and tenant administration
@@ -349,19 +352,31 @@ personas:
     - calendar triage and scheduling
     - availability and meeting coordination
     - conflict resolution and reminder management
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - calendar.update
+    - calendar.delete
+    - calendar.availability
+    - calendar.schedule
+    - meeting.organize
+    - availability.check
+    - reminder.send
+    - conflict.resolve
+    allowed_domains:
+    - messaging
     approval_owner: executive-assistant
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - calendar-management-agent
     - mateo alvarez
     - mateo-alvarez
-    action_count: 0
+    action_count: 11
     workload_families:
     - Mail, calendar, contacts, and bookings
     - Collaboration, meetings, and communities
@@ -383,19 +398,24 @@ personas:
     - client follow-up orchestration
     - relationship health scoring
     - feedback and satisfaction analysis
-    allowed_actions: []
+    allowed_actions:
+    - client.follow-up
+    - satisfaction.survey
+    - feedback.analyze
+    - relationship.score
+    - engagement.plan
     allowed_domains: []
     approval_owner: account-manager
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - client-relationship-agent
     - priya mehta
     - priya-mehta
-    action_count: 0
+    action_count: 5
     workload_families:
     - Mail, calendar, contacts, and bookings
     - Knowledge, search, and employee experience
@@ -417,19 +437,25 @@ personas:
     - compliance assessment coordination
     - policy validation
     - violation reporting and remediation planning
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - compliance.check
+    - policy.validate
+    - audit.prepare
+    - violation.report
+    - remediation.plan
+    allowed_domains:
+    - compliance
     approval_owner: legal
     approval_profile: critical-regulated
     risk_tier: critical
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - compliance-monitoring-agent
     - farah alvi
     - farah-alvi
-    action_count: 0
+    action_count: 5
     workload_families:
     - Security, compliance, and data governance
     - Identity, directory, and tenant administration
@@ -494,19 +520,24 @@ personas:
     - managed device inventory
     - device compliance review
     - endpoint action coordination
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - devices.list
+    - devices.get
+    - devices.compliance
+    - devices.actions
+    allowed_domains:
+    - devices
     approval_owner: it-operations-manager
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - connor walsh
     - connor-walsh
     - device-management
-    action_count: 0
+    action_count: 4
     workload_families:
     - Devices, endpoint management, and adjacent Windows admin surfaces
     - Security, compliance, and data governance
@@ -574,19 +605,34 @@ personas:
     - mail triage and classification
     - response drafting and routing
     - follow-up scheduling
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - mail.list
+    - mail.read
+    - mail.send
+    - mail.reply
+    - mail.forward
+    - mail.move
+    - mail.delete
+    - mail.folders
+    - mailbox.settings
+    - email.classify
+    - email.respond
+    - email.forward
+    - email.archive
+    - follow-up.schedule
+    allowed_domains:
+    - messaging
     approval_owner: legal
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - email-processing-agent
     - hannah kim
     - hannah-kim
-    action_count: 0
+    action_count: 14
     workload_families:
     - Mail, calendar, contacts, and bookings
     - Tasks, scheduling, and work management
@@ -739,19 +785,24 @@ personas:
     - invoice processing coordination
     - expense and budget control tracking
     - forecast update preparation
-    allowed_actions: []
+    allowed_actions:
+    - invoice.process
+    - expense.approve
+    - budget.track
+    - forecast.update
+    - audit.prepare
     allowed_domains: []
     approval_owner: finance-director
     approval_profile: critical-regulated
     risk_tier: critical
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - financial-operations-agent
     - luis carvalho
     - luis-carvalho
-    action_count: 0
+    action_count: 5
     workload_families:
     - Low-code, workflow, and analytics
     - Documents, notes, and workspace productivity
@@ -905,19 +956,25 @@ personas:
     - conditional access governance
     - named location governance
     - identity hardening change control
-    allowed_actions: []
+    allowed_actions:
+    - ca.policies
+    - ca.policy_get
+    - ca.policy_create
+    - ca.policy_update
+    - ca.policy_delete
+    - ca.named_locations
     allowed_domains: []
     approval_owner: ciso
     approval_profile: critical-regulated
     risk_tier: critical
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - amara okoye
     - amara-okoye
     - identity-security
-    action_count: 0
+    action_count: 6
     workload_families:
     - Identity, directory, and tenant administration
     - Security, compliance, and data governance
@@ -1018,19 +1075,25 @@ personas:
     - infrastructure monitoring
     - health-check coordination
     - alert and backup response
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - infrastructure.monitor
+    - system.health-check
+    - alerts.respond
+    - backup.verify
+    - security.scan
+    allowed_domains:
+    - security
     approval_owner: ciso
     approval_profile: high-impact
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - it-operations-manager
     - peter novak
     - peter-novak
-    action_count: 0
+    action_count: 5
     workload_families:
     - Devices, endpoint management, and adjacent Windows admin surfaces
     - Security, compliance, and data governance
@@ -1052,19 +1115,24 @@ personas:
     - document indexing
     - search optimization
     - training and expert routing
-    allowed_actions: []
+    allowed_actions:
+    - document.index
+    - search.optimize
+    - content.curate
+    - training.recommend
+    - expert.connect
     allowed_domains: []
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - knowledge-management-agent
     - leah goldstein
     - leah-goldstein
-    action_count: 0
+    action_count: 5
     workload_families:
     - Knowledge, search, and employee experience
     - Documents, notes, and workspace productivity
@@ -1338,19 +1406,22 @@ personas:
     - client service provisioning
     - platform lifecycle governance
     - tenant status coordination
-    allowed_actions: []
+    allowed_actions:
+    - provision-client-services
+    - deprovision-client-services
+    - get-client-status
     allowed_domains: []
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - andre baptiste
     - andre-baptiste
     - platform-manager
-    action_count: 0
+    action_count: 3
     workload_families:
     - Low-code, workflow, and analytics
     - Content, intranet, and files
@@ -1372,19 +1443,30 @@ personas:
     - plan and task orchestration
     - deadline tracking
     - status reporting
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
+    - list_plans
+    - create_plan
+    - list_buckets
+    - create_bucket
+    - create_task
+    allowed_domains:
+    - collaboration
     approval_owner: project-manager
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - project-coordination-agent
     - sofia petrova
     - sofia-petrova
-    action_count: 0
+    action_count: 10
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1406,19 +1488,23 @@ personas:
     - project lifecycle governance
     - milestone status oversight
     - archive and closeout control
-    allowed_actions: []
+    allowed_actions:
+    - create-project
+    - list-projects
+    - update-project-status
+    - archive-project
     allowed_domains: []
     approval_owner: department-owner:project-management
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - haruto tanaka
     - haruto-tanaka
     - project-manager
-    action_count: 0
+    action_count: 4
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -1529,19 +1615,24 @@ personas:
     - candidate screening
     - interview coordination
     - offer and onboarding preparation
-    allowed_actions: []
+    allowed_actions:
+    - candidate.screen
+    - interview.schedule
+    - feedback.collect
+    - offer.prepare
+    - onboarding.initiate
     allowed_domains: []
     approval_owner: hr-director
     approval_profile: high-impact
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - camila torres
     - camila-torres
     - recruitment-assistance-agent
-    action_count: 0
+    action_count: 5
     workload_families:
     - Tasks, scheduling, and work management
     - Mail, calendar, contacts, and bookings
@@ -1597,19 +1688,25 @@ personas:
     - usage reporting
     - activity analytics
     - kpi reporting packs
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
+    allowed_domains:
+    - reports
     approval_owner: department-owner:studio-operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - reports
     - youssef haddad
     - youssef-haddad
-    action_count: 0
+    action_count: 5
     workload_families:
     - Low-code, workflow, and analytics
     - Knowledge, search, and employee experience
@@ -1631,19 +1728,26 @@ personas:
     - security alert triage
     - incident investigation
     - secure score monitoring
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - security.alerts
+    - security.alert_get
+    - security.alert_update
+    - security.incidents
+    - security.incident_get
+    - security.secure_score
+    allowed_domains:
+    - security
     approval_owner: ciso
     approval_profile: high-impact
     risk_tier: high
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - security-operations
     - tunde adeyemi
     - tunde-adeyemi
-    action_count: 0
+    action_count: 6
     workload_families:
     - Security, compliance, and data governance
     - Low-code, workflow, and analytics
@@ -1665,19 +1769,23 @@ personas:
     - service health monitoring
     - message center tracking
     - escalation coordination
-    allowed_actions: []
+    allowed_actions:
+    - health.overview
+    - health.issues
+    - health.issue_get
+    - health.messages
     allowed_domains: []
     approval_owner: department-owner:operations
     approval_profile: low-observe-create
     risk_tier: low
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - chloe martin
     - chloe-martin
     - service-health
-    action_count: 0
+    action_count: 4
     workload_families:
     - Low-code, workflow, and analytics
     - Knowledge, search, and employee experience
@@ -1833,19 +1941,37 @@ personas:
     - teams workspace governance
     - channel lifecycle administration
     - chat and collaboration coordination
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - teams.list
+    - teams.get
+    - teams.create
+    - teams.archive
+    - teams.add_member
+    - teams.remove_member
+    - channels.list
+    - channels.create
+    - channels.send_message
+    - chat.create
+    - chat.send_message
+    - chat.send
+    - chat.list
+    - create-workspace
+    - add-workspace-members
+    - create-channels
+    - get-team-status
+    allowed_domains:
+    - collaboration
     approval_owner: it-director
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - alicia nguyen
     - alicia-nguyen
     - teams-manager
-    action_count: 0
+    action_count: 17
     workload_families:
     - Collaboration, meetings, and communities
     - Mail, calendar, contacts, and bookings
@@ -2106,19 +2232,29 @@ personas:
     - tier administration
     - tenant config governance
     - audit-log review
-    allowed_actions: []
-    allowed_domains: []
+    allowed_actions:
+    - admin.list_tiers
+    - admin.get_tier
+    - admin.list_users
+    - admin.get_user_tier
+    - admin.set_user_tier
+    - admin.remove_user_tier
+    - admin.get_tenant_config
+    - admin.reload_config
+    - admin.audit_log
+    allowed_domains:
+    - directory
     approval_owner: global_admin
     approval_profile: critical-regulated
     risk_tier: critical
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - omar el-masry
     - omar-el-masry
     - ucp-administrator
-    action_count: 0
+    action_count: 9
     workload_families:
     - Identity, directory, and tenant administration
     - Security, compliance, and data governance
@@ -2308,19 +2444,25 @@ personas:
     - website deployment operations
     - cdn and dns change coordination
     - performance optimization and rollback readiness
-    allowed_actions: []
+    allowed_actions:
+    - website.deploy
+    - cdn.purge
+    - dns.update
+    - ssl.renew
+    - performance.optimize
+    - backup.restore
     allowed_domains: []
     approval_owner: it-director
     approval_profile: medium-operational
     risk_tier: medium
-    coverage_status: persona-contract-only
-    status: planned
+    coverage_status: registry-backed
+    status: active
     external_presence_policy: internal_only
     aliases:
     - lucia fernandez
     - lucia-fernandez
     - website-operations-specialist
-    action_count: 0
+    action_count: 6
     workload_families:
     - Media, publishing, and extended communications
     - Content, intranet, and files

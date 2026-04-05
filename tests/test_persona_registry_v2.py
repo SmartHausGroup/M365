@@ -10,6 +10,14 @@ from ops_adapter.personas import (
     resolve_persona_target,
 )
 
+DEFERRED = {
+    "app-store-optimizer",
+    "instagram-curator",
+    "reddit-community-builder",
+    "tiktok-strategist",
+    "twitter-engager",
+}
+
 
 def _load_repo_sources() -> tuple[dict, dict, dict]:
     root = Path(__file__).resolve().parents[1]
@@ -28,16 +36,24 @@ def test_e5a_authoritative_persona_registry_is_roster_bound() -> None:
 
     assert payload["summary"]["total_personas"] == 59
     assert payload["summary"]["total_departments"] == 10
-    assert payload["summary"]["active_personas"] == 34
-    assert payload["summary"]["planned_personas"] == 25
-    assert payload["summary"]["registry_backed_personas"] == 34
-    assert payload["summary"]["persona_contract_only_personas"] == 25
-    assert payload["personas"]["teams-manager"]["status"] == "planned"
-    assert payload["personas"]["teams-manager"]["allowed_actions"] == []
-    assert payload["personas"]["teams-manager"]["action_count"] == 0
-    assert payload["personas"]["calendar-management-agent"]["status"] == "planned"
+    assert payload["summary"]["active_personas"] == 54
+    assert payload["summary"]["planned_personas"] == 5
+    assert payload["summary"]["registry_backed_personas"] == 54
+    assert payload["summary"]["persona_contract_only_personas"] == 5
+    assert payload["personas"]["teams-manager"]["status"] == "active"
+    assert payload["personas"]["teams-manager"]["action_count"] == 17
+    assert len(payload["personas"]["teams-manager"]["allowed_actions"]) == 17
+    assert payload["personas"]["calendar-management-agent"]["status"] == "active"
+    assert len(payload["personas"]["calendar-management-agent"]["allowed_actions"]) == 11
+    assert payload["personas"]["app-store-optimizer"]["status"] == "planned"
+    assert payload["personas"]["app-store-optimizer"]["allowed_actions"] == []
     assert payload["personas"]["m365-administrator"]["status"] == "active"
     assert payload["personas"]["ai-engineer"]["status"] == "active"
+    assert {
+        persona_id
+        for persona_id, details in payload["personas"].items()
+        if details["status"] == "planned"
+    } == DEFERRED
 
 
 def test_e5a_load_persona_registry_prefers_authoritative_registry_file(tmp_path: Path) -> None:
@@ -54,7 +70,7 @@ def test_e5a_load_persona_registry_prefers_authoritative_registry_file(tmp_path:
 
     assert len(personas) == 59
     assert personas["teams-manager"]["display_name"] == "Alicia Nguyen"
-    assert personas["teams-manager"]["status"] == "planned"
+    assert personas["teams-manager"]["status"] == "active"
     assert personas["website-manager"]["display_name"] == "Elena Rodriguez"
     assert personas["hr-generalist"]["approval_profile"] == "critical-regulated"
 

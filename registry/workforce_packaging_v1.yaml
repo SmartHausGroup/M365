@@ -1,7 +1,7 @@
 version: "1.0.0"
-last_updated: "2026-03-21T18:00:00Z"
+last_updated: "2026-04-05T15:20:00Z"
 authority:
-  enterprise_release_gate: registry/enterprise_release_gate_v2.yaml
+  activated_surface: registry/activated_persona_surface_v1.yaml
   persona_registry: registry/persona_registry_v2.yaml
   workload_certification: registry/workload_certification_v1.yaml
   department_certification: registry/department_certification_v1.yaml
@@ -12,16 +12,16 @@ contract:
   display_name: Workforce Packaging Contract v1
   status: contract-defined
   description: >
-    Packages the full workforce offering into a deterministic product
+    Packages the final governed workforce offering into a deterministic product
     definition with explicit capability tiers, persona classes, department
-    coverage, and bounded claims for customers.
+    coverage, and bounded claims for customers after H5 activation closeout.
 
 packaging_layers:
   - order: 1
     id: capability_tier_definition
     description: >
-      Define the capability tiers available to customers based on the
-      certified workload surface and routed actions.
+      Define the capability tiers available to customers based on the final
+      certified M365-backed activated surface and routed actions.
     outputs:
       - tier definitions with action counts and domain coverage
     failure_mode: >
@@ -31,42 +31,43 @@ packaging_layers:
     id: persona_class_packaging
     description: >
       Package personas into customer-facing classes: active (registry-backed
-      with implemented actions) and planned (contract-only, roadmap).
+      with implemented actions) and deferred external (contract-only, non-live).
     outputs:
       - persona class definitions with counts and capability summaries
     failure_mode: >
-      Persona class claiming action capability for contract-only personas fails.
+      Persona class claiming action capability for deferred external personas fails.
 
   - order: 3
     id: department_coverage_matrix
     description: >
-      Define the department coverage matrix showing which departments
-      have active personas versus planned-only personas.
+      Define the department coverage matrix showing that all 10 departments
+      have active M365-backed personas while only marketing retains deferred
+      external specialists.
     outputs:
-      - department coverage matrix with active/planned persona counts
+      - department coverage matrix with active and deferred counts
     failure_mode: >
-      Department claiming active coverage without registry-backed personas fails.
+      Department coverage diverging from the authoritative registry fails.
 
   - order: 4
     id: product_boundary_lock
     description: >
-      Lock the product boundary with explicit supported and unsupported
-      claims derived from the release gate evidence.
+      Lock the product boundary with explicit supported and unsupported claims
+      derived from the final activated persona surface evidence.
     outputs:
       - product boundary document with versioned claims
     failure_mode: >
-      Product claim exceeding release gate evidence fails boundary lock.
+      Product claim exceeding activated-surface evidence fails boundary lock.
 
 governance_rules:
   fail_closed:
     description: >
-      Any packaging claim that exceeds release gate evidence is rejected.
+      Any packaging claim that exceeds the final activated-surface evidence is rejected.
   audit_completeness:
     description: >
       Packaging decisions produce traceable evidence back to certification.
   bounded_claims:
     description: >
-      Customer-facing claims must not exceed the certified action surface.
+      Customer-facing claims must not exceed the final certified action surface.
   determinism:
     description: >
       Same certification evidence produces the same packaging output.
@@ -77,31 +78,32 @@ governance_rules:
 kpis:
   packaging_layer_count: 4
   governance_rule_count: 5
-  active_persona_count: 4
-  planned_persona_count: 35
-  total_persona_count: 39
+  active_persona_count: 54
+  planned_persona_count: 5
+  total_persona_count: 59
   certified_workload_domains: 13
-  total_routed_actions: 155
+  total_routed_actions: 430
   department_count: 10
 
 product_tiers:
   core:
-    description: "Registry-backed personas with certified actions across 13 workload domains"
-    persona_count: 4
-    action_count: 155
-    departments_with_active_personas: 3
+    description: "Registry-backed personas with certified actions across 13 workload domains and all 10 departments"
+    persona_count: 54
+    action_count: 430
+    departments_with_active_personas: 10
   expansion:
-    description: "Contract-defined personas across all 10 departments, roadmap to full action backing"
-    persona_count: 35
+    description: "Deferred external-platform marketing personas remain governed and non-active pending later platform-specific runtime work"
+    persona_count: 5
     action_count: 0
-    departments_covered: 10
+    departments_covered: 1
 
 bounded_claims:
   supported:
-    - "4 active personas with 155 routed actions across 13 certified domains"
-    - "35 planned personas with governance contracts across all 10 departments"
-    - "Deterministic packaging derived from four-layer certification evidence"
+    - "54 active personas with 430 routed actions across 13 certified domains and all 10 departments"
+    - "5 deferred external-platform marketing personas remain governed but non-active"
+    - "Deterministic packaging derived from the final activated persona surface and certification evidence"
   not_supported:
-    - "All 39 personas have implemented actions"
-    - "All 15 executor domains are certified"
-    - "Full workforce operational readiness"
+    - "All 59 personas have implemented actions"
+    - "Deferred external-platform personas are live"
+    - "External-platform adapters and credentials are implemented"
+    - "Full external-platform operational readiness"

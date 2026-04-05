@@ -1021,8 +1021,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `registry/persona_registry_v2.yaml` | Authoritative runtime persona registry for the staged `59`-persona digital workforce, generated from the rebased roster, capability map, and agent registry while preserving the pre-H5 `34 active / 25 planned` split. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-registry-and-capability-map-rebase:R2` |
-| `docs/commercialization/m365-persona-registry-v2.md` | Human-readable contract defining the required persona fields, staged status semantics, and fail-closed runtime boundary for the `59`-persona authoritative workforce after H3. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-registry-and-capability-map-rebase:R2` |
+| `registry/persona_registry_v2.yaml` | Authoritative runtime persona registry for the final governed `59`-persona workforce, with `54` active personas and `5` deferred external-platform planned personas after H5 closeout. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R3` |
+| `docs/commercialization/m365-persona-registry-v2.md` | Human-readable contract defining the required persona fields, final status semantics, and fail-closed runtime boundary for the post-H5 authoritative workforce. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-activation-gate-closeout:R4` |
 | `docs/ma/lemmas/L43_m365_persona_registry_v2.md` | Lemma doc asserting that runtime persona resolution remains bounded to the authoritative roster and excludes overflow registry agents. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
 | `invariants/lemmas/L43_m365_persona_registry_v2.yaml` | Machine-enforced invariant metadata for `L43`. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
 | `notebooks/m365/INV-M365-AS-persona-registry-v2.ipynb` | Primary notebook-backed governance source for the E5A authoritative persona-registry proof. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
@@ -1030,12 +1030,12 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `artifacts/scorecards/scorecard_l43.json` | Determinism and notebook-backing scorecard for the `L43` evidence chain. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
 | `src/ops_adapter/personas.py` | Shared persona loader, validator, projection helper, and resolver now enforcing the authoritative persona-registry boundary in runtime. | `Technical Architecture`, `Policy & Security` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
 | `registry/ai_team.json` | Authoritative workforce roster input for the E5A persona-registry builder. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
-| `registry/persona_capability_map.yaml` | Authoritative persona-to-capability and approval-profile input used to complete the E5A registry fields. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
+| `registry/persona_capability_map.yaml` | Authoritative persona-to-capability and approval-profile input for the final H5 active/deferred split, with `54` registry-backed personas and `5` deferred external-platform personas. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R3` |
 | `registry/agents.yaml` | Authoritative allowed-action and approval-rule input used to project runtime-backed personas into the E5A registry. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
-| `scripts/ci/build_persona_registry_v2.py` | Deterministic builder that projects the authoritative roster, persona map, and agent registry into `registry/persona_registry_v2.yaml`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
-| `scripts/ci/verify_persona_registry_v2.py` | Bounded verifier for the E5A registry counts, roster alignment, and runtime loader projection. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
+| `scripts/ci/build_persona_registry_v2.py` | Deterministic builder that projects the authoritative roster, H5-rebased persona map, and agent registry into the final `registry/persona_registry_v2.yaml`. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R3` |
+| `scripts/ci/verify_persona_registry_v2.py` | Bounded verifier for the final H5 registry counts, promoted-persona activation state, deferred-persona set, and runtime loader projection. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 | `configs/generated/persona_registry_v2_verification.json` | Generated proof artifact showing the E5A registry, runtime loader, and authoritative roster remain aligned. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
-| `tests/test_persona_registry_v2.py` | Targeted regression coverage for the E5A authoritative persona-registry builder, loader, and alias resolution. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E5A` |
+| `tests/test_persona_registry_v2.py` | Targeted regression coverage for the final H5 authoritative persona-registry builder, loader, alias resolution, and active/deferred split. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 
 ## Active E5B Humanized Delegation Interface Artifacts
 
@@ -1424,16 +1424,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `registry/workforce_packaging_v1.yaml` | Workforce packaging contract. | `Mission Statement` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
-| `docs/commercialization/m365-workforce-packaging-v1.md` | Human-readable doc. | `Operational Model` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `registry/workforce_packaging_v1.yaml` | Final H5 workforce packaging contract aligned to the activated-surface authority at `54` active personas, `5` deferred personas, and `430` routed actions. | `Mission Statement`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R4` |
+| `docs/commercialization/m365-workforce-packaging-v1.md` | Human-readable packaging boundary for the final H5 active/deferred workforce split. | `Operational Model`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R4` |
 | `docs/ma/lemmas/L68_m365_workforce_packaging_v1.md` | Lemma doc for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
 | `invariants/lemmas/L68_m365_workforce_packaging_v1.yaml` | Invariant for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
 | `notebooks/m365/INV-M365-BP-workforce-packaging-v1.ipynb` | Primary notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
 | `notebooks/lemma_proofs/L68_m365_workforce_packaging_v1.ipynb` | Proof notebook. | `Technical Architecture` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
 | `artifacts/scorecards/scorecard_l68.json` | Scorecard for L68. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
-| `scripts/ci/verify_workforce_packaging_v1.py` | CI verifier. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `scripts/ci/verify_workforce_packaging_v1.py` | CI verifier for the final H5 packaging contract and its alignment to the activated-surface authority. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 | `configs/generated/workforce_packaging_v1_verification.json` | Generated proof. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
-| `tests/test_workforce_packaging_v1.py` | Tests. | `Core Success Metrics` | `plan:m365-ai-workforce-expansion-master-plan:E9A` |
+| `tests/test_workforce_packaging_v1.py` | Tests for the final H5 packaging contract and activated-surface alignment. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 
 ## Active E9B Customer Onboarding v2 Artifacts
 
@@ -1535,16 +1535,22 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
-| `registry/activated_persona_surface_v1.yaml` | Branch-specific certification/closeout contract for the current activated persona surface. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
-| `docs/commercialization/m365-activated-persona-surface-v1.md` | Human-readable commercialization boundary for the current activated surface. | `Authorized Capabilities (AI Workforce North Star)` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `registry/activated_persona_surface_v1.yaml` | Final H5 certification/closeout contract for the activated persona surface at `54` active personas, `5` deferred external personas, and `430` total allowed persona-actions. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R4` |
+| `docs/commercialization/m365-activated-persona-surface-v1.md` | Human-readable commercialization boundary for the final H5 activated surface. | `Authorized Capabilities (AI Workforce North Star)`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R4` |
 | `docs/ma/lemmas/L76_m365_activated_persona_surface_v1.md` | Lemma doc for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 | `invariants/lemmas/L76_m365_activated_persona_surface_v1.yaml` | Invariant for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 | `notebooks/m365/INV-M365-BX-activated-persona-surface-v1.ipynb` | Primary notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 | `notebooks/lemma_proofs/L76_m365_activated_persona_surface_v1.ipynb` | Proof replay notebook for L76. | `Technical Architecture` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
 | `artifacts/scorecards/scorecard_l76.json` | Scorecard for L76. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
-| `scripts/ci/verify_activated_persona_surface_v1.py` | CI verifier for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `docs/ma/lemmas/L81_m365_authoritative_persona_activation_gate_closeout_v1.md` | Lemma doc asserting that H5 may close only when the governed `20`-persona promotion lands atomically into the final `59 / 54 / 5` state. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `invariants/lemmas/L81_m365_authoritative_persona_activation_gate_closeout_v1.yaml` | Machine-enforced invariant metadata for the final H5 activation gate closeout proof. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `notebooks/m365/INV-M365-CC-authoritative-persona-activation-gate-closeout-v1.ipynb` | Primary notebook-backed governance source for the final H5 activation gate proof and final-state transform. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `notebooks/lemma_proofs/L81_m365_authoritative_persona_activation_gate_closeout_v1.ipynb` | Lemma-proof notebook for the final H5 activation gate closeout. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `artifacts/scorecards/scorecard_l81.json` | Scorecard certifying the final H5 activation gate proof chain and deterministic closeout. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `configs/generated/authoritative_persona_activation_gate_closeout_v1_verification.json` | Generated verification artifact for the final H5 active/deferred split, department breakdown, and `430`-action surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R6` |
+| `scripts/ci/verify_activated_persona_surface_v1.py` | CI verifier for the final H5 activated-surface contract and deferred-persona boundary. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 | `configs/generated/activated_persona_surface_v1_verification.json` | Generated proof for P2E. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
-| `tests/test_activated_persona_surface_v1.py` | Tests for P2E certification closeout. | `Core Success Metrics` | `plan:m365-post-expansion-promotion-and-persona-activation:P2E` |
+| `tests/test_activated_persona_surface_v1.py` | Tests for the final H5 activated-surface contract, deferred-persona set, and `430`-action boundary. | `Core Success Metrics` | `plan:m365-authoritative-persona-activation-gate-closeout:R5` |
 
 ## Active UCP Live Activation Repair Artifacts
 

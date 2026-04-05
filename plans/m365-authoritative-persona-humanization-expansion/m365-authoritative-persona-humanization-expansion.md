@@ -7,7 +7,7 @@
 - **Parent Plan ID:** `plan:m365-post-expansion-promotion-and-persona-activation`
 - **Title:** `Promote all 20 extra agents into named digital employees through a governed census rebase`
 - **Version:** `1.2`
-- **Status:** `active`
+- **Status:** `complete-go`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-03`
 - **Date Updated:** `2026-04-05`
@@ -194,7 +194,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### Parent execution discipline
 
-- **Current next act:** `H5`
+- **Current next act:** `none - initiative complete`
 - **Execution model:** one child phase at a time, in order, with no auto-advance
 - **Notebook-first rule:** `H2`, `H3`, `H4S`, `H4`, and `H5` must complete notebook-backed iteration before any code, registry, verifier, or documentation extraction
 - **Landing rule:** each child phase must validate, commit, and push before the next child phase begins
@@ -241,7 +241,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H5 — Activation gate closeout
 
-- **Status:** `draft-package-created-and-unblocked-by-H4`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
 - **Child acts:** `H5A activation prerequisite verification`, `H5B final registry and active-surface rebase`, `H5C final validation and branch closeout`

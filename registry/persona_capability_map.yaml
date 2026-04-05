@@ -7,8 +7,8 @@ authority:
 summary:
   total_personas: 59
   total_departments: 10
-  current_registry_backed_personas: 34
-  persona_contract_only_personas: 25
+  current_registry_backed_personas: 54
+  persona_contract_only_personas: 5
   non_authoritative_registry_agents: 0
   non_authoritative_registry_departments: []
 approval_profiles:
@@ -74,8 +74,8 @@ departments:
         title: Audit Operations Lead
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 3
         workload_families:
         - Security, compliance, and data governance
         - Identity, directory, and tenant administration
@@ -89,8 +89,8 @@ departments:
         title: Compliance Monitoring Lead
         current_risk_tier: critical
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Security, compliance, and data governance
         - Identity, directory, and tenant administration
@@ -104,8 +104,8 @@ departments:
         title: Endpoint Operations Administrator
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 4
         workload_families:
         - Devices, endpoint management, and adjacent Windows admin surfaces
         - Security, compliance, and data governance
@@ -119,8 +119,8 @@ departments:
         title: Identity Security Administrator
         current_risk_tier: critical
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 6
         workload_families:
         - Identity, directory, and tenant administration
         - Security, compliance, and data governance
@@ -134,8 +134,8 @@ departments:
         title: IT Operations Manager
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Devices, endpoint management, and adjacent Windows admin surfaces
         - Security, compliance, and data governance
@@ -149,8 +149,8 @@ departments:
         title: Security Operations Lead
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 6
         workload_families:
         - Security, compliance, and data governance
         - Low-code, workflow, and analytics
@@ -164,8 +164,8 @@ departments:
         title: Service Reliability Coordinator
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 4
         workload_families:
         - Low-code, workflow, and analytics
         - Knowledge, search, and employee experience
@@ -179,8 +179,8 @@ departments:
         title: UCP Control Plane Administrator
         current_risk_tier: critical
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 9
         workload_families:
         - Identity, directory, and tenant administration
         - Security, compliance, and data governance
@@ -218,8 +218,8 @@ departments:
         title: Recruiting Coordinator
         current_risk_tier: high
         approval_profile: high-impact
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Tasks, scheduling, and work management
         - Mail, calendar, contacts, and bookings
@@ -257,8 +257,8 @@ departments:
         title: Calendar Operations Coordinator
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 11
         workload_families:
         - Mail, calendar, contacts, and bookings
         - Collaboration, meetings, and communities
@@ -272,8 +272,8 @@ departments:
         title: Email Operations Specialist
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 14
         workload_families:
         - Mail, calendar, contacts, and bookings
         - Tasks, scheduling, and work management
@@ -287,8 +287,8 @@ departments:
         title: Teams Collaboration Administrator
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 17
         workload_families:
         - Collaboration, meetings, and communities
         - Mail, calendar, contacts, and bookings
@@ -414,8 +414,8 @@ departments:
         title: Platform Engineering Manager
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 3
         workload_families:
         - Low-code, workflow, and analytics
         - Content, intranet, and files
@@ -541,8 +541,8 @@ departments:
         title: Website Operations Specialist
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 6
         workload_families:
         - Media, publishing, and extended communications
         - Content, intranet, and files
@@ -658,8 +658,8 @@ departments:
         title: Project Coordinator
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 10
         workload_families:
         - Tasks, scheduling, and work management
         - Collaboration, meetings, and communities
@@ -673,8 +673,8 @@ departments:
         title: Project Manager
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 4
         workload_families:
         - Tasks, scheduling, and work management
         - Collaboration, meetings, and communities
@@ -770,8 +770,8 @@ departments:
         title: Client Relationship Manager
         current_risk_tier: medium
         approval_profile: medium-operational
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Mail, calendar, contacts, and bookings
         - Knowledge, search, and employee experience
@@ -785,8 +785,8 @@ departments:
         title: Financial Operations Manager
         current_risk_tier: critical
         approval_profile: critical-regulated
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Low-code, workflow, and analytics
         - Documents, notes, and workspace productivity
@@ -800,8 +800,8 @@ departments:
         title: Knowledge Operations Lead
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Knowledge, search, and employee experience
         - Documents, notes, and workspace productivity
@@ -815,8 +815,8 @@ departments:
         title: Reporting and KPI Analyst
         current_risk_tier: low
         approval_profile: low-observe-create
-        coverage_status: persona-contract-only
-        current_action_count: 0
+        coverage_status: registry-backed
+        current_action_count: 5
         workload_families:
         - Low-code, workflow, and analytics
         - Knowledge, search, and employee experience

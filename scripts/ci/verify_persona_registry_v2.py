@@ -6,6 +6,14 @@ from pathlib import Path
 import yaml
 from ops_adapter.personas import load_persona_registry, validate_persona_registry_document
 
+DEFERRED = {
+    "app-store-optimizer",
+    "instagram-curator",
+    "reddit-community-builder",
+    "tiktok-strategist",
+    "twitter-engager",
+}
+
 
 def main() -> None:
     root = Path(__file__).resolve().parents[2]
@@ -61,18 +69,21 @@ def main() -> None:
         persona = personas.get(persona_id)
         if persona is None:
             raise SystemExit(f"Promoted persona missing from authoritative registry: {persona_id}")
-        if str(persona.get("status")) != "planned":
-            raise SystemExit(f"Promoted persona unexpectedly active before H5: {persona_id}")
-        if list(persona.get("allowed_actions") or []):
-            raise SystemExit(f"Promoted persona has actions before H5: {persona_id}")
-        if list(persona.get("allowed_domains") or []):
-            raise SystemExit(f"Promoted persona has domains before H5: {persona_id}")
+        if str(persona.get("status")) != "active":
+            raise SystemExit(f"Promoted persona not active after H5: {persona_id}")
+        if not list(persona.get("allowed_actions") or []):
+            raise SystemExit(f"Promoted persona missing actions after H5: {persona_id}")
+
+    if set(planned) != DEFERRED:
+        raise SystemExit(f"Deferred persona set mismatch after H5: {planned}")
 
     expected_summary = {
         "total_personas": 59,
         "total_departments": 10,
-        "active_personas": 34,
-        "planned_personas": 25,
+        "active_personas": 54,
+        "planned_personas": 5,
+        "registry_backed_personas": 54,
+        "persona_contract_only_personas": 5,
     }
     for key, expected_value in expected_summary.items():
         actual_value = payload.get("summary", {}).get(key)
@@ -88,6 +99,7 @@ def main() -> None:
         "active_personas": active,
         "planned_personas": planned,
         "promoted_personas": promoted_ids,
+        "deferred_personas": sorted(DEFERRED),
         "required_fields": payload.get("required_fields") or [],
     }
     output_path.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
