@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T12:20:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -11,12 +11,9 @@ department:
   display_name: Design
   wave: W7
   wave_track: Wave A
-  status: partial-activation
-  purpose: Package the Design digital employees into one bounded department contract covering brand governance, UI design,
-    UX research, visual storytelling, and delight design responsibilities that are defined but not yet action-backed.
-  bounded_claim: The Design department pack may only claim the authoritative contract personas, capability families, approval
-    posture, and blocked readiness state declared here. It may not claim implemented brand, UI, UX, visual, or delight execution
-    coverage until later acts activate those personas.
+  status: registry-backed
+  purpose: Package the Design digital employees into one bounded department pack that truthfully reflects the fully action-backed authoritative roster after H3 and H4S.
+  bounded_claim: The Design department pack may claim registry-backed execution coverage only for Isabella Rossi, Noah Anderson, Mila Novak, Diego Alvarez, Luna Park and only across the explicit supported actions declared in this authority.
 workflow_families:
 - brand_governance_and_consistency
 - interface_design_and_component_specs
@@ -46,8 +43,7 @@ approval_model:
       - ux-researcher
       - visual-storyteller
       - whimsy-injector
-      rule: Brand review, UI design, UX research, visual storytelling, and delight design may proceed in observe/create mode
-        until later acts activate mutating Design execution surfaces.
+      rule: Brand review, UI design, UX research, visual storytelling, and delight design may proceed in observe/create mode until later acts activate mutating Design execution surfaces.
 kpis:
   required_personas: 5
   required_active_personas: 5
@@ -184,9 +180,8 @@ personas:
 bounded_claims:
   supported:
   - design persona census and capability-family contract
-  - approval and escalation semantics for future design activation
-  - deterministic blocked-state projection while design remains contract-only
+  - registry-backed execution coverage for Isabella Rossi, Noah Anderson, Mila Novak, Diego Alvarez, Luna Park
+  - deterministic ready/watch/attention_required/blocked projection for the fully active pack
   unsupported:
-  - claims that design personas are currently action-backed
-  - live brand, UI, UX, visual, or delight mutations beyond later activation acts
-  - HR, engineering, or testing work outside the design contract
+  - claims outside the explicit supported action surface declared in this authority
+  - cross-department work outside the design contract

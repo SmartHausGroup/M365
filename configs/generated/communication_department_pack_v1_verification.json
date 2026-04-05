@@ -1,18 +1,40 @@
 {
   "active_persona_count": 1,
   "department": "communication",
-  "pack_state": "ready",
-  "persona_count": 1,
+  "pack_state": "blocked",
+  "persona_count": 4,
   "personas": [
     {
       "accountability_state": "on_track",
       "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "outreach-coordinator",
       "status": "active"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "calendar-management-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "email-processing-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "teams-manager",
+      "status": "planned"
     }
   ],
   "registry_backed_persona_count": 1,
   "supported_action_count": 7,
   "workflow_family_count": 3,
-  "workload_family_count": 4
+  "workload_family_count": 5
 }

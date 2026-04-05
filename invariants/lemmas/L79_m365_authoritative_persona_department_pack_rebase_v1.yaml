@@ -1,0 +1,18 @@
+invariant_id: L79
+title: Authoritative department-pack rebase remains staged and fail-closed
+lemma_reference: docs/ma/lemmas/L79_m365_authoritative_persona_department_pack_rebase_v1.md
+proof_obligations:
+  - every department-pack authority must match the staged H3 department totals, active counts, and registry-backed counts
+  - every contract-only persona in a department pack must declare zero supported actions
+  - every registry-backed persona in a department pack must declare the same supported actions as the persona registry
+  - repeated reconciliation must emit the same verification hash
+failure_boundaries:
+  - stale pre-H3 department-pack count remains in scope
+  - department-pack authority claims more active or registry-backed personas than the authoritative registry
+  - contract-only persona declares live supported actions
+  - deterministic verification replay drifts across repeated runs
+test_bindings:
+  - scripts/ci/verify_*_department_pack_v1.py
+  - tests/test_*_department_pack_v1.py
+  - configs/generated/authoritative_persona_department_pack_rebase_v1_verification.json
+ci_gate: authoritative-persona-department-pack-rebase-v1

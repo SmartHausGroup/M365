@@ -1,0 +1,190 @@
+{
+  "determinism_inputs": {
+    "pack_glob": "registry/department_pack_*_v1.yaml",
+    "registry": "registry/persona_registry_v2.yaml"
+  },
+  "deterministic_hash": "4f6933dd56f180b5c58eca28c25d25cae8b578deb2061cb8ee6ac99dcf806cbd",
+  "lemma_id": "L79",
+  "post_h4s_departments": {
+    "communication": {
+      "authority": {
+        "active_count": 1,
+        "persona_count": 4,
+        "registry_backed_count": 1,
+        "required_active_personas": 1,
+        "required_personas": 4,
+        "required_registry_backed_personas": 1,
+        "supported_action_count": 7
+      },
+      "registry": {
+        "active": 1,
+        "registry_backed": 1,
+        "supported_actions": 7,
+        "total": 4
+      }
+    },
+    "design": {
+      "authority": {
+        "active_count": 5,
+        "persona_count": 5,
+        "registry_backed_count": 5,
+        "required_active_personas": 5,
+        "required_personas": 5,
+        "required_registry_backed_personas": 5,
+        "supported_action_count": 36
+      },
+      "registry": {
+        "active": 5,
+        "registry_backed": 5,
+        "supported_actions": 36,
+        "total": 5
+      }
+    },
+    "engineering": {
+      "authority": {
+        "active_count": 7,
+        "persona_count": 8,
+        "registry_backed_count": 7,
+        "required_active_personas": 7,
+        "required_personas": 8,
+        "required_registry_backed_personas": 7,
+        "supported_action_count": 62
+      },
+      "registry": {
+        "active": 7,
+        "registry_backed": 7,
+        "supported_actions": 62,
+        "total": 8
+      }
+    },
+    "hr": {
+      "authority": {
+        "active_count": 1,
+        "persona_count": 2,
+        "registry_backed_count": 1,
+        "required_active_personas": 1,
+        "required_personas": 2,
+        "required_registry_backed_personas": 1,
+        "supported_action_count": 5
+      },
+      "registry": {
+        "active": 1,
+        "registry_backed": 1,
+        "supported_actions": 5,
+        "total": 2
+      }
+    },
+    "marketing": {
+      "authority": {
+        "active_count": 2,
+        "persona_count": 8,
+        "registry_backed_count": 2,
+        "required_active_personas": 2,
+        "required_personas": 8,
+        "required_registry_backed_personas": 2,
+        "supported_action_count": 18
+      },
+      "registry": {
+        "active": 2,
+        "registry_backed": 2,
+        "supported_actions": 18,
+        "total": 8
+      }
+    },
+    "operations": {
+      "authority": {
+        "active_count": 2,
+        "persona_count": 10,
+        "registry_backed_count": 2,
+        "required_active_personas": 2,
+        "required_personas": 10,
+        "required_registry_backed_personas": 2,
+        "supported_action_count": 43
+      },
+      "registry": {
+        "active": 2,
+        "registry_backed": 2,
+        "supported_actions": 43,
+        "total": 10
+      }
+    },
+    "product": {
+      "authority": {
+        "active_count": 3,
+        "persona_count": 3,
+        "registry_backed_count": 3,
+        "required_active_personas": 3,
+        "required_personas": 3,
+        "required_registry_backed_personas": 3,
+        "supported_action_count": 22
+      },
+      "registry": {
+        "active": 3,
+        "registry_backed": 3,
+        "supported_actions": 22,
+        "total": 3
+      }
+    },
+    "project-management": {
+      "authority": {
+        "active_count": 3,
+        "persona_count": 5,
+        "registry_backed_count": 3,
+        "required_active_personas": 3,
+        "required_personas": 5,
+        "required_registry_backed_personas": 3,
+        "supported_action_count": 26
+      },
+      "registry": {
+        "active": 3,
+        "registry_backed": 3,
+        "supported_actions": 26,
+        "total": 5
+      }
+    },
+    "studio-operations": {
+      "authority": {
+        "active_count": 5,
+        "persona_count": 9,
+        "registry_backed_count": 5,
+        "required_active_personas": 5,
+        "required_personas": 9,
+        "required_registry_backed_personas": 5,
+        "supported_action_count": 41
+      },
+      "registry": {
+        "active": 5,
+        "registry_backed": 5,
+        "supported_actions": 41,
+        "total": 9
+      }
+    },
+    "testing": {
+      "authority": {
+        "active_count": 5,
+        "persona_count": 5,
+        "registry_backed_count": 5,
+        "required_active_personas": 5,
+        "required_personas": 5,
+        "required_registry_backed_personas": 5,
+        "supported_action_count": 38
+      },
+      "registry": {
+        "active": 5,
+        "registry_backed": 5,
+        "supported_actions": 38,
+        "total": 5
+      }
+    }
+  },
+  "preflight_mismatch_count": 7,
+  "preflight_mismatch_departments": [
+    "communication",
+    "engineering",
+    "hr",
+    "marketing",
+    "operations",
+    "project-management",
+    "studio-operations"
+  ]
+}

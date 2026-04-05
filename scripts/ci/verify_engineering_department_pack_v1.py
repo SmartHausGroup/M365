@@ -9,17 +9,20 @@ from smarthaus_common.department_pack import build_department_pack, load_departm
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[2]
     authority = load_department_pack_authority(
-        "engineering", path=repo_root / "registry" / "department_pack_engineering_v1.yaml"
+        "engineering",
+        path=repo_root / "registry" / "department_pack_engineering_v1.yaml",
     )
     pack = build_department_pack("engineering")
 
     summary = pack["summary"]
-    if summary["persona_count"] != 7:
+    if summary["persona_count"] != 8:
         raise SystemExit("engineering_department_pack_persona_count_mismatch")
-    if summary["supported_action_count"] != 23:
-        raise SystemExit("engineering_department_pack_supported_action_count_mismatch")
-    if summary["registry_backed_persona_count"] != 2:
+    if summary["active_persona_count"] != 7:
+        raise SystemExit("engineering_department_pack_active_count_mismatch")
+    if summary["registry_backed_persona_count"] != 7:
         raise SystemExit("engineering_department_pack_registry_backed_count_mismatch")
+    if summary["supported_action_count"] != 62:
+        raise SystemExit("engineering_department_pack_supported_action_count_mismatch")
     if summary["pack_state"] != "blocked":
         raise SystemExit("engineering_department_pack_expected_blocked")
 

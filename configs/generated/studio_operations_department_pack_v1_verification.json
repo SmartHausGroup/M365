@@ -1,8 +1,8 @@
 {
-  "active_persona_count": 2,
+  "active_persona_count": 5,
   "department": "studio-operations",
   "pack_state": "blocked",
-  "persona_count": 5,
+  "persona_count": 9,
   "personas": [
     {
       "accountability_state": "on_track",
@@ -13,24 +13,24 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "finance-tracker",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "infrastructure-maintainer",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "legal-compliance-checker",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
@@ -38,10 +38,38 @@
       "coverage_status": "registry-backed",
       "persona_id": "support-responder",
       "status": "active"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "client-relationship-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "financial-operations-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "knowledge-management-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "reports",
+      "status": "planned"
     }
   ],
-  "registry_backed_persona_count": 2,
-  "supported_action_count": 17,
-  "workflow_family_count": 4,
+  "registry_backed_persona_count": 5,
+  "supported_action_count": 41,
+  "workflow_family_count": 5,
   "workload_family_count": 8
 }

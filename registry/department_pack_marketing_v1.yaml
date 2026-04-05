@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T05:40:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,11 +12,8 @@ department:
   wave: W7
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Marketing digital employees into one bounded department contract covering growth experimentation, content
-    planning, social-channel operations, and community engagement responsibilities that are defined but not yet action-backed.
-  bounded_claim: The Marketing department pack may only claim the authoritative contract personas, capability families, approval
-    posture, and blocked readiness state declared here. It may not claim implemented external publishing, campaign execution,
-    or channel-operation coverage until later acts activate those personas.
+  purpose: Package the Marketing digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Taylor Swift and Morgan Davis remain the only action-backed Marketing anchors in the staged model.
+  bounded_claim: The Marketing department pack may claim registry-backed execution coverage only for Taylor Swift, Morgan Davis. The remaining 6 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
 workflow_families:
 - content_strategy_and_asset_preparation
 - growth_experimentation_and_campaign_analysis
@@ -44,8 +41,8 @@ approval_model:
       - department-owner:marketing
       personas:
       - growth-hacker
-      rule: Growth experiments, funnel mutations, and campaign-analysis decisions require department-owner review when later
-        acts activate the Marketing personas.
+      - website-operations-specialist
+      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
     low-observe-create:
       approvers:
       - department-owner:marketing
@@ -56,10 +53,9 @@ approval_model:
       - reddit-community-builder
       - tiktok-strategist
       - twitter-engager
-      rule: Draft, asset-preparation, and social-planning work may proceed in observe/create mode until later acts activate
-        outbound publication and community execution surfaces.
+      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
 kpis:
-  required_personas: 7
+  required_personas: 8
   required_active_personas: 2
   required_registry_backed_personas: 2
   required_workflow_families: 4
@@ -214,12 +210,32 @@ personas:
     - community_engagement_and_feedback_harvesting
     - social_channel_curation_and_publication_support
     supported_actions: []
+  website-operations-specialist:
+    display_name: Lucia Fernandez
+    title: Website Operations Specialist
+    role_type: channel_operator
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - website deployment operations
+    - cdn and dns change coordination
+    - performance optimization and rollback readiness
+    workload_families:
+    - Media, publishing, and extended communications
+    - Content, intranet, and files
+    - Low-code, workflow, and analytics
+    workflow_families:
+    - content_strategy_and_asset_preparation
+    - social_channel_curation_and_publication_support
+    supported_actions: []
 bounded_claims:
   supported:
   - marketing persona census and capability-family contract
-  - approval and escalation semantics for future marketing activation
-  - deterministic blocked-state projection while marketing remains contract-only
+  - approval and escalation semantics for staged marketing activation
+  - registry-backed execution coverage only for Taylor Swift, Morgan Davis
+  - deterministic pack-state projection while planned personas remain fail-closed
   unsupported:
-  - claims that marketing personas are currently action-backed
-  - outbound publishing, campaign execution, or community mutations beyond later activation acts
-  - finance, HR, or engineering work outside the marketing contract
+  - claims that planned marketing personas are action-backed
+  - mutation or activation beyond the explicitly registry-backed persona set
+  - cross-department work outside the marketing contract

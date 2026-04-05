@@ -15,10 +15,16 @@ def main() -> int:
     pack = build_department_pack("communication")
 
     summary = pack["summary"]
-    if summary["persona_count"] != 1:
+    if summary["persona_count"] != 4:
         raise SystemExit("communication_department_pack_persona_count_mismatch")
+    if summary["active_persona_count"] != 1:
+        raise SystemExit("communication_department_pack_active_count_mismatch")
+    if summary["registry_backed_persona_count"] != 1:
+        raise SystemExit("communication_department_pack_registry_backed_count_mismatch")
     if summary["supported_action_count"] != 7:
         raise SystemExit("communication_department_pack_supported_action_count_mismatch")
+    if summary["pack_state"] != "blocked":
+        raise SystemExit("communication_department_pack_expected_blocked")
 
     payload = {
         "department": authority["department"]["id"],
@@ -33,6 +39,7 @@ def main() -> int:
             {
                 "persona_id": persona["persona_id"],
                 "status": persona["status"],
+                "coverage_status": persona["coverage_status"],
                 "accountability_state": persona["accountability_state"],
                 "action_count": persona["action_count"],
             }
@@ -49,7 +56,7 @@ def main() -> int:
         "PASSED",
         f"department={payload['department']}",
         f"pack_state={payload['pack_state']}",
-        f"supported_action_count={payload['supported_action_count']}",
+        f"persona_count={payload['persona_count']}",
     )
     return 0
 

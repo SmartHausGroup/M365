@@ -2,83 +2,66 @@
 
 ## Purpose
 
-Turn the runtime-real Communication persona into one bounded department-operable pack that can be
-delegated to, governed, and measured as a single workforce unit.
+Turn the authoritative Communication persona contract into one bounded department pack that can
+be governed, delegated to, and measured while the staged post-H3 roster remains fail-closed.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. `E2B`
-made the communication workload surface real. But there was still no department-level contract that
-said what Communication as a unit is allowed to do, which persona anchors that pack, how
-outbound-communication approval works inside the department, and what state makes the Communication
-pack ready versus blocked.
+H3 rebased the authoritative persona registry to `59` personas, but the communication
+department-pack contract still encoded pre-H3 counts. H4S corrects that scope gap so H4 can
+resume certification/count rebase from truthful department-pack authority.
 
 ## Decision
 
-`registry/department_pack_communication_v1.yaml` is now the authoritative Communication
-department-pack contract.
+`registry/department_pack_communication_v1.yaml` is the authoritative Communication
+department-pack contract and now reconciles to the staged post-H3 authoritative roster.
 
-The shared runtime is `src/smarthaus_common/department_pack.py`.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This act delivers the authority and proof surface for Communication on top of the shared runtime:
+This H4S rebase locks the following staged truth:
 
-- the authoritative Communication pack authority in `registry/department_pack_communication_v1.yaml`
-- the deterministic verifier in `scripts/ci/verify_communication_department_pack_v1.py`
-- the generated proof in `configs/generated/communication_department_pack_v1_verification.json`
+- total personas: `4`
+- active personas: `1`
+- registry-backed personas: `1`
+- persona-contract-only personas: `3`
+- supported action count: `7`
+- pack state before later activation acts: `blocked`
 
 ## Communication Pack Boundary
 
-The Communication pack contains exactly one registry-backed persona:
+The Communication pack now contains exactly `4` authoritative personas:
+- `calendar-management-agent` — Mateo Alvarez (Calendar Operations Coordinator); persona-contract-only; actions=0
+- `email-processing-agent` — Hannah Kim (Email Operations Specialist); persona-contract-only; actions=0
+- `outreach-coordinator` — David Park (Communications Manager); registry-backed; actions=7
+- `teams-manager` — Alicia Nguyen (Teams Collaboration Administrator); persona-contract-only; actions=0
 
-- `outreach-coordinator`
-  - David Park
-  - outbound email, bulk email, scheduled communication, meetings, follow-up, and campaign launch
+Registry-backed execution coverage is limited to `outreach-coordinator`.
 
-The pack may claim only that persona and its explicit action-backed workflows.
+Persona-contract-only coverage is limited to `calendar-management-agent`, `email-processing-agent`, `teams-manager`.
+
+David Park remains the only action-backed Communication anchor before later activation acts.
 
 ## Department Pack Contract
 
 Every Communication pack snapshot must include:
 
 - department metadata
-  - id
-  - display name
-  - wave and release track
-  - department status
 - workload and workflow families
 - approval model
-  - department owner
-  - department lead
-  - per-profile approver routing
 - KPI contract
-  - required personas
-  - required active personas
-  - required registry-backed personas
-  - required workflow families
-  - supported action count
 - personas
   - persona context from the authoritative persona registry
   - accountability state
   - queue depth
   - memory count
   - work-history event count
+  - coverage status
 - pack summary
   - persona counts
   - supported action count
   - workload-family count
   - workflow-family count
   - pack state
-
-## Pack State Contract
-
-- `ready`
-  - the Communication persona is active and not escalated
-- `watch`
-  - the Communication persona has entered warning state but is not escalated
-- `attention_required`
-  - the Communication persona is escalated and the communication lead must intervene
-- `blocked`
-  - the Communication persona is missing, inactive, or outside the declared authority
 
 ## Runtime Rule
 
@@ -90,19 +73,18 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- pack status is derived deterministically from persona status and accountability state
+- any planned persona keeps the pack fail-closed as `blocked`
 
 ## Required Guarantees
 
-- one Communication department-pack authority
-- one deterministic pack summary for the Communication workforce surface
+- one truthful Communication department-pack authority reconciled to H3
+- one deterministic pack summary for outbound coordination, calendar handling, mailbox triage, and Teams collaboration administration
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- deterministic department state derived from persona accountability and registry state
-- bounded department claim that does not overstate unsupported communication or non-communication workflows
+- no over-claim of active or registry-backed coverage beyond the staged authoritative truth
 
 ## No-Go Conditions
 
-- the pack fabricates personas not in the authoritative registry
-- supported action counts drift from the declared authority
-- an inactive or missing Communication persona still yields `ready`
-- the department pack claims website, finance, HR, or security work outside the explicit communication surface
+- the pack fabricates personas not present in `registry/persona_registry_v2.yaml`
+- a contract-only persona declares live supported actions
+- the pack claims a planned persona is active or registry-backed
+- the department-pack authority drifts from the staged H3 counts

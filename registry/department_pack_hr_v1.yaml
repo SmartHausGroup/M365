@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T05:05:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -11,24 +11,20 @@ department:
   display_name: Human Resources
   wave: W6
   wave_track: Wave A
-  status: registry-backed
-  purpose: >-
-    Package the Human Resources digital employee into one bounded workforce
-    contract for onboarding, offboarding, personnel-state administration, review
-    orchestration, and HR policy governance.
-  bounded_claim: >-
-    The HR department pack may only claim the action-backed Sarah Williams
-    workflows plus the explicit approval, escalation, and regulated-change
-    semantics declared in this authority.
+  status: partial-activation
+  purpose: Package the Human Resources digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Sarah Williams remains the only action-backed HR anchor while recruiting support stays contract-only.
+  bounded_claim: The Human Resources department pack may claim registry-backed execution coverage only for Sarah Williams. The remaining 1 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
 workflow_families:
-  - onboarding_and_offboarding
-  - employee_record_and_policy_administration
-  - review_cycle_and_case_coordination
+- onboarding_and_offboarding
+- employee_record_and_policy_administration
+- review_cycle_and_case_coordination
+- recruitment_and_candidate_coordination
 workload_families:
-  - Identity, directory, and tenant administration
-  - Documents, notes, and workspace productivity
-  - Tasks, scheduling, and work management
-  - Security, compliance, and data governance
+- Identity, directory, and tenant administration
+- Documents, notes, and workspace productivity
+- Tasks, scheduling, and work management
+- Security, compliance, and data governance
+- Mail, calendar, contacts, and bookings
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
@@ -40,18 +36,21 @@ approval_model:
   profiles:
     critical-regulated:
       approvers:
-        - hr-manager
-        - department-head
+      - hr-manager
       personas:
-        - hr-generalist
-      rule: >-
-        Personnel-state, offboarding, review, and policy mutations require
-        regulated dual human approval before execution.
+      - hr-generalist
+      rule: Dual human approval and explicit sign-off are required for regulated, personnel-state, legal, security, or compliance-sensitive mutations.
+    high-impact:
+      approvers:
+      - hr-manager
+      personas:
+      - recruitment-assistance-agent
+      rule: Human approval is required for tenant, public-facing, financial, or organization-wide changes; destructive or privileged mutations remain explicitly gated.
 kpis:
-  required_personas: 1
+  required_personas: 2
   required_active_personas: 1
   required_registry_backed_personas: 1
-  required_workflow_families: 3
+  required_workflow_families: 4
   supported_action_count: 5
 personas:
   hr-generalist:
@@ -62,33 +61,51 @@ personas:
     risk_tier: critical
     approval_profile: critical-regulated
     capability_families:
-      - onboarding and offboarding
-      - employee record updates
-      - review orchestration
-      - HR policy lifecycle
+    - onboarding and offboarding
+    - employee record updates
+    - review orchestration
+    - HR policy lifecycle
     workload_families:
-      - Identity, directory, and tenant administration
-      - Documents, notes, and workspace productivity
-      - Tasks, scheduling, and work management
-      - Security, compliance, and data governance
+    - Identity, directory, and tenant administration
+    - Documents, notes, and workspace productivity
+    - Tasks, scheduling, and work management
+    - Security, compliance, and data governance
     workflow_families:
-      - onboarding_and_offboarding
-      - employee_record_and_policy_administration
-      - review_cycle_and_case_coordination
+    - onboarding_and_offboarding
+    - employee_record_and_policy_administration
+    - review_cycle_and_case_coordination
     supported_actions:
-      - employee.onboard
-      - employee.update_info
-      - employee.offboard
-      - policy.create
-      - review.initiate
+    - employee.onboard
+    - employee.update_info
+    - employee.offboard
+    - policy.create
+    - review.initiate
+  recruitment-assistance-agent:
+    display_name: Camila Torres
+    title: Recruiting Coordinator
+    role_type: recruiting_operator
+    coverage_status: persona-contract-only
+    risk_tier: high
+    approval_profile: high-impact
+    capability_families:
+    - candidate screening
+    - interview coordination
+    - offer and onboarding preparation
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Mail, calendar, contacts, and bookings
+    - Documents, notes, and workspace productivity
+    workflow_families:
+    - recruitment_and_candidate_coordination
+    - onboarding_and_offboarding
+    supported_actions: []
 bounded_claims:
   supported:
-    - onboarding and offboarding orchestration
-    - employee record and personnel-state updates
-    - review initiation and policy lifecycle governance
-    - regulated HR approval routing for explicit hr-generalist actions
+  - hr persona census and capability-family contract
+  - approval and escalation semantics for staged hr activation
+  - registry-backed execution coverage only for Sarah Williams
+  - deterministic pack-state projection while planned personas remain fail-closed
   unsupported:
-    - payroll and benefits system administration
-    - finance approval and accounting operations
-    - legal case management outside explicit HR actions
-    - generalized security, compliance, or device administration outside the declared pack
+  - claims that planned hr personas are action-backed
+  - mutation or activation beyond the explicitly registry-backed persona set
+  - cross-department work outside the hr contract

@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T05:24:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,11 +12,8 @@ department:
   wave: W6
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Engineering digital employees into one bounded department pack. Backend-architect and devops-automator
-    are now registry-backed foundation operators; the remaining five personas are defined but not yet action-backed.
-  bounded_claim: The Engineering department pack may claim registry-backed execution coverage for backend-architect (13 actions)
-    and devops-automator (10 actions) only. The remaining five personas retain contract-only status until later activation
-    acts.
+  purpose: Package the Engineering digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Seven engineering personas remain action-backed while platform stewardship stays contract-only.
+  bounded_claim: The Engineering department pack may claim registry-backed execution coverage only for Alex Thompson, Jordan Kim, Casey Johnson, Riley Martinez, Taylor Brown, Ethan Rivera, Grace Lee. The remaining 1 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
 workflow_families:
 - architecture_and_integration_design
 - automation_and_release_engineering
@@ -30,6 +27,9 @@ workload_families:
 - Knowledge, search, and employee experience
 - Identity, directory, and tenant administration
 - Security, compliance, and data governance
+- Media, publishing, and extended communications
+- Collaboration, meetings, and communities
+- Tasks, scheduling, and work management
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
@@ -46,8 +46,8 @@ approval_model:
       - ai-engineer
       - backend-architect
       - devops-automator
-      rule: Architecture, automation, and infrastructure changes require department-owner review when later acts activate
-        these personas.
+      - platform-manager
+      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
     low-observe-create:
       approvers:
       - department-owner:engineering
@@ -56,10 +56,9 @@ approval_model:
       - mobile-app-builder
       - rapid-prototyper
       - test-writer-fixer
-      rule: Draft, prototype, and implementation changes may proceed in observe/create mode until later acts activate their
-        bounded action surfaces.
+      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
 kpis:
-  required_personas: 7
+  required_personas: 8
   required_active_personas: 7
   required_registry_backed_personas: 7
   required_workflow_families: 4
@@ -254,12 +253,32 @@ personas:
     - files.list
     - files.get
     - files.search
+  platform-manager:
+    display_name: Andre Baptiste
+    title: Platform Engineering Manager
+    role_type: platform_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - client service provisioning
+    - platform lifecycle governance
+    - tenant status coordination
+    workload_families:
+    - Low-code, workflow, and analytics
+    - Content, intranet, and files
+    - Identity, directory, and tenant administration
+    workflow_families:
+    - architecture_and_integration_design
+    - automation_and_release_engineering
+    supported_actions: []
 bounded_claims:
   supported:
   - engineering persona census and capability-family contract
-  - approval and escalation semantics for future engineering activation
-  - deterministic blocked-state projection while engineering remains contract-only
+  - approval and escalation semantics for staged engineering activation
+  - registry-backed execution coverage only for Alex Thompson, Jordan Kim, Casey Johnson, Riley Martinez, Taylor Brown, Ethan Rivera, Grace Lee
+  - deterministic pack-state projection while planned personas remain fail-closed
   unsupported:
-  - claims that engineering personas are currently action-backed
-  - production engineering execution beyond explicit later activation acts
-  - finance, HR, or communication work outside the engineering contract
+  - claims that planned engineering personas are action-backed
+  - mutation or activation beyond the explicitly registry-backed persona set
+  - cross-department work outside the engineering contract

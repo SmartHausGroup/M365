@@ -1,8 +1,8 @@
 {
-  "active_persona_count": 0,
+  "active_persona_count": 2,
   "department": "marketing",
   "pack_state": "blocked",
-  "persona_count": 7,
+  "persona_count": 8,
   "personas": [
     {
       "accountability_state": "on_track",
@@ -13,17 +13,17 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "content-creator",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 10,
+      "coverage_status": "registry-backed",
       "persona_id": "growth-hacker",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
@@ -52,10 +52,17 @@
       "coverage_status": "persona-contract-only",
       "persona_id": "twitter-engager",
       "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "website-operations-specialist",
+      "status": "planned"
     }
   ],
-  "registry_backed_persona_count": 0,
-  "supported_action_count": 0,
+  "registry_backed_persona_count": 2,
+  "supported_action_count": 18,
   "workflow_family_count": 4,
   "workload_family_count": 7
 }

@@ -1,24 +1,82 @@
 {
   "active_persona_count": 2,
   "department": "operations",
-  "pack_state": "ready",
-  "persona_count": 2,
+  "pack_state": "blocked",
+  "persona_count": 10,
   "personas": [
     {
       "accountability_state": "on_track",
       "action_count": 37,
+      "coverage_status": "registry-backed",
       "persona_id": "m365-administrator",
       "status": "active"
     },
     {
       "accountability_state": "on_track",
       "action_count": 6,
+      "coverage_status": "registry-backed",
       "persona_id": "website-manager",
       "status": "active"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "audit-operations",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "compliance-monitoring-agent",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "device-management",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "identity-security",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "it-operations-manager",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "security-operations",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "service-health",
+      "status": "planned"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 0,
+      "coverage_status": "persona-contract-only",
+      "persona_id": "ucp-administrator",
+      "status": "planned"
     }
   ],
   "registry_backed_persona_count": 2,
   "supported_action_count": 43,
-  "workflow_family_count": 5,
-  "workload_family_count": 5
+  "workflow_family_count": 13,
+  "workload_family_count": 9
 }

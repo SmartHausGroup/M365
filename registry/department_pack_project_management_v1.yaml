@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T06:02:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,11 +12,8 @@ department:
   wave: W7
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Project Management digital employees into one bounded department pack. Project-shipper is now a registry-backed
-    foundation operator; the remaining two personas are defined but not yet action-backed.
-  bounded_claim: The Project Management department pack may claim registry-backed execution coverage for project-shipper (9
-    actions) only. The remaining two personas (experiment-tracker, studio-producer) retain contract-only status until later
-    activation acts.
+  purpose: Package the Project Management digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Ben Foster, Emily Carter, and Olivia Park remain the action-backed Project Management anchors.
+  bounded_claim: The Project Management department pack may claim registry-backed execution coverage only for Emily Carter, Ben Foster, Olivia Park. The remaining 2 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
 workflow_families:
 - release_coordination_and_handoff_management
 - experiment_tracking_and_status_reporting
@@ -42,19 +39,19 @@ approval_model:
       approvers:
       - department-owner:project-management
       personas:
+      - project-coordination-agent
+      - project-manager
       - project-shipper
-      rule: Release coordination, handoff orchestration, and launch-checklist changes require department-owner review when
-        later acts activate the Project Management personas.
+      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
     low-observe-create:
       approvers:
       - department-owner:project-management
       personas:
       - experiment-tracker
       - studio-producer
-      rule: Experiment logging, production planning, and scheduling preparation may proceed in observe/create mode until later
-        acts activate mutating Project Management execution surfaces.
+      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
 kpis:
-  required_personas: 3
+  required_personas: 5
   required_active_personas: 3
   required_registry_backed_personas: 3
   required_workflow_families: 3
@@ -141,13 +138,50 @@ personas:
     - sites.list
     - lists.list
     - lists.items
+  project-coordination-agent:
+    display_name: Sofia Petrova
+    title: Project Coordinator
+    role_type: planning_operator
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - plan and task orchestration
+    - deadline tracking
+    - status reporting
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Documents, notes, and workspace productivity
+    workflow_families:
+    - cross_functional_schedule_and_delivery_planning
+    supported_actions: []
+  project-manager:
+    display_name: Haruto Tanaka
+    title: Project Manager
+    role_type: release_anchor
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - project lifecycle governance
+    - milestone status oversight
+    - archive and closeout control
+    workload_families:
+    - Tasks, scheduling, and work management
+    - Collaboration, meetings, and communities
+    - Low-code, workflow, and analytics
+    workflow_families:
+    - release_coordination_and_handoff_management
+    - cross_functional_schedule_and_delivery_planning
+    supported_actions: []
 bounded_claims:
   supported:
   - project-management persona census and capability-family contract
-  - approval and escalation semantics for project-management activation
-  - registry-backed execution coverage for project-shipper (9 actions)
-  - deterministic pack-state projection with partial activation
+  - approval and escalation semantics for staged project-management activation
+  - registry-backed execution coverage only for Emily Carter, Ben Foster, Olivia Park
+  - deterministic pack-state projection while planned personas remain fail-closed
   unsupported:
-  - claims that experiment-tracker or studio-producer are action-backed
-  - live experiment-state or production-planning mutations beyond later activation acts
-  - engineering, marketing, or finance work outside the project-management contract
+  - claims that planned project-management personas are action-backed
+  - mutation or activation beyond the explicitly registry-backed persona set
+  - cross-department work outside the project-management contract

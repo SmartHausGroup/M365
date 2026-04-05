@@ -1,33 +1,33 @@
 {
-  "active_persona_count": 0,
+  "active_persona_count": 3,
   "department": "product",
-  "pack_state": "blocked",
+  "pack_state": "ready",
   "persona_count": 3,
   "personas": [
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "sprint-prioritizer",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "feedback-synthesizer",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "trend-researcher",
-      "status": "planned"
+      "status": "active"
     }
   ],
-  "registry_backed_persona_count": 0,
-  "supported_action_count": 0,
+  "registry_backed_persona_count": 3,
+  "supported_action_count": 22,
   "workflow_family_count": 3,
   "workload_family_count": 7
 }

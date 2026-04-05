@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T05:12:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -11,24 +11,19 @@ department:
   display_name: Communication
   wave: W6
   wave_track: Wave A
-  status: registry-backed
-  purpose: >-
-    Package the Communication digital employee into one bounded workforce
-    contract for outbound email, meeting coordination, follow-up orchestration,
-    and campaign launch operations.
-  bounded_claim: >-
-    The Communication department pack may only claim the action-backed David Park
-    workflows plus the explicit approval, escalation, and external-communication
-    safeguards declared in this authority.
+  status: partial-activation
+  purpose: Package the Communication digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. David Park remains the only action-backed Communication anchor before later activation acts.
+  bounded_claim: The Communication department pack may claim registry-backed execution coverage only for David Park. The remaining 3 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
 workflow_families:
-  - outbound_email_and_mailbox_campaigns
-  - meeting_and_followup_coordination
-  - campaign_launch_and_communication_operations
+- outbound_email_and_mailbox_campaigns
+- meeting_and_followup_coordination
+- campaign_launch_and_communication_operations
 workload_families:
-  - Mail, calendar, contacts, and bookings
-  - Collaboration, meetings, and communities
-  - Media, publishing, and extended communications
-  - Tasks, scheduling, and work management
+- Mail, calendar, contacts, and bookings
+- Collaboration, meetings, and communities
+- Media, publishing, and extended communications
+- Tasks, scheduling, and work management
+- Documents, notes, and workspace productivity
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
@@ -40,14 +35,25 @@ approval_model:
   profiles:
     high-impact:
       approvers:
-        - marketing-lead
+      - marketing-lead
       personas:
-        - outreach-coordinator
-      rule: >-
-        Bulk outbound mail, campaign launches, and externally visible
-        communication changes require human review before execution.
+      - outreach-coordinator
+      rule: Human approval is required for tenant, public-facing, financial, or organization-wide changes; destructive or privileged mutations remain explicitly gated.
+    medium-operational:
+      approvers:
+      - marketing-lead
+      personas:
+      - email-processing-agent
+      - teams-manager
+      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
+    low-observe-create:
+      approvers:
+      - marketing-lead
+      personas:
+      - calendar-management-agent
+      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
 kpis:
-  required_personas: 1
+  required_personas: 4
   required_active_personas: 1
   required_registry_backed_personas: 1
   required_workflow_families: 3
@@ -61,35 +67,89 @@ personas:
     risk_tier: high
     approval_profile: high-impact
     capability_families:
-      - outbound email and mailbox campaigns
-      - meeting coordination
-      - follow-up orchestration
-      - campaign launch coordination
+    - outbound email and mailbox campaigns
+    - meeting coordination
+    - follow-up orchestration
+    - campaign launch coordination
     workload_families:
-      - Mail, calendar, contacts, and bookings
-      - Collaboration, meetings, and communities
-      - Media, publishing, and extended communications
-      - Tasks, scheduling, and work management
+    - Mail, calendar, contacts, and bookings
+    - Collaboration, meetings, and communities
+    - Media, publishing, and extended communications
+    - Tasks, scheduling, and work management
     workflow_families:
-      - outbound_email_and_mailbox_campaigns
-      - meeting_and_followup_coordination
-      - campaign_launch_and_communication_operations
+    - outbound_email_and_mailbox_campaigns
+    - meeting_and_followup_coordination
+    - campaign_launch_and_communication_operations
     supported_actions:
-      - email.send_individual
-      - email.send_bulk
-      - email.schedule
-      - meeting.schedule
-      - followup.create
-      - campaign.create
-      - mail.send
+    - email.send_individual
+    - email.send_bulk
+    - email.schedule
+    - meeting.schedule
+    - followup.create
+    - campaign.create
+    - mail.send
+  calendar-management-agent:
+    display_name: Mateo Alvarez
+    title: Calendar Operations Coordinator
+    role_type: coordination_operator
+    coverage_status: persona-contract-only
+    risk_tier: low
+    approval_profile: low-observe-create
+    capability_families:
+    - calendar triage and scheduling
+    - availability and meeting coordination
+    - conflict resolution and reminder management
+    workload_families:
+    - Mail, calendar, contacts, and bookings
+    - Collaboration, meetings, and communities
+    - Tasks, scheduling, and work management
+    workflow_families:
+    - meeting_and_followup_coordination
+    supported_actions: []
+  email-processing-agent:
+    display_name: Hannah Kim
+    title: Email Operations Specialist
+    role_type: communication_operator
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - mail triage and classification
+    - response drafting and routing
+    - follow-up scheduling
+    workload_families:
+    - Mail, calendar, contacts, and bookings
+    - Tasks, scheduling, and work management
+    - Documents, notes, and workspace productivity
+    workflow_families:
+    - outbound_email_and_mailbox_campaigns
+    supported_actions: []
+  teams-manager:
+    display_name: Alicia Nguyen
+    title: Teams Collaboration Administrator
+    role_type: collaboration_operator
+    coverage_status: persona-contract-only
+    risk_tier: medium
+    approval_profile: medium-operational
+    capability_families:
+    - teams workspace governance
+    - channel lifecycle administration
+    - chat and collaboration coordination
+    workload_families:
+    - Collaboration, meetings, and communities
+    - Mail, calendar, contacts, and bookings
+    - Tasks, scheduling, and work management
+    workflow_families:
+    - meeting_and_followup_coordination
+    - campaign_launch_and_communication_operations
+    supported_actions: []
 bounded_claims:
   supported:
-    - outbound email and mailbox campaigns
-    - meeting scheduling and follow-up coordination
-    - campaign launch preparation and communication operations
-    - human-reviewed external communication changes for the declared persona
+  - communication persona census and capability-family contract
+  - approval and escalation semantics for staged communication activation
+  - registry-backed execution coverage only for David Park
+  - deterministic pack-state projection while planned personas remain fail-closed
   unsupported:
-    - finance or HR approval workflows
-    - website publishing and SEO operations
-    - general legal or security case management
-    - social publishing beyond the declared communication action surface
+  - claims that planned communication personas are action-backed
+  - mutation or activation beyond the explicitly registry-backed persona set
+  - cross-department work outside the communication contract
