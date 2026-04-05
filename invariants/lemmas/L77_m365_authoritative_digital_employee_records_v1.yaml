@@ -1,0 +1,17 @@
+invariant_id: L77
+title: Authoritative digital employee records remain bounded and complete
+lemma_reference: docs/ma/lemmas/L77_m365_authoritative_digital_employee_records_v1.md
+proof_obligations:
+  - the employee-record artifact must contain exactly 20 promoted personas
+  - every record must include the required identity, title, department, manager, and escalation fields
+  - the only permitted humanization fields are working_style, communication_style, and decision_style
+  - manager and escalation tokens must remain deterministic by department
+failure_boundaries:
+  - missing employee record
+  - extra humanization field
+  - blank manager or escalation token
+  - promoted persona outside the H1-approved department set
+test_bindings:
+  - tests/test_authoritative_digital_employee_records_v1.py
+  - scripts/ci/verify_authoritative_digital_employee_records_v1.py
+ci_gate: authoritative-digital-employee-records-v1

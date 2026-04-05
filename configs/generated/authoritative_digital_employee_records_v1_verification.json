@@ -1,0 +1,20 @@
+{
+  "bounded_humanization_fields": [
+    "communication_style",
+    "decision_style",
+    "working_style"
+  ],
+  "departments_covered": {
+    "communication": 3,
+    "engineering": 1,
+    "hr": 1,
+    "marketing": 1,
+    "operations": 8,
+    "project-management": 2,
+    "studio-operations": 4
+  },
+  "escalation_token_policy": "department-owner:<department>",
+  "manager_token_policy": "department-lead:<department>",
+  "status": "passed",
+  "total_promoted_personas": 20
+}

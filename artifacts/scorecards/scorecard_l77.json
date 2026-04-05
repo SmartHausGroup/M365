@@ -1,0 +1,20 @@
+{
+  "lemma_id": "L77",
+  "title": "M365 Authoritative Digital Employee Records v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-BY-authoritative-digital-employee-records-v1.ipynb",
+    "notebooks/lemma_proofs/L77_m365_authoritative_digital_employee_records_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L77_m365_authoritative_digital_employee_records_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "20 promoted personas have complete bounded employee records",
+    "Only working_style, communication_style, and decision_style are used for humanization metadata",
+    "Manager and escalation tokens remain deterministic by department",
+    "H2 stops before any authoritative roster, registry, capability-map, certification, or activation rebase"
+  ]
+}
