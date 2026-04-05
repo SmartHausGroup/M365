@@ -117,6 +117,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md` | Detailed prompt for executing the H5 notebook-first activation gate closeout phase after approval. | `Policy & Security`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R1` |
 | `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout-prompt.txt` | Kickoff prompt for the draft H5 activation gate closeout phase. | `Policy & Security`, `Technical Architecture` | `plan:m365-authoritative-persona-activation-gate-closeout:R1` |
 
+## Active Authoritative Persona Humanization Merge-to-Development Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-authoritative-persona-humanization-merge-to-development/m365-authoritative-persona-humanization-merge-to-development.md` | Human-readable governed package for merging the completed authoritative persona humanization branch into `development` only. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
+| `plans/m365-authoritative-persona-humanization-merge-to-development/m365-authoritative-persona-humanization-merge-to-development.yaml` | Structured YAML authority for the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
+| `plans/m365-authoritative-persona-humanization-merge-to-development/m365-authoritative-persona-humanization-merge-to-development.json` | Structured JSON mirror for automation and governance tooling on the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md` | Detailed prompt for the future governed `codex/... -> development` merge execution. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt` | Kickoff prompt for the bounded authoritative persona merge-to-development package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

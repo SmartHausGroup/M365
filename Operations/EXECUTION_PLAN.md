@@ -329,6 +329,21 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-04-05 13:40 EDT):** Executed `H5` and emitted `GO` under `plan:m365-authoritative-persona-activation-gate-closeout:R1` through `R6`. Published the `L81` MA evidence chain in `docs/ma/lemmas/`, `invariants/lemmas/`, `notebooks/m365/`, `notebooks/lemma_proofs/`, `artifacts/scorecards/scorecard_l81.json`, and `configs/generated/authoritative_persona_activation_gate_closeout_v1_verification.json`; promoted the governed `20` personas in `registry/persona_capability_map.yaml` and rebuilt `registry/persona_registry_v2.yaml` to the final `59 total / 54 active / 5 planned` truth; rebased `registry/activated_persona_surface_v1.yaml`, `registry/workforce_packaging_v1.yaml`, and the scoped commercialization docs to the final `54 active / 5 deferred external / 430 total allowed persona-actions` boundary; and refreshed the H5-focused verifiers plus tests so the final activation and packaging state is mechanically enforced. Validation passed with notebook replay, `PYTHONPATH=src python3 scripts/ci/build_persona_registry_v2.py`, `PYTHONPATH=src python3 scripts/ci/verify_persona_registry_v2.py`, `python3 scripts/ci/verify_activated_persona_surface_v1.py`, `python3 scripts/ci/verify_workforce_packaging_v1.py`, focused pytest (`14 passed`), `git diff --check`, and `pre-commit run --all-files`. The initiative is now complete; only the five external-platform marketing personas remain planned and non-active.
 
+**Initiative:** Merge the completed authoritative persona humanization branch into `development` through one bounded governed integration step.
+
+**Plan:** `plans/m365-authoritative-persona-humanization-merge-to-development/m365-authoritative-persona-humanization-merge-to-development.md`
+
+**Reference:** `plan:m365-authoritative-persona-humanization-merge-to-development:R1`
+
+**Status:** 🟡 Draft — the merge package exists on `codex/m365-authoritative-persona-humanization-expansion-plan`, but the actual merge into `development` has not started.
+**Current next act:** Present the approval packet for `M1` and execute the bounded `codex/m365-authoritative-persona-humanization-expansion-plan -> development` merge only after explicit `go`.
+
+**North Star guardrail:** This package is `development`-only. It must preserve the already governed `59 total / 54 active / 5 planned` truth, use an explicit merge commit, rerun the final humanization validation slice on `development`, and stop before any `staging`, `main`, or release-tag promotion.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md`, `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt`
+
+**Status update (2026-04-05 14:37 EDT):** Created the governed merge-to-development package and prompt pair for the completed authoritative persona humanization branch. The bounded source branch head at package creation is `cca8a90`; the target `development` head at package creation is `4c997ea`. No merge, `development` commit, or branch promotion has been executed in this slice.
+
 ---
 
 ## Internal Ops: SmartHaus UCP Setup-Token Delivery Flow
