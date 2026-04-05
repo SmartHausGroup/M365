@@ -1,0 +1,15 @@
+Execute the governed package at `docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction.md`.
+
+Plan Reference: `plan:m365-authoritative-persona-post-h5-parity-correction`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md`.
+
+This package repairs one bounded blocker only: stale post-H5 persona
+certification and enterprise release-gate parity. Keep all derivation in
+notebooks first, do not touch the already truthful final registry/activation/
+packaging surfaces, and do not push `development` from this package.
+
+Do not implement until explicit owner approval.

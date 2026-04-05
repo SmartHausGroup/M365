@@ -127,6 +127,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md` | Detailed prompt for the future governed `codex/... -> development` merge execution. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
 | `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt` | Kickoff prompt for the bounded authoritative persona merge-to-development package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-authoritative-persona-humanization-merge-to-development:R1` |
 
+## Active Authoritative Persona Post-H5 Parity Correction Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md` | Human-readable governed blocker package for correcting stale post-H5 persona-certification and enterprise-release-gate parity before `M1` merge replay resumes. | `Mission Statement`, `Policy & Security` | `plan:m365-authoritative-persona-post-h5-parity-correction:R1` |
+| `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.yaml` | Structured YAML authority for the bounded post-H5 parity-correction package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-post-h5-parity-correction:R1` |
+| `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.json` | Structured JSON mirror for automation and governance tooling on the post-H5 parity-correction package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-post-h5-parity-correction:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction.md` | Detailed prompt for executing the notebook-first post-H5 parity correction. | `Policy & Security`, `Technical Architecture` | `plan:m365-authoritative-persona-post-h5-parity-correction:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction-prompt.txt` | Kickoff prompt for the bounded post-H5 parity-correction package. | `Policy & Security`, `Technical Architecture` | `plan:m365-authoritative-persona-post-h5-parity-correction:R1` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
