@@ -2,25 +2,29 @@
 
 ## Purpose
 
-Lock the authoritative workforce roster for the expansion program so all later capability, routing, and certification work uses one department and persona census.
+Lock the staged authoritative workforce roster so all capability, certification, release-gate, and activation work uses one department and persona census.
 
 ## Authority
 
 - Primary roster source: `registry/ai_team.json`
+- Authoritative registry source: `registry/persona_registry_v2.yaml`
 - Runtime cross-check source: `registry/agents.yaml`
-- Plan reference: `plan:m365-ai-workforce-expansion-master-plan:E0A`
+- Plan reference: `plan:m365-authoritative-persona-certification-and-count-rebase:R3`
 
 ## Locked Census
 
 - Department count: `10`
-- Persona count: `39`
-- Source-of-truth roster version: `registry/ai_team.json` as corrected on `2026-03-20`
+- Persona count: `59`
+- Active personas: `34`
+- Planned personas: `25`
+- Source-of-truth roster version: `registry/ai_team.json` as rebased through H3 and preserved by H4 on `2026-04-05`
 
 ## Validation Findings
 
-- The roster now matches the North Star target of `39` personas across `10` departments.
-- All `39` roster agent IDs resolve in `registry/agents.yaml`.
-- The prior `bonus` department block was removed because it inflated the roster to `41`, created an eleventh department, and included `studio-coach` plus `joker`, neither of which exists in the runtime registry.
+- The authoritative census now reflects `59` named digital employees across the existing `10`-department model.
+- The staged activation boundary remains `34` active personas and `25` planned personas until H5 closes the activation gate.
+- All `59` authoritative persona IDs resolve in `registry/agents.yaml`.
+- Department totals reconcile to the rebased H4S department-pack authority and the H4 certification contracts.
 
 ## Department Roster
 
@@ -28,14 +32,26 @@ Lock the authoritative workforce roster for the expansion program so all later c
 
 - `Marcus Chen` — `m365-administrator` — `Senior IT Administrator`
 - `Elena Rodriguez` — `website-manager` — `Website Manager`
+- `Naomi Brooks` — `audit-operations` — `Audit Operations Lead`
+- `Farah Alvi` — `compliance-monitoring-agent` — `Compliance Monitoring Lead`
+- `Connor Walsh` — `device-management` — `Endpoint Operations Administrator`
+- `Amara Okoye` — `identity-security` — `Identity Security Administrator`
+- `Peter Novak` — `it-operations-manager` — `IT Operations Manager`
+- `Tunde Adeyemi` — `security-operations` — `Security Operations Lead`
+- `Chloe Martin` — `service-health` — `Service Reliability Coordinator`
+- `Omar El-Masry` — `ucp-administrator` — `UCP Control Plane Administrator`
 
 ### hr
 
 - `Sarah Williams` — `hr-generalist` — `HR Director`
+- `Camila Torres` — `recruitment-assistance-agent` — `Recruiting Coordinator`
 
 ### communication
 
 - `David Park` — `outreach-coordinator` — `Communications Manager`
+- `Mateo Alvarez` — `calendar-management-agent` — `Calendar Operations Coordinator`
+- `Hannah Kim` — `email-processing-agent` — `Email Operations Specialist`
+- `Alicia Nguyen` — `teams-manager` — `Teams Collaboration Administrator`
 
 ### engineering
 
@@ -46,6 +62,7 @@ Lock the authoritative workforce roster for the expansion program so all later c
 - `Taylor Brown` — `mobile-app-builder` — `Mobile Engineer`
 - `Ethan Rivera` — `rapid-prototyper` — `Prototype Engineer`
 - `Grace Lee` — `test-writer-fixer` — `Test Engineer`
+- `Andre Baptiste` — `platform-manager` — `Platform Engineering Manager`
 
 ### marketing
 
@@ -56,6 +73,7 @@ Lock the authoritative workforce roster for the expansion program so all later c
 - `Priya Singh` — `reddit-community-builder` — `Community Manager`
 - `Ryan O'Connor` — `tiktok-strategist` — `Short-form Video Expert`
 - `Jamie Lee` — `twitter-engager` — `Social Media Director`
+- `Lucia Fernandez` — `website-operations-specialist` — `Website Operations Specialist`
 
 ### product
 
@@ -68,6 +86,8 @@ Lock the authoritative workforce roster for the expansion program so all later c
 - `Emily Carter` — `experiment-tracker` — `Experimentation PM`
 - `Ben Foster` — `project-shipper` — `Release Manager`
 - `Olivia Park` — `studio-producer` — `Studio Producer`
+- `Sofia Petrova` — `project-coordination-agent` — `Project Coordinator`
+- `Haruto Tanaka` — `project-manager` — `Project Manager`
 
 ### studio-operations
 
@@ -76,6 +96,10 @@ Lock the authoritative workforce roster for the expansion program so all later c
 - `Jennifer Liu` — `infrastructure-maintainer` — `Site Reliability Engineer`
 - `Robert Kim` — `legal-compliance-checker` — `Legal Counsel`
 - `Mike Rodriguez` — `support-responder` — `Customer Success Manager`
+- `Priya Mehta` — `client-relationship-agent` — `Client Relationship Manager`
+- `Luis Carvalho` — `financial-operations-agent` — `Financial Operations Manager`
+- `Leah Goldstein` — `knowledge-management-agent` — `Knowledge Operations Lead`
+- `Youssef Haddad` — `reports` — `Reporting and KPI Analyst`
 
 ### testing
 
@@ -95,4 +119,4 @@ Lock the authoritative workforce roster for the expansion program so all later c
 
 ## Next Dependency
 
-`E0B` is now the next act. It must inventory the full M365 workload universe and bind that universe to this locked department and persona census.
+`H5` is the next governed act. It may not activate the `25` planned personas until the staged H4 count and certification truth remains green.

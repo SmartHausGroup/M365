@@ -6,7 +6,7 @@ Define the authoritative digital-employee registry for the SMARTHAUS workforce r
 
 ## Problem
 
-The earlier authoritative registry froze the workforce at `39` personas even though `20` additional runtime agents had already been promoted through the governed humanization path. H3 rebases the authoritative roster to `59` named personas without activating the promoted set before H5.
+The earlier authoritative registry froze the workforce at the pre-H3 baseline even though `20` additional runtime agents had already been promoted through the governed humanization path. H3 rebased the authoritative roster to `59` named personas, and H4 requires every certification/count surface to mirror that same staged truth without activating the promoted set before H5.
 
 ## Decision
 
@@ -26,6 +26,8 @@ It is built deterministically from:
 - Planned personas: `25`
 - Registry-backed personas: `34`
 - Persona-contract-only personas: `25`
+
+These are the same staged counts the H4 certification and release-gate surfaces must preserve.
 
 ## Required Persona Fields
 
@@ -65,7 +67,7 @@ Only personas present in `registry/persona_registry_v2.yaml` may be treated as v
 That means:
 
 - all `59` authoritative personas are now roster-valid delegation targets
-- the `20` promoted personas are authoritative in H3 but remain `planned`
+- the `20` promoted personas are authoritative in the staged H4 model but remain `planned`
 - `planned` personas must keep `allowed_actions = []`, `allowed_domains = []`, and `action_count = 0` until H5 closes the activation gate
 - non-authoritative overflow registry agents no longer exist in the authoritative persona surface
 
@@ -79,7 +81,7 @@ That means:
 
 ## No-Go Conditions
 
-- any promoted persona becomes `active` in H3
+- any promoted persona becomes `active` in H4
 - any promoted persona exposes actions or domains before H5
 - summary counts drift away from `59 total / 34 active / 25 planned`
 - the roster, capability map, and persona registry disagree on membership

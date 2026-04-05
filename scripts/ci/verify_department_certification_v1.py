@@ -52,10 +52,36 @@ def main() -> None:
     registry = yaml.safe_load(
         (repo_root / "registry" / "persona_registry_v2.yaml").read_text(encoding="utf-8")
     )
-    dept_counts: dict[str, int] = {}
+    dept_counts: dict[str, dict[str, int]] = {}
     for p in registry["personas"].values():
         d = p["department"]
-        dept_counts[d] = dept_counts.get(d, 0) + 1
+        dept = dept_counts.setdefault(
+            d,
+            {
+                "persona_count": 0,
+                "active_persona_count": 0,
+                "planned_persona_count": 0,
+                "registry_backed_persona_count": 0,
+                "contract_only_persona_count": 0,
+            },
+        )
+        dept["persona_count"] += 1
+        if p["status"] == "active":
+            dept["active_persona_count"] += 1
+        elif p["status"] == "planned":
+            dept["planned_persona_count"] += 1
+        else:
+            print(f"FAILED: unexpected persona status for {p['persona_id']}: {p['status']}")
+            sys.exit(1)
+        if p["coverage_status"] == "registry-backed":
+            dept["registry_backed_persona_count"] += 1
+        elif p["coverage_status"] == "persona-contract-only":
+            dept["contract_only_persona_count"] += 1
+        else:
+            print(
+                f"FAILED: unexpected coverage_status for {p['persona_id']}: {p['coverage_status']}"
+            )
+            sys.exit(1)
 
     cert_status = contract["department_certification_status"]
     kpis = contract["kpis"]
@@ -65,6 +91,10 @@ def main() -> None:
         sys.exit(1)
 
     total_personas = 0
+    active_personas = 0
+    planned_personas = 0
+    registry_backed_personas = 0
+    contract_only_personas = 0
     dept_names = []
     for dept_id, entry in cert_status.items():
         pack_name = f"department_pack_{dept_id.replace('-', '_')}_v1.yaml"
@@ -81,12 +111,27 @@ def main() -> None:
             )
             sys.exit(1)
 
-        registry_count = dept_counts.get(dept_id, 0)
-        if entry["persona_count"] != registry_count:
+        registry_count = dept_counts.get(dept_id, {})
+        if entry["persona_count"] != registry_count.get("persona_count", 0):
             print(
-                f"FAILED: {dept_id} persona count {entry['persona_count']} != registry {registry_count}"
+                "FAILED: "
+                f"{dept_id} persona count {entry['persona_count']} != registry "
+                f"{registry_count.get('persona_count', 0)}"
             )
             sys.exit(1)
+
+        for key in (
+            "active_persona_count",
+            "planned_persona_count",
+            "registry_backed_persona_count",
+            "contract_only_persona_count",
+        ):
+            if entry[key] != registry_count.get(key, 0):
+                print(
+                    f"FAILED: {dept_id} {key} {entry[key]} != registry "
+                    f"{registry_count.get(key, 0)}"
+                )
+                sys.exit(1)
 
         wf_count = len(pack.get("workflow_families", []))
         if wf_count != entry["workflow_family_count"]:
@@ -96,7 +141,23 @@ def main() -> None:
             print(f"FAILED: {dept_id} has zero workflow families")
             sys.exit(1)
 
+        workload_count = len(pack.get("workload_families", []))
+        if workload_count != entry["workload_family_count"]:
+            print(f"FAILED: {dept_id} workload_family_count mismatch")
+            sys.exit(1)
+        if workload_count == 0:
+            print(f"FAILED: {dept_id} has zero workload families")
+            sys.exit(1)
+
+        if entry["department_status"] != pack["department"]["status"]:
+            print(f"FAILED: {dept_id} department_status mismatch")
+            sys.exit(1)
+
         total_personas += entry["persona_count"]
+        active_personas += entry["active_persona_count"]
+        planned_personas += entry["planned_persona_count"]
+        registry_backed_personas += entry["registry_backed_persona_count"]
+        contract_only_personas += entry["contract_only_persona_count"]
         dept_names.append(dept_id)
 
     if total_personas != kpis["total_department_personas"]:
@@ -105,12 +166,32 @@ def main() -> None:
         )
         sys.exit(1)
 
+    if active_personas != kpis["active_department_personas"]:
+        print("FAILED: active_department_personas mismatch")
+        sys.exit(1)
+
+    if planned_personas != kpis["planned_department_personas"]:
+        print("FAILED: planned_department_personas mismatch")
+        sys.exit(1)
+
+    if registry_backed_personas != kpis["registry_backed_department_personas"]:
+        print("FAILED: registry_backed_department_personas mismatch")
+        sys.exit(1)
+
+    if contract_only_personas != kpis["contract_only_department_personas"]:
+        print("FAILED: contract_only_department_personas mismatch")
+        sys.exit(1)
+
     output = {
         "contract_id": contract["contract"]["id"],
         "certification_phase_count": len(phases),
         "governance_rule_count": len(contract["governance_rules"]),
         "total_departments": len(cert_status),
         "total_department_personas": total_personas,
+        "active_department_personas": active_personas,
+        "planned_department_personas": planned_personas,
+        "registry_backed_department_personas": registry_backed_personas,
+        "contract_only_department_personas": contract_only_personas,
         "departments": sorted(dept_names),
     }
 
@@ -123,7 +204,8 @@ def main() -> None:
     print(
         f"PASSED: department certification '{contract['contract']['id']}' — "
         f"{len(phases)} phases, {len(contract['governance_rules'])} rules, "
-        f"{len(cert_status)} departments, {total_personas} total personas"
+        f"{len(cert_status)} departments, {total_personas} total personas, "
+        f"{active_personas} active / {planned_personas} planned"
     )
 
 

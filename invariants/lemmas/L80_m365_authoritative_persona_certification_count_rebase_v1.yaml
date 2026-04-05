@@ -1,0 +1,26 @@
+invariant_id: L80
+title: Authoritative certification and count truth remain staged and fail-closed
+lemma_reference: docs/ma/lemmas/L80_m365_authoritative_persona_certification_count_rebase_v1.md
+proof_obligations:
+  - all scoped certification/count surfaces must agree on 59 total personas across 10 departments
+  - all scoped certification/count surfaces must agree on 34 active personas and 25 planned personas before H5
+  - persona certification KPIs must match the staged registry-backed, contract-only, and risk-tier distributions
+  - department certification KPIs must match the rebased department-pack totals, active counts, planned counts, and workflow family counts
+  - enterprise release gate claims must stay staged and must not claim all 59 personas are action-capable
+  - repeated reconciliation must emit the same verification hash
+failure_boundaries:
+  - any scoped artifact still asserts 39 total personas
+  - any scoped artifact claims more than 34 active personas before H5
+  - any scoped artifact claims all 59 personas are implemented or action-capable
+  - department certification count summaries drift from rebased department-pack authority
+  - deterministic verification replay drifts across repeated runs
+test_bindings:
+  - scripts/ci/verify_persona_certification_v1.py
+  - scripts/ci/verify_department_certification_v1.py
+  - scripts/ci/verify_enterprise_release_gate_v2.py
+  - tests/test_persona_certification_v1.py
+  - tests/test_department_certification_v1.py
+  - tests/test_persona_registry_v2.py
+  - tests/test_enterprise_release_gate_v2.py
+  - configs/generated/authoritative_persona_certification_count_rebase_v1_verification.json
+ci_gate: authoritative-persona-certification-count-rebase-v1

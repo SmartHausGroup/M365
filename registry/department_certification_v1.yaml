@@ -1,5 +1,5 @@
 version: "1.0.0"
-last_updated: "2026-03-21T16:00:00Z"
+last_updated: "2026-04-05T13:30:26Z"
 authority:
   department_packs: registry/department_pack_*_v1.yaml
   persona_registry: registry/persona_registry_v2.yaml
@@ -13,8 +13,9 @@ contract:
   description: >
     Defines the deterministic certification criteria for each department pack
     against its target workflows and responsibilities. Every department must
-    have a valid pack, correct persona count, consistent workflow families,
-    and bounded-claim alignment.
+    have a valid pack, correct staged persona counts, consistent workflow and
+    workload families, and bounded-claim alignment before H5 activation
+    closeout may proceed.
 
 certification_phases:
   - order: 1
@@ -78,6 +79,7 @@ governance_rules:
   bounded_claims:
     description: >
       Certification verdicts must not exceed the actual department surface.
+      Partial-activation departments must not claim full activation before H5.
   determinism:
     description: >
       Same packs plus same registry must produce the same verdicts on replay.
@@ -88,58 +90,124 @@ governance_rules:
 
 kpis:
   total_departments: 10
-  total_department_personas: 39
+  total_department_personas: 59
+  active_department_personas: 34
+  planned_department_personas: 25
+  registry_backed_department_personas: 34
+  contract_only_department_personas: 25
   certification_phase_count: 4
   governance_rule_count: 5
 
 department_certification_status:
   operations:
-    persona_count: 2
-    workflow_family_count: 5
+    persona_count: 10
+    active_persona_count: 2
+    planned_persona_count: 8
+    registry_backed_persona_count: 2
+    contract_only_persona_count: 8
+    workflow_family_count: 13
+    workload_family_count: 9
+    department_status: partial-activation
     certification_verdict: certified
   hr:
-    persona_count: 1
-    workflow_family_count: 3
+    persona_count: 2
+    active_persona_count: 1
+    planned_persona_count: 1
+    registry_backed_persona_count: 1
+    contract_only_persona_count: 1
+    workflow_family_count: 4
+    workload_family_count: 5
+    department_status: partial-activation
     certification_verdict: certified
   communication:
-    persona_count: 1
+    persona_count: 4
+    active_persona_count: 1
+    planned_persona_count: 3
+    registry_backed_persona_count: 1
+    contract_only_persona_count: 3
     workflow_family_count: 3
+    workload_family_count: 5
+    department_status: partial-activation
     certification_verdict: certified
   engineering:
-    persona_count: 7
+    persona_count: 8
+    active_persona_count: 7
+    planned_persona_count: 1
+    registry_backed_persona_count: 7
+    contract_only_persona_count: 1
     workflow_family_count: 4
+    workload_family_count: 10
+    department_status: partial-activation
     certification_verdict: certified
   marketing:
-    persona_count: 7
+    persona_count: 8
+    active_persona_count: 2
+    planned_persona_count: 6
+    registry_backed_persona_count: 2
+    contract_only_persona_count: 6
     workflow_family_count: 4
+    workload_family_count: 7
+    department_status: partial-activation
     certification_verdict: certified
   product:
     persona_count: 3
+    active_persona_count: 3
+    planned_persona_count: 0
+    registry_backed_persona_count: 3
+    contract_only_persona_count: 0
     workflow_family_count: 3
+    workload_family_count: 7
+    department_status: registry-backed
     certification_verdict: certified
   project-management:
-    persona_count: 3
+    persona_count: 5
+    active_persona_count: 3
+    planned_persona_count: 2
+    registry_backed_persona_count: 3
+    contract_only_persona_count: 2
     workflow_family_count: 3
+    workload_family_count: 7
+    department_status: partial-activation
     certification_verdict: certified
   studio-operations:
-    persona_count: 5
-    workflow_family_count: 4
+    persona_count: 9
+    active_persona_count: 5
+    planned_persona_count: 4
+    registry_backed_persona_count: 5
+    contract_only_persona_count: 4
+    workflow_family_count: 5
+    workload_family_count: 8
+    department_status: partial-activation
     certification_verdict: certified
   testing:
     persona_count: 5
+    active_persona_count: 5
+    planned_persona_count: 0
+    registry_backed_persona_count: 5
+    contract_only_persona_count: 0
     workflow_family_count: 4
+    workload_family_count: 4
+    department_status: registry-backed
     certification_verdict: certified
   design:
     persona_count: 5
+    active_persona_count: 5
+    planned_persona_count: 0
+    registry_backed_persona_count: 5
+    contract_only_persona_count: 0
     workflow_family_count: 4
+    workload_family_count: 5
+    department_status: registry-backed
     certification_verdict: certified
 
 bounded_claims:
   supported:
     - "All 10 departments have packs and pass four-phase certification"
-    - "39 total personas distributed across 10 departments with correct counts"
+    - "59 total personas are distributed correctly across 10 departments"
+    - "34 active / registry-backed personas and 25 planned / contract-only personas are distributed correctly before H5"
     - "Every department has at least one workflow family and one workload family"
     - "Certification is deterministic and replay-stable"
   not_supported:
+    - "All 59 department personas are active before H5"
     - "All department workflows are implemented end-to-end"
     - "Live tenant execution evidence for every department workflow"

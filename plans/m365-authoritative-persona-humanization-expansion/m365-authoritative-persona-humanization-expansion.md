@@ -194,14 +194,14 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### Parent execution discipline
 
-- **Current next act:** `H4S`
+- **Current next act:** `H5`
 - **Execution model:** one child phase at a time, in order, with no auto-advance
 - **Notebook-first rule:** `H2`, `H3`, `H4S`, `H4`, and `H5` must complete notebook-backed iteration before any code, registry, verifier, or documentation extraction
 - **Landing rule:** each child phase must validate, commit, and push before the next child phase begins
 
 ### H1 — Authoritative census and department-model decision
 
-- **Status:** `draft-package-created`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md`
 - **Child acts:** `H1A baseline truth lock`, `H1B mapping matrix`, `H1C decision artifact`
@@ -209,7 +209,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H2 — Humanized employee record completion
 
-- **Status:** `draft-package-created`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-humanized-employee-record-completion/m365-authoritative-persona-humanized-employee-record-completion.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md`
 - **Child acts:** `H2A field contract`, `H2B notebook-backed employee record artifact`, `H2C verification and closeout`
@@ -217,7 +217,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H3 — Authoritative registry and capability-map rebase
 
-- **Status:** `draft-package-created`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-registry-and-capability-map-rebase.md`
 - **Child acts:** `H3A authoritative roster rebase`, `H3B persona registry rebase`, `H3C capability-map rebase and closeout`
@@ -225,7 +225,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H4S — Department-pack scope correction
 
-- **Status:** `draft-package-created`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-h4-scope-correction/m365-authoritative-persona-h4-scope-correction.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-h4-scope-correction.md`
 - **Child acts:** `H4SA dependency and mismatch proof`, `H4SB department-pack authority rebase`, `H4SC validation and H4 unblock`
@@ -233,7 +233,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H4 — Certification and count rebase
 
-- **Status:** `draft-package-created-and-blocked-by-H4S`
+- **Status:** `complete-go`
 - **Plan:** `plans/m365-authoritative-persona-certification-and-count-rebase/m365-authoritative-persona-certification-and-count-rebase.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-certification-and-count-rebase.md`
 - **Child acts:** `H4A certification contract rebase`, `H4B census and commercialization truth rebase`, `H4C verifier/test rebase and closeout`
@@ -241,7 +241,7 @@ Stop and re-scope if the work expands beyond branch creation, planning artifacts
 
 ### H5 — Activation gate closeout
 
-- **Status:** `draft-package-created`
+- **Status:** `draft-package-created-and-unblocked-by-H4`
 - **Plan:** `plans/m365-authoritative-persona-activation-gate-closeout/m365-authoritative-persona-activation-gate-closeout.md`
 - **Prompt:** `docs/prompts/codex-m365-authoritative-persona-activation-gate-closeout.md`
 - **Child acts:** `H5A activation prerequisite verification`, `H5B final registry and active-surface rebase`, `H5C final validation and branch closeout`
