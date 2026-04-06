@@ -23,6 +23,51 @@ canonical_executor_domains:
   - publishing
   - composite
 exact_action_routes:
+  analytics.read: sharepoint
+  archive-project: workmanagement
+  audit.directory: reports
+  audit.prepare: compliance
+  audit.provisioning: reports
+  audit.signins: reports
+  availability.check: messaging
+  backup.restore: publishing
+  backup.verify: security
+  alerts.respond: security
+  conflict.resolve: messaging
+  content.create: sharepoint
+  content.curate: knowledge
+  content.update: sharepoint
+  create-project: workmanagement
+  add-workspace-members: collaboration
+  create-workspace: collaboration
+  create-channels: collaboration
+  create_bucket: collaboration
+  create_task: collaboration
+  deprovision-client-services: composite
+  deployment.production: sharepoint
+  dns.update: publishing
+  employee.offboard: directory
+  employee.update_info: directory
+  get-client-status: composite
+  get-team-status: collaboration
+  infrastructure.monitor: security
+  list-projects: workmanagement
+  list_buckets: collaboration
+  mailbox.settings: messaging
+  performance.optimize: publishing
+  policy.create: directory
+  policy.validate: compliance
+  provision-client-services: composite
+  remediation.plan: compliance
+  reminder.send: messaging
+  review.initiate: directory
+  search.optimize: knowledge
+  seo.update: sharepoint
+  ssl.renew: publishing
+  system.health-check: security
+  update-project-status: workmanagement
+  violation.report: compliance
+  website.deploy: publishing
   list_users: directory
   get_user: directory
   reset_user_password: directory
@@ -179,6 +224,36 @@ exact_action_routes:
   list_ediscovery_case_custodians: compliance
   list_ediscovery_case_legal_holds: compliance
 prefix_routes:
+  "budget.": composite
+  "campaign.": messaging
+  "candidate.": composite
+  "cdn.": publishing
+  "client.": composite
+  "deadline.": collaboration
+  "document.": knowledge
+  "email.": messaging
+  "employee.": directory
+  "engagement.": composite
+  "expert.": knowledge
+  "expense.": composite
+  "feedback.": composite
+  "follow-up.": messaging
+  "followup.": messaging
+  "forecast.": composite
+  "health.": reports
+  "interview.": composite
+  "invoice.": composite
+  "meeting.": messaging
+  "offer.": composite
+  "onboarding.": composite
+  "relationship.": composite
+  "report.": collaboration
+  "review.": directory
+  "satisfaction.": composite
+  "status.": collaboration
+  "task.": collaboration
+  "training.": knowledge
+  "website.": publishing
   "sites.": sharepoint
   "lists.": sharepoint
   "files.": sharepoint
@@ -206,6 +281,7 @@ prefix_routes:
   "devices.": devices
   "security.": security
   "identity_security.": identity_security
+  "ca.": identity_security
   "external.": knowledge
   "automation.": composite
 agent_action_overrides:

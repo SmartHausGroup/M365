@@ -39,23 +39,41 @@ def executor_route_for_action(agent: str | None, action: str) -> str:
     return resolve_route_for_action(agent, action)
 
 
-def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
+def resolve_execution_target_for_action(
+    agent: str,
+    action: str,
+    tenant_config: Any,
+) -> tuple[str, str]:
     route_key = executor_route_for_action(agent, action)
     fallback_keys = ["sharepoint"] if route_key == "approvals" else []
-    return tenant_config.resolve_executor_name(
+    executor_name = tenant_config.resolve_executor_name(
         route_key,
         action_name=action,
         fallback_keys=fallback_keys,
     )
+    return executor_name, route_key
 
 
-def build_executor_identity(tenant_config: Any, executor_name: str) -> dict[str, Any]:
+def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
+    return resolve_execution_target_for_action(agent, action, tenant_config)[0]
+
+
+def build_executor_identity(
+    tenant_config: Any,
+    executor_name: str,
+    *,
+    logical_domain: str | None = None,
+) -> dict[str, Any]:
     projected_config = tenant_config.project_executor(executor_name)
     executor_cfg = tenant_config.executors[executor_name]
+    route_domain = str(logical_domain or executor_cfg.domain or "").strip() or "default"
+    physical_domain = str(executor_cfg.domain or "").strip() or "default"
     return {
         "type": "service_principal",
         "name": executor_name,
-        "domain": executor_cfg.domain,
+        "domain": route_domain,
+        "logical_domain": route_domain,
+        "physical_domain": physical_domain,
         "mode": projected_config.auth.mode,
         "tenant": projected_config.tenant.id,
         "azure_tenant_id": projected_config.azure.tenant_id,

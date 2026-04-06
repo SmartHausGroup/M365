@@ -6,7 +6,7 @@ from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from integrations import vercel as vercel_api
@@ -38,12 +38,15 @@ from provisioning_api.routers.email_dashboard import router as email_dashboard_r
 from provisioning_api.storage import JsonStore
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
+_STATIC_DIR = _REPO_ROOT / "static"
+_TEMPLATE_DIR = _REPO_ROOT / "templates"
 load_bootstrap_env(_REPO_ROOT / ".env")
 
 configure_logging()
 app = FastAPI(title="SMARTHAUS Provisioning API", version=os.getenv("APP_VERSION", "0.1.0"))
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+if _STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+templates = Jinja2Templates(directory=str(_TEMPLATE_DIR)) if _TEMPLATE_DIR.exists() else None
 store = JsonStore()
 ent = EnterpriseConfig()
 
@@ -107,6 +110,10 @@ def dashboard(request: Request) -> object:
     store = JsonStore()
     lattice_data = store.list("lattice_research")
     website_data = store.list("website_updates")
+    if templates is None:
+        return HTMLResponse(
+            content="<html><body><h1>SMARTHAUS Provisioning API</h1><p>Dashboard template is not installed in this repo checkout.</p></body></html>"
+        )
     return templates.TemplateResponse(
         "dashboard.html",
         {

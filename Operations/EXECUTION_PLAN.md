@@ -565,6 +565,24 @@ outside this repo slice.
 
 ---
 
+## Initiative: M365 Direct Runtime Readiness Remediation
+
+**Initiative:** Repair the repo-direct runtime so representative M365 functions can be tested locally and truthfully through this repo version instead of failing on known local import, routing, or harness defects.
+
+**Plan:** `plans/m365-direct-runtime-readiness-remediation/m365-direct-runtime-readiness-remediation.md`
+
+**Reference:** `plan:m365-direct-runtime-readiness-remediation:R0`
+
+**Status:** ✅ Complete — the direct repo runtime is now usable enough for representative function testing without tripping on known local import or routing defects. Remaining red outcomes are truthful external prerequisites: Graph `ErrorAccessDenied` on mail/calendar, Graph `UnknownError` on service-health, and missing local Power Apps / Power Automate admin PowerShell modules.
+**Current next act:** None — M365-local direct-runtime remediation is complete. Any further advance requires a separate environment / tenant enablement plan rather than more repo-runtime repair.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-direct-runtime-readiness-remediation.md`, `docs/prompts/codex-m365-direct-runtime-readiness-remediation-prompt.txt`
+
+**Status update (2026-04-06 11:26 EDT):** Created the governed direct-runtime remediation package and prompt pair after direct repo testing proved the current local state is partially healthy but not directly usable enough for real function checks. The bounded repair scope is now locked to the repo-direct runtime only: repair `provisioning_api.main` import failure, repair bounded `registry/executor_routing_v2.yaml` drift that blocks representative governed actions, add focused regression coverage, build one truthful direct-test harness, and stop only when representative function tests either succeed or fail for truthful external reasons rather than known local defects. No UCP work, release promotion, or tenant-admin scope is included.
+**Status update (2026-04-06 11:59 EDT):** Completed the bounded direct-runtime remediation. Repaired the provisioning API import boundary in `src/provisioning_api/routers/email_dashboard.py` and `src/provisioning_api/main.py`; repaired logical-vs-physical executor routing in `src/smarthaus_common/tenant_config.py`, `src/ops_adapter/actions.py`, `src/ops_adapter/main.py`, `src/ops_adapter/app.py`; rebased `registry/executor_routing_v2.yaml` from `99` missing allowed-action routes to `0`; added focused regressions in `tests/test_executor_routing_v2.py`, `tests/test_ops_adapter.py`, and `tests/test_env_loading.py`; and validated green with focused pytest (`51 passed`). Live direct probes now show the repo runtime is truthful: SharePoint and Teams succeed on both the instruction surface and the governed action surface, while mail/calendar fail with real Graph `ErrorAccessDenied`, service health fails with a real Graph `UnknownError`, and Power Apps / Power Automate admin paths fail because the local PowerShell modules are not installed. The next dependency boundary is environment / tenant enablement, not more M365-local repair.
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.

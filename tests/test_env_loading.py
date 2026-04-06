@@ -226,6 +226,60 @@ executor_registry:
     assert graph.client_secret == "fallback-secret"
 
 
+def test_tenant_config_resolves_logical_executor_aliases_to_bounded_executors(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    tenant_root = tmp_path / "ucp"
+    tenants_dir = tenant_root / "tenants"
+    tenants_dir.mkdir(parents=True)
+    (tenants_dir / "tenant-alias.yaml").write_text(
+        """
+tenant:
+  id: tenant-alias
+auth:
+  mode: app_only
+executors:
+  collaboration:
+    domain: collaboration
+    capabilities:
+      - collaboration
+      - teams
+      - groups
+  directory:
+    domain: directory
+    capabilities:
+      - directory
+      - users
+      - identity
+  sharepoint:
+    domain: sharepoint
+    capabilities:
+      - approvals
+      - sharepoint
+executor_registry:
+  default_executor: sharepoint
+  routes:
+    collaboration: collaboration
+    directory: directory
+    sharepoint: sharepoint
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    monkeypatch.setenv("UCP_TENANT", "tenant-alias")
+    monkeypatch.setenv("UCP_ROOT", str(tenant_root))
+
+    cfg = load_tenant_config()
+
+    assert cfg.resolve_executor_name("messaging") == "collaboration"
+    assert cfg.resolve_executor_name("workmanagement") == "collaboration"
+    assert cfg.resolve_executor_name("reports") == "directory"
+    assert cfg.resolve_executor_name("security") == "directory"
+    assert cfg.resolve_executor_name("powerplatform") == "sharepoint"
+    assert cfg.resolve_executor_name("knowledge") == "sharepoint"
+
+
 def test_multi_executor_contract_fails_closed_without_default_executor(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

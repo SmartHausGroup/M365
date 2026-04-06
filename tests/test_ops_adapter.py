@@ -533,9 +533,9 @@ def test_b7b_routes_directory_actions_to_directory_executor(
 
     client = TestClient(app)
     r = client.post(
-        "/actions/m365-administrator/users.disable",
+        "/actions/m365-administrator/groups.list",
         headers=_auth_headers("admin@example.com"),
-        json={"params": {"userPrincipalName": "jdoe@example.com"}},
+        json={"params": {}},
     )
 
     assert r.status_code == 200
@@ -543,6 +543,81 @@ def test_b7b_routes_directory_actions_to_directory_executor(
     assert payload["result"]["executor_name"] == "directory"
     assert payload["result"]["executor_identity"]["domain"] == "directory"
     assert payload["result"]["executor_identity"]["client_id"] == "directory-client"
+
+
+def test_b7b_preserves_logical_domain_when_executor_alias_maps_to_collaboration(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+    monkeypatch.setattr(
+        patched_runtime,
+        "REGISTRY",
+        {
+            "agents": {
+                "email-processing-agent": {
+                    "allowed_actions": ["mail.list"],
+                    "approval_rules": [],
+                }
+            }
+        },
+    )
+    monkeypatch.setattr(
+        patched_runtime,
+        "PERSONAS",
+        {
+            "email-processing-agent": {
+                "persona_id": "email-processing-agent",
+                "canonical_agent": "email-processing-agent",
+                "display_name": "Hannah Kim",
+                "slug": "hannah-kim",
+                "department": "communication",
+                "title": "Email Processing Agent",
+                "manager": "unassigned",
+                "responsibilities": [],
+                "allowed_domains": ["messaging"],
+                "approval_owner": "unassigned",
+                "status": "active",
+                "external_presence_policy": "internal_only",
+                "aliases": ["email-processing-agent", "hannah kim"],
+            }
+        },
+    )
+    monkeypatch.setattr(
+        patched_runtime,
+        "APPROVALS",
+        ApprovalsStore(patched_runtime.REGISTRY, patched_runtime.PERSONAS),
+    )
+
+    async def _capture_execute(
+        _agent: str,
+        _action: str,
+        params: dict[str, Any],
+        _correlation_id: str,
+        executor_name: str | None = None,
+    ) -> dict[str, Any]:
+        return {
+            "executor_name": executor_name,
+            "executor_domain": params["executor_domain"],
+            "executor_identity": params["executor_identity"],
+        }
+
+    monkeypatch.setattr(patched_runtime, "execute", _capture_execute)
+
+    client = TestClient(app)
+    response = client.post(
+        "/actions/email-processing-agent/mail.list",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"userId": "admin@example.com", "top": 5}},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["result"]["executor_name"] == "collaboration"
+    assert payload["result"]["executor_domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["logical_domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["physical_domain"] == "collaboration"
+    assert payload["result"]["executor_identity"]["client_id"] == "collab-client"
 
 
 def test_graph_token_surfaces_missing_tenant_config(

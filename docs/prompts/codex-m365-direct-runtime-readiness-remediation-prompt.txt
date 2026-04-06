@@ -1,0 +1,7 @@
+Execute M365 Direct Runtime Readiness Remediation
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-direct-runtime-readiness-remediation.md.
+
+Plan Reference: plan:m365-direct-runtime-readiness-remediation
+
+This package is approved for execution. Run `plan:m365-direct-runtime-readiness-remediation:T1` through `T5` only, stop on first red, and do not widen into UCP or release-promotion work.

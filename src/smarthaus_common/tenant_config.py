@@ -21,6 +21,22 @@ from typing import Any
 
 import yaml
 
+_LOGICAL_EXECUTOR_ALIASES: dict[str, tuple[str, ...]] = {
+    "approvals": ("sharepoint",),
+    "messaging": ("collaboration",),
+    "workmanagement": ("collaboration",),
+    "knowledge": ("sharepoint",),
+    "powerplatform": ("sharepoint",),
+    "publishing": ("sharepoint",),
+    "composite": ("sharepoint",),
+    "reports": ("directory",),
+    "access_reviews": ("directory",),
+    "compliance": ("directory",),
+    "security": ("directory",),
+    "identity_security": ("directory",),
+    "devices": ("directory",),
+}
+
 # ---------------------------------------------------------------------------
 # Data models
 # ---------------------------------------------------------------------------
@@ -220,14 +236,44 @@ class TenantConfig:
             candidates.append(route_key)
         candidates.extend([str(key) for key in (fallback_keys or []) if str(key).strip()])
 
+        registry_routes = {
+            str(key).strip().lower(): str(value).strip()
+            for key, value in (self.executor_registry.routes or {}).items()
+            if str(key).strip() and str(value).strip()
+        }
+        executor_capabilities = {
+            executor_name: {
+                executor_name.lower(),
+                str(executor.domain or "").strip().lower(),
+                *{
+                    str(capability).strip().lower()
+                    for capability in (executor.capabilities or [])
+                    if str(capability).strip()
+                },
+            }
+            for executor_name, executor in (self.executors or {}).items()
+        }
+
         for candidate in candidates:
-            target = self.executor_registry.routes.get(candidate)
+            normalized_candidate = str(candidate).strip().lower()
+            if not normalized_candidate:
+                continue
+
+            target = registry_routes.get(normalized_candidate)
             if target:
                 if target not in self.executors:
-                    raise ValueError(f"executor_route_target_missing:{candidate}:{target}")
+                    raise ValueError(
+                        f"executor_route_target_missing:{normalized_candidate}:{target}"
+                    )
                 return target
-            if candidate in self.executors:
-                return candidate
+            if normalized_candidate in self.executors:
+                return normalized_candidate
+            for alias_target in _LOGICAL_EXECUTOR_ALIASES.get(normalized_candidate, ()):
+                if alias_target in self.executors:
+                    return alias_target
+            for executor_name, capabilities in executor_capabilities.items():
+                if normalized_candidate in capabilities:
+                    return executor_name
 
         if len(self.executors) == 1:
             return self.default_executor_name

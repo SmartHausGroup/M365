@@ -1731,3 +1731,15 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `tests/test_ucp_m365_pack_contracts.py` | Focused contract validation for the M365-owned standalone UCP-facing pack surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ucp-standalone-pack-surface:R4` |
 | `tests/test_ucp_m365_pack_client.py` | Focused client validation for the M365-owned standalone UCP-facing pack surface. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-ucp-standalone-pack-surface:R4` |
 | `docs/commercialization/m365-ucp-standalone-pack-surface.md` | Human-readable boundary note stating that this repo owns the standalone UCP-facing M365 pack surface. | `Technical Architecture`, `Policy & Security` | `plan:m365-ucp-standalone-pack-surface:R4` |
+
+## Active Direct Runtime Readiness Remediation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-direct-runtime-readiness-remediation/m365-direct-runtime-readiness-remediation.md` | Human-readable governed plan for repairing the repo-direct M365 runtime so representative functions can be tested locally without known local import or routing defects. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
+| `plans/m365-direct-runtime-readiness-remediation/m365-direct-runtime-readiness-remediation.yaml` | Structured YAML authority for the bounded direct-runtime remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
+| `plans/m365-direct-runtime-readiness-remediation/m365-direct-runtime-readiness-remediation.json` | Structured JSON mirror for automation and governance tooling on the direct-runtime remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
+| `docs/prompts/codex-m365-direct-runtime-readiness-remediation.md` | Detailed execution prompt for the bounded direct-runtime remediation path. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
+| `docs/prompts/codex-m365-direct-runtime-readiness-remediation-prompt.txt` | Kickoff prompt for the direct-runtime remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
+| `docs/commercialization/m365-direct-runtime-readiness-remediation.md` | Human-readable closeout note for the direct-runtime remediation, recording which local defects were repaired and which remaining failures are external prerequisites. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R5` |
+| `artifacts/diagnostics/m365_direct_runtime_readiness_remediation.json` | Machine-readable direct-runtime closeout artifact capturing the repaired routing/import boundary and the final live smoke classifications. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-direct-runtime-readiness-remediation:R5` |
