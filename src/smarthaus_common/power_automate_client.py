@@ -23,6 +23,22 @@ def _ps_string(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
 
+def _load_json_payload(stdout: str) -> Any:
+    payload = stdout.strip()
+    if not payload:
+        return None
+    try:
+        return json.loads(payload)
+    except json.JSONDecodeError:
+        lines = [line.strip() for line in payload.splitlines() if line.strip()]
+        if not lines:
+            return None
+        for line in reversed(lines):
+            if line.startswith("{") or line.startswith("[") or line in {"null", "true", "false"}:
+                return json.loads(line)
+        return None
+
+
 class PowerAutomateClient:
     """Bounded Power Automate admin client.
 
@@ -82,6 +98,9 @@ class PowerAutomateClient:
             raise SmarthausError("Power Automate admin runtime not configured: pwsh not found")
 
         import_lines = [f"Import-Module {module} -ErrorAction Stop" for module in modules]
+        import_lines = [
+            f"Import-Module {module} -DisableNameChecking -ErrorAction Stop" for module in modules
+        ]
         script = "\n".join(
             [
                 "$ErrorActionPreference = 'Stop'",
@@ -110,7 +129,7 @@ class PowerAutomateClient:
         if not stdout:
             return None
         try:
-            return json.loads(stdout)
+            return _load_json_payload(stdout)
         except json.JSONDecodeError as exc:
             raise SmarthausError(
                 f"Power Automate admin command returned non-JSON output: {stdout}"

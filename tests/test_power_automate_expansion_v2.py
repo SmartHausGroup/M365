@@ -180,6 +180,58 @@ def test_e3a_power_automate_client_fails_closed_without_client_secret() -> None:
         client.list_flows_admin("Default-Env")
 
 
+def test_e3a_power_automate_client_ignores_warning_preamble_when_json_present(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class _Proc:
+        returncode = 0
+        stdout = 'WARNING: module import warning\n[{"name":"flow-1"}]'
+        stderr = ""
+
+    monkeypatch.setattr("shutil.which", lambda _name: "/usr/bin/pwsh")
+    monkeypatch.setattr("subprocess.run", lambda *args, **kwargs: _Proc())
+
+    client = PowerAutomateClient(
+        tenant_config=TenantConfig(
+            azure=AzureConfig(
+                tenant_id="tenant-id",
+                client_id="client-id",
+                client_secret="secret",
+            )
+        )
+    )
+
+    payload = client.list_flows_admin("Default-Env")
+
+    assert payload == [{"name": "flow-1"}]
+
+
+def test_e3a_power_automate_client_treats_warning_only_stdout_as_empty(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class _Proc:
+        returncode = 0
+        stdout = "WARNING: module import warning"
+        stderr = ""
+
+    monkeypatch.setattr("shutil.which", lambda _name: "/usr/bin/pwsh")
+    monkeypatch.setattr("subprocess.run", lambda *args, **kwargs: _Proc())
+
+    client = PowerAutomateClient(
+        tenant_config=TenantConfig(
+            azure=AzureConfig(
+                tenant_id="tenant-id",
+                client_id="client-id",
+                client_secret="secret",
+            )
+        )
+    )
+
+    payload = client.list_flows_admin("Default-Env")
+
+    assert payload == []
+
+
 def test_e3a_invoke_flow_callback_returns_response(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Response:
         status_code = 202

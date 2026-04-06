@@ -51,4 +51,3 @@ Before any write or mutating action:
 ## Hard rule
 
 Do not report the surface as working unless the tested support matrix says it is certified. If an action cannot be made truthful, fence it out of the certified surface instead of implying support.
-

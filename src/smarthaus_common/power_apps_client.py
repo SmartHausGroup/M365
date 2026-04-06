@@ -20,6 +20,19 @@ def _ps_string(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
 
+def _load_json_payload(stdout: str) -> Any:
+    payload = stdout.strip()
+    if not payload:
+        return None
+    try:
+        return json.loads(payload)
+    except json.JSONDecodeError:
+        lines = [line.strip() for line in payload.splitlines() if line.strip()]
+        if not lines:
+            return None
+        return json.loads(lines[-1])
+
+
 class PowerAppsClient:
     """Bounded Power Apps admin client.
 
@@ -80,7 +93,7 @@ class PowerAppsClient:
         script = "\n".join(
             [
                 "$ErrorActionPreference = 'Stop'",
-                f"Import-Module {_ADMIN_MODULE} -ErrorAction Stop",
+                f"Import-Module {_ADMIN_MODULE} -DisableNameChecking -ErrorAction Stop",
                 (
                     "Add-PowerAppsAccount -Endpoint prod "
                     f"-TenantID $env:{_PW_TENANT_ENV} "
@@ -105,7 +118,7 @@ class PowerAppsClient:
         if not stdout:
             return None
         try:
-            return json.loads(stdout)
+            return _load_json_payload(stdout)
         except json.JSONDecodeError as exc:
             raise SmarthausError(
                 f"Power Apps admin command returned non-JSON output: {stdout}"

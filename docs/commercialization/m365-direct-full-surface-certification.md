@@ -2,7 +2,7 @@
 
 ## Status
 
-`F0` is complete. The direct full-surface certification program is active, and `F1` enablement is now the next act.
+`F1` is complete. The direct full-surface certification program has cleared its current environment and tenant enablement blockers, and `F2` read-path certification is now the next act.
 
 ## Purpose
 
@@ -74,7 +74,7 @@ The current legacy-stub agent set is:
 
 These actions cannot be counted as “tested M365 functionality” until they are either implemented against real M365 behavior or explicitly fenced out of the certified surface.
 
-## What F1 Must Do
+## What F1 Had To Do
 
 `F1` is now responsible for the enablement and truth decision boundary:
 
@@ -91,3 +91,37 @@ The direct runtime is no longer the primary blocker. The program now moves forwa
 - some remaining failures are surface-truth blockers caused by legacy action topology and stubbed behavior
 
 Full certification can now proceed on a real baseline instead of on mixed assumptions.
+
+## F1 Enablement Results
+
+`F1` closed the blocker class that had kept the repaired direct runtime from being broadly testable.
+
+### What changed
+
+- collaboration executor Graph permissions were expanded to cover direct mail and calendar reads
+- directory executor Graph permissions were expanded to cover reports and service health
+- local Power Platform admin modules were installed and verified
+- the `powerplatform` executor app was registered as a Power Platform management application through the documented tenant-admin operator path
+- the Power Apps / Power Automate clients were hardened so PowerShell warning preambles no longer cause false parser failures
+
+### What is now proven live from the direct repo runtime
+
+- mail:
+  - `list_messages` succeeds for the configured tenant user path
+- calendar:
+  - `list_events` succeeds
+  - `get_schedule` succeeds when app-only input includes explicit `userId`
+- service health:
+  - the governed service-health overview path succeeds with the enabled directory executor roles
+- Power Apps:
+  - `list_powerapp_environments` succeeds through the `powerplatform` executor
+- Power Automate:
+  - `list_flows_admin` succeeds through the `powerplatform` executor and returns a truthful zero-flow result when no flows are present
+
+### What F1 did not solve
+
+`F1` did not certify the whole claimed surface. It removed the direct enablement blockers. The remaining work is now certification work:
+
+- read-path certification across the supported surface
+- mutation and approval-path certification
+- truthful surface reduction where legacy stub behavior or crosswalk gaps still prevent honest certification

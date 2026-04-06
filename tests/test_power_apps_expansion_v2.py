@@ -158,3 +158,32 @@ def test_e3b_power_apps_client_fails_closed_without_client_secret() -> None:
 
     with pytest.raises(Exception, match="client_secret is required"):
         client.list_powerapps_admin()
+
+
+def test_e3b_power_apps_client_ignores_warning_preamble_when_json_present(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class _Proc:
+        returncode = 0
+        stdout = (
+            "WARNING: module import warning\n"
+            '[{"EnvironmentName":"Default-Env","DisplayName":"Default"}]'
+        )
+        stderr = ""
+
+    monkeypatch.setattr("shutil.which", lambda _name: "/usr/bin/pwsh")
+    monkeypatch.setattr("subprocess.run", lambda *args, **kwargs: _Proc())
+
+    client = PowerAppsClient(
+        tenant_config=TenantConfig(
+            azure=AzureConfig(
+                tenant_id="tenant-id",
+                client_id="client-id",
+                client_secret="secret",
+            )
+        )
+    )
+
+    payload = client.list_powerapp_environments()
+
+    assert payload == [{"EnvironmentName": "Default-Env", "DisplayName": "Default"}]

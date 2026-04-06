@@ -44,7 +44,8 @@
 ## Section 4A: Current Phase State
 
 - `F0` is complete.
-- `F1` is now the active next act.
+- `F1` is complete.
+- `F2` is now the active next act.
 - The notebook-backed `F0` evidence is `notebooks/m365/INV-M365-CH-direct-full-surface-certification-universe-lock-v1.ipynb`.
 - The current baseline artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 

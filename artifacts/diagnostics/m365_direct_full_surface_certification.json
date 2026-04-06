@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-direct-full-surface-certification",
-  "phase": "F0",
-  "status": "universe_lock_complete",
+  "phase": "F1",
+  "status": "enablement_complete",
   "counts": {
     "agents_total": 59,
     "instruction_surface_total": 155,
@@ -173,5 +173,38 @@
     "The direct repo certification universe is not yet a single surface; it requires the v2 expansion and recipe catalog crosswalk.",
     "The direct instruction surface still includes nine legacy actions outside the current expansion-backed canonical universe.",
     "A material subset of persona-facing actions remains legacy stub behavior in src/ops_adapter/actions.py and cannot yet be honestly certified as real M365 execution."
-  ]
+  ],
+  "f1_enablement": {
+    "status": "complete",
+    "collaboration_executor_roles_added": [
+      "Mail.ReadWrite",
+      "Mail.Send",
+      "Calendars.ReadWrite",
+      "MailboxSettings.ReadWrite",
+      "Contacts.ReadWrite"
+    ],
+    "directory_executor_roles_added": [
+      "Reports.Read.All",
+      "ServiceHealth.Read.All",
+      "ServiceMessage.Read.All"
+    ],
+    "powerplatform_management_app_registered": true,
+    "repo_local_repairs": [
+      "Power Apps client ignores warning-prefixed JSON output",
+      "Power Automate client ignores warning-prefixed JSON output",
+      "Power Automate client treats warning-only stdout as empty data instead of parser failure"
+    ],
+    "live_results": {
+      "list_messages": "pass",
+      "list_events": "pass",
+      "get_schedule": "pass",
+      "health_overview": "pass",
+      "list_powerapp_environments": "pass",
+      "list_flows_admin": "pass"
+    },
+    "notes": [
+      "The powerplatform executor application is now visible on the BusinessAppPlatform adminApplications surface.",
+      "Power Automate admin reads currently return a truthful zero-flow result for the default environment rather than failing on warning-only stdout."
+    ]
+  }
 }
