@@ -2,7 +2,7 @@
 
 ## Status
 
-`F1` is complete. The direct full-surface certification program has cleared its current environment and tenant enablement blockers, and `F2` read-path certification is now the next act.
+`F2` is complete. The direct full-surface certification program now has a published read-path support matrix, and `F3` mutation / approval certification is the next act.
 
 ## Purpose
 
@@ -125,3 +125,163 @@ Full certification can now proceed on a real baseline instead of on mixed assump
 - read-path certification across the supported surface
 - mutation and approval-path certification
 - truthful surface reduction where legacy stub behavior or crosswalk gaps still prevent honest certification
+
+## F2 Read-Path Certification Results
+
+`F2` certified the implemented non-mutating direct surface action by action and closed the phase with a truthful split between green reads and fenced reads.
+
+### Locked F2 read surface
+
+The `F2` read-path matrix used the implemented non-mutating capability-registry surface:
+
+- `91` implemented non-mutating direct actions
+- `45` certified green against the live direct runtime
+- `46` fenced from the currently certified read surface
+
+### Repo-local defects repaired during F2
+
+Two real repo-local defects were exposed and fixed during `F2`:
+
+- `GraphClient.list_directory_roles` stopped sending unsupported `$top` to `/directoryRoles`, which unblocked both `list_directory_roles` and `list_directory_role_members`
+- `PowerAppsClient` now treats warning-only PowerShell stdout as empty data, which unblocked `list_powerapp_environment_role_assignments`
+
+### Certified green read families
+
+The following actions are now certified green on the direct repo runtime:
+
+- identity:
+  - `list_users`
+  - `get_user`
+  - `list_groups`
+  - `get_group`
+  - `list_group_members`
+  - `list_directory_roles`
+  - `list_directory_role_members`
+  - `list_domains`
+  - `get_organization`
+  - `list_applications`
+  - `get_application`
+  - `list_service_principals`
+- Teams / SharePoint:
+  - `list_teams`
+  - `get_team`
+  - `list_channels`
+  - `list_sites`
+  - `get_site`
+  - `list_site_lists`
+  - `get_list`
+  - `list_list_items`
+- files:
+  - `list_drives`
+- mail / calendar / contacts:
+  - `list_messages`
+  - `get_message`
+  - `list_mail_folders`
+  - `get_mailbox_settings`
+  - `list_events`
+  - `get_event`
+  - `get_schedule`
+  - `list_contacts`
+  - `get_contact`
+  - `list_contact_folders`
+- reports:
+  - `get_report`
+  - `get_usage_reports`
+  - `get_activity_reports`
+  - `list_powerbi_workspaces`
+- Power Platform admin:
+  - `list_powerapp_environments`
+  - `get_powerapp_environment`
+  - `list_powerapp_environment_role_assignments`
+  - `list_powerapps_admin`
+  - `get_powerapp_admin`
+  - `list_powerapp_role_assignments`
+  - `list_flows_admin`
+  - `list_http_flows`
+- provisioning:
+  - `list_automation_recipes`
+  - `get_automation_recipe`
+
+### Fenced read families
+
+The following actions are not part of the currently certified direct read surface and must not be implied to work until their blocker class is removed.
+
+- files with no live sample:
+  - `get_drive`
+  - `list_drive_items`
+  - `get_drive_item`
+  - reason: the governed site probe returned `0` drives, so dependent drive reads could not be certified truthfully
+- Planner:
+  - `list_plans`
+  - `list_plan_buckets`
+  - reason: the live group-plan probe returns Graph `403` (`You do not have the required permissions to access this item.`)
+- approvals:
+  - `get_approval_solution`
+  - `list_approval_items`
+  - `get_approval_item`
+  - `list_approval_item_requests`
+  - reason: the current approvals app surface requires delegated or hybrid auth mode
+- Power Platform flow-specific reads with no live sample:
+  - `get_flow_admin`
+  - `list_flow_owners`
+  - `list_flow_runs`
+  - reason: the certified environment currently returns `0` admin-visible flows
+- external connections:
+  - `list_external_connections`
+  - `get_external_connection`
+  - `get_external_item`
+  - reason: the live external-connections probe returns Graph `401 UnknownError`
+- devices:
+  - `list_devices`
+  - `get_device`
+  - `list_device_compliance_summaries`
+  - reason: the current executor token is missing the required Intune application roles
+- identity security:
+  - `list_conditional_access_policies`
+  - `get_conditional_access_policy`
+  - `list_named_locations`
+  - `list_risk_detections`
+  - reason: the current token is missing the required Conditional Access / Identity Protection scopes
+- security:
+  - `list_security_alerts`
+  - `get_security_alert`
+  - `list_security_incidents`
+  - `get_security_incident`
+  - `list_secure_scores`
+  - `get_secure_score_profile`
+  - reason: the current tenant and token state is not provisioned for these Microsoft security surfaces, and there is no discoverable secure-score-profile sample in the claimed read surface
+- access reviews:
+  - `list_access_reviews`
+  - `get_access_review`
+  - `list_access_review_decisions`
+  - reason: the governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window
+- eDiscovery compliance:
+  - `list_ediscovery_cases`
+  - `get_ediscovery_case`
+  - `list_ediscovery_case_searches`
+  - `get_ediscovery_case_search`
+  - `list_ediscovery_case_custodians`
+  - `list_ediscovery_case_legal_holds`
+  - reason: the governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window
+- Power BI reads with no live sample:
+  - `get_powerbi_workspace`
+  - `list_powerbi_datasets`
+  - `get_powerbi_dataset`
+  - `list_powerbi_dataset_refreshes`
+  - `list_powerbi_reports`
+  - `get_powerbi_report`
+  - `list_powerbi_dashboards`
+  - `get_powerbi_dashboard`
+  - reason: the certified tenant probe returned `0` Power BI workspaces, so dependent reads could not be certified truthfully
+- misclassified read claim:
+  - `refresh_powerbi_dataset`
+  - reason: this is a mutating action and is explicitly fenced out of `F2` read certification
+
+### F2 closeout
+
+`F2` is green at the phase level because the read surface is now truthfully split between:
+
+- certified live reads that actually work from this repo version
+- fenced reads that still require permission changes, delegated auth, live sample objects, or a future retry-path investigation
+
+The next act is `F3`, which covers mutation paths, approval-required paths, and actor-tier certification.

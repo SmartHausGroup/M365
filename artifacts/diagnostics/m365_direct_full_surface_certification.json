@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-direct-full-surface-certification",
-  "phase": "F1",
-  "status": "enablement_complete",
+  "phase": "F2",
+  "status": "read_certification_complete",
   "counts": {
     "agents_total": 59,
     "instruction_surface_total": 155,
@@ -206,5 +206,184 @@
       "The powerplatform executor application is now visible on the BusinessAppPlatform adminApplications surface.",
       "Power Automate admin reads currently return a truthful zero-flow result for the default environment rather than failing on warning-only stdout."
     ]
+  },
+  "f2_read_certification": {
+    "status": "complete",
+    "read_actions_total": 91,
+    "certified_green_total": 45,
+    "fenced_total": 46,
+    "repo_local_repairs": [
+      "GraphClient.list_directory_roles no longer sends unsupported $top to /directoryRoles",
+      "PowerAppsClient treats warning-only PowerShell stdout as empty data for environment role-assignment reads"
+    ],
+    "certified_green_actions": {
+      "identity": [
+        "list_users",
+        "get_user",
+        "list_groups",
+        "get_group",
+        "list_group_members",
+        "list_directory_roles",
+        "list_directory_role_members",
+        "list_domains",
+        "get_organization",
+        "list_applications",
+        "get_application",
+        "list_service_principals"
+      ],
+      "teams_sharepoint": [
+        "list_teams",
+        "get_team",
+        "list_channels",
+        "list_sites",
+        "get_site",
+        "list_site_lists",
+        "get_list",
+        "list_list_items"
+      ],
+      "files": [
+        "list_drives"
+      ],
+      "mail_calendar_contacts": [
+        "list_messages",
+        "get_message",
+        "list_mail_folders",
+        "get_mailbox_settings",
+        "list_events",
+        "get_event",
+        "get_schedule",
+        "list_contacts",
+        "get_contact",
+        "list_contact_folders"
+      ],
+      "reports": [
+        "get_report",
+        "get_usage_reports",
+        "get_activity_reports",
+        "list_powerbi_workspaces"
+      ],
+      "powerplatform": [
+        "list_powerapp_environments",
+        "get_powerapp_environment",
+        "list_powerapp_environment_role_assignments",
+        "list_powerapps_admin",
+        "get_powerapp_admin",
+        "list_powerapp_role_assignments",
+        "list_flows_admin",
+        "list_http_flows"
+      ],
+      "provisioning": [
+        "list_automation_recipes",
+        "get_automation_recipe"
+      ]
+    },
+    "fenced_actions": {
+      "files_no_sample": {
+        "actions": [
+          "get_drive",
+          "list_drive_items",
+          "get_drive_item"
+        ],
+        "reason": "The governed site probe returned zero drives, so dependent drive reads could not be certified."
+      },
+      "planner_permissions": {
+        "actions": [
+          "list_plans",
+          "list_plan_buckets"
+        ],
+        "reason": "The live Planner group-plan probe returns Graph 403: You do not have the required permissions to access this item."
+      },
+      "approvals_auth_mode": {
+        "actions": [
+          "get_approval_solution",
+          "list_approval_items",
+          "get_approval_item",
+          "list_approval_item_requests"
+        ],
+        "reason": "The approvals surface currently requires delegated or hybrid auth mode."
+      },
+      "powerplatform_no_flow_sample": {
+        "actions": [
+          "get_flow_admin",
+          "list_flow_owners",
+          "list_flow_runs"
+        ],
+        "reason": "The certified environment currently returns zero admin-visible flows."
+      },
+      "external_connections_401": {
+        "actions": [
+          "list_external_connections",
+          "get_external_connection",
+          "get_external_item"
+        ],
+        "reason": "The live external-connections probe returns Graph 401 UnknownError."
+      },
+      "devices_permissions": {
+        "actions": [
+          "list_devices",
+          "get_device",
+          "list_device_compliance_summaries"
+        ],
+        "reason": "The current executor token is missing the required Intune application roles."
+      },
+      "identity_security_permissions": {
+        "actions": [
+          "list_conditional_access_policies",
+          "get_conditional_access_policy",
+          "list_named_locations",
+          "list_risk_detections"
+        ],
+        "reason": "The current token is missing the required Conditional Access and Identity Protection scopes."
+      },
+      "security_surface_not_provisioned": {
+        "actions": [
+          "list_security_alerts",
+          "get_security_alert",
+          "list_security_incidents",
+          "get_security_incident",
+          "list_secure_scores",
+          "get_secure_score_profile"
+        ],
+        "reason": "The current tenant and token state is not provisioned for these Microsoft security surfaces, and there is no discoverable secure-score-profile sample."
+      },
+      "access_reviews_retry_path": {
+        "actions": [
+          "list_access_reviews",
+          "get_access_review",
+          "list_access_review_decisions"
+        ],
+        "reason": "The governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window."
+      },
+      "ediscovery_retry_path": {
+        "actions": [
+          "list_ediscovery_cases",
+          "get_ediscovery_case",
+          "list_ediscovery_case_searches",
+          "get_ediscovery_case_search",
+          "list_ediscovery_case_custodians",
+          "list_ediscovery_case_legal_holds"
+        ],
+        "reason": "The governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window."
+      },
+      "powerbi_no_workspace_sample": {
+        "actions": [
+          "get_powerbi_workspace",
+          "list_powerbi_datasets",
+          "get_powerbi_dataset",
+          "list_powerbi_dataset_refreshes",
+          "list_powerbi_reports",
+          "get_powerbi_report",
+          "list_powerbi_dashboards",
+          "get_powerbi_dashboard"
+        ],
+        "reason": "The certified tenant probe returned zero Power BI workspaces, so dependent Power BI reads could not be certified."
+      },
+      "misclassified_mutation": {
+        "actions": [
+          "refresh_powerbi_dataset"
+        ],
+        "reason": "This is a mutating action and is explicitly fenced out of F2 read certification."
+      }
+    }
   }
 }

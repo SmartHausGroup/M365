@@ -30,7 +30,10 @@ def _load_json_payload(stdout: str) -> Any:
         lines = [line.strip() for line in payload.splitlines() if line.strip()]
         if not lines:
             return None
-        return json.loads(lines[-1])
+        for line in reversed(lines):
+            if line.startswith("{") or line.startswith("[") or line in {"null", "true", "false"}:
+                return json.loads(line)
+        return None
 
 
 class PowerAppsClient:

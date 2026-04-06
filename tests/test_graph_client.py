@@ -71,6 +71,23 @@ def test_graph_client_get_org() -> None:
         assert route.called
 
 
+def test_graph_client_list_directory_roles_omits_custom_page_size() -> None:
+    cfg = AppConfig()
+    client = GraphClient(config=cfg)
+    client._token_provider = DummyTP()
+
+    with respx.mock(base_url="https://graph.microsoft.com") as mock:
+        route = mock.get("/v1.0/directoryRoles").mock(
+            return_value=httpx.Response(200, json={"value": [{"id": "role-1"}]})
+        )
+        data = client.list_directory_roles(top=5)
+
+    assert data == {"value": [{"id": "role-1"}]}
+    assert route.called
+    assert "$top" not in route.calls[0].request.url.params
+    assert route.calls[0].request.url.params["$select"] == "id,displayName,description"
+
+
 def test_load_client_certificate_credential_from_pem(tmp_path: Path) -> None:
     pem_path, certificate = _write_executor_pem(tmp_path)
 

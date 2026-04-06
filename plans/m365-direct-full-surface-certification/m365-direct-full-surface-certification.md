@@ -45,7 +45,8 @@
 
 - `F0` is complete.
 - `F1` is complete.
-- `F2` is now the active next act.
+- `F2` is complete.
+- `F3` is now the active next act.
 - The notebook-backed `F0` evidence is `notebooks/m365/INV-M365-CH-direct-full-surface-certification-universe-lock-v1.ipynb`.
 - The current baseline artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 
@@ -174,3 +175,14 @@ Stop and re-scope if certification requires UCP-side edits or tenant changes tha
 - `docs/prompts/codex-m365-direct-full-surface-certification-prompt.txt`
 - `docs/commercialization/m365-direct-full-surface-certification.md`
 - `artifacts/diagnostics/m365_direct_full_surface_certification.json`
+
+## Section 11: Current Result
+
+- `F2` is complete.
+- The implemented non-mutating direct surface was classified as `45` certified green actions and `46` fenced actions.
+- `CHECK:C3` passed because every tested read family is now either green or explicitly fenced with a written reason.
+- `CHECK:C4` passed because the two repo-local defects exposed during `F2` were repaired and rerun:
+  - `GraphClient.list_directory_roles` no longer sends unsupported `$top` to `/directoryRoles`
+  - `PowerAppsClient` treats warning-only PowerShell stdout as empty data for environment role-assignment reads
+- `CHECK:C5` passed because the support matrix and machine-readable diagnostics artifact now include the `F2` result.
+- `F3` mutation / approval certification is the next act.

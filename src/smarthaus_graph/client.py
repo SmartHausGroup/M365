@@ -1335,7 +1335,7 @@ class GraphClient:
         r = self._request(
             "GET",
             "/directoryRoles",
-            params={"$select": "id,displayName,description", "$top": min(max(1, top), 999)},
+            params={"$select": "id,displayName,description"},
         )
         return r.json()
 
