@@ -47,4 +47,3 @@ where:
 - `tests/test_department_certification_v1.py`
 - `tests/test_enterprise_release_gate_v2.py`
 - `configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json`
-

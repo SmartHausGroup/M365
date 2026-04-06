@@ -1,0 +1,243 @@
+{
+  "affected_department_count": 7,
+  "affected_departments": [
+    {
+      "department_id": "communication",
+      "mismatch_count": 3,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "calendar-management-agent",
+          "registry_allowed_action_count": 11,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "email-processing-agent",
+          "registry_allowed_action_count": 14,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "teams-manager",
+          "registry_allowed_action_count": 17,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_communication_v1.yaml"
+    },
+    {
+      "department_id": "engineering",
+      "mismatch_count": 1,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "platform-manager",
+          "registry_allowed_action_count": 3,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_engineering_v1.yaml"
+    },
+    {
+      "department_id": "hr",
+      "mismatch_count": 1,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "recruitment-assistance-agent",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_hr_v1.yaml"
+    },
+    {
+      "department_id": "marketing",
+      "mismatch_count": 1,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "website-operations-specialist",
+          "registry_allowed_action_count": 6,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_marketing_v1.yaml"
+    },
+    {
+      "department_id": "operations",
+      "mismatch_count": 8,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "audit-operations",
+          "registry_allowed_action_count": 3,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "compliance-monitoring-agent",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "device-management",
+          "registry_allowed_action_count": 4,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "identity-security",
+          "registry_allowed_action_count": 6,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "it-operations-manager",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "security-operations",
+          "registry_allowed_action_count": 6,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "service-health",
+          "registry_allowed_action_count": 4,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "ucp-administrator",
+          "registry_allowed_action_count": 9,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_operations_v1.yaml"
+    },
+    {
+      "department_id": "project-management",
+      "mismatch_count": 2,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "project-coordination-agent",
+          "registry_allowed_action_count": 10,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "project-manager",
+          "registry_allowed_action_count": 4,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_project_management_v1.yaml"
+    },
+    {
+      "department_id": "studio-operations",
+      "mismatch_count": 4,
+      "mismatches": [
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "client-relationship-agent",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "financial-operations-agent",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "knowledge-management-agent",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        },
+        {
+          "declared_coverage_status": "persona-contract-only",
+          "declared_supported_action_count": 0,
+          "persona_id": "reports",
+          "registry_allowed_action_count": 5,
+          "registry_coverage_status": "registry-backed"
+        }
+      ],
+      "pack_path": "registry/department_pack_studio_operations_v1.yaml"
+    }
+  ],
+  "blocked_by_m1_department_pack_validation": true,
+  "fresh_m1_blocked_merge_branch": "development",
+  "fresh_m1_blocked_merge_commit": "d194b94",
+  "fresh_m1_blocked_merge_pushed": false,
+  "fresh_m1_blocked_merge_safety_branch": "codex/m1-fresh-replay-blocked-development-d194b94",
+  "lemma_id": "L84",
+  "mismatch_total": 20,
+  "origin_development_head": "4c997ea",
+  "previous_blocked_merge_safety_branch": "codex/m1-replay-blocked-development-a895678",
+  "required_scope": {
+    "commercialization_contracts": [
+      "docs/commercialization/m365-communication-department-pack-v1.md",
+      "docs/commercialization/m365-engineering-department-pack-v1.md",
+      "docs/commercialization/m365-hr-department-pack-v1.md",
+      "docs/commercialization/m365-marketing-department-pack-v1.md",
+      "docs/commercialization/m365-operations-department-pack-v1.md",
+      "docs/commercialization/m365-project-management-department-pack-v1.md",
+      "docs/commercialization/m365-studio-operations-department-pack-v1.md"
+    ],
+    "department_pack_authorities": [
+      "registry/department_pack_communication_v1.yaml",
+      "registry/department_pack_engineering_v1.yaml",
+      "registry/department_pack_hr_v1.yaml",
+      "registry/department_pack_marketing_v1.yaml",
+      "registry/department_pack_operations_v1.yaml",
+      "registry/department_pack_project_management_v1.yaml",
+      "registry/department_pack_studio_operations_v1.yaml"
+    ],
+    "tests": [
+      "tests/test_communication_department_pack_v1.py",
+      "tests/test_engineering_department_pack_v1.py",
+      "tests/test_hr_department_pack_v1.py",
+      "tests/test_marketing_department_pack_v1.py",
+      "tests/test_operations_department_pack_v1.py",
+      "tests/test_project_management_department_pack_v1.py",
+      "tests/test_studio_operations_department_pack_v1.py"
+    ],
+    "verifiers": [
+      "scripts/ci/verify_communication_department_pack_v1.py",
+      "scripts/ci/verify_engineering_department_pack_v1.py",
+      "scripts/ci/verify_hr_department_pack_v1.py",
+      "scripts/ci/verify_marketing_department_pack_v1.py",
+      "scripts/ci/verify_operations_department_pack_v1.py",
+      "scripts/ci/verify_project_management_department_pack_v1.py",
+      "scripts/ci/verify_studio_operations_department_pack_v1.py"
+    ]
+  },
+  "source_branch": "codex/m365-authoritative-persona-post-h5-parity-correction",
+  "source_branch_head": "e85be90"
+}

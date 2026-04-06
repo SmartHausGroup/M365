@@ -1,0 +1,11 @@
+Read and execute the detailed prompt at `docs/prompts/codex-m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction.md`.
+
+Plan Reference: `plan:m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction:R1`
+Parent Plan: `plan:m365-authoritative-persona-humanization-merge-to-development`
+
+This run exists because the fresh `M1` replay on `development @ d194b94` proved that 7 department-pack contracts still lag the final post-H5 coverage truth for the 20 promoted personas.
+
+Present the approval packet first.
+Wait for explicit `go`.
+Use notebook-first execution.
+Stop on first red.

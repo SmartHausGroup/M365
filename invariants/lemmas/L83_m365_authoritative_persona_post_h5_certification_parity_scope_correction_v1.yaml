@@ -23,4 +23,3 @@ test_bindings:
   - tests/test_enterprise_release_gate_v2.py
   - configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json
 ci_gate: authoritative-persona-post-h5-certification-parity-scope-correction-v1
-
