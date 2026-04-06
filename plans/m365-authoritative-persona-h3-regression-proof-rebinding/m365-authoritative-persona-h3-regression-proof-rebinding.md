@@ -7,7 +7,7 @@
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — preserve truthful, auditable workforce state by keeping the live branch on the final post-H5 `59 total / 54 active / 5 planned` authority while binding historical H3 regression checks to frozen H3 proof surfaces instead of stale live-file assumptions.
-**Governance evidence:** `notebooks/m365/INV-M365-BZ-authoritative-persona-registry-rebase-v1.ipynb`, `configs/generated/authoritative_persona_registry_rebase_v1_verification.json`
+**Governance evidence:** `artifacts/scorecards/scorecard_l78.json`, `docs/ma/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.md`, `invariants/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.yaml`, `notebooks/m365/INV-M365-BZ-authoritative-persona-registry-rebase-v1.ipynb`
 
 ## Objective
 
@@ -27,14 +27,17 @@ The remaining `M1` replay blocker is not a live registry defect. It is a stale r
   - `54 active / 5 planned`
   - promoted personas are `registry-backed`
 - the frozen H3 staged proof already exists in:
-  - `configs/generated/authoritative_persona_registry_rebase_v1_verification.json`
+  - `artifacts/scorecards/scorecard_l78.json`
+  - `docs/ma/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.md`
+  - `invariants/lemmas/L78_m365_authoritative_persona_registry_rebase_v1.yaml`
   - the notebook source `notebooks/m365/INV-M365-BZ-authoritative-persona-registry-rebase-v1.ipynb`
+- the first rebound attempt proved that `configs/generated/authoritative_persona_registry_rebase_v1_verification.json` is regenerated during merged-development validation and therefore cannot serve as immutable H3 truth
 
 So the correct fix is to rebind the H3 regression to the frozen H3 proof surface, not to mutate the live final registry back toward staged truth.
 
 ## Decision Rule
 
-`FrozenH3ProofAvailable = GeneratedH3VerificationExists AND H3NotebookExists`
+`FrozenH3ProofAvailable = ScorecardExists AND LemmaExists AND InvariantExists AND H3NotebookExists`
 
 `RegressionBoundCorrectly = H3RegressionReadsFrozenProof AND H3RegressionDoesNotAssertAgainstLivePostH5RegistryState`
 
@@ -52,7 +55,7 @@ If `H3R_GO` is false, emit `NO-GO`, stop fail-closed, and do not replay `M1`.
 
 - create a formal correction package and prompt pair
 - rebind `tests/test_authoritative_persona_registry_rebase_v1.py` to frozen H3 proof artifacts
-- use the existing H3 notebook and generated verification artifact as the historical truth source
+- use the existing H3 scorecard, lemma, invariant, and notebook source as the historical truth source
 - update trackers so `M1` truthfully points at this correction as the next blocker
 
 ### Out of scope
@@ -90,7 +93,7 @@ If `H3R_GO` is false, emit `NO-GO`, stop fail-closed, and do not replay `M1`.
 
 ### R2 — Bind H3 regression to frozen H3 proof
 
-- Update the failing H3 regression so it asserts against the frozen H3 verification surface rather than the live post-H5 authority files.
+- Update the failing H3 regression so it asserts against immutable H3 proof artifacts rather than live post-H5 authority files or regenerated post-build verification output.
 
 ### R3 — Preserve live final truth
 
@@ -130,7 +133,7 @@ If `H3R_GO` is false, emit `NO-GO`, stop fail-closed, and do not replay `M1`.
 ## Execution Status
 
 - `R1` complete on 2026-04-06: created the correction plan triplet, prompt pair, and tracker entries.
-- `R2` complete on 2026-04-06: rebound `tests/test_authoritative_persona_registry_rebase_v1.py` to the frozen H3 verification JSON, scorecard, and lemma instead of the live post-H5 registry surfaces.
+- `R2` complete on 2026-04-06: rebound `tests/test_authoritative_persona_registry_rebase_v1.py` to the immutable `L78` scorecard, lemma, invariant, and notebook source after merged-development replay proved the generated verification JSON is rebuilt to post-H5 truth.
 - `R3` complete on 2026-04-06: preserved the live post-H5 registry, capability-map, activation, packaging, and certification surfaces without edits.
-- `R4` complete on 2026-04-06: validation passed with focused pytest (`5 passed`), `pre-commit run --all-files`, and `git diff --check`.
-- `R5` complete on 2026-04-06: synchronized trackers so `M1` is handed back as the next governed act.
+- `R4` complete on 2026-04-06: revalidated green after rebinding the regression to the immutable `L78` scorecard, lemma, invariant, and notebook source; focused pytest passed (`5 passed`), `pre-commit run --all-files` passed, and `git diff --check` passed.
+- `R5` complete on 2026-04-06: synchronized the package and operations trackers so `M1` is handed back with the corrected immutable proof binding instead of the regenerated verification JSON.
