@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-authoritative-persona-humanization-merge-replay-to-development",
+  "purpose": "Verify the successor replay merge package truthfully targets the corrected post-H5 source branch and preserves the bounded development-only merge scope.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb",
+    "role": "governance_prerequisite_evidence"
+  },
+  "stale_predecessor_package": {
+    "plan_id": "plan:m365-authoritative-persona-humanization-merge-to-development",
+    "source_branch": "codex/m365-authoritative-persona-humanization-expansion-plan",
+    "source_head": "cca8a90",
+    "refresh_required": true
+  },
+  "corrected_replay_source": {
+    "branch": "codex/m365-authoritative-persona-post-h5-parity-correction",
+    "head": "2a13c5c",
+    "final_truth": {
+      "total_personas": 59,
+      "active_personas": 54,
+      "planned_personas": 5,
+      "allowed_persona_actions": 430
+    }
+  },
+  "target_branch": {
+    "branch": "development",
+    "origin_head": "4c997ea"
+  },
+  "blocked_local_merge_evidence": {
+    "fresh_replay_branch": "codex/m1-fresh-replay-blocked-development-d194b94",
+    "fresh_replay_head": "d194b94",
+    "prior_replay_branch": "codex/m1-replay-blocked-development-a895678",
+    "prior_replay_head": "a895678"
+  },
+  "successor_package_required": true
+}

@@ -1,0 +1,617 @@
+{
+  "plan_id": "plan:m365-authoritative-persona-humanization-merge-replay-to-development",
+  "parent_plan_id": "plan:m365-authoritative-persona-humanization-merge-to-development",
+  "title": "Replay the corrected authoritative persona humanization merge into development",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-06",
+  "date_updated": "2026-04-06",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona Humanization Merge Replay to Development",
+  "domain": "governance",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "truthful integration of the corrected authoritative persona surface into development",
+      "fail-closed replay merge governance with bounded branch scope",
+      "no silent promotion beyond development"
+    ],
+    "anti_alignment": [
+      "does not promote to staging or main",
+      "does not alter registry/agents.yaml or registry/ai_team.json",
+      "does not reopen H1 through H5 or blocker-correction semantics during replay execution"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "The next governed act is a fresh M1 approval packet and merge replay from codex/m365-authoritative-persona-post-h5-parity-correction into development.",
+      "create a bounded merge-package refresh first because the current merge package is stale",
+      "preserve the corrected post-H5 source branch as the replay source"
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "R1 through R6 capture the bounded merge-replay work required before any actual branch mutation on development."
+  },
+  "objective": "Replay the corrected authoritative persona humanization surface from codex/m365-authoritative-persona-post-h5-parity-correction into development via an explicit merge commit and stop before any staging or main promotion.",
+  "current_state": "The historical merge package remains pinned to the pre-correction source branch `codex/m365-authoritative-persona-humanization-expansion-plan @ cca8a90`, while the truthfully replayable source branch is now `codex/m365-authoritative-persona-post-h5-parity-correction @ 2a13c5c` after the completed `L83` and `L84` blocker corrections. `development` remains unpushed at `origin/development @ 4c997ea`, and the blocked local replay evidence is preserved on `codex/m1-fresh-replay-blocked-development-d194b94` and `codex/m1-replay-blocked-development-a895678`.",
+  "target_state": "One successor replay package truthfully governs the corrected `codex/m365-authoritative-persona-post-h5-parity-correction -> development` merge, the fresh `M1` approval packet can be presented against that corrected boundary, and no staging/main or release-tag work is implied.",
+  "replay_inventory": {
+    "predecessor_merge_package": {
+      "plan_id": "plan:m365-authoritative-persona-humanization-merge-to-development",
+      "source_branch": "codex/m365-authoritative-persona-humanization-expansion-plan",
+      "source_head": "cca8a90",
+      "status": "predecessor_only"
+    },
+    "corrected_source_branch": {
+      "branch": "codex/m365-authoritative-persona-post-h5-parity-correction",
+      "head": "2a13c5c",
+      "clean": true,
+      "pushed": true
+    },
+    "target_branch": {
+      "branch": "development",
+      "origin_head": "4c997ea"
+    },
+    "blocked_local_replays": {
+      "fresh_replay_branch": "codex/m1-fresh-replay-blocked-development-d194b94",
+      "fresh_replay_head": "d194b94",
+      "prior_replay_branch": "codex/m1-replay-blocked-development-a895678",
+      "prior_replay_head": "a895678"
+    },
+    "final_truth": {
+      "total_personas": 59,
+      "active_personas": 54,
+      "planned_personas": 5,
+      "allowed_persona_actions": 430
+    }
+  },
+  "governance_evidence": {
+    "notebook_path": "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb",
+    "verification_path": "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json"
+  },
+  "scope": {
+    "in_scope": [
+      "verify corrected source and target branch readiness",
+      "inspect branch drift between the corrected source branch and development",
+      "merge the corrected source branch into development with an explicit merge commit",
+      "resolve only bounded conflicts inside the already governed H1-H5 plus blocker-correction merge surface and governance trackers",
+      "rerun the final humanization validation slice on merged development",
+      "update the replay package and governance trackers truthfully",
+      "push development only after green validation"
+    ],
+    "out_of_scope": [
+      "staging promotion",
+      "main promotion",
+      "release-tag publication",
+      "new persona, capability, or department-model changes",
+      "edits to registry/agents.yaml",
+      "edits to registry/ai_team.json"
+    ],
+    "file_allowlist": [
+      "plans/m365-authoritative-persona-humanization-merge-replay-to-development/**",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development-prompt.txt",
+      "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb",
+      "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "any file already changed in the governed humanization surface between 4c997ea and 2a13c5c, but only when required for bounded conflict resolution that preserves the proven H1-H5 plus L83/L84 semantics"
+    ],
+    "file_denylist": [
+      "registry/agents.yaml",
+      "registry/ai_team.json",
+      "staging",
+      "main",
+      "release tags",
+      "any file outside the bounded corrected source-branch diff unless separately governed"
+    ],
+    "scope_fence_rule": "Stop and open a new governed scope-correction package if origin/development drift or merge conflicts require semantic edits outside the bounded corrected source-branch diff or tracker surfaces."
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R1",
+      "description": "Verify corrected source and target branch readiness before mutating development.",
+      "acceptance_criteria": "Corrected source branch is clean and pushed, development is fetched and clean, and branch inventory is captured.",
+      "depends_on": [],
+      "user_intent_trace": "fresh M1 approval packet and merge replay into development"
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R2",
+      "description": "Keep the replay merge bounded to development only.",
+      "acceptance_criteria": "No staging, main, or release-tag action occurs during execution.",
+      "depends_on": [
+        "R1"
+      ],
+      "user_intent_trace": "development only"
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R3",
+      "description": "Merge the corrected source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "acceptance_criteria": "Development contains a merge result from the corrected source branch, and any conflict resolution stays inside the bounded replay surface.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "replay the corrected source branch into development"
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R4",
+      "description": "Re-run the final humanization validation slice on the merged development state.",
+      "acceptance_criteria": "The builder, targeted verifiers, focused pytest slice, pre-commit, and git diff --check are green on merged development.",
+      "depends_on": [
+        "R3"
+      ],
+      "user_intent_trace": "do not move on until it passes"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R5",
+      "description": "Synchronize trackers and replay-package status truthfully.",
+      "acceptance_criteria": "Operations trackers plus this package reflect the actual replay merge outcome and next act.",
+      "depends_on": [
+        "R4"
+      ],
+      "user_intent_trace": "aligned to AGENTS.md and governance"
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:R6",
+      "description": "Push development only after green validation and stop before any further promotion.",
+      "acceptance_criteria": "origin/development matches the validated replay merge result, and staging/main remain untouched.",
+      "depends_on": [
+        "R4",
+        "R5"
+      ],
+      "user_intent_trace": "merge only, then stop"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:T1",
+      "name": "Preflight replay inventory",
+      "description": "Capture corrected source and target branch readiness, drift, and bounded replay surface before any mutation.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [],
+      "deliverables": [
+        "branch inventory evidence",
+        "source and target SHAs"
+      ],
+      "exit_criteria": [
+        "The corrected source branch is still clean and pushed.",
+        "Development is fetched and clean.",
+        "The bounded replay surface is explicit."
+      ],
+      "validation_command": "git status --short --branch && git rev-parse codex/m365-authoritative-persona-post-h5-parity-correction development origin/development",
+      "maths_phase": null
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:T2",
+      "name": "Approval packet and governance gate",
+      "description": "Present the replay-merge approval packet and validate every mutating action before execution.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "deliverables": [
+        "approval packet",
+        "validate_action verdicts"
+      ],
+      "exit_criteria": [
+        "Explicit go is received.",
+        "Mutating actions are governance-approved."
+      ],
+      "validation_command": "echo \"approval packet presented before replay merge execution\"",
+      "maths_phase": null
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:T3",
+      "name": "Replay merge into development",
+      "description": "Merge the corrected source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "deliverables": [
+        "merge result on development"
+      ],
+      "exit_criteria": [
+        "Development contains the corrected source-branch merge result.",
+        "No conflict resolution escapes the bounded replay surface."
+      ],
+      "validation_command": "git log --oneline -n 3 development",
+      "maths_phase": null
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:T4",
+      "name": "Validate merged development",
+      "description": "Run the final humanization validation slice on the merged development state.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "deliverables": [
+        "green builder, verifier, test, pre-commit, and diff-check results"
+      ],
+      "exit_criteria": [
+        "The final governed 59 total / 54 active / 5 planned truth still holds on development.",
+        "All required validations are green."
+      ],
+      "validation_command": "pre-commit run --all-files",
+      "maths_phase": null
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-replay-to-development:T5",
+      "name": "Push development and close governance",
+      "description": "Update trackers, push development, and freeze the replay merge result.",
+      "requirement_refs": [
+        "R5",
+        "R6"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "deliverables": [
+        "pushed development branch",
+        "synchronized trackers"
+      ],
+      "exit_criteria": [
+        "origin/development matches the validated replay merge result.",
+        "No staging, main, or release-tag work is performed."
+      ],
+      "validation_command": "git rev-parse development origin/development",
+      "maths_phase": null
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Plan schema validation",
+        "description": "The successor replay YAML must validate against the canonical UCP plan schema.",
+        "task_ref": "T1",
+        "validation_command": "../UCP/.venv/bin/python -c \"import json, pathlib, yaml; from jsonschema import Draft202012Validator; schema=json.loads(pathlib.Path('../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json').read_text()); data=yaml.safe_load(pathlib.Path('plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.yaml').read_text()); Draft202012Validator(schema).validate(data); print('plan schema ok')\"",
+        "pass_criteria": "The YAML replay package validates.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C1",
+        "name": "Prompt contract validation",
+        "description": "The detailed and kickoff prompts must validate under the governed prompt contract.",
+        "task_ref": "T1",
+        "validation_command": "python3 - <<'PY'\nfrom pathlib import Path\nchecks = {\n    'docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md': ['PLAN_REF_ACK:', 'PARENT_PLAN_ACK:', 'NORTH_STAR_ACK:'],\n    'docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development-prompt.txt': ['Plan Reference:', 'Execute the governed package at'],\n}\nfor path, needles in checks.items():\n    text = Path(path).read_text()\n    for needle in needles:\n        assert needle in text, (path, needle)\n    print(path, 'accepted')\nPY",
+        "pass_criteria": "Both replay prompt artifacts contain the required governed prompt anchors.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C2",
+        "name": "Governance evidence parse",
+        "description": "The notebook-backed governance evidence and generated verification artifact must parse cleanly.",
+        "task_ref": "T1",
+        "validation_command": "python3 - <<'PY'\nimport json\nfrom pathlib import Path\nfor path in [\n    Path('notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb'),\n    Path('configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json'),\n]:\n    json.loads(path.read_text())\nprint('governance evidence parse ok')\nPY",
+        "pass_criteria": "Notebook and verification JSON parse cleanly.",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C3",
+        "name": "Clean diff gate",
+        "description": "The package creation slice must keep git diff --check green.",
+        "task_ref": "T1",
+        "validation_command": "git diff --check",
+        "pass_criteria": "No whitespace or patch-format issues exist.",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "The successor replay package, prompt pair, and notebook-backed governance evidence all validate cleanly, and the repo now truthfully points the next M1 act at the corrected replay source branch.",
+      "no_go_rule": "The successor replay package remains schema-invalid, lacks notebook-backed governance evidence, or leaves the stale predecessor package as the active merge authority."
+    },
+    "no_go_triggers": [
+      "The successor replay package fails the live plan schema.",
+      "The replay prompt pair fails the governed prompt contract.",
+      "The notebook-backed governance evidence does not parse cleanly.",
+      "The trackers still point the next M1 act at the stale predecessor package."
+    ]
+  },
+  "determinism": null,
+  "artifacts": [
+    {
+      "path": "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.md",
+      "format": "md",
+      "producer": "T1",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE.md",
+      "validation": "Human-readable replay package artifact present."
+    },
+    {
+      "path": "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.yaml",
+      "format": "YAML",
+      "producer": "T1",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json",
+      "validation": "YAML artifact validates against the canonical schema."
+    },
+    {
+      "path": "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.json",
+      "format": "JSON",
+      "producer": "T1",
+      "schema_ref": "../UCP/agent_governance/PLAN_TEMPLATE_SCHEMA.json",
+      "validation": "JSON artifact mirrors the YAML replay package."
+    },
+    {
+      "path": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md",
+      "format": "md",
+      "producer": "T1",
+      "schema_ref": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+      "validation": "Detailed replay prompt validates under the governed prompt contract."
+    },
+    {
+      "path": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development-prompt.txt",
+      "format": "txt",
+      "producer": "T1",
+      "schema_ref": "inline",
+      "validation": "Kickoff prompt points to the detailed replay prompt and preserves the bounded scope."
+    },
+    {
+      "path": "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb",
+      "format": "ipynb",
+      "producer": "T1",
+      "schema_ref": "inline",
+      "validation": "Notebook-backed governance prerequisite exists for the successor replay package."
+    },
+    {
+      "path": "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json",
+      "format": "JSON",
+      "producer": "T1",
+      "schema_ref": "inline",
+      "validation": "Verification artifact records the corrected replay boundary and successor-package requirement."
+    }
+  ],
+  "environment": {
+    "python_version": ">=3.14",
+    "venv": ".venv/bin/python",
+    "additional_dependencies": [
+      "jsonschema",
+      "PyYAML"
+    ],
+    "hardware": "standard local macOS workstation",
+    "external_data": [
+      "sibling UCP repo at ../UCP for plan-schema and prompt-contract validation"
+    ],
+    "pre_notebook_check": "This slice uses notebook-backed governance evidence only; no long-running notebooks are expected."
+  },
+  "implementation_approach": {
+    "options_considered": [
+      {
+        "id": "A",
+        "description": "Reuse the stale predecessor merge package and treat the corrected source branch as an implicit override.",
+        "pros": [
+          "Fastest path."
+        ],
+        "cons": [
+          "Leaves false governance authority in place.",
+          "Makes the next M1 approval packet misleading."
+        ]
+      },
+      {
+        "id": "B",
+        "description": "Create a successor replay package with explicit notebook-backed governance evidence and preserve the predecessor package as historical lineage only.",
+        "pros": [
+          "Matches the corrected replay boundary truthfully.",
+          "Keeps the blocked replay history auditable."
+        ],
+        "cons": [
+          "Adds one governance-only package-creation slice before replay execution."
+        ]
+      },
+      {
+        "id": "C",
+        "description": "Rewrite the predecessor merge package in place.",
+        "pros": [
+          "Keeps a single package path."
+        ],
+        "cons": [
+          "Destroys the historical blocked-merge lineage.",
+          "Makes prior M1 failures harder to audit."
+        ]
+      }
+    ],
+    "chosen": "B",
+    "rationale": "The replay boundary changed after the completed L83 and L84 blocker corrections, so the next M1 act needs a truthful successor package that points at the corrected source branch without erasing the historical package that governed the blocked attempts.",
+    "rejected_rationale": {
+      "A": "Implicit override is not truthful enough for fail-closed governance.",
+      "C": "In-place rewrite would erase auditability of the blocked replay history."
+    },
+    "adr_ref": null
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "The successor replay package could still miss a required live-schema field.",
+        "impact": "high",
+        "mitigation": "Validate against the live UCP plan schema before closure.",
+        "status": "open"
+      },
+      {
+        "risk": "The new prompt pair could drift from the governed prompt contract.",
+        "impact": "medium",
+        "mitigation": "Run the prompt-contract validator before closure.",
+        "status": "open"
+      }
+    ],
+    "hard_blockers": [
+      "The successor replay package cannot pass the live plan schema."
+    ]
+  },
+  "rollback": {
+    "procedure": [
+      "Revert only the successor replay package files and tracker updates created by this slice.",
+      "Keep the historical predecessor merge package untouched if rollback is required."
+    ],
+    "files_to_revert": [
+      "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.md",
+      "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.yaml",
+      "plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.json",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development-prompt.txt",
+      "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb",
+      "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "artifacts_to_delete": [
+      "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json"
+    ],
+    "governance_updates_on_rollback": [
+      "Restore Operations trackers to point at the predecessor merge package as historical lineage only."
+    ]
+  },
+  "prompt_references": {
+    "maths_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md",
+    "prompt_doc": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md",
+    "prompt_kickoff": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development-prompt.txt",
+    "per_task_prompts": []
+  },
+  "traceability": {
+    "requirement_task_map": {
+      "R1": [
+        "T1",
+        "T2"
+      ],
+      "R2": [
+        "T1",
+        "T2"
+      ],
+      "R3": [
+        "T3"
+      ],
+      "R4": [
+        "T4"
+      ],
+      "R5": [
+        "T5"
+      ],
+      "R6": [
+        "T5"
+      ]
+    },
+    "validation_map": {
+      "R1": [
+        "CHECK:C0",
+        "CHECK:C2"
+      ],
+      "R2": [
+        "CHECK:C0",
+        "CHECK:C1"
+      ],
+      "R3": [
+        "CHECK:C1"
+      ],
+      "R4": [
+        "CHECK:C2"
+      ],
+      "R5": [
+        "CHECK:C3"
+      ],
+      "R6": [
+        "CHECK:C3"
+      ]
+    },
+    "files_created": {
+      "notebooks": [
+        "notebooks/m365/INV-M365-CG-authoritative-persona-merge-replay-package-governance-alignment-v1.ipynb"
+      ],
+      "invariants": [],
+      "lemmas": [],
+      "code_files": [],
+      "config_artifacts": [
+        "configs/generated/authoritative_persona_merge_replay_package_governance_alignment_v1_verification.json"
+      ]
+    },
+    "index_updates": {
+      "traceability_index": null,
+      "invariant_index": null,
+      "math_readme": null,
+      "lemmas_appendix": null
+    }
+  },
+  "governance_closure": {
+    "action_log": "Operations/ACTION_LOG.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "project_status": null,
+    "invariant_promotions": [],
+    "lemma_promotions": []
+  },
+  "execution_outcome": {
+    "task_checklist": [],
+    "gate_checklist": [],
+    "final_decision": null,
+    "approved_by": null,
+    "completion_timestamp": null
+  },
+  "when_blocked": {
+    "format": "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}",
+    "escalation": {
+      "primary": "SMARTHAUS",
+      "secondary": "CTO"
+    }
+  },
+  "agent_constraints": [
+    "Do not execute the replay merge from this package-creation slice.",
+    "Do not mutate staging, main, or release tags in this package.",
+    "Do not rewrite the historical predecessor merge package in place."
+  ],
+  "references": {
+    "north_star": "Operations/NORTHSTAR.md",
+    "execution_plan": "Operations/EXECUTION_PLAN.md",
+    "applicable_rules": [
+      "AGENTS.md",
+      ".cursor/rules/agent-workflow-mandatory.mdc",
+      ".cursor/rules/plan-first-execution.mdc",
+      ".cursor/rules/rsf-change-approval.mdc",
+      ".cursor/rules/codex-prompt-creation.mdc",
+      ".cursor/rules/project-file-index-enforcement.mdc",
+      ".cursor/rules/governance/mcp-constraint-enforcement.mdc",
+      "docs/governance/MATHS_PROMPT_TEMPLATE.md"
+    ],
+    "related_plans": [
+      "plan:m365-authoritative-persona-humanization-merge-to-development",
+      "plan:m365-authoritative-persona-post-h5-certification-parity-scope-correction",
+      "plan:m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction"
+    ],
+    "related_docs": [
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md"
+    ],
+    "maths_prompt_template": "docs/governance/MATHS_PROMPT_TEMPLATE.md"
+  }
+}

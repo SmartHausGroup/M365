@@ -1,0 +1,16 @@
+Execute the governed package at `docs/prompts/codex-m365-authoritative-persona-humanization-merge-replay-to-development.md`.
+
+Plan Reference: `plan:m365-authoritative-persona-humanization-merge-replay-to-development`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-authoritative-persona-humanization-merge-replay-to-development/m365-authoritative-persona-humanization-merge-replay-to-development.md`.
+
+This package is for one bounded branch action only:
+`codex/m365-authoritative-persona-post-h5-parity-correction -> development`.
+Use an explicit merge commit, keep conflict resolution bounded to the already
+governed replay surface, rerun the full merge-state validation slice, and stop
+before any staging, main, or release-tag work.
+
+Do not implement until explicit owner approval.
