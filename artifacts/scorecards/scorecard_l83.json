@@ -1,0 +1,20 @@
+{
+  "determinism_certified": true,
+  "invariants": [
+    "invariants/lemmas/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.yaml"
+  ],
+  "lemma_id": "L83",
+  "notebooks": [
+    "notebooks/m365/INV-M365-CE-authoritative-persona-post-h5-certification-parity-scope-correction-v1.ipynb",
+    "notebooks/lemma_proofs/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.ipynb"
+  ],
+  "notes": [
+    "L83 proves the only truthful scoped correction is to rebase persona certification, department certification, and release-gate truth together.",
+    "The final certification boundary is 59 total personas across 10 departments with 54 active and 5 planned personas.",
+    "The enterprise release gate must reconcile to 13 certified workload domains and 430 routed actions.",
+    "Department pack status labels remain the bounded H4S taxonomy in this phase because pack authority files are out of scope."
+  ],
+  "seed_lock_required": false,
+  "status": "green",
+  "title": "M365 Authoritative Persona Post-H5 Certification Parity Scope Correction v1"
+}

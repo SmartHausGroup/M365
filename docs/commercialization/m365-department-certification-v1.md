@@ -12,11 +12,11 @@ Define the deterministic certification contract for every department pack in the
 
 ## Problem
 
-H4S rebased the department-pack authority to the staged post-H3 roster, but the department certification contract still undercounted the workforce and omitted the active/planned split. Without this contract, the program cannot claim truthful department-level coverage for the staged pre-H5 state.
+H5 closed the activation gate, but department certification still claims the staged `34 active / 25 planned` split. Without rebasing this contract, the program cannot claim truthful department-level coverage for the final post-H5 state.
 
 ## Decision
 
-Make `registry/department_certification_v1.yaml` the authoritative department certification contract with four ordered certification phases and explicit staged counts.
+Make `registry/department_certification_v1.yaml` the authoritative department certification contract with four ordered certification phases and explicit final post-H5 counts. The department-status field continues to mirror the current department-pack authority surface because those pack files remain outside this bounded correction.
 
 ## Certification Phases
 
@@ -27,20 +27,21 @@ Make `registry/department_certification_v1.yaml` the authoritative department ce
 
 ## Certification Results
 
-All 10 departments pass four-phase certification with `59` total personas distributed correctly across the staged pre-H5 workforce:
+All 10 departments pass four-phase certification with `59` total personas distributed correctly across the final post-H5 workforce:
 
-- `34` active / registry-backed personas
-- `25` planned / contract-only personas
-- rebased workflow-family and workload-family counts that match the H4S department-pack contracts
+- `54` active / registry-backed personas
+- `5` planned / contract-only personas
+- rebased workflow-family and workload-family counts that still match the current H4S department-pack contracts
+- preserved department-pack status labels (`registry-backed` or `partial-activation`) from the current pack authority surface
 
 ## No-Go Conditions
 
 - Missing department pack file.
 - Persona count mismatch between pack and registry.
-- Active/planned or registry-backed/contract-only counts drift from the staged H4 truth.
+- Active/planned or registry-backed/contract-only counts drift from the final `59 / 54 / 5` truth.
 - Pack with zero workflow or workload families.
 - Claim exceeding declared surface.
 
 ## Next Dependency
 
-`H5` (Activation Gate Closeout) is the next governed act after H4 closes.
+Fresh `M1` merge replay is the next governed act after the post-H5 certification parity correction closes.

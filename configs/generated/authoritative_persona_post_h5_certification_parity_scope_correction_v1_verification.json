@@ -1,0 +1,218 @@
+{
+  "activated_surface_targets": {
+    "certified_active_personas": 54,
+    "deferred_external_personas": 5,
+    "total_allowed_persona_actions": 430
+  },
+  "current_stale_surface_counts": {
+    "department_certification": {
+      "active_department_personas": 34,
+      "certification_phase_count": 4,
+      "contract_only_department_personas": 25,
+      "governance_rule_count": 5,
+      "planned_department_personas": 25,
+      "registry_backed_department_personas": 34,
+      "total_department_personas": 59,
+      "total_departments": 10
+    },
+    "enterprise_release_gate": {
+      "active_personas_certified": 34,
+      "departments_certified": 10,
+      "governance_rule_count": 5,
+      "personas_certified": 59,
+      "planned_personas_certified": 25,
+      "release_gate_check_count": 6,
+      "total_routed_actions": 298,
+      "workload_domains_certified": 13,
+      "workload_domains_not_yet": 2
+    },
+    "persona_certification": {
+      "active_personas": 34,
+      "certification_phase_count": 4,
+      "contract_only_personas": 25,
+      "governance_rule_count": 5,
+      "planned_personas": 25,
+      "registry_backed_personas": 34,
+      "risk_tier_critical": 5,
+      "risk_tier_high": 8,
+      "risk_tier_low": 32,
+      "risk_tier_medium": 14,
+      "total_personas": 59
+    }
+  },
+  "deterministic_hash": "1f0f384a769e48412bcb73f83eabee4a103eb8b4d1ef32f77975772e2328e31c",
+  "final_department_certification_targets": {
+    "active_department_personas": 54,
+    "contract_only_department_personas": 5,
+    "department_statuses": {
+      "communication": {
+        "active_persona_count": 4,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 4,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 4,
+        "workflow_family_count": 3,
+        "workload_family_count": 5
+      },
+      "design": {
+        "active_persona_count": 5,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "registry-backed",
+        "persona_count": 5,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 5,
+        "workflow_family_count": 4,
+        "workload_family_count": 5
+      },
+      "engineering": {
+        "active_persona_count": 8,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 8,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 8,
+        "workflow_family_count": 4,
+        "workload_family_count": 10
+      },
+      "hr": {
+        "active_persona_count": 2,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 2,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 2,
+        "workflow_family_count": 4,
+        "workload_family_count": 5
+      },
+      "marketing": {
+        "active_persona_count": 3,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 5,
+        "department_status": "partial-activation",
+        "persona_count": 8,
+        "planned_persona_count": 5,
+        "registry_backed_persona_count": 3,
+        "workflow_family_count": 4,
+        "workload_family_count": 7
+      },
+      "operations": {
+        "active_persona_count": 10,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 10,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 10,
+        "workflow_family_count": 13,
+        "workload_family_count": 9
+      },
+      "product": {
+        "active_persona_count": 3,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "registry-backed",
+        "persona_count": 3,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 3,
+        "workflow_family_count": 3,
+        "workload_family_count": 7
+      },
+      "project-management": {
+        "active_persona_count": 5,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 5,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 5,
+        "workflow_family_count": 3,
+        "workload_family_count": 7
+      },
+      "studio-operations": {
+        "active_persona_count": 9,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 9,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 9,
+        "workflow_family_count": 5,
+        "workload_family_count": 8
+      },
+      "testing": {
+        "active_persona_count": 5,
+        "certification_verdict": "certified",
+        "contract_only_persona_count": 0,
+        "department_status": "registry-backed",
+        "persona_count": 5,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 5,
+        "workflow_family_count": 4,
+        "workload_family_count": 4
+      }
+    },
+    "planned_department_personas": 5,
+    "registry_backed_department_personas": 54,
+    "total_department_personas": 59,
+    "total_departments": 10
+  },
+  "final_persona_certification_targets": {
+    "active_personas": 54,
+    "contract_only_personas": 5,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "risk_tier_critical": 5,
+    "risk_tier_high": 8,
+    "risk_tier_low": 32,
+    "risk_tier_medium": 14,
+    "total_personas": 59
+  },
+  "final_release_gate_targets": {
+    "active_personas_certified": 54,
+    "departments_certified": 10,
+    "personas_certified": 59,
+    "planned_personas_certified": 5,
+    "total_routed_actions": 430,
+    "workload_domains_certified": 13,
+    "workload_domains_not_yet": 2
+  },
+  "lemma_id": "L83",
+  "packaging_targets": {
+    "active_persona_count": 54,
+    "planned_persona_count": 5,
+    "total_persona_count": 59,
+    "total_routed_actions": 430
+  },
+  "predecessor_scope_gap_proof": true,
+  "registry_summary": {
+    "active_personas": 54,
+    "persona_contract_only_personas": 5,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "total_departments": 10,
+    "total_personas": 59
+  },
+  "residual_gaps": [
+    "2 executor domains (workmanagement, publishing) have zero routed actions",
+    "5 of 59 personas remain contract-only deferred external-platform marketing roles with zero actions",
+    "Department pack status fields remain the bounded H4S taxonomy and are not reclassified in this phase",
+    "Cross-department workflows are contract-certified, not live-executed"
+  ],
+  "risk_distribution": {
+    "active_personas": 54,
+    "contract_only_personas": 5,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "risk_tier_critical": 5,
+    "risk_tier_high": 8,
+    "risk_tier_low": 32,
+    "risk_tier_medium": 14,
+    "total_personas": 59
+  },
+  "status": "passed"
+}

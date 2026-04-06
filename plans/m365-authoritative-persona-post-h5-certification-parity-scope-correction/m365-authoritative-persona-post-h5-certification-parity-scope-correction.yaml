@@ -3,7 +3,7 @@ parent_plan_id: plan:m365-authoritative-persona-post-h5-parity-correction
 title: Expand the post-H5 parity correction to include department certification before
   resuming M1
 version: '1.0'
-status: draft
+status: complete
 owner: SMARTHAUS
 date_created: '2026-04-06'
 date_updated: '2026-04-06'
@@ -49,6 +49,18 @@ current_state:
       active_personas_certified: 34
       planned_personas_certified: 25
       total_routed_actions: 298
+completion_summary:
+  completed_at: '2026-04-06 06:17 EDT'
+  gate: GO
+  outputs:
+  - docs/ma/lemmas/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.md
+  - invariants/lemmas/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.yaml
+  - notebooks/m365/INV-M365-CE-authoritative-persona-post-h5-certification-parity-scope-correction-v1.ipynb
+  - notebooks/lemma_proofs/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.ipynb
+  - artifacts/scorecards/scorecard_l83.json
+  - configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json
+  restored_merge_handback: M1 is now blocked only by a fresh governed merge replay from
+    the corrected source branch; development remains unpushed.
 north_star_alignment:
   source: Operations/NORTHSTAR.md
   principles:
@@ -155,6 +167,9 @@ scope:
   - notebooks/lemma_proofs/L*_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.ipynb
   - artifacts/scorecards/scorecard_*.json
   - configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json
+  - configs/generated/persona_certification_v1_verification.json
+  - configs/generated/department_certification_v1_verification.json
+  - configs/generated/enterprise_release_gate_v2_verification.json
   - Operations/EXECUTION_PLAN.md
   - Operations/ACTION_LOG.md
   - Operations/PROJECT_FILE_INDEX.md

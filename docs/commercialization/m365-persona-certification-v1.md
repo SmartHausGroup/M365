@@ -13,11 +13,11 @@ Define the deterministic certification contract for every persona in the expande
 
 ## Problem
 
-H3 rebased the authoritative roster to `59` named personas, and H4 must keep persona certification aligned to that staged pre-H5 truth. Without this contract, the program would still undercount the workforce and would blur the difference between active registry-backed personas and planned contract-only personas.
+H5 closed the activation gate and lifted the authoritative roster to the final `59 total / 54 active / 5 planned` truth. Without rebasing this contract, persona certification would still claim the staged pre-H5 workforce and would blur the difference between active registry-backed personas and the remaining deferred external contract-only personas.
 
 ## Decision
 
-Make `registry/persona_certification_v1.yaml` the authoritative persona certification contract. The contract defines four ordered certification phases that every persona must pass in the staged pre-H5 state.
+Make `registry/persona_certification_v1.yaml` the authoritative persona certification contract. The contract defines four ordered certification phases that every persona must pass in the final post-H5 state.
 
 ## Certification Phases
 
@@ -36,9 +36,9 @@ Make `registry/persona_certification_v1.yaml` the authoritative persona certific
 
 ## Certification Results
 
-- **59 personas pass four-phase certification in the staged pre-H5 state.**
-- 34 registry-backed personas are certified as active action-backed personas with non-zero actions and certified domains.
-- 25 contract-only personas are certified as planned contract-defined personas with zero actions.
+- **59 personas pass four-phase certification in the final post-H5 state.**
+- 54 registry-backed personas are certified as active action-backed personas with non-zero actions and certified domains.
+- 5 contract-only personas are certified as planned deferred external-platform personas with zero actions.
 - Risk tier distribution: 5 critical, 8 high, 14 medium, 32 low.
 
 ## No-Go Conditions
@@ -46,10 +46,10 @@ Make `registry/persona_certification_v1.yaml` the authoritative persona certific
 - Persona missing any required field.
 - Registry-backed persona with zero actions.
 - Contract-only persona with non-zero actions.
-- Persona count drift away from `59 total / 34 active / 25 planned`.
+- Persona count drift away from `59 total / 54 active / 5 planned`.
 - Risk tier to approval profile mismatch.
 - Registry-backed persona claiming uncertified domain.
 
 ## Next Dependency
 
-`H5` (Activation Gate Closeout) is the next governed act after H4 closes.
+Fresh `M1` merge replay is the next governed act after the post-H5 certification parity correction closes.

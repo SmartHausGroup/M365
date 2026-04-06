@@ -2,13 +2,14 @@
 
 **Plan ID:** `m365-authoritative-persona-post-h5-certification-parity-scope-correction`
 **Parent Plan ID:** `m365-authoritative-persona-post-h5-parity-correction`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-06
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-post-h5-certification-parity-scope-correction:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — keep the final authoritative workforce and merge-to-development gate truthful and fail-closed by widening the post-H5 parity correction only enough to cover the department-certification surface that `M1` already validates.
 **Canonical predecessor:** `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md`
 **Scope-gap evidence:** `notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb`, `configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json`
+**Completion status (2026-04-06 06:17 EDT):** `GO` — published the `L83` MA proof chain, rebased persona certification, department certification, and enterprise release-gate truth to the final post-H5 `59 total / 54 active / 5 planned / 430 routed actions` boundary, refreshed the scoped verifier/test surfaces, and restored `M1` to a truthfully replayable state on the corrected source branch. The next governed act is a fresh `M1` approval packet and merge replay from `codex/m365-authoritative-persona-post-h5-parity-correction`; `development` remains unpushed.
 
 **Draft vs Active semantics:** This blocker package starts in **Draft**. It becomes **Active** only after the approval packet is presented and receives explicit `go`, and only while no other post-H5 correction or merge phase is concurrently active. It becomes **Complete** only after persona certification, department certification, and enterprise release-gate truth are all rebased to the final post-H5 state, the correction branch is committed and pushed, and `M1` is truthfully eligible for a fresh merge replay.
 
@@ -103,6 +104,9 @@ If `P6_GO` is false, this package must emit `NO-GO`, stop fail-closed, and leave
 - `notebooks/lemma_proofs/L*_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.ipynb`
 - `artifacts/scorecards/scorecard_*.json`
 - `configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json`
+- `configs/generated/persona_certification_v1_verification.json`
+- `configs/generated/department_certification_v1_verification.json`
+- `configs/generated/enterprise_release_gate_v2_verification.json`
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/ACTION_LOG.md`
 - `Operations/PROJECT_FILE_INDEX.md`
@@ -166,10 +170,10 @@ If `P6_GO` is false, this package must emit `NO-GO`, stop fail-closed, and leave
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] this package `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this package `status -> complete`
 
 ## Agent Constraints
 

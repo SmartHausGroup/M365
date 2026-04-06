@@ -110,3 +110,29 @@ def test_e8c_persona_counts_and_total() -> None:
     assert registry_backed_total == contract["kpis"]["registry_backed_department_personas"]
     assert contract_only_total == contract["kpis"]["contract_only_department_personas"]
     assert len(contract["department_certification_status"]) == contract["kpis"]["total_departments"]
+
+
+def test_e8c_final_post_h5_counts_and_preserved_pack_statuses() -> None:
+    contract = _load_contract()
+    assert contract["kpis"] == {
+        "total_departments": 10,
+        "total_department_personas": 59,
+        "active_department_personas": 54,
+        "planned_department_personas": 5,
+        "registry_backed_department_personas": 54,
+        "contract_only_department_personas": 5,
+        "certification_phase_count": 4,
+        "governance_rule_count": 5,
+    }
+    assert contract["department_certification_status"]["marketing"]["planned_persona_count"] == 5
+    assert (
+        contract["department_certification_status"]["marketing"]["contract_only_persona_count"] == 5
+    )
+    assert (
+        contract["department_certification_status"]["operations"]["department_status"]
+        == "partial-activation"
+    )
+    assert (
+        contract["department_certification_status"]["design"]["department_status"]
+        == "registry-backed"
+    )

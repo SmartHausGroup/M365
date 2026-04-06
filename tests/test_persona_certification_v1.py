@@ -141,3 +141,24 @@ def test_e8b_coverage_partition_and_approval_alignment() -> None:
     assert risk_counts["high"] == kpis["risk_tier_high"]
     assert risk_counts["medium"] == kpis["risk_tier_medium"]
     assert risk_counts["low"] == kpis["risk_tier_low"]
+
+
+def test_e8b_final_post_h5_counts_and_claims() -> None:
+    contract = _load_contract()
+    assert contract["kpis"] == {
+        "total_personas": 59,
+        "active_personas": 54,
+        "planned_personas": 5,
+        "registry_backed_personas": 54,
+        "contract_only_personas": 5,
+        "risk_tier_critical": 5,
+        "risk_tier_high": 8,
+        "risk_tier_medium": 14,
+        "risk_tier_low": 32,
+        "certification_phase_count": 4,
+        "governance_rule_count": 5,
+    }
+    supported_claims = " ".join(contract["bounded_claims"]["supported"])
+    not_supported_claims = " ".join(contract["bounded_claims"]["not_supported"])
+    assert "pre-H5" not in supported_claims
+    assert "before H5" not in not_supported_claims

@@ -1,0 +1,26 @@
+invariant_id: L83
+title: Final post-H5 certification parity closes only when persona, department, and release-gate truth all match the final registry
+lemma_reference: docs/ma/lemmas/L83_m365_authoritative_persona_post_h5_certification_parity_scope_correction_v1.md
+proof_obligations:
+  - L82 must prove the predecessor package cannot satisfy M1 without widening scope to department certification
+  - persona certification must reconcile exactly to 59 total, 54 active, 5 planned, 54 registry-backed, and 5 contract-only personas
+  - department certification must reconcile exactly to 10 departments, 59 total, 54 active, 5 planned, 54 registry-backed, and 5 contract-only personas
+  - department certification must preserve the current department-pack status taxonomy because pack authority files remain out of scope in this phase
+  - enterprise release-gate KPIs must reconcile to 13 certified workload domains, 59 certified personas, 54 active certified personas, 5 planned certified personas, 10 certified departments, and 430 routed actions
+  - repeated proof replay must emit the same deterministic verification hash
+failure_boundaries:
+  - any certification surface still asserts the staged 34 active / 25 planned boundary
+  - any certification surface disagrees with the already-truthful final registry, activated-surface, or packaging contracts
+  - department certification tries to reclassify department-pack status labels without modifying the pack authority files
+  - enterprise release-gate truth still claims pre-H5 staging or historical 298 routed actions
+  - deterministic verification replay drifts across repeated runs
+test_bindings:
+  - scripts/ci/verify_persona_certification_v1.py
+  - scripts/ci/verify_department_certification_v1.py
+  - scripts/ci/verify_enterprise_release_gate_v2.py
+  - tests/test_persona_certification_v1.py
+  - tests/test_department_certification_v1.py
+  - tests/test_enterprise_release_gate_v2.py
+  - configs/generated/authoritative_persona_post_h5_certification_parity_scope_correction_v1_verification.json
+ci_gate: authoritative-persona-post-h5-certification-parity-scope-correction-v1
+

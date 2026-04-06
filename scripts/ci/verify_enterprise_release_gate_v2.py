@@ -12,6 +12,8 @@ CERTIFICATION_PREREQUISITES = [
     "registry/workload_certification_v1.yaml",
     "registry/persona_certification_v1.yaml",
     "registry/department_certification_v1.yaml",
+    "registry/activated_persona_surface_v1.yaml",
+    "registry/workforce_packaging_v1.yaml",
     "registry/cross_department_certification_v1.yaml",
     "registry/ucp_delegation_contract_v1.yaml",
     "registry/executive_oversight_contract_v1.yaml",
@@ -70,6 +72,22 @@ def main() -> None:
             print(f"FAILED: prerequisite not found: {prereq}")
             sys.exit(1)
 
+    workload = yaml.safe_load(
+        (repo_root / "registry" / "workload_certification_v1.yaml").read_text(encoding="utf-8")
+    )
+    persona_cert = yaml.safe_load(
+        (repo_root / "registry" / "persona_certification_v1.yaml").read_text(encoding="utf-8")
+    )
+    department_cert = yaml.safe_load(
+        (repo_root / "registry" / "department_certification_v1.yaml").read_text(encoding="utf-8")
+    )
+    activated_surface = yaml.safe_load(
+        (repo_root / "registry" / "activated_persona_surface_v1.yaml").read_text(encoding="utf-8")
+    )
+    workforce_packaging = yaml.safe_load(
+        (repo_root / "registry" / "workforce_packaging_v1.yaml").read_text(encoding="utf-8")
+    )
+
     decision = contract["release_decision"]
     if decision["verdict"] != "GO":
         print(f"FAILED: release verdict is {decision['verdict']}, expected GO")
@@ -80,6 +98,101 @@ def main() -> None:
         sys.exit(1)
 
     kpis = contract["kpis"]
+    workload_kpis = workload["kpis"]
+    persona_kpis = persona_cert["kpis"]
+    department_kpis = department_cert["kpis"]
+    activated_kpis = activated_surface["kpis"]
+    packaging_kpis = workforce_packaging["kpis"]
+
+    if kpis["workload_domains_certified"] != workload_kpis["domains_with_routed_actions"]:
+        print("FAILED: workload_domains_certified mismatch")
+        sys.exit(1)
+
+    if kpis["workload_domains_not_yet"] != workload_kpis["domains_without_routed_actions"]:
+        print("FAILED: workload_domains_not_yet mismatch")
+        sys.exit(1)
+
+    if kpis["personas_certified"] != persona_kpis["total_personas"]:
+        print("FAILED: personas_certified mismatch")
+        sys.exit(1)
+
+    if kpis["active_personas_certified"] != persona_kpis["active_personas"]:
+        print("FAILED: active_personas_certified mismatch")
+        sys.exit(1)
+
+    if kpis["planned_personas_certified"] != persona_kpis["planned_personas"]:
+        print("FAILED: planned_personas_certified mismatch")
+        sys.exit(1)
+
+    if kpis["departments_certified"] != department_kpis["total_departments"]:
+        print("FAILED: departments_certified mismatch")
+        sys.exit(1)
+
+    if persona_kpis["active_personas"] != department_kpis["active_department_personas"]:
+        print("FAILED: persona/department active count mismatch")
+        sys.exit(1)
+
+    if persona_kpis["planned_personas"] != department_kpis["planned_department_personas"]:
+        print("FAILED: persona/department planned count mismatch")
+        sys.exit(1)
+
+    if (
+        persona_kpis["registry_backed_personas"]
+        != department_kpis["registry_backed_department_personas"]
+    ):
+        print("FAILED: persona/department registry-backed count mismatch")
+        sys.exit(1)
+
+    if (
+        persona_kpis["contract_only_personas"]
+        != department_kpis["contract_only_department_personas"]
+    ):
+        print("FAILED: persona/department contract-only count mismatch")
+        sys.exit(1)
+
+    if kpis["personas_certified"] != activated_kpis["total_personas"]:
+        print("FAILED: release gate / activated surface total persona mismatch")
+        sys.exit(1)
+
+    if kpis["active_personas_certified"] != activated_kpis["certified_active_personas"]:
+        print("FAILED: release gate / activated surface active persona mismatch")
+        sys.exit(1)
+
+    if kpis["planned_personas_certified"] != activated_kpis["deferred_external_personas"]:
+        print("FAILED: release gate / activated surface planned persona mismatch")
+        sys.exit(1)
+
+    if kpis["departments_certified"] != activated_kpis["active_departments"]:
+        print("FAILED: release gate / activated surface department mismatch")
+        sys.exit(1)
+
+    if kpis["total_routed_actions"] != activated_kpis["total_allowed_persona_actions"]:
+        print("FAILED: release gate / activated surface routed action mismatch")
+        sys.exit(1)
+
+    if kpis["workload_domains_certified"] != packaging_kpis["certified_workload_domains"]:
+        print("FAILED: release gate / packaging domain mismatch")
+        sys.exit(1)
+
+    if kpis["personas_certified"] != packaging_kpis["total_persona_count"]:
+        print("FAILED: release gate / packaging total persona mismatch")
+        sys.exit(1)
+
+    if kpis["active_personas_certified"] != packaging_kpis["active_persona_count"]:
+        print("FAILED: release gate / packaging active persona mismatch")
+        sys.exit(1)
+
+    if kpis["planned_personas_certified"] != packaging_kpis["planned_persona_count"]:
+        print("FAILED: release gate / packaging planned persona mismatch")
+        sys.exit(1)
+
+    if kpis["departments_certified"] != packaging_kpis["department_count"]:
+        print("FAILED: release gate / packaging department mismatch")
+        sys.exit(1)
+
+    if kpis["total_routed_actions"] != packaging_kpis["total_routed_actions"]:
+        print("FAILED: release gate / packaging routed action mismatch")
+        sys.exit(1)
 
     output = {
         "contract_id": contract["contract"]["id"],
@@ -91,6 +204,9 @@ def main() -> None:
         "workload_domains_certified": kpis["workload_domains_certified"],
         "personas_certified": kpis["personas_certified"],
         "departments_certified": kpis["departments_certified"],
+        "active_personas_certified": kpis["active_personas_certified"],
+        "planned_personas_certified": kpis["planned_personas_certified"],
+        "total_routed_actions": kpis["total_routed_actions"],
     }
 
     output_path = (
