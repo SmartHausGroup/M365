@@ -8,7 +8,7 @@ from smarthaus_common.department_pack import build_department_pack
 from smarthaus_common.json_store import JsonStore
 
 
-def test_h4s_builds_blocked_marketing_department_pack(
+def test_post_h5_builds_marketing_department_pack(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))
@@ -18,9 +18,9 @@ def test_h4s_builds_blocked_marketing_department_pack(
 
     assert pack["department"]["id"] == "marketing"
     assert pack["summary"]["persona_count"] == 8
-    assert pack["summary"]["active_persona_count"] == 2
-    assert pack["summary"]["registry_backed_persona_count"] == 2
-    assert pack["summary"]["supported_action_count"] == 18
+    assert pack["summary"]["active_persona_count"] == 3
+    assert pack["summary"]["registry_backed_persona_count"] == 3
+    assert pack["summary"]["supported_action_count"] == 24
     assert pack["summary"]["pack_state"] == "blocked"
     assert {persona["coverage_status"] for persona in pack["personas"]} == {
         "registry-backed",
@@ -28,7 +28,7 @@ def test_h4s_builds_blocked_marketing_department_pack(
     }
 
 
-def test_h4s_marketing_pack_remains_blocked_without_queue_pressure(
+def test_post_h5_marketing_pack_remains_blocked_without_queue_pressure(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))
@@ -38,29 +38,32 @@ def test_h4s_marketing_pack_remains_blocked_without_queue_pressure(
     assert pack["summary"]["pack_state"] == "blocked"
     statuses = {persona["persona_id"]: persona["status"] for persona in pack["personas"]}
     assert statuses["content-creator"] == "active"
+    assert statuses["website-operations-specialist"] == "active"
     assert statuses["app-store-optimizer"] == "planned"
 
 
-def test_h4s_marketing_fails_closed_when_contract_only_persona_declares_actions(
+def test_post_h5_marketing_fails_closed_on_declared_action_mismatch(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))
 
     source = Path("registry/department_pack_marketing_v1.yaml")
     payload = yaml.safe_load(source.read_text(encoding="utf-8"))
-    payload["personas"]["app-store-optimizer"]["supported_actions"] = ["mail.send"]
+    payload["personas"]["website-operations-specialist"]["supported_actions"] = payload["personas"][
+        "website-operations-specialist"
+    ]["supported_actions"][:-1]
+    payload["kpis"]["supported_action_count"] = 23
 
     overridden = tmp_path / "department_pack_marketing_v1.yaml"
     overridden.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
 
     with pytest.raises(
-        ValueError,
-        match="department_pack_persona_contract_only_has_actions:app-store-optimizer",
+        ValueError, match="department_pack_persona_action_mismatch:website-operations-specialist"
     ):
         build_department_pack("marketing", path=overridden)
 
 
-def test_h4s_marketing_fails_closed_on_declared_coverage_status_mismatch(
+def test_post_h5_marketing_fails_closed_on_declared_coverage_status_mismatch(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("APP_DATA", str(tmp_path))

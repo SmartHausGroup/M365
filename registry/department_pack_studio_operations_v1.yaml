@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-04-05T14:30:00Z'
+last_updated: '2026-04-06T12:00:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,8 +12,14 @@ department:
   wave: W7
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Studio Operations digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Five studio-operations personas remain action-backed while four promoted personas stay contract-only.
-  bounded_claim: The Studio Operations department pack may claim registry-backed execution coverage only for Amanda Foster, Lisa Chang, Jennifer Liu, Robert Kim, Mike Rodriguez. The remaining 4 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
+  purpose: Package the Studio Operations digital employees into one bounded department
+    pack that reconciles to the final post-H5 source-branch authoritative roster while
+    preserving the certified partial-activation department taxonomy required by downstream
+    certification surfaces.
+  bounded_claim: The Studio Operations department pack may claim registry-backed execution
+    coverage for all 9 department personas in the authoritative registry. The default
+    pack state is ready without queue pressure; department.status remains partial-activation
+    by design for downstream certification compatibility.
 workflow_families:
 - reporting_and_operational_visibility
 - finance_and_control_review
@@ -32,8 +38,10 @@ workload_families:
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
-  attention_required: At least one pack persona is escalated and the studio-operations lead must intervene.
-  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+  attention_required: At least one pack persona is escalated and the studio-operations
+    lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the
+    declared authority.
 approval_model:
   department_owner: department-owner:studio-operations
   department_lead: department-lead:studio-operations
@@ -44,20 +52,24 @@ approval_model:
       personas:
       - financial-operations-agent
       - legal-compliance-checker
-      rule: Dual human approval and explicit sign-off are required for regulated, personnel-state, legal, security, or compliance-sensitive mutations.
+      rule: Dual human approval and explicit sign-off are required for regulated,
+        personnel-state, legal, security, or compliance-sensitive mutations.
     high-impact:
       approvers:
       - department-owner:studio-operations
       personas:
       - finance-tracker
-      rule: Human approval is required for tenant, public-facing, financial, or organization-wide changes; destructive or privileged mutations remain explicitly gated.
+      rule: Human approval is required for tenant, public-facing, financial, or organization-wide
+        changes; destructive or privileged mutations remain explicitly gated.
     medium-operational:
       approvers:
       - department-owner:studio-operations
       personas:
       - client-relationship-agent
       - infrastructure-maintainer
-      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
+      rule: Routine internal mutations require department-owner review; cross-department
+        or externally visible changes remain gated within the declared approval model
+        and explicit action surface.
     low-observe-create:
       approvers:
       - department-owner:studio-operations
@@ -66,13 +78,14 @@ approval_model:
       - knowledge-management-agent
       - reports
       - support-responder
-      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
+      rule: Draft, research, planning, and low-risk preparation work may proceed in
+        observe/create mode within the declared action surface and approval model.
 kpis:
   required_personas: 9
-  required_active_personas: 5
-  required_registry_backed_personas: 5
+  required_active_personas: 9
+  required_registry_backed_personas: 9
   required_workflow_families: 5
-  supported_action_count: 41
+  supported_action_count: 61
 personas:
   analytics-reporter:
     display_name: Amanda Foster
@@ -211,7 +224,7 @@ personas:
     display_name: Priya Mehta
     title: Client Relationship Manager
     role_type: support_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
@@ -224,12 +237,17 @@ personas:
     - Low-code, workflow, and analytics
     workflow_families:
     - support_and_case_coordination
-    supported_actions: []
+    supported_actions:
+    - client.follow-up
+    - satisfaction.survey
+    - feedback.analyze
+    - relationship.score
+    - engagement.plan
   financial-operations-agent:
     display_name: Luis Carvalho
     title: Financial Operations Manager
     role_type: finance_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: critical
     approval_profile: critical-regulated
     capability_families:
@@ -242,12 +260,17 @@ personas:
     - Security, compliance, and data governance
     workflow_families:
     - finance_and_control_review
-    supported_actions: []
+    supported_actions:
+    - invoice.process
+    - expense.approve
+    - budget.track
+    - forecast.update
+    - audit.prepare
   knowledge-management-agent:
     display_name: Leah Goldstein
     title: Knowledge Operations Lead
     role_type: enablement_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -260,12 +283,17 @@ personas:
     - Content, intranet, and files
     workflow_families:
     - knowledge_enablement_and_documentation
-    supported_actions: []
+    supported_actions:
+    - document.index
+    - search.optimize
+    - content.curate
+    - training.recommend
+    - expert.connect
   reports:
     display_name: Youssef Haddad
     title: Reporting and KPI Analyst
     role_type: reporting_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: low
     approval_profile: low-observe-create
     capability_families:
@@ -278,14 +306,20 @@ personas:
     - Documents, notes, and workspace productivity
     workflow_families:
     - reporting_and_operational_visibility
-    supported_actions: []
+    supported_actions:
+    - reports.users_active
+    - reports.email_activity
+    - reports.teams_activity
+    - reports.sharepoint_usage
+    - reports.onedrive_usage
 bounded_claims:
   supported:
-  - studio-operations persona census and capability-family contract
-  - approval and escalation semantics for staged studio-operations activation
-  - registry-backed execution coverage only for Amanda Foster, Lisa Chang, Jennifer Liu, Robert Kim, Mike Rodriguez
-  - deterministic pack-state projection while planned personas remain fail-closed
+  - studio operations persona census and capability-family contract
+  - registry-backed execution coverage for all 9 declared studio operations personas
+  - deterministic ready-pack projection without queue pressure
+  - preservation of the certified partial-activation department taxonomy for downstream
+    certification compatibility
   unsupported:
-  - claims that planned studio-operations personas are action-backed
-  - mutation or activation beyond the explicitly registry-backed persona set
-  - cross-department work outside the studio-operations contract
+  - claims that any declared persona is outside the authoritative registry
+  - mutation or activation beyond the explicit registry-backed action surface
+  - department status rebasing beyond the preserved downstream certification taxonomy

@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-04-05T14:30:00Z'
+last_updated: '2026-04-06T12:00:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,8 +12,14 @@ department:
   wave: W7
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Project Management digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Ben Foster, Emily Carter, and Olivia Park remain the action-backed Project Management anchors.
-  bounded_claim: The Project Management department pack may claim registry-backed execution coverage only for Emily Carter, Ben Foster, Olivia Park. The remaining 2 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
+  purpose: Package the Project Management digital employees into one bounded department
+    pack that reconciles to the final post-H5 source-branch authoritative roster while
+    preserving the certified partial-activation department taxonomy required by downstream
+    certification surfaces.
+  bounded_claim: The Project Management department pack may claim registry-backed
+    execution coverage for all 5 department personas in the authoritative registry.
+    The default pack state is ready without queue pressure; department.status remains
+    partial-activation by design for downstream certification compatibility.
 workflow_families:
 - release_coordination_and_handoff_management
 - experiment_tracking_and_status_reporting
@@ -29,8 +35,10 @@ workload_families:
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
-  attention_required: At least one pack persona is escalated and the project-management lead must intervene.
-  blocked: An expected persona is missing, inactive, planned-only, or outside the declared authority.
+  attention_required: At least one pack persona is escalated and the project-management
+    lead must intervene.
+  blocked: An expected persona is missing, inactive, planned-only, or outside the
+    declared authority.
 approval_model:
   department_owner: department-owner:project-management
   department_lead: department-lead:project-management
@@ -42,20 +50,23 @@ approval_model:
       - project-coordination-agent
       - project-manager
       - project-shipper
-      rule: Routine internal mutations require department-owner review; cross-department or externally visible changes remain gated until later activation acts widen the surface.
+      rule: Routine internal mutations require department-owner review; cross-department
+        or externally visible changes remain gated within the declared approval model
+        and explicit action surface.
     low-observe-create:
       approvers:
       - department-owner:project-management
       personas:
       - experiment-tracker
       - studio-producer
-      rule: Draft, research, planning, and internal-preparation work may proceed in observe/create mode until later activation acts unlock mutating execution surfaces.
+      rule: Draft, research, planning, and low-risk preparation work may proceed in
+        observe/create mode within the declared action surface and approval model.
 kpis:
   required_personas: 5
-  required_active_personas: 3
-  required_registry_backed_personas: 3
+  required_active_personas: 5
+  required_registry_backed_personas: 5
   required_workflow_families: 3
-  supported_action_count: 26
+  supported_action_count: 40
 personas:
   experiment-tracker:
     display_name: Emily Carter
@@ -142,7 +153,7 @@ personas:
     display_name: Sofia Petrova
     title: Project Coordinator
     role_type: planning_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
@@ -155,12 +166,22 @@ personas:
     - Documents, notes, and workspace productivity
     workflow_families:
     - cross_functional_schedule_and_delivery_planning
-    supported_actions: []
+    supported_actions:
+    - task.create
+    - task.assign
+    - deadline.track
+    - status.update
+    - report.generate
+    - list_plans
+    - create_plan
+    - list_buckets
+    - create_bucket
+    - create_task
   project-manager:
     display_name: Haruto Tanaka
     title: Project Manager
     role_type: release_anchor
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: medium
     approval_profile: medium-operational
     capability_families:
@@ -174,14 +195,19 @@ personas:
     workflow_families:
     - release_coordination_and_handoff_management
     - cross_functional_schedule_and_delivery_planning
-    supported_actions: []
+    supported_actions:
+    - create-project
+    - list-projects
+    - update-project-status
+    - archive-project
 bounded_claims:
   supported:
-  - project-management persona census and capability-family contract
-  - approval and escalation semantics for staged project-management activation
-  - registry-backed execution coverage only for Emily Carter, Ben Foster, Olivia Park
-  - deterministic pack-state projection while planned personas remain fail-closed
+  - project management persona census and capability-family contract
+  - registry-backed execution coverage for all 5 declared project management personas
+  - deterministic ready-pack projection without queue pressure
+  - preservation of the certified partial-activation department taxonomy for downstream
+    certification compatibility
   unsupported:
-  - claims that planned project-management personas are action-backed
-  - mutation or activation beyond the explicitly registry-backed persona set
-  - cross-department work outside the project-management contract
+  - claims that any declared persona is outside the authoritative registry
+  - mutation or activation beyond the explicit registry-backed action surface
+  - department status rebasing beyond the preserved downstream certification taxonomy

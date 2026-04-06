@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-04-05T14:30:00Z'
+last_updated: '2026-04-06T12:00:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -12,8 +12,14 @@ department:
   wave: W6
   wave_track: Wave A
   status: partial-activation
-  purpose: Package the Human Resources digital employees into one bounded department pack that reconciles to the staged post-H3 authoritative roster. Sarah Williams remains the only action-backed HR anchor while recruiting support stays contract-only.
-  bounded_claim: The Human Resources department pack may claim registry-backed execution coverage only for Sarah Williams. The remaining 1 promoted personas remain persona-contract-only with zero supported actions until later activation acts.
+  purpose: Package the Human Resources digital employees into one bounded department
+    pack that reconciles to the final post-H5 source-branch authoritative roster while
+    preserving the certified partial-activation department taxonomy required by downstream
+    certification surfaces.
+  bounded_claim: The Human Resources department pack may claim registry-backed execution
+    coverage for all 2 department personas in the authoritative registry. The default
+    pack state is ready without queue pressure; department.status remains partial-activation
+    by design for downstream certification compatibility.
 workflow_families:
 - onboarding_and_offboarding
 - employee_record_and_policy_administration
@@ -28,7 +34,8 @@ workload_families:
 pack_states:
   ready: Every pack persona is active and no accountability state requires intervention.
   watch: At least one pack persona is in warning state but none are escalated.
-  attention_required: At least one pack persona is escalated and the HR lead must intervene.
+  attention_required: At least one pack persona is escalated and the HR lead must
+    intervene.
   blocked: An expected persona is missing, inactive, or outside the declared authority.
 approval_model:
   department_owner: hr-manager
@@ -39,19 +46,21 @@ approval_model:
       - hr-manager
       personas:
       - hr-generalist
-      rule: Dual human approval and explicit sign-off are required for regulated, personnel-state, legal, security, or compliance-sensitive mutations.
+      rule: Dual human approval and explicit sign-off are required for regulated,
+        personnel-state, legal, security, or compliance-sensitive mutations.
     high-impact:
       approvers:
       - hr-manager
       personas:
       - recruitment-assistance-agent
-      rule: Human approval is required for tenant, public-facing, financial, or organization-wide changes; destructive or privileged mutations remain explicitly gated.
+      rule: Human approval is required for tenant, public-facing, financial, or organization-wide
+        changes; destructive or privileged mutations remain explicitly gated.
 kpis:
   required_personas: 2
-  required_active_personas: 1
-  required_registry_backed_personas: 1
+  required_active_personas: 2
+  required_registry_backed_personas: 2
   required_workflow_families: 4
-  supported_action_count: 5
+  supported_action_count: 10
 personas:
   hr-generalist:
     display_name: Sarah Williams
@@ -84,7 +93,7 @@ personas:
     display_name: Camila Torres
     title: Recruiting Coordinator
     role_type: recruiting_operator
-    coverage_status: persona-contract-only
+    coverage_status: registry-backed
     risk_tier: high
     approval_profile: high-impact
     capability_families:
@@ -98,14 +107,20 @@ personas:
     workflow_families:
     - recruitment_and_candidate_coordination
     - onboarding_and_offboarding
-    supported_actions: []
+    supported_actions:
+    - candidate.screen
+    - interview.schedule
+    - feedback.collect
+    - offer.prepare
+    - onboarding.initiate
 bounded_claims:
   supported:
-  - hr persona census and capability-family contract
-  - approval and escalation semantics for staged hr activation
-  - registry-backed execution coverage only for Sarah Williams
-  - deterministic pack-state projection while planned personas remain fail-closed
+  - human resources persona census and capability-family contract
+  - registry-backed execution coverage for all 2 declared human resources personas
+  - deterministic ready-pack projection without queue pressure
+  - preservation of the certified partial-activation department taxonomy for downstream
+    certification compatibility
   unsupported:
-  - claims that planned hr personas are action-backed
-  - mutation or activation beyond the explicitly registry-backed persona set
-  - cross-department work outside the hr contract
+  - claims that any declared persona is outside the authoritative registry
+  - mutation or activation beyond the explicit registry-backed action surface
+  - department status rebasing beyond the preserved downstream certification taxonomy

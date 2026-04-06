@@ -1,7 +1,7 @@
 {
-  "active_persona_count": 7,
+  "active_persona_count": 8,
   "department": "engineering",
-  "pack_state": "blocked",
+  "pack_state": "ready",
   "persona_count": 8,
   "personas": [
     {
@@ -55,14 +55,14 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 3,
+      "coverage_status": "registry-backed",
       "persona_id": "platform-manager",
-      "status": "planned"
+      "status": "active"
     }
   ],
-  "registry_backed_persona_count": 7,
-  "supported_action_count": 62,
+  "registry_backed_persona_count": 8,
+  "supported_action_count": 65,
   "workflow_family_count": 4,
   "workload_family_count": 10
 }

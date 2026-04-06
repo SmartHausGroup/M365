@@ -1,7 +1,7 @@
 {
-  "active_persona_count": 3,
+  "active_persona_count": 5,
   "department": "project-management",
-  "pack_state": "blocked",
+  "pack_state": "ready",
   "persona_count": 5,
   "personas": [
     {
@@ -27,21 +27,21 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 10,
+      "coverage_status": "registry-backed",
       "persona_id": "project-coordination-agent",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 4,
+      "coverage_status": "registry-backed",
       "persona_id": "project-manager",
-      "status": "planned"
+      "status": "active"
     }
   ],
-  "registry_backed_persona_count": 3,
-  "supported_action_count": 26,
+  "registry_backed_persona_count": 5,
+  "supported_action_count": 40,
   "workflow_family_count": 3,
   "workload_family_count": 7
 }

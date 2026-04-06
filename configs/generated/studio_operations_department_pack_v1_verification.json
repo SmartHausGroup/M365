@@ -1,7 +1,7 @@
 {
-  "active_persona_count": 5,
+  "active_persona_count": 9,
   "department": "studio-operations",
-  "pack_state": "blocked",
+  "pack_state": "ready",
   "persona_count": 9,
   "personas": [
     {
@@ -41,35 +41,35 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 5,
+      "coverage_status": "registry-backed",
       "persona_id": "client-relationship-agent",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 5,
+      "coverage_status": "registry-backed",
       "persona_id": "financial-operations-agent",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 5,
+      "coverage_status": "registry-backed",
       "persona_id": "knowledge-management-agent",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 5,
+      "coverage_status": "registry-backed",
       "persona_id": "reports",
-      "status": "planned"
+      "status": "active"
     }
   ],
-  "registry_backed_persona_count": 5,
-  "supported_action_count": 41,
+  "registry_backed_persona_count": 9,
+  "supported_action_count": 61,
   "workflow_family_count": 5,
   "workload_family_count": 8
 }

@@ -27,7 +27,93 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_communication_v1.yaml"
+      "pack_path": "registry/department_pack_communication_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Mateo Alvarez",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 11,
+          "final_supported_actions": [
+            "calendar.list",
+            "calendar.create",
+            "calendar.get",
+            "calendar.update",
+            "calendar.delete",
+            "calendar.availability",
+            "calendar.schedule",
+            "meeting.organize",
+            "availability.check",
+            "reminder.send",
+            "conflict.resolve"
+          ],
+          "persona_id": "calendar-management-agent",
+          "status": "active",
+          "title": "Calendar Operations Coordinator"
+        },
+        {
+          "display_name": "Hannah Kim",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 14,
+          "final_supported_actions": [
+            "mail.list",
+            "mail.read",
+            "mail.send",
+            "mail.reply",
+            "mail.forward",
+            "mail.move",
+            "mail.delete",
+            "mail.folders",
+            "mailbox.settings",
+            "email.classify",
+            "email.respond",
+            "email.forward",
+            "email.archive",
+            "follow-up.schedule"
+          ],
+          "persona_id": "email-processing-agent",
+          "status": "active",
+          "title": "Email Operations Specialist"
+        },
+        {
+          "display_name": "Alicia Nguyen",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 17,
+          "final_supported_actions": [
+            "teams.list",
+            "teams.get",
+            "teams.create",
+            "teams.archive",
+            "teams.add_member",
+            "teams.remove_member",
+            "channels.list",
+            "channels.create",
+            "channels.send_message",
+            "chat.create",
+            "chat.send_message",
+            "chat.send",
+            "chat.list",
+            "create-workspace",
+            "add-workspace-members",
+            "create-channels",
+            "get-team-status"
+          ],
+          "persona_id": "teams-manager",
+          "status": "active",
+          "title": "Teams Collaboration Administrator"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 4,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 4,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 4,
+        "supported_action_count": 49,
+        "target_pack_state": "ready",
+        "workflow_family_count": 3,
+        "workload_family_count": 5
+      }
     },
     {
       "department_id": "engineering",
@@ -41,7 +127,34 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_engineering_v1.yaml"
+      "pack_path": "registry/department_pack_engineering_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Andre Baptiste",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 3,
+          "final_supported_actions": [
+            "provision-client-services",
+            "deprovision-client-services",
+            "get-client-status"
+          ],
+          "persona_id": "platform-manager",
+          "status": "active",
+          "title": "Platform Engineering Manager"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 8,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 8,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 8,
+        "supported_action_count": 65,
+        "target_pack_state": "ready",
+        "workflow_family_count": 4,
+        "workload_family_count": 10
+      }
     },
     {
       "department_id": "hr",
@@ -55,7 +168,36 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_hr_v1.yaml"
+      "pack_path": "registry/department_pack_hr_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Camila Torres",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "candidate.screen",
+            "interview.schedule",
+            "feedback.collect",
+            "offer.prepare",
+            "onboarding.initiate"
+          ],
+          "persona_id": "recruitment-assistance-agent",
+          "status": "active",
+          "title": "Recruiting Coordinator"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 2,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 2,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 2,
+        "supported_action_count": 10,
+        "target_pack_state": "ready",
+        "workflow_family_count": 4,
+        "workload_family_count": 5
+      }
     },
     {
       "department_id": "marketing",
@@ -69,7 +211,37 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_marketing_v1.yaml"
+      "pack_path": "registry/department_pack_marketing_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Lucia Fernandez",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 6,
+          "final_supported_actions": [
+            "website.deploy",
+            "cdn.purge",
+            "dns.update",
+            "ssl.renew",
+            "performance.optimize",
+            "backup.restore"
+          ],
+          "persona_id": "website-operations-specialist",
+          "status": "active",
+          "title": "Website Operations Specialist"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 3,
+        "contract_only_persona_count": 5,
+        "department_status": "partial-activation",
+        "persona_count": 8,
+        "planned_persona_count": 5,
+        "registry_backed_persona_count": 3,
+        "supported_action_count": 24,
+        "target_pack_state": "blocked",
+        "workflow_family_count": 4,
+        "workload_family_count": 7
+      }
     },
     {
       "department_id": "operations",
@@ -132,7 +304,143 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_operations_v1.yaml"
+      "pack_path": "registry/department_pack_operations_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Naomi Brooks",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 3,
+          "final_supported_actions": [
+            "audit.directory",
+            "audit.signins",
+            "audit.provisioning"
+          ],
+          "persona_id": "audit-operations",
+          "status": "active",
+          "title": "Audit Operations Lead"
+        },
+        {
+          "display_name": "Farah Alvi",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "compliance.check",
+            "policy.validate",
+            "audit.prepare",
+            "violation.report",
+            "remediation.plan"
+          ],
+          "persona_id": "compliance-monitoring-agent",
+          "status": "active",
+          "title": "Compliance Monitoring Lead"
+        },
+        {
+          "display_name": "Connor Walsh",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 4,
+          "final_supported_actions": [
+            "devices.list",
+            "devices.get",
+            "devices.compliance",
+            "devices.actions"
+          ],
+          "persona_id": "device-management",
+          "status": "active",
+          "title": "Endpoint Operations Administrator"
+        },
+        {
+          "display_name": "Amara Okoye",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 6,
+          "final_supported_actions": [
+            "ca.policies",
+            "ca.policy_get",
+            "ca.policy_create",
+            "ca.policy_update",
+            "ca.policy_delete",
+            "ca.named_locations"
+          ],
+          "persona_id": "identity-security",
+          "status": "active",
+          "title": "Identity Security Administrator"
+        },
+        {
+          "display_name": "Peter Novak",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "infrastructure.monitor",
+            "system.health-check",
+            "alerts.respond",
+            "backup.verify",
+            "security.scan"
+          ],
+          "persona_id": "it-operations-manager",
+          "status": "active",
+          "title": "IT Operations Manager"
+        },
+        {
+          "display_name": "Tunde Adeyemi",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 6,
+          "final_supported_actions": [
+            "security.alerts",
+            "security.alert_get",
+            "security.alert_update",
+            "security.incidents",
+            "security.incident_get",
+            "security.secure_score"
+          ],
+          "persona_id": "security-operations",
+          "status": "active",
+          "title": "Security Operations Lead"
+        },
+        {
+          "display_name": "Chloe Martin",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 4,
+          "final_supported_actions": [
+            "health.overview",
+            "health.issues",
+            "health.issue_get",
+            "health.messages"
+          ],
+          "persona_id": "service-health",
+          "status": "active",
+          "title": "Service Reliability Coordinator"
+        },
+        {
+          "display_name": "Omar El-Masry",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 9,
+          "final_supported_actions": [
+            "admin.list_tiers",
+            "admin.get_tier",
+            "admin.list_users",
+            "admin.get_user_tier",
+            "admin.set_user_tier",
+            "admin.remove_user_tier",
+            "admin.get_tenant_config",
+            "admin.reload_config",
+            "admin.audit_log"
+          ],
+          "persona_id": "ucp-administrator",
+          "status": "active",
+          "title": "UCP Control Plane Administrator"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 10,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 10,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 10,
+        "supported_action_count": 85,
+        "target_pack_state": "ready",
+        "workflow_family_count": 13,
+        "workload_family_count": 9
+      }
     },
     {
       "department_id": "project-management",
@@ -153,7 +461,55 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_project_management_v1.yaml"
+      "pack_path": "registry/department_pack_project_management_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Sofia Petrova",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 10,
+          "final_supported_actions": [
+            "task.create",
+            "task.assign",
+            "deadline.track",
+            "status.update",
+            "report.generate",
+            "list_plans",
+            "create_plan",
+            "list_buckets",
+            "create_bucket",
+            "create_task"
+          ],
+          "persona_id": "project-coordination-agent",
+          "status": "active",
+          "title": "Project Coordinator"
+        },
+        {
+          "display_name": "Haruto Tanaka",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 4,
+          "final_supported_actions": [
+            "create-project",
+            "list-projects",
+            "update-project-status",
+            "archive-project"
+          ],
+          "persona_id": "project-manager",
+          "status": "active",
+          "title": "Project Manager"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 5,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 5,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 5,
+        "supported_action_count": 40,
+        "target_pack_state": "ready",
+        "workflow_family_count": 3,
+        "workload_family_count": 7
+      }
     },
     {
       "department_id": "studio-operations",
@@ -188,7 +544,81 @@
           "registry_coverage_status": "registry-backed"
         }
       ],
-      "pack_path": "registry/department_pack_studio_operations_v1.yaml"
+      "pack_path": "registry/department_pack_studio_operations_v1.yaml",
+      "target_persona_rebases": [
+        {
+          "display_name": "Priya Mehta",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "client.follow-up",
+            "satisfaction.survey",
+            "feedback.analyze",
+            "relationship.score",
+            "engagement.plan"
+          ],
+          "persona_id": "client-relationship-agent",
+          "status": "active",
+          "title": "Client Relationship Manager"
+        },
+        {
+          "display_name": "Luis Carvalho",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "invoice.process",
+            "expense.approve",
+            "budget.track",
+            "forecast.update",
+            "audit.prepare"
+          ],
+          "persona_id": "financial-operations-agent",
+          "status": "active",
+          "title": "Financial Operations Manager"
+        },
+        {
+          "display_name": "Leah Goldstein",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "document.index",
+            "search.optimize",
+            "content.curate",
+            "training.recommend",
+            "expert.connect"
+          ],
+          "persona_id": "knowledge-management-agent",
+          "status": "active",
+          "title": "Knowledge Operations Lead"
+        },
+        {
+          "display_name": "Youssef Haddad",
+          "final_coverage_status": "registry-backed",
+          "final_supported_action_count": 5,
+          "final_supported_actions": [
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity",
+            "reports.sharepoint_usage",
+            "reports.onedrive_usage"
+          ],
+          "persona_id": "reports",
+          "status": "active",
+          "title": "Reporting and KPI Analyst"
+        }
+      ],
+      "target_summary": {
+        "active_persona_count": 9,
+        "contract_only_persona_count": 0,
+        "department_status": "partial-activation",
+        "persona_count": 9,
+        "planned_persona_count": 0,
+        "registry_backed_persona_count": 9,
+        "supported_action_count": 61,
+        "target_pack_state": "ready",
+        "workflow_family_count": 5,
+        "workload_family_count": 8
+      }
     }
   ],
   "blocked_by_m1_department_pack_validation": true,
@@ -199,6 +629,16 @@
   "lemma_id": "L84",
   "mismatch_total": 20,
   "origin_development_head": "4c997ea",
+  "predecessor_blocker_proof": true,
+  "preserved_department_status_taxonomy": {
+    "communication": "partial-activation",
+    "engineering": "partial-activation",
+    "hr": "partial-activation",
+    "marketing": "partial-activation",
+    "operations": "partial-activation",
+    "project-management": "partial-activation",
+    "studio-operations": "partial-activation"
+  },
   "previous_blocked_merge_safety_branch": "codex/m1-replay-blocked-development-a895678",
   "required_scope": {
     "commercialization_contracts": [
@@ -238,6 +678,94 @@
       "scripts/ci/verify_studio_operations_department_pack_v1.py"
     ]
   },
+  "runtime_change_required": false,
   "source_branch": "codex/m365-authoritative-persona-post-h5-parity-correction",
-  "source_branch_head": "e85be90"
+  "source_branch_head": "1cfc6c1",
+  "target_department_summaries": {
+    "communication": {
+      "active_persona_count": 4,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 4,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 4,
+      "supported_action_count": 49,
+      "target_pack_state": "ready",
+      "workflow_family_count": 3,
+      "workload_family_count": 5
+    },
+    "engineering": {
+      "active_persona_count": 8,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 8,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 8,
+      "supported_action_count": 65,
+      "target_pack_state": "ready",
+      "workflow_family_count": 4,
+      "workload_family_count": 10
+    },
+    "hr": {
+      "active_persona_count": 2,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 2,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 2,
+      "supported_action_count": 10,
+      "target_pack_state": "ready",
+      "workflow_family_count": 4,
+      "workload_family_count": 5
+    },
+    "marketing": {
+      "active_persona_count": 3,
+      "contract_only_persona_count": 5,
+      "department_status": "partial-activation",
+      "persona_count": 8,
+      "planned_persona_count": 5,
+      "registry_backed_persona_count": 3,
+      "supported_action_count": 24,
+      "target_pack_state": "blocked",
+      "workflow_family_count": 4,
+      "workload_family_count": 7
+    },
+    "operations": {
+      "active_persona_count": 10,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 10,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 10,
+      "supported_action_count": 85,
+      "target_pack_state": "ready",
+      "workflow_family_count": 13,
+      "workload_family_count": 9
+    },
+    "project-management": {
+      "active_persona_count": 5,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 5,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 5,
+      "supported_action_count": 40,
+      "target_pack_state": "ready",
+      "workflow_family_count": 3,
+      "workload_family_count": 7
+    },
+    "studio-operations": {
+      "active_persona_count": 9,
+      "contract_only_persona_count": 0,
+      "department_status": "partial-activation",
+      "persona_count": 9,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 9,
+      "supported_action_count": 61,
+      "target_pack_state": "ready",
+      "workflow_family_count": 5,
+      "workload_family_count": 8
+    }
+  },
+  "verification_hash": "3640dd0fc2da1aa007347cd0bfa4569809370f4a926b6ffe1c078791cfc79652"
 }

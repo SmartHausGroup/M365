@@ -3,69 +3,42 @@
 ## Purpose
 
 Turn the authoritative Engineering persona contract into one bounded department pack that can
-be governed, delegated to, and measured while the staged post-H3 roster remains fail-closed.
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-H3 rebased the authoritative persona registry to `59` personas, but the engineering
-department-pack contract still encoded pre-H3 counts. H4S corrects that scope gap so H4 can
-resume certification/count rebase from truthful department-pack authority.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 1 promoted persona staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
 `registry/department_pack_engineering_v1.yaml` is the authoritative Engineering
-department-pack contract and now reconciles to the staged post-H3 authoritative roster.
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
 The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This H4S rebase locks the following staged truth:
+This correction locks the following truth:
 
 - total personas: `8`
-- active personas: `7`
-- registry-backed personas: `7`
-- persona-contract-only personas: `1`
-- supported action count: `62`
-- pack state before later activation acts: `blocked`
+- active personas: `8`
+- registry-backed personas: `8`
+- supported action count: `65`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
 ## Engineering Pack Boundary
 
-The Engineering pack now contains exactly `8` authoritative personas:
+The Engineering pack contains exactly `8` registry-backed personas:
 - `ai-engineer` — Alex Thompson (ML Engineer); registry-backed; actions=10
 - `backend-architect` — Jordan Kim (Principal Backend Engineer); registry-backed; actions=13
 - `devops-automator` — Casey Johnson (DevOps Engineer); registry-backed; actions=10
 - `frontend-developer` — Riley Martinez (UI/UX Developer); registry-backed; actions=7
 - `mobile-app-builder` — Taylor Brown (Mobile Engineer); registry-backed; actions=7
-- `platform-manager` — Andre Baptiste (Platform Engineering Manager); persona-contract-only; actions=0
 - `rapid-prototyper` — Ethan Rivera (Prototype Engineer); registry-backed; actions=8
 - `test-writer-fixer` — Grace Lee (Test Engineer); registry-backed; actions=7
+- `platform-manager` — Andre Baptiste (Platform Engineering Manager); registry-backed; actions=3
 
-Registry-backed execution coverage is limited to `ai-engineer`, `backend-architect`, `devops-automator`, `frontend-developer`, `mobile-app-builder`, `rapid-prototyper`, `test-writer-fixer`.
-
-Persona-contract-only coverage is limited to `platform-manager`.
-
-Seven engineering personas remain action-backed while platform stewardship stays contract-only.
-
-## Department Pack Contract
-
-Every Engineering pack snapshot must include:
-
-- department metadata
-- workload and workflow families
-- approval model
-- KPI contract
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-  - coverage status
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
+The pack may claim only those personas and their explicit bounded workflows.
 
 ## Runtime Rule
 
@@ -77,18 +50,19 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- any planned persona keeps the pack fail-closed as `blocked`
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one truthful Engineering department-pack authority reconciled to H3
-- one deterministic pack summary for architecture, automation, frontend/mobile delivery, prototyping, testing, and platform stewardship
+- one truthful Engineering department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- no over-claim of active or registry-backed coverage beyond the staged authoritative truth
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- the pack fabricates personas not present in `registry/persona_registry_v2.yaml`
-- a contract-only persona declares live supported actions
-- the pack claims a planned persona is active or registry-backed
-- the department-pack authority drifts from the staged H3 counts
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
+- supported action counts drift from the declared authority
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

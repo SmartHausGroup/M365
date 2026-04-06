@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction`
 **Parent Plan ID:** `m365-authoritative-persona-humanization-merge-to-development`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-06
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction:R1`
@@ -17,6 +17,8 @@
 **Approval and governance gates:** Present the approval packet first. Wait for explicit `go`. Call MCP `validate_action` before every mutating action, including notebook execution, file edits, tests, commit, and push. Stop on first red. Do not push `development` from this package.
 
 **Notebook-first discipline:** This correction changes department-pack execution claims, so all pack-parity formulas, mismatch inventories, and bounded final-state claims must be re-derived in notebooks first before extraction.
+
+**Status update (2026-04-06 07:42 EDT):** Executed the notebook-first `L84` department-pack coverage-parity correction and closed it `GO`. Published the completed proof chain in `docs/ma/lemmas/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.md`, `invariants/lemmas/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.yaml`, `notebooks/m365/INV-M365-CF-authoritative-persona-post-h5-department-pack-coverage-parity-correction-v1.ipynb`, `notebooks/lemma_proofs/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.ipynb`, `artifacts/scorecards/scorecard_l84.json`, and `configs/generated/authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1_verification.json`; rebased the 7 affected `registry/department_pack_*_v1.yaml` authority surfaces plus their commercialization contracts, verifier scripts, and focused pytest files to the final post-H5 source-branch truth; and preserved the certified `department.status` taxonomy without changing the already-truthful final registry, activation, packaging, or certification surfaces. Validation passed with the 7 targeted department-pack verifier scripts, focused pytest (`28 passed`), `pre-commit run --all-files`, and `git diff --check`. `M1` is now blocked only by a fresh governed replay from the corrected source branch after this package commit/push closes.
 
 ## Objective
 
@@ -207,10 +209,10 @@ If `P9_GO` is false, this package must emit `NO-GO`, stop fail-closed, and leave
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] this package `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this package `status -> complete`
 
 ## Agent Constraints
 

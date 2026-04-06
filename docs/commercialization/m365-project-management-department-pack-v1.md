@@ -3,66 +3,39 @@
 ## Purpose
 
 Turn the authoritative Project Management persona contract into one bounded department pack that can
-be governed, delegated to, and measured while the staged post-H3 roster remains fail-closed.
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-H3 rebased the authoritative persona registry to `59` personas, but the project-management
-department-pack contract still encoded pre-H3 counts. H4S corrects that scope gap so H4 can
-resume certification/count rebase from truthful department-pack authority.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 2 promoted personas staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
 `registry/department_pack_project_management_v1.yaml` is the authoritative Project Management
-department-pack contract and now reconciles to the staged post-H3 authoritative roster.
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
 The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This H4S rebase locks the following staged truth:
+This correction locks the following truth:
 
 - total personas: `5`
-- active personas: `3`
-- registry-backed personas: `3`
-- persona-contract-only personas: `2`
-- supported action count: `26`
-- pack state before later activation acts: `blocked`
+- active personas: `5`
+- registry-backed personas: `5`
+- supported action count: `40`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
 ## Project Management Pack Boundary
 
-The Project Management pack now contains exactly `5` authoritative personas:
+The Project Management pack contains exactly `5` registry-backed personas:
 - `experiment-tracker` — Emily Carter (Experimentation PM); registry-backed; actions=8
-- `project-coordination-agent` — Sofia Petrova (Project Coordinator); persona-contract-only; actions=0
-- `project-manager` — Haruto Tanaka (Project Manager); persona-contract-only; actions=0
 - `project-shipper` — Ben Foster (Release Manager); registry-backed; actions=9
 - `studio-producer` — Olivia Park (Studio Producer); registry-backed; actions=9
+- `project-coordination-agent` — Sofia Petrova (Project Coordinator); registry-backed; actions=10
+- `project-manager` — Haruto Tanaka (Project Manager); registry-backed; actions=4
 
-Registry-backed execution coverage is limited to `experiment-tracker`, `project-shipper`, `studio-producer`.
-
-Persona-contract-only coverage is limited to `project-coordination-agent`, `project-manager`.
-
-Ben Foster, Emily Carter, and Olivia Park remain the action-backed Project Management anchors.
-
-## Department Pack Contract
-
-Every Project Management pack snapshot must include:
-
-- department metadata
-- workload and workflow families
-- approval model
-- KPI contract
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-  - coverage status
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
+The pack may claim only those personas and their explicit bounded workflows.
 
 ## Runtime Rule
 
@@ -74,18 +47,19 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- any planned persona keeps the pack fail-closed as `blocked`
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one truthful Project Management department-pack authority reconciled to H3
-- one deterministic pack summary for release coordination, project leadership, experimentation reporting, and schedule orchestration
+- one truthful Project Management department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- no over-claim of active or registry-backed coverage beyond the staged authoritative truth
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- the pack fabricates personas not present in `registry/persona_registry_v2.yaml`
-- a contract-only persona declares live supported actions
-- the pack claims a planned persona is active or registry-backed
-- the department-pack authority drifts from the staged H3 counts
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
+- supported action counts drift from the declared authority
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy
