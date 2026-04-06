@@ -601,6 +601,24 @@ outside this repo slice.
 
 ---
 
+## Initiative: M365 Direct Full Surface Certification
+
+**Initiative:** Lock, enable, and certify the full repo-claimed direct M365 surface so supported actions are actually testable and trustworthy rather than partially proven.
+
+**Plan:** `plans/m365-direct-full-surface-certification/m365-direct-full-surface-certification.md`
+
+**Reference:** `plan:m365-direct-full-surface-certification:R0`
+
+**Status:** 🟢 Active — `F0` is now complete, and the initiative has moved from baseline discovery into enablement and truth-reduction work for the real claimed direct surface.
+**Current next act:** `F1` — remove workstation and tenant blockers that can be fixed inside scope, and separate them from implementation-truth blockers that require surface reduction or real implementation.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-direct-full-surface-certification.md`, `docs/prompts/codex-m365-direct-full-surface-certification-prompt.txt`
+
+**Status update (2026-04-06 12:20 EDT):** Created the governed full-surface certification package after the bounded direct-function wave proved only that a subset of the repaired runtime works. This new initiative raises the target to the real user requirement: certify the supported direct M365 surface, not just a few function families. The current baseline truth is `59` agents, `184` unique allowed actions in `registry/agents.yaml`, and `155` direct instruction actions in `src/provisioning_api/routers/m365.py`. The next acts are to lock the certification universe, identify direct-surface coverage gaps and blocker classes, remove the workstation/tenant blockers that can be fixed inside scope, and then run certification slices family by family.
+**Status update (2026-04-06 12:53 EDT):** Completed `F0` with notebook-backed universe-lock evidence in `notebooks/m365/INV-M365-CH-direct-full-surface-certification-universe-lock-v1.ipynb` and machine-readable output in `artifacts/diagnostics/m365_direct_full_surface_certification.json`. The locked baseline now proves the repo has `155` direct instruction actions, `184` persona-facing aliases, `340` capability rows, and `146` crosswalked canonical actions once the v2 expansion registries plus the cross-workload recipe catalog are combined. It also proves the remaining blocker is not just environment enablement: `9` legacy direct instruction actions still sit outside the expansion-backed canonical universe, `125` persona-facing aliases still sit outside the current direct crosswalk, and `41` actions across `8` agents remain legacy stub behavior in `src/ops_adapter/actions.py`. `F1` is now the active next act.
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.

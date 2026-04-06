@@ -137,4 +137,3 @@ Required evidence:
 - `If a direct function still fails because of repo-local import, routing, or harness drift, fail the phase.`
 - `If a function fails because of Graph permission, missing local modules, or a Microsoft service-side error, classify it as external truth rather than masking it.`
 - `Repeat the usable direct harness and require the same classification on replay.`
-

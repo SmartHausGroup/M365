@@ -54,4 +54,3 @@ Any further advance now requires one of two separate acts:
   - local Power Apps / Power Automate admin PowerShell modules
   - Microsoft service-health surface access
 - or a separate governed write-path test plan if the next request is to perform live mutations such as sending mail or creating meetings instead of read-only or safe validation
-
