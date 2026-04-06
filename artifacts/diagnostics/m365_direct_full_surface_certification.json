@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-direct-full-surface-certification",
-  "phase": "F2",
-  "status": "read_certification_complete",
+  "phase": "F3",
+  "status": "mutation_approval_certification_complete",
   "counts": {
     "agents_total": 59,
     "instruction_surface_total": 155,
@@ -383,6 +383,81 @@
           "refresh_powerbi_dataset"
         ],
         "reason": "This is a mutating action and is explicitly fenced out of F2 read certification."
+      }
+    }
+  },
+  "f3_mutation_approval_certification": {
+    "status": "complete",
+    "bounded_actions_evaluated_total": 25,
+    "live_execute_green_total": 19,
+    "approval_boundary_green_total": 2,
+    "actor_tier_boundary_green_total": 1,
+    "fenced_total": 3,
+    "repo_local_repairs": [],
+    "notes": [
+      "F3 certified low-risk direct writes by live execution and certified high-impact writes at the pending-approval boundary instead of post-approval live execution.",
+      "The initial red rows in the mail follow-up slice were probe-shape issues rather than repo defects: mailbox settings needed a writable payload and delete_message needed the post-move message id."
+    ],
+    "live_probe_runs": {
+      "mail_calendar_contacts": [
+        "f3-mail-20260406T212930Z",
+        "f3-mail-followup-20260406T213053Z"
+      ],
+      "sharepoint_files": [
+        "f3-files-20260406T213118Z"
+      ],
+      "planner": [
+        "f3-planner-20260406T213145Z"
+      ]
+    },
+    "certified_green_actions": {
+      "mail_calendar_contacts": [
+        "send_mail",
+        "move_message",
+        "delete_message",
+        "update_mailbox_settings",
+        "create_event",
+        "update_event",
+        "delete_event",
+        "create_contact",
+        "update_contact",
+        "delete_contact"
+      ],
+      "sharepoint_files_office": [
+        "create_folder",
+        "upload_file",
+        "create_document",
+        "update_document",
+        "create_workbook",
+        "update_workbook",
+        "create_presentation",
+        "update_presentation",
+        "create_list_item"
+      ]
+    },
+    "approval_boundary_certification": {
+      "actor_tier_denials": {
+        "standard_user": [
+          "users.disable"
+        ]
+      },
+      "pending_approval_actions": [
+        "sites.provision",
+        "ca.policy_create"
+      ],
+      "notes": [
+        "A standard_user actor was denied on users.disable before approval or execution.",
+        "Global-admin requests for sites.provision and ca.policy_create returned pending_approval and persisted approval records with actor, tier, persona, executor, and risk metadata."
+      ]
+    },
+    "fenced_actions": {
+      "planner_permissions": {
+        "actions": [
+          "create_plan",
+          "create_plan_bucket",
+          "create_plan_task"
+        ],
+        "reason": "The live Planner group-plan probe still returns Graph 403: You do not have the required permissions to access this item."
       }
     }
   }

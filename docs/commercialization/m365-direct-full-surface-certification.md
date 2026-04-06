@@ -2,7 +2,7 @@
 
 ## Status
 
-`F2` is complete. The direct full-surface certification program now has a published read-path support matrix, and `F3` mutation / approval certification is the next act.
+`F3` is complete. The direct full-surface certification program now has published read-path evidence plus bounded live mutation, approval, and actor-tier evidence. `F4` closeout is the next act.
 
 ## Purpose
 
@@ -284,4 +284,81 @@ The following actions are not part of the currently certified direct read surfac
 - certified live reads that actually work from this repo version
 - fenced reads that still require permission changes, delegated auth, live sample objects, or a future retry-path investigation
 
-The next act is `F3`, which covers mutation paths, approval-required paths, and actor-tier certification.
+## F3 Mutation / Approval Certification Results
+
+`F3` closed the bounded live mutation and approval certification window for the direct repo runtime. The phase goal was not to force every high-impact write to execute live. The goal was to prove the truthful split between:
+
+- low-risk direct mutations that really execute
+- high-impact writes that correctly stop at governed approval creation
+- fenced write families that still hit external permission blockers
+
+### Certified green live mutation families
+
+The following low-risk direct write actions are now certified green on the live repo runtime:
+
+- mail / calendar / contacts:
+  - `send_mail`
+  - `move_message`
+  - `delete_message`
+  - `update_mailbox_settings`
+  - `create_event`
+  - `update_event`
+  - `delete_event`
+  - `create_contact`
+  - `update_contact`
+  - `delete_contact`
+- SharePoint / files / Office generation:
+  - `create_folder`
+  - `upload_file`
+  - `create_document`
+  - `update_document`
+  - `create_workbook`
+  - `update_workbook`
+  - `create_presentation`
+  - `update_presentation`
+  - `create_list_item`
+
+### Certified green approval and actor-tier boundaries
+
+The governed runtime boundaries are now also certified green:
+
+- actor-tier deny:
+  - a `standard_user` actor is denied on `users.disable` with a truthful `tier_blocked` response before approval or execution
+- approval-required boundary:
+  - `sites.provision` returns `pending_approval` and persists a real approval record in the approvals store
+  - `ca.policy_create` returns `pending_approval` and persists a real approval record in the approvals store
+
+This means the direct runtime now proves the two critical governance guarantees required for high-impact writes:
+
+- low-tier actors do not silently escalate
+- high-impact writes stop at approval creation instead of mutating live tenant state
+
+### Fenced mutation families
+
+The following write family is still fenced out of the certified live mutation surface:
+
+- Planner:
+  - `create_plan`
+  - `create_plan_bucket`
+  - `create_plan_task`
+  - reason: the live team/group probe still returns Graph `403` (`You do not have the required permissions to access this item.`), so the Planner write family cannot be certified truthfully in the current tenant state
+
+### What F3 did not require
+
+`F3` did not require live execution of destructive high-impact writes after approval. Those actions were certified at the governed boundary instead:
+
+- the runtime reaches the correct pending-approval state
+- the approval record persists with actor, tier, persona, executor, and risk metadata
+- no mutation occurs before approval
+
+### F3 closeout
+
+`F3` is green at the phase level because the bounded mutation / approval slices are now truthfully split between:
+
+- live low-risk writes that execute successfully from this repo version
+- governed high-impact writes that correctly stop at `pending_approval`
+- fenced Planner writes that still fail for an external tenant permission reason
+
+No repo-local runtime defect required extraction during `F3`. The initial mail follow-up failures were probe-input issues, not code defects: mailbox settings needed a writable payload shape, and message deletion needed the moved message identifier returned by `move_message`.
+
+The next act is `F4`, which will publish the final support-matrix closeout across the certified direct surface.
