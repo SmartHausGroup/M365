@@ -26,12 +26,11 @@ Replay the bounded authoritative persona humanization merge into `development` f
 - canonical predecessor package remains fixed to the historical source branch:
   - `codex/m365-authoritative-persona-humanization-expansion-plan @ cca8a90`
 - corrected replay source branch:
-  - `codex/m365-authoritative-persona-post-h5-parity-correction @ 2a13c5c`
+  - `codex/m365-authoritative-persona-post-h5-parity-correction @ 9c3efd4`
 - target branch at replay-package creation:
   - `origin/development @ 4c997ea`
-- preserved blocked local merge evidence:
-  - `codex/m1-fresh-replay-blocked-development-d194b94 @ d194b94`
-  - `codex/m1-replay-blocked-development-a895678 @ a895678`
+- historical blocked local merge evidence:
+  - `d194b94` and `a895678` remain recorded in governance history, but the temporary local blocker branches were intentionally deleted by `plan:m365-authoritative-persona-branch-topology-cleanup:R3`
 - corrected source branch status at package creation:
   - clean and pushed
 - completed source-branch truth to preserve:
@@ -44,7 +43,7 @@ Replay the bounded authoritative persona humanization merge into `development` f
 
 `ReplayTargetReady = LocalDevelopmentClean AND OriginDevelopmentFetched`
 
-`ReplayScoped = MergeSurface ⊆ Diff(4c997ea..2a13c5c) ∪ {replay_package_files, governance_trackers}`
+`ReplayScoped = MergeSurface ⊆ Diff(4c997ea..9c3efd4) ∪ {replay_package_files, governance_trackers}`
 
 `ReplayValidated = PreCommitGreen AND PersonaBuilderGreen AND TargetedVerifiersGreen AND FocusedPytestGreen AND DiffCheckGreen`
 
@@ -83,7 +82,7 @@ If `M1R_GO` is false, this phase must emit `NO-GO`, stop fail-closed, and leave 
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/ACTION_LOG.md`
 - `Operations/PROJECT_FILE_INDEX.md`
-- any file already changed in the governed humanization surface between `4c997ea` and `2a13c5c`, but only when required for bounded merge conflict resolution that preserves the proven H1-H5 plus L83/L84 semantics
+- any file already changed in the governed humanization surface between `4c997ea` and `9c3efd4`, but only when required for bounded merge conflict resolution that preserves the proven H1-H5 plus L83/L84 semantics
 
 ### File denylist
 
