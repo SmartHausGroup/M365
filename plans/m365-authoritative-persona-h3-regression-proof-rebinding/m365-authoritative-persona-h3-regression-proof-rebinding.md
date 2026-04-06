@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-authoritative-persona-h3-regression-proof-rebinding`
 **Parent Plan ID:** `m365-authoritative-persona-humanization-merge-replay-to-development`
-**Status:** Draft
+**Status:** Complete (`R1` through `R5` complete on 2026-04-06)
 **Date:** 2026-04-06
 **Owner:** SmartHaus
 **Execution plan reference:** `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1`
@@ -126,3 +126,11 @@ If `H3R_GO` is false, emit `NO-GO`, stop fail-closed, and do not replay `M1`.
 
 - restore the pre-correction test binding if the frozen H3 proof is found insufficient
 - do not touch live registry truth as part of rollback
+
+## Execution Status
+
+- `R1` complete on 2026-04-06: created the correction plan triplet, prompt pair, and tracker entries.
+- `R2` complete on 2026-04-06: rebound `tests/test_authoritative_persona_registry_rebase_v1.py` to the frozen H3 verification JSON, scorecard, and lemma instead of the live post-H5 registry surfaces.
+- `R3` complete on 2026-04-06: preserved the live post-H5 registry, capability-map, activation, packaging, and certification surfaces without edits.
+- `R4` complete on 2026-04-06: validation passed with focused pytest (`5 passed`), `pre-commit run --all-files`, and `git diff --check`.
+- `R5` complete on 2026-04-06: synchronized trackers so `M1` is handed back as the next governed act.

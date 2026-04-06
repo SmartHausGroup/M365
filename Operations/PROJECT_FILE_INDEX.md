@@ -193,7 +193,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup.md` | Detailed prompt for the bounded authoritative-persona branch/worktree cleanup. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
 | `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup-prompt.txt` | Kickoff prompt for the authoritative-persona branch/worktree cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
 
-## Active Authoritative Persona H3 Regression Proof-Rebinding Artifacts
+## Complete Authoritative Persona H3 Regression Proof-Rebinding Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
