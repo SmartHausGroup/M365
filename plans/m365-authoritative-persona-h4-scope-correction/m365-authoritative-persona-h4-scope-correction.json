@@ -1,0 +1,111 @@
+{
+  "plan_id": "m365-authoritative-persona-h4-scope-correction",
+  "parent_plan_id": "m365-authoritative-persona-humanization-expansion",
+  "status": "Draft",
+  "date": "2026-04-05",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-authoritative-persona-h4-scope-correction:R1",
+  "canonical_predecessor": "plans/m365-authoritative-persona-registry-and-capability-map-rebase/m365-authoritative-persona-registry-and-capability-map-rebase.md",
+  "draft_vs_active_semantics": "Draft until H3 is green, approval packet plus explicit go are received, and no sibling child phase is active",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "do not auto-advance to H4"
+  ],
+  "notebook_first_discipline": "All department-pack rebase logic and staged count assertions must be modeled in notebooks first before extraction",
+  "objective": "Rebase the department-pack authority surface to the staged post-H3 59-persona authoritative truth before H4 certification and count rebase resumes",
+  "scope": {
+    "in": [
+      "Prove the H4 dependency and scope gap from live repo truth.",
+      "Rebase registry/department_pack_*_v1.yaml to the staged post-H3 authoritative counts.",
+      "Rebase the corresponding department-pack commercialization docs.",
+      "Rebase the corresponding pack tests and targeted pack verifier surfaces.",
+      "Produce notebook-backed proof and generated verification output."
+    ],
+    "out": [
+      "Rebasing persona certification, department certification, or enterprise release-gate contracts.",
+      "Activating promoted personas.",
+      "Rebasing final active-surface claims.",
+      "Changing registry/agents.yaml."
+    ]
+  },
+  "allowlist": [
+    "plans/m365-authoritative-persona-h4-scope-correction/**",
+    "docs/prompts/codex-m365-authoritative-persona-h4-scope-correction.md",
+    "docs/prompts/codex-m365-authoritative-persona-h4-scope-correction-prompt.txt",
+    "registry/department_pack_*_v1.yaml",
+    "docs/commercialization/m365-*-department-pack-v1.md",
+    "scripts/ci/verify_*_department_pack_v1.py",
+    "tests/test_*_department_pack_v1.py",
+    "docs/ma/lemmas/L*_m365_authoritative_persona_department_pack_rebase_v1.md",
+    "invariants/lemmas/L*_m365_authoritative_persona_department_pack_rebase_v1.yaml",
+    "notebooks/m365/INV-M365-*-authoritative-persona-department-pack-rebase-v1.ipynb",
+    "notebooks/lemma_proofs/L*_m365_authoritative_persona_department_pack_rebase_v1.ipynb",
+    "artifacts/scorecards/scorecard_*.json",
+    "configs/generated/authoritative_persona_department_pack_rebase_v1_verification.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": [
+    "registry/persona_certification_v1.yaml",
+    "registry/department_certification_v1.yaml",
+    "registry/enterprise_release_gate_v2.yaml",
+    "docs/commercialization/m365-persona-certification-v1.md",
+    "docs/commercialization/m365-department-certification-v1.md",
+    "docs/commercialization/m365-enterprise-release-gate-v2.md",
+    "registry/activated_persona_surface_v1.yaml",
+    "docs/commercialization/m365-activated-persona-surface-v1.md",
+    "registry/agents.yaml"
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Make the H4 dependency and scope gap explicit"
+    },
+    {
+      "id": "R2",
+      "title": "Rebase all 10 department-pack authorities"
+    },
+    {
+      "id": "R3",
+      "title": "Rebase the corresponding department-pack docs"
+    },
+    {
+      "id": "R4",
+      "title": "Rebase the corresponding pack tests and targeted verifiers"
+    },
+    {
+      "id": "R5",
+      "title": "Notebook-backed proof and verification output"
+    },
+    {
+      "id": "R6",
+      "title": "Keep H4 blocked until H4S is green"
+    },
+    {
+      "id": "R7",
+      "title": "Commit and push before H4"
+    }
+  ],
+  "child_acts": [
+    {
+      "id": "H4SA",
+      "description": "Prove the H4 dependency and mismatch."
+    },
+    {
+      "id": "H4SB",
+      "description": "Rebase the department-pack authority surface."
+    },
+    {
+      "id": "H4SC",
+      "description": "Validate, commit, push, and unblock H4."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-authoritative-persona-h4-scope-correction.md",
+    "kickoff": "docs/prompts/codex-m365-authoritative-persona-h4-scope-correction-prompt.txt"
+  }
+}

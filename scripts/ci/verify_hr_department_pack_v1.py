@@ -9,15 +9,22 @@ from smarthaus_common.department_pack import build_department_pack, load_departm
 def main() -> int:
     repo_root = Path(__file__).resolve().parents[2]
     authority = load_department_pack_authority(
-        "hr", path=repo_root / "registry" / "department_pack_hr_v1.yaml"
+        "hr",
+        path=repo_root / "registry" / "department_pack_hr_v1.yaml",
     )
     pack = build_department_pack("hr")
 
     summary = pack["summary"]
-    if summary["persona_count"] != 1:
+    if summary["persona_count"] != 2:
         raise SystemExit("hr_department_pack_persona_count_mismatch")
-    if summary["supported_action_count"] != 5:
+    if summary["active_persona_count"] != 2:
+        raise SystemExit("hr_department_pack_active_count_mismatch")
+    if summary["registry_backed_persona_count"] != 2:
+        raise SystemExit("hr_department_pack_registry_backed_count_mismatch")
+    if summary["supported_action_count"] != 10:
         raise SystemExit("hr_department_pack_supported_action_count_mismatch")
+    if summary["pack_state"] != "ready":
+        raise SystemExit("hr_department_pack_expected_ready")
 
     payload = {
         "department": authority["department"]["id"],
@@ -32,6 +39,7 @@ def main() -> int:
             {
                 "persona_id": persona["persona_id"],
                 "status": persona["status"],
+                "coverage_status": persona["coverage_status"],
                 "accountability_state": persona["accountability_state"],
                 "action_count": persona["action_count"],
             }
@@ -46,7 +54,7 @@ def main() -> int:
         "PASSED",
         f"department={payload['department']}",
         f"pack_state={payload['pack_state']}",
-        f"supported_action_count={payload['supported_action_count']}",
+        f"persona_count={payload['persona_count']}",
     )
     return 0
 

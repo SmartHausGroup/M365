@@ -1,0 +1,268 @@
+{
+  "plan_id": "m365-authoritative-persona-census-and-department-model-decision",
+  "parent_plan_id": "m365-authoritative-persona-humanization-expansion",
+  "status": "Complete",
+  "date": "2026-04-05",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-authoritative-persona-census-and-department-model-decision:R1",
+  "canonical_predecessor": "plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md",
+  "draft_vs_active_semantics": "Draft until approval packet plus explicit go; parent initiative may remain Active while this child remains Draft",
+  "approval_governance_gates": [
+    "present approval packet first",
+    "wait for explicit go",
+    "call MCP validate_action before any mutating action and obey the verdict",
+    "stop on first red",
+    "do not auto-advance to H2"
+  ],
+  "objective": "Lock the census rebase contract from 39 to 59 and decide whether all 20 extras fit within the existing 10 departments.",
+  "decision_rule": {
+    "baseline_ready": {
+      "runtime_agents": 59,
+      "authoritative_personas": 39,
+      "current_departments": 10,
+      "extras_to_map": 20
+    },
+    "h1_go_formula": "BaselineReady AND RemapValid AND ProjectedTruthConsistent",
+    "fail_closed_rule": "If any extra agent requires a new department or projected counts do not reconcile to 59 across 10 departments, emit NO-GO and open a separate governed department-model change."
+  },
+  "scope": {
+    "in": [
+      "Restate the current authoritative baseline.",
+      "Evaluate all 20 extras against the current 10 departments only.",
+      "Publish mapping matrix and projected department counts.",
+      "Produce an explicit H1 decision artifact and diagnostics artifact.",
+      "Define the fail-closed handoff into H2 through H5."
+    ],
+    "out": [
+      "Editing registry/ai_team.json.",
+      "Editing registry/persona_registry_v2.yaml.",
+      "Editing registry/persona_capability_map.yaml.",
+      "Editing registry/agents.yaml.",
+      "Activating promoted personas.",
+      "Changing Operations/NORTHSTAR.md."
+    ]
+  },
+  "allowlist": [
+    "plans/m365-authoritative-persona-census-and-department-model-decision/**",
+    "docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md",
+    "docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision-prompt.txt",
+    "docs/commercialization/m365-authoritative-persona-census-and-department-model-decision.md",
+    "artifacts/diagnostics/m365_authoritative_persona_census_and_department_model_decision.json",
+    "Operations/EXECUTION_PLAN.md",
+    "Operations/ACTION_LOG.md",
+    "Operations/PROJECT_FILE_INDEX.md"
+  ],
+  "denylist": [
+    "registry/ai_team.json",
+    "registry/persona_registry_v2.yaml",
+    "registry/persona_capability_map.yaml",
+    "registry/agents.yaml",
+    "src/**",
+    "tests/**",
+    "Operations/NORTHSTAR.md"
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Baseline truth lock"
+    },
+    {
+      "id": "R2",
+      "title": "20-persona mapping matrix"
+    },
+    {
+      "id": "R3",
+      "title": "Projected 59-persona department counts"
+    },
+    {
+      "id": "R4",
+      "title": "Decision artifact and diagnostics artifact"
+    },
+    {
+      "id": "R5",
+      "title": "Fail-closed handoff into H2 through H5"
+    },
+    {
+      "id": "R6",
+      "title": "Truthful governance synchronization and stop"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "description": "Read authoritative authorities and restate baseline counts."
+    },
+    {
+      "id": "T2",
+      "description": "Evaluate and document the 20-persona mapping set."
+    },
+    {
+      "id": "T3",
+      "description": "Compute projected department counts and decide whether the 10-department model holds."
+    },
+    {
+      "id": "T4",
+      "description": "Publish the decision doc and diagnostics artifact."
+    },
+    {
+      "id": "T5",
+      "description": "Update tracker docs and stop without editing runtime authorities."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md",
+    "kickoff": "docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision-prompt.txt"
+  },
+  "baseline_counts": {
+    "runtime_agents": 59,
+    "authoritative_personas": 39,
+    "active_authoritative_personas": 34,
+    "departments": 10
+  },
+  "current_department_counts": {
+    "operations": 2,
+    "hr": 1,
+    "communication": 1,
+    "engineering": 7,
+    "marketing": 7,
+    "product": 3,
+    "project-management": 3,
+    "studio-operations": 5,
+    "testing": 5,
+    "design": 5
+  },
+  "proposed_extra_counts": {
+    "operations": 8,
+    "hr": 1,
+    "communication": 3,
+    "engineering": 1,
+    "marketing": 1,
+    "product": 0,
+    "project-management": 2,
+    "studio-operations": 4,
+    "testing": 0,
+    "design": 0
+  },
+  "projected_department_counts": {
+    "operations": 10,
+    "hr": 2,
+    "communication": 4,
+    "engineering": 8,
+    "marketing": 8,
+    "product": 3,
+    "project-management": 5,
+    "studio-operations": 9,
+    "testing": 5,
+    "design": 5
+  },
+  "candidate_mapping": [
+    {
+      "agent_id": "audit-operations",
+      "proposed_name": "Naomi Brooks",
+      "department": "operations"
+    },
+    {
+      "agent_id": "calendar-management-agent",
+      "proposed_name": "Mateo Alvarez",
+      "department": "communication"
+    },
+    {
+      "agent_id": "client-relationship-agent",
+      "proposed_name": "Priya Mehta",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "compliance-monitoring-agent",
+      "proposed_name": "Farah Alvi",
+      "department": "operations"
+    },
+    {
+      "agent_id": "device-management",
+      "proposed_name": "Connor Walsh",
+      "department": "operations"
+    },
+    {
+      "agent_id": "email-processing-agent",
+      "proposed_name": "Hannah Kim",
+      "department": "communication"
+    },
+    {
+      "agent_id": "financial-operations-agent",
+      "proposed_name": "Luis Carvalho",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "identity-security",
+      "proposed_name": "Amara Okoye",
+      "department": "operations"
+    },
+    {
+      "agent_id": "it-operations-manager",
+      "proposed_name": "Peter Novak",
+      "department": "operations"
+    },
+    {
+      "agent_id": "knowledge-management-agent",
+      "proposed_name": "Leah Goldstein",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "platform-manager",
+      "proposed_name": "Andre Baptiste",
+      "department": "engineering"
+    },
+    {
+      "agent_id": "project-coordination-agent",
+      "proposed_name": "Sofia Petrova",
+      "department": "project-management"
+    },
+    {
+      "agent_id": "project-manager",
+      "proposed_name": "Haruto Tanaka",
+      "department": "project-management"
+    },
+    {
+      "agent_id": "recruitment-assistance-agent",
+      "proposed_name": "Camila Torres",
+      "department": "hr"
+    },
+    {
+      "agent_id": "reports",
+      "proposed_name": "Youssef Haddad",
+      "department": "studio-operations"
+    },
+    {
+      "agent_id": "security-operations",
+      "proposed_name": "Tunde Adeyemi",
+      "department": "operations"
+    },
+    {
+      "agent_id": "service-health",
+      "proposed_name": "Chloe Martin",
+      "department": "operations"
+    },
+    {
+      "agent_id": "teams-manager",
+      "proposed_name": "Alicia Nguyen",
+      "department": "communication"
+    },
+    {
+      "agent_id": "ucp-administrator",
+      "proposed_name": "Omar El-Masry",
+      "department": "operations"
+    },
+    {
+      "agent_id": "website-operations-specialist",
+      "proposed_name": "Lucia Fernandez",
+      "department": "marketing"
+    }
+  ],
+  "execution_outcome": {
+    "decision": "GO",
+    "approved_by": "operator explicit go",
+    "completion_timestamp": "2026-04-05 07:46:12 EDT",
+    "decision_artifact": "docs/commercialization/m365-authoritative-persona-census-and-department-model-decision.md",
+    "diagnostics_artifact": "artifacts/diagnostics/m365_authoritative_persona_census_and_department_model_decision.json",
+    "validated_next_act": "H2"
+  }
+}

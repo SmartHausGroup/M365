@@ -1,0 +1,20 @@
+{
+  "determinism_certified": true,
+  "invariants": [
+    "invariants/lemmas/L81_m365_authoritative_persona_activation_gate_closeout_v1.yaml"
+  ],
+  "lemma_id": "L81",
+  "notebooks": [
+    "notebooks/m365/INV-M365-CC-authoritative-persona-activation-gate-closeout-v1.ipynb",
+    "notebooks/lemma_proofs/L81_m365_authoritative_persona_activation_gate_closeout_v1.ipynb"
+  ],
+  "notes": [
+    "H5 verifies the governed 20 promoted personas already satisfy the fail-closed prerequisite inventory.",
+    "The final closeout state is 59 total personas across 10 departments with 54 active and 5 planned personas.",
+    "The only remaining planned personas are the five deferred external-platform roles.",
+    "Deterministic replay is certified by the verification artifact hash for the final 430-action activated surface."
+  ],
+  "seed_lock_required": false,
+  "status": "green",
+  "title": "M365 Authoritative Persona Activation Gate Closeout v1"
+}

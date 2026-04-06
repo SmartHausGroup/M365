@@ -52,8 +52,8 @@ def main() -> None:
         k: v for k, v in personas.items() if v["coverage_status"] == "persona-contract-only"
     }
 
-    if len(active) != 34:
-        print(f"FAILED: expected 34 active personas, got {len(active)}")
+    if len(active) != 54:
+        print(f"FAILED: expected 54 active personas, got {len(active)}")
         sys.exit(1)
     if len(deferred) != 5:
         print(f"FAILED: expected 5 deferred personas, got {len(deferred)}")
@@ -63,8 +63,8 @@ def main() -> None:
         sys.exit(1)
 
     total_actions = sum(len(agents[pid]["allowed_actions"]) for pid in active)
-    if total_actions != 298:
-        print(f"FAILED: expected 298 total persona actions, got {total_actions}")
+    if total_actions != 430:
+        print(f"FAILED: expected 430 total persona actions, got {total_actions}")
         sys.exit(1)
 
     active_departments = Counter(v["department"] for v in active.values())
@@ -74,7 +74,7 @@ def main() -> None:
 
     reg_summary = persona_registry["summary"]
     if (
-        reg_summary["registry_backed_personas"] != 34
+        reg_summary["registry_backed_personas"] != 54
         or reg_summary["persona_contract_only_personas"] != 5
     ):
         print("FAILED: persona_registry summary mismatch")
@@ -82,7 +82,7 @@ def main() -> None:
 
     cap_summary = capability_map["summary"]
     if (
-        cap_summary["current_registry_backed_personas"] != 34
+        cap_summary["current_registry_backed_personas"] != 54
         or cap_summary["persona_contract_only_personas"] != 5
     ):
         print("FAILED: capability_map summary mismatch")
@@ -93,7 +93,7 @@ def main() -> None:
             print(f"FAILED: deferred persona {pid} has non-zero allowed_actions")
             sys.exit(1)
 
-    for lemma_id in ("l73", "l74", "l75"):
+    for lemma_id in ("l81",):
         scorecard_path = repo / "artifacts" / "scorecards" / f"scorecard_{lemma_id}.json"
         if not scorecard_path.exists():
             print(f"FAILED: missing scorecard {scorecard_path}")
@@ -109,8 +109,8 @@ def main() -> None:
     packaging_text = (
         repo / "docs" / "commercialization" / "m365-workforce-packaging-v1.md"
     ).read_text(encoding="utf-8")
-    if "34 registry-backed personas" not in doc_text:
-        print("FAILED: activated persona surface doc missing 34-person boundary")
+    if "54 registry-backed personas" not in doc_text:
+        print("FAILED: activated persona surface doc missing 54-person boundary")
         sys.exit(1)
     if "activated_persona_surface_v1.yaml" not in packaging_text:
         print("FAILED: packaging v1 doc missing branch-specific activated surface reference")
@@ -123,7 +123,7 @@ def main() -> None:
         "total_allowed_persona_actions": total_actions,
         "active_departments": dict(active_departments),
         "deferred_persona_ids": sorted(deferred),
-        "scorecards_green": ["l73", "l74", "l75"],
+        "scorecards_green": ["l81"],
     }
     output_path = repo / "configs" / "generated" / "activated_persona_surface_v1_verification.json"
     output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")

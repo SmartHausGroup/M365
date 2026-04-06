@@ -1,0 +1,89 @@
+{
+  "plan_id": "m365-authoritative-persona-branch-topology-cleanup",
+  "parent_plan_id": "m365-authoritative-persona-humanization-merge-replay-to-development",
+  "status": "Complete",
+  "date": "2026-04-06",
+  "owner": "SmartHaus",
+  "execution_plan_reference": "plan:m365-authoritative-persona-branch-topology-cleanup:R1",
+  "north_star": "Operations/NORTHSTAR.md",
+  "objective": "Clean up the local branch and worktree debt created by repeated blocked M1 replay attempts without discarding the canonical authoritative-persona source branch or silently preserving redundant local merge state.",
+  "scope": {
+    "in_scope": [
+      "create a formal cleanup initiative and prompt pair",
+      "record the canonical keep-branch set",
+      "discard the transient replay-validation side effects",
+      "realign local development to origin/development",
+      "delete the redundant local blocked replay branches",
+      "delete the redundant local predecessor and merged feature branches already absorbed into canonical history",
+      "delete the stale predecessor remote branch origin/codex/m365-authoritative-persona-humanization-expansion-plan",
+      "synchronize Operations/EXECUTION_PLAN.md, Operations/ACTION_LOG.md, and Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "out_of_scope": [
+      "changing runtime, registry, commercialization, MA, or certification truth",
+      "pushing development",
+      "replaying M1",
+      "deleting main, staging, or the canonical corrected source branch",
+      "deleting unrelated remote historical branches outside the scoped predecessor branch"
+    ]
+  },
+  "requirements": [
+    { "id": "R1", "name": "Governed cleanup initiative" },
+    { "id": "R2", "name": "Canonical branch inventory" },
+    { "id": "R3", "name": "Worktree and local-branch cleanup" },
+    { "id": "R4", "name": "Scoped remote cleanup" },
+    { "id": "R5", "name": "Governance synchronization" }
+  ],
+  "keep_set": [
+    "codex/m365-authoritative-persona-post-h5-parity-correction",
+    "development",
+    "main",
+    "staging"
+  ],
+  "delete_local": [
+    "codex/m1-fresh-replay-blocked-development-d194b94",
+    "codex/m1-replay-blocked-development-a895678",
+    "codex/m365-authoritative-persona-humanization-expansion-plan",
+    "codex/m365-service-mode-runtime-remediation",
+    "codex/m365-token-acquisition-validation",
+    "feature/m365-universe-batch1-identity-groups",
+    "feature/m365_personas"
+  ],
+  "delete_remote": [
+    "origin/codex/m365-authoritative-persona-humanization-expansion-plan"
+  ],
+  "success_criteria": [
+    "transient replay-validation residue is removed",
+    "local development equals origin/development",
+    "canonical branch remains clean and checked out",
+    "scoped redundant local branches are removed",
+    "stale predecessor remote branch is removed",
+    "tracker files truthfully show cleanup completion and the next blocker"
+  ],
+  "execution_status": [
+    {
+      "id": "R1",
+      "status": "complete",
+      "note": "created cleanup plan triplet, prompt pair, and tracker entry"
+    },
+    {
+      "id": "R2",
+      "status": "complete",
+      "note": "recorded canonical keep set and bounded delete sets"
+    },
+    {
+      "id": "R3",
+      "status": "complete",
+      "note": "discarded replay-validation residue, reset local development, and deleted scoped redundant local branches"
+    },
+    {
+      "id": "R4",
+      "status": "complete",
+      "note": "deleted the stale predecessor remote branch"
+    },
+    {
+      "id": "R5",
+      "status": "complete",
+      "note": "synchronized trackers and recorded the remaining stale H3 replay blocker"
+    }
+  ]
+}

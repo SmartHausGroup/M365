@@ -1,0 +1,81 @@
+plan_id: m365-authoritative-persona-h3-regression-proof-rebinding
+parent_plan_id: m365-authoritative-persona-humanization-merge-replay-to-development
+status: Complete
+date: "2026-04-06"
+owner: SmartHaus
+execution_plan_reference: plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1
+north_star: Operations/NORTHSTAR.md
+governance_evidence:
+  - notebooks/m365/INV-M365-BZ-authoritative-persona-registry-rebase-v1.ipynb
+  - configs/generated/authoritative_persona_registry_rebase_v1_verification.json
+
+objective: >
+  Rebind the stale H3 regression surface to the frozen H3 proof artifacts so the
+  historical staged 34 active / 25 planned assertions remain mechanically enforced
+  without blocking final post-H5 merge replay on the truthful live branch.
+
+scope:
+  in_scope:
+    - create a formal correction package and prompt pair
+    - rebind tests/test_authoritative_persona_registry_rebase_v1.py to frozen H3 proof artifacts
+    - use the existing H3 notebook and generated verification artifact as the historical truth source
+    - update trackers so M1 truthfully points at this correction as the next blocker
+  out_of_scope:
+    - changing the live final post-H5 registry or capability-map truth
+    - changing activation packaging certification or department-pack live truth
+    - replaying M1
+    - pushing development
+
+file_allowlist:
+  - plans/m365-authoritative-persona-h3-regression-proof-rebinding/**
+  - docs/prompts/codex-m365-authoritative-persona-h3-regression-proof-rebinding.md
+  - docs/prompts/codex-m365-authoritative-persona-h3-regression-proof-rebinding-prompt.txt
+  - tests/test_authoritative_persona_registry_rebase_v1.py
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+
+file_denylist:
+  - registry/persona_registry_v2.yaml
+  - registry/persona_capability_map.yaml
+  - registry/activated_persona_surface_v1.yaml
+  - registry/workforce_packaging_v1.yaml
+  - development
+  - staging
+  - main
+
+requirements:
+  - id: R1
+    name: Governed proof-rebinding package
+  - id: R2
+    name: Bind H3 regression to frozen H3 proof
+  - id: R3
+    name: Preserve live final truth
+  - id: R4
+    name: Validate the bounded correction
+  - id: R5
+    name: Governance synchronization
+
+success_criteria:
+  - the H3 regression still proves staged H3 truth mechanically
+  - the regression no longer assumes the live branch is still in H3
+  - the live post-H5 authority surfaces remain untouched
+  - the focused regression validation is green
+  - M1 is blocked only by executing this correction package
+
+execution_status:
+  - id: R1
+    status: complete
+    note: created correction plan triplet prompt pair and tracker entries
+  - id: R2
+    status: complete
+    note: rebound the stale H3 regression to the frozen H3 verification scorecard and lemma surfaces
+  - id: R3
+    status: complete
+    note: validated that live post-H5 authority surfaces remained untouched
+  - id: R4
+    status: complete
+    note: focused pytest pre-commit and diff-check are green
+  - id: R5
+    status: complete
+    note: trackers synchronized and M1 handed back as the next governed act

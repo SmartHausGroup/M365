@@ -1,15 +1,15 @@
 {
-  "active_persona_count": 2,
+  "active_persona_count": 8,
   "department": "engineering",
-  "pack_state": "blocked",
-  "persona_count": 7,
+  "pack_state": "ready",
+  "persona_count": 8,
   "personas": [
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 10,
+      "coverage_status": "registry-backed",
       "persona_id": "ai-engineer",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
@@ -27,35 +27,42 @@
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "frontend-developer",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "mobile-app-builder",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 8,
+      "coverage_status": "registry-backed",
       "persona_id": "rapid-prototyper",
-      "status": "planned"
+      "status": "active"
     },
     {
       "accountability_state": "on_track",
-      "action_count": 0,
-      "coverage_status": "persona-contract-only",
+      "action_count": 7,
+      "coverage_status": "registry-backed",
       "persona_id": "test-writer-fixer",
-      "status": "planned"
+      "status": "active"
+    },
+    {
+      "accountability_state": "on_track",
+      "action_count": 3,
+      "coverage_status": "registry-backed",
+      "persona_id": "platform-manager",
+      "status": "active"
     }
   ],
-  "registry_backed_persona_count": 2,
-  "supported_action_count": 23,
+  "registry_backed_persona_count": 8,
+  "supported_action_count": 65,
   "workflow_family_count": 4,
-  "workload_family_count": 7
+  "workload_family_count": 10
 }

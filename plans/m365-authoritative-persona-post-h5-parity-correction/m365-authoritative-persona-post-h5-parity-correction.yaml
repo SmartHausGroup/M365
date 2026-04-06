@@ -1,0 +1,331 @@
+plan_id: plan:m365-authoritative-persona-post-h5-parity-correction
+parent_plan_id: plan:m365-authoritative-persona-humanization-expansion
+title: Correct stale post-H5 certification and release-gate parity before resuming M1
+version: '1.0'
+status: blocked
+owner: SMARTHAUS
+date_created: '2026-04-05'
+date_updated: '2026-04-06'
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: 'Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona
+  Humanization Merge to Development'
+domain: governance
+math_algorithm_scope: true
+current_state:
+  correction_branch: codex/m365-authoritative-persona-post-h5-parity-correction
+  correction_branch_base: 0f210e9
+  blocked_local_merge_branch: development
+  blocked_local_merge_commit: a895678
+  blocked_local_merge_pushed: false
+  scope_gap_evidence:
+    notebook: notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb
+    verification: configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json
+    successor_package: plans/m365-authoritative-persona-post-h5-certification-parity-scope-correction/m365-authoritative-persona-post-h5-certification-parity-scope-correction.md
+    scope_correction_required: true
+  final_truth_surfaces:
+    persona_registry_v2:
+      total_personas: 59
+      active_personas: 54
+      planned_personas: 5
+      registry_backed_personas: 54
+    activated_persona_surface_v1:
+      active_personas: 54
+      deferred_external_personas: 5
+    workforce_packaging_v1:
+      active_persona_count: 54
+      planned_persona_count: 5
+      total_allowed_persona_actions: 430
+  stale_surfaces:
+    persona_certification_v1:
+      active_personas: 34
+      planned_personas: 25
+      registry_backed_personas: 34
+      contract_only_personas: 25
+    department_certification_v1:
+      active_personas: 34
+      planned_personas: 25
+      registry_backed_personas: 34
+      contract_only_personas: 25
+    enterprise_release_gate_v2:
+      active_personas_certified: 34
+      planned_personas_certified: 25
+      total_routed_actions: 298
+north_star_alignment:
+  source: Operations/NORTHSTAR.md
+  principles:
+  - truthful final authoritative workforce claims before branch integration
+  - fail-closed merge governance when certification surfaces disagree
+  - deterministic notebook-backed parity correction
+  anti_alignment:
+  - Does NOT push development while final certification parity is stale.
+  - Does NOT change already truthful final registry, activation, or packaging surfaces.
+  - Does NOT widen into staging, main, or release-tag work.
+intent_capture:
+  user_stated_requirements:
+  - create the bounded correction package next
+  - follow AGENTS.md, rules process, and governance
+  - continue fail-closed rather than bypass the failing validation
+  intent_doc_ref: captured in this plan
+  intent_verification: R1 through R7 capture the bounded correction work needed to
+    repair the stale post-H5 parity gap before M1 may resume.
+objective: Rebase stale post-H5 certification and enterprise release-gate surfaces
+  to the final authoritative `59 total / 54 active / 5 planned / 430 actions`
+  truth and unblock M1 for a fresh merge validation replay.
+decision_summary:
+  chosen_option: bounded_post_h5_parity_correction_before_resuming_m1
+  preserve_truthful_surfaces:
+  - registry/persona_registry_v2.yaml
+  - registry/activated_persona_surface_v1.yaml
+  - registry/workforce_packaging_v1.yaml
+  stale_surfaces_to_rebase:
+  - registry/persona_certification_v1.yaml
+  - registry/enterprise_release_gate_v2.yaml
+options_considered:
+- id: A
+  description: Create a bounded correction package and repair the stale parity gap
+    before retrying the development merge validation.
+  pros:
+  - Fixes the real root cause.
+  - Preserves fail-closed merge governance.
+  - Keeps development unpushed until green.
+  cons:
+  - Adds one more correction branch before M1 can resume.
+- id: B
+  description: Drop the failing certification and release-gate checks from M1.
+  pros:
+  - Faster immediate path to a push.
+  cons:
+  - Bypasses the real inconsistency.
+  - Violates fix-the-root-cause governance.
+- id: C
+  description: Patch the stale surfaces directly on development after the failed merge.
+  pros:
+  - Repairs the current local merge state in one place.
+  cons:
+  - Develops the correction on unvalidated development instead of a dedicated feature branch.
+complexity_warning:
+  statement: Reworking the final registry or activation surfaces again would add complexity
+    without fixing the actual blocker, which lives in stale certification and release-gate
+    parity.
+  simpler_path: Repair only the stale certification/release-gate boundary on a dedicated
+    correction branch, then rerun M1.
+scope:
+  in_scope:
+  - prove the post-H5 parity gap from live repo truth
+  - rebase registry/persona_certification_v1.yaml to the final post-H5 state
+  - rebase registry/enterprise_release_gate_v2.yaml to the final post-H5 state
+  - update the corresponding commercialization contracts
+  - update the corresponding verifiers and tests
+  - publish notebook-backed proof, scorecard, and generated verification output
+  - update trackers so M1 is truthfully blocked by this correction until green
+  out_of_scope:
+  - pushing development
+  - staging or main promotion
+  - release-tag publication
+  - changing registry/persona_registry_v2.yaml
+  - changing registry/activated_persona_surface_v1.yaml
+  - changing registry/workforce_packaging_v1.yaml
+  - changing registry/agents.yaml
+  - changing registry/ai_team.json
+  file_allowlist:
+  - plans/m365-authoritative-persona-post-h5-parity-correction/**
+  - docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction.md
+  - docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction-prompt.txt
+  - registry/persona_certification_v1.yaml
+  - registry/enterprise_release_gate_v2.yaml
+  - docs/commercialization/m365-persona-certification-v1.md
+  - docs/commercialization/m365-enterprise-release-gate-v2.md
+  - scripts/ci/verify_persona_certification_v1.py
+  - scripts/ci/verify_enterprise_release_gate_v2.py
+  - tests/test_persona_certification_v1.py
+  - tests/test_enterprise_release_gate_v2.py
+  - docs/ma/lemmas/L*_m365_authoritative_persona_post_h5_parity_correction_v1.md
+  - invariants/lemmas/L*_m365_authoritative_persona_post_h5_parity_correction_v1.yaml
+  - notebooks/m365/INV-M365-*-authoritative-persona-post-h5-parity-correction-v1.ipynb
+  - notebooks/lemma_proofs/L*_m365_authoritative_persona_post_h5_parity_correction_v1.ipynb
+  - artifacts/scorecards/scorecard_*.json
+  - configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+  file_denylist:
+  - registry/persona_registry_v2.yaml
+  - registry/activated_persona_surface_v1.yaml
+  - registry/workforce_packaging_v1.yaml
+  - registry/persona_capability_map.yaml
+  - registry/agents.yaml
+  - registry/ai_team.json
+  - staging
+  - main
+  - release tags
+  scope_fence_rule: Stop and re-scope if the fix appears to require changes outside
+    the stale certification and release-gate boundary.
+requirements:
+- id: R1
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R1
+  description: Make the blocked M1 parity gap explicit from live repo truth.
+  acceptance_criteria: The package records the local blocked merge commit, the truthful
+    final surfaces, and the stale pre-H5 certification/release-gate surfaces.
+  depends_on: []
+  user_intent_trace: continue fail-closed and create the bounded correction package
+- id: R2
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R2
+  description: Produce MA-backed proof for final post-H5 certification and release-gate
+    parity.
+  acceptance_criteria: A new notebook-backed parity proof, invariant, and scorecard
+    exist and are green.
+  depends_on:
+  - R1
+  user_intent_trace: notebook-first correction, then validate
+- id: R3
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R3
+  description: Rebase persona certification to the final `59 / 54 / 5` truth.
+  acceptance_criteria: persona_certification_v1 and its commercialization contract
+    reflect the final post-H5 truth without staged-count drift.
+  depends_on:
+  - R2
+  user_intent_trace: fix the real parity blocker
+- id: R4
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R4
+  description: Rebase the enterprise release gate to the final `59 / 54 / 5 / 430`
+    truth.
+  acceptance_criteria: enterprise_release_gate_v2 and its commercialization contract
+    reflect the final post-H5 truth and final routed-action count.
+  depends_on:
+  - R2
+  user_intent_trace: fix the real parity blocker
+- id: R5
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R5
+  description: Update commercialization contracts, verifiers, and tests to the final
+    parity state.
+  acceptance_criteria: targeted verifiers and tests mechanically enforce the corrected
+    final parity boundary.
+  depends_on:
+  - R3
+  - R4
+  user_intent_trace: test each phase and do not move on until it passes
+- id: R6
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R6
+  description: Validate the correction branch and restore M1 to a truthfully unblockable
+    state.
+  acceptance_criteria: targeted validation, pre-commit, and diff-check are green, and
+    trackers record that M1 may resume only after a fresh merge replay.
+  depends_on:
+  - R5
+  user_intent_trace: fail-closed handback to the merge phase
+- id: R7
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:R7
+  description: Commit and push the correction branch before M1 resumes.
+  acceptance_criteria: the correction branch is committed, pushed, and clean.
+  depends_on:
+  - R6
+  user_intent_trace: commit and push before moving on
+execution_sequence:
+  ordering:
+  - T1
+  - T2
+  - T3
+  - T4
+  - T5
+  stop_on_first_failure: true
+  maths_phase_mapping:
+    T1: phase_0_intent_and_phase_1_formula
+    T2: phase_2_calculus_and_phase_3_lemmas
+    T3: phase_4_invariants_and_phase_5_notebooks
+    T4: phase_6_scorecard_and_validation
+    T5: phase_7_extraction_and_handback
+tasks:
+- id: T1
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:T1
+  name: Freeze the blocker truth
+  description: Capture the local blocked merge evidence and the exact stale/final surface
+    mismatch.
+  requirement_refs:
+  - R1
+  depends_on: []
+  maths_phase: phase_0_intent_and_phase_1_formula
+  deliverables:
+  - blocker truth summary
+  - explicit final-vs-stale count matrix
+  exit_criteria:
+  - The package records both the truthful final state and the stale pre-H5 state.
+  - The blocked local development merge remains unpushed.
+  validation_command: rg -n "34|25|54|430|a895678" plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md
+  implementation_notes: null
+- id: T2
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:T2
+  name: Derive the parity proof
+  description: Define the final post-H5 parity formula, lemmas, and invariant obligations.
+  requirement_refs:
+  - R2
+  depends_on:
+  - T1
+  maths_phase: phase_2_calculus_and_phase_3_lemmas
+  deliverables:
+  - L82 lemma
+  - invariant metadata
+  exit_criteria:
+  - Final certification and release-gate counts are mathematically pinned to the final
+    post-H5 truth.
+  validation_command: echo "L82 parity proof defined"
+  implementation_notes: null
+- id: T3
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:T3
+  name: Notebook-first correction
+  description: Prove the parity correction in notebooks and extract only after notebook
+    assertions are green.
+  requirement_refs:
+  - R2
+  - R3
+  - R4
+  depends_on:
+  - T2
+  maths_phase: phase_4_invariants_and_phase_5_notebooks
+  deliverables:
+  - corrected certification and release-gate surfaces
+  - generated verification artifact
+  exit_criteria:
+  - Notebook outputs prove the final post-H5 parity state.
+  validation_command: echo "notebook-backed parity correction replay"
+  implementation_notes: null
+- id: T4
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:T4
+  name: Validation and scorecard
+  description: Run targeted verifiers, tests, scorecard replay, pre-commit, and diff-check.
+  requirement_refs:
+  - R5
+  - R6
+  depends_on:
+  - T3
+  maths_phase: phase_6_scorecard_and_validation
+  deliverables:
+  - green targeted verifiers
+  - green focused pytest slice
+  - green scorecard
+  exit_criteria:
+  - The stale post-H5 parity gap is mechanically closed.
+  - M1 can be retried from a truthful source branch.
+  validation_command: pre-commit run --all-files
+  implementation_notes: null
+- id: T5
+  ref: plan:m365-authoritative-persona-post-h5-parity-correction:T5
+  name: Extraction handback
+  description: Commit and push the correction branch, then mark M1 blocked only by fresh
+    merge replay.
+  requirement_refs:
+  - R6
+  - R7
+  depends_on:
+  - T4
+  maths_phase: phase_7_extraction_and_handback
+  deliverables:
+  - pushed correction branch
+  - synchronized trackers
+  exit_criteria:
+  - The correction branch is pushed and clean.
+  - M1 is ready for a fresh merge replay, not for a blind push.
+  validation_command: git status --short --branch
+  implementation_notes: null
+prompt_refs:
+  detailed: docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction.md
+  kickoff: docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction-prompt.txt

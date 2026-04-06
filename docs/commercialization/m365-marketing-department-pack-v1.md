@@ -2,84 +2,68 @@
 
 ## Purpose
 
-Turn the authoritative Marketing persona contract into one bounded department pack that can be
-governed, delegated to, and measured even before the marketing personas become action-backed.
+Turn the authoritative Marketing persona contract into one bounded department pack that can
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. But the
-Marketing department still exists only as a set of contract-only personas with no department-level
-surface saying which personas belong to Marketing, what capability families they own, how approval
-works when later activation arrives, and how the runtime should represent a department that is
-planned but not yet executable.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left Lucia Fernandez staged as contract-only while the authoritative registry had already promoted her to registry-backed execution. That stale layer blocked fresh M1 replay even though the only remaining planned personas are the five deferred external-platform roles.
 
 ## Decision
 
-`registry/department_pack_marketing_v1.yaml` is now the authoritative Marketing
-department-pack contract.
+`registry/department_pack_marketing_v1.yaml` is the authoritative Marketing
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
-The shared runtime remains `src/smarthaus_common/department_pack.py`, and `E6E` uses the
-generalized contract-only pack rules introduced under `E6D` so the Marketing department can be
-represented deterministically and fail closed as `blocked` instead of being omitted or overclaimed.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
+
+This correction locks the following truth:
+
+- total personas: `8`
+- active personas: `3`
+- registry-backed personas: `3`
+- persona-contract-only personas: `5`
+- supported action count: `24`
+- default pack state without queue pressure: `blocked`
+- preserved department status taxonomy: `partial-activation`
 
 ## Marketing Pack Boundary
 
-The Marketing pack contains exactly seven authoritative personas:
+The Marketing pack contains exactly `8` authoritative personas. Only the three registry-backed personas may claim action-backed execution; the five deferred external-platform personas remain contract-only.
+- `app-store-optimizer` — Jake Thompson (ASO Specialist); persona-contract-only; actions=0
+- `content-creator` — Taylor Swift (Content Strategist); registry-backed; actions=8
+- `growth-hacker` — Morgan Davis (Growth Lead); registry-backed; actions=10
+- `instagram-curator` — Zoe Martinez (Visual Content Specialist); persona-contract-only; actions=0
+- `reddit-community-builder` — Priya Singh (Community Manager); persona-contract-only; actions=0
+- `tiktok-strategist` — Ryan O'Connor (Short-form Video Expert); persona-contract-only; actions=0
+- `twitter-engager` — Jamie Lee (Social Media Director); persona-contract-only; actions=0
+- `website-operations-specialist` — Lucia Fernandez (Website Operations Specialist); registry-backed; actions=6
 
-- `app-store-optimizer`
-- `content-creator`
-- `growth-hacker`
-- `instagram-curator`
-- `reddit-community-builder`
-- `tiktok-strategist`
-- `twitter-engager`
+The pack may claim only those personas and their explicit bounded workflows.
 
-Every one of those personas is still `persona-contract-only`, so the pack may claim only the
-contract boundary, capability families, approval posture, and blocked/planned state.
+## Runtime Rule
 
-## Department Pack Contract
-
-Every Marketing pack snapshot must include:
-
-- department metadata
-- workload and workflow families
-- approval model
-- KPI contract
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-  - coverage status
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
-
-## Contract-Only Runtime Rule
-
-Marketing is not action-backed yet, so the runtime must represent that explicitly.
+Department-pack state is projected, not hand-maintained.
 
 That means:
 
-- contract-only personas may declare zero supported actions
-- the pack still validates against the authoritative registry
-- the pack state must resolve to `blocked` while the personas remain planned-only
-- no department-level ready claim is allowed until later acts activate those personas
+- personas come from the authoritative persona registry
+- the pack boundary comes from the department-pack authority file
+- accountability comes from the shared persona-accountability runtime
+- memory and work-history counts come from the shared persona-memory runtime
+- the default state remains `blocked` while any planned persona remains in the boundary
 
 ## Required Guarantees
 
-- one Marketing department-pack authority
-- one deterministic blocked-state representation for contract-only Marketing personas
-- fail-closed behavior for missing personas, invalid authorities, or mismatched coverage/action claims
-- bounded department claim that does not pretend Marketing is live before later activation acts
+- one truthful Marketing department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic blocked-pack summary while the five deferred external-platform personas remain planned
+- fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
+- no over-claim beyond the three explicit registry-backed marketing personas
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- a contract-only Marketing persona declares live supported actions
-- the pack claims Marketing is ready while all personas remain planned-only
-- the pack omits authoritative Marketing personas
-- the pack silently drifts from the authoritative persona registry
+- website-operations-specialist remains contract-only after the authoritative registry marks her registry-backed
+- any deferred external-platform persona declares live supported actions
+- supported action counts drift from the declared authority
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

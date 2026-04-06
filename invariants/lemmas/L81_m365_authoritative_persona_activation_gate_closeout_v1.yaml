@@ -1,0 +1,27 @@
+invariant_id: L81
+title: Final activation gate closes only on full-governed promotion and truthful final counts
+lemma_reference: docs/ma/lemmas/L81_m365_authoritative_persona_activation_gate_closeout_v1.md
+proof_obligations:
+  - all 20 governed promoted personas must satisfy the fail-closed activation prerequisite inventory
+  - the promoted set must move atomically from persona-contract-only to registry-backed with no partial activation
+  - the final registry summary must equal 59 total personas, 10 departments, 54 active personas, and 5 planned personas
+  - the final activated surface must equal 54 active personas, 5 deferred external personas, and 430 allowed persona actions
+  - the final packaging contract must reconcile to the final activated surface instead of stale historical boundaries
+  - repeated proof and build replay must emit the same verification hash
+failure_boundaries:
+  - any promoted persona is missing required authoritative metadata
+  - any promoted persona remains planned after H5 extraction
+  - any non-deferred persona remains persona-contract-only after H5 extraction
+  - any scoped surface still asserts the staged 34 active / 25 planned or historical 4 active / 35 planned boundary
+  - packaging truth depends on an out-of-scope release-gate count instead of the final activated surface
+  - deterministic verification replay drifts across repeated runs
+test_bindings:
+  - scripts/ci/build_persona_registry_v2.py
+  - scripts/ci/verify_persona_registry_v2.py
+  - scripts/ci/verify_activated_persona_surface_v1.py
+  - scripts/ci/verify_workforce_packaging_v1.py
+  - tests/test_persona_registry_v2.py
+  - tests/test_activated_persona_surface_v1.py
+  - tests/test_workforce_packaging_v1.py
+  - configs/generated/authoritative_persona_activation_gate_closeout_v1_verification.json
+ci_gate: authoritative-persona-activation-gate-closeout-v1

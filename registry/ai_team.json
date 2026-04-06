@@ -1,66 +1,362 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-03-20T16:11:29Z",
-  "total_agents": 39,
+  "last_updated": "2026-04-05T13:30:00Z",
+  "total_agents": 59,
   "departments": {
     "operations": [
-      {"agent": "m365-administrator", "name": "Marcus Chen", "role": "Senior IT Administrator"},
-      {"agent": "website-manager", "name": "Elena Rodriguez", "role": "Website Manager"}
+      {
+        "agent": "m365-administrator",
+        "name": "Marcus Chen",
+        "role": "Senior IT Administrator"
+      },
+      {
+        "agent": "website-manager",
+        "name": "Elena Rodriguez",
+        "role": "Website Manager"
+      },
+      {
+        "agent": "audit-operations",
+        "name": "Naomi Brooks",
+        "role": "Audit Operations Lead",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "compliance-monitoring-agent",
+        "name": "Farah Alvi",
+        "role": "Compliance Monitoring Lead",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "device-management",
+        "name": "Connor Walsh",
+        "role": "Endpoint Operations Administrator",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "identity-security",
+        "name": "Amara Okoye",
+        "role": "Identity Security Administrator",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "it-operations-manager",
+        "name": "Peter Novak",
+        "role": "IT Operations Manager",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "security-operations",
+        "name": "Tunde Adeyemi",
+        "role": "Security Operations Lead",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "service-health",
+        "name": "Chloe Martin",
+        "role": "Service Reliability Coordinator",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      },
+      {
+        "agent": "ucp-administrator",
+        "name": "Omar El-Masry",
+        "role": "UCP Control Plane Administrator",
+        "manager": "department-lead:operations",
+        "escalation_owner": "department-owner:operations"
+      }
     ],
     "hr": [
-      {"agent": "hr-generalist", "name": "Sarah Williams", "role": "HR Director"}
+      {
+        "agent": "hr-generalist",
+        "name": "Sarah Williams",
+        "role": "HR Director"
+      },
+      {
+        "agent": "recruitment-assistance-agent",
+        "name": "Camila Torres",
+        "role": "Recruiting Coordinator",
+        "manager": "department-lead:hr",
+        "escalation_owner": "department-owner:hr"
+      }
     ],
     "communication": [
-      {"agent": "outreach-coordinator", "name": "David Park", "role": "Communications Manager"}
+      {
+        "agent": "outreach-coordinator",
+        "name": "David Park",
+        "role": "Communications Manager"
+      },
+      {
+        "agent": "calendar-management-agent",
+        "name": "Mateo Alvarez",
+        "role": "Calendar Operations Coordinator",
+        "manager": "department-lead:communication",
+        "escalation_owner": "department-owner:communication"
+      },
+      {
+        "agent": "email-processing-agent",
+        "name": "Hannah Kim",
+        "role": "Email Operations Specialist",
+        "manager": "department-lead:communication",
+        "escalation_owner": "department-owner:communication"
+      },
+      {
+        "agent": "teams-manager",
+        "name": "Alicia Nguyen",
+        "role": "Teams Collaboration Administrator",
+        "manager": "department-lead:communication",
+        "escalation_owner": "department-owner:communication"
+      }
     ],
     "engineering": [
-      {"agent": "ai-engineer", "name": "Alex Thompson", "role": "ML Engineer"},
-      {"agent": "backend-architect", "name": "Jordan Kim", "role": "Principal Backend Engineer"},
-      {"agent": "devops-automator", "name": "Casey Johnson", "role": "DevOps Engineer"},
-      {"agent": "frontend-developer", "name": "Riley Martinez", "role": "UI/UX Developer"},
-      {"agent": "mobile-app-builder", "name": "Taylor Brown", "role": "Mobile Engineer"},
-      {"agent": "rapid-prototyper", "name": "Ethan Rivera", "role": "Prototype Engineer"},
-      {"agent": "test-writer-fixer", "name": "Grace Lee", "role": "Test Engineer"}
+      {
+        "agent": "ai-engineer",
+        "name": "Alex Thompson",
+        "role": "ML Engineer"
+      },
+      {
+        "agent": "backend-architect",
+        "name": "Jordan Kim",
+        "role": "Principal Backend Engineer"
+      },
+      {
+        "agent": "devops-automator",
+        "name": "Casey Johnson",
+        "role": "DevOps Engineer"
+      },
+      {
+        "agent": "frontend-developer",
+        "name": "Riley Martinez",
+        "role": "UI/UX Developer"
+      },
+      {
+        "agent": "mobile-app-builder",
+        "name": "Taylor Brown",
+        "role": "Mobile Engineer"
+      },
+      {
+        "agent": "rapid-prototyper",
+        "name": "Ethan Rivera",
+        "role": "Prototype Engineer"
+      },
+      {
+        "agent": "test-writer-fixer",
+        "name": "Grace Lee",
+        "role": "Test Engineer"
+      },
+      {
+        "agent": "platform-manager",
+        "name": "Andre Baptiste",
+        "role": "Platform Engineering Manager",
+        "manager": "department-lead:engineering",
+        "escalation_owner": "department-owner:engineering"
+      }
     ],
     "marketing": [
-      {"agent": "app-store-optimizer", "name": "Jake Thompson", "role": "ASO Specialist"},
-      {"agent": "content-creator", "name": "Taylor Swift", "role": "Content Strategist"},
-      {"agent": "growth-hacker", "name": "Morgan Davis", "role": "Growth Lead"},
-      {"agent": "instagram-curator", "name": "Zoe Martinez", "role": "Visual Content Specialist"},
-      {"agent": "reddit-community-builder", "name": "Priya Singh", "role": "Community Manager"},
-      {"agent": "tiktok-strategist", "name": "Ryan O'Connor", "role": "Short-form Video Expert"},
-      {"agent": "twitter-engager", "name": "Jamie Lee", "role": "Social Media Director"}
+      {
+        "agent": "app-store-optimizer",
+        "name": "Jake Thompson",
+        "role": "ASO Specialist"
+      },
+      {
+        "agent": "content-creator",
+        "name": "Taylor Swift",
+        "role": "Content Strategist"
+      },
+      {
+        "agent": "growth-hacker",
+        "name": "Morgan Davis",
+        "role": "Growth Lead"
+      },
+      {
+        "agent": "instagram-curator",
+        "name": "Zoe Martinez",
+        "role": "Visual Content Specialist"
+      },
+      {
+        "agent": "reddit-community-builder",
+        "name": "Priya Singh",
+        "role": "Community Manager"
+      },
+      {
+        "agent": "tiktok-strategist",
+        "name": "Ryan O'Connor",
+        "role": "Short-form Video Expert"
+      },
+      {
+        "agent": "twitter-engager",
+        "name": "Jamie Lee",
+        "role": "Social Media Director"
+      },
+      {
+        "agent": "website-operations-specialist",
+        "name": "Lucia Fernandez",
+        "role": "Website Operations Specialist",
+        "manager": "department-lead:marketing",
+        "escalation_owner": "department-owner:marketing"
+      }
     ],
     "product": [
-      {"agent": "sprint-prioritizer", "name": "Sam Chen", "role": "Product Manager"},
-      {"agent": "feedback-synthesizer", "name": "Maya Patel", "role": "User Research Lead"},
-      {"agent": "trend-researcher", "name": "Chris Wong", "role": "Market Analyst"}
+      {
+        "agent": "sprint-prioritizer",
+        "name": "Sam Chen",
+        "role": "Product Manager"
+      },
+      {
+        "agent": "feedback-synthesizer",
+        "name": "Maya Patel",
+        "role": "User Research Lead"
+      },
+      {
+        "agent": "trend-researcher",
+        "name": "Chris Wong",
+        "role": "Market Analyst"
+      }
     ],
     "project-management": [
-      {"agent": "experiment-tracker", "name": "Emily Carter", "role": "Experimentation PM"},
-      {"agent": "project-shipper", "name": "Ben Foster", "role": "Release Manager"},
-      {"agent": "studio-producer", "name": "Olivia Park", "role": "Studio Producer"}
+      {
+        "agent": "experiment-tracker",
+        "name": "Emily Carter",
+        "role": "Experimentation PM"
+      },
+      {
+        "agent": "project-shipper",
+        "name": "Ben Foster",
+        "role": "Release Manager"
+      },
+      {
+        "agent": "studio-producer",
+        "name": "Olivia Park",
+        "role": "Studio Producer"
+      },
+      {
+        "agent": "project-coordination-agent",
+        "name": "Sofia Petrova",
+        "role": "Project Coordinator",
+        "manager": "department-lead:project-management",
+        "escalation_owner": "department-owner:project-management"
+      },
+      {
+        "agent": "project-manager",
+        "name": "Haruto Tanaka",
+        "role": "Project Manager",
+        "manager": "department-lead:project-management",
+        "escalation_owner": "department-owner:project-management"
+      }
     ],
     "studio-operations": [
-      {"agent": "analytics-reporter", "name": "Amanda Foster", "role": "Data Scientist"},
-      {"agent": "finance-tracker", "name": "Lisa Chang", "role": "Chief Financial Officer"},
-      {"agent": "infrastructure-maintainer", "name": "Jennifer Liu", "role": "Site Reliability Engineer"},
-      {"agent": "legal-compliance-checker", "name": "Robert Kim", "role": "Legal Counsel"},
-      {"agent": "support-responder", "name": "Mike Rodriguez", "role": "Customer Success Manager"}
+      {
+        "agent": "analytics-reporter",
+        "name": "Amanda Foster",
+        "role": "Data Scientist"
+      },
+      {
+        "agent": "finance-tracker",
+        "name": "Lisa Chang",
+        "role": "Chief Financial Officer"
+      },
+      {
+        "agent": "infrastructure-maintainer",
+        "name": "Jennifer Liu",
+        "role": "Site Reliability Engineer"
+      },
+      {
+        "agent": "legal-compliance-checker",
+        "name": "Robert Kim",
+        "role": "Legal Counsel"
+      },
+      {
+        "agent": "support-responder",
+        "name": "Mike Rodriguez",
+        "role": "Customer Success Manager"
+      },
+      {
+        "agent": "client-relationship-agent",
+        "name": "Priya Mehta",
+        "role": "Client Relationship Manager",
+        "manager": "department-lead:studio-operations",
+        "escalation_owner": "department-owner:studio-operations"
+      },
+      {
+        "agent": "financial-operations-agent",
+        "name": "Luis Carvalho",
+        "role": "Financial Operations Manager",
+        "manager": "department-lead:studio-operations",
+        "escalation_owner": "department-owner:studio-operations"
+      },
+      {
+        "agent": "knowledge-management-agent",
+        "name": "Leah Goldstein",
+        "role": "Knowledge Operations Lead",
+        "manager": "department-lead:studio-operations",
+        "escalation_owner": "department-owner:studio-operations"
+      },
+      {
+        "agent": "reports",
+        "name": "Youssef Haddad",
+        "role": "Reporting and KPI Analyst",
+        "manager": "department-lead:studio-operations",
+        "escalation_owner": "department-owner:studio-operations"
+      }
     ],
     "testing": [
-      {"agent": "api-tester", "name": "Nina Shah", "role": "QA Automation Lead"},
-      {"agent": "performance-benchmarker", "name": "Omar Haddad", "role": "Performance Engineer"},
-      {"agent": "test-results-analyzer", "name": "Sofia Alvarez", "role": "Quality Analyst"},
-      {"agent": "tool-evaluator", "name": "Liam Nguyen", "role": "Dev Tools Strategist"},
-      {"agent": "workflow-optimizer", "name": "Ava Johnson", "role": "Process Engineer"}
+      {
+        "agent": "api-tester",
+        "name": "Nina Shah",
+        "role": "QA Automation Lead"
+      },
+      {
+        "agent": "performance-benchmarker",
+        "name": "Omar Haddad",
+        "role": "Performance Engineer"
+      },
+      {
+        "agent": "test-results-analyzer",
+        "name": "Sofia Alvarez",
+        "role": "Quality Analyst"
+      },
+      {
+        "agent": "tool-evaluator",
+        "name": "Liam Nguyen",
+        "role": "Dev Tools Strategist"
+      },
+      {
+        "agent": "workflow-optimizer",
+        "name": "Ava Johnson",
+        "role": "Process Engineer"
+      }
     ],
     "design": [
-      {"agent": "brand-guardian", "name": "Isabella Rossi", "role": "Brand Guardian"},
-      {"agent": "ui-designer", "name": "Noah Anderson", "role": "UI Designer"},
-      {"agent": "ux-researcher", "name": "Mila Novak", "role": "UX Researcher"},
-      {"agent": "visual-storyteller", "name": "Diego Alvarez", "role": "Visual Storyteller"},
-      {"agent": "whimsy-injector", "name": "Luna Park", "role": "Delight Designer"}
+      {
+        "agent": "brand-guardian",
+        "name": "Isabella Rossi",
+        "role": "Brand Guardian"
+      },
+      {
+        "agent": "ui-designer",
+        "name": "Noah Anderson",
+        "role": "UI Designer"
+      },
+      {
+        "agent": "ux-researcher",
+        "name": "Mila Novak",
+        "role": "UX Researcher"
+      },
+      {
+        "agent": "visual-storyteller",
+        "name": "Diego Alvarez",
+        "role": "Visual Storyteller"
+      },
+      {
+        "agent": "whimsy-injector",
+        "name": "Luna Park",
+        "role": "Delight Designer"
+      }
     ]
   }
 }

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import os
-from unittest import mock
 from pathlib import Path
+from unittest import mock
 
 import pytest
 from ucp_m365_pack.client import (

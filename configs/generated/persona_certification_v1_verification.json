@@ -1,9 +1,10 @@
 {
+  "active_personas": 54,
   "all_approval_aligned": true,
   "all_fields_complete": true,
   "certification_phase_count": 4,
   "contract_id": "persona-certification",
-  "contract_only_personas": 35,
+  "contract_only_personas": 5,
   "governance_rule_count": 5,
   "overall_verdict": "certified",
   "phase_ids": [
@@ -12,7 +13,14 @@
     "approval_posture_alignment",
     "domain_alignment"
   ],
-  "registry_backed_personas": 4,
+  "planned_personas": 5,
+  "registry_backed_personas": 54,
+  "risk_distribution": {
+    "critical": 5,
+    "high": 8,
+    "low": 32,
+    "medium": 14
+  },
   "rule_keys": [
     "audit_completeness",
     "bounded_claims",
@@ -20,5 +28,5 @@
     "determinism",
     "fail_closed"
   ],
-  "total_personas": 39
+  "total_personas": 59
 }

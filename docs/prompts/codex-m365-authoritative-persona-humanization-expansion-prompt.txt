@@ -1,0 +1,24 @@
+Execute the governed package at `docs/prompts/codex-m365-authoritative-persona-humanization-expansion.md`.
+
+Plan Reference: `plan:m365-authoritative-persona-humanization-expansion`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-authoritative-persona-humanization-expansion/m365-authoritative-persona-humanization-expansion.md`.
+
+Preserve the current `10`-department model by default, keep personality metadata
+bounded to `working_style`, `communication_style`, and `decision_style`, and fail
+closed if a separate governed department-model change is required.
+
+Use the child phase packages in order: `H1` then `H2` then `H3` then `H4S` then
+`H4` then `H5`. Execute only one child phase at a time. For `H2`, `H3`, `H4S`,
+`H4`, and `H5`, keep all iteration in notebooks first, then validate, commit,
+and push before moving on.
+
+If the mandatory pre-commit gate blocks commit on
+`tests/test_ucp_m365_pack_contracts.py` or
+`tests/test_ucp_m365_pack_client.py`, repair only those files and keep all other
+runtime or test surfaces out of scope.
+
+Do not implement until explicit owner approval.

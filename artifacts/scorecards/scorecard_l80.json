@@ -1,0 +1,20 @@
+{
+  "determinism_certified": true,
+  "invariants": [
+    "invariants/lemmas/L80_m365_authoritative_persona_certification_count_rebase_v1.yaml"
+  ],
+  "lemma_id": "L80",
+  "notebooks": [
+    "notebooks/m365/INV-M365-CB-authoritative-persona-certification-count-rebase-v1.ipynb",
+    "notebooks/lemma_proofs/L80_m365_authoritative_persona_certification_count_rebase_v1.ipynb"
+  ],
+  "notes": [
+    "H4 records the stale certification/count claims that remained after H3 and H4S.",
+    "The staged truth is 59 total personas across 10 departments with 34 active / registry-backed and 25 planned / contract-only personas.",
+    "Department certification targets now reconcile to the rebased H4S pack workflow counts and department totals.",
+    "Deterministic replay is certified by the verification artifact hash for the staged H4 count model."
+  ],
+  "seed_lock_required": false,
+  "status": "green",
+  "title": "M365 Authoritative Persona Certification Count Rebase v1"
+}

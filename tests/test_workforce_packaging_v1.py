@@ -45,9 +45,35 @@ def test_e9a_tiers_match_registry() -> None:
     assert contract["kpis"]["total_persona_count"] == len(personas)
 
 
-def test_e9a_actions_match_release_gate() -> None:
+def test_e9a_actions_match_activated_surface() -> None:
     contract = _load_contract()
-    gate = yaml.safe_load(
-        (REPO_ROOT / "registry" / "enterprise_release_gate_v2.yaml").read_text(encoding="utf-8")
+    activated_surface = yaml.safe_load(
+        (REPO_ROOT / "registry" / "activated_persona_surface_v1.yaml").read_text(encoding="utf-8")
     )
-    assert contract["kpis"]["total_routed_actions"] == gate["kpis"]["total_routed_actions"]
+    registry = yaml.safe_load(
+        (REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text(encoding="utf-8")
+    )
+    active_departments = {
+        persona["department"]
+        for persona in registry["personas"].values()
+        if persona["status"] == "active"
+    }
+    deferred_departments = {
+        persona["department"]
+        for persona in registry["personas"].values()
+        if persona["status"] == "planned"
+    }
+    assert (
+        contract["kpis"]["total_routed_actions"]
+        == activated_surface["kpis"]["total_allowed_persona_actions"]
+        == 430
+    )
+    assert contract["kpis"]["active_persona_count"] == 54
+    assert contract["kpis"]["planned_persona_count"] == 5
+    assert contract["product_tiers"]["core"]["action_count"] == 430
+    assert contract["product_tiers"]["core"]["departments_with_active_personas"] == len(
+        active_departments
+    )
+    assert contract["product_tiers"]["expansion"]["departments_covered"] == len(
+        deferred_departments
+    )

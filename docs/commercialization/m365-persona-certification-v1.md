@@ -13,17 +13,17 @@ Define the deterministic certification contract for every persona in the expande
 
 ## Problem
 
-E8A certified the workload surface at the executor domain level. However, no contract certifies that each individual persona has consistent fields, coverage status, approval posture, and domain alignment. Without this certification, the program cannot claim deterministic persona coverage.
+H5 closed the activation gate and lifted the authoritative roster to the final `59 total / 54 active / 5 planned` truth. Without rebasing this contract, persona certification would still claim the staged pre-H5 workforce and would blur the difference between active registry-backed personas and the remaining deferred external contract-only personas.
 
 ## Decision
 
-Make `registry/persona_certification_v1.yaml` the authoritative persona certification contract. The contract defines four ordered certification phases that every persona must pass.
+Make `registry/persona_certification_v1.yaml` the authoritative persona certification contract. The contract defines four ordered certification phases that every persona must pass in the final post-H5 state.
 
 ## Certification Phases
 
 1. **Field Completeness** — verify every persona has all 21 required fields.
 2. **Coverage Status Consistency** — verify registry-backed personas have actions and contract-only personas have zero.
-3. **Approval Posture Alignment** — verify risk_tier maps correctly to approval_profile.
+3. **Approval Posture Alignment** — verify `risk_tier` maps correctly to `approval_profile`.
 4. **Domain Alignment** — verify registry-backed persona domains are within certified workload domains.
 
 ## Governance Rules
@@ -36,19 +36,20 @@ Make `registry/persona_certification_v1.yaml` the authoritative persona certific
 
 ## Certification Results
 
-- **39 personas pass four-phase certification.**
-- 4 registry-backed personas (hr-generalist, m365-administrator, outreach-coordinator, website-manager) have non-zero actions and certified domains.
-- 35 contract-only personas are certified as contract-defined.
-- Risk tier distribution: 1 critical, 4 high, 6 medium, 28 low.
+- **59 personas pass four-phase certification in the final post-H5 state.**
+- 54 registry-backed personas are certified as active action-backed personas with non-zero actions and certified domains.
+- 5 contract-only personas are certified as planned deferred external-platform personas with zero actions.
+- Risk tier distribution: 5 critical, 8 high, 14 medium, 32 low.
 
 ## No-Go Conditions
 
 - Persona missing any required field.
 - Registry-backed persona with zero actions.
 - Contract-only persona with non-zero actions.
+- Persona count drift away from `59 total / 54 active / 5 planned`.
 - Risk tier to approval profile mismatch.
 - Registry-backed persona claiming uncertified domain.
 
 ## Next Dependency
 
-`E8C` (Department Certification) is the next act.
+Fresh `M1` merge replay is the next governed act after the post-H5 certification parity correction closes.

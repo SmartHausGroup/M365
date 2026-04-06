@@ -12,11 +12,11 @@ Define the deterministic certification contract for every department pack in the
 
 ## Problem
 
-E8A certified workloads and E8B certified personas. However, no contract certifies that each department pack has correct persona counts, valid workflow families, and bounded-claim consistency. Without this, the program cannot claim department-level coverage.
+H5 closed the activation gate, but department certification still claims the staged `34 active / 25 planned` split. Without rebasing this contract, the program cannot claim truthful department-level coverage for the final post-H5 state.
 
 ## Decision
 
-Make `registry/department_certification_v1.yaml` the authoritative department certification contract with four ordered certification phases.
+Make `registry/department_certification_v1.yaml` the authoritative department certification contract with four ordered certification phases and explicit final post-H5 counts. The department-status field continues to mirror the current department-pack authority surface because those pack files remain outside this bounded correction.
 
 ## Certification Phases
 
@@ -27,15 +27,21 @@ Make `registry/department_certification_v1.yaml` the authoritative department ce
 
 ## Certification Results
 
-All 10 departments pass four-phase certification with 39 total personas distributed correctly.
+All 10 departments pass four-phase certification with `59` total personas distributed correctly across the final post-H5 workforce:
+
+- `54` active / registry-backed personas
+- `5` planned / contract-only personas
+- rebased workflow-family and workload-family counts that still match the current H4S department-pack contracts
+- preserved department-pack status labels (`registry-backed` or `partial-activation`) from the current pack authority surface
 
 ## No-Go Conditions
 
 - Missing department pack file.
 - Persona count mismatch between pack and registry.
-- Pack with zero workflow families.
+- Active/planned or registry-backed/contract-only counts drift from the final `59 / 54 / 5` truth.
+- Pack with zero workflow or workload families.
 - Claim exceeding declared surface.
 
 ## Next Dependency
 
-`E8D` (Cross-Department Workflow Certification) is the next act.
+Fresh `M1` merge replay is the next governed act after the post-H5 certification parity correction closes.

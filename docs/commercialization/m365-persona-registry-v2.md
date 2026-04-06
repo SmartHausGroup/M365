@@ -6,20 +6,31 @@ Define the authoritative digital-employee registry for the SMARTHAUS workforce r
 
 ## Problem
 
-The legacy runtime persona projection merged the entire `registry/agents.yaml` inventory with the
-authoritative roster. That produced `59` active personas, including `20` non-authoritative
-registry-only agents that are not part of the committed `39`-persona workforce.
+H3 rebased the authoritative roster to `59` named personas, and H4 preserved a
+staged truth of `34` active and `25` planned personas. H5 closes the final
+activation gate so the governed `20` promoted personas become fully active while
+the `5` deferred external-platform personas remain fail-closed.
 
 ## Decision
 
-`registry/persona_registry_v2.yaml` is now the authoritative runtime registry for digital
-employees.
-
-It is built deterministically from:
+`registry/persona_registry_v2.yaml` remains the authoritative runtime registry
+for digital employees. It is built deterministically from:
 
 - `registry/ai_team.json`
 - `registry/persona_capability_map.yaml`
 - `registry/agents.yaml`
+
+## Current Authoritative Summary
+
+- Total personas: `59`
+- Total departments: `10`
+- Active personas: `54`
+- Planned personas: `5`
+- Registry-backed personas: `54`
+- Persona-contract-only personas: `5`
+
+The only remaining planned personas are the deferred external-platform
+marketing roles.
 
 ## Required Persona Fields
 
@@ -48,32 +59,33 @@ It is built deterministically from:
 - `active`
   - authoritative persona with implemented runtime actions
 - `planned`
-  - authoritative persona with locked contract fields but not yet action-backed
+  - authoritative persona that remains governed but not yet action-capable
 - `inactive`
   - authoritative persona that is intentionally unavailable
 
 ## Runtime Rule
 
-Only personas present in `registry/persona_registry_v2.yaml` may be treated as valid digital
-employees by the governed runtime.
+Only personas present in `registry/persona_registry_v2.yaml` may be treated as
+valid digital employees by the governed runtime.
 
 That means:
 
-- non-authoritative overflow registry agents are not valid delegation targets
-- authoritative contract-only personas remain addressable in the registry, but they stay
-  fail-closed for action execution until later workload phases make them action-backed
+- all `59` authoritative personas are valid delegation targets
+- the governed `20` promoted personas are now `active`
+- the `5` deferred external-platform personas remain `planned` with `allowed_actions = []`, `allowed_domains = []`, and `action_count = 0`
+- non-authoritative overflow registry agents do not exist in the authoritative surface
 
 ## Required Guarantees
 
-- exactly `39` personas
+- exactly `59` authoritative personas
 - exactly `10` departments
-- zero non-authoritative overflow agents in runtime persona resolution
-- deterministic alias resolution for full-name and canonical-agent targets
-- stable projection of status, approval ownership, and executor-domain boundaries
+- exactly `54` active personas and `5` planned personas after H5
+- deterministic alias resolution for canonical-agent and full-name targets
+- stable projection of manager, escalation owner, approval owner, and final action boundaries
 
 ## No-Go Conditions
 
-- runtime can still resolve the extra registry-only agents as personas
-- required persona fields are missing
-- persona status and coverage status disagree
-- summary counts drift from the roster authority
+- any governed promoted persona remains `planned` after H5
+- any deferred external persona exposes actions or domains
+- summary counts drift away from `59 total / 54 active / 5 planned`
+- the roster, capability map, and persona registry disagree on membership

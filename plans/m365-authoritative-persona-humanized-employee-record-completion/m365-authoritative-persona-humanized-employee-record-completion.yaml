@@ -1,0 +1,82 @@
+plan_id: m365-authoritative-persona-humanized-employee-record-completion
+parent_plan_id: m365-authoritative-persona-humanization-expansion
+status: Complete
+date: '2026-04-05'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-authoritative-persona-humanized-employee-record-completion:R1
+canonical_predecessor: plans/m365-authoritative-persona-census-and-department-model-decision/m365-authoritative-persona-census-and-department-model-decision.md
+draft_vs_active_semantics: Draft until H1 is green, approval packet plus explicit go are received, and no sibling child phase is active
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before any mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to H3
+notebook_first_discipline: All record-field iteration and artifact generation must occur in notebooks first; no direct registry extraction is allowed before scorecard green
+objective: Create the deterministic named employee-record set for the 20 promoted personas without rebasing registries or activating personas
+scope:
+  in:
+    - Define the complete named employee record for each promoted persona.
+    - Bind each record to the H1-approved department placement.
+    - Bind manager and escalation-owner tokens.
+    - Produce notebook-backed employee-record authority artifacts.
+    - Produce deterministic verification and tests.
+  out:
+    - Editing registry/ai_team.json.
+    - Editing registry/persona_registry_v2.yaml.
+    - Editing registry/persona_capability_map.yaml.
+    - Editing registry/agents.yaml.
+    - Activating promoted personas.
+allowlist:
+  - plans/m365-authoritative-persona-humanized-employee-record-completion/**
+  - docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md
+  - docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion-prompt.txt
+  - registry/authoritative_digital_employee_records_v1.yaml
+  - docs/commercialization/m365-authoritative-digital-employee-records-v1.md
+  - docs/ma/lemmas/L*_m365_authoritative_digital_employee_records_v1.md
+  - invariants/lemmas/L*_m365_authoritative_digital_employee_records_v1.yaml
+  - notebooks/m365/INV-M365-*-authoritative-digital-employee-records-v1.ipynb
+  - notebooks/lemma_proofs/L*_m365_authoritative_digital_employee_records_v1.ipynb
+  - artifacts/scorecards/scorecard_*.json
+  - scripts/ci/verify_authoritative_digital_employee_records_v1.py
+  - configs/generated/authoritative_digital_employee_records_v1_verification.json
+  - tests/test_authoritative_digital_employee_records_v1.py
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - registry/ai_team.json
+  - registry/persona_registry_v2.yaml
+  - registry/persona_capability_map.yaml
+  - registry/agents.yaml
+  - src/**
+requirements:
+  - id: R1
+    title: Complete employee-record fields
+  - id: R2
+    title: Bounded metadata only
+  - id: R3
+    title: Manager and escalation-owner binding
+  - id: R4
+    title: Notebook-backed authority artifact
+  - id: R5
+    title: Deterministic verification evidence
+  - id: R6
+    title: Stop before registry rebase or activation
+child_acts:
+  - id: H2A
+    description: Lock field matrix and chain-of-command tokens.
+  - id: H2B
+    description: Create notebook-backed employee-record artifact and scorecard.
+  - id: H2C
+    description: Validate, synchronize governance, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion.md
+  kickoff: docs/prompts/codex-m365-authoritative-persona-humanized-employee-record-completion-prompt.txt
+execution_outcome:
+  decision: GO
+  approved_by: operator explicit go
+  completion_timestamp: '2026-04-05 08:08:00 EDT'
+  employee_record_artifact: registry/authoritative_digital_employee_records_v1.yaml
+  verification_artifact: configs/generated/authoritative_digital_employee_records_v1_verification.json
+  validated_next_act: H3

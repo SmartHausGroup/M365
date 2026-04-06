@@ -1,0 +1,330 @@
+{
+  "plan_id": "plan:m365-authoritative-persona-humanization-merge-to-development",
+  "parent_plan_id": "plan:m365-authoritative-persona-humanization-expansion",
+  "title": "Merge the completed authoritative persona humanization branch into development",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-05",
+  "date_updated": "2026-04-05",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona Humanization Merge to Development",
+  "domain": "governance",
+  "math_algorithm_scope": false,
+  "current_state": {
+    "source_branch": "codex/m365-authoritative-persona-humanization-expansion-plan",
+    "source_head": "cca8a90",
+    "source_branch_clean": true,
+    "source_branch_pushed": true,
+    "target_branch": "development",
+    "target_head_at_package_creation": "4c997ea",
+    "governed_final_truth": {
+      "total_personas": 59,
+      "active_personas": 54,
+      "planned_personas": 5
+    }
+  },
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "truthful integration of the already governed authoritative persona surface into development",
+      "fail-closed merge governance with bounded branch scope",
+      "no silent promotion beyond development"
+    ],
+    "anti_alignment": [
+      "Does NOT promote to staging or main.",
+      "Does NOT alter registry/agents.yaml or registry/ai_team.json.",
+      "Does NOT reopen H1 through H5 semantics during merge execution."
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "go merge",
+      "create a formal governed merge package first because no such plan exists yet",
+      "merge this completed branch into development only"
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "R1 through R6 capture the bounded merge-to-development work required before any actual branch mutation."
+  },
+  "objective": "Merge the completed authoritative persona humanization surface from codex/m365-authoritative-persona-humanization-expansion-plan into development via an explicit merge commit and stop before any staging or main promotion.",
+  "decision_summary": {
+    "chosen_option": "explicit_merge_commit_into_development_only",
+    "source_branch": "codex/m365-authoritative-persona-humanization-expansion-plan",
+    "target_branch": "development",
+    "stop_after_push": true,
+    "final_truth_to_preserve": [
+      "59 total",
+      "54 active",
+      "5 planned"
+    ]
+  },
+  "options_considered": [
+    {
+      "id": "A",
+      "description": "Create a governed merge-to-development package and execute the merge only after approval.",
+      "pros": [
+        "Preserves plan-first governance.",
+        "Keeps scope bounded to development.",
+        "Produces a clear rollback and validation path."
+      ],
+      "cons": [
+        "Adds one extra governance step before the actual merge."
+      ]
+    },
+    {
+      "id": "B",
+      "description": "Merge directly without a new plan.",
+      "pros": [
+        "Fastest path."
+      ],
+      "cons": [
+        "Violates AGENTS.md plan-first rules."
+      ]
+    },
+    {
+      "id": "C",
+      "description": "Fold the merge into a staging and main promotion package immediately.",
+      "pros": [
+        "Collapses later promotion work into one package."
+      ],
+      "cons": [
+        "Widens scope beyond the requested development merge."
+      ]
+    }
+  ],
+  "complexity_warning": {
+    "statement": "Combining development merge, staging/main promotion, and release publication in one package adds release-surface risk without improving deterministic merge governance.",
+    "simpler_path": "Create one bounded merge-to-development package first and stop after development is green and pushed."
+  },
+  "scope": {
+    "in_scope": [
+      "verify source and target branch readiness",
+      "inspect branch drift between the source branch and development",
+      "merge the completed source branch into development with an explicit merge commit",
+      "resolve only bounded conflicts inside the already governed H1-H5 merge surface and governance trackers",
+      "rerun the final humanization validation slice on merged development",
+      "update the merge package and governance trackers truthfully",
+      "push development only after green validation"
+    ],
+    "out_of_scope": [
+      "staging promotion",
+      "main promotion",
+      "release-tag publication",
+      "new persona, capability, or department-model changes",
+      "edits to registry/agents.yaml",
+      "edits to registry/ai_team.json"
+    ],
+    "file_allowlist": [
+      "plans/m365-authoritative-persona-humanization-merge-to-development/**",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md",
+      "docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "any file already changed in the governed humanization surface between 4c997ea and cca8a90, but only when required for bounded merge conflict resolution that preserves the proven H1-H5 semantics"
+    ],
+    "file_denylist": [
+      "registry/agents.yaml",
+      "registry/ai_team.json",
+      "staging",
+      "main",
+      "release tags",
+      "any file outside the bounded source-branch diff unless separately governed"
+    ],
+    "scope_fence_rule": "Stop and open a new governed scope-correction package if origin/development drift or merge conflicts require semantic edits outside the bounded source-branch diff or tracker surfaces."
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R1",
+      "description": "Verify source and target branch readiness before mutating development.",
+      "acceptance_criteria": "Source branch is clean and pushed, development is fetched and clean, and branch inventory is captured.",
+      "depends_on": [],
+      "user_intent_trace": "merge this completed branch into development only"
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R2",
+      "description": "Keep the merge bounded to development only.",
+      "acceptance_criteria": "No staging, main, or release-tag action occurs during execution.",
+      "depends_on": [
+        "R1"
+      ],
+      "user_intent_trace": "development only"
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R3",
+      "description": "Merge the governed source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "acceptance_criteria": "Development contains a merge result from the source branch, and any conflict resolution stays inside the bounded merge surface.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "merge this completed branch into development"
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R4",
+      "description": "Re-run the final humanization validation slice on the merged development state.",
+      "acceptance_criteria": "The builder, targeted verifiers, focused pytest slice, pre-commit, and git diff --check are green on merged development.",
+      "depends_on": [
+        "R3"
+      ],
+      "user_intent_trace": "test each phase and do not move on until it passes"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R5",
+      "description": "Synchronize trackers and package status truthfully.",
+      "acceptance_criteria": "Operations trackers plus this package reflect the actual merge outcome and next act.",
+      "depends_on": [
+        "R4"
+      ],
+      "user_intent_trace": "aligned to AGENTS.md and governance"
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:R6",
+      "description": "Push development only after green validation and stop before any further promotion.",
+      "acceptance_criteria": "origin/development matches the validated merge result, and staging/main remain untouched.",
+      "depends_on": [
+        "R4",
+        "R5"
+      ],
+      "user_intent_trace": "merge only, then stop"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:T1",
+      "name": "Preflight inventory",
+      "description": "Capture source and target branch readiness, drift, and bounded merge surface before any mutation.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "branch inventory evidence",
+        "source and target SHAs"
+      ],
+      "exit_criteria": [
+        "The source branch is still clean and pushed.",
+        "Development is fetched and clean.",
+        "The bounded merge surface is explicit."
+      ],
+      "validation_command": "git status --short --branch && git rev-parse codex/m365-authoritative-persona-humanization-expansion-plan development origin/development",
+      "implementation_notes": null
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:T2",
+      "name": "Approval packet and governance gate",
+      "description": "Present the merge approval packet and validate every mutating action before execution.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "approval packet",
+        "validate_action verdicts"
+      ],
+      "exit_criteria": [
+        "Explicit go is received.",
+        "Mutating actions are governance-approved."
+      ],
+      "validation_command": "echo \"approval packet presented before merge execution\"",
+      "implementation_notes": null
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:T3",
+      "name": "Merge into development",
+      "description": "Merge the governed source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "merge result on development"
+      ],
+      "exit_criteria": [
+        "Development contains the source-branch merge result.",
+        "No conflict resolution escapes the bounded merge surface."
+      ],
+      "validation_command": "git log --oneline -n 3 development",
+      "implementation_notes": null
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:T4",
+      "name": "Validate merged development",
+      "description": "Run the final humanization validation slice on the merged development state.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "green builder, verifier, test, pre-commit, and diff-check results"
+      ],
+      "exit_criteria": [
+        "The final governed 59 total / 54 active / 5 planned truth still holds on development.",
+        "All required validations are green."
+      ],
+      "validation_command": "pre-commit run --all-files",
+      "implementation_notes": null
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-authoritative-persona-humanization-merge-to-development:T5",
+      "name": "Push development and close governance",
+      "description": "Update trackers, push development, and freeze the merge result.",
+      "requirement_refs": [
+        "R5",
+        "R6"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "pushed development branch",
+        "synchronized trackers"
+      ],
+      "exit_criteria": [
+        "origin/development matches the validated merge result.",
+        "No staging, main, or release-tag work is performed."
+      ],
+      "validation_command": "git rev-parse development origin/development",
+      "implementation_notes": null
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md",
+    "kickoff": "docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt"
+  }
+}

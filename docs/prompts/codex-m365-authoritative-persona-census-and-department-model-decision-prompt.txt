@@ -1,0 +1,8 @@
+Execute H1 Authoritative Persona Census and Department-Model Decision
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-authoritative-persona-census-and-department-model-decision.md.
+
+Plan Reference: plan:m365-authoritative-persona-census-and-department-model-decision:R1
+Parent Plan: plan:m365-authoritative-persona-humanization-expansion
+
+This phase starts in Draft. Present the approval packet first, wait for "go", call MCP validate_action before any mutating action and obey the verdict, stop on first red, execute only H1, do not edit registry/runtime authorities, and do not auto-advance to H2.

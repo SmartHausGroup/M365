@@ -54,9 +54,9 @@ def test_p2e_active_deferred_partition_matches_registry() -> None:
     personas = persona_registry["personas"]
     active = {k for k, v in personas.items() if v["coverage_status"] == "registry-backed"}
     deferred = {k for k, v in personas.items() if v["coverage_status"] == "persona-contract-only"}
-    assert len(active) == contract["activated_surface"]["registry_backed_personas"] == 34
+    assert len(active) == contract["activated_surface"]["registry_backed_personas"] == 54
     assert len(deferred) == contract["activated_surface"]["deferred_external_personas"] == 5
-    assert capability_map["summary"]["current_registry_backed_personas"] == 34
+    assert capability_map["summary"]["current_registry_backed_personas"] == 54
     assert capability_map["summary"]["persona_contract_only_personas"] == 5
 
 
@@ -66,7 +66,7 @@ def test_p2e_deferred_persona_set_is_exact() -> None:
     assert deferred == DEFERRED
 
 
-def test_p2e_total_allowed_persona_actions_is_298() -> None:
+def test_p2e_total_allowed_persona_actions_is_430() -> None:
     _persona_registry, _capability_map, agents = _load_registries()
     persona_registry = yaml.safe_load(
         (REPO_ROOT / "registry" / "persona_registry_v2.yaml").read_text()
@@ -77,11 +77,11 @@ def test_p2e_total_allowed_persona_actions_is_298() -> None:
         if details["coverage_status"] == "registry-backed"
     ]
     total = sum(len(agents[pid]["allowed_actions"]) for pid in active_ids)
-    assert total == 298
+    assert total == 430
 
 
 def test_p2e_wave_scorecards_are_green() -> None:
-    for lemma_id in ("l73", "l74", "l75"):
+    for lemma_id in ("l81",):
         scorecard = json.loads(
             (REPO_ROOT / "artifacts" / "scorecards" / f"scorecard_{lemma_id}.json").read_text()
         )
@@ -95,7 +95,7 @@ def test_p2e_docs_define_branch_specific_boundary() -> None:
     packaging_doc = (
         REPO_ROOT / "docs" / "commercialization" / "m365-workforce-packaging-v1.md"
     ).read_text()
-    assert "34 registry-backed personas" in surface_doc
+    assert "54 registry-backed personas" in surface_doc
     assert "activated_persona_surface_v1.yaml" in packaging_doc
 
 

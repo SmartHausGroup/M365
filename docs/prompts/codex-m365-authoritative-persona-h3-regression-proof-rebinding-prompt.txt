@@ -1,0 +1,8 @@
+Work in repo `/Users/smarthaus/Projects/GitHub/M365`.
+
+Follow `AGENTS.md` and all `.cursor/rules/*.mdc`.
+Execute the governed correction plan at:
+`plans/m365-authoritative-persona-h3-regression-proof-rebinding/m365-authoritative-persona-h3-regression-proof-rebinding.md`
+
+This correction is bounded to the stale H3 regression blocker.
+Rebind the H3 regression to frozen H3 proof artifacts, keep live post-H5 registry truth unchanged, validate, commit, and push the canonical branch.

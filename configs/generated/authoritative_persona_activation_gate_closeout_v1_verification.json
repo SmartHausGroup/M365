@@ -1,0 +1,502 @@
+{
+  "activation_prerequisite_results": {
+    "audit-operations": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 3,
+      "manager": true,
+      "title": true
+    },
+    "calendar-management-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 11,
+      "manager": true,
+      "title": true
+    },
+    "client-relationship-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "compliance-monitoring-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "device-management": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 4,
+      "manager": true,
+      "title": true
+    },
+    "email-processing-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 14,
+      "manager": true,
+      "title": true
+    },
+    "financial-operations-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "identity-security": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 6,
+      "manager": true,
+      "title": true
+    },
+    "it-operations-manager": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "knowledge-management-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "platform-manager": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 3,
+      "manager": true,
+      "title": true
+    },
+    "project-coordination-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 10,
+      "manager": true,
+      "title": true
+    },
+    "project-manager": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 4,
+      "manager": true,
+      "title": true
+    },
+    "recruitment-assistance-agent": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "reports": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 5,
+      "manager": true,
+      "title": true
+    },
+    "security-operations": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 6,
+      "manager": true,
+      "title": true
+    },
+    "service-health": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 4,
+      "manager": true,
+      "title": true
+    },
+    "teams-manager": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 17,
+      "manager": true,
+      "title": true
+    },
+    "ucp-administrator": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 9,
+      "manager": true,
+      "title": true
+    },
+    "website-operations-specialist": {
+      "authoritative_registry_entry": true,
+      "capability_map_entry": true,
+      "current_coverage_status": "persona-contract-only",
+      "current_registry_status": "planned",
+      "department": true,
+      "display_name": true,
+      "escalation_owner": true,
+      "future_action_count": 6,
+      "manager": true,
+      "title": true
+    }
+  },
+  "current_summary": {
+    "active_personas": 34,
+    "persona_contract_only_personas": 25,
+    "planned_personas": 25,
+    "registry_backed_personas": 34,
+    "total_departments": 10,
+    "total_personas": 59
+  },
+  "determinism_inputs": {
+    "agents_registry": "registry/agents.yaml",
+    "persona_map": "registry/persona_capability_map.yaml",
+    "persona_registry": "registry/persona_registry_v2.yaml",
+    "promoted_records": "registry/authoritative_digital_employee_records_v1.yaml",
+    "scoped_surfaces": [
+      "registry/activated_persona_surface_v1.yaml",
+      "registry/workforce_packaging_v1.yaml",
+      "docs/commercialization/m365-activated-persona-surface-v1.md",
+      "docs/commercialization/m365-workforce-packaging-v1.md",
+      "docs/commercialization/m365-persona-registry-v2.md"
+    ]
+  },
+  "deterministic_hash": "449ef7647a8c19ddbead0af6768ec8bc762e36a1990034922a5e82da8f5a1df0",
+  "final_active_surface": {
+    "active_department_breakdown": {
+      "communication": 4,
+      "design": 5,
+      "engineering": 8,
+      "hr": 2,
+      "marketing": 3,
+      "operations": 10,
+      "product": 3,
+      "project-management": 5,
+      "studio-operations": 9,
+      "testing": 5
+    },
+    "active_departments": 10,
+    "deferred_external_persona_ids": [
+      "app-store-optimizer",
+      "instagram-curator",
+      "reddit-community-builder",
+      "tiktok-strategist",
+      "twitter-engager"
+    ],
+    "deferred_external_personas": 5,
+    "registry_backed_personas": 54,
+    "total_allowed_persona_actions": 430
+  },
+  "final_packaging_targets": {
+    "active_departments": 10,
+    "active_persona_count": 54,
+    "certified_workload_domains": 13,
+    "planned_persona_count": 5,
+    "total_persona_count": 59,
+    "total_routed_actions": 430
+  },
+  "final_summary": {
+    "active_personas": 54,
+    "persona_contract_only_personas": 5,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "total_departments": 10,
+    "total_personas": 59
+  },
+  "lemma_id": "L81",
+  "preflight_stale_claim_count": 29,
+  "preflight_stale_claims": [
+    {
+      "line": 30,
+      "match": "34 registry-backed personas",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 147,
+      "match": "34 registry-backed personas",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 109,
+      "match": "298",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 118,
+      "match": "298",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 148,
+      "match": "298",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 152,
+      "match": "39 personas",
+      "path": "registry/activated_persona_surface_v1.yaml"
+    },
+    {
+      "line": 101,
+      "match": "4 active personas",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 102,
+      "match": "35 planned personas",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 84,
+      "match": "155",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 91,
+      "match": "155",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 101,
+      "match": "155",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 105,
+      "match": "39 personas",
+      "path": "registry/workforce_packaging_v1.yaml"
+    },
+    {
+      "line": 32,
+      "match": "34 registry-backed personas",
+      "path": "docs/commercialization/m365-activated-persona-surface-v1.md"
+    },
+    {
+      "line": 65,
+      "match": "34 registry-backed personas",
+      "path": "docs/commercialization/m365-activated-persona-surface-v1.md"
+    },
+    {
+      "line": 34,
+      "match": "298",
+      "path": "docs/commercialization/m365-activated-persona-surface-v1.md"
+    },
+    {
+      "line": 18,
+      "match": "4 active personas",
+      "path": "docs/commercialization/m365-activated-persona-surface-v1.md"
+    },
+    {
+      "line": 18,
+      "match": "35 planned personas",
+      "path": "docs/commercialization/m365-activated-persona-surface-v1.md"
+    },
+    {
+      "line": 30,
+      "match": "4 active personas",
+      "path": "docs/commercialization/m365-workforce-packaging-v1.md"
+    },
+    {
+      "line": 31,
+      "match": "35 planned personas",
+      "path": "docs/commercialization/m365-workforce-packaging-v1.md"
+    },
+    {
+      "line": 30,
+      "match": "155",
+      "path": "docs/commercialization/m365-workforce-packaging-v1.md"
+    },
+    {
+      "line": 86,
+      "match": "59 total / 34 active / 25 planned",
+      "path": "docs/commercialization/m365-persona-registry-v2.md"
+    },
+    {
+      "line": 112,
+      "match": "34 registry-backed personas",
+      "path": "scripts/ci/verify_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 66,
+      "match": "298",
+      "path": "scripts/ci/verify_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 67,
+      "match": "298",
+      "path": "scripts/ci/verify_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 56,
+      "match": "4 active personas",
+      "path": "scripts/ci/verify_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 56,
+      "match": "34 active personas",
+      "path": "scripts/ci/verify_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 98,
+      "match": "34 registry-backed personas",
+      "path": "tests/test_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 69,
+      "match": "298",
+      "path": "tests/test_activated_persona_surface_v1.py"
+    },
+    {
+      "line": 80,
+      "match": "298",
+      "path": "tests/test_activated_persona_surface_v1.py"
+    }
+  ],
+  "prereq_green": true,
+  "promoted_persona_action_counts": {
+    "audit-operations": 3,
+    "calendar-management-agent": 11,
+    "client-relationship-agent": 5,
+    "compliance-monitoring-agent": 5,
+    "device-management": 4,
+    "email-processing-agent": 14,
+    "financial-operations-agent": 5,
+    "identity-security": 6,
+    "it-operations-manager": 5,
+    "knowledge-management-agent": 5,
+    "platform-manager": 3,
+    "project-coordination-agent": 10,
+    "project-manager": 4,
+    "recruitment-assistance-agent": 5,
+    "reports": 5,
+    "security-operations": 6,
+    "service-health": 4,
+    "teams-manager": 17,
+    "ucp-administrator": 9,
+    "website-operations-specialist": 6
+  },
+  "promoted_persona_count": 20,
+  "promoted_persona_ids": [
+    "audit-operations",
+    "calendar-management-agent",
+    "client-relationship-agent",
+    "compliance-monitoring-agent",
+    "device-management",
+    "email-processing-agent",
+    "financial-operations-agent",
+    "identity-security",
+    "it-operations-manager",
+    "knowledge-management-agent",
+    "platform-manager",
+    "project-coordination-agent",
+    "project-manager",
+    "recruitment-assistance-agent",
+    "reports",
+    "security-operations",
+    "service-health",
+    "teams-manager",
+    "ucp-administrator",
+    "website-operations-specialist"
+  ]
+}

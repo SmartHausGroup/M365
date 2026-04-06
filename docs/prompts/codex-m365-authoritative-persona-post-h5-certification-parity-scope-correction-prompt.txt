@@ -1,0 +1,11 @@
+Read and execute the detailed prompt at `docs/prompts/codex-m365-authoritative-persona-post-h5-certification-parity-scope-correction.md`.
+
+Plan Reference: `plan:m365-authoritative-persona-post-h5-certification-parity-scope-correction:R1`
+Parent Plan: `plan:m365-authoritative-persona-post-h5-parity-correction`
+
+This run exists because `L82` proved the current post-H5 parity package cannot unblock `M1` while department certification remains stale and out of scope.
+
+Present the approval packet first.
+Wait for explicit `go`.
+Use notebook-first execution.
+Stop on first red.

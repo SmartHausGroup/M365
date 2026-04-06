@@ -1,0 +1,34 @@
+invariant_id: L84
+title: Final post-H5 department-pack authority must match the final registry-backed action surface
+lemma_reference: docs/ma/lemmas/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.md
+proof_obligations:
+  - the fresh blocked M1 replay must remain frozen at commit d194b94 with 20 mismatches across 7 affected department packs
+  - every affected department-pack persona must declare the same coverage_status as the authoritative persona registry
+  - every affected department-pack persona must declare the same supported_actions as the authoritative persona registry
+  - communication, engineering, hr, operations, project-management, and studio-operations must reconcile to ready default pack states without queue pressure
+  - marketing must remain blocked because its 5 deferred external-platform personas stay planned and persona-contract-only
+  - every affected department pack must preserve the currently certified department.status taxonomy rather than silently rebasing that downstream contract
+  - repeated proof replay must emit the same deterministic verification hash and target summaries
+failure_boundaries:
+  - any affected persona remains staged as persona-contract-only after the registry marks it registry-backed
+  - any affected persona declares an action list that differs from the authoritative registry
+  - any affected department pack claims a ready state while still containing planned personas
+  - the correction attempts to mutate already truthful final registry, activation, packaging, or certification surfaces
+  - deterministic verification replay drifts across repeated runs
+test_bindings:
+  - scripts/ci/verify_communication_department_pack_v1.py
+  - scripts/ci/verify_engineering_department_pack_v1.py
+  - scripts/ci/verify_hr_department_pack_v1.py
+  - scripts/ci/verify_marketing_department_pack_v1.py
+  - scripts/ci/verify_operations_department_pack_v1.py
+  - scripts/ci/verify_project_management_department_pack_v1.py
+  - scripts/ci/verify_studio_operations_department_pack_v1.py
+  - tests/test_communication_department_pack_v1.py
+  - tests/test_engineering_department_pack_v1.py
+  - tests/test_hr_department_pack_v1.py
+  - tests/test_marketing_department_pack_v1.py
+  - tests/test_operations_department_pack_v1.py
+  - tests/test_project_management_department_pack_v1.py
+  - tests/test_studio_operations_department_pack_v1.py
+  - configs/generated/authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1_verification.json
+ci_gate: authoritative-persona-post-h5-department-pack-coverage-parity-correction-v1

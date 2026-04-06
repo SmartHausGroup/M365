@@ -3,83 +3,67 @@
 ## Purpose
 
 Turn the authoritative Studio Operations persona contract into one bounded department pack that can
-be governed, delegated to, and measured even before the studio-operations personas become
-action-backed.
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. But the
-Studio Operations department still exists only as a set of contract-only personas with no
-department-level surface saying which personas belong to Studio Operations, what capability families
-they own, how approval works when later activation arrives, and how the runtime should represent a
-department that is planned but not yet executable.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 4 promoted personas staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
-`registry/department_pack_studio_operations_v1.yaml` is now the authoritative Studio Operations
-department-pack contract.
+`registry/department_pack_studio_operations_v1.yaml` is the authoritative Studio Operations
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
-The shared runtime remains `src/smarthaus_common/department_pack.py`, and `E6H` uses the
-generalized contract-only pack rules introduced under `E6D` so the Studio Operations department can
-be represented deterministically and fail closed as `blocked` instead of being omitted or
-overclaimed.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
+
+This correction locks the following truth:
+
+- total personas: `9`
+- active personas: `9`
+- registry-backed personas: `9`
+- supported action count: `61`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
 ## Studio Operations Pack Boundary
 
-The Studio Operations pack contains exactly five authoritative personas:
+The Studio Operations pack contains exactly `9` registry-backed personas:
+- `analytics-reporter` — Amanda Foster (Data Scientist); registry-backed; actions=9
+- `finance-tracker` — Lisa Chang (Chief Financial Officer); registry-backed; actions=8
+- `infrastructure-maintainer` — Jennifer Liu (Site Reliability Engineer); registry-backed; actions=8
+- `legal-compliance-checker` — Robert Kim (Legal Counsel); registry-backed; actions=8
+- `support-responder` — Mike Rodriguez (Customer Success Manager); registry-backed; actions=8
+- `client-relationship-agent` — Priya Mehta (Client Relationship Manager); registry-backed; actions=5
+- `financial-operations-agent` — Luis Carvalho (Financial Operations Manager); registry-backed; actions=5
+- `knowledge-management-agent` — Leah Goldstein (Knowledge Operations Lead); registry-backed; actions=5
+- `reports` — Youssef Haddad (Reporting and KPI Analyst); registry-backed; actions=5
 
-- `analytics-reporter`
-- `finance-tracker`
-- `infrastructure-maintainer`
-- `legal-compliance-checker`
-- `support-responder`
+The pack may claim only those personas and their explicit bounded workflows.
 
-Every one of those personas is still `persona-contract-only`, so the pack may claim only the
-contract boundary, capability families, approval posture, and blocked/planned state.
+## Runtime Rule
 
-## Department Pack Contract
-
-Every Studio Operations pack snapshot must include:
-
-- department metadata
-- workload and workflow families
-- approval model
-- KPI contract
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-  - coverage status
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
-
-## Contract-Only Runtime Rule
-
-Studio Operations is not action-backed yet, so the runtime must represent that explicitly.
+Department-pack state is projected, not hand-maintained.
 
 That means:
 
-- contract-only personas may declare zero supported actions
-- the pack still validates against the authoritative registry
-- the pack state must resolve to `blocked` while the personas remain planned-only
-- no department-level ready claim is allowed until later acts activate those personas
+- personas come from the authoritative persona registry
+- the pack boundary comes from the department-pack authority file
+- accountability comes from the shared persona-accountability runtime
+- memory and work-history counts come from the shared persona-memory runtime
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one Studio Operations department-pack authority
-- one deterministic blocked-state representation for contract-only Studio Operations personas
-- fail-closed behavior for missing personas, invalid authorities, or mismatched coverage/action claims
-- bounded department claim that does not pretend Studio Operations is live before later activation acts
+- one truthful Studio Operations department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
+- fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- a contract-only Studio Operations persona declares live supported actions
-- the pack claims Studio Operations is ready while all personas remain planned-only
-- the pack omits authoritative Studio Operations personas
-- the pack silently drifts from the authoritative persona registry
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
+- supported action counts drift from the declared authority
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

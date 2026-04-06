@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T05:52:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -11,12 +11,9 @@ department:
   display_name: Product
   wave: W7
   wave_track: Wave A
-  status: partial-activation
-  purpose: Package the Product digital employees into one bounded department contract covering backlog prioritization, insight
-    synthesis, and market research responsibilities that are defined but not yet action-backed.
-  bounded_claim: The Product department pack may only claim the authoritative contract personas, capability families, approval
-    posture, and blocked readiness state declared here. It may not claim implemented planning, prioritization, or research
-    execution coverage until later acts activate those personas.
+  status: registry-backed
+  purpose: Package the Product digital employees into one bounded department pack that truthfully reflects the fully action-backed authoritative roster after H3 and H4S.
+  bounded_claim: The Product department pack may claim registry-backed execution coverage only for Maya Patel, Sam Chen, Chris Wong and only across the explicit supported actions declared in this authority.
 workflow_families:
 - backlog_planning_and_prioritization
 - feedback_synthesis_and_insight_briefing
@@ -45,8 +42,7 @@ approval_model:
       - sprint-prioritizer
       - feedback-synthesizer
       - trend-researcher
-      rule: Planning, synthesis, and research preparation may proceed in observe/create mode until later acts activate mutating
-        Product execution surfaces.
+      rule: Planning, synthesis, and research preparation may proceed in observe/create mode until later acts activate mutating Product execution surfaces.
 kpis:
   required_personas: 3
   required_active_personas: 3
@@ -133,9 +129,8 @@ personas:
 bounded_claims:
   supported:
   - product persona census and capability-family contract
-  - approval and escalation semantics for future product activation
-  - deterministic blocked-state projection while product remains contract-only
+  - registry-backed execution coverage for Maya Patel, Sam Chen, Chris Wong
+  - deterministic ready/watch/attention_required/blocked projection for the fully active pack
   unsupported:
-  - claims that product personas are currently action-backed
-  - live backlog mutation, roadmap execution, or research publication beyond later activation acts
-  - engineering, finance, or HR work outside the product contract
+  - claims outside the explicit supported action surface declared in this authority
+  - cross-department work outside the product contract

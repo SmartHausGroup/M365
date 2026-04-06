@@ -2,83 +2,39 @@
 
 ## Purpose
 
-Turn the runtime-real Communication persona into one bounded department-operable pack that can be
-delegated to, governed, and measured as a single workforce unit.
+Turn the authoritative Communication persona contract into one bounded department pack that can
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. `E2B`
-made the communication workload surface real. But there was still no department-level contract that
-said what Communication as a unit is allowed to do, which persona anchors that pack, how
-outbound-communication approval works inside the department, and what state makes the Communication
-pack ready versus blocked.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 3 promoted personas staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
-`registry/department_pack_communication_v1.yaml` is now the authoritative Communication
-department-pack contract.
+`registry/department_pack_communication_v1.yaml` is the authoritative Communication
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
-The shared runtime is `src/smarthaus_common/department_pack.py`.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This act delivers the authority and proof surface for Communication on top of the shared runtime:
+This correction locks the following truth:
 
-- the authoritative Communication pack authority in `registry/department_pack_communication_v1.yaml`
-- the deterministic verifier in `scripts/ci/verify_communication_department_pack_v1.py`
-- the generated proof in `configs/generated/communication_department_pack_v1_verification.json`
+- total personas: `4`
+- active personas: `4`
+- registry-backed personas: `4`
+- supported action count: `49`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
 ## Communication Pack Boundary
 
-The Communication pack contains exactly one registry-backed persona:
+The Communication pack contains exactly `4` registry-backed personas:
+- `outreach-coordinator` — David Park (Communications Manager); registry-backed; actions=7
+- `calendar-management-agent` — Mateo Alvarez (Calendar Operations Coordinator); registry-backed; actions=11
+- `email-processing-agent` — Hannah Kim (Email Operations Specialist); registry-backed; actions=14
+- `teams-manager` — Alicia Nguyen (Teams Collaboration Administrator); registry-backed; actions=17
 
-- `outreach-coordinator`
-  - David Park
-  - outbound email, bulk email, scheduled communication, meetings, follow-up, and campaign launch
-
-The pack may claim only that persona and its explicit action-backed workflows.
-
-## Department Pack Contract
-
-Every Communication pack snapshot must include:
-
-- department metadata
-  - id
-  - display name
-  - wave and release track
-  - department status
-- workload and workflow families
-- approval model
-  - department owner
-  - department lead
-  - per-profile approver routing
-- KPI contract
-  - required personas
-  - required active personas
-  - required registry-backed personas
-  - required workflow families
-  - supported action count
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
-
-## Pack State Contract
-
-- `ready`
-  - the Communication persona is active and not escalated
-- `watch`
-  - the Communication persona has entered warning state but is not escalated
-- `attention_required`
-  - the Communication persona is escalated and the communication lead must intervene
-- `blocked`
-  - the Communication persona is missing, inactive, or outside the declared authority
+The pack may claim only those personas and their explicit bounded workflows.
 
 ## Runtime Rule
 
@@ -90,19 +46,19 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- pack status is derived deterministically from persona status and accountability state
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one Communication department-pack authority
-- one deterministic pack summary for the Communication workforce surface
+- one truthful Communication department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- deterministic department state derived from persona accountability and registry state
-- bounded department claim that does not overstate unsupported communication or non-communication workflows
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- the pack fabricates personas not in the authoritative registry
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
 - supported action counts drift from the declared authority
-- an inactive or missing Communication persona still yields `ready`
-- the department pack claims website, finance, HR, or security work outside the explicit communication surface
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

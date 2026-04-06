@@ -1,82 +1,38 @@
-# M365 HR Department Pack v1
+# M365 Human Resources Department Pack v1
 
 ## Purpose
 
-Turn the runtime-real HR persona into one bounded department-operable pack that can be delegated to,
-governed, and measured as a single workforce unit.
+Turn the authoritative Human Resources persona contract into one bounded department pack that can
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. `E2A`
-made the HR workload surface real. But there was still no department-level contract that said what
-Human Resources as a unit is allowed to do, which persona anchors that pack, how regulated approval
-works inside the department, and what state makes the HR pack ready versus blocked.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 1 promoted persona staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
-`registry/department_pack_hr_v1.yaml` is now the authoritative HR department-pack contract.
+`registry/department_pack_hr_v1.yaml` is the authoritative Human Resources
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
-The shared runtime is `src/smarthaus_common/department_pack.py`.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This act delivers the authority and proof surface for HR on top of the shared runtime:
+This correction locks the following truth:
 
-- the authoritative HR pack authority in `registry/department_pack_hr_v1.yaml`
-- the deterministic verifier in `scripts/ci/verify_hr_department_pack_v1.py`
-- the generated proof in `configs/generated/hr_department_pack_v1_verification.json`
+- total personas: `2`
+- active personas: `2`
+- registry-backed personas: `2`
+- supported action count: `10`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
-## HR Pack Boundary
+## Human Resources Pack Boundary
 
-The HR pack contains exactly one registry-backed persona:
+The Human Resources pack contains exactly `2` registry-backed personas:
+- `hr-generalist` — Sarah Williams (HR Director); registry-backed; actions=5
+- `recruitment-assistance-agent` — Camila Torres (Recruiting Coordinator); registry-backed; actions=5
 
-- `hr-generalist`
-  - Sarah Williams
-  - onboarding, offboarding, employee record updates, review initiation, and HR policy creation
-
-The pack may claim only that persona and its explicit action-backed workflows.
-
-## Department Pack Contract
-
-Every HR pack snapshot must include:
-
-- department metadata
-  - id
-  - display name
-  - wave and release track
-  - department status
-- workload and workflow families
-- approval model
-  - department owner
-  - department lead
-  - per-profile approver routing
-- KPI contract
-  - required personas
-  - required active personas
-  - required registry-backed personas
-  - required workflow families
-  - supported action count
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
-
-## Pack State Contract
-
-- `ready`
-  - the HR persona is active and not escalated
-- `watch`
-  - the HR persona has entered warning state but is not escalated
-- `attention_required`
-  - the HR persona is escalated and the HR lead must intervene
-- `blocked`
-  - the HR persona is missing, inactive, or outside the declared authority
+The pack may claim only those personas and their explicit bounded workflows.
 
 ## Runtime Rule
 
@@ -88,19 +44,19 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- pack status is derived deterministically from persona status and accountability state
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one HR department-pack authority
-- one deterministic pack summary for the HR workforce surface
+- one truthful Human Resources department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- deterministic department state derived from persona accountability and registry state
-- bounded department claim that does not overstate unsupported HR or non-HR workflows
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- the pack fabricates personas not in the authoritative registry
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
 - supported action counts drift from the declared authority
-- an inactive or missing HR persona still yields `ready`
-- the department pack claims payroll, finance, legal, or security work outside the explicit HR surface
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

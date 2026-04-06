@@ -1,9 +1,11 @@
 version: "2.0.0"
-last_updated: "2026-03-21T17:00:00Z"
+last_updated: "2026-04-06T09:49:55Z"
 authority:
   workload_certification: registry/workload_certification_v1.yaml
   persona_certification: registry/persona_certification_v1.yaml
   department_certification: registry/department_certification_v1.yaml
+  activated_surface: registry/activated_persona_surface_v1.yaml
+  workforce_packaging: registry/workforce_packaging_v1.yaml
   cross_department_certification: registry/cross_department_certification_v1.yaml
   executive_oversight: registry/executive_oversight_contract_v1.yaml
   ucp_delegation: registry/ucp_delegation_contract_v1.yaml
@@ -14,9 +16,12 @@ contract:
   display_name: Enterprise Release Gate v2
   status: contract-defined
   description: >
-    Closes the formal workforce release gate with live evidence and explicit
+    Closes the formal workforce release gate with final post-H5 evidence and explicit
     sign-off by aggregating all four certification layers (workload, persona,
     department, cross-department) into a single deterministic release decision.
+    The gate is GO for the final governed certification state while preserving
+    bounded residual gaps for uncertified executor domains and deferred
+    external-platform personas.
 
 release_gate_checks:
   - order: 1
@@ -31,17 +36,19 @@ release_gate_checks:
   - order: 2
     id: persona_certification_green
     description: >
-      Verify E8B persona certification contract exists and all 39 personas
-      pass certification.
+      Verify persona certification exists and all 59 personas pass final
+      post-H5 certification with only the 5 deferred external-platform roles
+      remaining planned and contract-only.
     evidence_source: registry/persona_certification_v1.yaml
-    required_verdict: "39 personas certified"
+    required_verdict: "59 personas certified"
     status: green
 
   - order: 3
     id: department_certification_green
     description: >
-      Verify E8C department certification contract exists and all 10
-      departments pass certification.
+      Verify department certification exists and all 10 departments pass
+      certification against the final post-H5 authoritative roster while
+      preserving the current department-pack status taxonomy.
     evidence_source: registry/department_certification_v1.yaml
     required_verdict: "10 departments certified"
     status: green
@@ -92,28 +99,32 @@ governance_rules:
     description: >
       The release gate is a formal governance artifact that requires
       explicit acknowledgment before the program may claim complete
-      workforce certification.
+      final workforce certification.
 
 kpis:
   release_gate_check_count: 6
   governance_rule_count: 5
   workload_domains_certified: 13
   workload_domains_not_yet: 2
-  personas_certified: 39
+  personas_certified: 59
+  active_personas_certified: 54
+  planned_personas_certified: 5
   departments_certified: 10
-  total_routed_actions: 155
+  total_routed_actions: 430
 
 release_decision:
   verdict: GO
   conditions:
     - "13 of 15 workload domains certified (2 domains have zero routed actions)"
-    - "All 39 personas certified (4 registry-backed, 35 contract-only)"
-    - "All 10 departments certified with 39 personas correctly distributed"
+    - "All 59 personas certified in the final post-H5 state (54 registry-backed active, 5 contract-only deferred external planned)"
+    - "All 10 departments certified with 59 personas correctly distributed"
+    - "Activated-surface and packaging contracts reconcile to 430 total routed actions"
     - "Cross-department workflows certified through collaboration contract"
     - "Governance layer (UCP delegation + executive oversight) is present"
   residual_gaps:
     - "2 executor domains (workmanagement, publishing) have zero routed actions"
-    - "35 of 39 personas are contract-only without implemented actions"
+    - "5 of 59 personas are deferred external-platform marketing roles without implemented actions"
+    - "Department pack status fields remain the bounded H4S taxonomy and are not reclassified in this phase"
     - "Cross-department workflows are contract-certified, not live-executed"
   sign_off_required_from:
     - engineering
@@ -122,11 +133,12 @@ release_decision:
 
 bounded_claims:
   supported:
-    - "The workforce expansion program has completed its four-layer certification"
+    - "The workforce expansion program has completed its four-layer certification for the final post-H5 state"
     - "The release gate is GO with documented residual gaps"
     - "All certification artifacts are deterministic and replay-stable"
   not_supported:
     - "All 15 executor domains are fully certified"
-    - "All 39 personas have implemented actions"
+    - "All 59 personas have implemented actions"
+    - "All 59 personas are active"
     - "Live tenant execution evidence for the complete workforce"
     - "Release is unconditional (residual gaps exist)"

@@ -50,19 +50,89 @@ def test_e8c_persona_counts_and_total() -> None:
     contract = _load_contract()
     registry = _load_registry()
 
-    dept_counts: dict[str, int] = {}
+    dept_counts: dict[str, dict[str, int]] = {}
     for p in registry["personas"].values():
         d = p["department"]
-        dept_counts[d] = dept_counts.get(d, 0) + 1
+        dept = dept_counts.setdefault(
+            d,
+            {
+                "persona_count": 0,
+                "active_persona_count": 0,
+                "planned_persona_count": 0,
+                "registry_backed_persona_count": 0,
+                "contract_only_persona_count": 0,
+            },
+        )
+        dept["persona_count"] += 1
+        if p["status"] == "active":
+            dept["active_persona_count"] += 1
+        else:
+            dept["planned_persona_count"] += 1
+        if p["coverage_status"] == "registry-backed":
+            dept["registry_backed_persona_count"] += 1
+        else:
+            dept["contract_only_persona_count"] += 1
 
     total = 0
+    active_total = 0
+    planned_total = 0
+    registry_backed_total = 0
+    contract_only_total = 0
     for dept_id, entry in contract["department_certification_status"].items():
         pack_name = f"department_pack_{dept_id.replace('-', '_')}_v1.yaml"
         pack = yaml.safe_load((REPO_ROOT / "registry" / pack_name).read_text(encoding="utf-8"))
         assert len(pack.get("personas", {})) == entry["persona_count"]
-        assert entry["persona_count"] == dept_counts.get(dept_id, 0)
+        assert entry["persona_count"] == dept_counts[dept_id]["persona_count"]
+        assert entry["active_persona_count"] == dept_counts[dept_id]["active_persona_count"]
+        assert entry["planned_persona_count"] == dept_counts[dept_id]["planned_persona_count"]
+        assert (
+            entry["registry_backed_persona_count"]
+            == dept_counts[dept_id]["registry_backed_persona_count"]
+        )
+        assert (
+            entry["contract_only_persona_count"]
+            == dept_counts[dept_id]["contract_only_persona_count"]
+        )
+        assert entry["workflow_family_count"] == len(pack.get("workflow_families", []))
+        assert entry["workload_family_count"] == len(pack.get("workload_families", []))
         assert entry["workflow_family_count"] > 0
+        assert entry["workload_family_count"] > 0
+        assert entry["department_status"] == pack["department"]["status"]
         total += entry["persona_count"]
+        active_total += entry["active_persona_count"]
+        planned_total += entry["planned_persona_count"]
+        registry_backed_total += entry["registry_backed_persona_count"]
+        contract_only_total += entry["contract_only_persona_count"]
 
     assert total == contract["kpis"]["total_department_personas"]
+    assert active_total == contract["kpis"]["active_department_personas"]
+    assert planned_total == contract["kpis"]["planned_department_personas"]
+    assert registry_backed_total == contract["kpis"]["registry_backed_department_personas"]
+    assert contract_only_total == contract["kpis"]["contract_only_department_personas"]
     assert len(contract["department_certification_status"]) == contract["kpis"]["total_departments"]
+
+
+def test_e8c_final_post_h5_counts_and_preserved_pack_statuses() -> None:
+    contract = _load_contract()
+    assert contract["kpis"] == {
+        "total_departments": 10,
+        "total_department_personas": 59,
+        "active_department_personas": 54,
+        "planned_department_personas": 5,
+        "registry_backed_department_personas": 54,
+        "contract_only_department_personas": 5,
+        "certification_phase_count": 4,
+        "governance_rule_count": 5,
+    }
+    assert contract["department_certification_status"]["marketing"]["planned_persona_count"] == 5
+    assert (
+        contract["department_certification_status"]["marketing"]["contract_only_persona_count"] == 5
+    )
+    assert (
+        contract["department_certification_status"]["operations"]["department_status"]
+        == "partial-activation"
+    )
+    assert (
+        contract["department_certification_status"]["design"]["department_status"]
+        == "registry-backed"
+    )

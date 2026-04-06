@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-03-21T12:05:00Z'
+last_updated: '2026-04-05T14:30:00Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -11,11 +11,9 @@ department:
   display_name: Testing
   wave: W7
   wave_track: Wave A
-  status: partial-activation
-  purpose: Package the Testing digital employees into one bounded department pack. Api-tester is now a registry-backed foundation
-    operator; the remaining four personas are defined but not yet action-backed.
-  bounded_claim: The Testing department pack may claim registry-backed execution coverage for api-tester (8 actions) only.
-    The remaining four personas retain contract-only status until later activation acts.
+  status: registry-backed
+  purpose: Package the Testing digital employees into one bounded department pack that truthfully reflects the fully action-backed authoritative roster after H3 and H4S.
+  bounded_claim: The Testing department pack may claim registry-backed execution coverage only for Nina Shah, Omar Haddad, Sofia Alvarez, Liam Nguyen, Ava Johnson and only across the explicit supported actions declared in this authority.
 workflow_families:
 - qa_automation_and_regression
 - performance_measurement_and_benchmarking
@@ -40,8 +38,7 @@ approval_model:
       - department-owner:testing
       personas:
       - workflow-optimizer
-      rule: Process changes, workflow tuning, and automation opportunity mapping require department-owner review when later
-        acts activate the Testing personas.
+      rule: Process changes, workflow tuning, and automation opportunity mapping require department-owner review when later acts activate the Testing personas.
     low-observe-create:
       approvers:
       - department-owner:testing
@@ -50,8 +47,7 @@ approval_model:
       - performance-benchmarker
       - test-results-analyzer
       - tool-evaluator
-      rule: QA automation, benchmarking, test analysis, and tool evaluation may proceed in observe/create mode until later
-        acts activate mutating Testing execution surfaces.
+      rule: QA automation, benchmarking, test analysis, and tool evaluation may proceed in observe/create mode until later acts activate mutating Testing execution surfaces.
 kpis:
   required_personas: 5
   required_active_personas: 5
@@ -190,9 +186,8 @@ personas:
 bounded_claims:
   supported:
   - testing persona census and capability-family contract
-  - approval and escalation semantics for future testing activation
-  - deterministic blocked-state projection while testing remains contract-only
+  - registry-backed execution coverage for Nina Shah, Omar Haddad, Sofia Alvarez, Liam Nguyen, Ava Johnson
+  - deterministic ready/watch/attention_required/blocked projection for the fully active pack
   unsupported:
-  - claims that testing personas are currently action-backed
-  - live QA, benchmarking, analysis, or optimization mutations beyond later activation acts
-  - HR, design, or engineering work outside the testing contract
+  - claims outside the explicit supported action surface declared in this authority
+  - cross-department work outside the testing contract

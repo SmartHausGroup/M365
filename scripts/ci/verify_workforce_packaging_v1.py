@@ -70,12 +70,36 @@ def main() -> None:
         print("FAILED: total persona count mismatch")
         sys.exit(1)
 
-    # Validate against release gate
-    gate = yaml.safe_load(
-        (repo_root / "registry" / "enterprise_release_gate_v2.yaml").read_text(encoding="utf-8")
+    activated_surface = yaml.safe_load(
+        (repo_root / "registry" / "activated_persona_surface_v1.yaml").read_text(encoding="utf-8")
     )
-    if kpis["total_routed_actions"] != gate["kpis"]["total_routed_actions"]:
-        print("FAILED: routed actions mismatch with release gate")
+    active_departments = {
+        p.get("department") for p in personas.values() if p.get("status") == "active"
+    }
+    deferred_departments = {
+        p.get("department") for p in personas.values() if p.get("status") == "planned"
+    }
+
+    if kpis["active_persona_count"] != rb:
+        print("FAILED: active persona KPI mismatch")
+        sys.exit(1)
+    if kpis["planned_persona_count"] != co:
+        print("FAILED: planned persona KPI mismatch")
+        sys.exit(1)
+    if kpis["department_count"] != len({p.get("department") for p in personas.values()}):
+        print("FAILED: department count mismatch")
+        sys.exit(1)
+    if kpis["total_routed_actions"] != activated_surface["kpis"]["total_allowed_persona_actions"]:
+        print("FAILED: routed actions mismatch with activated surface")
+        sys.exit(1)
+    if tiers["core"]["action_count"] != kpis["total_routed_actions"]:
+        print("FAILED: core action count mismatch")
+        sys.exit(1)
+    if tiers["core"]["departments_with_active_personas"] != len(active_departments):
+        print("FAILED: active department count mismatch")
+        sys.exit(1)
+    if tiers["expansion"]["departments_covered"] != len(deferred_departments):
+        print("FAILED: deferred department count mismatch")
         sys.exit(1)
 
     output = {
@@ -86,6 +110,8 @@ def main() -> None:
         "expansion_personas": co,
         "total_personas": len(personas),
         "total_routed_actions": kpis["total_routed_actions"],
+        "active_departments": len(active_departments),
+        "deferred_departments": len(deferred_departments),
     }
     output_path = repo_root / "configs" / "generated" / "workforce_packaging_v1_verification.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)

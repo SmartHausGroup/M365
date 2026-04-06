@@ -1,11 +1,14 @@
 {
+  "active_personas_certified": 54,
   "all_checks_green": true,
   "contract_id": "enterprise-release-gate-v2",
   "departments_certified": 10,
   "governance_rule_count": 5,
-  "personas_certified": 39,
+  "personas_certified": 59,
+  "planned_personas_certified": 5,
   "release_gate_check_count": 6,
   "release_verdict": "GO",
-  "residual_gap_count": 3,
+  "residual_gap_count": 4,
+  "total_routed_actions": 430,
   "workload_domains_certified": 13
 }

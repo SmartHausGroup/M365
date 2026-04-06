@@ -107,6 +107,9 @@ def test_e8b_coverage_partition_and_approval_alignment() -> None:
 
     rb = 0
     co = 0
+    active = 0
+    planned = 0
+    risk_counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
     for pid, p in personas.items():
         assert (
             p["approval_profile"] in VALID_APPROVAL_PROFILES
@@ -115,6 +118,13 @@ def test_e8b_coverage_partition_and_approval_alignment() -> None:
         assert (
             APPROVAL_STRICTNESS[p["approval_profile"]] >= APPROVAL_STRICTNESS[baseline]
         ), f"{pid}: approval less strict than baseline: {p['approval_profile']} < {baseline}"
+        assert p["status"] in {"active", "planned"}, f"{pid}: unexpected status {p['status']}"
+        if p["status"] == "active":
+            active += 1
+        else:
+            planned += 1
+        assert p["risk_tier"] in risk_counts, f"{pid}: unexpected risk_tier {p['risk_tier']}"
+        risk_counts[p["risk_tier"]] += 1
         if p["coverage_status"] == "registry-backed":
             assert p["action_count"] > 0
             rb += 1
@@ -122,6 +132,33 @@ def test_e8b_coverage_partition_and_approval_alignment() -> None:
             assert p["action_count"] == 0
             co += 1
 
+    assert active == kpis["active_personas"]
+    assert planned == kpis["planned_personas"]
     assert rb == kpis["registry_backed_personas"]
     assert co == kpis["contract_only_personas"]
     assert rb + co == kpis["total_personas"]
+    assert risk_counts["critical"] == kpis["risk_tier_critical"]
+    assert risk_counts["high"] == kpis["risk_tier_high"]
+    assert risk_counts["medium"] == kpis["risk_tier_medium"]
+    assert risk_counts["low"] == kpis["risk_tier_low"]
+
+
+def test_e8b_final_post_h5_counts_and_claims() -> None:
+    contract = _load_contract()
+    assert contract["kpis"] == {
+        "total_personas": 59,
+        "active_personas": 54,
+        "planned_personas": 5,
+        "registry_backed_personas": 54,
+        "contract_only_personas": 5,
+        "risk_tier_critical": 5,
+        "risk_tier_high": 8,
+        "risk_tier_medium": 14,
+        "risk_tier_low": 32,
+        "certification_phase_count": 4,
+        "governance_rule_count": 5,
+    }
+    supported_claims = " ".join(contract["bounded_claims"]["supported"])
+    not_supported_claims = " ".join(contract["bounded_claims"]["not_supported"])
+    assert "pre-H5" not in supported_claims
+    assert "before H5" not in not_supported_claims

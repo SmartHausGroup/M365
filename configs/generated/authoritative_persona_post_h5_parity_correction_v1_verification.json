@@ -1,0 +1,64 @@
+{
+  "current_package": {
+    "allowlist_entry_count": 20,
+    "plan_id": "plan:m365-authoritative-persona-post-h5-parity-correction"
+  },
+  "decision": "new scope-correction package required before M1 replay",
+  "department_certification_truth": {
+    "active_personas": 34,
+    "contract_only_personas": 25,
+    "planned_personas": 25,
+    "registry_backed_personas": 34,
+    "total_personas": 59
+  },
+  "department_truth_mismatch": {
+    "active_personas": {
+      "department_certification": 34,
+      "registry": 54
+    },
+    "contract_only_personas": {
+      "department_certification": 25,
+      "registry": 5
+    },
+    "planned_personas": {
+      "department_certification": 25,
+      "registry": 5
+    },
+    "registry_backed_personas": {
+      "department_certification": 34,
+      "registry": 54
+    }
+  },
+  "department_validation_binds_to_registry": true,
+  "deterministic_hash": "577dadd33bec1f9c244f8ddd3b78a0aa292d3087d46b59c6d64db411481125d6",
+  "lemma_id": "L82",
+  "merge_package": {
+    "plan_id": "plan:m365-authoritative-persona-humanization-merge-to-development",
+    "requires_department_validation": true
+  },
+  "missing_scope_targets": [
+    "docs/commercialization/m365-department-certification-v1.md",
+    "registry/department_certification_v1.yaml",
+    "scripts/ci/verify_department_certification_v1.py",
+    "tests/test_department_certification_v1.py"
+  ],
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb",
+    "role": "governance_prerequisite_evidence"
+  },
+  "registry_truth": {
+    "active_personas": 54,
+    "contract_only_personas": 5,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "total_personas": 59
+  },
+  "scope_correction_required": true,
+  "scope_coverage": {
+    "docs/commercialization/m365-department-certification-v1.md": false,
+    "registry/department_certification_v1.yaml": false,
+    "scripts/ci/verify_department_certification_v1.py": false,
+    "tests/test_department_certification_v1.py": false
+  },
+  "status": "passed"
+}

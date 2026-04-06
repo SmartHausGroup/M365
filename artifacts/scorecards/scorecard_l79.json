@@ -1,0 +1,20 @@
+{
+  "lemma_id": "L79",
+  "title": "M365 Authoritative Persona Department Pack Rebase v1",
+  "status": "green",
+  "notebooks": [
+    "notebooks/m365/INV-M365-CA-authoritative-persona-department-pack-rebase-v1.ipynb",
+    "notebooks/lemma_proofs/L79_m365_authoritative_persona_department_pack_rebase_v1.ipynb"
+  ],
+  "invariants": [
+    "invariants/lemmas/L79_m365_authoritative_persona_department_pack_rebase_v1.yaml"
+  ],
+  "determinism_certified": true,
+  "seed_lock_required": false,
+  "notes": [
+    "H4S records the seven preflight department-pack mismatches that blocked H4 after H3.",
+    "All ten department packs now reconcile to the staged H3 department totals, active counts, and registry-backed counts.",
+    "Every promoted persona remains persona-contract-only with zero supported actions inside the rebased pack authority surface.",
+    "Deterministic replay produces an identical aggregate verification hash across repeated reconciliation."
+  ]
+}

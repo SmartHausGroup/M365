@@ -1,5 +1,5 @@
 version: "1.0.0"
-last_updated: "2026-03-21T15:30:00Z"
+last_updated: "2026-04-06T09:49:55Z"
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   approval_risk_matrix: registry/approval_risk_matrix_v2.yaml
@@ -13,8 +13,9 @@ contract:
   description: >
     Defines the deterministic certification criteria for each persona class
     against its allowed domains and approval posture. Every persona must have
-    a consistent coverage status, risk tier, approval profile, and domain
-    alignment before it can be marked certified.
+    a consistent coverage status, final post-H5 activation status, risk tier,
+    approval profile, and domain alignment before it can be marked certified in
+    the final governed workforce state.
 
 certification_phases:
   - order: 1
@@ -86,8 +87,8 @@ governance_rules:
   bounded_claims:
     description: >
       Certification verdicts must not exceed the actual persona surface.
-      Contract-only personas are certified as contract-only, not as
-      action-capable.
+      Contract-only personas are certified as contract-only and planned,
+      not as fully activated action-capable personas.
   determinism:
     description: >
       Same registry plus same approval matrix must produce the same
@@ -98,13 +99,15 @@ governance_rules:
       persona count. No persona may be uncategorized.
 
 kpis:
-  total_personas: 39
-  registry_backed_personas: 4
-  contract_only_personas: 35
-  risk_tier_critical: 1
-  risk_tier_high: 4
-  risk_tier_medium: 6
-  risk_tier_low: 28
+  total_personas: 59
+  active_personas: 54
+  planned_personas: 5
+  registry_backed_personas: 54
+  contract_only_personas: 5
+  risk_tier_critical: 5
+  risk_tier_high: 8
+  risk_tier_medium: 14
+  risk_tier_low: 32
   certification_phase_count: 4
   governance_rule_count: 5
 
@@ -117,12 +120,13 @@ persona_certification_summary:
 
 bounded_claims:
   supported:
-    - "All 39 personas pass four-phase certification"
-    - "4 registry-backed personas have non-zero actions and certified domains"
-    - "35 contract-only personas are certified as contract-defined with zero actions"
-    - "Risk tier to approval profile mapping is consistent across all personas"
+    - "All 59 personas pass four-phase certification in the final post-H5 state"
+    - "54 registry-backed personas are certified as active action-backed personas with certified domains"
+    - "5 contract-only personas are certified as planned deferred external-platform personas with zero actions"
+    - "Risk tier, approval profile, and final active/planned counts are consistent across all personas"
     - "Certification is deterministic and replay-stable"
   not_supported:
-    - "All 39 personas have implemented actions"
+    - "All 59 personas have implemented actions"
+    - "All 59 personas are active"
     - "Contract-only personas are action-capable"
     - "Live execution evidence for every persona"

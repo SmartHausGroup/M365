@@ -2,87 +2,45 @@
 
 ## Purpose
 
-Turn the now-runtime-real Operations personas into one bounded department-operable pack that can be
-delegated to, governed, and measured as a single workforce unit.
+Turn the authoritative Operations persona contract into one bounded department pack that can
+be governed, delegated to, and measured against the final post-H5 source-branch authority while
+preserving the certified `partial-activation` department taxonomy required by downstream certification.
 
 ## Problem
 
-`E5A` through `E5E` made personas, delegation, queues, accountability, and memory real. `E2A`
-through `E2D` made the Operations workload surfaces real. But there was still no department-level
-contract that said what the Operations team as a unit is allowed to do, which personas anchor that
-pack, how approvals differ inside the department, and what state makes the department pack ready
-versus blocked.
+The shared runtime already enforced exact registry parity, but this department-pack authority still left 8 promoted personas staged as contract-only with zero actions. That stale contract layer blocked fresh M1 replay despite the authoritative registry already carrying the final post-H5 action surface.
 
 ## Decision
 
-`registry/department_pack_operations_v1.yaml` is now the authoritative Operations department-pack
-contract.
+`registry/department_pack_operations_v1.yaml` is the authoritative Operations
+department-pack contract and now explicitly reflects the final post-H5 source-branch authority.
 
-The shared runtime is `src/smarthaus_common/department_pack.py`.
+The shared runtime remains `src/smarthaus_common/department_pack.py`.
 
-This act delivers the shared pack runtime and proof surface first:
+This correction locks the following truth:
 
-- the authoritative Operations pack authority in `registry/department_pack_operations_v1.yaml`
-- the shared runtime builder in `src/smarthaus_common/department_pack.py`
-- the deterministic verifier in `scripts/ci/verify_operations_department_pack_v1.py`
-- the generated proof in `configs/generated/operations_department_pack_v1_verification.json`
+- total personas: `10`
+- active personas: `10`
+- registry-backed personas: `10`
+- supported action count: `85`
+- default pack state without queue pressure: `ready`
+- preserved department status taxonomy: `partial-activation`
 
 ## Operations Pack Boundary
 
-The Operations pack contains exactly two registry-backed personas:
+The Operations pack contains exactly `10` registry-backed personas:
+- `m365-administrator` — Marcus Chen (Senior IT Administrator); registry-backed; actions=37
+- `website-manager` — Elena Rodriguez (Website Manager); registry-backed; actions=6
+- `audit-operations` — Naomi Brooks (Audit Operations Lead); registry-backed; actions=3
+- `compliance-monitoring-agent` — Farah Alvi (Compliance Monitoring Lead); registry-backed; actions=5
+- `device-management` — Connor Walsh (Endpoint Operations Administrator); registry-backed; actions=4
+- `identity-security` — Amara Okoye (Identity Security Administrator); registry-backed; actions=6
+- `it-operations-manager` — Peter Novak (IT Operations Manager); registry-backed; actions=5
+- `security-operations` — Tunde Adeyemi (Security Operations Lead); registry-backed; actions=6
+- `service-health` — Chloe Martin (Service Reliability Coordinator); registry-backed; actions=4
+- `ucp-administrator` — Omar El-Masry (UCP Control Plane Administrator); registry-backed; actions=9
 
-- `m365-administrator`
-  - Marcus Chen
-  - identity, licensing, directory, workspace, and SharePoint administration
-- `website-manager`
-  - Elena Rodriguez
-  - website publishing, deployment coordination, analytics, and SEO operations
-
-The pack may claim only those personas and their explicit action-backed workflows.
-
-## Department Pack Contract
-
-Every Operations pack snapshot must include:
-
-- department metadata
-  - id
-  - display name
-  - wave and release track
-  - department status
-- workload and workflow families
-- approval model
-  - department owner
-  - department lead
-  - per-profile approver routing
-- KPI contract
-  - required personas
-  - required active personas
-  - required registry-backed personas
-  - required workflow families
-  - supported action count
-- personas
-  - persona context from the authoritative persona registry
-  - accountability state
-  - queue depth
-  - memory count
-  - work-history event count
-- pack summary
-  - persona counts
-  - supported action count
-  - workload-family count
-  - workflow-family count
-  - pack state
-
-## Pack State Contract
-
-- `ready`
-  - every pack persona is active and no persona is escalated
-- `watch`
-  - at least one persona is in warning state and none are escalated
-- `attention_required`
-  - at least one persona is escalated and the department lead must intervene
-- `blocked`
-  - an expected persona is missing, inactive, or outside the declared authority
+The pack may claim only those personas and their explicit bounded workflows.
 
 ## Runtime Rule
 
@@ -94,20 +52,19 @@ That means:
 - the pack boundary comes from the department-pack authority file
 - accountability comes from the shared persona-accountability runtime
 - memory and work-history counts come from the shared persona-memory runtime
-- pack status is derived deterministically from persona status and accountability state
+- the default state is `ready` until queue/accountability evidence moves the pack to `watch` or `attention_required`
 
 ## Required Guarantees
 
-- one Operations department-pack authority
-- one deterministic pack summary across dashboard and persona runtime
+- one truthful Operations department-pack authority reconciled to the post-H5 source-branch truth
+- one deterministic ready-pack summary for the declared workflow families without queue pressure
 - fail-closed behavior for missing personas, invalid authorities, or mismatched action counts
-- deterministic department state derived from persona accountability and registry state
-- bounded department claim that does not overstate unsupported personas or workflows
+- no over-claim beyond the explicit registry-backed action surface
+- preservation of the certified partial-activation department taxonomy for downstream certification compatibility
 
 ## No-Go Conditions
 
-- the pack fabricates personas not in the authoritative registry
+- the pack fabricates personas not present in registry/persona_registry_v2.yaml
+- any promoted persona remains staged as contract-only after the authoritative registry marks it registry-backed
 - supported action counts drift from the declared authority
-- department runtime and dashboard disagree on pack state
-- an inactive or missing Operations persona still yields `ready`
-- the department pack claims other departments' responsibilities
+- the department-pack authority drifts from the post-H5 source-branch truth or preserved taxonomy

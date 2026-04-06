@@ -1,6 +1,8 @@
 {
+  "active_department_personas": 54,
   "certification_phase_count": 4,
   "contract_id": "department-certification",
+  "contract_only_department_personas": 5,
   "departments": [
     "communication",
     "design",
@@ -14,6 +16,8 @@
     "testing"
   ],
   "governance_rule_count": 5,
-  "total_department_personas": 39,
+  "planned_department_personas": 5,
+  "registry_backed_department_personas": 54,
+  "total_department_personas": 59,
   "total_departments": 10
 }

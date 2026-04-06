@@ -1,0 +1,265 @@
+{
+  "anti_overclaim_rules": {
+    "forbidden_claims": [
+      "all 59 personas have implemented actions",
+      "all 59 personas are action-capable",
+      "all 59 personas are active before H5"
+    ],
+    "max_active_personas_before_h5": 34,
+    "max_registry_backed_personas_before_h5": 34
+  },
+  "coverage_distribution": {
+    "persona-contract-only": 25,
+    "registry-backed": 34
+  },
+  "department_certification_targets": {
+    "communication": {
+      "active_persona_count": 1,
+      "contract_only_persona_count": 3,
+      "department_status": "partial-activation",
+      "persona_count": 4,
+      "planned_persona_count": 3,
+      "registry_backed_persona_count": 1,
+      "workflow_family_count": 3,
+      "workload_family_count": 5
+    },
+    "design": {
+      "active_persona_count": 5,
+      "contract_only_persona_count": 0,
+      "department_status": "registry-backed",
+      "persona_count": 5,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 5,
+      "workflow_family_count": 4,
+      "workload_family_count": 5
+    },
+    "engineering": {
+      "active_persona_count": 7,
+      "contract_only_persona_count": 1,
+      "department_status": "partial-activation",
+      "persona_count": 8,
+      "planned_persona_count": 1,
+      "registry_backed_persona_count": 7,
+      "workflow_family_count": 4,
+      "workload_family_count": 10
+    },
+    "hr": {
+      "active_persona_count": 1,
+      "contract_only_persona_count": 1,
+      "department_status": "partial-activation",
+      "persona_count": 2,
+      "planned_persona_count": 1,
+      "registry_backed_persona_count": 1,
+      "workflow_family_count": 4,
+      "workload_family_count": 5
+    },
+    "marketing": {
+      "active_persona_count": 2,
+      "contract_only_persona_count": 6,
+      "department_status": "partial-activation",
+      "persona_count": 8,
+      "planned_persona_count": 6,
+      "registry_backed_persona_count": 2,
+      "workflow_family_count": 4,
+      "workload_family_count": 7
+    },
+    "operations": {
+      "active_persona_count": 2,
+      "contract_only_persona_count": 8,
+      "department_status": "partial-activation",
+      "persona_count": 10,
+      "planned_persona_count": 8,
+      "registry_backed_persona_count": 2,
+      "workflow_family_count": 13,
+      "workload_family_count": 9
+    },
+    "product": {
+      "active_persona_count": 3,
+      "contract_only_persona_count": 0,
+      "department_status": "registry-backed",
+      "persona_count": 3,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 3,
+      "workflow_family_count": 3,
+      "workload_family_count": 7
+    },
+    "project-management": {
+      "active_persona_count": 3,
+      "contract_only_persona_count": 2,
+      "department_status": "partial-activation",
+      "persona_count": 5,
+      "planned_persona_count": 2,
+      "registry_backed_persona_count": 3,
+      "workflow_family_count": 3,
+      "workload_family_count": 7
+    },
+    "studio-operations": {
+      "active_persona_count": 5,
+      "contract_only_persona_count": 4,
+      "department_status": "partial-activation",
+      "persona_count": 9,
+      "planned_persona_count": 4,
+      "registry_backed_persona_count": 5,
+      "workflow_family_count": 5,
+      "workload_family_count": 8
+    },
+    "testing": {
+      "active_persona_count": 5,
+      "contract_only_persona_count": 0,
+      "department_status": "registry-backed",
+      "persona_count": 5,
+      "planned_persona_count": 0,
+      "registry_backed_persona_count": 5,
+      "workflow_family_count": 4,
+      "workload_family_count": 4
+    }
+  },
+  "determinism_inputs": {
+    "department_pack_glob": "registry/department_pack_*_v1.yaml",
+    "registry": "registry/persona_registry_v2.yaml",
+    "scoped_surfaces": [
+      "registry/persona_certification_v1.yaml",
+      "registry/department_certification_v1.yaml",
+      "registry/enterprise_release_gate_v2.yaml",
+      "docs/commercialization/m365-persona-certification-v1.md",
+      "docs/commercialization/m365-department-certification-v1.md",
+      "docs/commercialization/m365-persona-registry-v2.md",
+      "docs/commercialization/m365-department-persona-census.md",
+      "docs/commercialization/m365-enterprise-release-gate-v2.md"
+    ]
+  },
+  "deterministic_hash": "6673171d5f9645addcd07f5fade8b7917eca4130c589e60be10299ee5e35f78e",
+  "lemma_id": "L80",
+  "preflight_stale_claim_count": 22,
+  "preflight_stale_claims": [
+    {
+      "line": 120,
+      "match": "39 personas",
+      "path": "registry/persona_certification_v1.yaml"
+    },
+    {
+      "line": 126,
+      "match": "39 personas",
+      "path": "registry/persona_certification_v1.yaml"
+    },
+    {
+      "line": 121,
+      "match": "4 registry-backed personas",
+      "path": "registry/persona_certification_v1.yaml"
+    },
+    {
+      "line": 122,
+      "match": "35 contract-only personas",
+      "path": "registry/persona_certification_v1.yaml"
+    },
+    {
+      "line": 101,
+      "match": "total_personas: 39",
+      "path": "registry/persona_certification_v1.yaml"
+    },
+    {
+      "line": 140,
+      "match": "39 total personas",
+      "path": "registry/department_certification_v1.yaml"
+    },
+    {
+      "line": 91,
+      "match": "total_department_personas: 39",
+      "path": "registry/department_certification_v1.yaml"
+    },
+    {
+      "line": 34,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 37,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 110,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 111,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 116,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 130,
+      "match": "39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 116,
+      "match": "35 of 39 personas",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 102,
+      "match": "personas_certified: 39",
+      "path": "registry/enterprise_release_gate_v2.yaml"
+    },
+    {
+      "line": 39,
+      "match": "39 personas",
+      "path": "docs/commercialization/m365-persona-certification-v1.md"
+    },
+    {
+      "line": 40,
+      "match": "4 registry-backed personas",
+      "path": "docs/commercialization/m365-persona-certification-v1.md"
+    },
+    {
+      "line": 41,
+      "match": "35 contract-only personas",
+      "path": "docs/commercialization/m365-persona-certification-v1.md"
+    },
+    {
+      "line": 30,
+      "match": "39 total personas",
+      "path": "docs/commercialization/m365-department-certification-v1.md"
+    },
+    {
+      "line": 16,
+      "match": "39 personas",
+      "path": "docs/commercialization/m365-enterprise-release-gate-v2.md"
+    },
+    {
+      "line": 29,
+      "match": "39 personas",
+      "path": "docs/commercialization/m365-enterprise-release-gate-v2.md"
+    },
+    {
+      "line": 29,
+      "match": "35 of 39 personas",
+      "path": "docs/commercialization/m365-enterprise-release-gate-v2.md"
+    }
+  ],
+  "risk_distribution": {
+    "critical": 5,
+    "high": 8,
+    "low": 32,
+    "medium": 14
+  },
+  "staged_summary": {
+    "active_personas": 34,
+    "persona_contract_only_personas": 25,
+    "planned_personas": 25,
+    "registry_backed_personas": 34,
+    "total_departments": 10,
+    "total_personas": 59,
+    "total_routed_actions": 298
+  },
+  "status_distribution": {
+    "active": 34,
+    "planned": 25
+  }
+}

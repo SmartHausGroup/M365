@@ -1,0 +1,20 @@
+{
+  "determinism_certified": true,
+  "invariants": [
+    "invariants/lemmas/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.yaml"
+  ],
+  "lemma_id": "L84",
+  "notebooks": [
+    "notebooks/m365/INV-M365-CF-authoritative-persona-post-h5-department-pack-coverage-parity-correction-v1.ipynb",
+    "notebooks/lemma_proofs/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.ipynb"
+  ],
+  "notes": [
+    "L84 proves the remaining merge blocker is the staged department-pack contract layer, not the shared runtime.",
+    "Six affected packs become ready once the promoted personas inherit the final registry-backed action surface.",
+    "Marketing remains blocked by design because five external-platform personas stay planned and contract-only.",
+    "The H4S department.status taxonomy remains preserved in this package to avoid reopening downstream certification truth."
+  ],
+  "seed_lock_required": false,
+  "status": "green",
+  "title": "M365 Authoritative Persona Post-H5 Department-Pack Coverage Parity Correction v1"
+}
