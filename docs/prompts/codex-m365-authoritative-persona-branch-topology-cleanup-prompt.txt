@@ -1,0 +1,8 @@
+Work in repo `/Users/smarthaus/Projects/GitHub/M365`.
+
+Follow `AGENTS.md` and all `.cursor/rules/*.mdc`.
+Execute the governed cleanup plan at:
+`plans/m365-authoritative-persona-branch-topology-cleanup/m365-authoritative-persona-branch-topology-cleanup.md`
+
+This is branch/worktree cleanup only.
+Keep the canonical branch, reset local `development`, delete only the scoped redundant branches, update trackers, validate, commit, and push the canonical branch.

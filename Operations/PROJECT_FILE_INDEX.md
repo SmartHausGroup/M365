@@ -183,6 +183,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `notebooks/lemma_proofs/L84_m365_authoritative_persona_post_h5_department_pack_coverage_parity_correction_v1.ipynb` | Lemma-proof replay notebook for `L84`, proving the department-pack parity scorecard before extraction. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction:R2` |
 | `artifacts/scorecards/scorecard_l84.json` | Scorecard showing the `L84` department-pack parity notebook chain is green and deterministic before extraction. | `Core Success Metrics`, `Policy & Security` | `plan:m365-authoritative-persona-post-h5-department-pack-coverage-parity-correction:R2` |
 
+## Active Authoritative Persona Branch Topology Cleanup Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-authoritative-persona-branch-topology-cleanup/m365-authoritative-persona-branch-topology-cleanup.md` | Human-readable governed cleanup plan for collapsing the local authoritative-persona branch mess into one canonical working branch and a clean local `development` baseline. | `Mission Statement`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
+| `plans/m365-authoritative-persona-branch-topology-cleanup/m365-authoritative-persona-branch-topology-cleanup.yaml` | Structured YAML authority for the scoped branch/worktree cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
+| `plans/m365-authoritative-persona-branch-topology-cleanup/m365-authoritative-persona-branch-topology-cleanup.json` | Structured JSON mirror for automation and governance tooling on the branch/worktree cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup.md` | Detailed prompt for the bounded authoritative-persona branch/worktree cleanup. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup-prompt.txt` | Kickoff prompt for the authoritative-persona branch/worktree cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
