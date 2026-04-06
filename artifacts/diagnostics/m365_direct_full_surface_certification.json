@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-direct-full-surface-certification",
-  "phase": "F3",
-  "status": "mutation_approval_certification_complete",
+  "phase": "F4",
+  "status": "complete",
   "counts": {
     "agents_total": 59,
     "instruction_surface_total": 155,
@@ -459,6 +459,124 @@
         ],
         "reason": "The live Planner group-plan probe still returns Graph 403: You do not have the required permissions to access this item."
       }
+    }
+  },
+  "f4_final_support_matrix": {
+    "status": "complete",
+    "direct_instruction_surface_total": 155,
+    "certified_live_green_total": 64,
+    "fenced_total": 91,
+    "certified_live_green_breakdown": {
+      "read_actions": 45,
+      "write_actions": 19
+    },
+    "supplemental_governance_boundary_evidence": {
+      "note": "These proofs validate the governed ops-adapter boundary and are not counted in the 155 direct-instruction action totals.",
+      "actor_tier_denials": {
+        "standard_user": [
+          "users.disable"
+        ]
+      },
+      "pending_approval_actions": [
+        "sites.provision",
+        "ca.policy_create"
+      ]
+    },
+    "fenced_breakdown": {
+      "f2_fenced_reads_total": 46,
+      "f3_fenced_planner_writes_total": 3,
+      "f4_additional_fenced_writes_total": 42,
+      "f4_additional_fenced_write_groups": {
+        "workspace_and_admin_writes_need_post_approval_live_evidence": {
+          "actions": [
+            "add_channel",
+            "create_channel",
+            "create_site",
+            "create_team",
+            "provision_service",
+            "create_user",
+            "update_user",
+            "disable_user",
+            "create_group",
+            "add_group_member",
+            "remove_group_member",
+            "assign_user_license",
+            "update_application",
+            "reset_user_password"
+          ],
+          "reason": "These are high-impact or destructive admin/workspace mutations, and this program certified the governed approval boundary for that class rather than live post-approval execution."
+        },
+        "approvals_auth_mode_mutations": {
+          "actions": [
+            "create_approval_item",
+            "respond_to_approval_item"
+          ],
+          "reason": "The approvals surface currently requires delegated or hybrid auth mode."
+        },
+        "powerplatform_write_mutations_without_live_evidence": {
+          "actions": [
+            "set_flow_owner_role",
+            "remove_flow_owner_role",
+            "enable_flow",
+            "disable_flow",
+            "delete_flow",
+            "restore_flow",
+            "invoke_flow_callback",
+            "set_powerapp_owner",
+            "remove_powerapp_role_assignment",
+            "delete_powerapp",
+            "set_powerapp_environment_role_assignment",
+            "remove_powerapp_environment_role_assignment"
+          ],
+          "reason": "F1 and F2 proved the Power Platform read/admin boundary, but this initiative did not gather bounded live mutation evidence for these write paths."
+        },
+        "access_review_retry_path_mutations": {
+          "actions": [
+            "create_access_review",
+            "record_access_review_decision"
+          ],
+          "reason": "The underlying access-review surface remained in the Graph retry/backoff path during certification."
+        },
+        "external_connection_mutations_not_provisioned": {
+          "actions": [
+            "create_external_connection",
+            "register_external_connection_schema",
+            "upsert_external_item",
+            "create_external_group",
+            "add_external_group_member"
+          ],
+          "reason": "The live external-connections surface returns Graph 401 UnknownError and is not provisioned truthfully for certification."
+        },
+        "identity_security_mutations_missing_execution_scopes": {
+          "actions": [
+            "create_conditional_access_policy",
+            "update_conditional_access_policy",
+            "delete_conditional_access_policy"
+          ],
+          "reason": "The underlying identity-security execution surface still lacks the required scopes for truthful direct execution; only the approval boundary was certified."
+        },
+        "device_and_security_mutations_not_provisioned": {
+          "actions": [
+            "execute_device_action",
+            "update_security_incident"
+          ],
+          "reason": "The device and security execution surfaces are not provisioned in the current tenant/token state."
+        },
+        "ediscovery_retry_path_mutations": {
+          "actions": [
+            "create_ediscovery_case",
+            "create_ediscovery_case_search"
+          ],
+          "reason": "The underlying eDiscovery surface remained in the Graph retry/backoff path during certification."
+        }
+      }
+    },
+    "residual_surface_truth": {
+      "persona_alias_surface_total": 184,
+      "persona_aliases_without_crosswalk_total": 125,
+      "legacy_stub_actions_total": 41,
+      "legacy_stub_agents_total": 8,
+      "note": "The full persona-alias layer is not part of the certified direct support matrix and must not be implied to represent real M365 execution."
     }
   }
 }

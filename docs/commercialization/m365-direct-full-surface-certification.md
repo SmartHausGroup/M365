@@ -2,7 +2,7 @@
 
 ## Status
 
-`F3` is complete. The direct full-surface certification program now has published read-path evidence plus bounded live mutation, approval, and actor-tier evidence. `F4` closeout is the next act.
+`F4` is complete. The direct full-surface certification program now closes with a truthful reduced support matrix for the repo-direct instruction surface: `64` live-green direct actions and `91` fenced direct actions, plus supplemental approval and actor-tier governance evidence at the ops-adapter boundary.
 
 ## Purpose
 
@@ -361,4 +361,131 @@ The following write family is still fenced out of the certified live mutation su
 
 No repo-local runtime defect required extraction during `F3`. The initial mail follow-up failures were probe-input issues, not code defects: mailbox settings needed a writable payload shape, and message deletion needed the moved message identifier returned by `move_message`.
 
-The next act is `F4`, which will publish the final support-matrix closeout across the certified direct surface.
+## F4 Final Support Matrix
+
+`F4` closes the initiative by collapsing the phase evidence into one truthful direct support matrix.
+
+### Final direct instruction totals
+
+Across the repo-direct instruction surface in `src/provisioning_api/routers/m365.py`:
+
+- `155` total direct instruction actions claimed
+- `64` certified live-green direct actions
+- `91` fenced direct actions
+
+The certified live-green total is the sum of:
+
+- `45` certified read actions from `F2`
+- `19` certified low-risk write actions from `F3`
+
+The fenced total is the sum of:
+
+- `46` fenced read actions from `F2`
+- `3` fenced Planner write actions from `F3`
+- `42` additional direct write actions now explicitly reduced out of the certified surface in `F4`
+
+### Certified live-green direct surface
+
+The final certified direct surface is:
+
+- reads:
+  - all `45` actions already listed in the `F2` green matrix
+- writes:
+  - all `19` actions already listed in the `F3` live-green mutation matrix
+
+### Supplemental governance evidence
+
+The direct instruction totals above do not count the ops-adapter governance proofs, because those use the persona/action alias layer rather than the direct instruction action names. They still matter and are part of the final closeout evidence:
+
+- `standard_user` deny proof:
+  - `users.disable`
+- `pending_approval` proof:
+  - `sites.provision`
+  - `ca.policy_create`
+
+These proofs certify that the governed runtime denies low-tier actors and persists real approval records before high-impact execution.
+
+### Final fenced direct surface
+
+The final fenced direct surface includes all `46` read actions already fenced in `F2`, the `3` Planner mutations fenced in `F3`, and the following `42` additional direct write actions that remain outside the certified direct surface.
+
+- workspace and admin writes requiring dedicated post-approval live execution evidence:
+  - `add_channel`
+  - `create_channel`
+  - `create_site`
+  - `create_team`
+  - `provision_service`
+  - `create_user`
+  - `update_user`
+  - `disable_user`
+  - `create_group`
+  - `add_group_member`
+  - `remove_group_member`
+  - `assign_user_license`
+  - `update_application`
+  - `reset_user_password`
+  - reason: these are high-impact or destructive admin/workspace mutations, and this program only certified the governed approval boundary for that class rather than live post-approval execution
+- approvals mutations:
+  - `create_approval_item`
+  - `respond_to_approval_item`
+  - reason: the approvals surface still requires delegated or hybrid auth mode
+- Power Platform write mutations without live certification evidence:
+  - `set_flow_owner_role`
+  - `remove_flow_owner_role`
+  - `enable_flow`
+  - `disable_flow`
+  - `delete_flow`
+  - `restore_flow`
+  - `invoke_flow_callback`
+  - `set_powerapp_owner`
+  - `remove_powerapp_role_assignment`
+  - `delete_powerapp`
+  - `set_powerapp_environment_role_assignment`
+  - `remove_powerapp_environment_role_assignment`
+  - reason: `F1` and `F2` proved the Power Platform read/admin boundary, but this initiative did not gather bounded live write evidence for these mutation paths
+- access review mutations:
+  - `create_access_review`
+  - `record_access_review_decision`
+  - reason: the underlying access-review surface remained in the Graph retry/backoff path during certification
+- external connection and external item mutations:
+  - `create_external_connection`
+  - `register_external_connection_schema`
+  - `upsert_external_item`
+  - `create_external_group`
+  - `add_external_group_member`
+  - reason: the live external-connections surface returns Graph `401 UnknownError` and is not provisioned truthfully for certification
+- identity-security mutations:
+  - `create_conditional_access_policy`
+  - `update_conditional_access_policy`
+  - `delete_conditional_access_policy`
+  - reason: the underlying identity-security execution surface still lacks the required scopes for truthful direct execution; only the approval boundary was certified
+- device and security mutations:
+  - `execute_device_action`
+  - `update_security_incident`
+  - reason: the device and security execution surfaces are not provisioned in the current tenant/token state
+- eDiscovery mutations:
+  - `create_ediscovery_case`
+  - `create_ediscovery_case_search`
+  - reason: the underlying eDiscovery surface remained in the Graph retry/backoff path during certification
+
+### What this initiative did and did not certify
+
+This initiative certifies the repo-direct instruction surface only after truthful reduction. It does not certify the full persona-alias layer.
+
+The remaining persona-alias truth from `F0` still matters:
+
+- `125` persona-facing aliases remain outside the current direct crosswalk
+- `41` actions across `8` agents remain legacy stub behavior in `src/ops_adapter/actions.py`
+
+Those surfaces are not part of the certified direct support matrix and must not be implied to work as real M365 execution.
+
+### Final closeout
+
+`F4` is green because the direct surface is now closed truthfully:
+
+- the direct instruction surface is fully classified
+- every claimed direct action is either certified live-green or explicitly fenced with a reason
+- the runtime’s approval and actor-tier boundaries have real evidence
+- no repo-local runtime defect remains open inside this initiative
+
+The direct full-surface certification initiative is complete. Any future widening of the fenced surface requires a new governed initiative.

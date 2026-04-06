@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `none`
 - **Title:** `Enable and certify the full repo-claimed direct M365 surface so supported actions are actually testable and trustworthy`
 - **Version:** `1.0`
-- **Status:** `active`
+- **Status:** `complete`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-06`
 - **Date Updated:** `2026-04-06`
@@ -47,7 +47,8 @@
 - `F1` is complete.
 - `F2` is complete.
 - `F3` is complete.
-- `F4` is now the active next act.
+- `F4` is complete.
+- The initiative is complete.
 - The notebook-backed `F0` evidence is `notebooks/m365/INV-M365-CH-direct-full-surface-certification-universe-lock-v1.ipynb`.
 - The current baseline artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 
@@ -179,16 +180,21 @@ Stop and re-scope if certification requires UCP-side edits or tenant changes tha
 
 ## Section 11: Current Result
 
-- `F3` is complete.
-- The implemented non-mutating direct surface remains classified as `45` certified green actions and `46` fenced actions.
-- The bounded `F3` mutation / approval window closed with:
-  - `19` live-green low-risk mutation actions
-  - `2` high-impact actions certified at the real `pending_approval` boundary
-  - `1` actor-tier deny proof on `users.disable`
-  - `3` Planner mutations fenced by external Graph `403` permissions
+- `F4` is complete.
+- The final reduced direct instruction support matrix is:
+  - `155` total direct instruction actions
+  - `64` certified live-green direct actions
+  - `91` fenced direct actions
+- The certified live-green total is:
+  - `45` read actions from `F2`
+  - `19` low-risk write actions from `F3`
+- Supplemental governance evidence also exists at the ops-adapter boundary:
+  - `standard_user` deny proof on `users.disable`
+  - real `pending_approval` creation for `sites.provision`
+  - real `pending_approval` creation for `ca.policy_create`
 - `CHECK:C3` passed because every tested read family is now either green or explicitly fenced with a written reason.
 - `CHECK:C4` passed because the repo-local defects exposed during `F2` were repaired and rerun, and `F3` exposed no remaining runtime defect requiring extraction:
   - `GraphClient.list_directory_roles` no longer sends unsupported `$top` to `/directoryRoles`
   - `PowerAppsClient` treats warning-only PowerShell stdout as empty data for environment role-assignment reads
-- `CHECK:C5` remains the `F4` closeout gate because the final consolidated support matrix still needs to be published after the completed mutation / approval results are folded into the full direct-surface certification closeout.
-- `F4` final support-matrix closeout is the next act.
+- `CHECK:C5` passed because the final consolidated support matrix and the machine-readable diagnostics artifact now publish the full reduced direct surface.
+- The initiative is complete. Any future widening of the `91` fenced direct actions or the `125` persona aliases outside the direct crosswalk requires a new governed initiative.
