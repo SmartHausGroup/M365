@@ -193,6 +193,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup.md` | Detailed prompt for the bounded authoritative-persona branch/worktree cleanup. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
 | `docs/prompts/codex-m365-authoritative-persona-branch-topology-cleanup-prompt.txt` | Kickoff prompt for the authoritative-persona branch/worktree cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-branch-topology-cleanup:R1` |
 
+## Active Authoritative Persona H3 Regression Proof-Rebinding Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-authoritative-persona-h3-regression-proof-rebinding/m365-authoritative-persona-h3-regression-proof-rebinding.md` | Human-readable governed correction package for rebinding the stale H3 regression to frozen H3 proof artifacts before replaying `M1`. | `Mission Statement`, `Policy & Security` | `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1` |
+| `plans/m365-authoritative-persona-h3-regression-proof-rebinding/m365-authoritative-persona-h3-regression-proof-rebinding.yaml` | Structured YAML authority for the bounded H3 regression proof-rebinding package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1` |
+| `plans/m365-authoritative-persona-h3-regression-proof-rebinding/m365-authoritative-persona-h3-regression-proof-rebinding.json` | Structured JSON mirror for automation and governance tooling on the H3 regression proof-rebinding package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-h3-regression-proof-rebinding.md` | Detailed prompt for executing the bounded H3 regression proof-rebinding correction. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1` |
+| `docs/prompts/codex-m365-authoritative-persona-h3-regression-proof-rebinding-prompt.txt` | Kickoff prompt for the H3 regression proof-rebinding package. | `Technical Architecture`, `Policy & Security` | `plan:m365-authoritative-persona-h3-regression-proof-rebinding:R1` |
+
 ## Internal UCP Onboarding Automation Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
