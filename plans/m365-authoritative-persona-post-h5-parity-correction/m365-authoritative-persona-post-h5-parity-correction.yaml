@@ -2,10 +2,10 @@ plan_id: plan:m365-authoritative-persona-post-h5-parity-correction
 parent_plan_id: plan:m365-authoritative-persona-humanization-expansion
 title: Correct stale post-H5 certification and release-gate parity before resuming M1
 version: '1.0'
-status: draft
+status: blocked
 owner: SMARTHAUS
 date_created: '2026-04-05'
-date_updated: '2026-04-05'
+date_updated: '2026-04-06'
 north_star_ref: Operations/NORTHSTAR.md
 execution_plan_ref: 'Operations/EXECUTION_PLAN.md § Initiative: Authoritative Persona
   Humanization Merge to Development'
@@ -17,6 +17,11 @@ current_state:
   blocked_local_merge_branch: development
   blocked_local_merge_commit: a895678
   blocked_local_merge_pushed: false
+  scope_gap_evidence:
+    notebook: notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb
+    verification: configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json
+    successor_package: plans/m365-authoritative-persona-post-h5-certification-parity-scope-correction/m365-authoritative-persona-post-h5-certification-parity-scope-correction.md
+    scope_correction_required: true
   final_truth_surfaces:
     persona_registry_v2:
       total_personas: 59
@@ -32,6 +37,11 @@ current_state:
       total_allowed_persona_actions: 430
   stale_surfaces:
     persona_certification_v1:
+      active_personas: 34
+      planned_personas: 25
+      registry_backed_personas: 34
+      contract_only_personas: 25
+    department_certification_v1:
       active_personas: 34
       planned_personas: 25
       registry_backed_personas: 34

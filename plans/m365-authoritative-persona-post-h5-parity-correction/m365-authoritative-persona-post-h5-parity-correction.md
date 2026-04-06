@@ -2,15 +2,17 @@
 
 **Plan ID:** `m365-authoritative-persona-post-h5-parity-correction`
 **Parent Plan ID:** `m365-authoritative-persona-humanization-expansion`
-**Status:** 🟡 Draft
-**Date:** 2026-04-05
+**Status:** 🔴 Blocked by follow-on scope correction
+**Date:** 2026-04-06
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-authoritative-persona-post-h5-parity-correction:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — keep final authoritative workforce claims truthful and fail-closed by correcting stale post-H5 certification and release-gate surfaces before any merged `development` push may claim the humanized workforce is integrated.
 **Canonical predecessor:** `plans/m365-authoritative-persona-humanization-merge-to-development/m365-authoritative-persona-humanization-merge-to-development.md`
+**Canonical successor:** `plans/m365-authoritative-persona-post-h5-certification-parity-scope-correction/m365-authoritative-persona-post-h5-certification-parity-scope-correction.md`
 **Blocker context:** local `development` merge commit `a895678` is unpushed and blocked after `verify_persona_certification_v1.py` exposed stale pre-H5 certification and release-gate truth.
+**Scope-gap evidence:** `notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb`, `configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json`
 
-**Draft vs Active semantics:** This blocker package starts in **Draft**. It becomes **Active** only after the approval packet is presented and receives explicit `go`, and only while no other post-H5 correction or merge phase is concurrently active. It becomes **Complete** only after the stale parity gap is corrected, the correction branch is committed and pushed, and `M1` is truthfully unblocked for re-validation.
+**Draft vs Active semantics:** This blocker package started in **Draft**. It is now **Blocked** because `L82` proved that the package cannot truthfully unblock `M1` while department certification remains both stale and outside this package allowlist. It may resume only if its successor scope-correction package closes that gap and hands back a widened truthful correction boundary.
 
 **Approval and governance gates:** Present the approval packet first. Wait for explicit `go`. Call MCP `validate_action` before every mutating action, including notebook execution, file edits, tests, commit, and push. Stop on first red. Do not push `development` from this package.
 
@@ -30,7 +32,12 @@ Correct the stale post-H5 certification and release-gate surfaces so the final a
   - `registry/workforce_packaging_v1.yaml -> 54 active / 5 planned / 430 actions`
 - stale downstream surfaces still at staged pre-H5 truth:
   - `registry/persona_certification_v1.yaml -> 34 active / 25 planned / 34 registry-backed`
+  - `registry/department_certification_v1.yaml -> 34 active / 25 planned / 34 registry-backed`
   - `registry/enterprise_release_gate_v2.yaml -> 34 active certified / 25 planned certified / 298 routed actions`
+- `L82` scope-gap evidence proves the current package cannot unblock `M1` because:
+  - `M1` validates `verify_department_certification_v1.py` and `test_department_certification_v1.py`
+  - the department-certification surface is stale against the live `54 active / 5 planned` registry truth
+  - this package does not own the department-certification contract, doc, verifier, or test surfaces
 
 ## Decision Rule
 

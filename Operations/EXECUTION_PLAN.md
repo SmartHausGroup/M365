@@ -335,19 +335,22 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Reference:** `plan:m365-authoritative-persona-humanization-merge-to-development:R1`
 
-**Status:** 🔴 Blocked — local `M1` execution reached explicit merge commit `a895678` on `development`, but post-merge validation emitted `NO-GO` before push because final certification and release-gate surfaces remained at staged pre-H5 `34 active / 25 planned / 298 routed actions` truth while the final authoritative surfaces are already at `54 active / 5 planned / 430 actions`.
-**Current next act:** Present the approval packet for `m365-authoritative-persona-post-h5-parity-correction` and execute that bounded correction on `codex/m365-authoritative-persona-post-h5-parity-correction` before replaying `M1`.
+**Status:** 🔴 Blocked — local `M1` execution reached explicit merge commit `a895678` on `development`, and the first blocker package then proved insufficient because `L82` showed department certification is also stale at staged `34 active / 25 planned` truth and sits outside the current post-H5 parity package even though `M1` explicitly validates that layer.
+**Current next act:** Present the approval packet for `m365-authoritative-persona-post-h5-certification-parity-scope-correction` and execute that bounded scope correction on `codex/m365-authoritative-persona-post-h5-parity-correction` before replaying `M1`.
 
 **North Star guardrail:** This package is `development`-only. It must preserve the already governed `59 total / 54 active / 5 planned` truth, use an explicit merge commit, rerun the final humanization validation slice on `development`, and stop before any `staging`, `main`, or release-tag promotion.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development.md`, `docs/prompts/codex-m365-authoritative-persona-humanization-merge-to-development-prompt.txt`
 
-**Blocker correction plan:** `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md`
+**Blocker correction plan:** `plans/m365-authoritative-persona-post-h5-certification-parity-scope-correction/m365-authoritative-persona-post-h5-certification-parity-scope-correction.md`
 
-**Blocker prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction.md`, `docs/prompts/codex-m365-authoritative-persona-post-h5-parity-correction-prompt.txt`
+**Blocker prompt artifacts:** `docs/prompts/codex-m365-authoritative-persona-post-h5-certification-parity-scope-correction.md`, `docs/prompts/codex-m365-authoritative-persona-post-h5-certification-parity-scope-correction-prompt.txt`
+
+**Predecessor blocker package:** `plans/m365-authoritative-persona-post-h5-parity-correction/m365-authoritative-persona-post-h5-parity-correction.md`
 
 **Status update (2026-04-05 14:37 EDT):** Created the governed merge-to-development package and prompt pair for the completed authoritative persona humanization branch. The bounded source branch head at package creation is `cca8a90`; the target `development` head at package creation is `4c997ea`. No merge, `development` commit, or branch promotion has been executed in this slice.
 **Status update (2026-04-05 17:54 EDT):** Local `M1` execution on `development` emitted `NO-GO` after explicit merge commit `a895678`. The first blocked validation failure was `verify_persona_certification_v1.py -> FAILED: KPI registry_backed_personas mismatch`, which exposed that `registry/persona_certification_v1.yaml` and `registry/enterprise_release_gate_v2.yaml` still encode staged pre-H5 `34 active / 25 planned / 298 routed actions` truth while `registry/persona_registry_v2.yaml`, `registry/activated_persona_surface_v1.yaml`, and `registry/workforce_packaging_v1.yaml` already encode the final `54 active / 5 planned / 430 actions` truth. `development` remains unpushed. Created the bounded blocker package `m365-authoritative-persona-post-h5-parity-correction`; it is now the next governed act before any fresh `M1` replay.
+**Status update (2026-04-06 05:49 EDT):** Created notebook-backed `L82` scope-gap evidence for the first post-H5 blocker package and then created the governed follow-on package `m365-authoritative-persona-post-h5-certification-parity-scope-correction`. The `L82` notebook at `notebooks/m365/INV-M365-CD-authoritative-persona-post-h5-parity-correction-v1.ipynb` plus `configs/generated/authoritative_persona_post_h5_parity_correction_v1_verification.json` proved that `M1` explicitly validates department certification, `registry/department_certification_v1.yaml` still claims staged `34 active / 25 planned` truth against the live `54 active / 5 planned` registry, and the original blocker package does not own the department-certification contract/doc/verifier/test surfaces. The new follow-on package and prompt pair now widen the next correction boundary just enough to include persona certification, department certification, and release-gate parity before any fresh `M1` replay. No runtime, registry, activation, or merge-push work was performed in this slice.
 
 ---
 
