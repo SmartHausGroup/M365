@@ -1743,3 +1743,15 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-direct-runtime-readiness-remediation-prompt.txt` | Kickoff prompt for the direct-runtime remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R0` |
 | `docs/commercialization/m365-direct-runtime-readiness-remediation.md` | Human-readable closeout note for the direct-runtime remediation, recording which local defects were repaired and which remaining failures are external prerequisites. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-runtime-readiness-remediation:R5` |
 | `artifacts/diagnostics/m365_direct_runtime_readiness_remediation.json` | Machine-readable direct-runtime closeout artifact capturing the repaired routing/import boundary and the final live smoke classifications. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-direct-runtime-readiness-remediation:R5` |
+
+## Active Direct Function Validation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-direct-function-validation/m365-direct-function-validation.md` | Human-readable governed plan for direct repo-local M365 function validation and bounded repo-local repair. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R0` |
+| `plans/m365-direct-function-validation/m365-direct-function-validation.yaml` | Structured YAML authority for the direct function-validation initiative. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R0` |
+| `plans/m365-direct-function-validation/m365-direct-function-validation.json` | Structured JSON mirror for automation and governance tooling on the direct function-validation initiative. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R0` |
+| `docs/prompts/codex-m365-direct-function-validation.md` | Detailed execution prompt for the bounded direct function-validation path. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R0` |
+| `docs/prompts/codex-m365-direct-function-validation-prompt.txt` | Kickoff prompt for the direct function-validation initiative. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R0` |
+| `docs/commercialization/m365-direct-function-validation.md` | Human-readable closeout note recording which direct M365 function families now work from this repo version and which remaining failures are external prerequisites. | `Technical Architecture`, `Policy & Security` | `plan:m365-direct-function-validation:R4` |
+| `artifacts/diagnostics/m365_direct_function_validation.json` | Machine-readable per-function direct-runtime validation artifact capturing the final success and external-prerequisite classifications. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-direct-function-validation:R4` |

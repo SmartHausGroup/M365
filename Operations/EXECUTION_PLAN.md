@@ -583,6 +583,24 @@ outside this repo slice.
 
 ---
 
+## Initiative: M365 Direct Function Validation
+
+**Initiative:** Execute direct repo-local M365 function tests one by one, classify outcomes truthfully, and repair any remaining repo-local defects that still block meaningful direct testing.
+
+**Plan:** `plans/m365-direct-function-validation/m365-direct-function-validation.md`
+
+**Reference:** `plan:m365-direct-function-validation:R0`
+
+**Status:** ✅ Complete — the direct function matrix is now executed and the repo-local runtime is truthfully usable for specific function checks. No new repo-local defects were found; the remaining red outcomes are external prerequisites.
+**Current next act:** None — any further advance now requires external tenant/workstation enablement or a separate governed write-path test plan for live mutations.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-direct-function-validation.md`, `docs/prompts/codex-m365-direct-function-validation-prompt.txt`
+
+**Status update (2026-04-06 12:12 EDT):** Created the governed direct-function-validation package and prompt pair after the direct-runtime remediation closed green but left no plan authorizing a per-function live validation wave. This new bounded initiative is locked to the repo-local runtime only: run direct tests for admin/governance, Teams, SharePoint, email, calendar, Power Apps, Power Automate, and service health; repair only repo-local defects exposed by that matrix; classify permission, module, and Microsoft service failures truthfully as external prerequisites; and stop if the work would need UCP edits or tenant-admin changes.
+**Status update (2026-04-06 12:20 EDT):** Completed the bounded direct function-validation initiative. The direct matrix succeeded for `list_sites`, `list_teams`, `admin.get_tenant_config`, `teams.list`, and `sites.get`; no new repo-local defects were surfaced; and replay checks confirmed the same classifications on rerun. The remaining failures are external prerequisites rather than local runtime defects: mail and calendar remain blocked by Graph `ErrorAccessDenied`, Power Apps / Power Automate remain blocked by the missing local `Microsoft.PowerApps.Administration.PowerShell` module, and service health returns Graph `UnknownError`. Further progress now requires external enablement or a separate governed write-path test plan.
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.

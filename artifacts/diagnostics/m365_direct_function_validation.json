@@ -1,0 +1,89 @@
+{
+  "plan_id": "plan:m365-direct-function-validation",
+  "status": "complete",
+  "repo_runtime_is_direct_function_testable": true,
+  "repo_local_defects_found": [],
+  "tenant": "smarthaus",
+  "admin_user": "phil@smarthausgroup.com",
+  "default_user": "phil@smarthausgroup.com",
+  "baseline": {
+    "provisioning_root_status_code": 200,
+    "ops_health_status_code": 200,
+    "ops_health_status": "healthy"
+  },
+  "instruction_surface": {
+    "sharepoint_list_sites": {
+      "status": "success",
+      "status_code": 200
+    },
+    "teams_list": {
+      "status": "success",
+      "status_code": 200
+    },
+    "email_list_messages": {
+      "status": "external_prerequisite",
+      "status_code": 200,
+      "error_class": "graph_error:ErrorAccessDenied"
+    },
+    "calendar_list_events": {
+      "status": "external_prerequisite",
+      "status_code": 200,
+      "error_class": "graph_error:ErrorAccessDenied"
+    },
+    "powerapps_list_environments": {
+      "status": "external_prerequisite",
+      "status_code": 200,
+      "error_class": "missing_local_module:Microsoft.PowerApps.Administration.PowerShell"
+    },
+    "powerautomate_list_flows_admin": {
+      "status": "external_prerequisite",
+      "status_code": 200,
+      "error_class": "missing_local_module:Microsoft.PowerApps.Administration.PowerShell"
+    }
+  },
+  "governed_surface": {
+    "admin_get_tenant_config": {
+      "status": "success",
+      "status_code": 200
+    },
+    "teams_list": {
+      "status": "success",
+      "status_code": 200
+    },
+    "sharepoint_sites_get": {
+      "status": "success",
+      "status_code": 200
+    },
+    "email_mail_list": {
+      "status": "external_prerequisite",
+      "status_code": 403,
+      "error_class": "graph_error:ErrorAccessDenied"
+    },
+    "calendar_availability": {
+      "status": "external_prerequisite",
+      "status_code": 403,
+      "error_class": "graph_error:ErrorAccessDenied"
+    },
+    "service_health_overview": {
+      "status": "external_prerequisite",
+      "status_code": 403,
+      "error_class": "graph_error:UnknownError"
+    }
+  },
+  "replay_checks": {
+    "instruction_sharepoint": true,
+    "instruction_teams": true,
+    "instruction_mail_error": true,
+    "instruction_powerapps_module_missing": true,
+    "governed_admin": true,
+    "governed_service_health_external": true
+  },
+  "remaining_external_prerequisites": [
+    "Graph permissions for mail read on phil@smarthausgroup.com",
+    "Graph permissions for calendar read/getSchedule on phil@smarthausgroup.com",
+    "Microsoft.PowerApps.Administration.PowerShell installed locally for Power Apps and Power Automate admin commands",
+    "Microsoft Graph service-health access returning a usable payload instead of UnknownError"
+  ],
+  "next_dependency_boundary": "Further advance now requires external tenant or workstation enablement, or a separate governed write-path test plan for live mutations."
+}
+

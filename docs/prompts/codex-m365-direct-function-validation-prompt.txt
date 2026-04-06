@@ -1,0 +1,8 @@
+Follow `docs/prompts/codex-m365-direct-function-validation.md`.
+
+Plan reference: `plan:m365-direct-function-validation`.
+
+This phase is approved. Present short progress updates, call MCP `validate_action` before any mutating action, execute only this direct function-validation package, and stop on first red that escapes the allowlist or requires UCP / tenant-admin changes.
+
+Run the direct matrix from this repo version, fix any repo-local defects you find, classify external prerequisites truthfully, and close the package only when the direct function surface is genuinely usable.
+
