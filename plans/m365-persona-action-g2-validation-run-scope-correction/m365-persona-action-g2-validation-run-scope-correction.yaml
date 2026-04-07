@@ -1,0 +1,22 @@
+plan_id: plan:m365-persona-action-g2-validation-run-scope-correction
+title: Unblock the G2 closeout validation run with notebook-backed governance evidence
+version: "1.0"
+status: active
+owner: SMARTHAUS
+date_created: "2026-04-07"
+date_updated: "2026-04-07"
+parent_plan: plan:m365-persona-action-certification
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: Operations/EXECUTION_PLAN.md
+domain: governance
+requirements:
+  - id: R1
+    text: Freeze the blocked G2 validation-run context and denial reasons.
+  - id: R2
+    text: Publish notebook-backed governance evidence for the G2 closeout validation gate.
+  - id: R3
+    text: Retry the blocked validation-run authorization using the new evidence.
+  - id: R4
+    text: If cleared, return control to the parent plan for G2 commit/push.
+  - id: R5
+    text: If still denied, stop fail-closed and publish the remaining denial.

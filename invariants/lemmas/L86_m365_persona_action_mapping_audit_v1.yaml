@@ -1,0 +1,22 @@
+title: Persona-to-action G2 mapping audit remains classified and fail-closed
+lemma_reference: docs/ma/lemmas/L86_m365_persona_action_mapping_audit_v1.md
+source_notebook: notebooks/m365/INV-M365-CK-persona-action-mapping-audit-v1.ipynb
+lemma_notebook: notebooks/lemma_proofs/L86_m365_persona_action_mapping_audit_v1.ipynb
+proof_obligations:
+- every active persona/action pair is classified as mapped, legacy-stubbed, dead-routed,
+  or orphaned
+- every unique persona-facing alias is classified with published totals
+- pure literal synthetic handlers are counted as legacy-stubbed rather than mapped
+- reverse direct orphans are published explicitly
+- commercialization and diagnostic artifacts do not drift from the notebook-backed
+  counts
+failure_boundaries:
+- unclassified active persona/action pair
+- synthetic literal handler counted as mapped
+- dead-routed alias omitted from published audit
+- reverse direct orphan omitted from published audit
+- artifact totals drift from notebook-backed verification
+test_bindings:
+- configs/generated/persona_action_mapping_audit_v1_verification.json
+- artifacts/scorecards/scorecard_l86.json
+ci_gate: persona-action-mapping-audit-v1

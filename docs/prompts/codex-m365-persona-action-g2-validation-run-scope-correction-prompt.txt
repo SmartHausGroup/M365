@@ -1,0 +1,10 @@
+Execute `plan:m365-persona-action-g2-validation-run-scope-correction`.
+
+Read:
+- `docs/prompts/codex-m365-persona-action-g2-validation-run-scope-correction.md`
+
+Goal:
+- unblock the blocked `G2` closeout validation run using notebook-backed governance evidence
+- do not change the already-computed `G2` mapping truth
+
+Approval is granted for this bounded scope.

@@ -203,4 +203,24 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
   - `54` active personas reachable and action-eligible
   - `5` planned personas reachable but action-fenced
   - notebook-backed evidence at `L85`, `INV-M365-CJ`, `scorecard_l85.json`, and `persona_action_reachability_certification_v1_verification.json`
-- `G2` mapping / orphan / stub audit is the next act.
+- `G2` is now complete and published truthfully with notebook-backed evidence at `L86`, `INV-M365-CK`, `scorecard_l86.json`, and `persona_action_mapping_audit_v1_verification.json`.
+- `G2` closes the mapping layer at:
+  - `184` unique persona-facing aliases fully classified
+  - `115` unique aliases `mapped`
+  - `48` unique aliases `legacy-stubbed`
+  - `21` unique aliases `dead-routed`
+  - `0` unique aliases `orphaned`
+  - `430` active persona/action pairs fully classified with `265 mapped`, `49 legacy-stubbed`, and `116 dead-routed`
+  - `84` reverse direct orphans on the direct instruction surface
+  - `23` mixed aliases whose truth differs by owning persona
+- `G2` also expanded the synthetic stub perimeter by `8` additional literal-only handlers:
+  - `archive-project`
+  - `conflict.resolve`
+  - `deprovision-client-services`
+  - `email.classify`
+  - `follow-up.schedule`
+  - `get-client-status`
+  - `reminder.send`
+  - `update-project-status`
+- `G2S` is now complete and repaired the blocked `G2` closeout validation contract with notebook-backed governance evidence at `INV-M365-CL` and `persona_action_g2_validation_run_governance_alignment_v1_verification.json`.
+- `G3` unique action execution certification reuse is now the next act.

@@ -2,7 +2,7 @@
 
 ## Status
 
-`G0` and `G1` are complete. The workforce-graph certification initiative now has a frozen baseline plus notebook-backed persona reachability truth. `G2` mapping / orphan / stub audit is the next act.
+`G0`, `G1`, and `G2` are complete. The workforce-graph certification initiative now has a frozen baseline, notebook-backed persona reachability truth, and a published mapping / orphan / stub audit. `G3` unique action execution certification reuse is the next act.
 
 ## Purpose
 
@@ -151,4 +151,80 @@ The five planned personas that remain reachable but action-fenced are:
 - planned personas do not silently become action-capable
 - the initiative can now move to `G2` with reachability truth frozen
 
-The next act is `G2`, which will classify persona-facing actions as mapped, orphaned, dead-routed, legacy-stubbed, or fenced.
+## G2 Mapping / Orphan / Stub Audit
+
+`G2` closes the first real workforce-graph truth gap: it does not ask whether an action exists somewhere in the repo, it asks whether the action is actually usable by the personas that claim it.
+
+### What G2 Proved
+
+The authoritative workforce graph now classifies all `184` unique persona-facing aliases with no unclassified residue:
+
+- `115` unique aliases are `mapped`
+- `48` unique aliases are `legacy-stubbed`
+- `21` unique aliases are `dead-routed`
+- `0` unique aliases are `orphaned`
+- `0` unique aliases are `fenced` at the alias level because the current planned personas do not contribute active allowed-action rows
+
+At the active persona/action-pair level, the classifier closes all `430` active pairs:
+
+- `265` persona/action pairs are `mapped`
+- `49` persona/action pairs are `legacy-stubbed`
+- `116` persona/action pairs are `dead-routed`
+- `0` persona/action pairs are `orphaned`
+
+The reverse orphan check over the direct instruction surface also proves that `84` direct actions still have no active persona owner in the workforce graph.
+
+### What Changed In The Stub Boundary
+
+`G2` confirms the earlier known stub perimeter and expands it by `8` additional pure literal handlers that were previously easy to over-count as real runtime support:
+
+- `archive-project`
+- `conflict.resolve`
+- `deprovision-client-services`
+- `email.classify`
+- `follow-up.schedule`
+- `get-client-status`
+- `reminder.send`
+- `update-project-status`
+
+These branches return synthetic literal payloads without awaiting a real runtime path, so they are now counted as `legacy-stubbed` rather than `mapped`.
+
+### What G2 Revealed About The Workforce Graph
+
+The largest problem is not orphan aliases. It is mixed ownership truth.
+
+`23` aliases are now proven mixed across the workforce graph, which means the same alias can be `mapped` for one specialist persona and `dead-routed` or `legacy-stubbed` for another. Examples include:
+
+- `sites.list`
+- `files.search`
+- `reports.users_active`
+- `health.overview`
+- `mail.reply`
+- `teams.list`
+- `client.follow-up`
+- `task.create`
+
+That means workforce certification cannot be reduced to alias-level support alone. `G4` must certify the persona/action pairs explicitly.
+
+### Notebook-Backed Evidence
+
+`G2` is now backed by a dedicated proof chain:
+
+- [L86_m365_persona_action_mapping_audit_v1.md](/Users/smarthaus/Projects/GitHub/M365/docs/ma/lemmas/L86_m365_persona_action_mapping_audit_v1.md)
+- [L86_m365_persona_action_mapping_audit_v1.yaml](/Users/smarthaus/Projects/GitHub/M365/invariants/lemmas/L86_m365_persona_action_mapping_audit_v1.yaml)
+- [INV-M365-CK-persona-action-mapping-audit-v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/m365/INV-M365-CK-persona-action-mapping-audit-v1.ipynb)
+- [L86_m365_persona_action_mapping_audit_v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/lemma_proofs/L86_m365_persona_action_mapping_audit_v1.ipynb)
+- [scorecard_l86.json](/Users/smarthaus/Projects/GitHub/M365/artifacts/scorecards/scorecard_l86.json)
+- [persona_action_mapping_audit_v1_verification.json](/Users/smarthaus/Projects/GitHub/M365/configs/generated/persona_action_mapping_audit_v1_verification.json)
+
+### G2 Closeout
+
+`G2` is green because the workforce graph now has complete mapping truth:
+
+- every active persona/action pair is classified
+- no active persona-facing alias remains orphaned
+- the dead-routed perimeter is explicit instead of implied
+- the expanded synthetic stub perimeter is explicit instead of hidden inside literal handlers
+- reverse direct orphans are explicit instead of assumed away
+
+The next act is `G3`, which will reuse the completed direct-surface evidence where valid and isolate the remaining unique persona-facing actions that still need execution truth.

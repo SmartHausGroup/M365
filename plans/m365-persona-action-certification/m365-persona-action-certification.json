@@ -47,22 +47,22 @@
     {
       "id": "G0",
       "text": "Workforce graph lock",
-      "status": "active"
+      "status": "completed"
     },
     {
       "id": "G1",
       "text": "Persona reachability certification",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "G2",
       "text": "Mapping, orphan, and stub audit",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "G3",
       "text": "Unique action execution certification reuse",
-      "status": "pending"
+      "status": "active"
     },
     {
       "id": "G4",
@@ -79,22 +79,22 @@
     {
       "id": "C0",
       "text": "Package and tracker truth locked",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "C1",
       "text": "Workforce graph frozen",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "C2",
       "text": "Reachability truth published",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "C3",
       "text": "Mapping truth published",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "C4",

@@ -1,67 +1,84 @@
 plan_id: plan:m365-persona-action-certification
-title: Certify the full persona-to-action graph so every persona is reachable, every allowed action is mapped, and every orphan or stubbed path is truthfully classified
-version: "1.0"
+title: Certify the full persona-to-action graph so every persona is reachable, every
+  allowed action is mapped, and every orphan or stubbed path is truthfully classified
+version: '1.0'
 status: active
 owner: SMARTHAUS
-date_created: "2026-04-07"
-date_updated: "2026-04-07"
+date_created: '2026-04-07'
+date_updated: '2026-04-07'
 north_star_ref: Operations/NORTHSTAR.md
-execution_plan_ref: "Operations/EXECUTION_PLAN.md § Initiative: M365 Persona-Action Certification"
+execution_plan_ref: 'Operations/EXECUTION_PLAN.md § Initiative: M365 Persona-Action
+  Certification'
 domain: infrastructure
 math_algorithm_scope: false
-objective: "Lock and certify the full persona-to-action graph so every persona is either reachable or fenced, every persona action is either mapped to a real execution path or fenced, and the workforce graph contains no unclassified orphan surface."
-current_state: "The repo now has a truthfully reduced direct support matrix at 155 direct instruction actions with 64 certified green and 91 fenced. But the workforce graph is broader: 59 agents in registry/agents.yaml, 184 persona-facing allowed-action aliases, 125 aliases outside the current direct crosswalk, and 41 legacy stub actions across 8 agents in src/ops_adapter/actions.py."
-target_state: "Every persona in the authoritative workforce graph is classified for reachability, every persona-facing action is classified for mapping and execution truth, every orphan action is identified, and the final workforce certification matrix says exactly which persona/action pairs are live-green, approval-gated, fenced, stubbed, or orphaned."
+objective: Lock and certify the full persona-to-action graph so every persona is either
+  reachable or fenced, every persona action is either mapped to a real execution path
+  or fenced, and the workforce graph contains no unclassified orphan surface.
+current_state: 'The repo now has a truthfully reduced direct support matrix at 155
+  direct instruction actions with 64 certified green and 91 fenced. But the workforce
+  graph is broader: 59 agents in registry/agents.yaml, 184 persona-facing allowed-action
+  aliases, 125 aliases outside the current direct crosswalk, and 41 legacy stub actions
+  across 8 agents in src/ops_adapter/actions.py.'
+target_state: Every persona in the authoritative workforce graph is classified for
+  reachability, every persona-facing action is classified for mapping and execution
+  truth, every orphan action is identified, and the final workforce certification
+  matrix says exactly which persona/action pairs are live-green, approval-gated, fenced,
+  stubbed, or orphaned.
 requirements:
-  - id: R0
-    text: Create the governed persona-to-action certification package before any new workforce certification work.
-  - id: R1
-    text: Lock the workforce graph from persona, capability, approval, and routing truth sources.
-  - id: R2
-    text: Certify persona reachability through the governed runtime or explicitly fence unreachable personas.
-  - id: R3
-    text: Classify every persona-facing action as mapped, orphaned, dead-routed, legacy-stubbed, or fenced.
-  - id: R4
-    text: Certify execution truth across unique actions and material persona/action paths.
-  - id: R5
-    text: Repair repo-local defects or explicitly reduce the claimed workforce surface.
-  - id: R6
-    text: Publish the final workforce certification matrix and diagnostics artifact.
+- id: R0
+  text: Create the governed persona-to-action certification package before any new
+    workforce certification work.
+- id: R1
+  text: Lock the workforce graph from persona, capability, approval, and routing truth
+    sources.
+- id: R2
+  text: Certify persona reachability through the governed runtime or explicitly fence
+    unreachable personas.
+- id: R3
+  text: Classify every persona-facing action as mapped, orphaned, dead-routed, legacy-stubbed,
+    or fenced.
+- id: R4
+  text: Certify execution truth across unique actions and material persona/action
+    paths.
+- id: R5
+  text: Repair repo-local defects or explicitly reduce the claimed workforce surface.
+- id: R6
+  text: Publish the final workforce certification matrix and diagnostics artifact.
 phases:
-  - id: G0
-    text: Workforce graph lock
-    status: active
-  - id: G1
-    text: Persona reachability certification
-    status: pending
-  - id: G2
-    text: Mapping, orphan, and stub audit
-    status: pending
-  - id: G3
-    text: Unique action execution certification reuse
-    status: pending
-  - id: G4
-    text: Persona and action certification
-    status: pending
-  - id: G5
-    text: Closeout
-    status: pending
+- id: G0
+  text: Workforce graph lock
+  status: completed
+- id: G1
+  text: Persona reachability certification
+  status: completed
+- id: G2
+  text: Mapping, orphan, and stub audit
+  status: completed
+- id: G3
+  text: Unique action execution certification reuse
+  status: active
+- id: G4
+  text: Persona and action certification
+  status: pending
+- id: G5
+  text: Closeout
+  status: pending
 gates:
-  - id: C0
-    text: Package and tracker truth locked
-    status: pending
-  - id: C1
-    text: Workforce graph frozen
-    status: pending
-  - id: C2
-    text: Reachability truth published
-    status: pending
-  - id: C3
-    text: Mapping truth published
-    status: pending
-  - id: C4
-    text: Execution truth published
-    status: pending
-  - id: C5
-    text: Final workforce matrix published
-    status: pending
+- id: C0
+  text: Package and tracker truth locked
+  status: completed
+- id: C1
+  text: Workforce graph frozen
+  status: completed
+- id: C2
+  text: Reachability truth published
+  status: completed
+- id: C3
+  text: Mapping truth published
+  status: completed
+- id: C4
+  text: Execution truth published
+  status: pending
+- id: C5
+  text: Final workforce matrix published
+  status: pending

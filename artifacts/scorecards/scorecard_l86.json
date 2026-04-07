@@ -1,0 +1,27 @@
+{
+  "lemma_id": "L86",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-CK-persona-action-mapping-audit-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L86_m365_persona_action_mapping_audit_v1.ipynb",
+  "invariant": "invariants/lemmas/L86_m365_persona_action_mapping_audit_v1.yaml",
+  "seed_lock": true,
+  "determinism": "authoritative persona registry, executor routing registry, and AST-derived dispatcher classifier produce deterministic G2 totals for a fixed repo state",
+  "checks": [
+    {
+      "id": "unique_action_classification",
+      "status": "passed"
+    },
+    {
+      "id": "pair_classification",
+      "status": "passed"
+    },
+    {
+      "id": "reverse_direct_orphans_total",
+      "status": "passed"
+    },
+    {
+      "id": "mixed_aliases_total",
+      "status": "passed"
+    }
+  ]
+}
