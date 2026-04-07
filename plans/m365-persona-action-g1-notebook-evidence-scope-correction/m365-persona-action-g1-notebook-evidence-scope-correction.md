@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-persona-action-g1-notebook-evidence-scope-correction`
 **Parent Plan ID:** `m365-persona-action-certification`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-07
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-persona-action-g1-notebook-evidence-scope-correction:R1`
@@ -152,3 +152,16 @@ If `G1S_GO` is false, `G1S` must emit `NO-GO`, stop fail-closed, and keep the pa
 - Do not edit runtime code, registries, or tests in `G1S`.
 - Do not claim execution truth or orphan truth in `G1S`; this phase is reachability-evidence only.
 - Commit and push `G1S` before any `G2` work begins.
+
+## Governance Closure
+
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this child plan `status -> complete`
+
+## Execution Outcome
+
+- **Decision:** `GO`
+- **Approved by:** `operator explicit go`
+- **Completion timestamp:** `2026-04-07 06:33:24 EDT`

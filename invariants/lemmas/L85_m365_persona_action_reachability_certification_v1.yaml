@@ -1,0 +1,20 @@
+title: Persona-to-action G1 reachability certification remains bounded and fail-closed
+lemma_reference: docs/ma/lemmas/L85_m365_persona_action_reachability_certification_v1.md
+source_notebook: notebooks/m365/INV-M365-CJ-persona-action-reachability-certification-v1.ipynb
+lemma_notebook: notebooks/lemma_proofs/L85_m365_persona_action_reachability_certification_v1.ipynb
+proof_obligations:
+  - all authoritative personas resolve by canonical id through /personas/resolve
+  - all authoritative personas resolve by display name through /personas/resolve
+  - all authoritative personas expose /personas/{target}/state
+  - all planned personas fail closed on action execution with persona_inactive:<persona_id>
+  - the published G1 totals exactly match the bounded runtime probe
+failure_boundaries:
+  - canonical resolution failure
+  - display-name resolution failure
+  - persona-state reachability failure
+  - planned persona action path not fenced with persona_inactive
+  - commercialization or diagnostic artifacts drift from notebook-backed totals
+test_bindings:
+  - configs/generated/persona_action_reachability_certification_v1_verification.json
+  - artifacts/scorecards/scorecard_l85.json
+ci_gate: persona-action-reachability-certification-v1

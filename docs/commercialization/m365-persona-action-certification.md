@@ -2,7 +2,7 @@
 
 ## Status
 
-`G0` is complete. The workforce-graph certification initiative now has a frozen baseline for personas, persona-facing actions, predecessor direct-support evidence, candidate orphan mismatch zones, and the known stub perimeter. `G1` persona reachability certification is the next act.
+`G0` and `G1` are complete. The workforce-graph certification initiative now has a frozen baseline plus notebook-backed persona reachability truth. `G2` mapping / orphan / stub audit is the next act.
 
 ## Purpose
 
@@ -110,3 +110,45 @@ The predecessor direct-surface initiative already proved:
 - the current stub perimeter is explicit
 
 The next act is `G1`, which will certify persona reachability through the governed runtime surfaces.
+
+## G1 Persona Reachability Certification
+
+`G1` certifies persona reachability through the governed runtime surfaces. This phase does not yet classify mapping, orphan truth, or execution truth; it only proves whether personas are actually reachable and whether planned personas stay fenced from action execution.
+
+### What G1 Proved
+
+- `59/59` authoritative personas resolve by canonical persona id through `/personas/resolve`
+- `59/59` authoritative personas resolve by display name through `/personas/resolve`
+- `59/59` authoritative personas expose `/personas/{target}/state`
+- the `54` active personas remain the action-eligible workforce surface
+- the `5` planned personas remain reachable as delegation targets but fail closed on action execution with `persona_inactive:<persona_id>`
+
+The five planned personas that remain reachable but action-fenced are:
+
+- `app-store-optimizer`
+- `instagram-curator`
+- `reddit-community-builder`
+- `tiktok-strategist`
+- `twitter-engager`
+
+### Notebook-Backed Evidence
+
+`G1` is now backed by a phase-specific proof chain instead of relying only on older delegation notebooks:
+
+- [L85_m365_persona_action_reachability_certification_v1.md](/Users/smarthaus/Projects/GitHub/M365/docs/ma/lemmas/L85_m365_persona_action_reachability_certification_v1.md)
+- [L85_m365_persona_action_reachability_certification_v1.yaml](/Users/smarthaus/Projects/GitHub/M365/invariants/lemmas/L85_m365_persona_action_reachability_certification_v1.yaml)
+- [INV-M365-CJ-persona-action-reachability-certification-v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/m365/INV-M365-CJ-persona-action-reachability-certification-v1.ipynb)
+- [L85_m365_persona_action_reachability_certification_v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/lemma_proofs/L85_m365_persona_action_reachability_certification_v1.ipynb)
+- [scorecard_l85.json](/Users/smarthaus/Projects/GitHub/M365/artifacts/scorecards/scorecard_l85.json)
+- [persona_action_reachability_certification_v1_verification.json](/Users/smarthaus/Projects/GitHub/M365/configs/generated/persona_action_reachability_certification_v1_verification.json)
+
+### G1 Closeout
+
+`G1` is green because the workforce runtime now proves:
+
+- the full authoritative persona roster is reachable on persona surfaces
+- humanized delegation resolution stays aligned with the authoritative registry
+- planned personas do not silently become action-capable
+- the initiative can now move to `G2` with reachability truth frozen
+
+The next act is `G2`, which will classify persona-facing actions as mapped, orphaned, dead-routed, legacy-stubbed, or fenced.

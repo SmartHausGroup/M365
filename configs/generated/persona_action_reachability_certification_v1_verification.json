@@ -1,0 +1,44 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-persona-action-g1-notebook-evidence-scope-correction",
+  "parent_plan_id": "plan:m365-persona-action-certification",
+  "phase": "G1",
+  "purpose": "Verify the persona-to-action certification initiative can truthfully publish G1 reachability using phase-specific notebook-backed evidence.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-CJ-persona-action-reachability-certification-v1.ipynb",
+    "role": "phase_specific_reachability_evidence"
+  },
+  "lemma": {
+    "id": "L85",
+    "doc": "docs/ma/lemmas/L85_m365_persona_action_reachability_certification_v1.md",
+    "invariant": "invariants/lemmas/L85_m365_persona_action_reachability_certification_v1.yaml",
+    "scorecard": "artifacts/scorecards/scorecard_l85.json"
+  },
+  "results": {
+    "total_personas": 59,
+    "active_personas": 54,
+    "planned_personas": 5,
+    "canonical_resolve_total": 59,
+    "display_name_resolve_total": 59,
+    "state_endpoint_total": 59,
+    "planned_persona_fence_total": 5,
+    "planned_persona_fences": [
+      "app-store-optimizer",
+      "instagram-curator",
+      "reddit-community-builder",
+      "tiktok-strategist",
+      "twitter-engager"
+    ]
+  },
+  "runtime_surfaces": [
+    "/personas/resolve",
+    "/personas/{target}/state",
+    "/actions/{persona}/health.overview"
+  ],
+  "probe_mode": {
+    "pythonpath": "src",
+    "runtime": ".venv/bin/python",
+    "header_fallback": true,
+    "jwt_required": false
+  }
+}

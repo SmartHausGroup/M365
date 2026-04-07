@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-persona-action-certification",
-  "phase": "G0",
-  "status": "workforce_graph_lock_complete",
+  "phase": "G1",
+  "status": "persona_reachability_certified",
   "baseline": {
     "agents_total": 59,
     "authoritative_personas_total": 59,
@@ -189,5 +189,43 @@
       "The predecessor direct-surface initiative proved that 125 persona-facing aliases remain outside the current direct crosswalk.",
       "G0 does not yet classify final orphan counts. It freezes the raw graph and candidate mismatch zones so G2 can classify them explicitly."
     ]
+  },
+  "g1_reachability": {
+    "canonical_resolve_total": 59,
+    "display_name_resolve_total": 59,
+    "state_endpoint_reachable_total": 59,
+    "active_personas_action_eligible_total": 54,
+    "planned_personas_reachable_total": 5,
+    "planned_persona_action_fence_total": 5,
+    "planned_persona_action_fence_reason_format": "persona_inactive:<persona_id>",
+    "planned_persona_action_fences": [
+      "app-store-optimizer",
+      "instagram-curator",
+      "reddit-community-builder",
+      "tiktok-strategist",
+      "twitter-engager"
+    ],
+    "resolve_failures_total": 0,
+    "state_failures_total": 0,
+    "planned_gate_failures_total": 0,
+    "runtime_surfaces": [
+      "/personas/resolve",
+      "/personas/{target}/state",
+      "/actions/{persona}/health.overview"
+    ],
+    "probe_mode": {
+      "pythonpath": "src",
+      "runtime": ".venv/bin/python",
+      "header_fallback": true,
+      "jwt_required": false
+    },
+    "notebook_backing": {
+      "lemma_doc": "docs/ma/lemmas/L85_m365_persona_action_reachability_certification_v1.md",
+      "invariant": "invariants/lemmas/L85_m365_persona_action_reachability_certification_v1.yaml",
+      "notebook": "notebooks/m365/INV-M365-CJ-persona-action-reachability-certification-v1.ipynb",
+      "lemma_notebook": "notebooks/lemma_proofs/L85_m365_persona_action_reachability_certification_v1.ipynb",
+      "scorecard": "artifacts/scorecards/scorecard_l85.json",
+      "verification": "configs/generated/persona_action_reachability_certification_v1_verification.json"
+    }
   }
 }

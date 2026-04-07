@@ -1,0 +1,27 @@
+{
+  "lemma_id": "L85",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-CJ-persona-action-reachability-certification-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L85_m365_persona_action_reachability_certification_v1.ipynb",
+  "invariant": "invariants/lemmas/L85_m365_persona_action_reachability_certification_v1.yaml",
+  "seed_lock": true,
+  "determinism": "authoritative persona registry plus bounded runtime probes produce deterministic G1 reachability totals for fixed repo and tenant-selection state",
+  "checks": [
+    {
+      "id": "canonical_resolve_total",
+      "status": "passed"
+    },
+    {
+      "id": "display_name_resolve_total",
+      "status": "passed"
+    },
+    {
+      "id": "state_endpoint_total",
+      "status": "passed"
+    },
+    {
+      "id": "planned_persona_fence_total",
+      "status": "passed"
+    }
+  ]
+}
