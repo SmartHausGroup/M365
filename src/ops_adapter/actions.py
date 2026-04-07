@@ -984,6 +984,26 @@ async def itops_backup_verify(params: dict[str, Any], correlation_id: str) -> di
     )
 
 
+async def website_non_m365_unsupported(
+    params: dict[str, Any], correlation_id: str, action_name: str
+) -> dict[str, Any]:
+    del correlation_id
+    context_value = (
+        params.get("backup_id")
+        or params.get("backupId")
+        or params.get("target")
+        or params.get("domain")
+        or params.get("certificate")
+        or params.get("environment")
+    )
+    suffix = f":{context_value}" if context_value else ""
+    raise GraphAPIError(
+        501,
+        "unsupported_m365_only_action",
+        f"{action_name} is not supported in the M365-only runtime{suffix}",
+    )
+
+
 async def itops_security_scan(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     score = await security_secure_score(params, correlation_id)
     return {
@@ -4417,7 +4437,9 @@ async def _execute_impl(
             if action == "deployment.preview":
                 return await website_deployment_preview(params, correlation_id)
             if action == "deployment.production":
-                return {"status": "queued", "environment": "production", "provider": "vercel"}
+                return await website_non_m365_unsupported(
+                    params, correlation_id, "deployment.production"
+                )
             if action == "content.create":
                 return {
                     "status": "stubbed",
@@ -4659,17 +4681,19 @@ async def _execute_impl(
     # ---- Website Operations Specialist (legacy stubs) ----
     if agent == "website-operations-specialist":
         if action == "website.deploy":
-            return {"status": "deployed", "environment": params.get("environment")}
+            return await website_non_m365_unsupported(params, correlation_id, "website.deploy")
         if action == "cdn.purge":
-            return {"status": "purged", "target": params.get("target")}
+            return await website_non_m365_unsupported(params, correlation_id, "cdn.purge")
         if action == "dns.update":
-            return {"status": "updated", "domain": params.get("domain")}
+            return await website_non_m365_unsupported(params, correlation_id, "dns.update")
         if action == "ssl.renew":
-            return {"status": "renewed", "certificate": params.get("certificate")}
+            return await website_non_m365_unsupported(params, correlation_id, "ssl.renew")
         if action == "performance.optimize":
-            return {"status": "optimized", "improvements": ["caching", "compression"]}
+            return await website_non_m365_unsupported(
+                params, correlation_id, "performance.optimize"
+            )
         if action == "backup.restore":
-            return {"status": "restored", "backup_id": params.get("backup_id")}
+            return await website_non_m365_unsupported(params, correlation_id, "backup.restore")
 
     # ---- Project Coordination Agent (legacy stubs) ----
     if agent == "project-coordination-agent":

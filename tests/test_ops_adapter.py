@@ -1555,7 +1555,6 @@ def test_execute_routes_report_generate_to_persona_work_history(
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
-        ("website-manager", "deployment.production", {}, None),
         ("website-manager", "content.create", {"content_id": "content-1"}, None),
         ("website-manager", "content.update", {"content_id": "content-1"}, None),
         ("website-manager", "analytics.read", {}, None),
@@ -1753,3 +1752,28 @@ def test_p1_dead_route_aliases_no_longer_raise(
     assert isinstance(result, dict)
     if helper_name is not None:
         assert result["action"] == action
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params"),
+    [
+        ("website-manager", "deployment.production", {}),
+        ("website-operations-specialist", "website.deploy", {"environment": "production"}),
+        ("website-operations-specialist", "cdn.purge", {"target": "cdn://site"}),
+        ("website-operations-specialist", "dns.update", {"domain": "example.com"}),
+        ("website-operations-specialist", "ssl.renew", {"certificate": "cert-1"}),
+        ("website-operations-specialist", "performance.optimize", {"environment": "production"}),
+        ("website-operations-specialist", "backup.restore", {"backup_id": "backup-1"}),
+    ],
+)
+def test_execute_routes_website_non_m365_aliases_fail_closed_unsupported(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+) -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(actions_module.execute(agent, action, params, "corr-website"))
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert action in exc_info.value.message

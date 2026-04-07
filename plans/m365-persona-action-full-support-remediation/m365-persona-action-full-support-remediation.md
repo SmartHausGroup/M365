@@ -234,4 +234,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`86 passed`).
 - The bounded blocker-fix child phase `plan:m365-persona-action-p2-sixth-wave-notebook-evidence-scope-correction` is complete and published governance notebook `INV-M365-DA`, generated verification, and the future `L95` evidence chain for the website/non-M365 aliases `deployment.production`, `website.deploy`, `cdn.purge`, `dns.update`, `ssl.renew`, `performance.optimize`, and `backup.restore`.
 - The blocked sixth-wave `P2` file-edit validation has been reopened under child-plan authority.
-- `P2` is now the active next act again for the bounded website/non-M365 legacy-stub wave.
+- The bounded sixth-wave `P2` legacy-stub implementation wave is complete. The `L95` target aliases now fail closed explicitly in `src/ops_adapter/actions.py`: `deployment.production`, `website.deploy`, `cdn.purge`, `dns.update`, `ssl.renew`, `performance.optimize`, and `backup.restore` all raise `unsupported_m365_only_action` instead of returning fake success.
+- This sixth wave removes `7` unique aliases and `7` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
+- Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`92 passed`).
+- `P2` remains active with the remaining backlog reduced to `18` active pairs / `24` unique aliases.
