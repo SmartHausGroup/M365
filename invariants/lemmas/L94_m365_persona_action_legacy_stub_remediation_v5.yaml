@@ -1,0 +1,11 @@
+lemma_id: L94_m365_persona_action_legacy_stub_remediation_v5
+status: green
+scope:
+  aliases:
+    - infrastructure.monitor
+    - backup.verify
+    - security.scan
+replacement_modes:
+  infrastructure.monitor: health_overview
+  security.scan: security_secure_score
+  backup.verify: explicit_unsupported_m365_only_failure

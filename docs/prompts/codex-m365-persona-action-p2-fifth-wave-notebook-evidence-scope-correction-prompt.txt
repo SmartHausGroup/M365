@@ -1,0 +1,6 @@
+Execute `plan:m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction`.
+Read `docs/prompts/codex-m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction.md` first.
+This is the bounded `P2W` blocker-fix phase for the fifth legacy-stub remediation wave.
+Produce the governance notebook, generated verification output, and future `L94` evidence chain.
+Reopen the bounded fifth-wave `P2` file-edit validation only after the child package artifacts exist.
+Commit and push `P2W` before returning control to parent `P2`.
