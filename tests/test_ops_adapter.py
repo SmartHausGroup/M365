@@ -1076,6 +1076,98 @@ def test_execute_routes_employee_offboard_to_users_disable(
     assert result["userPrincipalName"] == "departing@example.com"
 
 
+def test_execute_routes_follow_up_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"subject": params["subject"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "email-processing-agent",
+            "follow-up.schedule",
+            {
+                "date": "2026-04-08",
+                "from": "owner@example.com",
+                "subject": "Check in",
+                "comment": "Send reminder",
+            },
+            "corr-5",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "owner@example.com"
+    assert captured["params"]["subject"] == "Check in"
+    assert captured["params"]["start"]["dateTime"] == "2026-04-08T09:00:00Z"
+    assert captured["params"]["end"]["dateTime"] == "2026-04-08T09:30:00Z"
+    assert captured["params"]["body"]["content"] == "Send reminder"
+
+
+def test_execute_routes_reminder_send_to_mail_send(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_mail_send(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"sent": True, "message_id": "msg-1"}
+
+    monkeypatch.setattr(actions_module, "mail_send", _fake_mail_send)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "calendar-management-agent",
+            "reminder.send",
+            {
+                "recipient": "teammate@example.com",
+                "userPrincipalName": "calendar-owner@example.com",
+                "message": "Do not forget the review",
+            },
+            "corr-6",
+        )
+    )
+
+    assert result["sent"] is True
+    assert captured["params"]["to"] == "teammate@example.com"
+    assert captured["params"]["from"] == "calendar-owner@example.com"
+    assert captured["params"]["subject"] == "Reminder"
+    assert captured["params"]["body"] == "Do not forget the review"
+
+
+def test_execute_routes_task_create_to_planner_create_task(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_planner_create_task(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        captured["params"] = params
+        return {"task": {"id": "task-1"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "planner_create_task", _fake_planner_create_task)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.create",
+            {"plan": "plan-123", "bucket": "bucket-456", "title": "Ship it"},
+            "corr-7",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["planId"] == "plan-123"
+    assert captured["params"]["bucketId"] == "bucket-456"
+    assert captured["params"]["title"] == "Ship it"
+
+
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
@@ -1149,6 +1241,24 @@ def test_execute_routes_employee_offboard_to_users_disable(
             "create_task",
             {"planId": "plan-1", "bucketId": "bucket-1", "title": "Ship"},
             "planner_create_task",
+        ),
+        (
+            "project-coordination-agent",
+            "task.create",
+            {"plan": "plan-1", "bucket": "bucket-1", "title": "Ship"},
+            "planner_create_task",
+        ),
+        (
+            "email-processing-agent",
+            "follow-up.schedule",
+            {"date": "2026-04-08", "from": "owner@example.com"},
+            "calendar_create",
+        ),
+        (
+            "calendar-management-agent",
+            "reminder.send",
+            {"recipient": "owner@example.com", "userPrincipalName": "calendar@example.com"},
+            "mail_send",
         ),
     ],
 )

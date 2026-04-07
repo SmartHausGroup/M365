@@ -577,6 +577,88 @@ async def planner_create_task(params: dict[str, Any], correlation_id: str) -> di
     return {"task": task, "status": "created"}
 
 
+def _task_create_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    plan_id = (
+        normalized.get("planId")
+        or normalized.get("plan_id")
+        or normalized.get("plan")
+        or normalized.get("plan_or_container")
+    )
+    bucket_id = (
+        normalized.get("bucketId") or normalized.get("bucket_id") or normalized.get("bucket")
+    )
+    if plan_id is not None:
+        normalized["planId"] = plan_id
+    if bucket_id is not None:
+        normalized["bucketId"] = bucket_id
+    return normalized
+
+
+def _coerce_iso_datetime(raw: Any) -> str | None:
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text:
+        return None
+    if "T" in text:
+        return text if text.endswith("Z") else f"{text}Z"
+    return f"{text}T09:00:00Z"
+
+
+def _follow_up_schedule_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    user_id = (
+        normalized.get("userId") or normalized.get("userPrincipalName") or normalized.get("from")
+    )
+    if user_id is not None:
+        normalized["userId"] = user_id
+
+    date_value = (
+        normalized.get("date")
+        or normalized.get("followUpDate")
+        or normalized.get("follow_up_date")
+        or normalized.get("startDateTime")
+    )
+    start_dt = _coerce_iso_datetime(normalized.get("startDateTime") or date_value)
+    end_dt = _coerce_iso_datetime(normalized.get("endDateTime"))
+    if start_dt and end_dt is None:
+        end_dt = start_dt.replace("T09:00:00Z", "T09:30:00Z")
+    if start_dt is not None:
+        normalized["start"] = {"dateTime": start_dt, "timeZone": "UTC"}
+    if end_dt is not None:
+        normalized["end"] = {"dateTime": end_dt, "timeZone": "UTC"}
+
+    normalized["subject"] = normalized.get("subject") or normalized.get("title") or "Follow-up"
+    if "body" not in normalized and normalized.get("comment"):
+        normalized["body"] = {
+            "contentType": "Text",
+            "content": str(normalized["comment"]),
+        }
+    return normalized
+
+
+def _reminder_send_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    recipient = (
+        normalized.get("recipient")
+        or normalized.get("to")
+        or normalized.get("userId")
+        or normalized.get("userPrincipalName")
+    )
+    if recipient is None:
+        return normalized
+    normalized["to"] = recipient
+    if "from" not in normalized:
+        normalized["from"] = (
+            normalized.get("userId") or normalized.get("userPrincipalName") or recipient
+        )
+    normalized.setdefault("subject", "Reminder")
+    if "body" not in normalized:
+        normalized["body"] = normalized.get("message") or normalized.get("content") or "Reminder"
+    return normalized
+
+
 async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     bulk_params = dict(params)
     if "to" not in bulk_params and "recipients" in bulk_params:
@@ -4098,7 +4180,7 @@ async def _execute_impl(
             if action == "email.archive":
                 return await mail_move({**params, "destinationId": "archive"}, correlation_id)
             if action == "follow-up.schedule":
-                return {"scheduled": True, "follow_up_date": params.get("date", "2024-02-01")}
+                return await calendar_create(_follow_up_schedule_params(params), correlation_id)
             if action == "email.send_individual":
                 return await outreach_email_send_individual(params, correlation_id)
 
@@ -4124,7 +4206,7 @@ async def _execute_impl(
             if action == "availability.check":
                 return await calendar_availability(params, correlation_id)
             if action == "reminder.send":
-                return {"reminder_sent": True, "recipient": params.get("recipient")}
+                return await mail_send(_reminder_send_params(params), correlation_id)
             if action == "conflict.resolve":
                 return {
                     "resolved": True,
@@ -4279,7 +4361,7 @@ async def _execute_impl(
         if action == "create_task":
             return await planner_create_task(params, correlation_id)
         if action == "task.create":
-            return {"created": True, "task_id": "task_456", "assignee": params.get("assignee")}
+            return await planner_create_task(_task_create_params(params), correlation_id)
         if action == "task.assign":
             return {
                 "assigned": True,
