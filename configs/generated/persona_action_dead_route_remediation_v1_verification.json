@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-persona-action-full-support-remediation",
+  "phase": "P1",
+  "lemma_id": "L89_m365_persona_action_dead_route_remediation_v1",
+  "dead_route_backlog": {
+    "active_pairs": 116,
+    "unique_aliases": 21
+  },
+  "initial_write_set": [
+    "src/ops_adapter/actions.py",
+    "src/smarthaus_common/permission_enforcer.py",
+    "policies/ops.rego",
+    "tests/test_ops_adapter.py",
+    "tests/test_policies.py",
+    "tests/test_executor_routing_v2.py"
+  ],
+  "truth_function": "route_unique AND dispatcher_aligned AND permission_aligned AND policy_aligned AND tests_green",
+  "notebook_backing": {
+    "primary": "notebooks/m365/INV-M365-CP-persona-action-dead-route-remediation-v1.ipynb",
+    "lemma_proof": "notebooks/lemma_proofs/L89_m365_persona_action_dead_route_remediation_v1.ipynb"
+  },
+  "scorecard": "artifacts/scorecards/scorecard_l89.json"
+}

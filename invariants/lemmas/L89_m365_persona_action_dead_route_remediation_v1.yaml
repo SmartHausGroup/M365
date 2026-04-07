@@ -1,0 +1,29 @@
+lemma_id: L89_m365_persona_action_dead_route_remediation_v1
+title: M365 Persona-Action Dead-Route Remediation v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-persona-action-p1-notebook-evidence-scope-correction:R3
+notebook_reference: notebooks/m365/INV-M365-CP-persona-action-dead-route-remediation-v1.ipynb
+lemma_proof_reference: notebooks/lemma_proofs/L89_m365_persona_action_dead_route_remediation_v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l89.json
+generated_verification_reference: configs/generated/persona_action_dead_route_remediation_v1_verification.json
+proof_obligations:
+  - Dead-route backlog remains frozen at 116 active pairs and 21 unique aliases before repair.
+  - The initial P1 repair write set remains frozen to dispatcher, permission, policy, and focused-test surfaces.
+  - A truthful repair requires one canonical route identity, dispatcher alignment, permission alignment, policy alignment, and focused regression coverage.
+failure_boundaries:
+  - Any repaired alias with more than one canonical route identity.
+  - Any repaired alias that still fails dispatcher ownership resolution.
+  - Any repaired alias whose permission or policy layer drifts from the runtime route identity.
+  - Any repaired alias lacking focused regression proof.
+test_bindings:
+  - tests/test_ops_adapter.py
+  - tests/test_policies.py
+  - tests/test_executor_routing_v2.py
+ci_gate_association:
+  - git diff --check
+  - pre-commit run --all-files
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

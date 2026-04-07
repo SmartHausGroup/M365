@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-persona-action-p1-notebook-evidence-scope-correction`
 **Parent Plan ID:** `m365-persona-action-full-support-remediation`
-**Status:** 🟢 Active
+**Status:** 🟢 Complete
 **Date:** 2026-04-07
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-persona-action-p1-notebook-evidence-scope-correction:R0`
@@ -160,13 +160,13 @@ If `P1S_GO` is false, `P1S` must emit `NO-GO`, stop fail-closed, and keep the pa
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] this child plan `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this child plan `status -> complete`
 
 ## Execution Outcome
 
-- **Decision:** `pending`
+- **Decision:** `GO`
 - **Approved by:** `operator explicit go`
-- **Completion timestamp:** `pending`
+- **Completion timestamp:** `2026-04-07 08:19:38 EDT`
