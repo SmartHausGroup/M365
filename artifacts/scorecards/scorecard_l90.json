@@ -1,0 +1,10 @@
+{
+  "lemma_id": "L90_m365_persona_action_legacy_stub_remediation_v1",
+  "status": "green",
+  "determinism_certified": true,
+  "target_aliases": [
+    "task.create",
+    "follow-up.schedule",
+    "reminder.send"
+  ]
+}

@@ -204,4 +204,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_policies.py` → `60 passed`
   - `pre-commit run --all-files` → passed
   - `git diff --check` → passed
-- The next act is `P2` — replace or retire the remaining legacy-stubbed surface truthfully.
+- The first bounded `P2` code write was blocked by MCP `validate_action(file_edit)` denial `map-2-code-notebook-required` against `src/ops_adapter/actions.py` and `tests/test_ops_adapter.py` for the targeted aliases `task.create`, `follow-up.schedule`, and `reminder.send`.
+- The bounded blocker-fix child phase `plan:m365-persona-action-p2-notebook-evidence-scope-correction` is complete and published the required governance notebook `INV-M365-CQ`, generated verification, and the future `L90` legacy-stub evidence chain.
+- The blocked `P2` file-edit validation has been reopened under child-plan authority.
+- The next act is `P2` — replace or retire the remaining legacy-stubbed surface truthfully, starting with the first bounded implementation wave for `task.create`, `follow-up.schedule`, and `reminder.send`.

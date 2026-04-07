@@ -1,0 +1,20 @@
+{
+  "status": "persona_action_p2_notebook_evidence_scope_correction_ready",
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "target_aliases": [
+    "task.create",
+    "follow-up.schedule",
+    "reminder.send"
+  ],
+  "legacy_stub_backlog": {
+    "active_pairs": 49,
+    "unique_aliases": 48
+  },
+  "blocked_validation": {
+    "verdict": "allowed:false",
+    "violation": "map-2-code-notebook-required"
+  }
+}
