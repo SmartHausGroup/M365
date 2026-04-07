@@ -237,4 +237,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - The bounded sixth-wave `P2` legacy-stub implementation wave is complete. The `L95` target aliases now fail closed explicitly in `src/ops_adapter/actions.py`: `deployment.production`, `website.deploy`, `cdn.purge`, `dns.update`, `ssl.renew`, `performance.optimize`, and `backup.restore` all raise `unsupported_m365_only_action` instead of returning fake success.
 - This sixth wave removes `7` unique aliases and `7` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`92 passed`).
-- `P2` remains active with the remaining backlog reduced to `18` active pairs / `24` unique aliases.
+- The bounded seventh-wave `P2` legacy-stub implementation wave is complete. The remaining literal stub aliases now fail closed explicitly in `src/ops_adapter/actions.py`: `content.create`, `content.update`, `analytics.read`, `seo.update`, `policy.create`, `review.initiate`, and `campaign.create` all raise `unsupported_m365_only_action` instead of returning fake success.
+- This seventh wave removes `7` unique aliases and `7` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
+- Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`92 passed`).
+- `P2` remains active with the remaining backlog reduced to `11` active pairs / `17` unique aliases.

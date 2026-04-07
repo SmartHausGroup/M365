@@ -984,7 +984,7 @@ async def itops_backup_verify(params: dict[str, Any], correlation_id: str) -> di
     )
 
 
-async def website_non_m365_unsupported(
+async def unsupported_m365_only_action(
     params: dict[str, Any], correlation_id: str, action_name: str
 ) -> dict[str, Any]:
     del correlation_id
@@ -4437,25 +4437,17 @@ async def _execute_impl(
             if action == "deployment.preview":
                 return await website_deployment_preview(params, correlation_id)
             if action == "deployment.production":
-                return await website_non_m365_unsupported(
+                return await unsupported_m365_only_action(
                     params, correlation_id, "deployment.production"
                 )
             if action == "content.create":
-                return {
-                    "status": "stubbed",
-                    "content_id": params.get("content_id"),
-                    "created": True,
-                }
+                return await unsupported_m365_only_action(params, correlation_id, "content.create")
             if action == "content.update":
-                return {
-                    "status": "stubbed",
-                    "content_id": params.get("content_id"),
-                    "updated": True,
-                }
+                return await unsupported_m365_only_action(params, correlation_id, "content.update")
             if action == "analytics.read":
-                return {"status": "stubbed", "analytics": {"visits": 0, "conversions": 0}}
+                return await unsupported_m365_only_action(params, correlation_id, "analytics.read")
             if action == "seo.update":
-                return {"status": "stubbed", "updated": True, "targets": params.get("targets", [])}
+                return await unsupported_m365_only_action(params, correlation_id, "seo.update")
 
         # ---- HR ----
         if agent == "hr-generalist":
@@ -4472,13 +4464,9 @@ async def _execute_impl(
                     disable_params["userPrincipalName"] = disable_params["email"]
                 return await m365_users_disable(disable_params, correlation_id)
             if action == "policy.create":
-                return {"status": "stubbed", "policy_id": params.get("policy_id"), "created": True}
+                return await unsupported_m365_only_action(params, correlation_id, "policy.create")
             if action == "review.initiate":
-                return {
-                    "status": "stubbed",
-                    "review_id": params.get("review_id"),
-                    "initiated": True,
-                }
+                return await unsupported_m365_only_action(params, correlation_id, "review.initiate")
 
         # ---- Outreach Coordinator ----
         if agent == "outreach-coordinator":
@@ -4495,11 +4483,7 @@ async def _execute_impl(
             if action == "followup.create":
                 return await calendar_create(_follow_up_schedule_params(params), correlation_id)
             if action == "campaign.create":
-                return {
-                    "status": "stubbed",
-                    "campaign_id": params.get("campaign_id"),
-                    "created": True,
-                }
+                return await unsupported_m365_only_action(params, correlation_id, "campaign.create")
 
         # ---- Email Processing Agent ----
         if agent == "email-processing-agent":
@@ -4681,19 +4665,19 @@ async def _execute_impl(
     # ---- Website Operations Specialist (legacy stubs) ----
     if agent == "website-operations-specialist":
         if action == "website.deploy":
-            return await website_non_m365_unsupported(params, correlation_id, "website.deploy")
+            return await unsupported_m365_only_action(params, correlation_id, "website.deploy")
         if action == "cdn.purge":
-            return await website_non_m365_unsupported(params, correlation_id, "cdn.purge")
+            return await unsupported_m365_only_action(params, correlation_id, "cdn.purge")
         if action == "dns.update":
-            return await website_non_m365_unsupported(params, correlation_id, "dns.update")
+            return await unsupported_m365_only_action(params, correlation_id, "dns.update")
         if action == "ssl.renew":
-            return await website_non_m365_unsupported(params, correlation_id, "ssl.renew")
+            return await unsupported_m365_only_action(params, correlation_id, "ssl.renew")
         if action == "performance.optimize":
-            return await website_non_m365_unsupported(
+            return await unsupported_m365_only_action(
                 params, correlation_id, "performance.optimize"
             )
         if action == "backup.restore":
-            return await website_non_m365_unsupported(params, correlation_id, "backup.restore")
+            return await unsupported_m365_only_action(params, correlation_id, "backup.restore")
 
     # ---- Project Coordination Agent (legacy stubs) ----
     if agent == "project-coordination-agent":

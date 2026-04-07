@@ -1555,19 +1555,12 @@ def test_execute_routes_report_generate_to_persona_work_history(
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
-        ("website-manager", "content.create", {"content_id": "content-1"}, None),
-        ("website-manager", "content.update", {"content_id": "content-1"}, None),
-        ("website-manager", "analytics.read", {}, None),
-        ("website-manager", "seo.update", {"targets": ["homepage"]}, None),
-        ("hr-generalist", "policy.create", {"policy_id": "policy-1"}, None),
-        ("hr-generalist", "review.initiate", {"review_id": "review-1"}, None),
         (
             "outreach-coordinator",
             "followup.create",
             {"date": "2026-04-09", "from": "owner@example.com"},
             "calendar_create",
         ),
-        ("outreach-coordinator", "campaign.create", {"campaign_id": "campaign-1"}, None),
         (
             "m365-administrator",
             "teams.add_channel",
@@ -1758,6 +1751,13 @@ def test_p1_dead_route_aliases_no_longer_raise(
     ("agent", "action", "params"),
     [
         ("website-manager", "deployment.production", {}),
+        ("website-manager", "content.create", {"content_id": "content-1"}),
+        ("website-manager", "content.update", {"content_id": "content-1"}),
+        ("website-manager", "analytics.read", {}),
+        ("website-manager", "seo.update", {"targets": ["homepage"]}),
+        ("hr-generalist", "policy.create", {"policy_id": "policy-1"}),
+        ("hr-generalist", "review.initiate", {"review_id": "review-1"}),
+        ("outreach-coordinator", "campaign.create", {"campaign_id": "campaign-1"}),
         ("website-operations-specialist", "website.deploy", {"environment": "production"}),
         ("website-operations-specialist", "cdn.purge", {"target": "cdn://site"}),
         ("website-operations-specialist", "dns.update", {"domain": "example.com"}),
@@ -1766,7 +1766,7 @@ def test_p1_dead_route_aliases_no_longer_raise(
         ("website-operations-specialist", "backup.restore", {"backup_id": "backup-1"}),
     ],
 )
-def test_execute_routes_website_non_m365_aliases_fail_closed_unsupported(
+def test_execute_routes_unsupported_m365_only_aliases_fail_closed(
     agent: str,
     action: str,
     params: dict[str, Any],
