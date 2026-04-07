@@ -1168,6 +1168,121 @@ def test_execute_routes_task_create_to_planner_create_task(
     assert captured["params"]["title"] == "Ship it"
 
 
+def test_execute_routes_followup_create_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-followup"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "outreach-coordinator",
+            "followup.create",
+            {"date": "2026-04-09", "from": "owner@example.com", "comment": "Reach back out"},
+            "corr-8",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "owner@example.com"
+    assert captured["params"]["subject"] == "Follow-up"
+
+
+def test_execute_routes_client_follow_up_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-client"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "client-relationship-agent",
+            "client.follow-up",
+            {
+                "date": "2026-04-10",
+                "owner": "rep@example.com",
+                "client_id": "client-123",
+            },
+            "corr-9",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "rep@example.com"
+    assert captured["params"]["subject"] == "Client follow-up: client-123"
+
+
+def test_execute_routes_satisfaction_survey_to_mail_send(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_mail_send(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"sent": True, "message_id": "survey-1"}
+
+    monkeypatch.setattr(actions_module, "mail_send", _fake_mail_send)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "client-relationship-agent",
+            "satisfaction.survey",
+            {
+                "client_email": "client@example.com",
+                "sender": "rep@example.com",
+            },
+            "corr-10",
+        )
+    )
+
+    assert result["sent"] is True
+    assert captured["params"]["to"] == "client@example.com"
+    assert captured["params"]["from"] == "rep@example.com"
+    assert captured["params"]["subject"] == "Satisfaction survey"
+
+
+def test_execute_routes_interview_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-interview"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "recruitment-assistance-agent",
+            "interview.schedule",
+            {
+                "interviewer": "interviewer@example.com",
+                "candidate_email": "candidate@example.com",
+                "startDateTime": "2026-04-11T15:00:00",
+                "endDateTime": "2026-04-11T15:30:00",
+                "candidate_id": "cand-123",
+            },
+            "corr-11",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "interviewer@example.com"
+    assert captured["params"]["subject"] == "Interview: cand-123"
+    assert captured["params"]["attendees"][0]["emailAddress"]["address"] == "candidate@example.com"
+
+
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
@@ -1178,7 +1293,12 @@ def test_execute_routes_task_create_to_planner_create_task(
         ("website-manager", "seo.update", {"targets": ["homepage"]}, None),
         ("hr-generalist", "policy.create", {"policy_id": "policy-1"}, None),
         ("hr-generalist", "review.initiate", {"review_id": "review-1"}, None),
-        ("outreach-coordinator", "followup.create", {"followup_id": "followup-1"}, None),
+        (
+            "outreach-coordinator",
+            "followup.create",
+            {"date": "2026-04-09", "from": "owner@example.com"},
+            "calendar_create",
+        ),
         ("outreach-coordinator", "campaign.create", {"campaign_id": "campaign-1"}, None),
         (
             "m365-administrator",
@@ -1259,6 +1379,29 @@ def test_execute_routes_task_create_to_planner_create_task(
             "reminder.send",
             {"recipient": "owner@example.com", "userPrincipalName": "calendar@example.com"},
             "mail_send",
+        ),
+        (
+            "client-relationship-agent",
+            "client.follow-up",
+            {"date": "2026-04-10", "owner": "rep@example.com", "client_id": "client-123"},
+            "calendar_create",
+        ),
+        (
+            "client-relationship-agent",
+            "satisfaction.survey",
+            {"client_email": "client@example.com", "sender": "rep@example.com"},
+            "mail_send",
+        ),
+        (
+            "recruitment-assistance-agent",
+            "interview.schedule",
+            {
+                "interviewer": "interviewer@example.com",
+                "candidate_email": "candidate@example.com",
+                "startDateTime": "2026-04-11T15:00:00",
+                "endDateTime": "2026-04-11T15:30:00",
+            },
+            "calendar_create",
         ),
     ],
 )

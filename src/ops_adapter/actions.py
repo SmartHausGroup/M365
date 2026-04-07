@@ -659,6 +659,70 @@ def _reminder_send_params(params: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def _client_follow_up_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = _follow_up_schedule_params(params)
+    if "userId" not in normalized:
+        owner = normalized.get("owner") or normalized.get("from")
+        if owner is not None:
+            normalized["userId"] = owner
+    if not params.get("subject") and not params.get("title"):
+        normalized["subject"] = f"Client follow-up: {normalized.get('client_id', 'client')}"
+    return normalized
+
+
+def _satisfaction_survey_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    recipient = (
+        normalized.get("client_email")
+        or normalized.get("clientEmail")
+        or normalized.get("recipient")
+        or normalized.get("to")
+    )
+    if recipient is None:
+        return normalized
+    normalized["to"] = recipient
+    normalized.setdefault(
+        "from",
+        normalized.get("userId")
+        or normalized.get("userPrincipalName")
+        or normalized.get("sender")
+        or recipient,
+    )
+    normalized.setdefault("subject", "Satisfaction survey")
+    if "body" not in normalized:
+        normalized["body"] = (
+            normalized.get("message") or normalized.get("content") or "Please share your feedback."
+        )
+    return normalized
+
+
+def _interview_schedule_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = _follow_up_schedule_params(params)
+    interviewer = (
+        normalized.get("interviewer_email")
+        or normalized.get("interviewerEmail")
+        or normalized.get("interviewer")
+        or normalized.get("from")
+    )
+    if interviewer is not None:
+        normalized["userId"] = interviewer
+    candidate_email = (
+        normalized.get("candidate_email")
+        or normalized.get("candidateEmail")
+        or normalized.get("candidate")
+    )
+    if candidate_email and "attendees" not in normalized:
+        normalized["attendees"] = [
+            {
+                "emailAddress": {"address": str(candidate_email)},
+                "type": "required",
+            }
+        ]
+    if not params.get("subject") and not params.get("title"):
+        normalized["subject"] = f"Interview: {normalized.get('candidate_id', 'candidate')}"
+    return normalized
+
+
 async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     bulk_params = dict(params)
     if "to" not in bulk_params and "recipients" in bulk_params:
@@ -4138,11 +4202,7 @@ async def _execute_impl(
             if action == "meeting.schedule":
                 return await outreach_meeting_schedule(params, correlation_id)
             if action == "followup.create":
-                return {
-                    "status": "stubbed",
-                    "followup_id": params.get("followup_id"),
-                    "created": True,
-                }
+                return await calendar_create(_follow_up_schedule_params(params), correlation_id)
             if action == "campaign.create":
                 return {
                     "status": "stubbed",
@@ -4386,9 +4446,9 @@ async def _execute_impl(
     # ---- Client Relationship Agent (legacy stubs) ----
     if agent == "client-relationship-agent":
         if action == "client.follow-up":
-            return {"follow_up_scheduled": True, "client_id": params.get("client_id")}
+            return await calendar_create(_client_follow_up_params(params), correlation_id)
         if action == "satisfaction.survey":
-            return {"survey_sent": True, "client_id": params.get("client_id")}
+            return await mail_send(_satisfaction_survey_params(params), correlation_id)
         if action == "feedback.analyze":
             return {"analyzed": True, "sentiment": "positive", "insights": ["happy with service"]}
         if action == "relationship.score":
@@ -4422,11 +4482,7 @@ async def _execute_impl(
                 "recommendation": "interview",
             }
         if action == "interview.schedule":
-            return {
-                "scheduled": True,
-                "candidate_id": params.get("candidate_id"),
-                "interviewer": params.get("interviewer"),
-            }
+            return await calendar_create(_interview_schedule_params(params), correlation_id)
         if action == "feedback.collect":
             return {"collected": True, "interview_id": params.get("interview_id")}
         if action == "offer.prepare":
