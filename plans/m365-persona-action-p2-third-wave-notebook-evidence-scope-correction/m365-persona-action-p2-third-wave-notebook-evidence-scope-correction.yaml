@@ -1,0 +1,56 @@
+plan_id: m365-persona-action-p2-third-wave-notebook-evidence-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Complete
+date: '2026-04-07'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p2-third-wave-notebook-evidence-scope-correction:R0
+canonical_predecessor: plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+governance_evidence:
+  notebook: notebooks/m365/INV-M365-CU-persona-action-p2-third-wave-notebook-evidence-scope-correction-v1.ipynb
+  verification: configs/generated/persona_action_p2_third_wave_notebook_evidence_scope_correction_v1_verification.json
+objective: Produce the phase-specific notebook-backed governance evidence required to reopen the third bounded P2 legacy-stub code write.
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phases:
+    - P0
+    - P1
+    - P2S
+    - P2T
+  blocked_write_set:
+    - src/ops_adapter/actions.py
+    - tests/test_ops_adapter.py
+  target_aliases:
+    - archive-project
+    - system.health-check
+    - alerts.respond
+  derived_legacy_stub_backlog:
+    active_pairs: 39
+    unique_aliases: 41
+  blocker:
+    verdict: allowed:false
+    violation: map-2-code-notebook-required
+requirements:
+  - id: R0
+    title: Create the bounded P2U blocker package
+  - id: R1
+    title: Make the bounded third-wave P2 governance blocker explicit
+  - id: R2
+    title: Produce notebook-backed governance evidence for the blocked third-wave P2 write
+  - id: R3
+    title: Expand the admissible future evidence surface to include L92
+  - id: R4
+    title: Reopen the blocked third-wave P2 code-write validation under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and governance trackers truthfully
+  - id: R6
+    title: Commit and push before resuming P2
+child_acts:
+  - id: P2UA
+    description: Freeze the post-wave-2 legacy-stub backlog and exact MCP denial.
+  - id: P2UB
+    description: Produce notebook-backed governance evidence and generated verification output.
+  - id: P2UC
+    description: Reopen the blocked validation, synchronize trackers, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p2-third-wave-notebook-evidence-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p2-third-wave-notebook-evidence-scope-correction-prompt.txt

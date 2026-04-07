@@ -1,0 +1,20 @@
+{
+  "status": "persona_action_p2_third_wave_notebook_evidence_scope_correction_ready",
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "target_aliases": [
+    "archive-project",
+    "system.health-check",
+    "alerts.respond"
+  ],
+  "legacy_stub_backlog": {
+    "active_pairs": 39,
+    "unique_aliases": 41
+  },
+  "blocked_validation": {
+    "verdict": "allowed:false",
+    "violation": "map-2-code-notebook-required"
+  }
+}

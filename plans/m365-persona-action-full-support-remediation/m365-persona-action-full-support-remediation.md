@@ -216,4 +216,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - The bounded second-wave `P2` legacy-stub implementation wave is complete. The `L91` target aliases now dispatch through truthful handlers in `src/ops_adapter/actions.py`: `followup.create -> calendar_create`, `client.follow-up -> calendar_create`, `satisfaction.survey -> mail_send`, and `interview.schedule -> calendar_create`.
 - This second wave removes `4` unique aliases and `6` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`66 passed`).
+- The bounded third-wave `P2` code-write probe is blocked by MCP `validate_action(file_edit)` denial `map-2-code-notebook-required` against `src/ops_adapter/actions.py` and `tests/test_ops_adapter.py` for the targeted aliases `archive-project`, `system.health-check`, and `alerts.respond`.
+- The bounded blocker-fix child phase `plan:m365-persona-action-p2-third-wave-notebook-evidence-scope-correction` is complete and published the required governance notebook `INV-M365-CU`, generated verification, and the future `L92` legacy-stub evidence chain.
+- The blocked third-wave `P2` file-edit validation has been reopened under child-plan authority.
 - The next act remains `P2` — continue replacing or retiring the remaining legacy-stubbed surface truthfully.

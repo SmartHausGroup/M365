@@ -1,0 +1,6 @@
+Execute `plan:m365-persona-action-p2-third-wave-notebook-evidence-scope-correction`.
+Read `docs/prompts/codex-m365-persona-action-p2-third-wave-notebook-evidence-scope-correction.md` first.
+This is the bounded `P2U` blocker-fix phase for the third legacy-stub remediation wave.
+Produce the governance notebook, generated verification output, and future `L92` evidence chain.
+Reopen the blocked third-wave `P2` file-edit validation only after the child package artifacts exist.
+Commit and push `P2U` before returning control to parent `P2`.
