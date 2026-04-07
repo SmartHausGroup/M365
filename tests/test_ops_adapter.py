@@ -1777,3 +1777,48 @@ def test_execute_routes_unsupported_m365_only_aliases_fail_closed(
     assert exc_info.value.status == 501
     assert exc_info.value.code == "unsupported_m365_only_action"
     assert action in exc_info.value.message
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params"),
+    [
+        ("project-manager", "update-project-status", {"id": "project-1", "status": "done"}),
+        ("platform-manager", "deprovision-client-services", {"clientId": "client-1"}),
+        ("platform-manager", "get-client-status", {"clientId": "client-1"}),
+        ("email-processing-agent", "email.classify", {"message_id": "msg-1"}),
+        ("calendar-management-agent", "conflict.resolve", {"newTime": "2026-04-12T15:00:00Z"}),
+        ("client-relationship-agent", "feedback.analyze", {"client_id": "client-1"}),
+        ("client-relationship-agent", "relationship.score", {"client_id": "client-1"}),
+        ("client-relationship-agent", "engagement.plan", {"client_id": "client-1"}),
+        ("compliance-monitoring-agent", "compliance.check", {"tenant": "smarthaus"}),
+        ("compliance-monitoring-agent", "policy.validate", {"policy_id": "policy-1"}),
+        ("compliance-monitoring-agent", "audit.prepare", {"audit_type": "gdpr"}),
+        ("compliance-monitoring-agent", "violation.report", {"violation_id": "violation-1"}),
+        ("compliance-monitoring-agent", "remediation.plan", {"violation_id": "violation-1"}),
+        ("recruitment-assistance-agent", "candidate.screen", {"candidate_id": "candidate-1"}),
+        ("recruitment-assistance-agent", "feedback.collect", {"interview_id": "interview-1"}),
+        ("recruitment-assistance-agent", "offer.prepare", {"candidate_id": "candidate-1"}),
+        ("recruitment-assistance-agent", "onboarding.initiate", {"candidate_id": "candidate-1"}),
+        ("financial-operations-agent", "invoice.process", {"invoice_id": "invoice-1"}),
+        ("financial-operations-agent", "expense.approve", {"expense_id": "expense-1"}),
+        ("financial-operations-agent", "budget.track", {"budget_id": "budget-1"}),
+        ("financial-operations-agent", "forecast.update", {"forecast_id": "forecast-1"}),
+        ("financial-operations-agent", "audit.prepare", {"audit_type": "financial"}),
+        ("knowledge-management-agent", "document.index", {"document_id": "doc-1"}),
+        ("knowledge-management-agent", "search.optimize", {"query": "m365"}),
+        ("knowledge-management-agent", "content.curate", {"category": "ops"}),
+        ("knowledge-management-agent", "training.recommend", {"user_id": "user-1"}),
+        ("knowledge-management-agent", "expert.connect", {"expert_id": "expert-1"}),
+    ],
+)
+def test_execute_routes_remaining_synthetic_aliases_fail_closed(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+) -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(actions_module.execute(agent, action, params, "corr-synthetic"))
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert action in exc_info.value.message

@@ -4507,7 +4507,7 @@ async def _execute_impl(
                 return await mailbox_settings(params, correlation_id)
             # Legacy action names
             if action == "email.classify":
-                return {"classification": "inquiry", "priority": "medium", "category": "general"}
+                return await unsupported_m365_only_action(params, correlation_id, "email.classify")
             if action == "email.respond":
                 return await mail_reply(params, correlation_id)
             if action == "email.forward":
@@ -4543,10 +4543,9 @@ async def _execute_impl(
             if action == "reminder.send":
                 return await mail_send(_reminder_send_params(params), correlation_id)
             if action == "conflict.resolve":
-                return {
-                    "resolved": True,
-                    "new_time": params.get("newTime", "2024-01-20T15:00:00Z"),
-                }
+                return await unsupported_m365_only_action(
+                    params, correlation_id, "conflict.resolve"
+                )
     # ---- Project Manager ----
     if agent == "project-manager":
         if action == "create-project":
@@ -4554,15 +4553,9 @@ async def _execute_impl(
         if action == "list-projects":
             return await list_projects(params, correlation_id)
         if action == "update-project-status":
-            pid = params.get("id")
-            status = params.get("status")
-            for p in _PROJECTS_MEM:
-                if p.get("id") == pid:
-                    if status:
-                        p["status"] = status
-                    p["lastActivity"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-                    return {"updated": True, "project": p}
-            return {"updated": False}
+            return await unsupported_m365_only_action(
+                params, correlation_id, "update-project-status"
+            )
         if action == "archive-project":
             return await teams_archive(_archive_project_params(params), correlation_id)
 
@@ -4571,9 +4564,11 @@ async def _execute_impl(
         if action == "provision-client-services":
             return await provision_client_services(params, correlation_id)
         if action == "deprovision-client-services":
-            return {"status": "deprovisioned", "clientId": params.get("clientId")}
+            return await unsupported_m365_only_action(
+                params, correlation_id, "deprovision-client-services"
+            )
         if action == "get-client-status":
-            return {"status": "active", "clientId": params.get("clientId")}
+            return await unsupported_m365_only_action(params, correlation_id, "get-client-status")
 
     # ---- Security Operations ----
     if agent == "security-operations":
@@ -4709,71 +4704,63 @@ async def _execute_impl(
         if action == "satisfaction.survey":
             return await mail_send(_satisfaction_survey_params(params), correlation_id)
         if action == "feedback.analyze":
-            return {"analyzed": True, "sentiment": "positive", "insights": ["happy with service"]}
+            return await unsupported_m365_only_action(params, correlation_id, "feedback.analyze")
         if action == "relationship.score":
-            return {"score": 8.5, "client_id": params.get("client_id"), "trend": "improving"}
+            return await unsupported_m365_only_action(params, correlation_id, "relationship.score")
         if action == "engagement.plan":
-            return {
-                "plan_created": True,
-                "client_id": params.get("client_id"),
-                "actions": ["send newsletter", "schedule call"],
-            }
+            return await unsupported_m365_only_action(params, correlation_id, "engagement.plan")
 
     # ---- Compliance Monitoring Agent (legacy stubs) ----
     if agent == "compliance-monitoring-agent":
         if action == "compliance.check":
-            return {"compliant": True, "regulations_checked": ["GDPR", "HIPAA"]}
+            return await unsupported_m365_only_action(params, correlation_id, "compliance.check")
         if action == "policy.validate":
-            return {"validated": True, "policy_id": params.get("policy_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "policy.validate")
         if action == "audit.prepare":
-            return {"prepared": True, "audit_type": params.get("audit_type")}
+            return await unsupported_m365_only_action(params, correlation_id, "audit.prepare")
         if action == "violation.report":
-            return {"reported": True, "violation_id": params.get("violation_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "violation.report")
         if action == "remediation.plan":
-            return {"plan_created": True, "violation_id": params.get("violation_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "remediation.plan")
 
     # ---- Recruitment Assistance Agent (legacy stubs) ----
     if agent == "recruitment-assistance-agent":
         if action == "candidate.screen":
-            return {
-                "screened": True,
-                "candidate_id": params.get("candidate_id"),
-                "recommendation": "interview",
-            }
+            return await unsupported_m365_only_action(params, correlation_id, "candidate.screen")
         if action == "interview.schedule":
             return await calendar_create(_interview_schedule_params(params), correlation_id)
         if action == "feedback.collect":
-            return {"collected": True, "interview_id": params.get("interview_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "feedback.collect")
         if action == "offer.prepare":
-            return {"prepared": True, "candidate_id": params.get("candidate_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "offer.prepare")
         if action == "onboarding.initiate":
-            return {"initiated": True, "candidate_id": params.get("candidate_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "onboarding.initiate")
 
     # ---- Financial Operations Agent (legacy stubs) ----
     if agent == "financial-operations-agent":
         if action == "invoice.process":
-            return {"processed": True, "invoice_id": params.get("invoice_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "invoice.process")
         if action == "expense.approve":
-            return {"approved": True, "expense_id": params.get("expense_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "expense.approve")
         if action == "budget.track":
-            return {"tracked": True, "budget_variance": 5.2}
+            return await unsupported_m365_only_action(params, correlation_id, "budget.track")
         if action == "forecast.update":
-            return {"updated": True, "forecast_accuracy": 92.5}
+            return await unsupported_m365_only_action(params, correlation_id, "forecast.update")
         if action == "audit.prepare":
-            return {"prepared": True, "audit_documents": ["financials.pdf", "reports.xlsx"]}
+            return await unsupported_m365_only_action(params, correlation_id, "audit.prepare")
 
     # ---- Knowledge Management Agent (legacy stubs) ----
     if agent == "knowledge-management-agent":
         if action == "document.index":
-            return {"indexed": True, "documents_processed": 25}
+            return await unsupported_m365_only_action(params, correlation_id, "document.index")
         if action == "search.optimize":
-            return {"optimized": True, "search_accuracy": 94.2}
+            return await unsupported_m365_only_action(params, correlation_id, "search.optimize")
         if action == "content.curate":
-            return {"curated": True, "articles_added": 12}
+            return await unsupported_m365_only_action(params, correlation_id, "content.curate")
         if action == "training.recommend":
-            return {"recommended": True, "courses": ["AI Ethics", "Data Governance"]}
+            return await unsupported_m365_only_action(params, correlation_id, "training.recommend")
         if action == "expert.connect":
-            return {"connected": True, "expert_id": params.get("expert_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "expert.connect")
 
     # ---- UCP / M365 Administrator (admin config surface) ----
     if agent in ("ucp-administrator", "m365-administrator"):
