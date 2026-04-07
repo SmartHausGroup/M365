@@ -224,4 +224,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`72 passed`).
 - The bounded blocker-fix child phase `plan:m365-persona-action-p2-fourth-wave-notebook-evidence-scope-correction` is complete and published governance notebook `INV-M365-CW`, generated verification, and the future `L93` evidence chain for `task.assign`, `deadline.track`, `status.update`, and `report.generate`.
 - The blocked fourth-wave `P2` file-edit validation has been reopened under child-plan authority.
-- `P2` is now active again for the bounded fourth-wave project-coordination remediation wave.
+- The bounded fourth-wave `P2` legacy-stub implementation wave is complete. The `L93` target aliases now dispatch through truthful internal workforce handlers in `src/ops_adapter/actions.py`: `task.assign -> create_persona_task`, `deadline.track -> list_persona_tasks`, `status.update -> update_persona_task`, and `report.generate -> build_persona_work_history` plus `build_persona_accountability`.
+- This fourth wave removes `4` unique aliases and `8` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
+- Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`80 passed`).
+- `P2` remains active for the remaining legacy-stub backlog, now reduced to `28` active pairs and `34` unique aliases.

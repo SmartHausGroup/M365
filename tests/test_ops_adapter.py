@@ -1358,6 +1358,139 @@ def test_execute_routes_alerts_respond_to_security_alert_update(
     assert captured["params"]["status"] == "inProgress"
 
 
+def test_execute_routes_task_assign_to_persona_task_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {
+                "assignee": "Elena Rodriguez",
+                "title": "Prepare launch notes",
+                "priority": "high",
+                "deadline": "2026-04-12",
+            },
+            "corr-15",
+        )
+    )
+
+    assert result["assigned"] is True
+    assert result["assignee"] == "website-manager"
+    assert result["task"]["status"] == "queued"
+    assert result["task"]["priority"] == "high"
+    assert result["task"]["due"] == "2026-04-12"
+
+
+def test_execute_routes_deadline_track_to_persona_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {
+                "assignee": "Elena Rodriguez",
+                "title": "Check deadline",
+                "deadline": "2026-04-13",
+            },
+            "corr-16a",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "deadline.track",
+            {"assignee": "Elena Rodriguez", "deadline": "2026-04-13"},
+            "corr-16b",
+        )
+    )
+
+    assert result["tracked"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["task_count"] == 1
+    assert result["tasks"][0]["id"] == assigned["task"]["id"]
+    assert result["status"] == "on_track"
+
+
+def test_execute_routes_status_update_to_persona_task_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Update status"},
+            "corr-17a",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "status.update",
+            {"task_id": assigned["task"]["id"], "status": "in_progress", "percent": 40},
+            "corr-17b",
+        )
+    )
+
+    assert result["updated"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["task"]["status"] == "in_progress"
+    assert result["task"]["history_count"] == 1
+
+
+def test_execute_routes_report_generate_to_persona_work_history(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Generate report"},
+            "corr-18a",
+        )
+    )
+    asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "status.update",
+            {
+                "task_id": assigned["task"]["id"],
+                "status": "in_progress",
+                "message": "Started work",
+            },
+            "corr-18b",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "report.generate",
+            {"assignee": "Elena Rodriguez", "limit": 10},
+            "corr-18c",
+        )
+    )
+
+    event_types = {event["event_type"] for event in result["history"]["history"]}
+
+    assert result["generated"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["history"]["task_count"] == 1
+    assert {"task_created", "task_update"} <= event_types
+    assert result["accountability"]["canonical_agent"] == "website-manager"
+
+
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
@@ -1442,6 +1575,30 @@ def test_execute_routes_alerts_respond_to_security_alert_update(
             "task.create",
             {"plan": "plan-1", "bucket": "bucket-1", "title": "Ship"},
             "planner_create_task",
+        ),
+        (
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Ship"},
+            "coordination_task_assign",
+        ),
+        (
+            "project-coordination-agent",
+            "deadline.track",
+            {"assignee": "Elena Rodriguez", "deadline": "2026-04-13"},
+            "coordination_deadline_track",
+        ),
+        (
+            "project-coordination-agent",
+            "status.update",
+            {"task_id": "task-1", "status": "in_progress"},
+            "coordination_status_update",
+        ),
+        (
+            "project-coordination-agent",
+            "report.generate",
+            {"assignee": "Elena Rodriguez", "limit": 10},
+            "coordination_report_generate",
         ),
         (
             "email-processing-agent",

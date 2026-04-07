@@ -7,6 +7,7 @@ import random
 import string
 import time
 from contextvars import ContextVar
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -14,8 +15,17 @@ import yaml
 from smarthaus_common.auth_model import AuthResolution, resolve_action_auth
 from smarthaus_common.errors import AuthConfigurationError, GraphRequestError
 from smarthaus_common.executor_routing import executor_route_for_action as resolve_route_for_action
+from smarthaus_common.json_store import JsonStore
+from smarthaus_common.persona_accountability import build_persona_accountability
+from smarthaus_common.persona_memory import build_persona_work_history
+from smarthaus_common.persona_task_queue import (
+    create_persona_task,
+    list_persona_tasks,
+    update_persona_task,
+)
 
 from .audit import recent_admin_events, record_admin_event
+from .personas import load_persona_registry, project_persona_context, resolve_persona_target
 
 GRAPH_SCOPE = "https://graph.microsoft.com/.default"
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
@@ -747,6 +757,208 @@ def _alerts_respond_params(params: dict[str, Any]) -> dict[str, Any]:
     if "status" not in normalized:
         normalized["status"] = "inProgress"
     return normalized
+
+
+def _load_ops_registry() -> dict[str, Any]:
+    registry_path = Path(os.getenv("REGISTRY_FILE", "./registry/agents.yaml"))
+    with registry_path.open(encoding="utf-8") as handle:
+        payload = yaml.safe_load(handle) or {}
+    if not isinstance(payload, dict):
+        raise ValueError("ops_registry_invalid")
+    return payload
+
+
+def _load_ops_personas() -> dict[str, dict[str, Any]]:
+    return load_persona_registry(_load_ops_registry())
+
+
+def _coordination_target_value(params: dict[str, Any]) -> str | None:
+    for key in ("assignee", "target", "persona", "agent", "owner", "canonical_agent"):
+        value = params.get(key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return None
+
+
+def _coordination_task_id(params: dict[str, Any]) -> str | None:
+    value = params.get("task_id") or params.get("taskId") or params.get("id")
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _coordination_limit(value: Any) -> int | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    return int(text)
+
+
+def _resolve_coordination_persona(
+    params: dict[str, Any], *, default_agent: str = "project-coordination-agent"
+) -> tuple[str, dict[str, Any]]:
+    personas = _load_ops_personas()
+    target = _coordination_target_value(params)
+    if target:
+        return resolve_persona_target(target, personas)
+    persona = personas.get(default_agent)
+    if not isinstance(persona, dict):
+        raise ValueError(f"persona_not_found:{default_agent}")
+    return default_agent, project_persona_context(persona)
+
+
+def _find_persona_task_owner(
+    task_id: str, personas: dict[str, dict[str, Any]], store: JsonStore
+) -> tuple[str, dict[str, Any]]:
+    for canonical_agent, persona in personas.items():
+        tasks = list_persona_tasks(canonical_agent, store=store)
+        if any(str(task.get("id") or "") == task_id for task in tasks):
+            return canonical_agent, project_persona_context(persona)
+    raise ValueError(f"persona_task_not_found:{task_id}")
+
+
+async def coordination_task_assign(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    canonical_agent, persona = _resolve_coordination_persona(params)
+    body = {
+        "title": params.get("title")
+        or params.get("task")
+        or params.get("summary")
+        or f"Assigned task for {persona.get('display_name')}",
+        "description": params.get("description") or params.get("details"),
+        "priority": params.get("priority") or "medium",
+        "due": params.get("due") or params.get("deadline"),
+        "created_by": params.get("created_by")
+        or params.get("requested_by")
+        or "project-coordination-agent",
+        "source": "project-coordination-agent/task.assign",
+    }
+    task = create_persona_task(canonical_agent, body, store=store)
+    return {
+        "assigned": True,
+        "task_id": task["id"],
+        "assignee": canonical_agent,
+        "persona": persona,
+        "task": task,
+    }
+
+
+async def coordination_deadline_track(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    task_id = _coordination_task_id(params)
+    if task_id and not _coordination_target_value(params):
+        canonical_agent, persona = _find_persona_task_owner(task_id, personas, store)
+    else:
+        canonical_agent, persona = _resolve_coordination_persona(params)
+
+    tracked_tasks = [
+        task
+        for task in list_persona_tasks(canonical_agent, store=store)
+        if bool(task.get("is_open"))
+    ]
+    if task_id:
+        tracked_tasks = [task for task in tracked_tasks if str(task.get("id") or "") == task_id]
+
+    deadline = str(params.get("deadline") or params.get("due") or "").strip()
+    if deadline:
+        tracked_tasks = [task for task in tracked_tasks if str(task.get("due") or "") == deadline]
+
+    status = "on_track"
+    if any(str(task.get("status") or "") == "failed" for task in tracked_tasks):
+        status = "attention_required"
+    elif any(str(task.get("status") or "") == "blocked" for task in tracked_tasks):
+        status = "blocked"
+    elif not tracked_tasks:
+        status = "clear"
+
+    return {
+        "tracked": True,
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "deadline": deadline or None,
+        "task_count": len(tracked_tasks),
+        "status": status,
+        "tasks": tracked_tasks,
+    }
+
+
+async def coordination_status_update(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    task_id = _coordination_task_id(params)
+    if task_id is None:
+        raise ValueError("task_id_required")
+
+    target = _coordination_target_value(params)
+    if target:
+        canonical_agent, persona = resolve_persona_target(target, personas)
+    else:
+        canonical_agent, persona = _find_persona_task_owner(task_id, personas, store)
+
+    task = update_persona_task(
+        canonical_agent,
+        task_id,
+        {
+            "status": params.get("status"),
+            "percent": params.get("percent"),
+            "message": params.get("message"),
+            "updated_by": params.get("updated_by")
+            or params.get("actor")
+            or params.get("requested_by")
+            or "project-coordination-agent",
+        },
+        store=store,
+    )
+    return {
+        "updated": True,
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "task_id": task_id,
+        "status": task.get("status"),
+        "task": task,
+    }
+
+
+async def coordination_report_generate(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    target = _coordination_target_value(params)
+    if target:
+        canonical_agent, persona = resolve_persona_target(target, personas)
+    else:
+        persona_payload = personas.get("project-coordination-agent")
+        if not isinstance(persona_payload, dict):
+            raise ValueError("persona_not_found:project-coordination-agent")
+        canonical_agent = "project-coordination-agent"
+        persona = project_persona_context(persona_payload)
+
+    limit = _coordination_limit(params.get("limit"))
+    history = build_persona_work_history(canonical_agent, store=store, limit=limit)
+    accountability = build_persona_accountability(
+        canonical_agent,
+        store=store,
+        persona_registry={"personas": personas},
+    )
+    return {
+        "generated": True,
+        "report_type": params.get("report_type") or params.get("reportType") or "work_history",
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "history": history,
+        "accountability": accountability,
+    }
 
 
 async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
@@ -4443,25 +4655,13 @@ async def _execute_impl(
         if action == "task.create":
             return await planner_create_task(_task_create_params(params), correlation_id)
         if action == "task.assign":
-            return {
-                "assigned": True,
-                "task_id": params.get("task_id"),
-                "assignee": params.get("assignee"),
-            }
+            return await coordination_task_assign(params, correlation_id)
         if action == "deadline.track":
-            return {"tracked": True, "deadline": params.get("deadline"), "status": "on_track"}
+            return await coordination_deadline_track(params, correlation_id)
         if action == "status.update":
-            return {
-                "updated": True,
-                "project_id": params.get("project_id"),
-                "status": params.get("status"),
-            }
+            return await coordination_status_update(params, correlation_id)
         if action == "report.generate":
-            return {
-                "generated": True,
-                "report_type": "weekly",
-                "download_url": "/reports/weekly.pdf",
-            }
+            return await coordination_report_generate(params, correlation_id)
 
     # ---- Client Relationship Agent (legacy stubs) ----
     if agent == "client-relationship-agent":
