@@ -195,4 +195,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `49` `legacy-stubbed`
   - `116` `dead-routed`
   - `0` `orphaned`
-- The next act is `P0` — freeze the certified backlog and phase ordering for the remediation wave.
+- `P0` is complete as a read-only backlog lock; the certified remediation ordering remains `dead-routed -> legacy-stubbed -> permission/alias -> policy-fenced -> re-certification`.
+- The first `P1` dead-route code write is blocked by MCP `validate_action(file_edit)` denial `map-2-code-notebook-required`.
+- The bounded blocker-fix child phase `plan:m365-persona-action-p1-notebook-evidence-scope-correction` now exists to publish the phase-specific notebook-backed evidence surface required before `P1` code repair can begin truthfully.
+- The next act is `P1S` — execute the notebook-evidence scope correction and reopen the blocked `P1` file-edit validation under child-plan authority.

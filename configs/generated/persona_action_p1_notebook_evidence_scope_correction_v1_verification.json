@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-persona-action-p1-notebook-evidence-scope-correction",
+  "purpose": "Verify the persona-action full-support remediation initiative cannot start P1 dead-route code repair without phase-specific notebook-backed blocker evidence and that the successor child package is required.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-CO-persona-action-p1-notebook-evidence-scope-correction-v1.ipynb",
+    "role": "governance_prerequisite_evidence"
+  },
+  "parent_plan": {
+    "plan_id": "plan:m365-persona-action-full-support-remediation",
+    "blocked_phase": "P1"
+  },
+  "certified_dead_route_backlog": {
+    "active_pairs": 116,
+    "unique_aliases": 21
+  },
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "src/smarthaus_common/permission_enforcer.py",
+    "policies/ops.rego",
+    "tests/test_ops_adapter.py",
+    "tests/test_policies.py",
+    "tests/test_executor_routing_v2.py"
+  ],
+  "governance_denial": {
+    "action_type": "file_edit",
+    "target": "first P1 dead-route code repair",
+    "violation": "map-2-code-notebook-required",
+    "allowed": false
+  },
+  "successor_package_required": true,
+  "successor_package": "plan:m365-persona-action-p1-notebook-evidence-scope-correction",
+  "future_dead_route_evidence_chain": {
+    "lemma": "docs/ma/lemmas/L89_m365_persona_action_dead_route_remediation_v1.md",
+    "invariant": "invariants/lemmas/L89_m365_persona_action_dead_route_remediation_v1.yaml",
+    "notebook": "notebooks/m365/INV-M365-CP-persona-action-dead-route-remediation-v1.ipynb",
+    "lemma_notebook": "notebooks/lemma_proofs/L89_m365_persona_action_dead_route_remediation_v1.ipynb",
+    "scorecard": "artifacts/scorecards/scorecard_l89.json",
+    "verification": "configs/generated/persona_action_dead_route_remediation_v1_verification.json"
+  }
+}

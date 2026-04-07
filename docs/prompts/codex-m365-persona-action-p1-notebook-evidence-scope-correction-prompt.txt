@@ -1,0 +1,12 @@
+Execute `plan:m365-persona-action-p1-notebook-evidence-scope-correction`.
+
+Read:
+- `docs/prompts/codex-m365-persona-action-p1-notebook-evidence-scope-correction.md`
+- `plans/m365-persona-action-p1-notebook-evidence-scope-correction/m365-persona-action-p1-notebook-evidence-scope-correction.md`
+
+Goal:
+- publish notebook-backed blocker evidence for the first `P1` dead-route code write
+- reopen the blocked validation truthfully
+- hand the parent initiative back to `P1`
+
+Approved by operator. Validate every mutating action with MCP first and stop on first red.
