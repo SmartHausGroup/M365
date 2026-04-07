@@ -623,6 +623,23 @@ outside this repo slice.
 
 ---
 
+## Initiative: M365 Persona-Action Certification
+
+**Initiative:** Certify the full workforce graph so every persona is reachable, every persona-facing action is mapped, and every orphan, stubbed, or dead-routed path is truthfully classified.
+
+**Plan:** `plans/m365-persona-action-certification/m365-persona-action-certification.md`
+
+**Reference:** `plan:m365-persona-action-certification:R0`
+
+**Status:** 🟢 Active — the planning package is now created and the workforce-graph certification initiative is active.
+**Current next act:** `G0` — freeze the persona universe, persona-facing action universe, and predecessor direct-support evidence before reachability and mapping claims.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-persona-action-certification.md`, `docs/prompts/codex-m365-persona-action-certification-prompt.txt`
+
+**Status update (2026-04-07 06:15 EDT):** Created the governed persona-to-action certification package after the direct-surface certification initiative closed the `155`-action instruction surface but did not certify the workforce graph itself. The current truth is that the repo has `59` agents in `registry/agents.yaml`, `184` persona-facing allowed-action aliases, `125` aliases outside the current direct crosswalk, and `41` legacy stub actions across `8` agents in `src/ops_adapter/actions.py`. The next acts are to freeze the workforce graph, prove persona reachability, classify every persona-facing action as mapped/orphaned/stubbed/dead-routed/fenced, reuse the completed direct-action evidence where valid, and then publish a final workforce certification matrix.
+
+---
+
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.
