@@ -1358,6 +1358,67 @@ def test_execute_routes_alerts_respond_to_security_alert_update(
     assert captured["params"]["status"] == "inProgress"
 
 
+def test_execute_routes_infrastructure_monitor_to_health_overview(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_health_overview(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        assert params["limit"] == 5
+        return {"services": [{"id": "Exchange Online"}, {"id": "Microsoft Teams"}]}
+
+    monkeypatch.setattr(actions_module, "health_overview", _fake_health_overview)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "infrastructure.monitor",
+            {"limit": 5},
+            "corr-15",
+        )
+    )
+
+    assert result["status"] == "monitoring"
+    assert result["count"] == 2
+    assert result["services"][0]["id"] == "Exchange Online"
+
+
+def test_execute_routes_backup_verify_fails_closed_unsupported() -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(
+            actions_module.execute(
+                "it-operations-manager",
+                "backup.verify",
+                {"backup_id": "backup-1"},
+                "corr-16",
+            )
+        )
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert "backup.verify" in exc_info.value.message
+
+
+def test_execute_routes_security_scan_to_secure_score(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_secure_score(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        assert params["top"] == 1
+        return {"secureScore": {"currentScore": 91.0}}
+
+    monkeypatch.setattr(actions_module, "security_secure_score", _fake_secure_score)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "security.scan",
+            {"top": 1},
+            "corr-17",
+        )
+    )
+
+    assert result["status"] == "scanned"
+    assert result["secureScore"]["currentScore"] == 91.0
+
+
 def test_execute_routes_task_assign_to_persona_task_queue(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -1646,6 +1707,24 @@ def test_execute_routes_report_generate_to_persona_work_history(
             "system.health-check",
             {"limit": 5},
             "health_overview",
+        ),
+        (
+            "it-operations-manager",
+            "infrastructure.monitor",
+            {"limit": 5},
+            "itops_infrastructure_monitor",
+        ),
+        (
+            "it-operations-manager",
+            "backup.verify",
+            {"backup_id": "backup-1"},
+            "itops_backup_verify",
+        ),
+        (
+            "it-operations-manager",
+            "security.scan",
+            {"top": 1},
+            "itops_security_scan",
         ),
         (
             "it-operations-manager",

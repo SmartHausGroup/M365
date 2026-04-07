@@ -229,4 +229,7 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`80 passed`).
 - The bounded blocker-fix child phase `plan:m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction` is complete and published governance notebook `INV-M365-CY`, generated verification, and the future `L94` evidence chain for `infrastructure.monitor`, `backup.verify`, and `security.scan`.
 - The blocked fifth-wave `P2` file-edit validation has been reopened under child-plan authority.
-- `P2` is now active again for the bounded fifth-wave IT-operations remediation wave.
+- The bounded fifth-wave `P2` legacy-stub implementation wave is complete. The `L94` target aliases now dispatch through truthful IT-operations outcomes in `src/ops_adapter/actions.py`: `infrastructure.monitor -> health_overview`, `security.scan -> security_secure_score`, and `backup.verify -> explicit unsupported M365-only failure`.
+- This fifth wave removes `3` unique aliases and `3` active persona/action pairs from the legacy-stub bucket without widening permissions or policy.
+- Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`86 passed`).
+- `P2` remains active for the remaining legacy-stub backlog, now reduced to `25` active pairs and `31` unique aliases.

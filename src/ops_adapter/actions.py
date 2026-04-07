@@ -961,6 +961,37 @@ async def coordination_report_generate(
     }
 
 
+async def itops_infrastructure_monitor(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    health = await health_overview(params, correlation_id)
+    services = [item for item in (health.get("services") or []) if isinstance(item, dict)]
+    return {
+        "status": "monitoring",
+        "services": services,
+        "count": len(services),
+    }
+
+
+async def itops_backup_verify(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    backup_id = params.get("backup_id") or params.get("backupId") or params.get("id")
+    suffix = f":{backup_id}" if backup_id else ""
+    raise GraphAPIError(
+        501,
+        "unsupported_m365_only_action",
+        f"backup.verify is not supported in the M365-only runtime{suffix}",
+    )
+
+
+async def itops_security_scan(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    score = await security_secure_score(params, correlation_id)
+    return {
+        "status": "scanned",
+        "secureScore": score.get("secureScore"),
+    }
+
+
 async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     bulk_params = dict(params)
     if "to" not in bulk_params and "recipients" in bulk_params:
@@ -4615,15 +4646,15 @@ async def _execute_impl(
     # ---- IT Operations Manager (legacy stubs) ----
     if agent == "it-operations-manager":
         if action == "infrastructure.monitor":
-            return {"status": "monitoring", "infrastructure_health": "good"}
+            return await itops_infrastructure_monitor(params, correlation_id)
         if action == "system.health-check":
             return await health_overview(params, correlation_id)
         if action == "alerts.respond":
             return await security_alert_update(_alerts_respond_params(params), correlation_id)
         if action == "backup.verify":
-            return {"status": "verified", "backup_integrity": "intact"}
+            return await itops_backup_verify(params, correlation_id)
         if action == "security.scan":
-            return {"status": "scanned", "vulnerabilities_found": 0}
+            return await itops_security_scan(params, correlation_id)
 
     # ---- Website Operations Specialist (legacy stubs) ----
     if agent == "website-operations-specialist":
