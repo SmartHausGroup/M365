@@ -2,7 +2,7 @@
   "plan_id": "plan:m365-persona-action-certification",
   "title": "Certify the full persona-to-action graph so every persona is reachable, every allowed action is mapped, and every orphan or stubbed path is truthfully classified",
   "version": "1.0",
-  "status": "active",
+  "status": "completed",
   "owner": "SMARTHAUS",
   "date_created": "2026-04-07",
   "date_updated": "2026-04-07",
@@ -67,12 +67,12 @@
     {
       "id": "G4",
       "text": "Persona and action certification",
-      "status": "active"
+      "status": "completed"
     },
     {
       "id": "G5",
       "text": "Closeout",
-      "status": "pending"
+      "status": "completed"
     }
   ],
   "gates": [
@@ -99,12 +99,12 @@
     {
       "id": "C4",
       "text": "Execution truth published",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "C5",
       "text": "Final workforce matrix published",
-      "status": "pending"
+      "status": "completed"
     }
   ]
 }

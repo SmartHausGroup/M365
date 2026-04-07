@@ -1,7 +1,7 @@
 {
   "plan_id": "plan:m365-persona-action-certification",
-  "phase": "G3",
-  "status": "persona_action_execution_reuse_complete",
+  "phase": "G5",
+  "status": "persona_action_certification_complete",
   "baseline": {
     "agents_total": 59,
     "authoritative_personas_total": 59,
@@ -1255,6 +1255,947 @@
     "evidence": {
       "predecessor_direct_support_matrix": "artifacts/diagnostics/m365_direct_full_surface_certification.json",
       "mapping_audit": "configs/generated/persona_action_mapping_audit_v1_verification.json"
+    }
+  },
+  "g4_route_certification": {
+    "remaining_mapped_pairs_requiring_live_proof_total": 56,
+    "route_certification_pair_counts": {
+      "fenced": 40,
+      "permission-blocked": 15,
+      "green": 1
+    },
+    "green_pairs": [
+      {
+        "persona_id": "m365-administrator",
+        "action": "users.read",
+        "http_status": 200,
+        "classification": "green",
+        "detail": "",
+        "payload": {
+          "status": "success",
+          "result": {
+            "user": {
+              "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users(id,displayName,userPrincipalName,accountEnabled,jobTitle,department)/$entity",
+              "id": "0003f4fd-6f9d-4767-8f53-67ae405176b1",
+              "displayName": "Philip Siniscalchi",
+              "userPrincipalName": "phil@smarthausgroup.com",
+              "accountEnabled": true,
+              "jobTitle": null,
+              "department": null
+            }
+          },
+          "approval_id": null,
+          "reason": null
+        },
+        "note": ""
+      }
+    ],
+    "permission_blocked_pairs": [
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "availability.check",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/availability.check \u2014 'availability.check' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/availability.check \u2014 'availability.check' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "meeting.organize",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/meeting.organize \u2014 'meeting.organize' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/meeting.organize \u2014 'meeting.organize' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.archive",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/email.archive \u2014 'email.archive' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/email.archive \u2014 'email.archive' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.forward",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/email.forward \u2014 'email.forward' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/email.forward \u2014 'email.forward' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.respond",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/email.respond \u2014 'email.respond' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/email.respond \u2014 'email.respond' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "hr-generalist",
+        "action": "employee.onboard",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/employee.onboard \u2014 'employee.onboard' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/employee.onboard \u2014 'employee.onboard' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "outreach-coordinator",
+        "action": "email.send_individual",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/email.send_individual \u2014 'email.send_individual' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/email.send_individual \u2014 'email.send_individual' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "platform-manager",
+        "action": "provision-client-services",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/provision-client-services \u2014 'provision-client-services' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/provision-client-services \u2014 'provision-client-services' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "create-project",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/create-project \u2014 'create-project' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/create-project \u2014 'create-project' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "list-projects",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/list-projects \u2014 'list-projects' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/list-projects \u2014 'list-projects' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "add-workspace-members",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/add-workspace-members \u2014 'add-workspace-members' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/add-workspace-members \u2014 'add-workspace-members' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "create-channels",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/create-channels \u2014 'create-channels' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/create-channels \u2014 'create-channels' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "create-workspace",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/create-workspace \u2014 'create-workspace' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/create-workspace \u2014 'create-workspace' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "get-team-status",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/get-team-status \u2014 'get-team-status' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/get-team-status \u2014 'get-team-status' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "website-manager",
+        "action": "deployment.preview",
+        "http_status": 403,
+        "classification": "permission-blocked",
+        "detail": "tier_not_allowed:global_admin/deployment.preview \u2014 'deployment.preview' is not in the allowed actions for Global Administrator",
+        "payload": {
+          "detail": "tier_not_allowed:global_admin/deployment.preview \u2014 'deployment.preview' is not in the allowed actions for Global Administrator"
+        },
+        "note": ""
+      }
+    ],
+    "fenced_pairs": [
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.directory",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.provisioning",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.signins",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "calendar.schedule",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "mail.forward",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "mail.reply",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "files.search",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "files.share",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "sites.list",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "sites.root",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "users.list",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.email_activity",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.onedrive_usage",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.sharepoint_usage",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.teams_activity",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.users_active",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "security-operations",
+        "action": "security.alert_update",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.issue_get",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.issues",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.messages",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.overview",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "channels.send_message",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.create",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.list",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.send",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.send_message",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.add_member",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.archive",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.create",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.list",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.remove_member",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.audit_log",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_tenant_config",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_tier",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_user_tier",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.list_tiers",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.list_users",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.reload_config",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.remove_user_tier",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.set_user_tier",
+        "http_status": 403,
+        "classification": "fenced",
+        "detail": "action_not_allowed",
+        "payload": {
+          "detail": "action_not_allowed"
+        },
+        "note": ""
+      }
+    ],
+    "permission_blocked_aliases_with_no_tier_support_total": 15,
+    "permission_blocked_aliases_with_no_tier_support": [
+      "add-workspace-members",
+      "availability.check",
+      "create-channels",
+      "create-project",
+      "create-workspace",
+      "deployment.preview",
+      "email.archive",
+      "email.forward",
+      "email.respond",
+      "email.send_individual",
+      "employee.onboard",
+      "get-team-status",
+      "list-projects",
+      "meeting.organize",
+      "provision-client-services"
+    ],
+    "permission_blocked_alias_tier_support": {
+      "add-workspace-members": [],
+      "availability.check": [],
+      "create-channels": [],
+      "create-project": [],
+      "create-workspace": [],
+      "deployment.preview": [],
+      "email.archive": [],
+      "email.forward": [],
+      "email.respond": [],
+      "email.send_individual": [],
+      "employee.onboard": [],
+      "get-team-status": [],
+      "list-projects": [],
+      "meeting.organize": [],
+      "provision-client-services": []
+    },
+    "fenced_aliases_action_not_allowed_total": 40,
+    "fenced_aliases_action_not_allowed": [
+      "admin.audit_log",
+      "admin.get_tenant_config",
+      "admin.get_tier",
+      "admin.get_user_tier",
+      "admin.list_tiers",
+      "admin.list_users",
+      "admin.reload_config",
+      "admin.remove_user_tier",
+      "admin.set_user_tier",
+      "audit.directory",
+      "audit.provisioning",
+      "audit.signins",
+      "calendar.schedule",
+      "channels.send_message",
+      "chat.create",
+      "chat.list",
+      "chat.send",
+      "chat.send_message",
+      "files.search",
+      "files.share",
+      "health.issue_get",
+      "health.issues",
+      "health.messages",
+      "health.overview",
+      "mail.forward",
+      "mail.reply",
+      "reports.email_activity",
+      "reports.onedrive_usage",
+      "reports.sharepoint_usage",
+      "reports.teams_activity",
+      "reports.users_active",
+      "security.alert_update",
+      "sites.list",
+      "sites.root",
+      "teams.add_member",
+      "teams.archive",
+      "teams.create",
+      "teams.list",
+      "teams.remove_member",
+      "users.list"
+    ],
+    "fenced_alias_tier_support": {
+      "admin.audit_log": [
+        "global_admin"
+      ],
+      "admin.get_tenant_config": [
+        "global_admin"
+      ],
+      "admin.get_tier": [
+        "global_admin"
+      ],
+      "admin.get_user_tier": [
+        "global_admin"
+      ],
+      "admin.list_tiers": [
+        "global_admin"
+      ],
+      "admin.list_users": [
+        "global_admin"
+      ],
+      "admin.reload_config": [
+        "global_admin"
+      ],
+      "admin.remove_user_tier": [
+        "global_admin"
+      ],
+      "admin.set_user_tier": [
+        "global_admin"
+      ],
+      "audit.directory": [
+        "global_admin",
+        "read_only"
+      ],
+      "audit.provisioning": [
+        "global_admin",
+        "read_only"
+      ],
+      "audit.signins": [
+        "global_admin",
+        "read_only"
+      ],
+      "calendar.schedule": [
+        "global_admin",
+        "department_admin",
+        "power_user"
+      ],
+      "channels.send_message": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user"
+      ],
+      "chat.create": [
+        "global_admin",
+        "department_admin",
+        "power_user"
+      ],
+      "chat.list": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user",
+        "read_only"
+      ],
+      "chat.send": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user"
+      ],
+      "chat.send_message": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user"
+      ],
+      "files.search": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user",
+        "read_only"
+      ],
+      "files.share": [
+        "global_admin",
+        "department_admin"
+      ],
+      "health.issue_get": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "health.issues": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "health.messages": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "health.overview": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user",
+        "read_only"
+      ],
+      "mail.forward": [
+        "global_admin",
+        "department_admin",
+        "power_user"
+      ],
+      "mail.reply": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user"
+      ],
+      "reports.email_activity": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "reports.onedrive_usage": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "reports.sharepoint_usage": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "reports.teams_activity": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "reports.users_active": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "read_only"
+      ],
+      "security.alert_update": [
+        "global_admin"
+      ],
+      "sites.list": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user",
+        "read_only"
+      ],
+      "sites.root": [
+        "global_admin",
+        "department_admin"
+      ],
+      "teams.add_member": [
+        "global_admin",
+        "department_admin"
+      ],
+      "teams.archive": [
+        "global_admin"
+      ],
+      "teams.create": [
+        "global_admin",
+        "department_admin"
+      ],
+      "teams.list": [
+        "global_admin",
+        "department_admin",
+        "power_user",
+        "standard_user",
+        "read_only"
+      ],
+      "teams.remove_member": [
+        "global_admin",
+        "department_admin"
+      ],
+      "users.list": [
+        "global_admin",
+        "department_admin",
+        "read_only"
+      ]
+    }
+  },
+  "final_unique_alias_matrix": {
+    "total": 184,
+    "counts": {
+      "green": 34,
+      "approval-gated": 1,
+      "actor-tier-gated": 1,
+      "permission-blocked": 15,
+      "fenced": 64,
+      "legacy-stubbed": 48,
+      "dead-routed": 21,
+      "orphaned": 0
+    }
+  },
+  "final_active_pair_matrix": {
+    "total": 430,
+    "counts": {
+      "green": 136,
+      "approval-gated": 1,
+      "actor-tier-gated": 1,
+      "permission-blocked": 15,
+      "fenced": 112,
+      "legacy-stubbed": 49,
+      "dead-routed": 116,
+      "orphaned": 0
     }
   }
 }

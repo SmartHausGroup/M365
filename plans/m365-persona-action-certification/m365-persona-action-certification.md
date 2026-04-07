@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `none`
 - **Title:** `Certify the full persona-to-action graph so every persona is reachable, every allowed action is mapped, and every orphan or stubbed path is truthfully classified`
 - **Version:** `1.0`
-- **Status:** `active`
+- **Status:** `completed`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-07`
 - **Date Updated:** `2026-04-07`
@@ -47,8 +47,12 @@
 - `G0` is complete.
 - `G1S` is complete.
 - `G1` is complete.
+- `G2` is complete.
+- `G2S` is complete.
 - `G3` is complete.
-- `G4` is now the active next act.
+- `G4` is complete.
+- `G5` is complete.
+- The initiative is now complete and has no active child act.
 - The predecessor direct-surface certification initiative is complete.
 - The current predecessor artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 - The current workforce baseline artifact is `artifacts/diagnostics/m365_persona_action_certification.json`.
@@ -229,4 +233,13 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
   - `115` mapped unique aliases partitioned into `33 green`, `1 approval-gated`, `1 actor-tier-gated`, `24 fenced`, and `56` remaining aliases requiring fresh live proof in `G4`
   - `265` mapped persona/action pairs partitioned into `135 green`, `1 approval-gated`, `1 actor-tier-gated`, `72 fenced`, and `56` remaining mapped pairs requiring fresh live proof in `G4`
   - `0` mixed-reuse aliases after the owner-aware join between `G2` pair truth and predecessor direct evidence
-- `G4` is now the active next act.
+- `G4` is now complete with notebook-backed route certification truth at `L88`, `INV-M365-CN`, `scorecard_l88.json`, and `persona_action_route_certification_v1_verification.json`.
+- `G4` closes the remaining mapped live-proof surface at:
+  - `56` remaining mapped pairs classified through the governed route
+  - `1` additional `green` pair
+  - `15` additional `permission-blocked` pairs
+  - `40` additional `fenced` pairs
+- `G5` is now complete and closes the final workforce matrices at:
+  - `184` unique aliases split into `34 green`, `1 approval-gated`, `1 actor-tier-gated`, `15 permission-blocked`, `64 fenced`, `48 legacy-stubbed`, `21 dead-routed`, and `0 orphaned`
+  - `430` active persona/action pairs split into `136 green`, `1 approval-gated`, `1 actor-tier-gated`, `15 permission-blocked`, `112 fenced`, `49 legacy-stubbed`, `116 dead-routed`, and `0 orphaned`
+- The initiative is complete.

@@ -2,7 +2,7 @@
 
 ## Status
 
-`G0`, `G1`, `G2`, and `G3` are complete. The workforce-graph certification initiative now has a frozen baseline, notebook-backed persona reachability truth, a published mapping / orphan / stub audit, and an execution-reuse boundary that shrinks `G4` to the irreducible live-proof surface.
+`G0` through `G5` are complete. The workforce-graph certification initiative now closes with a final notebook-backed matrix for all `184` persona-facing aliases and all `430` active persona/action pairs.
 
 ## Purpose
 
@@ -287,4 +287,106 @@ The join is now deterministic and owner-aware:
 - the remaining `G4` live-proof scope is finite and published
 - the workforce certification program can now move to pair-level proof without re-testing already-proven direct actions
 
-The next act is `G4`, which will execute the remaining `56` mapped persona/action proofs and publish final workforce certification truth.
+## G4 Persona/Action Certification
+
+`G4` executed the remaining `56` mapped persona/action pairs through the governed `/actions/{agent}/{action}` route using JWT-backed actor identity and a live local OPA server.
+
+### What G4 Proved
+
+The irreducible wrapper-owned route surface now closes at:
+
+- `1` `green` pair:
+  - `m365-administrator::users.read`
+- `15` `permission-blocked` pairs:
+  - these legacy alias names are not granted by any tier in `registry/permission_tiers.yaml`
+- `40` `fenced` pairs:
+  - these stop at the OPA layer with `action_not_allowed`
+
+The `15` permission-blocked aliases are:
+
+- `add-workspace-members`
+- `availability.check`
+- `create-channels`
+- `create-project`
+- `create-workspace`
+- `deployment.preview`
+- `email.archive`
+- `email.forward`
+- `email.respond`
+- `email.send_individual`
+- `employee.onboard`
+- `get-team-status`
+- `list-projects`
+- `meeting.organize`
+- `provision-client-services`
+
+The `40` fenced pairs are not dead routes. Many of them still have tier support at the domain layer, but the governed route denies them because the current OPA surface does not allow those persona/action combinations. That fenced set includes:
+
+- `audit-operations` audit reads
+- `m365-administrator` wrapper reads like `sites.list`, `sites.root`, `files.search`, `files.share`, and `users.list`
+- `reports` activity and usage reads
+- `service-health` wrappers
+- `teams-manager` Teams / chat / channel wrappers
+- `ucp-administrator` admin wrappers
+
+### Notebook-Backed Evidence
+
+`G4` is now backed by a dedicated proof chain:
+
+- [L88_m365_persona_action_route_certification_v1.md](/Users/smarthaus/Projects/GitHub/M365/docs/ma/lemmas/L88_m365_persona_action_route_certification_v1.md)
+- [L88_m365_persona_action_route_certification_v1.yaml](/Users/smarthaus/Projects/GitHub/M365/invariants/lemmas/L88_m365_persona_action_route_certification_v1.yaml)
+- [INV-M365-CN-persona-action-route-certification-v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/m365/INV-M365-CN-persona-action-route-certification-v1.ipynb)
+- [L88_m365_persona_action_route_certification_v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/lemma_proofs/L88_m365_persona_action_route_certification_v1.ipynb)
+- [scorecard_l88.json](/Users/smarthaus/Projects/GitHub/M365/artifacts/scorecards/scorecard_l88.json)
+- [persona_action_route_certification_v1_verification.json](/Users/smarthaus/Projects/GitHub/M365/configs/generated/persona_action_route_certification_v1_verification.json)
+
+### G4 Closeout
+
+`G4` is green because the remaining mapped route surface is no longer implied:
+
+- the last reusable live-green wrapper path is explicit
+- the unsupported legacy alias perimeter is explicit at the permission-tier layer
+- the policy-fenced wrapper perimeter is explicit at the OPA layer
+- the initiative can now close with a full workforce matrix
+
+## G5 Closeout
+
+The full workforce graph is now classified truthfully.
+
+### Final Unique-Alias Matrix
+
+All `184` unique persona-facing aliases now close at:
+
+- `34` `green`
+- `1` `approval-gated`
+- `1` `actor-tier-gated`
+- `15` `permission-blocked`
+- `64` `fenced`
+- `48` `legacy-stubbed`
+- `21` `dead-routed`
+- `0` `orphaned`
+
+### Final Active Persona/Action Matrix
+
+All `430` active persona/action pairs now close at:
+
+- `136` `green`
+- `1` `approval-gated`
+- `1` `actor-tier-gated`
+- `15` `permission-blocked`
+- `112` `fenced`
+- `49` `legacy-stubbed`
+- `116` `dead-routed`
+- `0` `orphaned`
+
+### Meaning
+
+The workforce graph is now fully classified instead of partially implied:
+
+- every active persona/action pair now lands in an explicit certification bucket
+- the route-level support surface is narrower than the raw registry claim surface
+- unsupported legacy wrapper aliases are explicit at the permission-tier layer
+- policy-fenced wrapper aliases are explicit at the OPA layer
+- no persona-facing alias remains orphaned
+
+The initiative is complete.
