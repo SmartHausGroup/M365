@@ -650,3 +650,20 @@ outside this repo slice.
 ## Notes
 - All M365‑changing operations are gated by `ALLOW_M365_MUTATIONS` and require valid Graph credentials.
 - We will not run tenant‑impacting steps without explicit readiness. Dry‑runs and status checks first.
+
+---
+
+## Initiative: M365 Persona-Action Full-Support Remediation
+
+**Initiative:** Drive the certified non-green persona/action surface to truthful full support where possible and explicitly reduce unsupported claims where not.
+
+**Plan:** `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
+
+**Reference:** `plan:m365-persona-action-full-support-remediation:R0`
+
+**Status:** 🟢 Active — successor remediation initiative created after persona-action certification completed.
+**Current next act:** `P0` — freeze the certified remediation backlog and execute the first bounded remediation wave from the classified non-green surface.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-persona-action-full-support-remediation.md`, `docs/prompts/codex-m365-persona-action-full-support-remediation-prompt.txt`
+
+**Status update (2026-04-07 07:59 EDT):** Created the governed successor remediation package after the completed persona-action certification initiative closed the workforce graph truthfully but left a classified non-green support backlog. The certified baseline now driving remediation is `430` active persona/action pairs split into `136 green`, `1 approval-gated`, `1 actor-tier-gated`, `15 permission-blocked`, `112 fenced`, `49 legacy-stubbed`, `116 dead-routed`, and `0 orphaned`. The remediation order is now fixed: dead-routed surface first, legacy-stubbed surface second, permission/alias truth third, policy-fenced surface last, and then a final recertification closeout. The successor initiative exists so anything that can work gets made truthful, and anything that cannot gets explicitly reduced from the claimed support surface instead of remaining ambiguous.
