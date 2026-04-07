@@ -1,0 +1,8 @@
+lemma_id: L93_m365_persona_action_legacy_stub_remediation_v4
+invariants:
+  - id: L93-I1
+    description: The bounded fourth-wave alias set is frozen to task.assign, deadline.track, status.update, and report.generate.
+    proof_obligation: verification.target_aliases == ["task.assign", "deadline.track", "status.update", "report.generate"]
+  - id: L93-I2
+    description: The replacement modes are fixed before extraction.
+    proof_obligation: verification.replacement_modes["task.assign"] == "create_persona_task" and verification.replacement_modes["deadline.track"] == "list_persona_tasks" and verification.replacement_modes["status.update"] == "update_persona_task" and verification.replacement_modes["report.generate"] == "build_persona_work_history"
