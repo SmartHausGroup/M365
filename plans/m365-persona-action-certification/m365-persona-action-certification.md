@@ -45,10 +45,12 @@
 ## Section 4A: Current Phase State
 
 - `G0` is complete.
-- `G1` is now the active next act.
+- `G1` runtime evidence is observed but cannot close yet because tracker synchronization is blocked on notebook-backed governance evidence.
+- `G1S` notebook-evidence scope correction is now the active next act.
 - The predecessor direct-surface certification initiative is complete.
 - The current predecessor artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 - The current workforce baseline artifact is `artifacts/diagnostics/m365_persona_action_certification.json`.
+- The current `G1` blocker package is `plans/m365-persona-action-g1-notebook-evidence-scope-correction/m365-persona-action-g1-notebook-evidence-scope-correction.md`.
 
 ## Section 5: Scope
 
@@ -128,7 +130,7 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
 
 ## Section 7: Execution Sequence
 
-- `G0 -> G1 -> G2 -> G3 -> G4 -> G5`
+- `G0 -> G1S -> G1 -> G2 -> G3 -> G4 -> G5`
 - Stop on first red that escapes the allowlist or requires unsafe/undocumented tenant changes.
 
 ## Section 8: Phases
@@ -190,5 +192,10 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
   - `2` exact-name overlaps between persona aliases and direct instruction actions
   - `182` persona aliases without an exact direct-action name match
   - `153` direct instruction actions without an exact persona-alias name match
-- No reachability, orphan, or final execution classification has been claimed yet under this package.
-- `G1` persona reachability certification is the next act.
+- Read-only `G1` runtime evidence already shows:
+  - `59/59` canonical persona-id resolutions through `/personas/resolve`
+  - `59/59` display-name resolutions through `/personas/resolve`
+  - `59/59` persona state endpoint reachability through `/personas/{target}/state`
+  - `5/5` planned personas fence from action execution with `persona_inactive:<persona_id>` once header-fallback action probes are enabled for the bounded runtime check
+- `G1` is not yet published because `validate_action` denied the required tracker closeout with `map-5-governance-notebook-evidence`.
+- `G1S` notebook-evidence scope correction is the current next act and must produce phase-specific notebook-backed governance evidence before `G1` can close and `G2` can begin.

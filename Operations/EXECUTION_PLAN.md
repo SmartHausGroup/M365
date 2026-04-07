@@ -632,12 +632,13 @@ outside this repo slice.
 **Reference:** `plan:m365-persona-action-certification:R0`
 
 **Status:** 🟢 Active — the planning package is now created and the workforce-graph certification initiative is active.
-**Current next act:** `G1` — certify persona reachability through the governed runtime surfaces.
+**Current next act:** `G1S` — execute the notebook-evidence scope correction so `G1` can close truthfully.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-persona-action-certification.md`, `docs/prompts/codex-m365-persona-action-certification-prompt.txt`
 
 **Status update (2026-04-07 06:15 EDT):** Created the governed persona-to-action certification package after the direct-surface certification initiative closed the `155`-action instruction surface but did not certify the workforce graph itself. The current truth is that the repo has `59` agents in `registry/agents.yaml`, `184` persona-facing allowed-action aliases, `125` aliases outside the current direct crosswalk, and `41` legacy stub actions across `8` agents in `src/ops_adapter/actions.py`. The next acts are to freeze the workforce graph, prove persona reachability, classify every persona-facing action as mapped/orphaned/stubbed/dead-routed/fenced, reuse the completed direct-action evidence where valid, and then publish a final workforce certification matrix.
 **Status update (2026-04-07 06:20 EDT):** Completed `G0` workforce-graph lock for the persona-to-action certification initiative. The frozen baseline now records `59` agents, `59` authoritative personas, `54` active personas, `5` planned personas, `5` contract-only personas, `184` persona-facing allowed-action aliases, and `41` approval rules. It also locks the predecessor direct-support matrix at `155` direct instruction actions with `64` certified live-green and `91` fenced, the current known stub perimeter at `8` agents with `46` attached actions, and the current candidate mismatch zones at only `2` exact-name overlaps, `182` persona aliases without an exact direct-action name match, and `153` direct actions without an exact persona-alias name match. `G1` is now the active next act.
+**Status update (2026-04-07 06:33 EDT):** `G1` runtime reachability is now observed read-only but cannot close truthfully yet. The active runtime already proves `59/59` canonical persona-id resolutions, `59/59` display-name resolutions, `59/59` persona state endpoint reachability, and `5/5` planned-persona action fences. However the required tracker closeout for `G1` was denied by `validate_action(governance_edit)` with `map-5-governance-notebook-evidence`. The bounded child package `plans/m365-persona-action-g1-notebook-evidence-scope-correction/m365-persona-action-g1-notebook-evidence-scope-correction.md` is now the next act. It owns the phase-specific notebook-backed reachability evidence, generated verification output, and parent `G1` closeout before the initiative may continue to `G2`.
 
 ---
 

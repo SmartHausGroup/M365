@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-persona-action-g1-notebook-evidence-scope-correction",
+  "purpose": "Verify the persona-action certification initiative cannot close G1 without phase-specific notebook-backed reachability evidence and that the successor child package is required.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-CI-persona-action-g1-notebook-evidence-governance-alignment-v1.ipynb",
+    "role": "governance_prerequisite_evidence"
+  },
+  "parent_plan": {
+    "plan_id": "plan:m365-persona-action-certification",
+    "blocked_phase": "G1"
+  },
+  "observed_runtime_truth": {
+    "canonical_resolve_total": 59,
+    "display_name_resolve_total": 59,
+    "state_endpoint_total": 59,
+    "planned_persona_fence_total": 5
+  },
+  "governance_denial": {
+    "action_type": "governance_edit",
+    "target": "G1 tracker closeout",
+    "violation": "map-5-governance-notebook-evidence",
+    "allowed": false
+  },
+  "successor_package_required": true,
+  "successor_package": "plan:m365-persona-action-g1-notebook-evidence-scope-correction"
+}

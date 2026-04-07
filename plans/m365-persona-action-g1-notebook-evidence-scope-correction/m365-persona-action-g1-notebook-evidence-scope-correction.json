@@ -1,0 +1,72 @@
+{
+  "plan_id": "m365-persona-action-g1-notebook-evidence-scope-correction",
+  "parent_plan_id": "m365-persona-action-certification",
+  "status": "Draft",
+  "date": "2026-04-07",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-persona-action-g1-notebook-evidence-scope-correction:R1",
+  "canonical_predecessor": "plans/m365-persona-action-certification/m365-persona-action-certification.md",
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-CI-persona-action-g1-notebook-evidence-governance-alignment-v1.ipynb",
+    "verification": "configs/generated/persona_action_g1_notebook_evidence_governance_alignment_v1_verification.json"
+  },
+  "objective": "Produce the phase-specific notebook-backed evidence required to publish G1 persona reachability and unblock the parent initiative.",
+  "current_state": {
+    "parent_plan": "plan:m365-persona-action-certification",
+    "completed_parent_phase": "G0",
+    "observed_reachability": {
+      "canonical_resolve_total": 59,
+      "display_name_resolve_total": 59,
+      "state_endpoint_total": 59,
+      "planned_persona_fence_total": 5
+    },
+    "blocker": {
+      "verdict": "allowed:false",
+      "violation": "map-5-governance-notebook-evidence"
+    }
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Make the G1 governance blocker explicit"
+    },
+    {
+      "id": "R2",
+      "title": "Produce notebook-backed G1 reachability evidence"
+    },
+    {
+      "id": "R3",
+      "title": "Produce generated verification output"
+    },
+    {
+      "id": "R4",
+      "title": "Publish the notebook-backed G1 result into the parent artifacts"
+    },
+    {
+      "id": "R5",
+      "title": "Synchronize the parent plan and governance trackers truthfully"
+    },
+    {
+      "id": "R6",
+      "title": "Commit and push before resuming G2"
+    }
+  ],
+  "child_acts": [
+    {
+      "id": "G1SA",
+      "description": "Freeze the live blocker and observed reachability truth."
+    },
+    {
+      "id": "G1SB",
+      "description": "Produce notebook-backed G1 reachability evidence and verification output."
+    },
+    {
+      "id": "G1SC",
+      "description": "Publish the parent closeout, validate, commit, and push."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-persona-action-g1-notebook-evidence-scope-correction.md",
+    "kickoff": "docs/prompts/codex-m365-persona-action-g1-notebook-evidence-scope-correction-prompt.txt"
+  }
+}

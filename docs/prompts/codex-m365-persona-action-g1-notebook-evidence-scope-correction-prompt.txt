@@ -1,0 +1,12 @@
+Execute `plan:m365-persona-action-g1-notebook-evidence-scope-correction`.
+
+Read:
+- `docs/prompts/codex-m365-persona-action-g1-notebook-evidence-scope-correction.md`
+- `plans/m365-persona-action-g1-notebook-evidence-scope-correction/m365-persona-action-g1-notebook-evidence-scope-correction.md`
+
+Goal:
+- create notebook-backed `G1` reachability evidence
+- publish the parent `G1` closeout truthfully
+- hand the parent initiative back to `G2`
+
+Approved by operator. Validate every mutating action with MCP first and stop on first red.
