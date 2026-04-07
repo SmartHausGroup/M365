@@ -1,0 +1,8 @@
+lemma_id: L91_m365_persona_action_legacy_stub_remediation_v2
+invariants:
+  - id: L91-I1
+    description: The bounded second-wave alias set is frozen to followup.create, client.follow-up, satisfaction.survey, and interview.schedule.
+    proof_obligation: verification.target_aliases == ["followup.create", "client.follow-up", "satisfaction.survey", "interview.schedule"]
+  - id: L91-I2
+    description: The replacement modes are fixed before extraction.
+    proof_obligation: verification.replacement_modes.followup.create == "calendar_create" and verification.replacement_modes["client.follow-up"] == "calendar_create" and verification.replacement_modes["satisfaction.survey"] == "mail_send" and verification.replacement_modes["interview.schedule"] == "calendar_create"

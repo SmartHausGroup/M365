@@ -1,0 +1,19 @@
+{
+  "status": "persona_action_legacy_stub_remediation_v2_ready",
+  "target_aliases": [
+    "followup.create",
+    "client.follow-up",
+    "satisfaction.survey",
+    "interview.schedule"
+  ],
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "replacement_modes": {
+    "followup.create": "calendar_create",
+    "client.follow-up": "calendar_create",
+    "satisfaction.survey": "mail_send",
+    "interview.schedule": "calendar_create"
+  }
+}
