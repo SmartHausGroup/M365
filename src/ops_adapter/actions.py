@@ -723,6 +723,32 @@ def _interview_schedule_params(params: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def _archive_project_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    team_id = (
+        normalized.get("teamId")
+        or normalized.get("team_id")
+        or normalized.get("projectId")
+        or normalized.get("project_id")
+        or normalized.get("id")
+    )
+    if team_id is not None:
+        normalized["teamId"] = team_id
+    return normalized
+
+
+def _alerts_respond_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    alert_id = normalized.get("alertId") or normalized.get("alert_id") or normalized.get("id")
+    if alert_id is not None:
+        normalized["alertId"] = alert_id
+    if "assignedTo" not in normalized and normalized.get("assigned_to") is not None:
+        normalized["assignedTo"] = normalized["assigned_to"]
+    if "status" not in normalized:
+        normalized["status"] = "inProgress"
+    return normalized
+
+
 async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
     bulk_params = dict(params)
     if "to" not in bulk_params and "recipients" in bulk_params:
@@ -4289,13 +4315,7 @@ async def _execute_impl(
                     return {"updated": True, "project": p}
             return {"updated": False}
         if action == "archive-project":
-            pid = params.get("id")
-            for p in _PROJECTS_MEM:
-                if p.get("id") == pid:
-                    p["status"] = "completed"
-                    p["lastActivity"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-                    return {"archived": True, "project": p}
-            return {"archived": False}
+            return await teams_archive(_archive_project_params(params), correlation_id)
 
     # ---- Platform Manager ----
     if agent == "platform-manager":
@@ -4385,9 +4405,9 @@ async def _execute_impl(
         if action == "infrastructure.monitor":
             return {"status": "monitoring", "infrastructure_health": "good"}
         if action == "system.health-check":
-            return {"status": "checked", "system_health": "healthy"}
+            return await health_overview(params, correlation_id)
         if action == "alerts.respond":
-            return {"status": "responded", "alert_id": params.get("alert_id")}
+            return await security_alert_update(_alerts_respond_params(params), correlation_id)
         if action == "backup.verify":
             return {"status": "verified", "backup_integrity": "intact"}
         if action == "security.scan":

@@ -1283,6 +1283,81 @@ def test_execute_routes_interview_schedule_to_calendar_create(
     assert captured["params"]["attendees"][0]["emailAddress"]["address"] == "candidate@example.com"
 
 
+def test_execute_routes_archive_project_to_teams_archive(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_teams_archive(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"archived": True, "teamId": params["teamId"]}
+
+    monkeypatch.setattr(actions_module, "teams_archive", _fake_teams_archive)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-manager",
+            "archive-project",
+            {"projectId": "team-archive-1"},
+            "corr-12",
+        )
+    )
+
+    assert result["archived"] is True
+    assert captured["params"]["teamId"] == "team-archive-1"
+
+
+def test_execute_routes_system_health_check_to_health_overview(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_health_overview(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"services": [{"id": "Exchange Online"}]}
+
+    monkeypatch.setattr(actions_module, "health_overview", _fake_health_overview)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "system.health-check",
+            {"limit": 5},
+            "corr-13",
+        )
+    )
+
+    assert result["services"][0]["id"] == "Exchange Online"
+    assert captured["params"]["limit"] == 5
+
+
+def test_execute_routes_alerts_respond_to_security_alert_update(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_security_alert_update(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        captured["params"] = params
+        return {"updated": True, "alertId": params["alertId"]}
+
+    monkeypatch.setattr(actions_module, "security_alert_update", _fake_security_alert_update)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "alerts.respond",
+            {"alert_id": "alert-123"},
+            "corr-14",
+        )
+    )
+
+    assert result["updated"] is True
+    assert captured["params"]["alertId"] == "alert-123"
+    assert captured["params"]["status"] == "inProgress"
+
+
 @pytest.mark.parametrize(
     ("agent", "action", "params", "helper_name"),
     [
@@ -1402,6 +1477,24 @@ def test_execute_routes_interview_schedule_to_calendar_create(
                 "endDateTime": "2026-04-11T15:30:00",
             },
             "calendar_create",
+        ),
+        (
+            "project-manager",
+            "archive-project",
+            {"projectId": "team-archive-1"},
+            "teams_archive",
+        ),
+        (
+            "it-operations-manager",
+            "system.health-check",
+            {"limit": 5},
+            "health_overview",
+        ),
+        (
+            "it-operations-manager",
+            "alerts.respond",
+            {"alert_id": "alert-123"},
+            "security_alert_update",
         ),
     ],
 )
