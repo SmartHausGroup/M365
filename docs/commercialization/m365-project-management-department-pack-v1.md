@@ -22,7 +22,7 @@ This correction locks the following truth:
 - total personas: `5`
 - active personas: `5`
 - registry-backed personas: `5`
-- supported action count: `40`
+- supported action count: `46`
 - default pack state without queue pressure: `ready`
 - preserved department status taxonomy: `partial-activation`
 
@@ -33,7 +33,7 @@ The Project Management pack contains exactly `5` registry-backed personas:
 - `project-shipper` — Ben Foster (Release Manager); registry-backed; actions=9
 - `studio-producer` — Olivia Park (Studio Producer); registry-backed; actions=9
 - `project-coordination-agent` — Sofia Petrova (Project Coordinator); registry-backed; actions=10
-- `project-manager` — Haruto Tanaka (Project Manager); registry-backed; actions=4
+- `project-manager` — Haruto Tanaka (Project Manager); registry-backed; actions=10
 
 The pack may claim only those personas and their explicit bounded workflows.
 

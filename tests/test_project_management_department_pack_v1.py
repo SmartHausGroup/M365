@@ -20,7 +20,7 @@ def test_post_h5_builds_project_management_department_pack(
     assert pack["summary"]["persona_count"] == 5
     assert pack["summary"]["active_persona_count"] == 5
     assert pack["summary"]["registry_backed_persona_count"] == 5
-    assert pack["summary"]["supported_action_count"] == 40
+    assert pack["summary"]["supported_action_count"] == 46
     assert pack["summary"]["pack_state"] == "ready"
     assert {persona["coverage_status"] for persona in pack["personas"]} == {"registry-backed"}
 
@@ -53,7 +53,7 @@ def test_post_h5_project_management_fails_closed_on_declared_action_mismatch(
     payload["personas"]["experiment-tracker"]["supported_actions"] = payload["personas"][
         "experiment-tracker"
     ]["supported_actions"][:-1]
-    payload["kpis"]["supported_action_count"] = 39
+    payload["kpis"]["supported_action_count"] = 45
 
     overridden = tmp_path / "department_pack_project_management_v1.yaml"
     overridden.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")

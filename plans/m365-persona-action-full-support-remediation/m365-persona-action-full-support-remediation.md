@@ -263,5 +263,16 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `list-projects`
   - `provision-client-services`
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`130 passed`).
-- The bounded child blocker phase `plan:m365-persona-action-p3-department-pack-scope-correction` is now created with governance notebook `INV-M365-DC` and generated verification `configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json`.
-- `P3S` is now the active next act before the second bounded `P3` retirement wave may touch the affected department-pack authority surfaces.
+- The bounded child blocker phase `plan:m365-persona-action-p3-department-pack-scope-correction` is complete and published governance notebook `INV-M365-DC` with generated verification `configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json`.
+- The second bounded `P3` retirement wave is complete. The final non-M365 aliases `create-project`, `deployment.preview`, `list-projects`, and `provision-client-services` now fail closed explicitly in `src/ops_adapter/actions.py`, and the affected persona surfaces now carry truthful real M365 actions instead:
+  - `website-manager` -> `sites.list`, `sites.get`, `lists.list`, `lists.get`, `lists.items`, `lists.create_item`, `files.list`, `files.get`, `files.search`, `files.create_folder`, `files.upload`, `files.share`
+  - `project-manager` -> `teams.list`, `teams.get`, `channels.list`, `calendar.list`, `calendar.create`, `calendar.get`, `sites.list`, `lists.list`, `lists.items`, `archive-project`
+  - `platform-manager` -> `sites.provision`, `sites.list`, `apps.list`, `apps.get`, `service_principals.list`, `directory.org`
+- The affected department-pack authority, commercialization, verifier, and test surfaces now reconcile to the new counts:
+  - operations supported actions -> `91`
+  - project-management supported actions -> `46`
+  - engineering supported actions -> `68`
+- Validation passed with:
+  - `python3 -m py_compile src/ops_adapter/actions.py scripts/ci/verify_operations_department_pack_v1.py scripts/ci/verify_project_management_department_pack_v1.py scripts/ci/verify_engineering_department_pack_v1.py tests/test_ops_adapter.py tests/test_persona_registry_v2.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py`
+  - `PYTHONPATH=src .venv/bin/pytest -q tests/test_persona_registry_v2.py tests/test_ops_adapter.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py` (`149 passed`)
+- `P3` is complete. `P4` is now the active next act.

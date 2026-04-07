@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-04-06T12:00:00Z'
+last_updated: '2026-04-07T16:53:23Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -94,7 +94,7 @@ kpis:
   required_active_personas: 10
   required_registry_backed_personas: 10
   required_workflow_families: 13
-  supported_action_count: 85
+  supported_action_count: 91
 personas:
   m365-administrator:
     display_name: Marcus Chen
@@ -173,12 +173,18 @@ personas:
     - website_content_publication
     - analytics_and_seo_change_management
     supported_actions:
-    - deployment.preview
-    - deployment.production
-    - content.update
-    - content.create
-    - analytics.read
-    - seo.update
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - files.upload
+    - files.share
   audit-operations:
     display_name: Naomi Brooks
     title: Audit Operations Lead

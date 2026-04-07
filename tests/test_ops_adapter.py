@@ -1775,6 +1775,7 @@ def test_p1_dead_route_aliases_no_longer_raise(
 @pytest.mark.parametrize(
     ("agent", "action", "params"),
     [
+        ("website-manager", "deployment.preview", {}),
         ("website-manager", "deployment.production", {}),
         ("website-manager", "content.create", {"content_id": "content-1"}),
         ("website-manager", "content.update", {"content_id": "content-1"}),
@@ -1807,7 +1808,10 @@ def test_execute_routes_unsupported_m365_only_aliases_fail_closed(
 @pytest.mark.parametrize(
     ("agent", "action", "params"),
     [
+        ("project-manager", "create-project", {"title": "Project One"}),
+        ("project-manager", "list-projects", {}),
         ("project-manager", "update-project-status", {"id": "project-1", "status": "done"}),
+        ("platform-manager", "provision-client-services", {"clientId": "client-1"}),
         ("platform-manager", "deprovision-client-services", {"clientId": "client-1"}),
         ("platform-manager", "get-client-status", {"clientId": "client-1"}),
         ("email-processing-agent", "email.classify", {"message_id": "msg-1"}),

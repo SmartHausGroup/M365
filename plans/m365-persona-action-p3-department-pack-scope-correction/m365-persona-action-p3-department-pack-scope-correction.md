@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-persona-action-p3-department-pack-scope-correction`
 **Parent Plan ID:** `m365-persona-action-full-support-remediation`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-07
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-persona-action-p3-department-pack-scope-correction:R1`
@@ -10,6 +10,7 @@
 **Canonical predecessor:** `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
 **Governance evidence:** `notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb`, `configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json`
 **Historical lineage:** successor blocker package after the first bounded `P3` wave reduced the frozen `permission_blocked_aliases_with_no_tier_support` set to four aliases whose truthful retirement now crosses department-pack authority surfaces outside the original parent allowlist.
+**Completion status (2026-04-07 13:05 EDT):** `GO` — widened the parent `P3` repair surface to the affected operations / project-management / engineering department-pack contracts, then handed the parent initiative back to the second bounded `P3` retirement wave, which closed the remaining non-M365 aliases and returned the parent plan to `P4`.
 
 **Draft vs Active semantics:** This child plan starts in **Draft**. It becomes **Active** only when the parent initiative remains on `P3`, the approval packet is presented and receives explicit `go`, and no sibling phase under the parent initiative is concurrently active. It becomes **Complete** only after the widened authority scope is notebook-backed, the parent plan and trackers are synchronized, the child package is committed and pushed, and control is truthfully returned to the parent `P3` retirement wave.
 
@@ -173,3 +174,16 @@ If `P3S_GO` is false, `P3S` must emit `NO-GO`, stop fail-closed, and keep the pa
 - Do not widen beyond operations, project-management, and engineering department-pack surfaces.
 - Do not widen into `P4`.
 - Commit and push `P3S` before any second-wave `P3` file edits begin.
+
+## Governance Closure
+
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this child plan `status -> complete`
+
+## Execution Outcome
+
+- **Decision:** `GO`
+- **Approved by:** `operator explicit go`
+- **Completion timestamp:** `2026-04-07 13:05:18 EDT`

@@ -4435,7 +4435,9 @@ async def _execute_impl(
         # ---- Website ----
         if agent == "website-manager":
             if action == "deployment.preview":
-                return await website_deployment_preview(params, correlation_id)
+                return await unsupported_m365_only_action(
+                    params, correlation_id, "deployment.preview"
+                )
             if action == "deployment.production":
                 return await unsupported_m365_only_action(
                     params, correlation_id, "deployment.production"
@@ -4549,9 +4551,9 @@ async def _execute_impl(
     # ---- Project Manager ----
     if agent == "project-manager":
         if action == "create-project":
-            return await create_project(params, correlation_id)
+            return await unsupported_m365_only_action(params, correlation_id, "create-project")
         if action == "list-projects":
-            return await list_projects(params, correlation_id)
+            return await unsupported_m365_only_action(params, correlation_id, "list-projects")
         if action == "update-project-status":
             return await unsupported_m365_only_action(
                 params, correlation_id, "update-project-status"
@@ -4562,7 +4564,9 @@ async def _execute_impl(
     # ---- Platform Manager ----
     if agent == "platform-manager":
         if action == "provision-client-services":
-            return await provision_client_services(params, correlation_id)
+            return await unsupported_m365_only_action(
+                params, correlation_id, "provision-client-services"
+            )
         if action == "deprovision-client-services":
             return await unsupported_m365_only_action(
                 params, correlation_id, "deprovision-client-services"

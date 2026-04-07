@@ -21,7 +21,7 @@ def main() -> int:
         raise SystemExit("engineering_department_pack_active_count_mismatch")
     if summary["registry_backed_persona_count"] != 8:
         raise SystemExit("engineering_department_pack_registry_backed_count_mismatch")
-    if summary["supported_action_count"] != 65:
+    if summary["supported_action_count"] != 68:
         raise SystemExit("engineering_department_pack_supported_action_count_mismatch")
     if summary["pack_state"] != "ready":
         raise SystemExit("engineering_department_pack_expected_ready")

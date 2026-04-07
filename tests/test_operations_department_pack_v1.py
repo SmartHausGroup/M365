@@ -20,7 +20,7 @@ def test_post_h5_builds_operations_department_pack(
     assert pack["summary"]["persona_count"] == 10
     assert pack["summary"]["active_persona_count"] == 10
     assert pack["summary"]["registry_backed_persona_count"] == 10
-    assert pack["summary"]["supported_action_count"] == 85
+    assert pack["summary"]["supported_action_count"] == 91
     assert pack["summary"]["pack_state"] == "ready"
     assert {persona["coverage_status"] for persona in pack["personas"]} == {"registry-backed"}
 
@@ -58,7 +58,7 @@ def test_post_h5_operations_fails_closed_on_declared_action_mismatch(
     payload["personas"]["m365-administrator"]["supported_actions"] = payload["personas"][
         "m365-administrator"
     ]["supported_actions"][:-1]
-    payload["kpis"]["supported_action_count"] = 84
+    payload["kpis"]["supported_action_count"] = 90
 
     overridden = tmp_path / "department_pack_operations_v1.yaml"
     overridden.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
