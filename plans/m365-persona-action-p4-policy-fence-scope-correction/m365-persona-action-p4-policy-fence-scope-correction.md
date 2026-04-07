@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-persona-action-p4-policy-fence-scope-correction`
 **Parent Plan ID:** `m365-persona-action-full-support-remediation`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-07
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-persona-action-p4-policy-fence-scope-correction:R1`
@@ -10,6 +10,7 @@
 **Canonical predecessor:** `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
 **Governance evidence:** `notebooks/m365/INV-M365-DD-persona-action-p4-policy-fence-scope-correction-v1.ipynb`, `configs/generated/persona_action_p4_policy_fence_scope_correction_v1_verification.json`
 **Historical lineage:** successor blocker package after `P3` closed the dead-route, legacy-stub, and permission/alias backlog far enough to expose the next real repo-local blocker: OPA policy drift is now denying the overwhelming majority of the active persona/action graph.
+**Completion status (2026-04-07 13:14 EDT):** `GO` — widened the parent `P4` repair surface to the notebook-backed policy-governance evidence boundary, then handed the parent initiative back to `P4` for the actual repo-local policy rewrite.
 
 **Draft vs Active semantics:** This child plan starts in **Draft**. It becomes **Active** only when the parent initiative remains on `P4`, the approval packet receives explicit `go`, and no sibling child phase is concurrently active. It becomes **Complete** only after the policy-drift scope is notebook-backed, the parent plan and trackers are synchronized, the child package is committed and pushed, and control is truthfully returned to the parent `P4` remediation wave.
 
@@ -160,3 +161,15 @@ If `P4S_GO` is false, `P4S` must emit `NO-GO`, stop fail-closed, and keep the pa
 - Do not widen into `P5`.
 - Commit and push `P4S` before any `P4` file edits begin.
 
+## Governance Closure
+
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this child plan `status -> complete`
+
+## Execution Outcome
+
+- **Decision:** `GO`
+- **Approved by:** `operator explicit go`
+- **Completion timestamp:** `2026-04-07 13:14:26 EDT`

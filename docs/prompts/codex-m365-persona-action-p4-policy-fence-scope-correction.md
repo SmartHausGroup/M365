@@ -46,4 +46,3 @@ When complete, mark the child package ready for the parent `P4` phase and update
 - `Operations/ACTION_LOG.md`
 - `Operations/PROJECT_FILE_INDEX.md`
 - `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
-

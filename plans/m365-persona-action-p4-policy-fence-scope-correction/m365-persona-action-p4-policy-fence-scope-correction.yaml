@@ -1,6 +1,6 @@
 plan_id: m365-persona-action-p4-policy-fence-scope-correction
 parent_plan_id: m365-persona-action-full-support-remediation
-status: Draft
+status: Complete
 date: '2026-04-07'
 owner: SMARTHAUS
 execution_plan_reference: plan:m365-persona-action-p4-policy-fence-scope-correction:R1
@@ -93,4 +93,3 @@ child_acts:
 prompt_refs:
   detailed: docs/prompts/codex-m365-persona-action-p4-policy-fence-scope-correction.md
   kickoff: docs/prompts/codex-m365-persona-action-p4-policy-fence-scope-correction-prompt.txt
-

@@ -282,4 +282,5 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `419` denied active persona/action pairs
   - `152` denied unique aliases
 - The bounded child blocker phase `plan:m365-persona-action-p4-policy-fence-scope-correction` is now required before `P4` policy edits may begin truthfully because the parent initiative needs notebook-backed scope evidence for the widened policy-remediation surface.
-- `P4S` is now the active next act.
+- The bounded child blocker phase `plan:m365-persona-action-p4-policy-fence-scope-correction` is complete. The governance notebook `INV-M365-DD` and generated verification now freeze the exact repo-local policy drift, and the parent initiative is returned to `P4` with notebook-backed authority to edit the repo-local policy and approval-risk surfaces.
+- `P4` is now the active next act again.
