@@ -44,9 +44,11 @@
 
 ## Section 4A: Current Phase State
 
-- `G0` is now the active next act.
+- `G0` is complete.
+- `G1` is now the active next act.
 - The predecessor direct-surface certification initiative is complete.
 - The current predecessor artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
+- The current workforce baseline artifact is `artifacts/diagnostics/m365_persona_action_certification.json`.
 
 ## Section 5: Scope
 
@@ -171,7 +173,22 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
 
 ## Section 11: Current Result
 
-- `R0` pending implementation on this branch
-- `G0` is the next act
-- No workforce-graph certification has been executed yet under this package
-- The direct-surface predecessor is complete and will be reused as evidence where valid
+- `R0` is complete.
+- `G0` is complete.
+- The frozen workforce baseline now records:
+  - `59` agents
+  - `59` authoritative personas
+  - `184` persona-facing allowed-action aliases
+  - `41` approval rules
+  - `5` contract-only personas
+  - `8` known stub agents with `46` currently attached actions
+- The predecessor direct-surface certification remains locked at:
+  - `155` direct instruction actions
+  - `64` certified live-green direct actions
+  - `91` fenced direct actions
+- `G0` also froze the current candidate mismatch zones:
+  - `2` exact-name overlaps between persona aliases and direct instruction actions
+  - `182` persona aliases without an exact direct-action name match
+  - `153` direct instruction actions without an exact persona-alias name match
+- No reachability, orphan, or final execution classification has been claimed yet under this package.
+- `G1` persona reachability certification is the next act.

@@ -632,11 +632,12 @@ outside this repo slice.
 **Reference:** `plan:m365-persona-action-certification:R0`
 
 **Status:** 🟢 Active — the planning package is now created and the workforce-graph certification initiative is active.
-**Current next act:** `G0` — freeze the persona universe, persona-facing action universe, and predecessor direct-support evidence before reachability and mapping claims.
+**Current next act:** `G1` — certify persona reachability through the governed runtime surfaces.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-persona-action-certification.md`, `docs/prompts/codex-m365-persona-action-certification-prompt.txt`
 
 **Status update (2026-04-07 06:15 EDT):** Created the governed persona-to-action certification package after the direct-surface certification initiative closed the `155`-action instruction surface but did not certify the workforce graph itself. The current truth is that the repo has `59` agents in `registry/agents.yaml`, `184` persona-facing allowed-action aliases, `125` aliases outside the current direct crosswalk, and `41` legacy stub actions across `8` agents in `src/ops_adapter/actions.py`. The next acts are to freeze the workforce graph, prove persona reachability, classify every persona-facing action as mapped/orphaned/stubbed/dead-routed/fenced, reuse the completed direct-action evidence where valid, and then publish a final workforce certification matrix.
+**Status update (2026-04-07 06:20 EDT):** Completed `G0` workforce-graph lock for the persona-to-action certification initiative. The frozen baseline now records `59` agents, `59` authoritative personas, `54` active personas, `5` planned personas, `5` contract-only personas, `184` persona-facing allowed-action aliases, and `41` approval rules. It also locks the predecessor direct-support matrix at `155` direct instruction actions with `64` certified live-green and `91` fenced, the current known stub perimeter at `8` agents with `46` attached actions, and the current candidate mismatch zones at only `2` exact-name overlaps, `182` persona aliases without an exact direct-action name match, and `153` direct actions without an exact persona-alias name match. `G1` is now the active next act.
 
 ---
 

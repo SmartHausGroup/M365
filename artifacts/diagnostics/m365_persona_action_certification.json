@@ -1,0 +1,193 @@
+{
+  "plan_id": "plan:m365-persona-action-certification",
+  "phase": "G0",
+  "status": "workforce_graph_lock_complete",
+  "baseline": {
+    "agents_total": 59,
+    "authoritative_personas_total": 59,
+    "active_personas_total": 54,
+    "planned_personas_total": 5,
+    "contract_only_personas_total": 5,
+    "persona_alias_surface_total": 184,
+    "approval_rules_total": 41
+  },
+  "contract_only_personas": [
+    "app-store-optimizer",
+    "instagram-curator",
+    "reddit-community-builder",
+    "tiktok-strategist",
+    "twitter-engager"
+  ],
+  "predecessor_direct_surface": {
+    "plan_id": "plan:m365-direct-full-surface-certification",
+    "direct_instruction_surface_total": 155,
+    "certified_live_green_total": 64,
+    "fenced_total": 91
+  },
+  "candidate_mismatch_zones": {
+    "exact_name_overlap_total": 2,
+    "exact_name_overlap": [
+      "create_plan",
+      "list_plans"
+    ],
+    "persona_aliases_without_exact_direct_match_total": 182,
+    "direct_actions_without_exact_persona_alias_total": 153,
+    "direct_actions_without_exact_persona_alias_sample": [
+      "add_channel",
+      "add_external_group_member",
+      "add_group_member",
+      "assign_user_license",
+      "create_access_review",
+      "create_approval_item",
+      "create_channel",
+      "create_conditional_access_policy",
+      "create_contact",
+      "create_document",
+      "create_ediscovery_case",
+      "create_ediscovery_case_search",
+      "create_event",
+      "create_external_connection",
+      "create_external_group",
+      "create_folder",
+      "create_group",
+      "create_list_item",
+      "create_plan_bucket",
+      "create_plan_task",
+      "create_presentation",
+      "create_site",
+      "create_team",
+      "create_user",
+      "create_workbook",
+      "delete_conditional_access_policy",
+      "delete_contact",
+      "delete_event",
+      "delete_flow",
+      "delete_message",
+      "delete_powerapp",
+      "disable_flow",
+      "disable_user",
+      "enable_flow",
+      "execute_device_action",
+      "get_access_review",
+      "get_activity_reports",
+      "get_application",
+      "get_approval_item",
+      "get_approval_solution",
+      "get_automation_recipe",
+      "get_conditional_access_policy",
+      "get_contact",
+      "get_device",
+      "get_drive",
+      "get_drive_item",
+      "get_ediscovery_case",
+      "get_ediscovery_case_search",
+      "get_event",
+      "get_external_connection",
+      "get_external_item",
+      "get_flow_admin",
+      "get_group",
+      "get_list",
+      "get_mailbox_settings",
+      "get_message",
+      "get_organization",
+      "get_powerapp_admin",
+      "get_powerapp_environment",
+      "get_powerbi_dashboard",
+      "get_powerbi_dataset",
+      "get_powerbi_report",
+      "get_powerbi_workspace",
+      "get_report",
+      "get_schedule",
+      "get_secure_score_profile",
+      "get_security_alert",
+      "get_security_incident",
+      "get_site",
+      "get_team",
+      "get_usage_reports",
+      "get_user",
+      "invoke_flow_callback",
+      "list_access_review_decisions",
+      "list_access_reviews",
+      "list_applications",
+      "list_approval_item_requests",
+      "list_approval_items",
+      "list_automation_recipes",
+      "list_channels"
+    ]
+  },
+  "legacy_stub_perimeter": {
+    "known_stub_agents_total": 8,
+    "known_stub_actions_total": 46,
+    "known_stub_agents": {
+      "it-operations-manager": [
+        "infrastructure.monitor",
+        "system.health-check",
+        "alerts.respond",
+        "backup.verify",
+        "security.scan"
+      ],
+      "website-operations-specialist": [
+        "website.deploy",
+        "cdn.purge",
+        "dns.update",
+        "ssl.renew",
+        "performance.optimize",
+        "backup.restore"
+      ],
+      "project-coordination-agent": [
+        "task.create",
+        "task.assign",
+        "deadline.track",
+        "status.update",
+        "report.generate",
+        "list_plans",
+        "create_plan",
+        "list_buckets",
+        "create_bucket",
+        "create_task"
+      ],
+      "client-relationship-agent": [
+        "client.follow-up",
+        "satisfaction.survey",
+        "feedback.analyze",
+        "relationship.score",
+        "engagement.plan"
+      ],
+      "compliance-monitoring-agent": [
+        "compliance.check",
+        "policy.validate",
+        "audit.prepare",
+        "violation.report",
+        "remediation.plan"
+      ],
+      "recruitment-assistance-agent": [
+        "candidate.screen",
+        "interview.schedule",
+        "feedback.collect",
+        "offer.prepare",
+        "onboarding.initiate"
+      ],
+      "financial-operations-agent": [
+        "invoice.process",
+        "expense.approve",
+        "budget.track",
+        "forecast.update",
+        "audit.prepare"
+      ],
+      "knowledge-management-agent": [
+        "document.index",
+        "search.optimize",
+        "content.curate",
+        "training.recommend",
+        "expert.connect"
+      ]
+    }
+  },
+  "inherited_blockers": {
+    "persona_aliases_outside_current_direct_crosswalk_total": 125,
+    "notes": [
+      "The predecessor direct-surface initiative proved that 125 persona-facing aliases remain outside the current direct crosswalk.",
+      "G0 does not yet classify final orphan counts. It freezes the raw graph and candidate mismatch zones so G2 can classify them explicitly."
+    ]
+  }
+}
