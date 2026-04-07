@@ -1,0 +1,19 @@
+lemma_id: L95_m365_persona_action_legacy_stub_remediation_v6
+status: green
+scope:
+  aliases:
+    - deployment.production
+    - website.deploy
+    - cdn.purge
+    - dns.update
+    - ssl.renew
+    - performance.optimize
+    - backup.restore
+replacement_modes:
+  deployment.production: explicit_unsupported_m365_only_failure
+  website.deploy: explicit_unsupported_m365_only_failure
+  cdn.purge: explicit_unsupported_m365_only_failure
+  dns.update: explicit_unsupported_m365_only_failure
+  ssl.renew: explicit_unsupported_m365_only_failure
+  performance.optimize: explicit_unsupported_m365_only_failure
+  backup.restore: explicit_unsupported_m365_only_failure

@@ -1,0 +1,13 @@
+{
+  "lemma_id": "L95_m365_persona_action_legacy_stub_remediation_v6",
+  "status": "green",
+  "replacement_modes": {
+    "deployment.production": "explicit unsupported M365-only failure",
+    "website.deploy": "explicit unsupported M365-only failure",
+    "cdn.purge": "explicit unsupported M365-only failure",
+    "dns.update": "explicit unsupported M365-only failure",
+    "ssl.renew": "explicit unsupported M365-only failure",
+    "performance.optimize": "explicit unsupported M365-only failure",
+    "backup.restore": "explicit unsupported M365-only failure"
+  }
+}
