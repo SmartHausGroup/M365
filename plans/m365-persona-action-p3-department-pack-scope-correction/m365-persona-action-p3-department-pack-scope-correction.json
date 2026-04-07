@@ -1,0 +1,68 @@
+{
+  "plan_id": "m365-persona-action-p3-department-pack-scope-correction",
+  "parent_plan_id": "m365-persona-action-full-support-remediation",
+  "status": "Draft",
+  "date": "2026-04-07",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-persona-action-p3-department-pack-scope-correction:R1",
+  "canonical_predecessor": "plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md",
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb",
+    "verification": "configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json"
+  },
+  "objective": "Produce the notebook-backed scope-correction package required to extend P3 into the affected department-pack authority surfaces.",
+  "current_state": {
+    "parent_plan": "plan:m365-persona-action-full-support-remediation",
+    "remaining_aliases": [
+      "create-project",
+      "deployment.preview",
+      "list-projects",
+      "provision-client-services"
+    ],
+    "companion_claim_drift": [
+      "deployment.production",
+      "content.create",
+      "content.update",
+      "analytics.read",
+      "seo.update",
+      "update-project-status",
+      "deprovision-client-services",
+      "get-client-status"
+    ],
+    "affected_authority_surfaces": [
+      "registry/department_pack_operations_v1.yaml",
+      "registry/department_pack_project_management_v1.yaml",
+      "registry/department_pack_engineering_v1.yaml"
+    ],
+    "blocker": {
+      "verdict": "allowed:false",
+      "violation": "map-5-governance-notebook-evidence"
+    }
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Make the remaining P3 authority-scope gap explicit"
+    },
+    {
+      "id": "R2",
+      "title": "Produce notebook-backed governance evidence"
+    },
+    {
+      "id": "R3",
+      "title": "Admit the affected department-pack surfaces into the bounded P3 repair set"
+    },
+    {
+      "id": "R4",
+      "title": "Reopen the future bounded P3 file-edit validation under child-plan authority"
+    },
+    {
+      "id": "R5",
+      "title": "Synchronize the parent plan and trackers"
+    },
+    {
+      "id": "R6",
+      "title": "Commit and push before resuming P3"
+    }
+  ]
+}

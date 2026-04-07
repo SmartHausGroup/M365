@@ -1,0 +1,43 @@
+{
+  "plan_ref": "plan:m365-persona-action-p3-department-pack-scope-correction:R2",
+  "notebook": "notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb",
+  "status": "green",
+  "remaining_aliases": [
+    "create-project",
+    "deployment.preview",
+    "list-projects",
+    "provision-client-services"
+  ],
+  "companion_claim_drift": [
+    "deployment.production",
+    "content.create",
+    "content.update",
+    "analytics.read",
+    "seo.update",
+    "update-project-status",
+    "deprovision-client-services",
+    "get-client-status"
+  ],
+  "affected_department_pack_surfaces": [
+    "registry/department_pack_operations_v1.yaml",
+    "registry/department_pack_project_management_v1.yaml",
+    "registry/department_pack_engineering_v1.yaml"
+  ],
+  "affected_validation_surfaces": [
+    "docs/commercialization/m365-operations-department-pack-v1.md",
+    "docs/commercialization/m365-project-management-department-pack-v1.md",
+    "docs/commercialization/m365-engineering-department-pack-v1.md",
+    "scripts/ci/verify_operations_department_pack_v1.py",
+    "scripts/ci/verify_project_management_department_pack_v1.py",
+    "scripts/ci/verify_engineering_department_pack_v1.py",
+    "tests/test_operations_department_pack_v1.py",
+    "tests/test_project_management_department_pack_v1.py",
+    "tests/test_engineering_department_pack_v1.py"
+  ],
+  "counts": {
+    "remaining_alias_count": 4,
+    "companion_claim_drift_count": 8,
+    "affected_department_pack_count": 3,
+    "affected_validation_surface_count": 9
+  }
+}

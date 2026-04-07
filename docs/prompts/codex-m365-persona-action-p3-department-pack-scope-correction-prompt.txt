@@ -1,0 +1,10 @@
+Execute `plan:m365-persona-action-p3-department-pack-scope-correction`.
+
+Read:
+- `docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction.md`
+- `plans/m365-persona-action-p3-department-pack-scope-correction/m365-persona-action-p3-department-pack-scope-correction.md`
+
+This child phase widens `P3` into the affected department-pack authority surfaces.
+Freeze the remaining four aliases and the companion stale pack claims.
+Publish the notebook-backed governance evidence.
+Return control to the parent `P3` retirement wave only after validation, commit, and push.

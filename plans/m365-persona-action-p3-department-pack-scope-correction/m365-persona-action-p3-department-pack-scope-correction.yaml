@@ -1,0 +1,110 @@
+plan_id: m365-persona-action-p3-department-pack-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Draft
+date: '2026-04-07'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p3-department-pack-scope-correction:R1
+canonical_predecessor: plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+governance_evidence:
+  notebook: notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb
+  verification: configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json
+draft_vs_active_semantics: Draft until the parent initiative remains on P3, the approval packet receives explicit go, and no sibling phase is concurrently active
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before every mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to P4
+notebook_first_discipline: All widened-scope claims must be frozen in notebooks before the parent P3 repair set is widened
+objective: Produce the notebook-backed scope-correction package required to extend P3 into the affected department-pack authority surfaces
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phases:
+    - P0
+    - P1
+    - P2
+    - P3 wave 1
+  remaining_aliases:
+    - create-project
+    - deployment.preview
+    - list-projects
+    - provision-client-services
+  companion_claim_drift:
+    - deployment.production
+    - content.create
+    - content.update
+    - analytics.read
+    - seo.update
+    - update-project-status
+    - deprovision-client-services
+    - get-client-status
+  affected_authority_surfaces:
+    - registry/department_pack_operations_v1.yaml
+    - registry/department_pack_project_management_v1.yaml
+    - registry/department_pack_engineering_v1.yaml
+  blocker:
+    verdict: allowed:false
+    violation: map-5-governance-notebook-evidence
+scope:
+  in:
+    - Restate the P3 authority-scope gap from live runtime, registry, and department-pack truth.
+    - Publish notebook-backed governance evidence and generated verification output for the widened P3 boundary.
+    - Admit the affected department-pack authority, commercialization, verifier, and test surfaces into the bounded P3 repair set.
+    - Synchronize the parent plan and governance trackers truthfully.
+  out:
+    - Executing the actual second-wave P3 retirement edits.
+    - P4 policy-fence remediation.
+    - UCP-side work.
+    - Unrelated department-pack surfaces outside operations, project-management, and engineering.
+allowlist:
+  - plans/m365-persona-action-p3-department-pack-scope-correction/**
+  - docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction.md
+  - docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction-prompt.txt
+  - notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb
+  - configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json
+  - plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+  - src/ops_adapter/actions.py
+  - tests/test_ops_adapter.py
+  - registry/agents.yaml
+  - registry/persona_registry_v2.yaml
+  - registry/department_pack_operations_v1.yaml
+  - registry/department_pack_project_management_v1.yaml
+  - registry/department_pack_engineering_v1.yaml
+  - docs/commercialization/m365-operations-department-pack-v1.md
+  - docs/commercialization/m365-project-management-department-pack-v1.md
+  - docs/commercialization/m365-engineering-department-pack-v1.md
+  - scripts/ci/verify_operations_department_pack_v1.py
+  - scripts/ci/verify_project_management_department_pack_v1.py
+  - scripts/ci/verify_engineering_department_pack_v1.py
+  - tests/test_operations_department_pack_v1.py
+  - tests/test_project_management_department_pack_v1.py
+  - tests/test_engineering_department_pack_v1.py
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - ../UCP/**
+  - any path not listed in the allowlist
+requirements:
+  - id: R1
+    title: Make the remaining P3 authority-scope gap explicit
+  - id: R2
+    title: Produce notebook-backed governance evidence
+  - id: R3
+    title: Admit the affected department-pack surfaces into the bounded P3 repair set
+  - id: R4
+    title: Reopen the future bounded P3 file-edit validation under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and trackers
+  - id: R6
+    title: Commit and push before resuming P3
+child_acts:
+  - id: P3SA
+    description: Freeze the remaining alias inventory, companion claim drift, and affected authority surfaces.
+  - id: P3SB
+    description: Produce notebook-backed governance evidence and generated verification output.
+  - id: P3SC
+    description: Widen the parent repair surface, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction-prompt.txt

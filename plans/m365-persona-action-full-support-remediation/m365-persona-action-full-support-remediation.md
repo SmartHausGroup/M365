@@ -90,6 +90,9 @@
 - `registry/approval_risk_matrix_v2.yaml`
 - `registry/executor_routing_v2.yaml`
 - `registry/permission_tiers.yaml`
+- `registry/department_pack_operations_v1.yaml`
+- `registry/department_pack_project_management_v1.yaml`
+- `registry/department_pack_engineering_v1.yaml`
 - `policies/ops.rego`
 - `policies/agents/*.rego`
 - `src/ops_adapter/main.py`
@@ -104,6 +107,15 @@
 - `tests/test_executor_routing_v2.py`
 - `tests/test_auth_model_v2.py`
 - `tests/test_approval_risk_v2.py`
+- `docs/commercialization/m365-operations-department-pack-v1.md`
+- `docs/commercialization/m365-project-management-department-pack-v1.md`
+- `docs/commercialization/m365-engineering-department-pack-v1.md`
+- `scripts/ci/verify_operations_department_pack_v1.py`
+- `scripts/ci/verify_project_management_department_pack_v1.py`
+- `scripts/ci/verify_engineering_department_pack_v1.py`
+- `tests/test_operations_department_pack_v1.py`
+- `tests/test_project_management_department_pack_v1.py`
+- `tests/test_engineering_department_pack_v1.py`
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/ACTION_LOG.md`
 - `Operations/PROJECT_FILE_INDEX.md`
@@ -251,4 +263,5 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `list-projects`
   - `provision-client-services`
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`130 passed`).
-- `P3` remains active for the remaining non-normalizable permission-blocked aliases.
+- The bounded child blocker phase `plan:m365-persona-action-p3-department-pack-scope-correction` is now created with governance notebook `INV-M365-DC` and generated verification `configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json`.
+- `P3S` is now the active next act before the second bounded `P3` retirement wave may touch the affected department-pack authority surfaces.

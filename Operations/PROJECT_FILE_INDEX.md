@@ -1824,6 +1824,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-action-full-support-remediation.md` | Detailed execution prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 | `docs/prompts/codex-m365-persona-action-full-support-remediation-prompt.txt` | Kickoff prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 
+## Active Persona-Action P3 Department-Pack Scope-Correction Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-persona-action-p3-department-pack-scope-correction/m365-persona-action-p3-department-pack-scope-correction.md` | Human-readable governed child blocker package for extending `P3` into the affected department-pack authority surfaces before the last non-M365 aliases are retired. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R1` |
+| `plans/m365-persona-action-p3-department-pack-scope-correction/m365-persona-action-p3-department-pack-scope-correction.yaml` | Structured YAML authority for the bounded `P3S` department-pack scope-correction package. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R1` |
+| `plans/m365-persona-action-p3-department-pack-scope-correction/m365-persona-action-p3-department-pack-scope-correction.json` | Structured JSON mirror for automation and governance tooling on the `P3S` blocker package. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R1` |
+| `docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction.md` | Detailed execution prompt for the bounded `P3S` department-pack scope-correction phase. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R1` |
+| `docs/prompts/codex-m365-persona-action-p3-department-pack-scope-correction-prompt.txt` | Kickoff prompt for the bounded `P3S` department-pack scope-correction phase. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R1` |
+| `notebooks/m365/INV-M365-DC-persona-action-p3-department-pack-scope-correction-v1.ipynb` | Governance notebook freezing the remaining `P3` alias inventory, companion stale department-pack claims, and the exact widened authority surface required before the second bounded `P3` retirement wave. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R2` |
+| `configs/generated/persona_action_p3_department_pack_scope_correction_v1_verification.json` | Machine-readable verification payload for the `P3S` governance notebook and widened authority-scope proof. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p3-department-pack-scope-correction:R2` |
+
 ## Active Persona-Action P1 Notebook Evidence Scope-Correction Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
