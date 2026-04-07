@@ -2,7 +2,7 @@
 
 ## Status
 
-`G0`, `G1`, and `G2` are complete. The workforce-graph certification initiative now has a frozen baseline, notebook-backed persona reachability truth, and a published mapping / orphan / stub audit. `G3` unique action execution certification reuse is the next act.
+`G0`, `G1`, `G2`, and `G3` are complete. The workforce-graph certification initiative now has a frozen baseline, notebook-backed persona reachability truth, a published mapping / orphan / stub audit, and an execution-reuse boundary that shrinks `G4` to the irreducible live-proof surface.
 
 ## Purpose
 
@@ -227,4 +227,64 @@ That means workforce certification cannot be reduced to alias-level support alon
 - the expanded synthetic stub perimeter is explicit instead of hidden inside literal handlers
 - reverse direct orphans are explicit instead of assumed away
 
-The next act is `G3`, which will reuse the completed direct-surface evidence where valid and isolate the remaining unique persona-facing actions that still need execution truth.
+## G3 Unique Action Execution Reuse
+
+`G3` does not try to prove new behavior yet. It joins the `G2` mapped workforce graph to the predecessor direct-support matrix so the workforce program can reuse already-proven execution truth where that reuse is explicit and fail-closed.
+
+### What G3 Proved
+
+At the mapped unique-alias layer, the `115` aliases that survived `G2` now split cleanly into:
+
+- `33` reusable `green`
+- `1` reusable `approval-gated`
+- `1` reusable `actor-tier-gated`
+- `24` reusable `fenced`
+- `56` remaining unique aliases that still require fresh live proof in `G4`
+
+At the mapped active persona/action-pair layer, the `265` mapped pairs now split into:
+
+- `135` reusable `green`
+- `1` reusable `approval-gated`
+- `1` reusable `actor-tier-gated`
+- `72` reusable `fenced`
+- `56` remaining mapped pairs that still require fresh live proof in `G4`
+
+The join is now deterministic and owner-aware:
+
+- the canonical crosswalked mapped surface no longer leaves any unproven reuse residue
+- `ca.policy_create` is carried forward as a reusable `approval-gated` path
+- `users.disable` is carried forward as a reusable `actor-tier-gated` path
+- the remaining live-proof scope is exactly the wrapper-owned mapped surface
+- there are `0` mixed-reuse aliases after the `G2` pair classifier is joined to predecessor direct evidence
+
+### What G3 Leaves For G4
+
+`G4` is now narrowed to the `56` mapped persona/action pairs that still need direct workforce proof. That remaining scope is concentrated in the wrapper layer, including:
+
+- `audit-operations` audit reads
+- `calendar-management-agent` legacy scheduling wrappers
+- `email-processing-agent` reply/forward/respond/archive wrappers
+- `m365-administrator` wrapper reads like `users.list`, `users.read`, `sites.list`, `sites.root`, `files.search`, and `files.share`
+- `reports`, `service-health`, `teams-manager`, `ucp-administrator`, and other wrapper-owned specialist paths
+
+### Notebook-Backed Evidence
+
+`G3` is now backed by a dedicated proof chain:
+
+- [L87_m365_persona_action_execution_reuse_v1.md](/Users/smarthaus/Projects/GitHub/M365/docs/ma/lemmas/L87_m365_persona_action_execution_reuse_v1.md)
+- [L87_m365_persona_action_execution_reuse_v1.yaml](/Users/smarthaus/Projects/GitHub/M365/invariants/lemmas/L87_m365_persona_action_execution_reuse_v1.yaml)
+- [INV-M365-CM-persona-action-execution-reuse-v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/m365/INV-M365-CM-persona-action-execution-reuse-v1.ipynb)
+- [L87_m365_persona_action_execution_reuse_v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/lemma_proofs/L87_m365_persona_action_execution_reuse_v1.ipynb)
+- [scorecard_l87.json](/Users/smarthaus/Projects/GitHub/M365/artifacts/scorecards/scorecard_l87.json)
+- [persona_action_execution_reuse_v1_verification.json](/Users/smarthaus/Projects/GitHub/M365/configs/generated/persona_action_execution_reuse_v1_verification.json)
+
+### G3 Closeout
+
+`G3` is green because the workforce program no longer has to guess where predecessor execution evidence applies:
+
+- reusable direct-surface proof is explicit
+- approval and actor-tier boundaries remain explicit instead of being over-claimed as `green`
+- the remaining `G4` live-proof scope is finite and published
+- the workforce certification program can now move to pair-level proof without re-testing already-proven direct actions
+
+The next act is `G4`, which will execute the remaining `56` mapped persona/action proofs and publish final workforce certification truth.

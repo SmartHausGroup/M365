@@ -47,7 +47,8 @@
 - `G0` is complete.
 - `G1S` is complete.
 - `G1` is complete.
-- `G2` is now the active next act.
+- `G3` is complete.
+- `G4` is now the active next act.
 - The predecessor direct-surface certification initiative is complete.
 - The current predecessor artifact is `artifacts/diagnostics/m365_direct_full_surface_certification.json`.
 - The current workforce baseline artifact is `artifacts/diagnostics/m365_persona_action_certification.json`.
@@ -223,4 +224,9 @@ Stop and re-scope if truthful workforce certification requires UCP-side edits or
   - `reminder.send`
   - `update-project-status`
 - `G2S` is now complete and repaired the blocked `G2` closeout validation contract with notebook-backed governance evidence at `INV-M365-CL` and `persona_action_g2_validation_run_governance_alignment_v1_verification.json`.
-- `G3` unique action execution certification reuse is now the next act.
+- `G3` is now complete and published truthfully with notebook-backed evidence at `L87`, `INV-M365-CM`, `scorecard_l87.json`, and `persona_action_execution_reuse_v1_verification.json`.
+- `G3` closes the execution-reuse layer at:
+  - `115` mapped unique aliases partitioned into `33 green`, `1 approval-gated`, `1 actor-tier-gated`, `24 fenced`, and `56` remaining aliases requiring fresh live proof in `G4`
+  - `265` mapped persona/action pairs partitioned into `135 green`, `1 approval-gated`, `1 actor-tier-gated`, `72 fenced`, and `56` remaining mapped pairs requiring fresh live proof in `G4`
+  - `0` mixed-reuse aliases after the owner-aware join between `G2` pair truth and predecessor direct evidence
+- `G4` is now the active next act.

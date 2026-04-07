@@ -1,0 +1,21 @@
+title: Persona-to-action G3 execution reuse remains deterministic and fail-closed
+lemma_reference: docs/ma/lemmas/L87_m365_persona_action_execution_reuse_v1.md
+source_notebook: notebooks/m365/INV-M365-CM-persona-action-execution-reuse-v1.ipynb
+lemma_notebook: notebooks/lemma_proofs/L87_m365_persona_action_execution_reuse_v1.ipynb
+proof_obligations:
+- mapped persona aliases inherit predecessor direct evidence only when the reuse mapping
+  is explicit
+- approval-gated and actor-tier-gated reuse remain explicit rather than collapsed
+  into green
+- all remaining mapped wrappers requiring fresh proof are published for G4
+- commercialization and diagnostic artifacts do not drift from the notebook-backed
+  G3 totals
+failure_boundaries:
+- mapped alias inherits direct proof without explicit reuse evidence
+- approval-only or actor-tier-only evidence is misclassified as green
+- remaining live-proof pair omitted from published scope
+- artifact totals drift from notebook-backed verification
+test_bindings:
+- configs/generated/persona_action_execution_reuse_v1_verification.json
+- artifacts/scorecards/scorecard_l87.json
+ci_gate: persona-action-execution-reuse-v1

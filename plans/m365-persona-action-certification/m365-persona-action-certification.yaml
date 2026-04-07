@@ -56,10 +56,10 @@ phases:
   status: completed
 - id: G3
   text: Unique action execution certification reuse
-  status: active
+  status: completed
 - id: G4
   text: Persona and action certification
-  status: pending
+  status: active
 - id: G5
   text: Closeout
   status: pending
