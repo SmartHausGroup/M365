@@ -276,3 +276,10 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `python3 -m py_compile src/ops_adapter/actions.py scripts/ci/verify_operations_department_pack_v1.py scripts/ci/verify_project_management_department_pack_v1.py scripts/ci/verify_engineering_department_pack_v1.py tests/test_ops_adapter.py tests/test_persona_registry_v2.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py`
   - `PYTHONPATH=src .venv/bin/pytest -q tests/test_persona_registry_v2.py tests/test_ops_adapter.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py` (`149 passed`)
 - `P3` is complete. `P4` is now the active next act.
+- The first read-only `P4` sweep found that repo-local OPA policy truth is severely stale against the current active registry:
+  - `54` active personas
+  - `53` active personas with at least one repo-local `action_not_allowed` denial
+  - `419` denied active persona/action pairs
+  - `152` denied unique aliases
+- The bounded child blocker phase `plan:m365-persona-action-p4-policy-fence-scope-correction` is now required before `P4` policy edits may begin truthfully because the parent initiative needs notebook-backed scope evidence for the widened policy-remediation surface.
+- `P4S` is now the active next act.

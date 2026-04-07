@@ -1824,6 +1824,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-action-full-support-remediation.md` | Detailed execution prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 | `docs/prompts/codex-m365-persona-action-full-support-remediation-prompt.txt` | Kickoff prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 
+## Active Persona-Action P4 Policy-Fence Scope-Correction Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-persona-action-p4-policy-fence-scope-correction/m365-persona-action-p4-policy-fence-scope-correction.md` | Human-readable governed child blocker package for extending `P4` into the repo-local policy-remediation evidence surface before policy widening begins. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R1` |
+| `plans/m365-persona-action-p4-policy-fence-scope-correction/m365-persona-action-p4-policy-fence-scope-correction.yaml` | Structured YAML authority for the bounded `P4S` policy-fence scope-correction package. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R1` |
+| `plans/m365-persona-action-p4-policy-fence-scope-correction/m365-persona-action-p4-policy-fence-scope-correction.json` | Structured JSON mirror for automation and governance tooling on the `P4S` blocker package. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R1` |
+| `docs/prompts/codex-m365-persona-action-p4-policy-fence-scope-correction.md` | Detailed execution prompt for the bounded `P4S` policy-fence scope-correction phase. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R1` |
+| `docs/prompts/codex-m365-persona-action-p4-policy-fence-scope-correction-prompt.txt` | Kickoff prompt for the bounded `P4S` policy-fence scope-correction phase. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R1` |
+| `notebooks/m365/INV-M365-DD-persona-action-p4-policy-fence-scope-correction-v1.ipynb` | Governance notebook freezing the live repo-local OPA drift totals and the exact policy surfaces that must be admitted before `P4` policy remediation can start truthfully. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R2` |
+| `configs/generated/persona_action_p4_policy_fence_scope_correction_v1_verification.json` | Machine-readable verification payload for the `P4S` governance notebook and widened policy-scope proof. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-p4-policy-fence-scope-correction:R2` |
+
 ## Active Persona-Action P3 Department-Pack Scope-Correction Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

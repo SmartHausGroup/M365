@@ -1,0 +1,19 @@
+{
+  "plan_id": "plan:m365-persona-action-p4-policy-fence-scope-correction",
+  "phase": "P4S",
+  "status": "persona_action_p4_policy_fence_scope_correction_ready",
+  "policy_drift_totals": {
+    "active_personas": 54,
+    "denied_personas": 53,
+    "action_not_allowed_pairs": 419,
+    "denied_unique_aliases": 152
+  },
+  "affected_policy_surfaces": [
+    "policies/ops.rego",
+    "policies/agents/m365_administrator.rego",
+    "policies/agents/hr_generalist.rego",
+    "policies/agents/outreach_coordinator.rego",
+    "policies/agents/website_manager.rego"
+  ]
+}
+

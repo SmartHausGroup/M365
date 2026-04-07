@@ -1,0 +1,57 @@
+{
+  "plan_id": "m365-persona-action-p4-policy-fence-scope-correction",
+  "parent_plan_id": "m365-persona-action-full-support-remediation",
+  "status": "Draft",
+  "date": "2026-04-07",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-persona-action-p4-policy-fence-scope-correction:R1",
+  "canonical_predecessor": "plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md",
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-DD-persona-action-p4-policy-fence-scope-correction-v1.ipynb",
+    "verification": "configs/generated/persona_action_p4_policy_fence_scope_correction_v1_verification.json"
+  },
+  "objective": "Produce the notebook-backed scope-correction package required to extend P4 into the repo-local policy-remediation evidence surface.",
+  "current_state": {
+    "parent_plan": "plan:m365-persona-action-full-support-remediation",
+    "policy_drift_totals": {
+      "active_personas": 54,
+      "denied_personas": 53,
+      "action_not_allowed_pairs": 419,
+      "denied_unique_aliases": 152
+    },
+    "affected_policy_surfaces": [
+      "policies/ops.rego",
+      "policies/agents/m365_administrator.rego",
+      "policies/agents/hr_generalist.rego",
+      "policies/agents/outreach_coordinator.rego",
+      "policies/agents/website_manager.rego"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "title": "Make the repo-local P4 policy-drift scope explicit"
+    },
+    {
+      "id": "R2",
+      "title": "Produce notebook-backed governance evidence"
+    },
+    {
+      "id": "R3",
+      "title": "Admit the required policy and validation surfaces into the bounded P4 repair set"
+    },
+    {
+      "id": "R4",
+      "title": "Reopen the future bounded P4 file-edit validation under child-plan authority"
+    },
+    {
+      "id": "R5",
+      "title": "Synchronize the parent plan and trackers"
+    },
+    {
+      "id": "R6",
+      "title": "Commit and push before resuming P4"
+    }
+  ]
+}
+
