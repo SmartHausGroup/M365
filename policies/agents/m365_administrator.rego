@@ -4,7 +4,46 @@ default allow_actions = {}
 default approval_required = {}
 
 allow_actions = {
+  "users.list",
   "users.read",
+  "users.create",
+  "users.update",
+  "users.disable",
+  "licenses.assign",
+  "groups.list",
+  "groups.get",
+  "groups.create",
+  "groups.add_member",
+  "groups.remove_member",
+  "groups.list_members",
+  "sites.list",
+  "sites.get",
+  "sites.root",
+  "sites.provision",
+  "lists.list",
+  "lists.get",
+  "lists.items",
+  "lists.create_item",
+  "files.list",
+  "files.get",
+  "files.search",
+  "files.create_folder",
+  "files.upload",
+  "files.share",
+  "drives.list",
+  "directory.roles",
+  "directory.role_members",
+  "directory.domains",
+  "directory.org",
+  "apps.list",
+  "apps.get",
+  "apps.update",
+  "service_principals.list",
+  "teams.create",
+  "teams.add_channel",
+}
+
+approval_required = {
   "users.create",
   "users.update",
   "users.disable",
@@ -15,5 +54,3 @@ allow_actions = {
   "sites.provision",
   "licenses.assign",
 }
-
-approval_required = {"users.disable"}

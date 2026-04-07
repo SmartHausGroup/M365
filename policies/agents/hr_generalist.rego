@@ -7,8 +7,6 @@ allow_actions = {
   "employee.onboard",
   "employee.update_info",
   "employee.offboard",
-  "policy.create",
-  "review.initiate",
 }
 
 approval_required = {"employee.offboard"}

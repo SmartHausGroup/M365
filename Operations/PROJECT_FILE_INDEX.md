@@ -1824,7 +1824,9 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-action-full-support-remediation.md` | Detailed execution prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 | `docs/prompts/codex-m365-persona-action-full-support-remediation-prompt.txt` | Kickoff prompt for the successor persona/action remediation program. | `Technical Architecture`, `Policy & Security` | `plan:m365-persona-action-full-support-remediation:R0` |
 
-## Active Persona-Action P4 Policy-Fence Scope-Correction Artifacts
+## Persona-Action P4 Policy-Fence Scope-Correction Artifacts
+
+P4S is complete. These artifacts remain the notebook-backed governance record that widened the parent remediation initiative into the repo-local policy surface before the successful `P4` rewrite.
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |

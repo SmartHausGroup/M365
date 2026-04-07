@@ -11,12 +11,12 @@ allow_actions = {
   "email.schedule",
   "meeting.schedule",
   "followup.create",
-  "campaign.create",
+  "mail.send",
 }
 
-# Require approval for large bulk sends; otherwise not required
 approval_required contains action if {
   action := "email.send_bulk"
   input.action == action
-  input.data.recipients_count > 100
+  recipients := object.get(input.data, "recipients_count", object.get(input.data, "recipients", 0))
+  recipients > 100
 }

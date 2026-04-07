@@ -283,4 +283,10 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `152` denied unique aliases
 - The bounded child blocker phase `plan:m365-persona-action-p4-policy-fence-scope-correction` is now required before `P4` policy edits may begin truthfully because the parent initiative needs notebook-backed scope evidence for the widened policy-remediation surface.
 - The bounded child blocker phase `plan:m365-persona-action-p4-policy-fence-scope-correction` is complete. The governance notebook `INV-M365-DD` and generated verification now freeze the exact repo-local policy drift, and the parent initiative is returned to `P4` with notebook-backed authority to edit the repo-local policy and approval-risk surfaces.
-- `P4` is now the active next act again.
+- `P4` is complete. `policies/ops.rego` now mirrors the active runtime-backed persona graph instead of the stale micro-surface, the four legacy per-agent policy mirrors are synchronized to the same truth, and `tests/test_policies.py` now carries drift guards that compare the repo-local OPA allow/approval maps against the live active persona graph plus the explicit `unsupported_m365_only_action` runtime perimeter.
+- The repo-local OPA drift has collapsed from `419` denied active persona/action pairs across `152` unique aliases to the explicit unsupported perimeter of `35` denied active pairs across `32` unique aliases. The repaired policy surface now allows `410` active persona/action pairs cleanly and denies only the aliases that runtime already fail-closes.
+- The `P4` validation slice is green:
+  - `PYTHONPATH=src .venv/bin/pytest -q tests/test_policies.py tests/test_ops_adapter.py` → `148 passed`
+  - `pre-commit run --all-files` → passed
+  - `git diff --check` → passed
+- `P5` is now the active next act.
