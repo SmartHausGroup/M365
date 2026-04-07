@@ -38,14 +38,25 @@ _TIERS_PATH: str | None = None
 _TIERS_MTIME: float = 0.0
 
 _CANONICAL_ACTION_ALIASES: dict[str, str] = {
+    "create-workspace": "teams.create",
+    "add-workspace-members": "teams.add_member",
+    "create-channels": "channels.create",
+    "get-team-status": "teams.get",
     "create_plan": "tasks.create_plan",
     "list_plans": "tasks.list_plans",
     "create_bucket": "tasks.create_bucket",
     "list_buckets": "tasks.list_buckets",
     "create_task": "tasks.create_task",
     "email.send_bulk": "mail.send",
+    "email.send_individual": "mail.send",
+    "email.respond": "mail.reply",
+    "email.forward": "mail.forward",
+    "email.archive": "mail.move",
     "email.schedule": "calendar.create",
     "meeting.schedule": "calendar.create",
+    "meeting.organize": "calendar.create",
+    "availability.check": "calendar.availability",
+    "employee.onboard": "users.create",
     "employee.update_info": "users.update",
     "employee.offboard": "users.disable",
 }

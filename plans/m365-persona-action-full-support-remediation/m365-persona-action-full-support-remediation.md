@@ -243,4 +243,12 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - The bounded final `P2` legacy-stub implementation wave is complete. The remaining synthetic helper aliases now fail closed explicitly in `src/ops_adapter/actions.py`: `update-project-status`, `deprovision-client-services`, `get-client-status`, `email.classify`, `conflict.resolve`, `feedback.analyze`, `relationship.score`, `engagement.plan`, `compliance.check`, `policy.validate`, `audit.prepare`, `violation.report`, `remediation.plan`, `candidate.screen`, `feedback.collect`, `offer.prepare`, `onboarding.initiate`, `invoice.process`, `expense.approve`, `budget.track`, `forecast.update`, `document.index`, `search.optimize`, `content.curate`, `training.recommend`, and `expert.connect` all raise `unsupported_m365_only_action` instead of returning fabricated business logic.
 - This final wave exhausts the frozen `G2` legacy-stub perimeter. `src/ops_adapter/actions.py` now contains no literal `status: "stubbed"` handlers, and the frozen `legacy_stubbed_unique_actions` set from `artifacts/diagnostics/m365_persona_action_certification.json` has zero remaining members after the completed `P2` waves.
 - Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`119 passed`).
-- `P2` is complete. The next act is `P3` — permission and alias remediation.
+- `P2` is complete. `P3` is the active next act.
+- The first bounded `P3` permission/alias remediation wave is complete. `src/smarthaus_common/permission_enforcer.py` now normalizes the legacy aliases `create-workspace`, `add-workspace-members`, `create-channels`, `get-team-status`, `email.send_individual`, `email.respond`, `email.forward`, `email.archive`, `meeting.organize`, `availability.check`, and `employee.onboard` onto truthful canonical permission surfaces that already exist in the runtime.
+- This first `P3` wave reduces the frozen `permission_blocked_aliases_with_no_tier_support` set from `15` aliases to `4` aliases:
+  - `create-project`
+  - `deployment.preview`
+  - `list-projects`
+  - `provision-client-services`
+- Validation passed with `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py` (`130 passed`).
+- `P3` remains active for the remaining non-normalizable permission-blocked aliases.

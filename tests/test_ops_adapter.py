@@ -270,6 +270,31 @@ def test_check_user_permission_normalizes_hr_aliases(tenant_env: None) -> None:
     assert reason == ""
 
 
+@pytest.mark.parametrize(
+    "action",
+    [
+        "create-workspace",
+        "add-workspace-members",
+        "create-channels",
+        "get-team-status",
+        "email.send_individual",
+        "email.respond",
+        "email.forward",
+        "email.archive",
+        "meeting.organize",
+        "availability.check",
+        "employee.onboard",
+    ],
+)
+def test_check_user_permission_normalizes_remaining_legacy_aliases(
+    tenant_env: None, action: str
+) -> None:
+    allowed, reason = check_user_permission("admin@example.com", action)
+
+    assert allowed is True
+    assert reason == ""
+
+
 def test_check_user_permission_denies_without_tiers_file(
     tenant_env: None, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
