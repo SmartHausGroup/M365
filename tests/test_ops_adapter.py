@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from collections.abc import Iterator
@@ -247,6 +248,24 @@ def test_check_user_permission_allows_group_mapped_actor(tenant_env: None) -> No
         "users.disable",
         actor_groups=["entra-global-admins"],
     )
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_planner_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "create_plan")
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_calendar_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "email.schedule")
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_hr_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "employee.offboard")
     assert allowed is True
     assert reason == ""
 
@@ -964,3 +983,191 @@ def test_success_audit_log_captures_actor_and_executor_identity(
     assert entry["tenant"] == "tenant-alpha"
     assert entry["result"]["outcome"] == "success"
     assert isinstance(entry["result"]["payload"], dict)
+
+
+def test_execute_routes_teams_add_channel_to_channel_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_channels_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"channel": {"teamId": params["teamId"], "displayName": params["displayName"]}}
+
+    monkeypatch.setattr(actions_module, "channels_create", _fake_channels_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "m365-administrator",
+            "teams.add_channel",
+            {"teamId": "team-123", "channelName": "Operations"},
+            "corr-1",
+        )
+    )
+
+    assert result["channel"]["teamId"] == "team-123"
+    assert result["channel"]["displayName"] == "Operations"
+
+
+def test_execute_routes_create_plan_to_planner_wrapper(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_planner_create_plan(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        return {"plan": {"id": "plan-123", "title": params["title"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "planner_create_plan", _fake_planner_create_plan)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "create_plan",
+            {"groupId": "group-123", "title": "Website Refresh"},
+            "corr-2",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert result["plan"]["title"] == "Website Refresh"
+
+
+def test_execute_routes_email_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"event": {"subject": params["subject"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "outreach-coordinator",
+            "email.schedule",
+            {
+                "userId": "admin@example.com",
+                "subject": "Follow-up",
+                "start": {"dateTime": "2026-04-08T10:00:00Z", "timeZone": "UTC"},
+                "end": {"dateTime": "2026-04-08T10:30:00Z", "timeZone": "UTC"},
+            },
+            "corr-3",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert result["event"]["subject"] == "Follow-up"
+
+
+def test_execute_routes_employee_offboard_to_users_disable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_users_disable(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"disabled": True, "userPrincipalName": params["userPrincipalName"]}
+
+    monkeypatch.setattr(actions_module, "m365_users_disable", _fake_users_disable)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "hr-generalist",
+            "employee.offboard",
+            {"email": "departing@example.com"},
+            "corr-4",
+        )
+    )
+
+    assert result["disabled"] is True
+    assert result["userPrincipalName"] == "departing@example.com"
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params", "helper_name"),
+    [
+        ("website-manager", "deployment.production", {}, None),
+        ("website-manager", "content.create", {"content_id": "content-1"}, None),
+        ("website-manager", "content.update", {"content_id": "content-1"}, None),
+        ("website-manager", "analytics.read", {}, None),
+        ("website-manager", "seo.update", {"targets": ["homepage"]}, None),
+        ("hr-generalist", "policy.create", {"policy_id": "policy-1"}, None),
+        ("hr-generalist", "review.initiate", {"review_id": "review-1"}, None),
+        ("outreach-coordinator", "followup.create", {"followup_id": "followup-1"}, None),
+        ("outreach-coordinator", "campaign.create", {"campaign_id": "campaign-1"}, None),
+        (
+            "m365-administrator",
+            "teams.add_channel",
+            {"teamId": "team-1", "channelName": "Ops"},
+            "channels_create",
+        ),
+        ("m365-administrator", "sites.provision", {"displayName": "Ops Site"}, "sites_provision"),
+        (
+            "outreach-coordinator",
+            "email.send_bulk",
+            {"recipients": ["a@example.com"]},
+            "outreach_email_send_bulk",
+        ),
+        (
+            "outreach-coordinator",
+            "email.schedule",
+            {"subject": "Follow-up"},
+            "outreach_email_schedule",
+        ),
+        (
+            "outreach-coordinator",
+            "meeting.schedule",
+            {"subject": "Meeting"},
+            "outreach_meeting_schedule",
+        ),
+        (
+            "hr-generalist",
+            "employee.update_info",
+            {"email": "person@example.com"},
+            "m365_users_update",
+        ),
+        (
+            "hr-generalist",
+            "employee.offboard",
+            {"email": "person@example.com"},
+            "m365_users_disable",
+        ),
+        ("project-coordination-agent", "list_plans", {"groupId": "group-1"}, "planner_list_plans"),
+        (
+            "project-coordination-agent",
+            "create_plan",
+            {"groupId": "group-1", "title": "Roadmap"},
+            "planner_create_plan",
+        ),
+        (
+            "project-coordination-agent",
+            "list_buckets",
+            {"planId": "plan-1"},
+            "planner_list_buckets",
+        ),
+        (
+            "project-coordination-agent",
+            "create_bucket",
+            {"planId": "plan-1", "name": "Backlog"},
+            "planner_create_bucket",
+        ),
+        (
+            "project-coordination-agent",
+            "create_task",
+            {"planId": "plan-1", "bucketId": "bucket-1", "title": "Ship"},
+            "planner_create_task",
+        ),
+    ],
+)
+def test_p1_dead_route_aliases_no_longer_raise(
+    monkeypatch: pytest.MonkeyPatch,
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+    helper_name: str | None,
+) -> None:
+    if helper_name is not None:
+
+        async def _fake_helper(_params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+            return {"status": "patched", "action": action}
+
+        monkeypatch.setattr(actions_module, helper_name, _fake_helper)
+
+    result = asyncio.run(actions_module.execute(agent, action, params, "corr-matrix"))
+
+    assert isinstance(result, dict)
+    if helper_name is not None:
+        assert result["action"] == action

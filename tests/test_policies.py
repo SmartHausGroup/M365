@@ -98,3 +98,16 @@ def test_outreach_bulk_over_100_requires_approval() -> None:
     )
     assert res["allow"] is True
     assert res.get("approval_required") is True
+
+
+def test_project_coordination_create_plan_allowed_without_approval() -> None:
+    res = opa_eval(
+        {
+            "agent": "project-coordination-agent",
+            "action": "create_plan",
+            "data": {"groupId": "group-123", "title": "Roadmap"},
+            "rate_allowed": True,
+        }
+    )
+    assert res["allow"] is True
+    assert res.get("approval_required") is False

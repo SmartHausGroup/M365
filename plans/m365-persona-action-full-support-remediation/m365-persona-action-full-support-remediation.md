@@ -198,5 +198,10 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - `P0` is complete as a read-only backlog lock; the certified remediation ordering remains `dead-routed -> legacy-stubbed -> permission/alias -> policy-fenced -> re-certification`.
 - The first `P1` dead-route code write was originally blocked by MCP `validate_action(file_edit)` denial `map-2-code-notebook-required`.
 - The bounded blocker-fix child phase `plan:m365-persona-action-p1-notebook-evidence-scope-correction` is complete and published the phase-specific notebook-backed evidence surface required before `P1` code repair can begin truthfully.
-- The `L89` dead-route remediation evidence chain is now in place and the blocked `P1` file-edit validation has reopened under child-plan authority.
-- The next act is `P1` — execute the first dead-route remediation wave against the bounded dispatcher, permission, policy, and focused-test surfaces.
+- The `L89` dead-route remediation evidence chain is now in place and the blocked `P1` file-edit validation reopened under child-plan authority.
+- `P1` is complete. The first dead-route remediation wave resolved all `21` previously dead-routed unique aliases in the certified backlog by converting `12` aliases to truthful mapped handlers (`sites.provision`, `teams.add_channel`, the Planner aliases, the schedule aliases, and the HR update/offboard aliases) and converting `9` aliases to explicit legacy-stubbed truth instead of leaving them dead-routed (`deployment.production`, `content.create`, `content.update`, `analytics.read`, `seo.update`, `policy.create`, `review.initiate`, `followup.create`, `campaign.create`).
+- The `P1` validation slice is green:
+  - `PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_policies.py` → `60 passed`
+  - `pre-commit run --all-files` → passed
+  - `git diff --check` → passed
+- The next act is `P2` — replace or retire the remaining legacy-stubbed surface truthfully.

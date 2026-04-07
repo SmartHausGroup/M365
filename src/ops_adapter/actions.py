@@ -12,7 +12,7 @@ from typing import Any
 import httpx
 import yaml
 from smarthaus_common.auth_model import AuthResolution, resolve_action_auth
-from smarthaus_common.errors import AuthConfigurationError
+from smarthaus_common.errors import AuthConfigurationError, GraphRequestError
 from smarthaus_common.executor_routing import executor_route_for_action as resolve_route_for_action
 
 from .audit import recent_admin_events, record_admin_event
@@ -436,6 +436,167 @@ def _csv_to_dicts(raw_csv: str) -> list[dict[str, str]]:
         return []
     reader = csv.DictReader(io.StringIO(raw_csv))
     return [dict(row) for row in reader]
+
+
+def _slugify_mail_nickname(value: str | None) -> str:
+    raw = "".join(ch.lower() if ch.isalnum() else "-" for ch in str(value or "").strip())
+    while "--" in raw:
+        raw = raw.replace("--", "-")
+    return raw.strip("-") or "workspace"
+
+
+def _graph_client_for_route(route_key: str) -> Any:
+    from smarthaus_common.config import AppConfig, has_selected_tenant
+    from smarthaus_common.tenant_config import get_tenant_config
+    from smarthaus_graph.client import GraphClient
+
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        selected_executor = _current_executor_name.get()
+        if selected_executor:
+            tenant_cfg = tenant_cfg.project_executor(selected_executor)
+        elif route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            executor_name = tenant_cfg.resolve_executor_name(route_key, fallback_keys=[route_key])
+            tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return GraphClient(tenant_config=tenant_cfg)
+    return GraphClient(config=AppConfig())
+
+
+async def sites_provision(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    if _stub_mode():
+        return {
+            "status": "provisioned",
+            "site_id": "stub-site-id",
+            "site_url": "https://stub.sharepoint.com/sites/workspace",
+            "group_created": True,
+            "libraries_created": list(params.get("libraries") or ["Documents"]),
+        }
+    from provisioning_api.m365_provision import provision_group_site
+
+    display_name = (
+        params.get("displayName")
+        or params.get("name")
+        or params.get("siteName")
+        or "Provisioned Site"
+    )
+    mail_nickname = (
+        params.get("mailNickname")
+        or params.get("mail_nickname")
+        or _slugify_mail_nickname(display_name)
+    )
+    libraries = params.get("libraries") or ["Documents"]
+    description = params.get("description")
+    wait_secs = int(params.get("wait_secs") or params.get("waitSecs") or 60)
+    try:
+        result = provision_group_site(
+            display_name=display_name,
+            mail_nickname=mail_nickname,
+            libraries=libraries,
+            description=description,
+            wait_secs=wait_secs,
+        )
+    except GraphRequestError as exc:
+        raise GraphAPIError(500, "site_provision_failed", str(exc)) from exc
+    return {"status": "provisioned", **result}
+
+
+async def planner_list_plans(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    if _stub_mode():
+        return {
+            "plans": [{"id": "plan-stub-001", "title": "Stub Plan"}],
+            "count": 1,
+        }
+    client = _graph_client_for_route("collaboration")
+    plans = client.list_plans(
+        group_id=params.get("groupId") or params.get("group_id"),
+        mail_nickname=params.get("mailNickname") or params.get("mail_nickname"),
+    )
+    return {"plans": plans, "count": len(plans)}
+
+
+async def planner_create_plan(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "plan": {"id": "plan-stub-001", "title": params.get("title", "Stub Plan")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    plan = client.create_plan(
+        params.get("groupId") or params.get("group_id"),
+        params.get("title") or "New Plan",
+        mail_nickname=params.get("mailNickname") or params.get("mail_nickname"),
+    )
+    return {"plan": plan, "status": "created"}
+
+
+async def planner_list_buckets(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "buckets": [{"id": "bucket-stub-001", "name": "Stub Bucket"}],
+            "count": 1,
+        }
+    client = _graph_client_for_route("collaboration")
+    buckets = client.list_plan_buckets(params["planId"])
+    return {"buckets": buckets, "count": len(buckets)}
+
+
+async def planner_create_bucket(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "bucket": {"id": "bucket-stub-001", "name": params.get("name", "Stub Bucket")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    bucket = client.create_bucket(
+        params["planId"],
+        params.get("name") or params.get("displayName") or "New Bucket",
+        order_hint=params.get("orderHint", " !"),
+    )
+    return {"bucket": bucket, "status": "created"}
+
+
+async def planner_create_task(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "task": {"id": "task-stub-001", "title": params.get("title", "Stub Task")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    task = client.create_task(
+        params["planId"],
+        params["bucketId"],
+        params.get("title") or "New Task",
+        description=params.get("description"),
+        reference_url=params.get("referenceUrl"),
+        percent_complete=params.get("percentComplete"),
+    )
+    return {"task": task, "status": "created"}
+
+
+async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    bulk_params = dict(params)
+    if "to" not in bulk_params and "recipients" in bulk_params:
+        bulk_params["to"] = bulk_params["recipients"]
+    return await mail_send(bulk_params, correlation_id)
+
+
+async def outreach_email_schedule(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    schedule_params = dict(params)
+    if "userId" not in schedule_params and schedule_params.get("from"):
+        schedule_params["userId"] = schedule_params["from"]
+    return await calendar_create(schedule_params, correlation_id)
+
+
+async def outreach_meeting_schedule(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    meeting_params = dict(params)
+    meeting_params.setdefault("isOnlineMeeting", True)
+    if "userId" not in meeting_params and meeting_params.get("from"):
+        meeting_params["userId"] = meeting_params["from"]
+    return await calendar_create(meeting_params, correlation_id)
 
 
 # ==================== USERS (existing - preserved exactly) ====================
@@ -3740,6 +3901,8 @@ async def _execute_impl(
                 return await lists_items(params, correlation_id)
             if action == "lists.create_item":
                 return await lists_create_item(params, correlation_id)
+            if action == "sites.provision":
+                return await sites_provision(params, correlation_id)
             # Files / OneDrive
             if action == "files.list":
                 return await files_list(params, correlation_id)
@@ -3772,6 +3935,11 @@ async def _execute_impl(
                 return await service_principals_list(params, correlation_id)
             if action == "apps.update":
                 return await apps_update(params, correlation_id)
+            if action == "teams.add_channel":
+                channel_params = dict(params)
+                if "displayName" not in channel_params and channel_params.get("channelName"):
+                    channel_params["displayName"] = channel_params["channelName"]
+                return await channels_create(channel_params, correlation_id)
 
         # ---- Teams Manager ----
         if agent == "teams-manager":
@@ -3830,12 +3998,50 @@ async def _execute_impl(
                 return {"status": "ok", "members": (params.get("members") or [])}
 
         # ---- Website ----
-        if agent == "website-manager" and action == "deployment.preview":
-            return await website_deployment_preview(params, correlation_id)
+        if agent == "website-manager":
+            if action == "deployment.preview":
+                return await website_deployment_preview(params, correlation_id)
+            if action == "deployment.production":
+                return {"status": "queued", "environment": "production", "provider": "vercel"}
+            if action == "content.create":
+                return {
+                    "status": "stubbed",
+                    "content_id": params.get("content_id"),
+                    "created": True,
+                }
+            if action == "content.update":
+                return {
+                    "status": "stubbed",
+                    "content_id": params.get("content_id"),
+                    "updated": True,
+                }
+            if action == "analytics.read":
+                return {"status": "stubbed", "analytics": {"visits": 0, "conversions": 0}}
+            if action == "seo.update":
+                return {"status": "stubbed", "updated": True, "targets": params.get("targets", [])}
 
         # ---- HR ----
-        if agent == "hr-generalist" and action == "employee.onboard":
-            return await hr_employee_onboard(params, correlation_id)
+        if agent == "hr-generalist":
+            if action == "employee.onboard":
+                return await hr_employee_onboard(params, correlation_id)
+            if action == "employee.update_info":
+                update_params = dict(params)
+                if "userPrincipalName" not in update_params and update_params.get("email"):
+                    update_params["userPrincipalName"] = update_params["email"]
+                return await m365_users_update(update_params, correlation_id)
+            if action == "employee.offboard":
+                disable_params = dict(params)
+                if "userPrincipalName" not in disable_params and disable_params.get("email"):
+                    disable_params["userPrincipalName"] = disable_params["email"]
+                return await m365_users_disable(disable_params, correlation_id)
+            if action == "policy.create":
+                return {"status": "stubbed", "policy_id": params.get("policy_id"), "created": True}
+            if action == "review.initiate":
+                return {
+                    "status": "stubbed",
+                    "review_id": params.get("review_id"),
+                    "initiated": True,
+                }
 
         # ---- Outreach Coordinator ----
         if agent == "outreach-coordinator":
@@ -3843,6 +4049,24 @@ async def _execute_impl(
                 return await outreach_email_send_individual(params, correlation_id)
             if action == "mail.send":
                 return await mail_send(params, correlation_id)
+            if action == "email.send_bulk":
+                return await outreach_email_send_bulk(params, correlation_id)
+            if action == "email.schedule":
+                return await outreach_email_schedule(params, correlation_id)
+            if action == "meeting.schedule":
+                return await outreach_meeting_schedule(params, correlation_id)
+            if action == "followup.create":
+                return {
+                    "status": "stubbed",
+                    "followup_id": params.get("followup_id"),
+                    "created": True,
+                }
+            if action == "campaign.create":
+                return {
+                    "status": "stubbed",
+                    "campaign_id": params.get("campaign_id"),
+                    "created": True,
+                }
 
         # ---- Email Processing Agent ----
         if agent == "email-processing-agent":
@@ -4044,6 +4268,16 @@ async def _execute_impl(
 
     # ---- Project Coordination Agent (legacy stubs) ----
     if agent == "project-coordination-agent":
+        if action == "list_plans":
+            return await planner_list_plans(params, correlation_id)
+        if action == "create_plan":
+            return await planner_create_plan(params, correlation_id)
+        if action == "list_buckets":
+            return await planner_list_buckets(params, correlation_id)
+        if action == "create_bucket":
+            return await planner_create_bucket(params, correlation_id)
+        if action == "create_task":
+            return await planner_create_task(params, correlation_id)
         if action == "task.create":
             return {"created": True, "task_id": "task_456", "assignee": params.get("assignee")}
         if action == "task.assign":

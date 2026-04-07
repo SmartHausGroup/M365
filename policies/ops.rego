@@ -113,6 +113,13 @@ allowed_actions := {
     "followup.create": true,
     "campaign.create": true,
   },
+  "project-coordination-agent": {
+    "list_plans": true,
+    "create_plan": true,
+    "list_buckets": true,
+    "create_bucket": true,
+    "create_task": true,
+  },
 }
 
 mandatory_approvals := {

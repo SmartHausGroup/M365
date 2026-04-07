@@ -37,6 +37,19 @@ _TIERS: dict[str, Any] | None = None
 _TIERS_PATH: str | None = None
 _TIERS_MTIME: float = 0.0
 
+_CANONICAL_ACTION_ALIASES: dict[str, str] = {
+    "create_plan": "tasks.create_plan",
+    "list_plans": "tasks.list_plans",
+    "create_bucket": "tasks.create_bucket",
+    "list_buckets": "tasks.list_buckets",
+    "create_task": "tasks.create_task",
+    "email.send_bulk": "mail.send",
+    "email.schedule": "calendar.create",
+    "meeting.schedule": "calendar.create",
+    "employee.update_info": "users.update",
+    "employee.offboard": "users.disable",
+}
+
 
 def _fail_open_enabled() -> bool:
     return os.getenv("M365_PERMISSION_FAIL_OPEN", "false").lower() in ("1", "true", "yes", "on")
@@ -138,6 +151,24 @@ def _is_action_in_list(action: str, patterns: list[str]) -> bool:
     return False
 
 
+def _normalize_action_for_tier_matching(action: str) -> str:
+    return _CANONICAL_ACTION_ALIASES.get(action, action)
+
+
+def _action_candidates_for_matching(action: str) -> list[str]:
+    normalized = _normalize_action_for_tier_matching(action)
+    if normalized == action:
+        return [action]
+    return [action, normalized]
+
+
+def _is_any_action_candidate_in_list(action: str, patterns: list[str]) -> bool:
+    for candidate in _action_candidates_for_matching(action):
+        if _is_action_in_list(candidate, patterns):
+            return True
+    return False
+
+
 # ---------------------------------------------------------------------------
 # Core enforcement
 # ---------------------------------------------------------------------------
@@ -195,7 +226,7 @@ def check_user_permission(
 
     # Check blocked_actions first (explicit deny takes precedence)
     blocked = tier_def.get("blocked_actions", [])
-    if _is_action_in_list(action, blocked):
+    if _is_any_action_candidate_in_list(action, blocked):
         return False, (
             f"tier_blocked:{tier_name}/{action} — "
             f"{tier_def.get('name', tier_name)} does not have permission for '{action}'"
@@ -203,7 +234,7 @@ def check_user_permission(
 
     # Check allowed_domains (explicit allow list)
     allowed = tier_def.get("allowed_domains", [])
-    if allowed and not _is_action_in_list(action, allowed):
+    if allowed and not _is_any_action_candidate_in_list(action, allowed):
         return False, (
             f"tier_not_allowed:{tier_name}/{action} — "
             f"'{action}' is not in the allowed actions for {tier_def.get('name', tier_name)}"
@@ -243,7 +274,8 @@ def get_confirmation_override(
         return None
 
     overrides = tier_def.get("confirmation_overrides", {})
-    return overrides.get(action)
+    normalized = _normalize_action_for_tier_matching(action)
+    return overrides.get(action) or overrides.get(normalized)
 
 
 def get_user_tier_info(
