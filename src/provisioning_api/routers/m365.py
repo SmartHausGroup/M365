@@ -1965,7 +1965,9 @@ def _power_automate_client(action: str | None = None) -> PowerAutomateClient:
         tenant_cfg = get_tenant_config()
         if action:
             route_key = executor_route_for_action(None, action)
-            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            if route_key == "powerplatform":
+                tenant_cfg = tenant_cfg.project_powerplatform_executor()
+            elif route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
                 executor_name = tenant_cfg.resolve_executor_name(
                     route_key,
                     fallback_keys=[route_key],
@@ -1982,7 +1984,9 @@ def _power_apps_client(action: str | None = None) -> PowerAppsClient:
         tenant_cfg = get_tenant_config()
         if action:
             route_key = executor_route_for_action(None, action)
-            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            if route_key == "powerplatform":
+                tenant_cfg = tenant_cfg.project_powerplatform_executor()
+            elif route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
                 executor_name = tenant_cfg.resolve_executor_name(
                     route_key,
                     fallback_keys=[route_key],
@@ -1999,7 +2003,9 @@ def _power_bi_client(action: str | None = None) -> PowerBIClient:
         tenant_cfg = get_tenant_config()
         if action:
             route_key = executor_route_for_action(None, action)
-            if route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            if route_key == "powerplatform":
+                tenant_cfg = tenant_cfg.project_powerplatform_executor()
+            elif route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
                 executor_name = tenant_cfg.resolve_executor_name(
                     route_key,
                     fallback_keys=[route_key],

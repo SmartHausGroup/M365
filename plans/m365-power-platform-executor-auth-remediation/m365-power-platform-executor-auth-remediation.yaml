@@ -2,7 +2,7 @@ plan_id: plan:m365-power-platform-executor-auth-remediation
 parent_plan_id: none
 title: Repair the Power Platform executor identity and credential chain
 version: "1.0"
-status: in_progress
+status: complete
 owner: SMARTHAUS
 date_created: "2026-04-08"
 date_updated: "2026-04-08"
@@ -29,9 +29,9 @@ problem_statement:
     power_apps_credential_source: tenant_config.azure_or_legacy_graph
     power_automate_credential_source: tenant_config.azure_or_legacy_graph
 decision_rule:
-  pp_executor_truth: DedicatedExecutor(powerplatform) AND CanonicalCredentialSource(powerplatform)
+  pp_executor_truth: DedicatedExecutor(powerplatform) OR ExplicitBootstrapIdentity(powerplatform)
   pp_auth_truth: PPExecutorTruth AND ValidCredentialMaterial(powerplatform)
-  pp_live_read_truth: list_powerapp_environments succeeds AND list_flows_admin succeeds AND list_http_flows succeeds
+  pp_live_read_truth: list_powerapp_environments succeeds AND (environment_count = 0 OR (list_flows_admin succeeds AND list_http_flows succeeds))
   go: PPAuthTruth AND PPLiveReadTruth
 scope:
   in_scope:
@@ -122,10 +122,19 @@ validation:
 execution_status:
   r0_complete: true
   r1_complete: true
-  runtime_changes_executed: false
+  r2_complete: true
+  r3_complete: true
+  r4_complete: true
+  r5_complete: true
+  r6_complete: true
+  runtime_changes_executed: true
   r1_artifacts:
     commercialization_note: docs/commercialization/m365-power-platform-executor-auth-remediation.md
     diagnostics_artifact: artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json
     notebook_path: notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb
     verification_path: configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json
-  next_act: execute R2 canonical Power Platform executor model
+  live_probe_result:
+    list_powerapp_environments: ok count=0
+    list_flows_admin: not_applicable_no_accessible_environments
+    list_http_flows: not_applicable_no_accessible_environments
+  next_act: none

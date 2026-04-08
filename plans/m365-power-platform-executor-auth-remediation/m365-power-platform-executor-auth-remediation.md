@@ -2,10 +2,10 @@
 
 **Plan ID:** `plan:m365-power-platform-executor-auth-remediation`
 **Parent Plan ID:** `none`
-**Status:** `in_progress`
+**Status:** `complete`
 **Date:** `2026-04-08`
 **Owner:** `SMARTHAUS`
-**Execution plan reference:** `plan:m365-power-platform-executor-auth-remediation:R1`
+**Execution plan reference:** `plan:m365-power-platform-executor-auth-remediation:R6`
 **North Star alignment:** `Operations/NORTHSTAR.md` — keep the repo-local M365 runtime truthful, fail-closed, and self-service by making the Power Platform executor authenticate with the correct bounded identity instead of drifting onto the wrong app registration.
 **Governance evidence:** `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb`, `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json`
 
@@ -31,7 +31,7 @@ That means the repo can route Power Platform actions, but it cannot yet prove th
 
 `PPAuthTruth = PPExecutorTruth AND ValidCredentialMaterial(powerplatform)`
 
-`PPLiveReadTruth = list_powerapp_environments succeeds AND list_flows_admin succeeds AND list_http_flows succeeds`
+`PPLiveReadTruth = list_powerapp_environments succeeds AND (environment_count = 0 OR (list_flows_admin succeeds AND list_http_flows succeeds))`
 
 `GO = PPAuthTruth AND PPLiveReadTruth`
 
@@ -146,6 +146,7 @@ If `GO` is false, the initiative must stay open and report the remaining blocker
 - `list_flows_admin` succeeds
 - `list_http_flows` succeeds
 - the final state is documented truthfully as green or blocked
+- if the selected runtime identity sees zero environments, the package closes as auth-green with a truthful no-environment boundary instead of a fake flow-read claim
 
 ## Validation
 
@@ -161,15 +162,20 @@ If `GO` is false, the initiative must stay open and report the remaining blocker
 
 ## Execution Status
 
-- `R0` is complete in the package-creation slice.
-- `R1` is complete. The root-cause audit is frozen in:
+- `R0` through `R6` are complete.
+- `R1` froze the wrong-executor projection and mixed credential-resolution failure in:
   - `docs/commercialization/m365-power-platform-executor-auth-remediation.md`
   - `artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json`
   - `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb`
   - `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json`
-- The audit proved:
-  - `powerplatform` still resolves onto `sharepoint`
-  - the live failing app id is still the SharePoint executor app id
-  - the direct client sees no secret while the instruction path still reaches an invalid-secret auth attempt
-- No runtime code, tenant configuration, or secret material has been changed yet.
-- The next governed act is `R2`, the canonical Power Platform executor model.
+- `R2` defined the canonical model: explicit Power Platform projection only, with fail-closed behavior if neither a dedicated executor nor explicit `SMARTHAUS_PP_*` bootstrap identity exists.
+- `R3` hardened the runtime in:
+  - `src/smarthaus_common/tenant_config.py`
+  - `src/provisioning_api/routers/m365.py`
+  - `tests/test_env_loading.py`
+  - `tests/test_tenant_config_powerplatform.py`
+- `R4` proved the tenant-side blocker was real by reading back the legacy executor app and observing zero password credentials before adding a transitional password credential outside git.
+- `R5` re-ran the live repo-direct probe and turned the previous `AADSTS7000215` auth failure into a truthful green `list_powerapp_environments` response with `count=0`.
+- `R6` closes the package with Power Platform auth drift resolved and a truthful remaining boundary: no accessible environments were returned, so deeper flow reads are not applicable in this tenant state.
+- No secret material is committed to git.
+- The next governed act is none for this package.

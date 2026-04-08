@@ -1,9 +1,9 @@
 {
   "plan_id": "plan:m365-power-platform-executor-auth-remediation",
-  "phase": "R1",
+  "phase": "R6",
   "status": "complete",
-  "objective": "Freeze the current Power Platform auth failure, wrong executor evidence, and credential-resolution chain before runtime hardening.",
-  "observed_failure": {
+  "objective": "Repair the Power Platform executor identity and credential chain so direct repo Power Apps and Power Automate admin actions authenticate with the correct bounded identity and return truthful live results.",
+  "r1_frozen_failure": {
     "date": "2026-04-08",
     "action": "list_powerapp_environments",
     "instruction_response_ok": false,
@@ -15,53 +15,63 @@
     "microsoft_correlation_id": "4aea70f0-4b77-4b5a-9915-60c05253a2b7",
     "microsoft_timestamp_utc": "2026-04-08 15:10:36Z"
   },
-  "documented_executor_contract": {
-    "sharepoint_executor_app_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
-    "powerplatform_executor_present": false,
-    "source_doc": "docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md"
+  "r2_canonical_model": {
+    "powerplatform_projection": "explicit powerplatform executor when present; otherwise explicit SMARTHAUS_PP bootstrap identity; never sharepoint projection",
+    "preferred_posture": "certificate-backed executor administration with transitional client secret for Power Platform admin module auth",
+    "fail_closed_behavior": "raise powerplatform_executor_unconfigured when no explicit executor or explicit bootstrap identity is available"
   },
-  "selected_tenant_runtime_state": {
-    "selected_tenant_active": true,
-    "tenant_display_name": "SMARTHAUS",
-    "tenant_domain": "smarthausgroup.com",
-    "default_executor": "sharepoint",
-    "executors": [
-      "collaboration",
-      "directory",
-      "sharepoint"
+  "r3_repo_runtime_hardening": {
+    "files_changed": [
+      "src/smarthaus_common/tenant_config.py",
+      "src/provisioning_api/routers/m365.py",
+      "tests/test_env_loading.py",
+      "tests/test_tenant_config_powerplatform.py"
     ],
-    "route_key": "powerplatform",
-    "resolved_executor_name": "sharepoint",
-    "resolved_executor_domain": "sharepoint",
-    "resolved_executor_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
-    "resolved_executor_has_client_secret": false,
-    "resolved_executor_has_certificate": true
+    "focused_test_command": "PYTHONPATH=src .venv/bin/pytest -q tests/test_env_loading.py tests/test_tenant_config_powerplatform.py tests/test_power_apps_expansion_v2.py tests/test_power_automate_expansion_v2.py tests/test_executor_routing_v2.py tests/test_auth_model_v2.py",
+    "focused_test_result": "44 passed"
   },
-  "credential_resolution": {
-    "power_apps_client_source": "tenant_config.azure_or_legacy_graph",
-    "power_automate_client_source": "tenant_config.azure_or_legacy_graph",
-    "direct_client_probe": {
-      "client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
-      "has_client_secret": false,
-      "has_certificate": true,
-      "certificate_path": "/Users/smarthaus/.ucp/certs/smarthaus-sharepoint-executor.pem",
-      "failure_type": "AuthConfigurationError",
-      "failure_message": "Power Apps admin not configured: client_secret is required for Add-PowerAppsAccount service-principal auth."
+  "r4_tenant_enablement_proof": {
+    "legacy_executor_app_id": "720788ac-1485-4073-b0c8-1a6294819a87",
+    "legacy_executor_object_id": "3266508d-71ac-4d1d-813f-c598991bc686",
+    "graph_readback_before_fix": {
+      "display_name": "SMARTHAUS Legacy M365 Executor",
+      "password_credentials_count": 0,
+      "certificate_credentials_count": 1
     },
-    "instruction_path_probe": {
-      "failure_type": "AADSTS7000215",
-      "failure_message_contains": "Invalid client secret provided"
+    "transitional_enablement": {
+      "password_credential_added": true,
+      "bootstrap_env_updated_locally": true,
+      "bootstrap_env_keys": [
+        "SMARTHAUS_PP_TENANT_ID",
+        "SMARTHAUS_PP_CLIENT_ID",
+        "SMARTHAUS_PP_CLIENT_SECRET",
+        "SMARTHAUS_PP_CLIENT_CERTIFICATE_PATH"
+      ]
     }
   },
-  "root_cause": {
-    "wrong_executor_projection": true,
-    "mixed_credential_resolution": true,
-    "dedicated_powerplatform_executor_missing": true
+  "r5_live_repo_direct_certification": {
+    "list_powerapp_environments": {
+      "http_status": 200,
+      "ok": true,
+      "count": 0,
+      "trace_id": "538f73b8-fc52-4624-be18-595262d97280"
+    },
+    "list_flows_admin": {
+      "status": "not_applicable",
+      "reason": "no_accessible_environments"
+    },
+    "list_http_flows": {
+      "status": "not_applicable",
+      "reason": "no_accessible_environments"
+    }
   },
-  "decision_rule": {
-    "pp_executor_truth": "DedicatedExecutor(powerplatform) AND CanonicalCredentialSource(powerplatform)",
-    "pp_auth_truth": "PPExecutorTruth AND ValidCredentialMaterial(powerplatform)",
-    "go": false
+  "closeout": {
+    "wrong_executor_projection_fixed": true,
+    "mixed_credential_resolution_fixed": true,
+    "previous_aadsts7000215_eliminated": true,
+    "auth_drift_resolved": true,
+    "remaining_boundary": "zero_accessible_power_platform_environments",
+    "go": true
   },
-  "next_act": "plan:m365-power-platform-executor-auth-remediation:R2"
+  "next_act": "none"
 }

@@ -26,7 +26,6 @@ _LOGICAL_EXECUTOR_ALIASES: dict[str, tuple[str, ...]] = {
     "messaging": ("collaboration",),
     "workmanagement": ("collaboration",),
     "knowledge": ("sharepoint",),
-    "powerplatform": ("sharepoint",),
     "publishing": ("sharepoint",),
     "composite": ("sharepoint",),
     "reports": ("directory",),
@@ -291,6 +290,40 @@ class TenantConfig:
         projected.executor_registry.default_executor = executor_name
         return projected
 
+    def project_powerplatform_executor(self) -> TenantConfig:
+        """Project Power Platform onto an explicit runtime identity.
+
+        The logical `powerplatform` route must never silently drift onto the
+        SharePoint executor. If no explicit Power Platform executor exists in
+        the tenant contract, this falls back only to the dedicated or legacy
+        bootstrap env contract.
+        """
+
+        explicit = self.executors.get("powerplatform")
+        if explicit is not None:
+            return self.project_executor("powerplatform")
+
+        for executor_name, executor in (self.executors or {}).items():
+            if str(executor.domain or "").strip().lower() == "powerplatform":
+                return self.project_executor(executor_name)
+
+        env_azure = _build_powerplatform_env_azure_config()
+        if not env_azure.tenant_id or not env_azure.client_id:
+            raise ValueError("powerplatform_executor_unconfigured")
+
+        projected = copy.deepcopy(self)
+        projected.azure = env_azure
+        projected.executor_registry.default_executor = "powerplatform"
+        projected.executors["powerplatform"] = ExecutorConfig(
+            name="powerplatform",
+            display_name="Power Platform Runtime Projection",
+            domain="powerplatform",
+            capabilities=["powerplatform", "powerapps", "powerautomate", "powerbi"],
+            azure=_clone_azure_config(env_azure),
+            auth=_clone_auth_config(projected.auth),
+        )
+        return projected
+
 
 # ---------------------------------------------------------------------------
 # Loader
@@ -315,6 +348,37 @@ _ENV_FALLBACKS = {
         "MICROSOFT_CLIENT_SECRET",
     ],
     "azure.client_certificate_path": [
+        "AZURE_CLIENT_CERTIFICATE_PATH",
+    ],
+}
+
+_POWERPLATFORM_ENV_FALLBACKS = {
+    "azure.tenant_id": [
+        "SMARTHAUS_PP_TENANT_ID",
+        "SMARTHAUS_POWERPLATFORM_TENANT_ID",
+        "AZURE_TENANT_ID",
+        "GRAPH_TENANT_ID",
+        "MICROSOFT_TENANT_ID",
+    ],
+    "azure.client_id": [
+        "SMARTHAUS_PP_CLIENT_ID",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_ID",
+        "AZURE_APP_CLIENT_ID_TAI",
+        "GRAPH_CLIENT_ID",
+        "AZURE_CLIENT_ID",
+        "MICROSOFT_CLIENT_ID",
+    ],
+    "azure.client_secret": [
+        "SMARTHAUS_PP_CLIENT_SECRET",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_SECRET",
+        "AZURE_APP_CLIENT_SECRET_TAI",
+        "GRAPH_CLIENT_SECRET",
+        "AZURE_CLIENT_SECRET",
+        "MICROSOFT_CLIENT_SECRET",
+    ],
+    "azure.client_certificate_path": [
+        "SMARTHAUS_PP_CLIENT_CERTIFICATE_PATH",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_CERTIFICATE_PATH",
         "AZURE_CLIENT_CERTIFICATE_PATH",
     ],
 }
@@ -358,6 +422,19 @@ def _clone_azure_config(source: AzureConfig) -> AzureConfig:
         client_id=source.client_id,
         client_secret=source.client_secret,
         client_certificate_path=source.client_certificate_path,
+    )
+
+
+def _build_powerplatform_env_azure_config() -> AzureConfig:
+    return AzureConfig(
+        tenant_id=_resolve_env_fallback("", _POWERPLATFORM_ENV_FALLBACKS["azure.tenant_id"]),
+        client_id=_resolve_env_fallback("", _POWERPLATFORM_ENV_FALLBACKS["azure.client_id"]),
+        client_secret=_resolve_env_fallback(
+            "", _POWERPLATFORM_ENV_FALLBACKS["azure.client_secret"]
+        ),
+        client_certificate_path=_resolve_env_fallback(
+            "", _POWERPLATFORM_ENV_FALLBACKS["azure.client_certificate_path"]
+        ),
     )
 
 
