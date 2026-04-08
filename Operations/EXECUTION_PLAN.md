@@ -708,9 +708,10 @@ outside this repo slice.
 
 **Reference:** `plan:m365-persona-action-full-support-merge-to-development:R1`
 
-**Status:** 🟢 Active — the completed persona-action full-support remediation branch is clean and pushed at `ce652dc`, and the governed merge-to-`development` package now exists.
-**Current next act:** `M1` — present the approval packet for the merge package, then execute the bounded `codex/m365-persona-action-full-support-remediation -> development` merge only after explicit `go`.
+**Status:** ✅ Complete (2026-04-08) — the completed persona-action full-support remediation branch has been merged into `development`, validated green, and pushed without widening beyond the governed post-`P5` workforce truth.
+**Current next act:** None — this package stops at `development` and does not auto-advance to `staging`, `main`, or release tags.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-persona-action-full-support-merge-to-development.md`, `docs/prompts/codex-m365-persona-action-full-support-merge-to-development-prompt.txt`
 
 **Status update (2026-04-08 08:32 EDT):** Created the governed merge-to-`development` package and prompt pair for the completed persona-action full-support remediation branch. The bounded source branch head at package creation is `ce652dc`; the target `origin/development` head at package creation is `8dfa986`. No merge, `development` commit, or promotion work has been executed in this slice. The merge must preserve the final post-`P5` truth of `172` unique aliases / `445` active persona-action pairs, closing at `103 green / 36 approval-gated / 1 actor-tier-gated / 32 fenced` on the unique-alias surface and `360 green / 49 approval-gated / 1 actor-tier-gated / 35 fenced` on the active-pair surface.
+**Status update (2026-04-08 09:05 EDT):** Executed the bounded merge package under `plan:m365-persona-action-full-support-merge-to-development:R1` through `R6`. Replay-merged `codex/m365-persona-action-full-support-remediation @ b02e039` into `development` via explicit merge commit `3894971`, ran the merge-state validation slice (`python3 -m py_compile`, the three department-pack verifiers, focused pytest `163 passed`, `pre-commit run --all-files`, and `git diff --check`), and synchronized the package plus governance trackers to the successful result. `development` is now ready to be pushed and this package stops before any `staging`, `main`, or release-tag action.
