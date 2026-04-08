@@ -1,0 +1,81 @@
+plan_id: plan:m365-power-platform-and-team-status-merge-to-development
+parent_plan_id: plan:m365-team-status-workflow-enablement
+title: Merge the completed tenant-generic Power Platform auth and team-status workflow branch into development
+version: "1.0"
+status: in_progress
+owner: SMARTHAUS
+date_created: "2026-04-08"
+date_updated: "2026-04-08"
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: "Operations/EXECUTION_PLAN.md § Initiative: M365 Power Platform and Team Status Merge to Development"
+domain: governance
+math_algorithm_scope: false
+governance_evidence:
+  notebook_path: notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb
+  verification_path: configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json
+objective: >
+  Merge the completed Power Platform executor-auth remediation and weekly team-status
+  workflow enablement into development through one bounded, validated merge.
+decision_rule:
+  merge_source_ready: SourceBranchClean AND SourceBranchPushed AND WorkflowPackageComplete
+  merge_target_ready: LocalDevelopmentClean AND OriginDevelopmentFetched
+  merge_scoped: MergeSurface bounded to source diff plus merge package and trackers
+  merge_validated: PyCompileGreen AND VerifiersGreen AND FocusedPytestGreen AND PreCommitGreen AND DiffCheckGreen
+  go: MergeSourceReady AND MergeTargetReady AND MergeScoped AND MergeValidated
+scope:
+  in_scope:
+    - source and target readiness verification
+    - explicit merge commit into development
+    - bounded conflict resolution inside the governed source diff
+    - focused post-merge validation
+    - tracker and package closeout
+    - push development after green validation
+  out_of_scope:
+    - staging promotion
+    - main promotion
+    - release tags
+    - UCP edits
+  file_allowlist:
+    - plans/m365-power-platform-and-team-status-merge-to-development/**
+    - docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md
+    - docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt
+    - Operations/EXECUTION_PLAN.md
+    - Operations/ACTION_LOG.md
+    - Operations/PROJECT_FILE_INDEX.md
+  file_denylist:
+    - ../UCP/**
+    - staging
+    - main
+    - release tags
+requirements:
+  - id: R1
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R1
+    description: Verify source and target branch readiness before mutating development.
+  - id: R2
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R2
+    description: Keep the merge bounded to development only.
+  - id: R3
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R3
+    description: Merge the governed source branch via an explicit merge commit and bounded conflict resolution.
+  - id: R4
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R4
+    description: Re-run the final bounded validation slice on merged development.
+  - id: R5
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R5
+    description: Synchronize trackers and package status truthfully.
+  - id: R6
+    ref: plan:m365-power-platform-and-team-status-merge-to-development:R6
+    description: Push development only after green validation and stop before further promotion.
+validation:
+  focused_tests:
+    - PYTHONPATH=src .venv/bin/pytest -q tests/test_tenant_config_powerplatform.py tests/test_sharepoint_onedrive_files_expansion_v2.py tests/test_power_automate_expansion_v2.py tests/test_team_status_workflow.py
+  verifiers:
+    - PYTHONPATH=src .venv/bin/python scripts/ci/verify_sharepoint_onedrive_files_expansion.py
+    - PYTHONPATH=src .venv/bin/python scripts/ci/verify_power_automate_expansion.py
+    - PYTHONPATH=src .venv/bin/python scripts/ci/verify_capability_registry.py
+    - PYTHONPATH=src .venv/bin/python scripts/ci/verify_caio_m365_contract.py
+  hard_gates:
+    - pre-commit run --all-files
+    - git diff --check
+execution_status:
+  next_act: M1

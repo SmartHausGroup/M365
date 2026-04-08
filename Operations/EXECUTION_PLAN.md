@@ -764,3 +764,18 @@ outside this repo slice.
 
 **Status update (2026-04-08 12:41 EDT):** Created the governed team-status workflow enablement package after freezing the real product gap: Power Platform auth is repaired, but the runtime still sees zero accessible environments, the public instruction surface still does not expose SharePoint list creation even though `src/smarthaus_graph/client.py` already implements `create_list`, and the Power Automate surface still lacks a bounded provisioning path for a new workflow. Published the governance notebook `notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb`, generated `configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json`, added the plan triplet plus prompt pair, and activated the tracker. No tenant changes or runtime changes were executed in this package-creation slice. `R1` is now the active next act.
 **Status update (2026-04-08 13:53 EDT):** Completed `R1` through `R6` for team-status workflow enablement. The runtime can now see the Power Platform default environment `Default-6c4cb441-342c-430f-9a9d-79c3cdb18b75` (`The SmartHaus Group (default)`), the public instruction surface now exposes SharePoint list creation, and the bounded workflow provisioning path is live through `src/provisioning_api/routers/m365.py`, `src/smarthaus_common/team_status_workflow.py`, and `scripts/ops/provision_team_status_workflow.py`. The engine-side Power Platform credential model is now tenant-generic: it prefers explicit tenant executor config and generic `POWERPLATFORM_*` / `M365_POWERPLATFORM_*` env names, preserves `SMARTHAUS_PP_*` only as local compatibility fallback, and no longer borrows shared Graph or Azure env aliases. Live provisioning succeeded on the reference scenario: the Founding Team site reused SharePoint list `Codex Weekly Status Tracker` (`582f39f9-d80c-47b6-9e74-24edefaf22f6`), created meeting `Codex Weekly Status Meeting`, and created reminder flow `27f4f6b3-83fe-47f8-ad14-0da29c61302f` plus digest flow `4d65d1a1-7295-4733-8418-4d0d8b22b08a`. Focused validation passed with `21` tests green plus compile checks and live repo-direct provisioning proof. No secrets or private keys were committed.
+
+## Initiative: M365 Power Platform and Team Status Merge to Development
+
+**Initiative:** Merge the completed tenant-generic Power Platform auth remediation and weekly team-status workflow enablement branch into `development` through one bounded, validated, fail-closed merge.
+
+**Plan:** `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.md`
+
+**Reference:** `plan:m365-power-platform-and-team-status-merge-to-development:R1`
+
+**Status:** 🔄 In progress (2026-04-08) — merge package creation is complete and `M1` is the active next act.
+**Current next act:** Execute `M1` to merge `codex/m365-power-platform-executor-auth-remediation` into `development`, validate the merged state, and push `development` only if green.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md`, `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt`
+
+**Status update (2026-04-08 14:12 EDT):** Created the governed merge-to-development package for the completed Power Platform auth and weekly team-status workflow branch. The bounded source branch head at package creation is `5b4efb6`, the target `origin/development` head is `541c00e`, and the merge validation slice is frozen to the touched Power Platform, SharePoint/files, CAIO contract, capability-registry, and team-status workflow surfaces. No merge into `development` has happened in this package-creation slice.

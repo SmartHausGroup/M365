@@ -1,0 +1,8 @@
+Execute the governed package at `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md`.
+
+Plan Reference: `plan:m365-power-platform-and-team-status-merge-to-development`
+Parent Plan: `plan:m365-team-status-workflow-enablement`
+
+Run the bounded merge of `codex/m365-power-platform-executor-auth-remediation`
+into `development`, validate the merged state, and stop after a validated
+push to `development`.

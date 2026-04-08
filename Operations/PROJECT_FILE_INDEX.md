@@ -43,6 +43,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-team-status-workflow-enablement.md` | Final closeout for the weekly team status workflow enablement package, covering the tenant-generic credential model, repo-surface completion, live provisioning fixes, and the successful end-to-end reference workflow result. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
 | `artifacts/diagnostics/m365_team_status_workflow_enablement.json` | Machine-readable `R6` diagnostics artifact freezing the visible Power Platform environment, tenant-generic Power Platform model, live tracker/meeting/flow provisioning result, and final closeout truth. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
 
+## Active Power Platform and Team Status Merge-to-Development Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.md` | Human-readable governed package for merging the completed Power Platform auth and weekly team-status workflow branch into `development` only. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.yaml` | Structured YAML authority for the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.json` | Structured JSON mirror for automation and governance tooling on the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md` | Detailed prompt for the bounded merge from the completed Power Platform auth and weekly team-status workflow branch into `development`. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt` | Kickoff prompt for the bounded Power Platform and team-status merge-to-development package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+
 ## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
