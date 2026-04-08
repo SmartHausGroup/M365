@@ -295,8 +295,10 @@ class TenantConfig:
 
         The logical `powerplatform` route must never silently drift onto the
         SharePoint executor. If no explicit Power Platform executor exists in
-        the tenant contract, this falls back only to the dedicated or legacy
-        bootstrap env contract.
+        the tenant contract, this falls back only to a dedicated Power
+        Platform bootstrap contract. Shared Graph/Azure env aliases are
+        intentionally excluded so Power Platform cannot silently borrow
+        another executor's credentials.
         """
 
         explicit = self.executors.get("powerplatform")
@@ -354,32 +356,28 @@ _ENV_FALLBACKS = {
 
 _POWERPLATFORM_ENV_FALLBACKS = {
     "azure.tenant_id": [
+        "POWERPLATFORM_TENANT_ID",
+        "M365_POWERPLATFORM_TENANT_ID",
         "SMARTHAUS_PP_TENANT_ID",
         "SMARTHAUS_POWERPLATFORM_TENANT_ID",
-        "AZURE_TENANT_ID",
-        "GRAPH_TENANT_ID",
-        "MICROSOFT_TENANT_ID",
     ],
     "azure.client_id": [
+        "POWERPLATFORM_CLIENT_ID",
+        "M365_POWERPLATFORM_CLIENT_ID",
         "SMARTHAUS_PP_CLIENT_ID",
         "SMARTHAUS_POWERPLATFORM_CLIENT_ID",
-        "AZURE_APP_CLIENT_ID_TAI",
-        "GRAPH_CLIENT_ID",
-        "AZURE_CLIENT_ID",
-        "MICROSOFT_CLIENT_ID",
     ],
     "azure.client_secret": [
+        "POWERPLATFORM_CLIENT_SECRET",
+        "M365_POWERPLATFORM_CLIENT_SECRET",
         "SMARTHAUS_PP_CLIENT_SECRET",
         "SMARTHAUS_POWERPLATFORM_CLIENT_SECRET",
-        "AZURE_APP_CLIENT_SECRET_TAI",
-        "GRAPH_CLIENT_SECRET",
-        "AZURE_CLIENT_SECRET",
-        "MICROSOFT_CLIENT_SECRET",
     ],
     "azure.client_certificate_path": [
+        "POWERPLATFORM_CLIENT_CERTIFICATE_PATH",
+        "M365_POWERPLATFORM_CLIENT_CERTIFICATE_PATH",
         "SMARTHAUS_PP_CLIENT_CERTIFICATE_PATH",
         "SMARTHAUS_POWERPLATFORM_CLIENT_CERTIFICATE_PATH",
-        "AZURE_CLIENT_CERTIFICATE_PATH",
     ],
 }
 

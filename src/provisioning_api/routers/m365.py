@@ -31,6 +31,10 @@ from smarthaus_common.power_apps_client import PowerAppsClient
 from smarthaus_common.power_automate_client import PowerAutomateClient
 from smarthaus_common.power_bi_client import PowerBIClient
 from smarthaus_common.security_defender_client import SecurityDefenderClient
+from smarthaus_common.team_status_workflow import (
+    TeamStatusWorkflowRequest,
+    provision_team_status_workflow,
+)
 from smarthaus_common.tenant_config import get_tenant_config
 from smarthaus_graph.client import GraphClient
 
@@ -64,6 +68,7 @@ _SUPPORTED_ACTIONS = {
     "list_site_lists",
     "get_list",
     "list_list_items",
+    "create_list",
     "create_list_item",
     "list_drives",
     "get_drive",
@@ -200,6 +205,7 @@ _SUPPORTED_ACTIONS = {
     "update_contact",
     "delete_contact",
     "list_contact_folders",
+    "provision_team_status_workflow",
 }
 _MUTATING_ACTIONS = {
     "create_site",
@@ -229,6 +235,7 @@ _MUTATING_ACTIONS = {
     "create_contact",
     "update_contact",
     "delete_contact",
+    "create_list",
     "create_list_item",
     "create_folder",
     "upload_file",
@@ -267,6 +274,7 @@ _MUTATING_ACTIONS = {
     "delete_conditional_access_policy",
     "create_ediscovery_case",
     "create_ediscovery_case_search",
+    "provision_team_status_workflow",
 }
 
 
@@ -820,6 +828,16 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
         if action == "get_site":
             return {"site_id": site_id}
         return {"site_id": site_id, "top": _normalize_top(params)}
+    if action == "create_list":
+        site_id = _first_str(params, "siteId", "site_id")
+        display_name = _first_str(params, "displayName", "display_name", "name", "title")
+        if not site_id or not display_name:
+            raise HTTPException(status_code=400, detail="Missing 'siteId' or 'displayName'")
+        return {
+            "site_id": site_id,
+            "display_name": display_name,
+            "columns": _normalize_dict_list_field(params, "columns", "columnDefinitions"),
+        }
     if action in {"get_list", "list_list_items", "create_list_item"}:
         site_id = _first_str(params, "siteId", "site_id")
         list_id = _first_str(params, "listId", "list_id", "id")
@@ -896,6 +914,82 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
             "conflict_behavior": _first_str(params, "conflictBehavior", "conflict_behavior")
             or "replace",
             "content_type": _first_str(params, "contentType", "content_type"),
+        }
+    if action == "provision_team_status_workflow":
+        site_id = _first_str(params, "siteId", "site_id")
+        organizer = _first_str(
+            params,
+            "organizerUserId",
+            "organizer_user_id",
+            "organizerUserPrincipalName",
+            "organizer_user_principal_name",
+            "userId",
+            "user_id",
+            "userPrincipalName",
+            "mailbox",
+        )
+        recipients_source = (
+            params.get("recipients")
+            if "recipients" in params
+            else params.get("meetingAttendees", params.get("attendees"))
+        )
+        if not site_id or not organizer:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'siteId' or organizer user context",
+            )
+        recipients = _normalize_email_addresses(recipients_source, "recipients")
+        meeting_start = _normalize_datetime_value(
+            params.get("meetingStart", params.get("meeting_start", params.get("start"))),
+            "meetingStart",
+        )
+        meeting_end = _normalize_datetime_value(
+            params.get("meetingEnd", params.get("meeting_end", params.get("end"))),
+            "meetingEnd",
+        )
+        workflow_name = (
+            _first_str(params, "workflowName", "workflow_name", "name", "title")
+            or "Weekly Team Status"
+        )
+        try:
+            reminder_hour = int(params.get("reminderHour", params.get("reminder_hour", 9)))
+            reminder_minute = int(params.get("reminderMinute", params.get("reminder_minute", 0)))
+            digest_hour = int(params.get("digestHour", params.get("digest_hour", 16)))
+            digest_minute = int(params.get("digestMinute", params.get("digest_minute", 0)))
+        except (TypeError, ValueError) as exc:
+            raise HTTPException(
+                status_code=400,
+                detail="Reminder and digest schedule values must be integers",
+            ) from exc
+        return {
+            "site_id": site_id,
+            "site_url": _first_str(params, "siteUrl", "site_url"),
+            "organizer_user_id_or_upn": organizer,
+            "recipients": recipients,
+            "meeting_start": meeting_start,
+            "meeting_end": meeting_end,
+            "meeting_subject": (
+                _first_str(params, "meetingSubject", "meeting_subject", "subject")
+                or f"{workflow_name} Meeting"
+            ),
+            "workflow_name": workflow_name,
+            "tracker_list_name": (
+                _first_str(params, "trackerListName", "tracker_list_name")
+                or f"{workflow_name} Tracker"
+            ),
+            "time_zone": _first_str(params, "timeZone", "time_zone") or "Eastern Standard Time",
+            "reminder_day": _first_str(params, "reminderDay", "reminder_day") or "Friday",
+            "reminder_hour": max(0, min(23, reminder_hour)),
+            "reminder_minute": max(0, min(59, reminder_minute)),
+            "digest_day": _first_str(params, "digestDay", "digest_day") or "Friday",
+            "digest_hour": max(0, min(23, digest_hour)),
+            "digest_minute": max(0, min(59, digest_minute)),
+            "meeting_attendees": tuple(
+                _normalize_email_addresses(
+                    params.get("meetingAttendees", params.get("attendees", recipients)),
+                    "meetingAttendees",
+                )
+            ),
         }
     if action in {"create_document", "update_document"}:
         return {
@@ -2312,6 +2406,16 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
             ),
             "status": "uploaded",
         }
+    if action == "create_list":
+        client = _graph_client(action)
+        return {
+            "list": client.create_list(
+                params["site_id"],
+                params["display_name"],
+                columns=params.get("columns") or None,
+            ),
+            "status": "created",
+        }
     if action in {"create_document", "update_document"}:
         client = _graph_client(action)
         document = client.upload_bytes(
@@ -2507,6 +2611,32 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
         power_bi_client = _power_bi_client(action)
         value = power_bi_client.list_workspaces()[: params["top"]]
         return {"workspaces": value, "count": len(value)}
+    if action == "provision_team_status_workflow":
+        return provision_team_status_workflow(
+            sharepoint_client=_graph_client("create_list"),
+            messaging_client=_graph_client("create_event"),
+            power_apps_client=_power_apps_client("list_powerapp_environments"),
+            power_automate_client=_power_automate_client("list_flows_admin"),
+            request=TeamStatusWorkflowRequest(
+                site_id=params["site_id"],
+                site_url=params.get("site_url"),
+                organizer_user_id_or_upn=params["organizer_user_id_or_upn"],
+                recipients=tuple(params["recipients"]),
+                meeting_start=params["meeting_start"],
+                meeting_end=params["meeting_end"],
+                meeting_subject=params["meeting_subject"],
+                workflow_name=params["workflow_name"],
+                tracker_list_name=params["tracker_list_name"],
+                time_zone=params["time_zone"],
+                reminder_day=params["reminder_day"],
+                reminder_hour=params["reminder_hour"],
+                reminder_minute=params["reminder_minute"],
+                digest_day=params["digest_day"],
+                digest_hour=params["digest_hour"],
+                digest_minute=params["digest_minute"],
+                meeting_attendees=tuple(params["meeting_attendees"]),
+            ),
+        )
     if action == "get_powerbi_workspace":
         power_bi_client = _power_bi_client(action)
         return {"workspace": power_bi_client.get_workspace(params["workspace_id"])}
@@ -3380,6 +3510,12 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "mutating": False,
     },
     {
+        "action": "create_list",
+        "description": "Create a SharePoint tracker or generic list",
+        "params": ["siteId|site_id", "displayName|display_name|name|title", "columns?"],
+        "mutating": True,
+    },
+    {
         "action": "create_list_item",
         "description": "Create a SharePoint list item",
         "params": ["siteId|site_id", "listId|list_id|id", "fields"],
@@ -3610,6 +3746,24 @@ INSTRUCTION_ACTIONS_SCHEMA = [
         "action": "invoke_flow_callback",
         "description": "Invoke a Power Automate HTTP callback URL with a bounded payload",
         "params": ["callbackUrl|callback_url|url", "body|payload?", "headers?", "timeoutSeconds?"],
+        "mutating": True,
+    },
+    {
+        "action": "provision_team_status_workflow",
+        "description": "Provision a recurring meeting, tracker list, Friday reminder flow, and weekly digest flow",
+        "params": [
+            "siteId|site_id",
+            "organizerUserId?|organizerUserPrincipalName?|userId?|userPrincipalName?|mailbox?",
+            "recipients|meetingAttendees|attendees",
+            "meetingStart|meeting_start|start",
+            "meetingEnd|meeting_end|end",
+            "meetingSubject?",
+            "workflowName?",
+            "trackerListName?",
+            "timeZone?",
+            "reminderDay?|reminderHour?|reminderMinute?",
+            "digestDay?|digestHour?|digestMinute?",
+        ],
         "mutating": True,
     },
     {

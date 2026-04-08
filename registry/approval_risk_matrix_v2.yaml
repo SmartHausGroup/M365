@@ -427,6 +427,11 @@ exact_action_policies:
     risk_class: low
     approval_profile: low-observe-create
     approval_requirement: never
+  provision_team_status_workflow:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
   list_devices:
     risk_class: low
     approval_profile: low-observe-create
@@ -630,6 +635,10 @@ exact_action_policies:
   get_list:
     risk_class: low
     approval_profile: low-observe-create
+    approval_requirement: never
+  create_list:
+    risk_class: medium
+    approval_profile: medium-operational
     approval_requirement: never
   list_list_items:
     risk_class: low

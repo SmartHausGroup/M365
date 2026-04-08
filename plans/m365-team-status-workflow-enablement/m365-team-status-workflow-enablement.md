@@ -2,10 +2,10 @@
 
 **Plan ID:** `plan:m365-team-status-workflow-enablement`
 **Parent Plan ID:** `plan:m365-power-platform-executor-auth-remediation`
-**Status:** `in_progress`
+**Status:** `complete`
 **Date:** `2026-04-08`
 **Owner:** `SMARTHAUS`
-**Execution plan reference:** `plan:m365-team-status-workflow-enablement:R0`
+**Execution plan reference:** `plan:m365-team-status-workflow-enablement:R6`
 **North Star alignment:** `Operations/NORTHSTAR.md` — advance the M365-only self-service operating model by making a real cross-workload weekly team operating loop provisionable through Teams, Outlook, SharePoint, and Power Automate instead of leaving workflow automation at the recipe-catalog or admin-read stage.
 **Governance evidence:** `notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb`, `configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json`
 
@@ -23,6 +23,7 @@ Make the direct repo runtime able to provision and validate a real weekly team s
 The current repo is close, but not yet able to do the workflow the user actually wants.
 
 - Power Platform auth drift is repaired, but the selected runtime identity currently sees `0` accessible Power Platform environments.
+- The bounded Power Platform fallback still relies on SmartHaus-branded bootstrap env names, which is not the correct tenant-generic engine contract for a multi-company M365 pack.
 - The public instruction surface can create recurring calendar events and create SharePoint list items, but it does not yet expose SharePoint list creation even though the Graph client already supports it.
 - The Power Automate surface can read and administer existing flows, but it does not yet expose a bounded provisioning path for a new flow or a reusable workflow package.
 
@@ -50,6 +51,7 @@ If `GO` is false, the package remains open and reports the first remaining real 
 
 - create the governed plan package and tracker activation
 - diagnose and fix Power Platform environment accessibility for the runtime identity
+- replace the SmartHaus-specific Power Platform bootstrap assumption with a tenant-generic executor credential model
 - expose the missing repo surface needed to create the tracker
 - add a bounded provisioning path for the weekly team status automation
 - define the deterministic workflow contract and template assets
@@ -89,6 +91,7 @@ If `GO` is false, the package remains open and reports the first remaining real 
 - `docs/CAIO_M365_CONTRACT.md`
 - `docs/contracts/caio-m365/ACTION_SPECIFICATION.md`
 - `docs/contracts/M365_CAPABILITIES_UNIVERSE.md`
+- `tests/test_tenant_config_powerplatform.py`
 - `tests/test_sharepoint_onedrive_files_expansion_v2.py`
 - `tests/test_power_automate_expansion_v2.py`
 - `tests/test_team_status_workflow.py`
@@ -117,6 +120,7 @@ If `GO` is false, the package remains open and reports the first remaining real 
 ### R2 — Repo surface completion
 
 - expose SharePoint list creation on the public instruction surface
+- replace the SmartHaus-specific Power Platform bootstrap assumption with a tenant-generic executor credential model that prefers selected-tenant executor config and generic Power Platform env names
 - add a bounded provisioning path for the weekly team status automation instead of leaving it as manual portal work
 
 ### R3 — Deterministic workflow contract
@@ -161,13 +165,15 @@ If `GO` is false, the package remains open and reports the first remaining real 
 
 ## Validation
 
-- focused tests for any new repo surfaces
+- focused tests for any new repo surfaces and Power Platform tenant-config resolution changes
 - live repo-direct validation for environment visibility, tracker creation, meeting creation, and automation visibility
 - `pre-commit run --all-files`
 - `git diff --check`
 
 ## Execution Status
 
-- `R0` is active.
-- No tenant changes or runtime changes have been executed under this package yet.
-- The next act is `R1`, the tenant environment accessibility repair.
+- `R0` through `R6` are complete.
+- The weekly team status workflow now provisions end to end through the direct repo runtime.
+- The Power Platform credential model is now tenant-generic at the engine layer and only preserves `SMARTHAUS_PP_*` as a local compatibility fallback.
+- No secrets or private keys are committed under this package.
+- Next act: none inside this package.

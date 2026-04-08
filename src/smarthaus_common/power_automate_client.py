@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 from typing import Any
@@ -14,9 +15,14 @@ from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 
 _ADMIN_MODULE = "Microsoft.PowerApps.Administration.PowerShell"
 _MAKER_MODULE = "Microsoft.PowerApps.PowerShell"
-_PW_TENANT_ENV = "SMARTHAUS_PP_TENANT_ID"
-_PW_CLIENT_ID_ENV = "SMARTHAUS_PP_CLIENT_ID"
-_PW_CLIENT_SECRET_ENV = "SMARTHAUS_PP_CLIENT_SECRET"
+_PW_TENANT_ENV = "POWERPLATFORM_TENANT_ID"
+_PW_CLIENT_ID_ENV = "POWERPLATFORM_CLIENT_ID"
+_PW_CLIENT_SECRET_ENV = "POWERPLATFORM_CLIENT_SECRET"
+_FLOW_OPERATOR_RESOURCE = "https://service.flow.microsoft.com/"
+_FLOW_API_BASE = "https://api.flow.microsoft.com"
+_TENANT_GUID_RE = re.compile(
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)
 
 
 def _ps_string(value: str) -> str:
@@ -343,3 +349,116 @@ class PowerAutomateClient:
             "status_code": response.status_code,
             "response": response_payload,
         }
+
+    def _operator_access_token(self) -> str:
+        az = shutil.which("az")
+        if not az:
+            raise SmarthausError("Power Automate operator runtime not configured: az not found")
+
+        command = [az, "account", "get-access-token", "--resource", _FLOW_OPERATOR_RESOURCE]
+        tenant_hint = ""
+        if self._tenant_config is not None:
+            azure_tenant_id = str(self._tenant_config.azure.tenant_id or "").strip()
+            tenant_domain = str(self._tenant_config.tenant.domain or "").strip()
+            tenant_slug = str(self._tenant_config.tenant.id or "").strip()
+            if azure_tenant_id:
+                tenant_hint = azure_tenant_id
+            elif tenant_domain:
+                tenant_hint = tenant_domain
+            elif _TENANT_GUID_RE.match(tenant_slug):
+                tenant_hint = tenant_slug
+        if tenant_hint:
+            command.extend(["--tenant", tenant_hint])
+
+        proc = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            env=os.environ.copy(),
+        )
+        if proc.returncode != 0:
+            stderr = proc.stderr.strip() or proc.stdout.strip() or "unknown az failure"
+            raise SmarthausError(f"Power Automate operator token acquisition failed: {stderr}")
+        try:
+            payload = json.loads(proc.stdout)
+        except json.JSONDecodeError as exc:
+            raise SmarthausError(
+                "Power Automate operator token acquisition returned invalid JSON."
+            ) from exc
+        token = str(payload.get("accessToken") or "").strip()
+        if not token:
+            raise SmarthausError("Power Automate operator token acquisition returned no token.")
+        return token
+
+    def _flow_rest_request(
+        self,
+        method: str,
+        path: str,
+        *,
+        api_version: str = "2016-11-01",
+        json_body: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        token = self._operator_access_token()
+        response = httpx.request(
+            method,
+            f"{_FLOW_API_BASE}{path}",
+            headers={"Authorization": f"Bearer {token}"},
+            params={"api-version": api_version},
+            json=json_body,
+            timeout=60,
+        )
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            detail = exc.response.text.strip() or "unknown Power Automate REST error"
+            raise SmarthausError(f"Power Automate REST request failed: {detail}") from exc
+        if not response.text.strip():
+            return {}
+        try:
+            payload = response.json()
+        except ValueError as exc:
+            raise SmarthausError(
+                f"Power Automate REST request returned non-JSON output: {response.text.strip()}"
+            ) from exc
+        if not isinstance(payload, dict):
+            raise SmarthausError("Power Automate REST request returned non-object JSON output.")
+        return payload
+
+    def list_flows_operator(self, environment_name: str) -> list[dict[str, Any]]:
+        payload = self._flow_rest_request(
+            "GET",
+            f"/providers/Microsoft.ProcessSimple/environments/{environment_name}/flows",
+        )
+        value = payload.get("value", [])
+        return [item for item in value if isinstance(item, dict)]
+
+    def get_flow_operator(self, environment_name: str, flow_name: str) -> dict[str, Any]:
+        return self._flow_rest_request(
+            "GET",
+            f"/providers/Microsoft.ProcessSimple/environments/{environment_name}/flows/{flow_name}",
+        )
+
+    def create_flow_operator(
+        self,
+        environment_name: str,
+        *,
+        display_name: str,
+        definition: dict[str, Any],
+        connection_references: dict[str, Any],
+        api_id: str = "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+        state: str = "Started",
+    ) -> dict[str, Any]:
+        return self._flow_rest_request(
+            "POST",
+            f"/providers/Microsoft.ProcessSimple/environments/{environment_name}/flows",
+            json_body={
+                "properties": {
+                    "displayName": display_name,
+                    "apiId": api_id,
+                    "state": state,
+                    "definition": definition,
+                    "connectionReferences": connection_references,
+                }
+            },
+        )

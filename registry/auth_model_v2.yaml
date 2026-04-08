@@ -114,6 +114,8 @@ exact_action_policies:
     auth_class: app_only
   get_list:
     auth_class: app_only
+  create_list:
+    auth_class: app_only
   list_list_items:
     auth_class: app_only
   create_list_item:
@@ -250,6 +252,8 @@ exact_action_policies:
     auth_class: app_only
   get_automation_recipe:
     auth_class: app_only
+  provision_team_status_workflow:
+    auth_class: mixed
   list_devices:
     auth_class: app_only
   get_device:

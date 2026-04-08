@@ -30,6 +30,7 @@ Make the repo able to provision and validate a real weekly team status workflow 
 ## Required outputs
 
 - truthful Power Platform environment access for the runtime identity
+- tenant-generic Power Platform credential resolution that does not depend on SmartHaus-branded engine assumptions
 - repo surface for tracker provisioning
 - bounded provisioning path for the weekly team status workflow
 - live proof for the reference workflow or an exact blocker
@@ -44,7 +45,7 @@ Make the repo able to provision and validate a real weekly team status workflow 
 ## Execution order
 
 1. `R1` tenant environment accessibility
-2. `R2` repo surface completion
+2. `R2` repo surface completion plus tenant-generic Power Platform credential repair
 3. `R3` deterministic workflow contract
 4. `R4` live provisioning
 5. `R5` end-to-end validation

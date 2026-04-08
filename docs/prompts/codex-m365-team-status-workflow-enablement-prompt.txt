@@ -5,6 +5,6 @@ Read and execute:
 
 Current task:
 - make the weekly team status workflow real through the repo
-- fix environment access first
-- then add the missing provisioning surfaces
+- keep the Power Platform credential model tenant-generic
+- then add the missing provisioning surfaces and finish live workflow provisioning
 - then validate the workflow end-to-end

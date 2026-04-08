@@ -29,7 +29,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-power-platform-executor-auth-remediation.md` | Final closeout for the Power Platform executor-auth remediation, covering the canonical executor model, runtime hardening, tenant-side credential proof, and the live zero-environment certification result. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R6` |
 | `artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json` | Machine-readable `R6` diagnostics artifact freezing the repaired Power Platform auth chain, transitional tenant enablement proof, and live `list_powerapp_environments` zero-environment success result. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R6` |
 
-## Active Team Status Workflow Enablement Artifacts
+## Complete Team Status Workflow Enablement Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |
@@ -40,6 +40,8 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-team-status-workflow-enablement-prompt.txt` | Kickoff prompt for the weekly team status workflow enablement package. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
 | `notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb` | Governance notebook freezing the exact workflow-enablement gap and providing notebook backing for the new package activation. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
 | `configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json` | Machine-readable verification payload for the weekly team status workflow enablement governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/commercialization/m365-team-status-workflow-enablement.md` | Final closeout for the weekly team status workflow enablement package, covering the tenant-generic credential model, repo-surface completion, live provisioning fixes, and the successful end-to-end reference workflow result. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
+| `artifacts/diagnostics/m365_team_status_workflow_enablement.json` | Machine-readable `R6` diagnostics artifact freezing the visible Power Platform environment, tenant-generic Power Platform model, live tracker/meeting/flow provisioning result, and final closeout truth. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
 
 ## Active Workforce Expansion Master Plan Artifacts
 

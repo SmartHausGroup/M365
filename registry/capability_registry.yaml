@@ -1111,6 +1111,13 @@ actions:
   - Sites.Read.All
   mutating: false
   status: implemented
+- action: create_list
+  resource: list
+  domain: sharepoint
+  required_permissions:
+  - Sites.Manage.All
+  mutating: true
+  status: implemented
 - action: update_list
   resource: list
   domain: sharepoint
@@ -2477,6 +2484,23 @@ actions:
   status: implemented
   result_shape_keys:
   - recipe
+- action: provision_team_status_workflow
+  resource: workflow
+  domain: provisioning
+  required_permissions:
+  - Sites.ReadWrite.All
+  - Calendars.ReadWrite
+  - PowerPlatform.Admin
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - status
+  - environment
+  - site
+  - tracker_list
+  - meeting
+  - reminder_flow
+  - digest_flow
 - action: list_security_alerts
   resource: securityAlert
   domain: security

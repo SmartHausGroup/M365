@@ -281,6 +281,7 @@
 - delete_flow
 - restore_flow
 - invoke_flow_callback
+- provision_team_status_workflow
 
 ---
 
@@ -461,6 +462,7 @@ connector-backed surfaces instead.
 ## Provisioning / composite (our conveniences)
 
 - provision_service
+- provision_team_status_workflow
 - list_automation_recipes
 - get_automation_recipe
 - provision_user_and_license
