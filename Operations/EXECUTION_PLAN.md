@@ -731,3 +731,18 @@ outside this repo slice.
 
 **Status update (2026-04-08 09:14 EDT):** Created the governed branch-topology cleanup package for the merged post-remediation branch set. The approved local delete set is `codex/m365-direct-function-validation`, `codex/m365-direct-runtime-readiness-remediation`, `codex/m365-persona-action-certification-plan`, and `codex/m365-persona-action-full-support-remediation`; the approved remote delete set is those four branches plus `origin/codex/m365-token-acquisition-validation` and `origin/feature/m365_personas`. No branch deletion has been executed in this package-creation slice.
 **Status update (2026-04-08 09:14 EDT):** Executed the bounded branch-topology cleanup under `plan:m365-post-remediation-branch-topology-cleanup:R1` through `R6`. Verified the four local delete-candidate branches had `0` unique commits beyond `development` (`38/0`, `44/0`, `31/0`, `3/0`), deleted the scoped local `codex/*` feature branches, deleted the six scoped remote stale feature branches, and synchronized the cleanup package plus governance trackers to the final post-cleanup branch set. The repo now exposes only `development`, `staging`, and `main` locally and on origin.
+
+## Initiative: M365 Power Platform Executor Auth Remediation
+
+**Initiative:** Repair the direct repo Power Platform executor identity and credential chain so Power Apps and Power Automate admin actions authenticate with the correct bounded executor and validate live truthfully.
+
+**Plan:** `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.md`
+
+**Reference:** `plan:m365-power-platform-executor-auth-remediation:R0`
+
+**Status:** ⚠️ Package created (2026-04-08) — governance-backed remediation plan is in place; runtime/auth execution has not started yet.
+**Current next act:** Present the approval packet for `plan:m365-power-platform-executor-auth-remediation`, then execute `R1` root-cause audit notebook-first on `codex/m365-power-platform-executor-auth-remediation`.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-power-platform-executor-auth-remediation.md`, `docs/prompts/codex-m365-power-platform-executor-auth-remediation-prompt.txt`
+
+**Status update (2026-04-08 10:40 EDT):** Created the governed Power Platform executor-auth remediation package after the live repo-direct Power Platform probe failed with `AADSTS7000215` and surfaced app id `fe34434f-0de8-4807-a239-9ee093d4780c`, which the bounded executor docs identify as the SharePoint executor. Published the governance notebook `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb` and generated verification `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json`, then added the plan triplet and prompt pair for the bounded remediation. The package fixes scope around the observed drift in `src/smarthaus_common/tenant_config.py`, `src/smarthaus_common/power_apps_client.py`, and `src/smarthaus_common/power_automate_client.py`; no runtime code, tenant configuration, or secret material changed in this slice.

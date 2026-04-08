@@ -1,0 +1,15 @@
+Execute the governed package at `docs/prompts/codex-m365-power-platform-executor-auth-remediation.md`.
+
+Plan Reference: `plan:m365-power-platform-executor-auth-remediation`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.md`.
+
+This package is for one bounded remediation only:
+repair the direct repo Power Platform executor auth chain so Power Apps and
+Power Automate admin actions authenticate with the correct executor identity and
+prove it through live repo-direct validation.
+
+Do not implement until explicit owner approval.

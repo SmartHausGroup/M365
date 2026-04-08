@@ -15,6 +15,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `Operations/PROJECT_FILE_INDEX.md` | File-index governance baseline for active readiness artifacts. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 | `docs/governance/MATHS_PROMPT_TEMPLATE.md` | Canonical MATHS prompt template for execution acts. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 
+## Active Power Platform Executor Auth Remediation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.md` | Human-readable governed remediation plan for correcting Power Platform executor identity and credential drift in the direct repo runtime. | `Mission Statement`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.yaml` | Structured YAML authority for the Power Platform executor-auth remediation initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.json` | Structured JSON mirror for governance tooling on the Power Platform executor-auth remediation initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `docs/prompts/codex-m365-power-platform-executor-auth-remediation.md` | Detailed execution prompt for the bounded Power Platform executor-auth remediation. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `docs/prompts/codex-m365-power-platform-executor-auth-remediation-prompt.txt` | Kickoff prompt for the Power Platform executor-auth remediation package. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb` | Governance notebook freezing the live Power Platform auth drift and establishing notebook backing for tracker activation. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json` | Machine-readable verification payload for the Power Platform executor-auth governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+
 ## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
