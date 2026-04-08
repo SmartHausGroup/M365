@@ -1,0 +1,14 @@
+[
+  {
+    "id": "795009f5-a6ce-40f8-8add-34100c79fd55",
+    "ts": 1775684483,
+    "key": "test-m365-instruction",
+    "request_hash": "d6494784b22b5e34ac41cb3520361e3e1545ccd5a796b78964c66ab2c36f1b9e",
+    "response": {
+      "ok": false,
+      "result": null,
+      "error": "m365_mutations_disabled",
+      "trace_id": "bf3c6ffd-381b-4f94-a66a-56ffaac9aad2"
+    }
+  }
+]

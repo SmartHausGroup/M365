@@ -278,5 +278,13 @@
     "value": 1.23,
     "unit": "ms",
     "context": {}
+  },
+  {
+    "id": "d997e289-33eb-4ec6-b698-bb9b3ea66440",
+    "ts": 1775684483,
+    "benchmark": "b1",
+    "value": 1.23,
+    "unit": "ms",
+    "context": {}
   }
 ]

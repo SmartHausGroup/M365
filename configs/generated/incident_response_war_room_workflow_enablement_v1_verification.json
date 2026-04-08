@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-incident-response-war-room-workflow-enablement",
+  "phase": "R1-R3",
+  "lemma_id": "L97_m365_incident_response_war_room_workflow_enablement_v1",
+  "initial_write_set": [
+    "src/smarthaus_common/incident_response_war_room.py",
+    "src/provisioning_api/routers/m365.py",
+    "src/smarthaus_graph/client.py",
+    "scripts/ops/provision_incident_response_war_room.py",
+    "tests/test_incident_response_war_room.py",
+    "docs/commercialization/m365-incident-response-war-room-workflow-enablement.md",
+    "docs/CAIO_M365_CONTRACT.md",
+    "docs/contracts/caio-m365/ACTION_SPECIFICATION.md",
+    "docs/contracts/M365_CAPABILITIES_UNIVERSE.md",
+    "registry/capability_registry.yaml",
+    "registry/executor_routing_v2.yaml",
+    "registry/auth_model_v2.yaml",
+    "registry/approval_risk_matrix_v2.yaml"
+  ],
+  "truth_function": "workspace_identity_unified AND command_channel_idempotent AND runbook_document_bounded AND planner_seed_idempotent AND activation_mail_bounded AND contracts_synced AND tests_green",
+  "notebook_backing": {
+    "primary": "notebooks/m365/INV-M365-DJ-incident-response-war-room-workflow-enablement-v1.ipynb",
+    "lemma_proof": "notebooks/lemma_proofs/L97_m365_incident_response_war_room_workflow_enablement_v1.ipynb"
+  },
+  "scorecard": "artifacts/scorecards/scorecard_l97.json"
+}

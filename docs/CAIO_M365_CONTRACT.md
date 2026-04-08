@@ -103,6 +103,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `restore_flow` | Restore a soft-deleted Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
 | `invoke_flow_callback` | Invoke a Power Automate HTTP callback URL with a bounded payload | Yes | `callbackUrl` or `callback_url` or `url`, `body?` or `payload?`, `headers?`, `timeoutSeconds?` |
 | `provision_team_status_workflow` | Provision a recurring meeting, tracker list, Friday reminder flow, and weekly digest flow | Yes | `siteId` or `site_id`, organizer user context, `recipients`, `meetingStart`, `meetingEnd`, `meetingSubject?`, `workflowName?`, `trackerListName?`, `timeZone?`, reminder/digest schedule overrides? |
+| `provision_incident_response_war_room` | Provision a Team, command channel, SharePoint site, runbook document, Planner plan, seed task, and activation mail for one incident workspace | Yes | `incidentName`, `teamName`, `siteName`, `incidentLeadUpn`, `mailNickname?`, `commandChannelName?`, `runbookPath?`, `planTitle?`, `bucketName?`, `seedTaskTitle?`, `seedTaskDescription?`, `activationRecipients?`, `activationSenderUserPrincipalName?`, `activationSubject?`, `sendActivationMail?`, `forceSendActivation?` |
 | `list_powerapps_admin` | List Power Apps as admin across environments or within a specific environment | No | `environmentName?` or `environment_name?` or `environment?`, `owner?`, `filter?`, `top?` |
 | `get_powerapp_admin` | Get a Power App as admin | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id` |
 | `list_powerapp_role_assignments` | List Power App role assignments for an app | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id`, `userId?` |
@@ -263,6 +264,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **restore_flow:** `{ "flowName": "<name>", "status": "restored" }`
 - **invoke_flow_callback:** `{ "invoked": true, "status_code": 2xx, "response": { ... } | "<text>" }`
 - **provision_team_status_workflow:** `{ "status": "provisioned", "environment": { ... }, "site": { ... }, "tracker_list": { ... }, "meeting": { ... }, "reminder_flow": { ... }, "digest_flow": { ... } }`
+- **provision_incident_response_war_room:** `{ "status": "provisioned", "workspace": { ... }, "team": { ... }, "command_channel": { ... }, "site": { ... }, "runbook_document": { ... }, "plan": { ... }, "bucket": { ... }, "seed_task": { ... }, "activation_mail": { ... } }`
 - **list_powerapps_admin:** `{ "apps": [ ... ], "count": N }`
 - **get_powerapp_admin:** `{ "app": { ... } }`
 - **list_powerapp_role_assignments:** `{ "roles": [ ... ], "count": N }`

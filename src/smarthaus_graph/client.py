@@ -1943,6 +1943,11 @@ class GraphClient:
         data = r.json()
         return data.get("value", [])
 
+    def list_bucket_tasks(self, bucket_id: str) -> list[dict]:
+        r = self._request("GET", f"/planner/buckets/{bucket_id}/tasks")
+        data = r.json()
+        return data.get("value", [])
+
     def create_bucket(self, plan_id: str, name: str, order_hint: str = " !") -> dict:
         body = {"name": name, "planId": plan_id, "orderHint": order_hint}
         r = self._request("POST", "/planner/buckets", json=body)

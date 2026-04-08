@@ -254,6 +254,8 @@ exact_action_policies:
     auth_class: app_only
   provision_team_status_workflow:
     auth_class: mixed
+  provision_incident_response_war_room:
+    auth_class: mixed
   list_devices:
     auth_class: app_only
   get_device:

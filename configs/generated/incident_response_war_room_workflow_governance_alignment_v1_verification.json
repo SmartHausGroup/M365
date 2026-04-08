@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "plan_id": "plan:m365-incident-response-war-room-workflow-enablement",
+  "purpose": "Verify the incident response war room workflow package is notebook-backed before runtime extraction and freeze the truthful live Planner boundary before R2-R4 execution.",
+  "notebook_backing": {
+    "path": "notebooks/m365/INV-M365-DI-incident-response-war-room-workflow-governance-alignment-v1.ipynb",
+    "role": "governance_prerequisite_evidence"
+  },
+  "frozen_contract": {
+    "shared_workspace_identity": true,
+    "authoritative_assets": [
+      "team",
+      "command_channel",
+      "site",
+      "runbook_document",
+      "planner_plan",
+      "planner_bucket",
+      "planner_task",
+      "activation_mail"
+    ],
+    "truthful_live_boundary": "planner_write_permissions_may_block_live_execution"
+  },
+  "planned_runtime_targets": [
+    "src/smarthaus_common/incident_response_war_room.py",
+    "src/provisioning_api/routers/m365.py",
+    "src/smarthaus_graph/client.py",
+    "scripts/ops/provision_incident_response_war_room.py",
+    "tests/test_incident_response_war_room.py"
+  ],
+  "public_contract_targets": [
+    "docs/CAIO_M365_CONTRACT.md",
+    "docs/contracts/caio-m365/ACTION_SPECIFICATION.md",
+    "docs/contracts/M365_CAPABILITIES_UNIVERSE.md",
+    "registry/capability_registry.yaml",
+    "registry/executor_routing_v2.yaml",
+    "registry/auth_model_v2.yaml",
+    "registry/approval_risk_matrix_v2.yaml"
+  ],
+  "successor_package_required": false,
+  "next_act": "plan:m365-incident-response-war-room-workflow-enablement:R2"
+}

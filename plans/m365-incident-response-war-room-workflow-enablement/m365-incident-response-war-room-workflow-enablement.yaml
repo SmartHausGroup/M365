@@ -1,0 +1,126 @@
+plan_id: plan:m365-incident-response-war-room-workflow-enablement
+parent_plan_id: none
+title: Enable a real incident response war room workflow across Teams, SharePoint, Planner, and Outlook
+version: "1.0"
+status: complete
+owner: SMARTHAUS
+date_created: "2026-04-08"
+date_updated: "2026-04-08"
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: "Operations/EXECUTION_PLAN.md § Initiative: M365 Incident Response War Room Workflow Enablement"
+domain: infrastructure
+math_algorithm_scope: false
+objective: >
+  Make the direct repo runtime able to provision a Team, command channel,
+  SharePoint incident site, runbook document, Planner plan and seed task,
+  and activation email for a bounded incident response war room workflow.
+decision_rule:
+  incident_war_room_ready: WorkspaceProvisioning AND RunbookProvisioning AND TaskingProvisioning AND NotificationProvisioning AND ScenarioValidation
+  workspace_provisioning: TeamProvisionable AND ChannelProvisionable AND SiteProvisionable
+  runbook_provisioning: RunbookDocumentProvisionable
+  tasking_provisioning: PlannerPlanProvisionable AND PlannerTaskProvisionable
+  notification_provisioning: ActivationMailProvisionable
+  scenario_validation: TeamVisible AND ChannelVisible AND SiteVisible AND RunbookVisible AND PlannerArtifactsVisible AND ActivationMailAccepted
+  go: IncidentWarRoomReady AND ScenarioValidation
+scope:
+  in_scope:
+    - governed plan package activation
+    - deterministic workflow contract for incident response war room
+    - bounded composite workflow action
+    - shared runtime module and operator script
+    - public instruction-surface wiring and contract synchronization
+    - focused regression coverage
+    - truthful validation and closeout
+  out_of_scope:
+    - UCP-side workflow orchestration
+    - unrestricted workflow-engine claims
+    - external incident-management integrations
+    - bypassing Planner or approval boundaries
+    - committing secrets or private keys
+  file_allowlist:
+    - plans/m365-incident-response-war-room-workflow-enablement/**
+    - plans/m365-incident-response-war-room-workflow-notebook-evidence-scope-correction/**
+    - docs/prompts/codex-m365-incident-response-war-room-workflow-enablement.md
+    - docs/prompts/codex-m365-incident-response-war-room-workflow-enablement-prompt.txt
+    - docs/prompts/codex-m365-incident-response-war-room-workflow-notebook-evidence-scope-correction.md
+    - docs/prompts/codex-m365-incident-response-war-room-workflow-notebook-evidence-scope-correction-prompt.txt
+    - docs/commercialization/m365-incident-response-war-room-workflow-enablement.md
+    - docs/ma/lemmas/L97_m365_incident_response_war_room_workflow_enablement_v1.md
+    - invariants/lemmas/L97_m365_incident_response_war_room_workflow_enablement_v1.yaml
+    - notebooks/m365/INV-M365-DI-incident-response-war-room-workflow-governance-alignment-v1.ipynb
+    - notebooks/m365/INV-M365-DJ-incident-response-war-room-workflow-enablement-v1.ipynb
+    - notebooks/lemma_proofs/L97_m365_incident_response_war_room_workflow_enablement_v1.ipynb
+    - artifacts/scorecards/scorecard_l97.json
+    - configs/generated/incident_response_war_room_workflow_governance_alignment_v1_verification.json
+    - configs/generated/incident_response_war_room_workflow_enablement_v1_verification.json
+    - src/smarthaus_common/incident_response_war_room.py
+    - src/provisioning_api/routers/m365.py
+    - src/smarthaus_graph/client.py
+    - scripts/ops/provision_incident_response_war_room.py
+    - registry/capability_registry.yaml
+    - registry/executor_routing_v2.yaml
+    - registry/auth_model_v2.yaml
+    - registry/approval_risk_matrix_v2.yaml
+    - docs/CAIO_M365_CONTRACT.md
+    - docs/contracts/caio-m365/ACTION_SPECIFICATION.md
+    - docs/contracts/M365_CAPABILITIES_UNIVERSE.md
+    - tests/test_incident_response_war_room.py
+    - Operations/EXECUTION_PLAN.md
+    - Operations/ACTION_LOG.md
+    - Operations/PROJECT_FILE_INDEX.md
+  file_denylist:
+    - .env
+    - ../UCP/**
+    - any secret-bearing local file
+requirements:
+  - id: R0
+    ref: plan:m365-incident-response-war-room-workflow-enablement:R0
+    description: Create the governed package, prompt pair, and tracker activation.
+  - id: R1
+    ref: plan:m365-incident-response-war-room-workflow-enablement:R1
+    description: Freeze the deterministic workflow contract and bounded composite action surface.
+  - id: R2
+    ref: plan:m365-incident-response-war-room-workflow-enablement:R2
+    description: Add the shared runtime module, operator script, and instruction-surface wiring for the workflow.
+  - id: R3
+    ref: plan:m365-incident-response-war-room-workflow-enablement:R3
+    description: Add focused regression coverage for the workflow runtime and action contract.
+  - id: R4
+    ref: plan:m365-incident-response-war-room-workflow-enablement:R4
+    description: Run the agreed validation set and publish truthful closeout.
+execution_order:
+  - R0
+  - R1
+  - R2
+  - R3
+  - R4
+validation:
+  hard_gates:
+    - python3 -m py_compile src/provisioning_api/routers/m365.py src/smarthaus_common/incident_response_war_room.py scripts/ops/provision_incident_response_war_room.py tests/test_incident_response_war_room.py
+    - PYTHONPATH=src .venv/bin/pytest -q tests/test_incident_response_war_room.py
+    - PYTHONPATH=src .venv/bin/pytest -q tests/test_teams_groups_planner_expansion_v2.py tests/test_endpoints.py tests/test_ops_adapter.py
+    - git diff --check
+execution_status:
+  r0_complete: true
+  r1_complete: true
+  r1_evidence_chain_created: true
+  r1_blocked: false
+  blocked_reason: live tenant proof recorded the exact remaining external blockers: Team visibility was still 404 during the probe window and Planner returned Graph 403 on /groups/{groupId}/planner/plans
+  active_blocker_package: none
+  child_blocker_package_complete: true
+  r2_complete: true
+  r3_complete: true
+  r4_complete: true
+  local_validation_complete: true
+  local_validation_summary: py_compile passed; incident workflow pytest passed (4 passed); adjacent regression pytest passed (144 passed, 32 warnings); git diff --check passed
+  live_probe_result:
+    date: "2026-04-08"
+    incident_name: Codex IR Validation 2026-04-08 174211
+    mail_nickname: codex-ir-validation-20260408-174211
+    group_id: b36a0d62-2694-4870-9a1a-79eec455e271
+    site_root: 200 https://smarthausgroup.sharepoint.com/sites/codex-ir-validation-20260408-174211
+    team_read: 404 during bounded probe window
+    channel_read: 404 during bounded probe window
+    planner_read: 403 required permissions on /groups/{groupId}/planner/plans
+    cli_process_cleanup: original long-running provisioning process terminated after exact blocker capture
+  next_act: none

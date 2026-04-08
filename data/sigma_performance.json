@@ -270,5 +270,13 @@
     "sharpe": 1.0,
     "pnl": 10.0,
     "period": "1d"
+  },
+  {
+    "id": "b1e9eb60-289d-4177-9ca6-6b0b058ddcad",
+    "ts": 1775684483,
+    "strategy": "S1",
+    "sharpe": 1.0,
+    "pnl": 10.0,
+    "period": "1d"
   }
 ]

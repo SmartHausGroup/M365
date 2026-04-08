@@ -2501,6 +2501,29 @@ actions:
   - meeting
   - reminder_flow
   - digest_flow
+- action: provision_incident_response_war_room
+  resource: workflow
+  domain: provisioning
+  required_permissions:
+  - Group.ReadWrite.All
+  - Sites.ReadWrite.All
+  - Team.Create
+  - Channel.Create.Group
+  - Tasks.ReadWrite
+  - Mail.Send
+  mutating: true
+  status: implemented
+  result_shape_keys:
+  - status
+  - workspace
+  - team
+  - command_channel
+  - site
+  - runbook_document
+  - plan
+  - bucket
+  - seed_task
+  - activation_mail
 - action: list_security_alerts
   resource: securityAlert
   domain: security

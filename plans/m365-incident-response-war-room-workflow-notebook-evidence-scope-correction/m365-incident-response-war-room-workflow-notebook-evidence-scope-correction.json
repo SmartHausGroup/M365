@@ -1,0 +1,85 @@
+{
+  "plan_id": "plan:m365-incident-response-war-room-workflow-notebook-evidence-scope-correction",
+  "parent_plan_id": "plan:m365-incident-response-war-room-workflow-enablement",
+  "status": "Complete",
+  "date": "2026-04-08",
+  "owner": "SMARTHAUS",
+  "execution_plan_reference": "plan:m365-incident-response-war-room-workflow-notebook-evidence-scope-correction:R0",
+  "canonical_predecessor": "plans/m365-incident-response-war-room-workflow-enablement/m365-incident-response-war-room-workflow-enablement.md",
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-DI-incident-response-war-room-workflow-governance-alignment-v1.ipynb",
+    "verification": "configs/generated/incident_response_war_room_workflow_governance_alignment_v1_verification.json"
+  },
+  "objective": "Produce the phase-specific notebook-backed governance evidence required to reopen the incident workflow runtime code write.",
+  "current_state": {
+    "parent_plan": "plan:m365-incident-response-war-room-workflow-enablement",
+    "completed_parent_phase": "R3",
+    "active_parent_phase": "R4",
+    "blocked_parent_phase": "none",
+    "blocked_write_set": [
+      "src/smarthaus_common/incident_response_war_room.py",
+      "src/provisioning_api/routers/m365.py",
+      "src/smarthaus_graph/client.py",
+      "scripts/ops/provision_incident_response_war_room.py",
+      "tests/test_incident_response_war_room.py"
+    ],
+    "blocker": {
+      "original_verdict": "allowed:false",
+      "original_violation": "map-2-code-notebook-required",
+      "reopened_verdict": "allowed:true"
+    },
+    "handoff_result": "parent returned to R4 after local R2-R4 validation went green"
+  },
+  "requirements": [
+    {
+      "id": "R0",
+      "title": "Create the bounded incident workflow blocker package"
+    },
+    {
+      "id": "R1",
+      "title": "Make the workflow code-write blocker explicit"
+    },
+    {
+      "id": "R2",
+      "title": "Bind the DI governance notebook evidence to this package"
+    },
+    {
+      "id": "R3",
+      "title": "Bind the L97 future evidence chain to this package"
+    },
+    {
+      "id": "R4",
+      "title": "Reopen the blocked workflow file_edit validation under child-plan authority"
+    },
+    {
+      "id": "R5",
+      "title": "Synchronize the parent plan and governance trackers truthfully"
+    },
+    {
+      "id": "R6",
+      "title": "Hand the parent initiative back to R2 only if validation reopens green"
+    }
+  ],
+  "child_acts": [
+    {
+      "id": "IWNSA",
+      "description": "Freeze the exact workflow code-write set and MCP denial."
+    },
+    {
+      "id": "IWNSB",
+      "description": "Bind the existing DI and L97 evidence surfaces to this child package."
+    },
+    {
+      "id": "IWNSC",
+      "description": "Reopen blocked validation and hand back to the parent initiative if green."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-incident-response-war-room-workflow-notebook-evidence-scope-correction.md",
+    "kickoff": "docs/prompts/codex-m365-incident-response-war-room-workflow-notebook-evidence-scope-correction-prompt.txt"
+  },
+  "execution_outcome": {
+    "decision": "go",
+    "result": "The blocked incident-workflow file_edit validation reopened green under child-plan authority and the parent initiative returned to local R2-R4 execution."
+  }
+}

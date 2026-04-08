@@ -282,6 +282,7 @@
 - restore_flow
 - invoke_flow_callback
 - provision_team_status_workflow
+- provision_incident_response_war_room
 
 ---
 
@@ -463,6 +464,7 @@ connector-backed surfaces instead.
 
 - provision_service
 - provision_team_status_workflow
+- provision_incident_response_war_room
 - list_automation_recipes
 - get_automation_recipe
 - provision_user_and_license

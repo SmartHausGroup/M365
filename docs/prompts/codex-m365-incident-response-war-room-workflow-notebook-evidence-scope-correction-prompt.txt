@@ -1,0 +1,12 @@
+Execute `plan:m365-incident-response-war-room-workflow-notebook-evidence-scope-correction`.
+
+Read:
+- `docs/prompts/codex-m365-incident-response-war-room-workflow-notebook-evidence-scope-correction.md`
+- `plans/m365-incident-response-war-room-workflow-notebook-evidence-scope-correction/m365-incident-response-war-room-workflow-notebook-evidence-scope-correction.md`
+
+Goal:
+- publish the bounded blocker package for the denied incident workflow code wave
+- reopen the blocked `file_edit` validation truthfully
+- hand the parent initiative back to `R2` only if that validation is green
+
+Approved by operator. Validate every mutating action with MCP first and stop on first red.

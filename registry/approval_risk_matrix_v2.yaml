@@ -432,6 +432,11 @@ exact_action_policies:
     approval_profile: high-impact
     approval_requirement: always
     approvers: [global_admin]
+  provision_incident_response_war_room:
+    risk_class: high
+    approval_profile: high-impact
+    approval_requirement: always
+    approvers: [global_admin]
   list_devices:
     risk_class: low
     approval_profile: low-observe-create

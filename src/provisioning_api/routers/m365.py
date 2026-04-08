@@ -18,6 +18,10 @@ from smarthaus_common.errors import SmarthausError
 from smarthaus_common.executor_routing import executor_route_for_action
 from smarthaus_common.forms_approvals_connectors_client import FormsApprovalsConnectorsClient
 from smarthaus_common.identity_security_client import IdentitySecurityClient
+from smarthaus_common.incident_response_war_room import (
+    IncidentResponseWarRoomRequest,
+    provision_incident_response_war_room,
+)
 from smarthaus_common.intune_devices_client import IntuneDevicesClient
 from smarthaus_common.office_generation import (
     DOCUMENT_CONTENT_TYPE,
@@ -206,6 +210,7 @@ _SUPPORTED_ACTIONS = {
     "delete_contact",
     "list_contact_folders",
     "provision_team_status_workflow",
+    "provision_incident_response_war_room",
 }
 _MUTATING_ACTIONS = {
     "create_site",
@@ -275,6 +280,7 @@ _MUTATING_ACTIONS = {
     "create_ediscovery_case",
     "create_ediscovery_case_search",
     "provision_team_status_workflow",
+    "provision_incident_response_war_room",
 }
 
 
@@ -675,6 +681,22 @@ def _slugify_mail_nickname(value: str) -> str:
     return slug
 
 
+def _normalize_top_level_docx_path(value: str | None, *, default_name: str) -> str:
+    raw = str(value or default_name).strip().strip("/")
+    if not raw:
+        raise HTTPException(status_code=400, detail="Missing or invalid 'runbookPath'")
+    if Path(raw).parent != Path("."):
+        raise HTTPException(
+            status_code=400,
+            detail="runbookPath must be a top-level .docx filename",
+        )
+    if "." not in Path(raw).name:
+        return f"{raw}.docx"
+    if not raw.lower().endswith(".docx"):
+        raise HTTPException(status_code=400, detail="runbookPath must end with '.docx'")
+    return raw
+
+
 def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(params, dict):
         raise HTTPException(status_code=400, detail="params must be an object")
@@ -989,6 +1011,107 @@ def _normalize_params(action: str, params: dict[str, Any]) -> dict[str, Any]:
                     params.get("meetingAttendees", params.get("attendees", recipients)),
                     "meetingAttendees",
                 )
+            ),
+        }
+    if action == "provision_incident_response_war_room":
+        incident_name = _first_str(params, "incidentName", "incident_name", "name", "title")
+        team_name = _first_str(params, "teamName", "team_name")
+        site_name = _first_str(params, "siteName", "site_name")
+        incident_lead = _first_str(
+            params,
+            "incidentLeadUpn",
+            "incident_lead_upn",
+            "incidentLeadUserPrincipalName",
+            "incident_lead_user_principal_name",
+            "userPrincipalName",
+            "mailbox",
+            "userId",
+            "user_id",
+        )
+        if not incident_name or not team_name or not site_name or not incident_lead:
+            raise HTTPException(
+                status_code=400,
+                detail="Missing 'incidentName', 'teamName', 'siteName', or 'incidentLeadUpn'",
+            )
+        explicit_mail_nickname = _first_str(params, "mailNickname", "mail_nickname")
+        if explicit_mail_nickname:
+            mail_nickname = _slugify_mail_nickname(explicit_mail_nickname)
+        else:
+            team_slug = _slugify_mail_nickname(team_name)
+            site_slug = _slugify_mail_nickname(site_name)
+            if team_slug != site_slug:
+                raise HTTPException(
+                    status_code=400,
+                    detail=(
+                        "teamName and siteName resolve to different workspace identities; "
+                        "provide 'mailNickname' to unify them explicitly"
+                    ),
+                )
+            mail_nickname = team_slug
+        activation_recipients_source = (
+            params.get("activationRecipients")
+            if "activationRecipients" in params
+            else params.get("recipients", [incident_lead])
+        )
+        activation_recipients = _normalize_email_addresses(
+            activation_recipients_source,
+            "activationRecipients",
+        )
+        return {
+            "incident_name": incident_name,
+            "team_name": team_name,
+            "site_name": site_name,
+            "mail_nickname": mail_nickname,
+            "incident_lead_upn": incident_lead,
+            "command_channel_name": (
+                _first_str(
+                    params,
+                    "commandChannelName",
+                    "command_channel_name",
+                    "channelName",
+                    "channel_name",
+                )
+                or "Command"
+            ),
+            "runbook_path": _normalize_top_level_docx_path(
+                _first_str(params, "runbookPath", "runbook_path", "fileName", "file_name"),
+                default_name=f"{incident_name} Incident Runbook.docx",
+            ),
+            "plan_title": _first_str(params, "planTitle", "plan_title")
+            or f"{incident_name} Response Plan",
+            "bucket_name": _first_str(params, "bucketName", "bucket_name") or "Active Response",
+            "seed_task_title": _first_str(params, "seedTaskTitle", "seed_task_title")
+            or "Establish incident command",
+            "seed_task_description": (
+                _first_str(params, "seedTaskDescription", "seed_task_description")
+                or f"Open the {incident_name} incident bridge, assign owners, and start the response log."
+            ),
+            "activation_recipients": tuple(activation_recipients),
+            "activation_sender_user_id_or_upn": (
+                _first_str(
+                    params,
+                    "activationSenderUserPrincipalName",
+                    "activation_sender_user_principal_name",
+                    "senderUserPrincipalName",
+                    "sender_user_principal_name",
+                )
+                or incident_lead
+            ),
+            "activation_subject": _first_str(
+                params, "activationSubject", "activation_subject", "subject"
+            )
+            or f"[Incident] {incident_name} war room activated",
+            "send_activation_mail": _normalize_bool_field(
+                params,
+                "sendActivationMail",
+                "send_activation_mail",
+                default=True,
+            ),
+            "force_send_activation": _normalize_bool_field(
+                params,
+                "forceSendActivation",
+                "force_send_activation",
+                default=False,
             ),
         }
     if action in {"create_document", "update_document"}:
@@ -2637,6 +2760,32 @@ def _execute_action(action: str, params: dict[str, Any]) -> dict[str, Any]:
                 meeting_attendees=tuple(params["meeting_attendees"]),
             ),
         )
+    if action == "provision_incident_response_war_room":
+        return provision_incident_response_war_room(
+            workspace_client=_graph_client("create_site"),
+            collaboration_client=_graph_client("create_team"),
+            document_client=_graph_client("create_document"),
+            planner_client=_graph_client("create_plan"),
+            messaging_client=_graph_client("send_mail"),
+            request=IncidentResponseWarRoomRequest(
+                incident_name=params["incident_name"],
+                team_name=params["team_name"],
+                site_name=params["site_name"],
+                mail_nickname=params["mail_nickname"],
+                incident_lead_upn=params["incident_lead_upn"],
+                command_channel_name=params["command_channel_name"],
+                runbook_path=params["runbook_path"],
+                plan_title=params["plan_title"],
+                bucket_name=params["bucket_name"],
+                seed_task_title=params["seed_task_title"],
+                seed_task_description=params["seed_task_description"],
+                activation_recipients=tuple(params["activation_recipients"]),
+                activation_sender_user_id_or_upn=params["activation_sender_user_id_or_upn"],
+                activation_subject=params["activation_subject"],
+                send_activation_mail=params["send_activation_mail"],
+                force_send_activation=params["force_send_activation"],
+            ),
+        )
     if action == "get_powerbi_workspace":
         power_bi_client = _power_bi_client(action)
         return {"workspace": power_bi_client.get_workspace(params["workspace_id"])}
@@ -3763,6 +3912,29 @@ INSTRUCTION_ACTIONS_SCHEMA = [
             "timeZone?",
             "reminderDay?|reminderHour?|reminderMinute?",
             "digestDay?|digestHour?|digestMinute?",
+        ],
+        "mutating": True,
+    },
+    {
+        "action": "provision_incident_response_war_room",
+        "description": "Provision a Team, command channel, SharePoint site, runbook document, Planner plan, seed task, and activation mail for one incident workspace",
+        "params": [
+            "incidentName|incident_name|name|title",
+            "teamName|team_name",
+            "siteName|site_name",
+            "incidentLeadUpn|incident_lead_upn|incidentLeadUserPrincipalName|userPrincipalName|mailbox|userId",
+            "mailNickname?|mail_nickname?",
+            "commandChannelName?|command_channel_name?|channelName?|channel_name?",
+            "runbookPath?|runbook_path?",
+            "planTitle?|plan_title?",
+            "bucketName?|bucket_name?",
+            "seedTaskTitle?|seed_task_title?",
+            "seedTaskDescription?|seed_task_description?",
+            "activationRecipients?|recipients?",
+            "activationSenderUserPrincipalName?|activation_sender_user_principal_name?",
+            "activationSubject?",
+            "sendActivationMail?|send_activation_mail?",
+            "forceSendActivation?|force_send_activation?",
         ],
         "mutating": True,
     },

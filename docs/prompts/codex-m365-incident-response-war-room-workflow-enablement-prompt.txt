@@ -1,0 +1,9 @@
+Plan reference: `plan:m365-incident-response-war-room-workflow-enablement`
+
+Read and execute:
+`docs/prompts/codex-m365-incident-response-war-room-workflow-enablement.md`
+
+Current task:
+- make the incident response war room workflow real through the repo
+- add the bounded composite runtime and operator script
+- then validate the workflow truthfully, including the current Planner boundary

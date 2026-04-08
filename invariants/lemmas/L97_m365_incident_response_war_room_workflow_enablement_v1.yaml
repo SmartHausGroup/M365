@@ -1,0 +1,33 @@
+lemma_id: L97_m365_incident_response_war_room_workflow_enablement_v1
+title: M365 Incident Response War Room Workflow Enablement v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-incident-response-war-room-workflow-enablement:R1
+notebook_reference: notebooks/m365/INV-M365-DJ-incident-response-war-room-workflow-enablement-v1.ipynb
+lemma_proof_reference: notebooks/lemma_proofs/L97_m365_incident_response_war_room_workflow_enablement_v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l97.json
+generated_verification_reference: configs/generated/incident_response_war_room_workflow_enablement_v1_verification.json
+proof_obligations:
+  - The workflow resolves one shared M365 group-backed workspace identity for both the Team and SharePoint site.
+  - The command channel, runbook path, Planner plan, Planner bucket, and seed task use deterministic idempotent selectors.
+  - The activation mail is bounded to an explicit sender mailbox and explicit recipient set.
+  - The runtime, contract, and registry surfaces remain aligned for the composite action.
+  - Focused tests preserve the same asset contract and explicit Planner boundary.
+failure_boundaries:
+  - The Team and SharePoint site drift onto different workspace identities.
+  - The workflow creates duplicate command channels, runbook documents, plans, buckets, or seed tasks for the same selector set.
+  - The activation mail lacks an explicit sender mailbox or recipient set.
+  - The public contract and registry surfaces drift from the runtime implementation.
+  - Focused regression coverage does not prove the bounded orchestration path.
+test_bindings:
+  - tests/test_incident_response_war_room.py
+  - tests/test_teams_groups_planner_expansion_v2.py
+  - tests/test_endpoints.py
+  - tests/test_ops_adapter.py
+ci_gate_association:
+  - git diff --check
+  - pre-commit run --all-files
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static
