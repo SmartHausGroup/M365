@@ -2,7 +2,7 @@
 
 **Plan ID:** `plan:m365-post-remediation-branch-topology-cleanup`
 **Parent Plan ID:** `plan:m365-persona-action-full-support-merge-to-development`
-**Status:** `draft`
+**Status:** `complete`
 **Date:** `2026-04-08`
 **Owner:** `SmartHaus`
 **Execution plan reference:** `plan:m365-post-remediation-branch-topology-cleanup:R1`
@@ -123,8 +123,12 @@ This state is operationally noisy and increases the chance of stale-branch mista
 
 ## Execution Status
 
-- `R1` begins with package creation only.
-- No branch deletions have been executed in this package-creation slice.
+- `R1` complete on 2026-04-08: created the cleanup plan triplet, prompt pair, and tracker activation on `development`.
+- `R2` complete on 2026-04-08: froze the keep set at `development`, `staging`, and `main`, and the approved local/remote delete sets exactly as governed.
+- `R3` complete on 2026-04-08: proved each delete-candidate branch had `0` unique commits beyond `development` before deletion (`38/0`, `44/0`, `31/0`, and `3/0` for the four local `codex/*` branches).
+- `R4` complete on 2026-04-08: deleted the scoped local branches `codex/m365-direct-function-validation`, `codex/m365-direct-runtime-readiness-remediation`, `codex/m365-persona-action-certification-plan`, and `codex/m365-persona-action-full-support-remediation`.
+- `R5` complete on 2026-04-08: deleted the scoped remote branches `origin/codex/m365-direct-function-validation`, `origin/codex/m365-direct-runtime-readiness-remediation`, `origin/codex/m365-persona-action-certification-plan`, `origin/codex/m365-persona-action-full-support-remediation`, `origin/codex/m365-token-acquisition-validation`, and `origin/feature/m365_personas`.
+- `R6` complete on 2026-04-08: synchronized the plan and governance trackers so the repo now exposes only `development`, `staging`, and `main` locally and on origin.
 
 ## Rollback
 

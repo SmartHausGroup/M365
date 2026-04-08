@@ -2,7 +2,7 @@ plan_id: plan:m365-post-remediation-branch-topology-cleanup
 parent_plan_id: plan:m365-persona-action-full-support-merge-to-development
 title: Clean up merged post-remediation feature-branch debt
 version: '1.0'
-status: draft
+status: complete
 owner: SmartHaus
 date_created: '2026-04-08'
 date_updated: '2026-04-08'
@@ -83,5 +83,9 @@ validation:
   - git diff --check
 execution_status:
   summary:
-  - R1 begins with package creation only.
-  - No branch deletions have been executed in this package-creation slice.
+  - R1 complete on 2026-04-08: created the cleanup plan triplet, prompt pair, and tracker activation on development.
+  - R2 complete on 2026-04-08: froze the keep set at development, staging, and main, and the approved local/remote delete sets exactly as governed.
+  - R3 complete on 2026-04-08: proved each delete-candidate branch had zero unique commits beyond development before deletion (38/0, 44/0, 31/0, and 3/0 for the four local codex branches).
+  - R4 complete on 2026-04-08: deleted the scoped local codex feature branches.
+  - R5 complete on 2026-04-08: deleted the scoped remote feature branches.
+  - R6 complete on 2026-04-08: synchronized governance tracking so only development, staging, and main remain.
