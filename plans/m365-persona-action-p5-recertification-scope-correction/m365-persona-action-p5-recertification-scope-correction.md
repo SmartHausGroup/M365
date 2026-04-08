@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-persona-action-p5-recertification-scope-correction`
 **Parent Plan ID:** `m365-persona-action-full-support-remediation`
-**Status:** 🟡 Draft
+**Status:** 🟢 Complete
 **Date:** 2026-04-08
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-persona-action-p5-recertification-scope-correction:R1`
@@ -10,6 +10,7 @@
 **Canonical predecessor:** `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
 **Governance evidence:** `notebooks/m365/INV-M365-DE-persona-action-p5-recertification-scope-correction-v1.ipynb`, `configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json`
 **Historical lineage:** successor blocker package after `P4` collapsed repo-local OPA drift, leaving the parent initiative ready for final recertification but without an admitted notebook-backed evidence surface for the new live workforce totals.
+**Completion status (2026-04-08 09:12 EDT):** `GO` — widened the parent `P5` closeout surface to the notebook-backed `L96` recertification evidence chain, synchronized the trackers, and handed control back to the parent initiative for the actual final recertification publish.
 
 **Draft vs Active semantics:** This child plan starts in **Draft**. It becomes **Active** only when the parent initiative remains on `P5`, the approval packet receives explicit `go`, and no sibling child phase is concurrently active. It becomes **Complete** only after the new live workforce universe is notebook-backed, the parent plan/tracker handoff is synchronized, the child package is committed and pushed, and control is truthfully returned to parent `P5`.
 
@@ -144,7 +145,13 @@ If `P5S_GO` is false, `P5S` must emit `NO-GO`, stop fail-closed, and keep the pa
 
 ## Governance Closure
 
-- [ ] `Operations/ACTION_LOG.md`
-- [ ] `Operations/EXECUTION_PLAN.md`
-- [ ] `Operations/PROJECT_FILE_INDEX.md`
-- [ ] this child plan `status -> complete`
+- [x] `Operations/ACTION_LOG.md`
+- [x] `Operations/EXECUTION_PLAN.md`
+- [x] `Operations/PROJECT_FILE_INDEX.md`
+- [x] this child plan `status -> complete`
+
+## Execution Outcome
+
+- **Decision:** `GO`
+- **Approved by:** `operator explicit go`
+- **Completion timestamp:** `2026-04-08 09:12:00 EDT`

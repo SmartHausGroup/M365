@@ -82,6 +82,12 @@
 - `docs/prompts/codex-m365-persona-action-full-support-remediation-prompt.txt`
 - `docs/commercialization/m365-persona-action-certification.md`
 - `artifacts/diagnostics/m365_persona_action_certification.json`
+- `docs/ma/lemmas/L96_m365_persona_action_recertification_closeout_v1.md`
+- `invariants/lemmas/L96_m365_persona_action_recertification_closeout_v1.yaml`
+- `notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb`
+- `notebooks/lemma_proofs/L96_m365_persona_action_recertification_closeout_v1.ipynb`
+- `artifacts/scorecards/scorecard_l96.json`
+- `configs/generated/persona_action_recertification_closeout_v1_verification.json`
 - `registry/agents.yaml`
 - `registry/persona_registry_v2.yaml`
 - `registry/persona_capability_map.yaml`
@@ -291,4 +297,5 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `git diff --check` → passed
 - `P5` is blocked by a live-universe shift between the stale published workforce certification artifact and the current post-`P4` runtime truth.
 - The bounded child blocker phase `plan:m365-persona-action-p5-recertification-scope-correction` is now created with governance notebook `INV-M365-DE` and generated verification `configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json`.
-- `P5S` is now the active next act before any final `P5` commercialization or diagnostics closeout may begin.
+- `P5S` is complete. The child blocker phase widened the parent `P5` closeout surface to the required `L96` lemma/invariant/notebook/scorecard/generated-verification evidence chain.
+- `P5` is now the active next act again and may truthfully republish the final post-remediation workforce certification matrix against the live `172`-alias / `445`-pair universe.
