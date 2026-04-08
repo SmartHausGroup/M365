@@ -29,6 +29,18 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-power-platform-executor-auth-remediation.md` | Final closeout for the Power Platform executor-auth remediation, covering the canonical executor model, runtime hardening, tenant-side credential proof, and the live zero-environment certification result. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R6` |
 | `artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json` | Machine-readable `R6` diagnostics artifact freezing the repaired Power Platform auth chain, transitional tenant enablement proof, and live `list_powerapp_environments` zero-environment success result. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R6` |
 
+## Active Team Status Workflow Enablement Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.md` | Human-readable governed plan for making the weekly team status workflow provisionable through the direct repo runtime. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.yaml` | Structured YAML authority for the weekly team status workflow enablement initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.json` | Structured JSON mirror for governance tooling on the weekly team status workflow enablement initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/prompts/codex-m365-team-status-workflow-enablement.md` | Detailed execution prompt for the weekly team status workflow enablement package. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/prompts/codex-m365-team-status-workflow-enablement-prompt.txt` | Kickoff prompt for the weekly team status workflow enablement package. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb` | Governance notebook freezing the exact workflow-enablement gap and providing notebook backing for the new package activation. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json` | Machine-readable verification payload for the weekly team status workflow enablement governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+
 ## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

@@ -1,0 +1,10 @@
+Plan reference: `plan:m365-team-status-workflow-enablement`
+
+Read and execute:
+`docs/prompts/codex-m365-team-status-workflow-enablement.md`
+
+Current task:
+- make the weekly team status workflow real through the repo
+- fix environment access first
+- then add the missing provisioning surfaces
+- then validate the workflow end-to-end

@@ -1,0 +1,16 @@
+{
+  "plan_id": "plan:m365-team-status-workflow-enablement",
+  "phase": "R0",
+  "status": "complete",
+  "notebook_path": "notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb",
+  "frozen_truth": {
+    "power_platform_auth_repaired": true,
+    "accessible_power_platform_environment_count": 0,
+    "public_sharepoint_list_creation_supported": false,
+    "public_flow_provisioning_supported": false
+  },
+  "decision": {
+    "package_required": true,
+    "next_act": "plan:m365-team-status-workflow-enablement:R1"
+  }
+}
