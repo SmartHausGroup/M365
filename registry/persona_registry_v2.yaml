@@ -1407,10 +1407,15 @@ personas:
     - platform lifecycle governance
     - tenant status coordination
     allowed_actions:
-    - provision-client-services
-    - deprovision-client-services
-    - get-client-status
-    allowed_domains: []
+    - sites.provision
+    - sites.list
+    - apps.list
+    - apps.get
+    - service_principals.list
+    - directory.org
+    allowed_domains:
+    - sharepoint
+    - directory
     approval_owner: department-owner:engineering
     approval_profile: medium-operational
     risk_tier: medium
@@ -1421,7 +1426,7 @@ personas:
     - andre baptiste
     - andre-baptiste
     - platform-manager
-    action_count: 3
+    action_count: 6
     workload_families:
     - Low-code, workflow, and analytics
     - Content, intranet, and files
@@ -1489,11 +1494,21 @@ personas:
     - milestone status oversight
     - archive and closeout control
     allowed_actions:
-    - create-project
-    - list-projects
-    - update-project-status
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
     - archive-project
-    allowed_domains: []
+    allowed_domains:
+    - collaboration
+    - messaging
+    - sharepoint
+    - workmanagement
     approval_owner: department-owner:project-management
     approval_profile: medium-operational
     risk_tier: medium
@@ -1504,7 +1519,7 @@ personas:
     - haruto tanaka
     - haruto-tanaka
     - project-manager
-    action_count: 4
+    action_count: 10
     workload_families:
     - Tasks, scheduling, and work management
     - Collaboration, meetings, and communities
@@ -2404,12 +2419,18 @@ personas:
     - production deployment coordination
     - analytics and SEO changes
     allowed_actions:
-    - deployment.preview
-    - deployment.production
-    - content.update
-    - content.create
-    - analytics.read
-    - seo.update
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - files.upload
+    - files.share
     allowed_domains:
     - sharepoint
     approval_owner: engineering-lead
@@ -2422,7 +2443,7 @@ personas:
     - elena rodriguez
     - elena-rodriguez
     - website-manager
-    action_count: 6
+    action_count: 12
     workload_families:
     - Content, intranet, and files
     - Media, publishing, and extended communications

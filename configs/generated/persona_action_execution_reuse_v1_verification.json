@@ -1,0 +1,388 @@
+{
+  "plan_id": "plan:m365-persona-action-certification",
+  "phase": "G3",
+  "status": "persona_action_execution_reuse_complete",
+  "baseline": {
+    "mapped_unique_aliases_total": 115,
+    "mapped_pair_total": 265,
+    "predecessor_direct_green_total": 64,
+    "predecessor_direct_fenced_total": 91,
+    "mixed_aliases_total": 23
+  },
+  "g3_execution_reuse": {
+    "reusable_unique_aliases": {
+      "green": 33,
+      "approval-gated": 1,
+      "actor-tier-gated": 1,
+      "fenced": 24
+    },
+    "reusable_unique_alias_lists": {
+      "green": [
+        "apps.get",
+        "apps.list",
+        "calendar.availability",
+        "calendar.create",
+        "calendar.delete",
+        "calendar.get",
+        "calendar.list",
+        "calendar.update",
+        "channels.list",
+        "directory.domains",
+        "directory.org",
+        "directory.role_members",
+        "directory.roles",
+        "drives.list",
+        "files.create_folder",
+        "files.upload",
+        "groups.get",
+        "groups.list",
+        "groups.list_members",
+        "lists.create_item",
+        "lists.get",
+        "lists.items",
+        "lists.list",
+        "mail.delete",
+        "mail.folders",
+        "mail.list",
+        "mail.move",
+        "mail.read",
+        "mail.send",
+        "mailbox.settings",
+        "service_principals.list",
+        "sites.get",
+        "teams.get"
+      ],
+      "approval-gated": [
+        "ca.policy_create"
+      ],
+      "actor-tier-gated": [
+        "users.disable"
+      ],
+      "fenced": [
+        "apps.update",
+        "ca.named_locations",
+        "ca.policies",
+        "ca.policy_delete",
+        "ca.policy_get",
+        "ca.policy_update",
+        "channels.create",
+        "devices.actions",
+        "devices.compliance",
+        "devices.get",
+        "devices.list",
+        "files.get",
+        "files.list",
+        "groups.add_member",
+        "groups.create",
+        "groups.remove_member",
+        "licenses.assign",
+        "security.alert_get",
+        "security.alerts",
+        "security.incident_get",
+        "security.incidents",
+        "security.secure_score",
+        "users.create",
+        "users.update"
+      ]
+    },
+    "reusable_pair_counts": {
+      "actor-tier-gated": 1,
+      "approval-gated": 1,
+      "fenced": 72,
+      "green": 135,
+      "requires-live-proof": 56
+    },
+    "remaining_unique_aliases_requiring_live_proof_total": 56,
+    "remaining_unique_aliases_requiring_live_proof": [
+      "add-workspace-members",
+      "admin.audit_log",
+      "admin.get_tenant_config",
+      "admin.get_tier",
+      "admin.get_user_tier",
+      "admin.list_tiers",
+      "admin.list_users",
+      "admin.reload_config",
+      "admin.remove_user_tier",
+      "admin.set_user_tier",
+      "audit.directory",
+      "audit.provisioning",
+      "audit.signins",
+      "availability.check",
+      "calendar.schedule",
+      "channels.send_message",
+      "chat.create",
+      "chat.list",
+      "chat.send",
+      "chat.send_message",
+      "create-channels",
+      "create-project",
+      "create-workspace",
+      "deployment.preview",
+      "email.archive",
+      "email.forward",
+      "email.respond",
+      "email.send_individual",
+      "employee.onboard",
+      "files.search",
+      "files.share",
+      "get-team-status",
+      "health.issue_get",
+      "health.issues",
+      "health.messages",
+      "health.overview",
+      "list-projects",
+      "mail.forward",
+      "mail.reply",
+      "meeting.organize",
+      "provision-client-services",
+      "reports.email_activity",
+      "reports.onedrive_usage",
+      "reports.sharepoint_usage",
+      "reports.teams_activity",
+      "reports.users_active",
+      "security.alert_update",
+      "sites.list",
+      "sites.root",
+      "teams.add_member",
+      "teams.archive",
+      "teams.create",
+      "teams.list",
+      "teams.remove_member",
+      "users.list",
+      "users.read"
+    ],
+    "remaining_mapped_pairs_requiring_live_proof_total": 56,
+    "remaining_mapped_pairs_requiring_live_proof": [
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.directory"
+      },
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.provisioning"
+      },
+      {
+        "persona_id": "audit-operations",
+        "action": "audit.signins"
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "availability.check"
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "calendar.schedule"
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "meeting.organize"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.archive"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.forward"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.respond"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "mail.forward"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "mail.reply"
+      },
+      {
+        "persona_id": "hr-generalist",
+        "action": "employee.onboard"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "files.search"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "files.share"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "sites.list"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "sites.root"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "users.list"
+      },
+      {
+        "persona_id": "m365-administrator",
+        "action": "users.read"
+      },
+      {
+        "persona_id": "outreach-coordinator",
+        "action": "email.send_individual"
+      },
+      {
+        "persona_id": "platform-manager",
+        "action": "provision-client-services"
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "create-project"
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "list-projects"
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.email_activity"
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.onedrive_usage"
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.sharepoint_usage"
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.teams_activity"
+      },
+      {
+        "persona_id": "reports",
+        "action": "reports.users_active"
+      },
+      {
+        "persona_id": "security-operations",
+        "action": "security.alert_update"
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.issue_get"
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.issues"
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.messages"
+      },
+      {
+        "persona_id": "service-health",
+        "action": "health.overview"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "add-workspace-members"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "channels.send_message"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.create"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.list"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.send"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "chat.send_message"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "create-channels"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "create-workspace"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "get-team-status"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.add_member"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.archive"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.create"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.list"
+      },
+      {
+        "persona_id": "teams-manager",
+        "action": "teams.remove_member"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.audit_log"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_tenant_config"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_tier"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.get_user_tier"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.list_tiers"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.list_users"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.reload_config"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.remove_user_tier"
+      },
+      {
+        "persona_id": "ucp-administrator",
+        "action": "admin.set_user_tier"
+      },
+      {
+        "persona_id": "website-manager",
+        "action": "deployment.preview"
+      }
+    ],
+    "mixed_reuse_aliases_total": 0,
+    "mixed_reuse_aliases": [],
+    "evidence": {
+      "predecessor_direct_support_matrix": "artifacts/diagnostics/m365_direct_full_surface_certification.json",
+      "mapping_audit": "configs/generated/persona_action_mapping_audit_v1_verification.json"
+    }
+  }
+}

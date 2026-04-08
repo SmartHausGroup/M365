@@ -1,0 +1,9 @@
+Execute `plan:m365-persona-action-p4-policy-fence-scope-correction`.
+
+Read:
+- `plans/m365-persona-action-p4-policy-fence-scope-correction/m365-persona-action-p4-policy-fence-scope-correction.md`
+- `docs/prompts/codex-m365-persona-action-p4-policy-fence-scope-correction.md`
+
+Use the child package to freeze the live repo-local OPA drift, publish the notebook-backed scope evidence, update the trackers, and hand control back to the parent `P4` phase.
+
+Do not perform the actual `P4` policy rewrite in this child package.

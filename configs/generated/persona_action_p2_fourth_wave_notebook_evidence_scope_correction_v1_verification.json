@@ -1,0 +1,17 @@
+{
+  "status": "persona_action_p2_fourth_wave_notebook_evidence_scope_correction_ready",
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "target_aliases": [
+    "task.assign",
+    "deadline.track",
+    "status.update",
+    "report.generate"
+  ],
+  "legacy_stub_backlog": {
+    "active_pairs": 36,
+    "unique_aliases": 38
+  }
+}

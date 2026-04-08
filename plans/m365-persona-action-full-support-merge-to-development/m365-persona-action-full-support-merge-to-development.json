@@ -1,0 +1,375 @@
+{
+  "plan_id": "plan:m365-persona-action-full-support-merge-to-development",
+  "parent_plan_id": "plan:m365-persona-action-full-support-remediation",
+  "title": "Merge the completed persona-action full-support remediation branch into development",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-08",
+  "date_updated": "2026-04-08",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Persona-Action Full-Support Merge to Development",
+  "domain": "governance",
+  "math_algorithm_scope": false,
+  "current_state": {
+    "source_branch": "codex/m365-persona-action-full-support-remediation",
+    "source_head": "ce652dc",
+    "source_branch_clean": true,
+    "source_branch_pushed": true,
+    "target_branch": "development",
+    "target_head_at_package_creation": "8dfa986",
+    "governed_final_truth": {
+      "unique_aliases": 172,
+      "active_persona_action_pairs": 445,
+      "unique_alias_matrix": {
+        "green": 103,
+        "approval_gated": 36,
+        "actor_tier_gated": 1,
+        "fenced": 32
+      },
+      "active_pair_matrix": {
+        "green": 360,
+        "approval_gated": 49,
+        "actor_tier_gated": 1,
+        "fenced": 35
+      },
+      "residual_backlog": {
+        "permission_blocked": 0,
+        "legacy_stubbed": 0,
+        "dead_routed": 0,
+        "orphaned": 0
+      }
+    }
+  },
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb",
+    "verification": "configs/generated/persona_action_recertification_closeout_v1_verification.json"
+  },
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "truthful integration of the already governed M365-only persona/action workforce into development",
+      "fail-closed merge governance with bounded branch scope",
+      "no silent promotion beyond development"
+    ],
+    "anti_alignment": [
+      "Does NOT promote to staging or main.",
+      "Does NOT reopen P1 through P5 semantics during merge execution.",
+      "Does NOT widen into UCP or non-M365 runtime work."
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "are we on a feature branch and can it be merged into development",
+      "prepare that formal merge package next",
+      "do not merge yet; prepare the governed package first"
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "R1 through R6 capture the bounded merge-to-development work required before any actual branch mutation."
+  },
+  "objective": "Merge the completed persona-action full-support remediation surface from codex/m365-persona-action-full-support-remediation into development via an explicit merge commit and stop before any staging or main promotion.",
+  "decision_summary": {
+    "chosen_option": "explicit_merge_commit_into_development_only",
+    "source_branch": "codex/m365-persona-action-full-support-remediation",
+    "target_branch": "development",
+    "stop_after_push": true,
+    "final_truth_to_preserve": [
+      "172 unique aliases",
+      "445 active persona/action pairs",
+      "103 green / 36 approval-gated / 1 actor-tier-gated / 32 fenced unique aliases",
+      "360 green / 49 approval-gated / 1 actor-tier-gated / 35 fenced active pairs"
+    ]
+  },
+  "options_considered": [
+    {
+      "id": "A",
+      "description": "Create a governed merge-to-development package and execute the merge only after approval.",
+      "pros": [
+        "Preserves plan-first governance.",
+        "Keeps scope bounded to development.",
+        "Produces a clear rollback and validation path."
+      ],
+      "cons": [
+        "Adds one extra governance step before the actual merge."
+      ]
+    },
+    {
+      "id": "B",
+      "description": "Merge directly without a new plan.",
+      "pros": [
+        "Fastest path."
+      ],
+      "cons": [
+        "Violates AGENTS.md plan-first rules."
+      ]
+    },
+    {
+      "id": "C",
+      "description": "Fold the merge into a staging and main promotion package immediately.",
+      "pros": [
+        "Collapses later promotion work into one package."
+      ],
+      "cons": [
+        "Widens scope beyond the requested development merge."
+      ]
+    }
+  ],
+  "complexity_warning": {
+    "statement": "Combining development merge, staging/main promotion, and release publication in one package adds release-surface risk without improving deterministic merge governance.",
+    "simpler_path": "Create one bounded merge-to-development package first and stop after development is green and pushed."
+  },
+  "scope": {
+    "in_scope": [
+      "verify source and target branch readiness",
+      "inspect branch drift between the source branch and development",
+      "merge the completed source branch into development with an explicit merge commit",
+      "resolve only bounded conflicts inside the already governed P1-P5 remediation surface and governance trackers",
+      "rerun the final persona-action remediation validation slice on merged development",
+      "update the merge package and governance trackers truthfully",
+      "push development only after green validation"
+    ],
+    "out_of_scope": [
+      "staging promotion",
+      "main promotion",
+      "release-tag publication",
+      "new persona, capability, or workforce-model changes",
+      "UCP runtime edits"
+    ],
+    "file_allowlist": [
+      "plans/m365-persona-action-full-support-merge-to-development/**",
+      "docs/prompts/codex-m365-persona-action-full-support-merge-to-development.md",
+      "docs/prompts/codex-m365-persona-action-full-support-merge-to-development-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md",
+      "any file already changed in the governed P1-P5 remediation surface between 8dfa986 and ce652dc, but only when required for bounded conflict resolution that preserves the proven P1-P5 semantics"
+    ],
+    "file_denylist": [
+      "../UCP/**",
+      "staging",
+      "main",
+      "release tags",
+      "any file outside the bounded source-branch diff unless separately governed"
+    ],
+    "scope_fence_rule": "Stop and open a new governed scope-correction package if origin/development drift or merge conflicts require semantic edits outside the bounded source-branch diff or tracker surfaces."
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R1",
+      "description": "Verify source and target branch readiness before mutating development.",
+      "acceptance_criteria": "Source branch is clean and pushed, development is fetched and clean, and branch inventory is captured.",
+      "depends_on": [],
+      "user_intent_trace": "prepare the merge package for this completed branch"
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R2",
+      "description": "Keep the merge bounded to development only.",
+      "acceptance_criteria": "No staging, main, or release-tag action occurs during execution.",
+      "depends_on": [
+        "R1"
+      ],
+      "user_intent_trace": "development only"
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R3",
+      "description": "Merge the governed source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "acceptance_criteria": "Development contains a merge result from the source branch, and any conflict resolution stays inside the bounded merge surface.",
+      "depends_on": [
+        "R1",
+        "R2"
+      ],
+      "user_intent_trace": "merge this completed branch into development"
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R4",
+      "description": "Re-run the final persona-action remediation validation slice on the merged development state.",
+      "acceptance_criteria": "The focused verifier and pytest slices, pre-commit, and git diff --check are green on merged development.",
+      "depends_on": [
+        "R3"
+      ],
+      "user_intent_trace": "validate the merge result before push"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R5",
+      "description": "Synchronize trackers and package status truthfully.",
+      "acceptance_criteria": "Operations trackers plus this package reflect the actual merge outcome and next act.",
+      "depends_on": [
+        "R4"
+      ],
+      "user_intent_trace": "aligned to AGENTS.md and governance"
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:R6",
+      "description": "Push development only after green validation and stop before any further promotion.",
+      "acceptance_criteria": "origin/development matches the validated merge result, and staging/main remain untouched.",
+      "depends_on": [
+        "R4",
+        "R5"
+      ],
+      "user_intent_trace": "merge only, then stop"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:T1",
+      "name": "Preflight inventory",
+      "description": "Capture source and target branch readiness, drift, and bounded merge surface before any mutation.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "branch inventory evidence",
+        "source and target SHAs"
+      ],
+      "exit_criteria": [
+        "The source branch is still clean and pushed.",
+        "Development is fetched and clean.",
+        "The bounded merge surface is explicit."
+      ],
+      "validation_command": "git status --short --branch && git rev-parse codex/m365-persona-action-full-support-remediation development origin/development",
+      "implementation_notes": null
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:T2",
+      "name": "Approval packet and governance gate",
+      "description": "Present the merge approval packet and validate every mutating action before execution.",
+      "requirement_refs": [
+        "R1",
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "approval packet",
+        "validate_action verdicts"
+      ],
+      "exit_criteria": [
+        "Explicit go is received.",
+        "Mutating actions are governance-approved."
+      ],
+      "validation_command": "echo \"approval packet presented before merge execution\"",
+      "implementation_notes": null
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:T3",
+      "name": "Merge into development",
+      "description": "Merge the governed source branch into development with an explicit merge commit and bounded conflict resolution.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "merge result on development"
+      ],
+      "exit_criteria": [
+        "Development contains the source-branch merge result.",
+        "No conflict resolution escapes the bounded merge surface."
+      ],
+      "validation_command": "git log --oneline -n 3 development",
+      "implementation_notes": null
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:T4",
+      "name": "Validate merged development",
+      "description": "Run the final persona-action remediation validation slice on the merged development state.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "green verifier, test, pre-commit, and diff-check results"
+      ],
+      "exit_criteria": [
+        "The final governed 172-alias / 445-pair truth still holds on development.",
+        "All required validations are green."
+      ],
+      "validation_command": "pre-commit run --all-files",
+      "implementation_notes": null
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-persona-action-full-support-merge-to-development:T5",
+      "name": "Push development and close governance",
+      "description": "Update trackers, push development, and freeze the merge result.",
+      "requirement_refs": [
+        "R5",
+        "R6"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "pushed development branch",
+        "synchronized trackers"
+      ],
+      "exit_criteria": [
+        "origin/development matches the validated merge result.",
+        "This package and the trackers reflect the actual result."
+      ],
+      "validation_command": "git push origin development",
+      "implementation_notes": null
+    }
+  ],
+  "validation_strategy": {
+    "commands": [
+      "python3 -m py_compile src/ops_adapter/actions.py src/smarthaus_common/permission_enforcer.py src/smarthaus_common/executor_routing.py src/smarthaus_common/approval_risk.py tests/test_ops_adapter.py tests/test_policies.py tests/test_persona_registry_v2.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py",
+      "PYTHONPATH=src .venv/bin/python scripts/ci/verify_operations_department_pack_v1.py",
+      "PYTHONPATH=src .venv/bin/python scripts/ci/verify_project_management_department_pack_v1.py",
+      "PYTHONPATH=src .venv/bin/python scripts/ci/verify_engineering_department_pack_v1.py",
+      "PYTHONPATH=src .venv/bin/pytest -q tests/test_ops_adapter.py tests/test_policies.py tests/test_persona_registry_v2.py tests/test_operations_department_pack_v1.py tests/test_project_management_department_pack_v1.py tests/test_engineering_department_pack_v1.py",
+      "pre-commit run --all-files",
+      "git diff --check"
+    ],
+    "replay_branch_inspection": "Require local development and origin/development to resolve to the same merge result after push."
+  },
+  "governance_closure": {
+    "action_log": false,
+    "execution_plan": false,
+    "project_file_index": false,
+    "package_status_complete": false
+  },
+  "agent_constraints": [
+    "Do not merge to staging or main in this package.",
+    "Do not silently rewrite P1 through P5 semantics during conflict resolution.",
+    "Stop if origin/development drift changes the merge surface materially."
+  ],
+  "execution_status": {
+    "summary": [
+      "R1 begins only after the approval packet is presented and the merge package is the active next act.",
+      "No merge, development mutation, or promotion work has been executed in this package-creation slice."
+    ]
+  }
+}

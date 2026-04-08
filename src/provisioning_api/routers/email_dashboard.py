@@ -7,8 +7,8 @@ from fastapi.responses import HTMLResponse
 router = APIRouter(prefix="/api/email", tags=["email"])
 
 
-@router.get("/dashboard")
-async def get_email_dashboard(request: Request) -> HTMLResponse | dict[str, Any]:
+@router.get("/dashboard", response_class=HTMLResponse, response_model=None)
+async def get_email_dashboard(request: Request) -> Any:
     """
     📧 Email Management Dashboard
 

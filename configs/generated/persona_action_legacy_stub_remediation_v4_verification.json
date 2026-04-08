@@ -1,0 +1,19 @@
+{
+  "status": "persona_action_legacy_stub_remediation_v4_ready",
+  "target_aliases": [
+    "task.assign",
+    "deadline.track",
+    "status.update",
+    "report.generate"
+  ],
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "replacement_modes": {
+    "task.assign": "create_persona_task",
+    "deadline.track": "list_persona_tasks",
+    "status.update": "update_persona_task",
+    "report.generate": "build_persona_work_history"
+  }
+}

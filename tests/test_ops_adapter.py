@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from collections.abc import Iterator
@@ -247,6 +248,49 @@ def test_check_user_permission_allows_group_mapped_actor(tenant_env: None) -> No
         "users.disable",
         actor_groups=["entra-global-admins"],
     )
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_planner_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "create_plan")
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_calendar_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "email.schedule")
+    assert allowed is True
+    assert reason == ""
+
+
+def test_check_user_permission_normalizes_hr_aliases(tenant_env: None) -> None:
+    allowed, reason = check_user_permission("admin@example.com", "employee.offboard")
+    assert allowed is True
+    assert reason == ""
+
+
+@pytest.mark.parametrize(
+    "action",
+    [
+        "create-workspace",
+        "add-workspace-members",
+        "create-channels",
+        "get-team-status",
+        "email.send_individual",
+        "email.respond",
+        "email.forward",
+        "email.archive",
+        "meeting.organize",
+        "availability.check",
+        "employee.onboard",
+    ],
+)
+def test_check_user_permission_normalizes_remaining_legacy_aliases(
+    tenant_env: None, action: str
+) -> None:
+    allowed, reason = check_user_permission("admin@example.com", action)
+
     assert allowed is True
     assert reason == ""
 
@@ -533,9 +577,9 @@ def test_b7b_routes_directory_actions_to_directory_executor(
 
     client = TestClient(app)
     r = client.post(
-        "/actions/m365-administrator/users.disable",
+        "/actions/m365-administrator/groups.list",
         headers=_auth_headers("admin@example.com"),
-        json={"params": {"userPrincipalName": "jdoe@example.com"}},
+        json={"params": {}},
     )
 
     assert r.status_code == 200
@@ -543,6 +587,81 @@ def test_b7b_routes_directory_actions_to_directory_executor(
     assert payload["result"]["executor_name"] == "directory"
     assert payload["result"]["executor_identity"]["domain"] == "directory"
     assert payload["result"]["executor_identity"]["client_id"] == "directory-client"
+
+
+def test_b7b_preserves_logical_domain_when_executor_alias_maps_to_collaboration(
+    multi_executor_tenant_env: None, patched_runtime: ModuleType, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(patched_runtime, "OPA", _DummyOPA(allowed=True, approval_required=False))
+    monkeypatch.setattr(
+        patched_runtime,
+        "REGISTRY",
+        {
+            "agents": {
+                "email-processing-agent": {
+                    "allowed_actions": ["mail.list"],
+                    "approval_rules": [],
+                }
+            }
+        },
+    )
+    monkeypatch.setattr(
+        patched_runtime,
+        "PERSONAS",
+        {
+            "email-processing-agent": {
+                "persona_id": "email-processing-agent",
+                "canonical_agent": "email-processing-agent",
+                "display_name": "Hannah Kim",
+                "slug": "hannah-kim",
+                "department": "communication",
+                "title": "Email Processing Agent",
+                "manager": "unassigned",
+                "responsibilities": [],
+                "allowed_domains": ["messaging"],
+                "approval_owner": "unassigned",
+                "status": "active",
+                "external_presence_policy": "internal_only",
+                "aliases": ["email-processing-agent", "hannah kim"],
+            }
+        },
+    )
+    monkeypatch.setattr(
+        patched_runtime,
+        "APPROVALS",
+        ApprovalsStore(patched_runtime.REGISTRY, patched_runtime.PERSONAS),
+    )
+
+    async def _capture_execute(
+        _agent: str,
+        _action: str,
+        params: dict[str, Any],
+        _correlation_id: str,
+        executor_name: str | None = None,
+    ) -> dict[str, Any]:
+        return {
+            "executor_name": executor_name,
+            "executor_domain": params["executor_domain"],
+            "executor_identity": params["executor_identity"],
+        }
+
+    monkeypatch.setattr(patched_runtime, "execute", _capture_execute)
+
+    client = TestClient(app)
+    response = client.post(
+        "/actions/email-processing-agent/mail.list",
+        headers=_auth_headers("admin@example.com"),
+        json={"params": {"userId": "admin@example.com", "top": 5}},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["result"]["executor_name"] == "collaboration"
+    assert payload["result"]["executor_domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["logical_domain"] == "messaging"
+    assert payload["result"]["executor_identity"]["physical_domain"] == "collaboration"
+    assert payload["result"]["executor_identity"]["client_id"] == "collab-client"
 
 
 def test_graph_token_surfaces_missing_tenant_config(
@@ -889,3 +1008,846 @@ def test_success_audit_log_captures_actor_and_executor_identity(
     assert entry["tenant"] == "tenant-alpha"
     assert entry["result"]["outcome"] == "success"
     assert isinstance(entry["result"]["payload"], dict)
+
+
+def test_execute_routes_teams_add_channel_to_channel_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_channels_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"channel": {"teamId": params["teamId"], "displayName": params["displayName"]}}
+
+    monkeypatch.setattr(actions_module, "channels_create", _fake_channels_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "m365-administrator",
+            "teams.add_channel",
+            {"teamId": "team-123", "channelName": "Operations"},
+            "corr-1",
+        )
+    )
+
+    assert result["channel"]["teamId"] == "team-123"
+    assert result["channel"]["displayName"] == "Operations"
+
+
+def test_execute_routes_create_plan_to_planner_wrapper(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_planner_create_plan(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        return {"plan": {"id": "plan-123", "title": params["title"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "planner_create_plan", _fake_planner_create_plan)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "create_plan",
+            {"groupId": "group-123", "title": "Website Refresh"},
+            "corr-2",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert result["plan"]["title"] == "Website Refresh"
+
+
+def test_execute_routes_email_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"event": {"subject": params["subject"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "outreach-coordinator",
+            "email.schedule",
+            {
+                "userId": "admin@example.com",
+                "subject": "Follow-up",
+                "start": {"dateTime": "2026-04-08T10:00:00Z", "timeZone": "UTC"},
+                "end": {"dateTime": "2026-04-08T10:30:00Z", "timeZone": "UTC"},
+            },
+            "corr-3",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert result["event"]["subject"] == "Follow-up"
+
+
+def test_execute_routes_employee_offboard_to_users_disable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_users_disable(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        return {"disabled": True, "userPrincipalName": params["userPrincipalName"]}
+
+    monkeypatch.setattr(actions_module, "m365_users_disable", _fake_users_disable)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "hr-generalist",
+            "employee.offboard",
+            {"email": "departing@example.com"},
+            "corr-4",
+        )
+    )
+
+    assert result["disabled"] is True
+    assert result["userPrincipalName"] == "departing@example.com"
+
+
+def test_execute_routes_follow_up_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"subject": params["subject"]}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "email-processing-agent",
+            "follow-up.schedule",
+            {
+                "date": "2026-04-08",
+                "from": "owner@example.com",
+                "subject": "Check in",
+                "comment": "Send reminder",
+            },
+            "corr-5",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "owner@example.com"
+    assert captured["params"]["subject"] == "Check in"
+    assert captured["params"]["start"]["dateTime"] == "2026-04-08T09:00:00Z"
+    assert captured["params"]["end"]["dateTime"] == "2026-04-08T09:30:00Z"
+    assert captured["params"]["body"]["content"] == "Send reminder"
+
+
+def test_execute_routes_reminder_send_to_mail_send(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_mail_send(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"sent": True, "message_id": "msg-1"}
+
+    monkeypatch.setattr(actions_module, "mail_send", _fake_mail_send)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "calendar-management-agent",
+            "reminder.send",
+            {
+                "recipient": "teammate@example.com",
+                "userPrincipalName": "calendar-owner@example.com",
+                "message": "Do not forget the review",
+            },
+            "corr-6",
+        )
+    )
+
+    assert result["sent"] is True
+    assert captured["params"]["to"] == "teammate@example.com"
+    assert captured["params"]["from"] == "calendar-owner@example.com"
+    assert captured["params"]["subject"] == "Reminder"
+    assert captured["params"]["body"] == "Do not forget the review"
+
+
+def test_execute_routes_task_create_to_planner_create_task(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_planner_create_task(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        captured["params"] = params
+        return {"task": {"id": "task-1"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "planner_create_task", _fake_planner_create_task)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.create",
+            {"plan": "plan-123", "bucket": "bucket-456", "title": "Ship it"},
+            "corr-7",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["planId"] == "plan-123"
+    assert captured["params"]["bucketId"] == "bucket-456"
+    assert captured["params"]["title"] == "Ship it"
+
+
+def test_execute_routes_followup_create_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-followup"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "outreach-coordinator",
+            "followup.create",
+            {"date": "2026-04-09", "from": "owner@example.com", "comment": "Reach back out"},
+            "corr-8",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "owner@example.com"
+    assert captured["params"]["subject"] == "Follow-up"
+
+
+def test_execute_routes_client_follow_up_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-client"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "client-relationship-agent",
+            "client.follow-up",
+            {
+                "date": "2026-04-10",
+                "owner": "rep@example.com",
+                "client_id": "client-123",
+            },
+            "corr-9",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "rep@example.com"
+    assert captured["params"]["subject"] == "Client follow-up: client-123"
+
+
+def test_execute_routes_satisfaction_survey_to_mail_send(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_mail_send(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"sent": True, "message_id": "survey-1"}
+
+    monkeypatch.setattr(actions_module, "mail_send", _fake_mail_send)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "client-relationship-agent",
+            "satisfaction.survey",
+            {
+                "client_email": "client@example.com",
+                "sender": "rep@example.com",
+            },
+            "corr-10",
+        )
+    )
+
+    assert result["sent"] is True
+    assert captured["params"]["to"] == "client@example.com"
+    assert captured["params"]["from"] == "rep@example.com"
+    assert captured["params"]["subject"] == "Satisfaction survey"
+
+
+def test_execute_routes_interview_schedule_to_calendar_create(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_calendar_create(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"event": {"id": "evt-interview"}, "status": "created"}
+
+    monkeypatch.setattr(actions_module, "calendar_create", _fake_calendar_create)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "recruitment-assistance-agent",
+            "interview.schedule",
+            {
+                "interviewer": "interviewer@example.com",
+                "candidate_email": "candidate@example.com",
+                "startDateTime": "2026-04-11T15:00:00",
+                "endDateTime": "2026-04-11T15:30:00",
+                "candidate_id": "cand-123",
+            },
+            "corr-11",
+        )
+    )
+
+    assert result["status"] == "created"
+    assert captured["params"]["userId"] == "interviewer@example.com"
+    assert captured["params"]["subject"] == "Interview: cand-123"
+    assert captured["params"]["attendees"][0]["emailAddress"]["address"] == "candidate@example.com"
+
+
+def test_execute_routes_archive_project_to_teams_archive(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_teams_archive(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"archived": True, "teamId": params["teamId"]}
+
+    monkeypatch.setattr(actions_module, "teams_archive", _fake_teams_archive)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-manager",
+            "archive-project",
+            {"projectId": "team-archive-1"},
+            "corr-12",
+        )
+    )
+
+    assert result["archived"] is True
+    assert captured["params"]["teamId"] == "team-archive-1"
+
+
+def test_execute_routes_system_health_check_to_health_overview(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_health_overview(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        captured["params"] = params
+        return {"services": [{"id": "Exchange Online"}]}
+
+    monkeypatch.setattr(actions_module, "health_overview", _fake_health_overview)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "system.health-check",
+            {"limit": 5},
+            "corr-13",
+        )
+    )
+
+    assert result["services"][0]["id"] == "Exchange Online"
+    assert captured["params"]["limit"] == 5
+
+
+def test_execute_routes_alerts_respond_to_security_alert_update(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    async def _fake_security_alert_update(
+        params: dict[str, Any], _correlation_id: str
+    ) -> dict[str, Any]:
+        captured["params"] = params
+        return {"updated": True, "alertId": params["alertId"]}
+
+    monkeypatch.setattr(actions_module, "security_alert_update", _fake_security_alert_update)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "alerts.respond",
+            {"alert_id": "alert-123"},
+            "corr-14",
+        )
+    )
+
+    assert result["updated"] is True
+    assert captured["params"]["alertId"] == "alert-123"
+    assert captured["params"]["status"] == "inProgress"
+
+
+def test_execute_routes_infrastructure_monitor_to_health_overview(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_health_overview(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        assert params["limit"] == 5
+        return {"services": [{"id": "Exchange Online"}, {"id": "Microsoft Teams"}]}
+
+    monkeypatch.setattr(actions_module, "health_overview", _fake_health_overview)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "infrastructure.monitor",
+            {"limit": 5},
+            "corr-15",
+        )
+    )
+
+    assert result["status"] == "monitoring"
+    assert result["count"] == 2
+    assert result["services"][0]["id"] == "Exchange Online"
+
+
+def test_execute_routes_backup_verify_fails_closed_unsupported() -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(
+            actions_module.execute(
+                "it-operations-manager",
+                "backup.verify",
+                {"backup_id": "backup-1"},
+                "corr-16",
+            )
+        )
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert "backup.verify" in exc_info.value.message
+
+
+def test_execute_routes_security_scan_to_secure_score(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def _fake_secure_score(params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+        assert params["top"] == 1
+        return {"secureScore": {"currentScore": 91.0}}
+
+    monkeypatch.setattr(actions_module, "security_secure_score", _fake_secure_score)
+
+    result = asyncio.run(
+        actions_module.execute(
+            "it-operations-manager",
+            "security.scan",
+            {"top": 1},
+            "corr-17",
+        )
+    )
+
+    assert result["status"] == "scanned"
+    assert result["secureScore"]["currentScore"] == 91.0
+
+
+def test_execute_routes_task_assign_to_persona_task_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {
+                "assignee": "Elena Rodriguez",
+                "title": "Prepare launch notes",
+                "priority": "high",
+                "deadline": "2026-04-12",
+            },
+            "corr-15",
+        )
+    )
+
+    assert result["assigned"] is True
+    assert result["assignee"] == "website-manager"
+    assert result["task"]["status"] == "queued"
+    assert result["task"]["priority"] == "high"
+    assert result["task"]["due"] == "2026-04-12"
+
+
+def test_execute_routes_deadline_track_to_persona_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {
+                "assignee": "Elena Rodriguez",
+                "title": "Check deadline",
+                "deadline": "2026-04-13",
+            },
+            "corr-16a",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "deadline.track",
+            {"assignee": "Elena Rodriguez", "deadline": "2026-04-13"},
+            "corr-16b",
+        )
+    )
+
+    assert result["tracked"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["task_count"] == 1
+    assert result["tasks"][0]["id"] == assigned["task"]["id"]
+    assert result["status"] == "on_track"
+
+
+def test_execute_routes_status_update_to_persona_task_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Update status"},
+            "corr-17a",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "status.update",
+            {"task_id": assigned["task"]["id"], "status": "in_progress", "percent": 40},
+            "corr-17b",
+        )
+    )
+
+    assert result["updated"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["task"]["status"] == "in_progress"
+    assert result["task"]["history_count"] == 1
+
+
+def test_execute_routes_report_generate_to_persona_work_history(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("APP_DATA", str(tmp_path))
+
+    assigned = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Generate report"},
+            "corr-18a",
+        )
+    )
+    asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "status.update",
+            {
+                "task_id": assigned["task"]["id"],
+                "status": "in_progress",
+                "message": "Started work",
+            },
+            "corr-18b",
+        )
+    )
+
+    result = asyncio.run(
+        actions_module.execute(
+            "project-coordination-agent",
+            "report.generate",
+            {"assignee": "Elena Rodriguez", "limit": 10},
+            "corr-18c",
+        )
+    )
+
+    event_types = {event["event_type"] for event in result["history"]["history"]}
+
+    assert result["generated"] is True
+    assert result["canonical_agent"] == "website-manager"
+    assert result["history"]["task_count"] == 1
+    assert {"task_created", "task_update"} <= event_types
+    assert result["accountability"]["canonical_agent"] == "website-manager"
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params", "helper_name"),
+    [
+        (
+            "outreach-coordinator",
+            "followup.create",
+            {"date": "2026-04-09", "from": "owner@example.com"},
+            "calendar_create",
+        ),
+        (
+            "m365-administrator",
+            "teams.add_channel",
+            {"teamId": "team-1", "channelName": "Ops"},
+            "channels_create",
+        ),
+        ("m365-administrator", "sites.provision", {"displayName": "Ops Site"}, "sites_provision"),
+        (
+            "outreach-coordinator",
+            "email.send_bulk",
+            {"recipients": ["a@example.com"]},
+            "outreach_email_send_bulk",
+        ),
+        (
+            "outreach-coordinator",
+            "email.schedule",
+            {"subject": "Follow-up"},
+            "outreach_email_schedule",
+        ),
+        (
+            "outreach-coordinator",
+            "meeting.schedule",
+            {"subject": "Meeting"},
+            "outreach_meeting_schedule",
+        ),
+        (
+            "hr-generalist",
+            "employee.update_info",
+            {"email": "person@example.com"},
+            "m365_users_update",
+        ),
+        (
+            "hr-generalist",
+            "employee.offboard",
+            {"email": "person@example.com"},
+            "m365_users_disable",
+        ),
+        ("project-coordination-agent", "list_plans", {"groupId": "group-1"}, "planner_list_plans"),
+        (
+            "project-coordination-agent",
+            "create_plan",
+            {"groupId": "group-1", "title": "Roadmap"},
+            "planner_create_plan",
+        ),
+        (
+            "project-coordination-agent",
+            "list_buckets",
+            {"planId": "plan-1"},
+            "planner_list_buckets",
+        ),
+        (
+            "project-coordination-agent",
+            "create_bucket",
+            {"planId": "plan-1", "name": "Backlog"},
+            "planner_create_bucket",
+        ),
+        (
+            "project-coordination-agent",
+            "create_task",
+            {"planId": "plan-1", "bucketId": "bucket-1", "title": "Ship"},
+            "planner_create_task",
+        ),
+        (
+            "project-coordination-agent",
+            "task.create",
+            {"plan": "plan-1", "bucket": "bucket-1", "title": "Ship"},
+            "planner_create_task",
+        ),
+        (
+            "project-coordination-agent",
+            "task.assign",
+            {"assignee": "Elena Rodriguez", "title": "Ship"},
+            "coordination_task_assign",
+        ),
+        (
+            "project-coordination-agent",
+            "deadline.track",
+            {"assignee": "Elena Rodriguez", "deadline": "2026-04-13"},
+            "coordination_deadline_track",
+        ),
+        (
+            "project-coordination-agent",
+            "status.update",
+            {"task_id": "task-1", "status": "in_progress"},
+            "coordination_status_update",
+        ),
+        (
+            "project-coordination-agent",
+            "report.generate",
+            {"assignee": "Elena Rodriguez", "limit": 10},
+            "coordination_report_generate",
+        ),
+        (
+            "email-processing-agent",
+            "follow-up.schedule",
+            {"date": "2026-04-08", "from": "owner@example.com"},
+            "calendar_create",
+        ),
+        (
+            "calendar-management-agent",
+            "reminder.send",
+            {"recipient": "owner@example.com", "userPrincipalName": "calendar@example.com"},
+            "mail_send",
+        ),
+        (
+            "client-relationship-agent",
+            "client.follow-up",
+            {"date": "2026-04-10", "owner": "rep@example.com", "client_id": "client-123"},
+            "calendar_create",
+        ),
+        (
+            "client-relationship-agent",
+            "satisfaction.survey",
+            {"client_email": "client@example.com", "sender": "rep@example.com"},
+            "mail_send",
+        ),
+        (
+            "recruitment-assistance-agent",
+            "interview.schedule",
+            {
+                "interviewer": "interviewer@example.com",
+                "candidate_email": "candidate@example.com",
+                "startDateTime": "2026-04-11T15:00:00",
+                "endDateTime": "2026-04-11T15:30:00",
+            },
+            "calendar_create",
+        ),
+        (
+            "project-manager",
+            "archive-project",
+            {"projectId": "team-archive-1"},
+            "teams_archive",
+        ),
+        (
+            "it-operations-manager",
+            "system.health-check",
+            {"limit": 5},
+            "health_overview",
+        ),
+        (
+            "it-operations-manager",
+            "infrastructure.monitor",
+            {"limit": 5},
+            "itops_infrastructure_monitor",
+        ),
+        (
+            "it-operations-manager",
+            "backup.verify",
+            {"backup_id": "backup-1"},
+            "itops_backup_verify",
+        ),
+        (
+            "it-operations-manager",
+            "security.scan",
+            {"top": 1},
+            "itops_security_scan",
+        ),
+        (
+            "it-operations-manager",
+            "alerts.respond",
+            {"alert_id": "alert-123"},
+            "security_alert_update",
+        ),
+    ],
+)
+def test_p1_dead_route_aliases_no_longer_raise(
+    monkeypatch: pytest.MonkeyPatch,
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+    helper_name: str | None,
+) -> None:
+    if helper_name is not None:
+
+        async def _fake_helper(_params: dict[str, Any], _correlation_id: str) -> dict[str, Any]:
+            return {"status": "patched", "action": action}
+
+        monkeypatch.setattr(actions_module, helper_name, _fake_helper)
+
+    result = asyncio.run(actions_module.execute(agent, action, params, "corr-matrix"))
+
+    assert isinstance(result, dict)
+    if helper_name is not None:
+        assert result["action"] == action
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params"),
+    [
+        ("website-manager", "deployment.preview", {}),
+        ("website-manager", "deployment.production", {}),
+        ("website-manager", "content.create", {"content_id": "content-1"}),
+        ("website-manager", "content.update", {"content_id": "content-1"}),
+        ("website-manager", "analytics.read", {}),
+        ("website-manager", "seo.update", {"targets": ["homepage"]}),
+        ("hr-generalist", "policy.create", {"policy_id": "policy-1"}),
+        ("hr-generalist", "review.initiate", {"review_id": "review-1"}),
+        ("outreach-coordinator", "campaign.create", {"campaign_id": "campaign-1"}),
+        ("website-operations-specialist", "website.deploy", {"environment": "production"}),
+        ("website-operations-specialist", "cdn.purge", {"target": "cdn://site"}),
+        ("website-operations-specialist", "dns.update", {"domain": "example.com"}),
+        ("website-operations-specialist", "ssl.renew", {"certificate": "cert-1"}),
+        ("website-operations-specialist", "performance.optimize", {"environment": "production"}),
+        ("website-operations-specialist", "backup.restore", {"backup_id": "backup-1"}),
+    ],
+)
+def test_execute_routes_unsupported_m365_only_aliases_fail_closed(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+) -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(actions_module.execute(agent, action, params, "corr-website"))
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert action in exc_info.value.message
+
+
+@pytest.mark.parametrize(
+    ("agent", "action", "params"),
+    [
+        ("project-manager", "create-project", {"title": "Project One"}),
+        ("project-manager", "list-projects", {}),
+        ("project-manager", "update-project-status", {"id": "project-1", "status": "done"}),
+        ("platform-manager", "provision-client-services", {"clientId": "client-1"}),
+        ("platform-manager", "deprovision-client-services", {"clientId": "client-1"}),
+        ("platform-manager", "get-client-status", {"clientId": "client-1"}),
+        ("email-processing-agent", "email.classify", {"message_id": "msg-1"}),
+        ("calendar-management-agent", "conflict.resolve", {"newTime": "2026-04-12T15:00:00Z"}),
+        ("client-relationship-agent", "feedback.analyze", {"client_id": "client-1"}),
+        ("client-relationship-agent", "relationship.score", {"client_id": "client-1"}),
+        ("client-relationship-agent", "engagement.plan", {"client_id": "client-1"}),
+        ("compliance-monitoring-agent", "compliance.check", {"tenant": "smarthaus"}),
+        ("compliance-monitoring-agent", "policy.validate", {"policy_id": "policy-1"}),
+        ("compliance-monitoring-agent", "audit.prepare", {"audit_type": "gdpr"}),
+        ("compliance-monitoring-agent", "violation.report", {"violation_id": "violation-1"}),
+        ("compliance-monitoring-agent", "remediation.plan", {"violation_id": "violation-1"}),
+        ("recruitment-assistance-agent", "candidate.screen", {"candidate_id": "candidate-1"}),
+        ("recruitment-assistance-agent", "feedback.collect", {"interview_id": "interview-1"}),
+        ("recruitment-assistance-agent", "offer.prepare", {"candidate_id": "candidate-1"}),
+        ("recruitment-assistance-agent", "onboarding.initiate", {"candidate_id": "candidate-1"}),
+        ("financial-operations-agent", "invoice.process", {"invoice_id": "invoice-1"}),
+        ("financial-operations-agent", "expense.approve", {"expense_id": "expense-1"}),
+        ("financial-operations-agent", "budget.track", {"budget_id": "budget-1"}),
+        ("financial-operations-agent", "forecast.update", {"forecast_id": "forecast-1"}),
+        ("financial-operations-agent", "audit.prepare", {"audit_type": "financial"}),
+        ("knowledge-management-agent", "document.index", {"document_id": "doc-1"}),
+        ("knowledge-management-agent", "search.optimize", {"query": "m365"}),
+        ("knowledge-management-agent", "content.curate", {"category": "ops"}),
+        ("knowledge-management-agent", "training.recommend", {"user_id": "user-1"}),
+        ("knowledge-management-agent", "expert.connect", {"expert_id": "expert-1"}),
+    ],
+)
+def test_execute_routes_remaining_synthetic_aliases_fail_closed(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+) -> None:
+    with pytest.raises(actions_module.GraphAPIError) as exc_info:
+        asyncio.run(actions_module.execute(agent, action, params, "corr-synthetic"))
+
+    assert exc_info.value.status == 501
+    assert exc_info.value.code == "unsupported_m365_only_action"
+    assert action in exc_info.value.message

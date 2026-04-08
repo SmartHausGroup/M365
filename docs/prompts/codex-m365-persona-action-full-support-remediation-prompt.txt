@@ -1,0 +1,10 @@
+Execute `plan:m365-persona-action-full-support-remediation`.
+
+Read:
+- `docs/prompts/codex-m365-persona-action-full-support-remediation.md`
+- `plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md`
+
+This is the successor remediation initiative after persona-action certification closed.
+Fix what can truthfully work.
+Retire or reduce what cannot.
+Follow AGENTS.md, all `.cursor/rules/*.mdc`, UCP validation before writes, notebook-first where required, and fail closed on scope drift.

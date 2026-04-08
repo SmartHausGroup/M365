@@ -1,0 +1,44 @@
+plan_id: m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Complete
+date: '2026-04-07'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction:R0
+objective: Produce the phase-specific notebook-backed governance evidence required to reopen the fifth bounded P2 legacy-stub code write.
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phases:
+    - P0
+    - P1
+    - P2S
+    - P2T
+    - P2U
+    - P2V
+  blocked_write_set:
+    - src/ops_adapter/actions.py
+    - tests/test_ops_adapter.py
+  target_aliases:
+    - infrastructure.monitor
+    - backup.verify
+    - security.scan
+  derived_legacy_stub_backlog:
+    active_pairs: 28
+    unique_aliases: 34
+requirements:
+  - id: R0
+    title: Create the bounded P2W blocker package
+  - id: R1
+    title: Freeze the bounded fifth-wave P2 IT-operations slice explicitly
+  - id: R2
+    title: Produce notebook-backed governance evidence for the bounded fifth-wave P2 write
+  - id: R3
+    title: Expand the admissible future evidence surface to include L94
+  - id: R4
+    title: Reopen the bounded fifth-wave P2 code-write validation under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and governance trackers truthfully
+  - id: R6
+    title: Commit and push before resuming P2
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction-prompt.txt

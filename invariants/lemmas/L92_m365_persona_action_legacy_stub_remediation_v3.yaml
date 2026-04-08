@@ -1,0 +1,8 @@
+lemma_id: L92_m365_persona_action_legacy_stub_remediation_v3
+invariants:
+  - id: L92-I1
+    description: The bounded third-wave alias set is frozen to archive-project, system.health-check, and alerts.respond.
+    proof_obligation: verification.target_aliases == ["archive-project", "system.health-check", "alerts.respond"]
+  - id: L92-I2
+    description: The replacement modes are fixed before extraction.
+    proof_obligation: verification.replacement_modes["archive-project"] == "teams_archive" and verification.replacement_modes["system.health-check"] == "health_overview" and verification.replacement_modes["alerts.respond"] == "security_alert_update"

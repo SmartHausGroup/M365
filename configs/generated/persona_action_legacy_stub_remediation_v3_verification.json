@@ -1,0 +1,17 @@
+{
+  "status": "persona_action_legacy_stub_remediation_v3_ready",
+  "target_aliases": [
+    "archive-project",
+    "system.health-check",
+    "alerts.respond"
+  ],
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "replacement_modes": {
+    "archive-project": "teams_archive",
+    "system.health-check": "health_overview",
+    "alerts.respond": "security_alert_update"
+  }
+}

@@ -1,0 +1,20 @@
+title: Persona-to-action P5 recertification closes the remediated live workforce graph deterministically
+lemma_reference: docs/ma/lemmas/L96_m365_persona_action_recertification_closeout_v1.md
+source_notebook: notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb
+lemma_notebook: notebooks/lemma_proofs/L96_m365_persona_action_recertification_closeout_v1.ipynb
+proof_obligations:
+- "the live post-remediation workforce universe is exactly 172 unique aliases across 445 active persona/action pairs"
+- "the explicit unsupported runtime perimeter is exactly 32 unique aliases across 35 active pairs"
+- "the final unique-alias matrix closes at 103 green / 36 approval-gated / 1 actor-tier-gated / 32 fenced"
+- "the final active-pair matrix closes at 360 green / 49 approval-gated / 1 actor-tier-gated / 35 fenced"
+- "the post-remediation recertification leaves 0 permission-blocked, 0 legacy-stubbed, 0 dead-routed, and 0 orphaned residue"
+- "m365-administrator::users.disable remains the lone actor-tier-gated path"
+failure_boundaries:
+- "the published P5 matrix drifts from the live repo state"
+- "an explicit unsupported alias is classified as green or approval-gated"
+- "any non-fenced residue remains in permission-blocked, legacy-stubbed, dead-routed, or orphaned"
+- "the actor-tier split for users.disable is lost"
+test_bindings:
+- configs/generated/persona_action_recertification_closeout_v1_verification.json
+- artifacts/scorecards/scorecard_l96.json
+ci_gate: persona-action-recertification-closeout-v1

@@ -30,7 +30,7 @@ from starlette.responses import Response
 
 from .actions import (
     build_executor_identity,
-    resolve_executor_name_for_action,
+    resolve_execution_target_for_action,
 )
 from .actions import (
     execute as execute_action,
@@ -297,7 +297,11 @@ def create_app() -> FastAPI:
         actor_groups: list[str] = []
         actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
         try:
-            executor_name = resolve_executor_name_for_action(canonical_agent, action, tenant_config)
+            executor_name, executor_domain = resolve_execution_target_for_action(
+                canonical_agent,
+                action,
+                tenant_config,
+            )
         except ValueError as exc:
             audit_log(
                 "action_failed",
@@ -312,7 +316,11 @@ def create_app() -> FastAPI:
                 tenant=tenant_config.tenant.id,
             )
             raise HTTPException(status_code=500, detail=str(exc)) from exc
-        executor_identity = build_executor_identity(tenant_config, executor_name)
+        executor_identity = build_executor_identity(
+            tenant_config,
+            executor_name,
+            logical_domain=executor_domain,
+        )
         executor_domain = str(executor_identity.get("domain") or "")
         allowed_domains = [
             str(domain) for domain in (persona.get("allowed_domains") or []) if domain
@@ -376,7 +384,7 @@ def create_app() -> FastAPI:
         params.setdefault("persona", persona)
         params.setdefault("persona_target", agent)
         params.setdefault("executor_name", executor_name)
-        params.setdefault("executor_domain", executor_identity.get("domain"))
+        params.setdefault("executor_domain", executor_domain)
         params.setdefault("executor_identity", executor_identity)
         params.setdefault("tenant", tenant_config.tenant.id)
         decision = await opa.check(

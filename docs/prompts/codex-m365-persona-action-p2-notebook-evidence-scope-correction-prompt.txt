@@ -1,0 +1,4 @@
+Follow `docs/prompts/codex-m365-persona-action-p2-notebook-evidence-scope-correction.md`.
+Execute `plan:m365-persona-action-p2-notebook-evidence-scope-correction:R0-R6`.
+This is the bounded blocker-fix child phase for the first `P2` legacy-stub wave.
+Publish the governance notebook and `L90` evidence chain, reopen the blocked `P2` file-edit validation, then hand control back to `P2`.

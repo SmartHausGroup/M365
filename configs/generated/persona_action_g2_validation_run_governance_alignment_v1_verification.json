@@ -1,0 +1,16 @@
+{
+  "plan_id": "plan:m365-persona-action-g2-validation-run-scope-correction",
+  "phase": "G2S",
+  "status": "governance_alignment_ready",
+  "blocked_parent_phase": "G2",
+  "blocked_run_target": "pre-commit run --all-files",
+  "denials": [
+    "qual-4-fix-root-cause-mode",
+    "map-7-gating-for-long-running",
+    "qual-5-testing-real-service-warning",
+    "qual-7-metrics-notice",
+    "map-8-notebook-first-for-notebook-error-fix"
+  ],
+  "bounded_fix_intent": "Authorize the deterministic G2 closeout validation run without changing the already-computed G2 mapping totals.",
+  "next_step_if_green": "commit and push G2, then continue to G3"
+}

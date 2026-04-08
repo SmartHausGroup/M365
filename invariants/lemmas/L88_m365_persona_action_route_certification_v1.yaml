@@ -1,0 +1,18 @@
+title: Persona-to-action G4 route certification remains deterministic and fail-closed
+lemma_reference: docs/ma/lemmas/L88_m365_persona_action_route_certification_v1.md
+source_notebook: notebooks/m365/INV-M365-CN-persona-action-route-certification-v1.ipynb
+lemma_notebook: notebooks/lemma_proofs/L88_m365_persona_action_route_certification_v1.ipynb
+proof_obligations:
+- all `56` remaining mapped persona/action pairs are classified at the governed route
+- exactly one remaining pair closes green at the live route
+- legacy alias names with no permission-tier grant remain explicit permission-blocked
+- OPA-fenced pairs remain explicit instead of being implied green from lower-level direct evidence
+- final workforce matrices do not drift from notebook-backed route truth
+failure_boundaries:
+- any remaining mapped pair is omitted from the `G4` classifier
+- a tier-denied or OPA-denied pair is collapsed into green
+- final alias or active-pair totals drift from the published `G4` verification payload
+test_bindings:
+- configs/generated/persona_action_route_certification_v1_verification.json
+- artifacts/scorecards/scorecard_l88.json
+ci_gate: persona-action-route-certification-v1

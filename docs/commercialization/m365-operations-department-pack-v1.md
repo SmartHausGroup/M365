@@ -22,7 +22,7 @@ This correction locks the following truth:
 - total personas: `10`
 - active personas: `10`
 - registry-backed personas: `10`
-- supported action count: `85`
+- supported action count: `91`
 - default pack state without queue pressure: `ready`
 - preserved department status taxonomy: `partial-activation`
 
@@ -30,7 +30,7 @@ This correction locks the following truth:
 
 The Operations pack contains exactly `10` registry-backed personas:
 - `m365-administrator` — Marcus Chen (Senior IT Administrator); registry-backed; actions=37
-- `website-manager` — Elena Rodriguez (Website Manager); registry-backed; actions=6
+- `website-manager` — Elena Rodriguez (Website Manager); registry-backed; actions=12
 - `audit-operations` — Naomi Brooks (Audit Operations Lead); registry-backed; actions=3
 - `compliance-monitoring-agent` — Farah Alvi (Compliance Monitoring Lead); registry-backed; actions=5
 - `device-management` — Connor Walsh (Endpoint Operations Administrator); registry-backed; actions=4

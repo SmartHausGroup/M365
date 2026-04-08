@@ -7,15 +7,25 @@ import random
 import string
 import time
 from contextvars import ContextVar
+from pathlib import Path
 from typing import Any
 
 import httpx
 import yaml
 from smarthaus_common.auth_model import AuthResolution, resolve_action_auth
-from smarthaus_common.errors import AuthConfigurationError
+from smarthaus_common.errors import AuthConfigurationError, GraphRequestError
 from smarthaus_common.executor_routing import executor_route_for_action as resolve_route_for_action
+from smarthaus_common.json_store import JsonStore
+from smarthaus_common.persona_accountability import build_persona_accountability
+from smarthaus_common.persona_memory import build_persona_work_history
+from smarthaus_common.persona_task_queue import (
+    create_persona_task,
+    list_persona_tasks,
+    update_persona_task,
+)
 
 from .audit import recent_admin_events, record_admin_event
+from .personas import load_persona_registry, project_persona_context, resolve_persona_target
 
 GRAPH_SCOPE = "https://graph.microsoft.com/.default"
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
@@ -39,23 +49,41 @@ def executor_route_for_action(agent: str | None, action: str) -> str:
     return resolve_route_for_action(agent, action)
 
 
-def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
+def resolve_execution_target_for_action(
+    agent: str,
+    action: str,
+    tenant_config: Any,
+) -> tuple[str, str]:
     route_key = executor_route_for_action(agent, action)
     fallback_keys = ["sharepoint"] if route_key == "approvals" else []
-    return tenant_config.resolve_executor_name(
+    executor_name = tenant_config.resolve_executor_name(
         route_key,
         action_name=action,
         fallback_keys=fallback_keys,
     )
+    return executor_name, route_key
 
 
-def build_executor_identity(tenant_config: Any, executor_name: str) -> dict[str, Any]:
+def resolve_executor_name_for_action(agent: str, action: str, tenant_config: Any) -> str:
+    return resolve_execution_target_for_action(agent, action, tenant_config)[0]
+
+
+def build_executor_identity(
+    tenant_config: Any,
+    executor_name: str,
+    *,
+    logical_domain: str | None = None,
+) -> dict[str, Any]:
     projected_config = tenant_config.project_executor(executor_name)
     executor_cfg = tenant_config.executors[executor_name]
+    route_domain = str(logical_domain or executor_cfg.domain or "").strip() or "default"
+    physical_domain = str(executor_cfg.domain or "").strip() or "default"
     return {
         "type": "service_principal",
         "name": executor_name,
-        "domain": executor_cfg.domain,
+        "domain": route_domain,
+        "logical_domain": route_domain,
+        "physical_domain": physical_domain,
         "mode": projected_config.auth.mode,
         "tenant": projected_config.tenant.id,
         "azure_tenant_id": projected_config.azure.tenant_id,
@@ -418,6 +446,592 @@ def _csv_to_dicts(raw_csv: str) -> list[dict[str, str]]:
         return []
     reader = csv.DictReader(io.StringIO(raw_csv))
     return [dict(row) for row in reader]
+
+
+def _slugify_mail_nickname(value: str | None) -> str:
+    raw = "".join(ch.lower() if ch.isalnum() else "-" for ch in str(value or "").strip())
+    while "--" in raw:
+        raw = raw.replace("--", "-")
+    return raw.strip("-") or "workspace"
+
+
+def _graph_client_for_route(route_key: str) -> Any:
+    from smarthaus_common.config import AppConfig, has_selected_tenant
+    from smarthaus_common.tenant_config import get_tenant_config
+    from smarthaus_graph.client import GraphClient
+
+    if has_selected_tenant():
+        tenant_cfg = get_tenant_config()
+        selected_executor = _current_executor_name.get()
+        if selected_executor:
+            tenant_cfg = tenant_cfg.project_executor(selected_executor)
+        elif route_key and len(getattr(tenant_cfg, "executors", {}) or {}) > 1:
+            executor_name = tenant_cfg.resolve_executor_name(route_key, fallback_keys=[route_key])
+            tenant_cfg = tenant_cfg.project_executor(executor_name)
+        return GraphClient(tenant_config=tenant_cfg)
+    return GraphClient(config=AppConfig())
+
+
+async def sites_provision(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    if _stub_mode():
+        return {
+            "status": "provisioned",
+            "site_id": "stub-site-id",
+            "site_url": "https://stub.sharepoint.com/sites/workspace",
+            "group_created": True,
+            "libraries_created": list(params.get("libraries") or ["Documents"]),
+        }
+    from provisioning_api.m365_provision import provision_group_site
+
+    display_name = (
+        params.get("displayName")
+        or params.get("name")
+        or params.get("siteName")
+        or "Provisioned Site"
+    )
+    mail_nickname = (
+        params.get("mailNickname")
+        or params.get("mail_nickname")
+        or _slugify_mail_nickname(display_name)
+    )
+    libraries = params.get("libraries") or ["Documents"]
+    description = params.get("description")
+    wait_secs = int(params.get("wait_secs") or params.get("waitSecs") or 60)
+    try:
+        result = provision_group_site(
+            display_name=display_name,
+            mail_nickname=mail_nickname,
+            libraries=libraries,
+            description=description,
+            wait_secs=wait_secs,
+        )
+    except GraphRequestError as exc:
+        raise GraphAPIError(500, "site_provision_failed", str(exc)) from exc
+    return {"status": "provisioned", **result}
+
+
+async def planner_list_plans(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    if _stub_mode():
+        return {
+            "plans": [{"id": "plan-stub-001", "title": "Stub Plan"}],
+            "count": 1,
+        }
+    client = _graph_client_for_route("collaboration")
+    plans = client.list_plans(
+        group_id=params.get("groupId") or params.get("group_id"),
+        mail_nickname=params.get("mailNickname") or params.get("mail_nickname"),
+    )
+    return {"plans": plans, "count": len(plans)}
+
+
+async def planner_create_plan(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "plan": {"id": "plan-stub-001", "title": params.get("title", "Stub Plan")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    plan = client.create_plan(
+        params.get("groupId") or params.get("group_id"),
+        params.get("title") or "New Plan",
+        mail_nickname=params.get("mailNickname") or params.get("mail_nickname"),
+    )
+    return {"plan": plan, "status": "created"}
+
+
+async def planner_list_buckets(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "buckets": [{"id": "bucket-stub-001", "name": "Stub Bucket"}],
+            "count": 1,
+        }
+    client = _graph_client_for_route("collaboration")
+    buckets = client.list_plan_buckets(params["planId"])
+    return {"buckets": buckets, "count": len(buckets)}
+
+
+async def planner_create_bucket(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "bucket": {"id": "bucket-stub-001", "name": params.get("name", "Stub Bucket")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    bucket = client.create_bucket(
+        params["planId"],
+        params.get("name") or params.get("displayName") or "New Bucket",
+        order_hint=params.get("orderHint", " !"),
+    )
+    return {"bucket": bucket, "status": "created"}
+
+
+async def planner_create_task(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    if _stub_mode():
+        return {
+            "task": {"id": "task-stub-001", "title": params.get("title", "Stub Task")},
+            "status": "created",
+        }
+    client = _graph_client_for_route("collaboration")
+    task = client.create_task(
+        params["planId"],
+        params["bucketId"],
+        params.get("title") or "New Task",
+        description=params.get("description"),
+        reference_url=params.get("referenceUrl"),
+        percent_complete=params.get("percentComplete"),
+    )
+    return {"task": task, "status": "created"}
+
+
+def _task_create_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    plan_id = (
+        normalized.get("planId")
+        or normalized.get("plan_id")
+        or normalized.get("plan")
+        or normalized.get("plan_or_container")
+    )
+    bucket_id = (
+        normalized.get("bucketId") or normalized.get("bucket_id") or normalized.get("bucket")
+    )
+    if plan_id is not None:
+        normalized["planId"] = plan_id
+    if bucket_id is not None:
+        normalized["bucketId"] = bucket_id
+    return normalized
+
+
+def _coerce_iso_datetime(raw: Any) -> str | None:
+    if raw is None:
+        return None
+    text = str(raw).strip()
+    if not text:
+        return None
+    if "T" in text:
+        return text if text.endswith("Z") else f"{text}Z"
+    return f"{text}T09:00:00Z"
+
+
+def _follow_up_schedule_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    user_id = (
+        normalized.get("userId") or normalized.get("userPrincipalName") or normalized.get("from")
+    )
+    if user_id is not None:
+        normalized["userId"] = user_id
+
+    date_value = (
+        normalized.get("date")
+        or normalized.get("followUpDate")
+        or normalized.get("follow_up_date")
+        or normalized.get("startDateTime")
+    )
+    start_dt = _coerce_iso_datetime(normalized.get("startDateTime") or date_value)
+    end_dt = _coerce_iso_datetime(normalized.get("endDateTime"))
+    if start_dt and end_dt is None:
+        end_dt = start_dt.replace("T09:00:00Z", "T09:30:00Z")
+    if start_dt is not None:
+        normalized["start"] = {"dateTime": start_dt, "timeZone": "UTC"}
+    if end_dt is not None:
+        normalized["end"] = {"dateTime": end_dt, "timeZone": "UTC"}
+
+    normalized["subject"] = normalized.get("subject") or normalized.get("title") or "Follow-up"
+    if "body" not in normalized and normalized.get("comment"):
+        normalized["body"] = {
+            "contentType": "Text",
+            "content": str(normalized["comment"]),
+        }
+    return normalized
+
+
+def _reminder_send_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    recipient = (
+        normalized.get("recipient")
+        or normalized.get("to")
+        or normalized.get("userId")
+        or normalized.get("userPrincipalName")
+    )
+    if recipient is None:
+        return normalized
+    normalized["to"] = recipient
+    if "from" not in normalized:
+        normalized["from"] = (
+            normalized.get("userId") or normalized.get("userPrincipalName") or recipient
+        )
+    normalized.setdefault("subject", "Reminder")
+    if "body" not in normalized:
+        normalized["body"] = normalized.get("message") or normalized.get("content") or "Reminder"
+    return normalized
+
+
+def _client_follow_up_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = _follow_up_schedule_params(params)
+    if "userId" not in normalized:
+        owner = normalized.get("owner") or normalized.get("from")
+        if owner is not None:
+            normalized["userId"] = owner
+    if not params.get("subject") and not params.get("title"):
+        normalized["subject"] = f"Client follow-up: {normalized.get('client_id', 'client')}"
+    return normalized
+
+
+def _satisfaction_survey_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    recipient = (
+        normalized.get("client_email")
+        or normalized.get("clientEmail")
+        or normalized.get("recipient")
+        or normalized.get("to")
+    )
+    if recipient is None:
+        return normalized
+    normalized["to"] = recipient
+    normalized.setdefault(
+        "from",
+        normalized.get("userId")
+        or normalized.get("userPrincipalName")
+        or normalized.get("sender")
+        or recipient,
+    )
+    normalized.setdefault("subject", "Satisfaction survey")
+    if "body" not in normalized:
+        normalized["body"] = (
+            normalized.get("message") or normalized.get("content") or "Please share your feedback."
+        )
+    return normalized
+
+
+def _interview_schedule_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = _follow_up_schedule_params(params)
+    interviewer = (
+        normalized.get("interviewer_email")
+        or normalized.get("interviewerEmail")
+        or normalized.get("interviewer")
+        or normalized.get("from")
+    )
+    if interviewer is not None:
+        normalized["userId"] = interviewer
+    candidate_email = (
+        normalized.get("candidate_email")
+        or normalized.get("candidateEmail")
+        or normalized.get("candidate")
+    )
+    if candidate_email and "attendees" not in normalized:
+        normalized["attendees"] = [
+            {
+                "emailAddress": {"address": str(candidate_email)},
+                "type": "required",
+            }
+        ]
+    if not params.get("subject") and not params.get("title"):
+        normalized["subject"] = f"Interview: {normalized.get('candidate_id', 'candidate')}"
+    return normalized
+
+
+def _archive_project_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    team_id = (
+        normalized.get("teamId")
+        or normalized.get("team_id")
+        or normalized.get("projectId")
+        or normalized.get("project_id")
+        or normalized.get("id")
+    )
+    if team_id is not None:
+        normalized["teamId"] = team_id
+    return normalized
+
+
+def _alerts_respond_params(params: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(params)
+    alert_id = normalized.get("alertId") or normalized.get("alert_id") or normalized.get("id")
+    if alert_id is not None:
+        normalized["alertId"] = alert_id
+    if "assignedTo" not in normalized and normalized.get("assigned_to") is not None:
+        normalized["assignedTo"] = normalized["assigned_to"]
+    if "status" not in normalized:
+        normalized["status"] = "inProgress"
+    return normalized
+
+
+def _load_ops_registry() -> dict[str, Any]:
+    registry_path = Path(os.getenv("REGISTRY_FILE", "./registry/agents.yaml"))
+    with registry_path.open(encoding="utf-8") as handle:
+        payload = yaml.safe_load(handle) or {}
+    if not isinstance(payload, dict):
+        raise ValueError("ops_registry_invalid")
+    return payload
+
+
+def _load_ops_personas() -> dict[str, dict[str, Any]]:
+    return load_persona_registry(_load_ops_registry())
+
+
+def _coordination_target_value(params: dict[str, Any]) -> str | None:
+    for key in ("assignee", "target", "persona", "agent", "owner", "canonical_agent"):
+        value = params.get(key)
+        if value is not None and str(value).strip():
+            return str(value).strip()
+    return None
+
+
+def _coordination_task_id(params: dict[str, Any]) -> str | None:
+    value = params.get("task_id") or params.get("taskId") or params.get("id")
+    if value is None:
+        return None
+    text = str(value).strip()
+    return text or None
+
+
+def _coordination_limit(value: Any) -> int | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+    return int(text)
+
+
+def _resolve_coordination_persona(
+    params: dict[str, Any], *, default_agent: str = "project-coordination-agent"
+) -> tuple[str, dict[str, Any]]:
+    personas = _load_ops_personas()
+    target = _coordination_target_value(params)
+    if target:
+        return resolve_persona_target(target, personas)
+    persona = personas.get(default_agent)
+    if not isinstance(persona, dict):
+        raise ValueError(f"persona_not_found:{default_agent}")
+    return default_agent, project_persona_context(persona)
+
+
+def _find_persona_task_owner(
+    task_id: str, personas: dict[str, dict[str, Any]], store: JsonStore
+) -> tuple[str, dict[str, Any]]:
+    for canonical_agent, persona in personas.items():
+        tasks = list_persona_tasks(canonical_agent, store=store)
+        if any(str(task.get("id") or "") == task_id for task in tasks):
+            return canonical_agent, project_persona_context(persona)
+    raise ValueError(f"persona_task_not_found:{task_id}")
+
+
+async def coordination_task_assign(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    canonical_agent, persona = _resolve_coordination_persona(params)
+    body = {
+        "title": params.get("title")
+        or params.get("task")
+        or params.get("summary")
+        or f"Assigned task for {persona.get('display_name')}",
+        "description": params.get("description") or params.get("details"),
+        "priority": params.get("priority") or "medium",
+        "due": params.get("due") or params.get("deadline"),
+        "created_by": params.get("created_by")
+        or params.get("requested_by")
+        or "project-coordination-agent",
+        "source": "project-coordination-agent/task.assign",
+    }
+    task = create_persona_task(canonical_agent, body, store=store)
+    return {
+        "assigned": True,
+        "task_id": task["id"],
+        "assignee": canonical_agent,
+        "persona": persona,
+        "task": task,
+    }
+
+
+async def coordination_deadline_track(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    task_id = _coordination_task_id(params)
+    if task_id and not _coordination_target_value(params):
+        canonical_agent, persona = _find_persona_task_owner(task_id, personas, store)
+    else:
+        canonical_agent, persona = _resolve_coordination_persona(params)
+
+    tracked_tasks = [
+        task
+        for task in list_persona_tasks(canonical_agent, store=store)
+        if bool(task.get("is_open"))
+    ]
+    if task_id:
+        tracked_tasks = [task for task in tracked_tasks if str(task.get("id") or "") == task_id]
+
+    deadline = str(params.get("deadline") or params.get("due") or "").strip()
+    if deadline:
+        tracked_tasks = [task for task in tracked_tasks if str(task.get("due") or "") == deadline]
+
+    status = "on_track"
+    if any(str(task.get("status") or "") == "failed" for task in tracked_tasks):
+        status = "attention_required"
+    elif any(str(task.get("status") or "") == "blocked" for task in tracked_tasks):
+        status = "blocked"
+    elif not tracked_tasks:
+        status = "clear"
+
+    return {
+        "tracked": True,
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "deadline": deadline or None,
+        "task_count": len(tracked_tasks),
+        "status": status,
+        "tasks": tracked_tasks,
+    }
+
+
+async def coordination_status_update(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    task_id = _coordination_task_id(params)
+    if task_id is None:
+        raise ValueError("task_id_required")
+
+    target = _coordination_target_value(params)
+    if target:
+        canonical_agent, persona = resolve_persona_target(target, personas)
+    else:
+        canonical_agent, persona = _find_persona_task_owner(task_id, personas, store)
+
+    task = update_persona_task(
+        canonical_agent,
+        task_id,
+        {
+            "status": params.get("status"),
+            "percent": params.get("percent"),
+            "message": params.get("message"),
+            "updated_by": params.get("updated_by")
+            or params.get("actor")
+            or params.get("requested_by")
+            or "project-coordination-agent",
+        },
+        store=store,
+    )
+    return {
+        "updated": True,
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "task_id": task_id,
+        "status": task.get("status"),
+        "task": task,
+    }
+
+
+async def coordination_report_generate(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    del correlation_id
+    store = JsonStore()
+    personas = _load_ops_personas()
+    target = _coordination_target_value(params)
+    if target:
+        canonical_agent, persona = resolve_persona_target(target, personas)
+    else:
+        persona_payload = personas.get("project-coordination-agent")
+        if not isinstance(persona_payload, dict):
+            raise ValueError("persona_not_found:project-coordination-agent")
+        canonical_agent = "project-coordination-agent"
+        persona = project_persona_context(persona_payload)
+
+    limit = _coordination_limit(params.get("limit"))
+    history = build_persona_work_history(canonical_agent, store=store, limit=limit)
+    accountability = build_persona_accountability(
+        canonical_agent,
+        store=store,
+        persona_registry={"personas": personas},
+    )
+    return {
+        "generated": True,
+        "report_type": params.get("report_type") or params.get("reportType") or "work_history",
+        "canonical_agent": canonical_agent,
+        "persona": persona,
+        "history": history,
+        "accountability": accountability,
+    }
+
+
+async def itops_infrastructure_monitor(
+    params: dict[str, Any], correlation_id: str
+) -> dict[str, Any]:
+    health = await health_overview(params, correlation_id)
+    services = [item for item in (health.get("services") or []) if isinstance(item, dict)]
+    return {
+        "status": "monitoring",
+        "services": services,
+        "count": len(services),
+    }
+
+
+async def itops_backup_verify(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    del correlation_id
+    backup_id = params.get("backup_id") or params.get("backupId") or params.get("id")
+    suffix = f":{backup_id}" if backup_id else ""
+    raise GraphAPIError(
+        501,
+        "unsupported_m365_only_action",
+        f"backup.verify is not supported in the M365-only runtime{suffix}",
+    )
+
+
+async def unsupported_m365_only_action(
+    params: dict[str, Any], correlation_id: str, action_name: str
+) -> dict[str, Any]:
+    del correlation_id
+    context_value = (
+        params.get("backup_id")
+        or params.get("backupId")
+        or params.get("target")
+        or params.get("domain")
+        or params.get("certificate")
+        or params.get("environment")
+    )
+    suffix = f":{context_value}" if context_value else ""
+    raise GraphAPIError(
+        501,
+        "unsupported_m365_only_action",
+        f"{action_name} is not supported in the M365-only runtime{suffix}",
+    )
+
+
+async def itops_security_scan(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    score = await security_secure_score(params, correlation_id)
+    return {
+        "status": "scanned",
+        "secureScore": score.get("secureScore"),
+    }
+
+
+async def outreach_email_send_bulk(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    bulk_params = dict(params)
+    if "to" not in bulk_params and "recipients" in bulk_params:
+        bulk_params["to"] = bulk_params["recipients"]
+    return await mail_send(bulk_params, correlation_id)
+
+
+async def outreach_email_schedule(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    schedule_params = dict(params)
+    if "userId" not in schedule_params and schedule_params.get("from"):
+        schedule_params["userId"] = schedule_params["from"]
+    return await calendar_create(schedule_params, correlation_id)
+
+
+async def outreach_meeting_schedule(params: dict[str, Any], correlation_id: str) -> dict[str, Any]:
+    meeting_params = dict(params)
+    meeting_params.setdefault("isOnlineMeeting", True)
+    if "userId" not in meeting_params and meeting_params.get("from"):
+        meeting_params["userId"] = meeting_params["from"]
+    return await calendar_create(meeting_params, correlation_id)
 
 
 # ==================== USERS (existing - preserved exactly) ====================
@@ -3722,6 +4336,8 @@ async def _execute_impl(
                 return await lists_items(params, correlation_id)
             if action == "lists.create_item":
                 return await lists_create_item(params, correlation_id)
+            if action == "sites.provision":
+                return await sites_provision(params, correlation_id)
             # Files / OneDrive
             if action == "files.list":
                 return await files_list(params, correlation_id)
@@ -3754,6 +4370,11 @@ async def _execute_impl(
                 return await service_principals_list(params, correlation_id)
             if action == "apps.update":
                 return await apps_update(params, correlation_id)
+            if action == "teams.add_channel":
+                channel_params = dict(params)
+                if "displayName" not in channel_params and channel_params.get("channelName"):
+                    channel_params["displayName"] = channel_params["channelName"]
+                return await channels_create(channel_params, correlation_id)
 
         # ---- Teams Manager ----
         if agent == "teams-manager":
@@ -3812,12 +4433,42 @@ async def _execute_impl(
                 return {"status": "ok", "members": (params.get("members") or [])}
 
         # ---- Website ----
-        if agent == "website-manager" and action == "deployment.preview":
-            return await website_deployment_preview(params, correlation_id)
+        if agent == "website-manager":
+            if action == "deployment.preview":
+                return await unsupported_m365_only_action(
+                    params, correlation_id, "deployment.preview"
+                )
+            if action == "deployment.production":
+                return await unsupported_m365_only_action(
+                    params, correlation_id, "deployment.production"
+                )
+            if action == "content.create":
+                return await unsupported_m365_only_action(params, correlation_id, "content.create")
+            if action == "content.update":
+                return await unsupported_m365_only_action(params, correlation_id, "content.update")
+            if action == "analytics.read":
+                return await unsupported_m365_only_action(params, correlation_id, "analytics.read")
+            if action == "seo.update":
+                return await unsupported_m365_only_action(params, correlation_id, "seo.update")
 
         # ---- HR ----
-        if agent == "hr-generalist" and action == "employee.onboard":
-            return await hr_employee_onboard(params, correlation_id)
+        if agent == "hr-generalist":
+            if action == "employee.onboard":
+                return await hr_employee_onboard(params, correlation_id)
+            if action == "employee.update_info":
+                update_params = dict(params)
+                if "userPrincipalName" not in update_params and update_params.get("email"):
+                    update_params["userPrincipalName"] = update_params["email"]
+                return await m365_users_update(update_params, correlation_id)
+            if action == "employee.offboard":
+                disable_params = dict(params)
+                if "userPrincipalName" not in disable_params and disable_params.get("email"):
+                    disable_params["userPrincipalName"] = disable_params["email"]
+                return await m365_users_disable(disable_params, correlation_id)
+            if action == "policy.create":
+                return await unsupported_m365_only_action(params, correlation_id, "policy.create")
+            if action == "review.initiate":
+                return await unsupported_m365_only_action(params, correlation_id, "review.initiate")
 
         # ---- Outreach Coordinator ----
         if agent == "outreach-coordinator":
@@ -3825,6 +4476,16 @@ async def _execute_impl(
                 return await outreach_email_send_individual(params, correlation_id)
             if action == "mail.send":
                 return await mail_send(params, correlation_id)
+            if action == "email.send_bulk":
+                return await outreach_email_send_bulk(params, correlation_id)
+            if action == "email.schedule":
+                return await outreach_email_schedule(params, correlation_id)
+            if action == "meeting.schedule":
+                return await outreach_meeting_schedule(params, correlation_id)
+            if action == "followup.create":
+                return await calendar_create(_follow_up_schedule_params(params), correlation_id)
+            if action == "campaign.create":
+                return await unsupported_m365_only_action(params, correlation_id, "campaign.create")
 
         # ---- Email Processing Agent ----
         if agent == "email-processing-agent":
@@ -3848,7 +4509,7 @@ async def _execute_impl(
                 return await mailbox_settings(params, correlation_id)
             # Legacy action names
             if action == "email.classify":
-                return {"classification": "inquiry", "priority": "medium", "category": "general"}
+                return await unsupported_m365_only_action(params, correlation_id, "email.classify")
             if action == "email.respond":
                 return await mail_reply(params, correlation_id)
             if action == "email.forward":
@@ -3856,7 +4517,7 @@ async def _execute_impl(
             if action == "email.archive":
                 return await mail_move({**params, "destinationId": "archive"}, correlation_id)
             if action == "follow-up.schedule":
-                return {"scheduled": True, "follow_up_date": params.get("date", "2024-02-01")}
+                return await calendar_create(_follow_up_schedule_params(params), correlation_id)
             if action == "email.send_individual":
                 return await outreach_email_send_individual(params, correlation_id)
 
@@ -3882,45 +4543,36 @@ async def _execute_impl(
             if action == "availability.check":
                 return await calendar_availability(params, correlation_id)
             if action == "reminder.send":
-                return {"reminder_sent": True, "recipient": params.get("recipient")}
+                return await mail_send(_reminder_send_params(params), correlation_id)
             if action == "conflict.resolve":
-                return {
-                    "resolved": True,
-                    "new_time": params.get("newTime", "2024-01-20T15:00:00Z"),
-                }
+                return await unsupported_m365_only_action(
+                    params, correlation_id, "conflict.resolve"
+                )
     # ---- Project Manager ----
     if agent == "project-manager":
         if action == "create-project":
-            return await create_project(params, correlation_id)
+            return await unsupported_m365_only_action(params, correlation_id, "create-project")
         if action == "list-projects":
-            return await list_projects(params, correlation_id)
+            return await unsupported_m365_only_action(params, correlation_id, "list-projects")
         if action == "update-project-status":
-            pid = params.get("id")
-            status = params.get("status")
-            for p in _PROJECTS_MEM:
-                if p.get("id") == pid:
-                    if status:
-                        p["status"] = status
-                    p["lastActivity"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-                    return {"updated": True, "project": p}
-            return {"updated": False}
+            return await unsupported_m365_only_action(
+                params, correlation_id, "update-project-status"
+            )
         if action == "archive-project":
-            pid = params.get("id")
-            for p in _PROJECTS_MEM:
-                if p.get("id") == pid:
-                    p["status"] = "completed"
-                    p["lastActivity"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-                    return {"archived": True, "project": p}
-            return {"archived": False}
+            return await teams_archive(_archive_project_params(params), correlation_id)
 
     # ---- Platform Manager ----
     if agent == "platform-manager":
         if action == "provision-client-services":
-            return await provision_client_services(params, correlation_id)
+            return await unsupported_m365_only_action(
+                params, correlation_id, "provision-client-services"
+            )
         if action == "deprovision-client-services":
-            return {"status": "deprovisioned", "clientId": params.get("clientId")}
+            return await unsupported_m365_only_action(
+                params, correlation_id, "deprovision-client-services"
+            )
         if action == "get-client-status":
-            return {"status": "active", "clientId": params.get("clientId")}
+            return await unsupported_m365_only_action(params, correlation_id, "get-client-status")
 
     # ---- Security Operations ----
     if agent == "security-operations":
@@ -3999,132 +4651,120 @@ async def _execute_impl(
     # ---- IT Operations Manager (legacy stubs) ----
     if agent == "it-operations-manager":
         if action == "infrastructure.monitor":
-            return {"status": "monitoring", "infrastructure_health": "good"}
+            return await itops_infrastructure_monitor(params, correlation_id)
         if action == "system.health-check":
-            return {"status": "checked", "system_health": "healthy"}
+            return await health_overview(params, correlation_id)
         if action == "alerts.respond":
-            return {"status": "responded", "alert_id": params.get("alert_id")}
+            return await security_alert_update(_alerts_respond_params(params), correlation_id)
         if action == "backup.verify":
-            return {"status": "verified", "backup_integrity": "intact"}
+            return await itops_backup_verify(params, correlation_id)
         if action == "security.scan":
-            return {"status": "scanned", "vulnerabilities_found": 0}
+            return await itops_security_scan(params, correlation_id)
 
     # ---- Website Operations Specialist (legacy stubs) ----
     if agent == "website-operations-specialist":
         if action == "website.deploy":
-            return {"status": "deployed", "environment": params.get("environment")}
+            return await unsupported_m365_only_action(params, correlation_id, "website.deploy")
         if action == "cdn.purge":
-            return {"status": "purged", "target": params.get("target")}
+            return await unsupported_m365_only_action(params, correlation_id, "cdn.purge")
         if action == "dns.update":
-            return {"status": "updated", "domain": params.get("domain")}
+            return await unsupported_m365_only_action(params, correlation_id, "dns.update")
         if action == "ssl.renew":
-            return {"status": "renewed", "certificate": params.get("certificate")}
+            return await unsupported_m365_only_action(params, correlation_id, "ssl.renew")
         if action == "performance.optimize":
-            return {"status": "optimized", "improvements": ["caching", "compression"]}
+            return await unsupported_m365_only_action(
+                params, correlation_id, "performance.optimize"
+            )
         if action == "backup.restore":
-            return {"status": "restored", "backup_id": params.get("backup_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "backup.restore")
 
     # ---- Project Coordination Agent (legacy stubs) ----
     if agent == "project-coordination-agent":
+        if action == "list_plans":
+            return await planner_list_plans(params, correlation_id)
+        if action == "create_plan":
+            return await planner_create_plan(params, correlation_id)
+        if action == "list_buckets":
+            return await planner_list_buckets(params, correlation_id)
+        if action == "create_bucket":
+            return await planner_create_bucket(params, correlation_id)
+        if action == "create_task":
+            return await planner_create_task(params, correlation_id)
         if action == "task.create":
-            return {"created": True, "task_id": "task_456", "assignee": params.get("assignee")}
+            return await planner_create_task(_task_create_params(params), correlation_id)
         if action == "task.assign":
-            return {
-                "assigned": True,
-                "task_id": params.get("task_id"),
-                "assignee": params.get("assignee"),
-            }
+            return await coordination_task_assign(params, correlation_id)
         if action == "deadline.track":
-            return {"tracked": True, "deadline": params.get("deadline"), "status": "on_track"}
+            return await coordination_deadline_track(params, correlation_id)
         if action == "status.update":
-            return {
-                "updated": True,
-                "project_id": params.get("project_id"),
-                "status": params.get("status"),
-            }
+            return await coordination_status_update(params, correlation_id)
         if action == "report.generate":
-            return {
-                "generated": True,
-                "report_type": "weekly",
-                "download_url": "/reports/weekly.pdf",
-            }
+            return await coordination_report_generate(params, correlation_id)
 
     # ---- Client Relationship Agent (legacy stubs) ----
     if agent == "client-relationship-agent":
         if action == "client.follow-up":
-            return {"follow_up_scheduled": True, "client_id": params.get("client_id")}
+            return await calendar_create(_client_follow_up_params(params), correlation_id)
         if action == "satisfaction.survey":
-            return {"survey_sent": True, "client_id": params.get("client_id")}
+            return await mail_send(_satisfaction_survey_params(params), correlation_id)
         if action == "feedback.analyze":
-            return {"analyzed": True, "sentiment": "positive", "insights": ["happy with service"]}
+            return await unsupported_m365_only_action(params, correlation_id, "feedback.analyze")
         if action == "relationship.score":
-            return {"score": 8.5, "client_id": params.get("client_id"), "trend": "improving"}
+            return await unsupported_m365_only_action(params, correlation_id, "relationship.score")
         if action == "engagement.plan":
-            return {
-                "plan_created": True,
-                "client_id": params.get("client_id"),
-                "actions": ["send newsletter", "schedule call"],
-            }
+            return await unsupported_m365_only_action(params, correlation_id, "engagement.plan")
 
     # ---- Compliance Monitoring Agent (legacy stubs) ----
     if agent == "compliance-monitoring-agent":
         if action == "compliance.check":
-            return {"compliant": True, "regulations_checked": ["GDPR", "HIPAA"]}
+            return await unsupported_m365_only_action(params, correlation_id, "compliance.check")
         if action == "policy.validate":
-            return {"validated": True, "policy_id": params.get("policy_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "policy.validate")
         if action == "audit.prepare":
-            return {"prepared": True, "audit_type": params.get("audit_type")}
+            return await unsupported_m365_only_action(params, correlation_id, "audit.prepare")
         if action == "violation.report":
-            return {"reported": True, "violation_id": params.get("violation_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "violation.report")
         if action == "remediation.plan":
-            return {"plan_created": True, "violation_id": params.get("violation_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "remediation.plan")
 
     # ---- Recruitment Assistance Agent (legacy stubs) ----
     if agent == "recruitment-assistance-agent":
         if action == "candidate.screen":
-            return {
-                "screened": True,
-                "candidate_id": params.get("candidate_id"),
-                "recommendation": "interview",
-            }
+            return await unsupported_m365_only_action(params, correlation_id, "candidate.screen")
         if action == "interview.schedule":
-            return {
-                "scheduled": True,
-                "candidate_id": params.get("candidate_id"),
-                "interviewer": params.get("interviewer"),
-            }
+            return await calendar_create(_interview_schedule_params(params), correlation_id)
         if action == "feedback.collect":
-            return {"collected": True, "interview_id": params.get("interview_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "feedback.collect")
         if action == "offer.prepare":
-            return {"prepared": True, "candidate_id": params.get("candidate_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "offer.prepare")
         if action == "onboarding.initiate":
-            return {"initiated": True, "candidate_id": params.get("candidate_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "onboarding.initiate")
 
     # ---- Financial Operations Agent (legacy stubs) ----
     if agent == "financial-operations-agent":
         if action == "invoice.process":
-            return {"processed": True, "invoice_id": params.get("invoice_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "invoice.process")
         if action == "expense.approve":
-            return {"approved": True, "expense_id": params.get("expense_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "expense.approve")
         if action == "budget.track":
-            return {"tracked": True, "budget_variance": 5.2}
+            return await unsupported_m365_only_action(params, correlation_id, "budget.track")
         if action == "forecast.update":
-            return {"updated": True, "forecast_accuracy": 92.5}
+            return await unsupported_m365_only_action(params, correlation_id, "forecast.update")
         if action == "audit.prepare":
-            return {"prepared": True, "audit_documents": ["financials.pdf", "reports.xlsx"]}
+            return await unsupported_m365_only_action(params, correlation_id, "audit.prepare")
 
     # ---- Knowledge Management Agent (legacy stubs) ----
     if agent == "knowledge-management-agent":
         if action == "document.index":
-            return {"indexed": True, "documents_processed": 25}
+            return await unsupported_m365_only_action(params, correlation_id, "document.index")
         if action == "search.optimize":
-            return {"optimized": True, "search_accuracy": 94.2}
+            return await unsupported_m365_only_action(params, correlation_id, "search.optimize")
         if action == "content.curate":
-            return {"curated": True, "articles_added": 12}
+            return await unsupported_m365_only_action(params, correlation_id, "content.curate")
         if action == "training.recommend":
-            return {"recommended": True, "courses": ["AI Ethics", "Data Governance"]}
+            return await unsupported_m365_only_action(params, correlation_id, "training.recommend")
         if action == "expert.connect":
-            return {"connected": True, "expert_id": params.get("expert_id")}
+            return await unsupported_m365_only_action(params, correlation_id, "expert.connect")
 
     # ---- UCP / M365 Administrator (admin config surface) ----
     if agent in ("ucp-administrator", "m365-administrator"):

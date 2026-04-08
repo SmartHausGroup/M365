@@ -1,0 +1,62 @@
+plan_id: plan:m365-direct-full-surface-certification
+title: Enable and certify the full repo-claimed direct M365 surface so supported actions are actually testable and trustworthy
+version: "1.0"
+status: active
+owner: SMARTHAUS
+date_created: "2026-04-06"
+date_updated: "2026-04-06"
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: "Operations/EXECUTION_PLAN.md § Initiative: M365 Direct Full Surface Certification"
+domain: infrastructure
+math_algorithm_scope: false
+objective: Lock the authoritative supported direct M365 surface, remove the remaining workstation and tenant blockers inside scope, and run a real certification matrix until the supported surface is either certified green or truthfully reduced.
+current_state: The repo has 59 agents, 184 unique allowed actions in registry/agents.yaml, and 155 direct instruction actions in src/provisioning_api/routers/m365.py. A bounded direct-function validation wave proved the local runtime path works for SharePoint, Teams, and admin/governance reads, but the full claimed surface is not yet certified.
+target_state: The supported direct M365 surface is explicitly locked, enabled, and tested with published evidence. Any remaining unsupported or blocked actions are removed or explicitly fenced rather than implied to work.
+requirements:
+  - id: R0
+    text: Create the governed full-surface certification package before inventory or enablement work.
+  - id: R1
+    text: Lock the authoritative certification universe from repo truth sources.
+  - id: R2
+    text: Remove workstation and tenant blockers inside scope.
+  - id: R3
+    text: Execute certification slices across the supported direct surface.
+  - id: R4
+    text: Repair repo-local defects or explicitly reduce the claimed surface.
+  - id: R5
+    text: Publish the final direct support matrix and diagnostics artifact.
+phases:
+  - id: F0
+    text: Universe lock
+    status: complete
+  - id: F1
+    text: Enablement
+    status: active
+  - id: F2
+    text: Read-path certification
+    status: pending
+  - id: F3
+    text: Mutation and approval certification
+    status: pending
+  - id: F4
+    text: Closeout
+    status: pending
+gates:
+  - id: C0
+    text: Package and tracker truth locked
+    status: complete
+  - id: C1
+    text: Universe lock published
+    status: complete
+  - id: C2
+    text: Enablement blockers addressed
+    status: pending
+  - id: C3
+    text: Certification slices green or fenced
+    status: pending
+  - id: C4
+    text: Repo-local defects repaired
+    status: pending
+  - id: C5
+    text: Final support matrix published
+    status: pending

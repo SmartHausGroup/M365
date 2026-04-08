@@ -1,0 +1,17 @@
+{
+  "status": "persona_action_legacy_stub_remediation_ready",
+  "target_aliases": [
+    "task.create",
+    "follow-up.schedule",
+    "reminder.send"
+  ],
+  "blocked_write_set": [
+    "src/ops_adapter/actions.py",
+    "tests/test_ops_adapter.py"
+  ],
+  "replacement_modes": {
+    "task.create": "planner_create_task",
+    "follow-up.schedule": "calendar_create",
+    "reminder.send": "mail_send"
+  }
+}

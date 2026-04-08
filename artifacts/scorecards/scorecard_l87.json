@@ -1,0 +1,27 @@
+{
+  "lemma_id": "L87",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-CM-persona-action-execution-reuse-v1.ipynb",
+  "lemma_notebook": "notebooks/lemma_proofs/L87_m365_persona_action_execution_reuse_v1.ipynb",
+  "invariant": "invariants/lemmas/L87_m365_persona_action_execution_reuse_v1.yaml",
+  "seed_lock": true,
+  "determinism": "The fixed repo state, direct-surface certification artifact, and AST-derived persona dispatcher produce deterministic G3 execution-reuse totals.",
+  "checks": [
+    {
+      "id": "reusable_unique_aliases",
+      "status": "passed"
+    },
+    {
+      "id": "reusable_pair_counts",
+      "status": "passed"
+    },
+    {
+      "id": "remaining_live_proof_scope",
+      "status": "passed"
+    },
+    {
+      "id": "mixed_reuse_aliases_total",
+      "status": "passed"
+    }
+  ]
+}

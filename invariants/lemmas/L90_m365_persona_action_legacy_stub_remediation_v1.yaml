@@ -1,0 +1,12 @@
+lemma_id: L90_m365_persona_action_legacy_stub_remediation_v1
+title: Persona-action legacy-stub remediation v1
+invariants:
+  - id: L90-I1
+    description: The bounded P2 alias set is frozen to task.create, follow-up.schedule, and reminder.send.
+    proof_obligation: verification.target_aliases == ["task.create", "follow-up.schedule", "reminder.send"]
+  - id: L90-I2
+    description: The blocker being repaired is the first bounded P2 code-write denial.
+    proof_obligation: verification.blocked_validation.violation == "map-2-code-notebook-required"
+  - id: L90-I3
+    description: The future code-write scope remains bounded to actions.py and the focused regression file.
+    proof_obligation: verification.blocked_write_set == ["src/ops_adapter/actions.py", "tests/test_ops_adapter.py"]

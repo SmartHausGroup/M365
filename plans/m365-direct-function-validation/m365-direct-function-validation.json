@@ -1,0 +1,155 @@
+{
+  "plan_id": "plan:m365-direct-function-validation",
+  "title": "Execute direct repo function tests one by one and fix repo-local defects until the surface is truthfully usable",
+  "version": "1.0",
+  "status": "complete",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-06",
+  "date_updated": "2026-04-06",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md \u00a7 Initiative: M365 Direct Function Validation",
+  "domain": "infrastructure",
+  "math_algorithm_scope": false,
+  "objective": "Execute direct function-by-function validation against the repo-local M365 runtime, classify outcomes truthfully, and repair any repo-local defects that still prevent meaningful direct testing.",
+  "current_state": "The direct repo runtime now imports, routes, and executes representative actions truthfully enough for a governed live matrix, but no governed per-function validation wave exists yet.",
+  "target_state": "The repo has a truthful direct-function matrix showing which functions now succeed directly and which remaining failures are external prerequisites rather than local code, routing, or harness defects.",
+  "scope": {
+    "in_scope": [
+      "create the governed direct function-validation package and prompt pair",
+      "execute a repeatable direct test matrix across core M365 function families",
+      "repair repo-local defects exposed by that matrix when they remain inside the direct-runtime boundary",
+      "publish a human-readable and machine-readable closeout for direct function readiness"
+    ],
+    "out_of_scope": [
+      "UCP runtime changes",
+      "tenant-admin permission grants or Microsoft service-side fixes",
+      "release promotion or branch-merging work",
+      "silent bypasses of actor identity, approval, or mutation controls"
+    ],
+    "allowlist": [
+      "plans/m365-direct-function-validation/**",
+      "docs/prompts/codex-m365-direct-function-validation.md",
+      "docs/prompts/codex-m365-direct-function-validation-prompt.txt",
+      "docs/commercialization/m365-direct-function-validation.md",
+      "artifacts/diagnostics/m365_direct_function_validation.json",
+      "docs/LOCAL_TEST_LICENSED_RUNTIME.md",
+      "src/provisioning_api/main.py",
+      "src/provisioning_api/routers/m365.py",
+      "src/ops_adapter/main.py",
+      "src/ops_adapter/app.py",
+      "src/ops_adapter/actions.py",
+      "src/smarthaus_common/tenant_config.py",
+      "src/smarthaus_common/executor_routing.py",
+      "src/smarthaus_common/power_apps_client.py",
+      "src/smarthaus_common/power_automate_client.py",
+      "src/smarthaus_graph/client.py",
+      "registry/executor_routing_v2.yaml",
+      "tests/test_endpoints.py",
+      "tests/test_ops_adapter.py",
+      "tests/test_executor_routing_v2.py",
+      "tests/test_power_apps_expansion_v2.py",
+      "tests/test_power_automate_expansion_v2.py",
+      "tests/test_auth_model_v2.py",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "denylist": [
+      "../UCP/**",
+      "registry/persona_registry_v2.yaml",
+      "registry/persona_certification_v1.yaml",
+      "registry/department_certification_v1.yaml",
+      "registry/activated_persona_surface_v1.yaml",
+      "registry/workforce_packaging_v1.yaml"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R0",
+      "text": "Create the governed direct function-validation package before any new live tests."
+    },
+    {
+      "id": "R1",
+      "text": "Execute the direct function matrix across admin/governance, Teams, SharePoint, email, calendar, Power Apps, Power Automate, and service health."
+    },
+    {
+      "id": "R2",
+      "text": "Repair repo-local defects surfaced by the matrix when they remain inside the direct-runtime boundary."
+    },
+    {
+      "id": "R3",
+      "text": "Classify Microsoft permissions, missing local modules, and service-side failures as external prerequisites instead of widening scope."
+    },
+    {
+      "id": "R4",
+      "text": "Publish truthful diagnostics and close out the phase only when the direct function surface is genuinely usable."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "text": "Package and baseline lock",
+      "status": "complete"
+    },
+    {
+      "id": "T2",
+      "text": "Harness baseline",
+      "status": "complete"
+    },
+    {
+      "id": "T3",
+      "text": "Direct function matrix execution",
+      "status": "complete"
+    },
+    {
+      "id": "T4",
+      "text": "Targeted remediation and rerun",
+      "status": "complete"
+    },
+    {
+      "id": "T5",
+      "text": "Diagnostics and governance closeout",
+      "status": "complete"
+    }
+  ],
+  "gates": [
+    {
+      "id": "C0",
+      "text": "Package and tracker truth locked",
+      "status": "complete"
+    },
+    {
+      "id": "C1",
+      "text": "Harness baseline usable",
+      "status": "complete"
+    },
+    {
+      "id": "C2",
+      "text": "Core direct functions truthfully classified",
+      "status": "complete"
+    },
+    {
+      "id": "C3",
+      "text": "Remaining families truthfully classified",
+      "status": "complete"
+    },
+    {
+      "id": "C4",
+      "text": "Repo-local defects repaired if found",
+      "status": "complete"
+    },
+    {
+      "id": "C5",
+      "text": "Final validation green",
+      "status": "complete"
+    }
+  ],
+  "outcome_summary": [
+    "no new repo-local defects were surfaced by the direct function matrix",
+    "direct instruction successes include list_sites and list_teams",
+    "direct governed successes include admin.get_tenant_config, teams.list, and sites.get",
+    "mail and calendar remain blocked by Graph ErrorAccessDenied",
+    "Power Apps and Power Automate remain blocked by missing Microsoft.PowerApps.Administration.PowerShell",
+    "service health remains blocked by Graph UnknownError"
+  ]
+}

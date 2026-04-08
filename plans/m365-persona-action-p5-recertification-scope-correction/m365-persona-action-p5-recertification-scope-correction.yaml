@@ -1,0 +1,85 @@
+plan_id: m365-persona-action-p5-recertification-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Complete
+date: '2026-04-08'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p5-recertification-scope-correction:R1
+canonical_predecessor: plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+governance_evidence:
+  notebook: notebooks/m365/INV-M365-DE-persona-action-p5-recertification-scope-correction-v1.ipynb
+  verification: configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json
+draft_vs_active_semantics: Draft until the parent initiative remains on P5, the approval packet receives explicit go, and no sibling phase is concurrently active
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before every mutating action and obey the verdict
+  - stop on first red
+  - do not publish the final P5 certification artifact from this child phase
+notebook_first_discipline: All widened-scope claims must be frozen in notebooks before the parent P5 recertification closeout is widened
+objective: Produce the notebook-backed scope-correction package required to extend P5 into the post-remediation workforce recertification evidence surface
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phases:
+    - P0
+    - P1
+    - P2
+    - P3
+    - P4
+  stale_published_totals:
+    unique_aliases: 184
+    active_pairs: 430
+  live_post_p4_totals:
+    unique_aliases: 172
+    active_pairs: 445
+    allowed_pairs: 410
+    unsupported_pairs: 35
+    unsupported_unique_aliases: 32
+scope:
+  in:
+    - Restate the P5 post-remediation live-universe shift from the current runtime and policy surface.
+    - Publish notebook-backed governance evidence and generated verification output for the widened P5 boundary.
+    - Admit the required P5 lemma, invariant, notebook, scorecard, generated verification, commercialization, and diagnostics surfaces into the bounded recertification closeout.
+    - Synchronize the parent plan and governance trackers truthfully.
+  out:
+    - Publishing the final P5 certification artifact itself.
+    - New runtime remediation beyond completed P1 through P4 work.
+    - UCP-side work.
+    - Tenant-side permission or environment changes.
+allowlist:
+  - plans/m365-persona-action-p5-recertification-scope-correction/**
+  - docs/prompts/codex-m365-persona-action-p5-recertification-scope-correction.md
+  - docs/prompts/codex-m365-persona-action-p5-recertification-scope-correction-prompt.txt
+  - notebooks/m365/INV-M365-DE-persona-action-p5-recertification-scope-correction-v1.ipynb
+  - configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json
+  - plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+  - docs/commercialization/m365-persona-action-certification.md
+  - artifacts/diagnostics/m365_persona_action_certification.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - ../UCP/**
+  - any path not listed in the allowlist
+requirements:
+  - id: R1
+    title: Make the post-P4 live-universe shift explicit
+  - id: R2
+    title: Produce notebook-backed governance evidence
+  - id: R3
+    title: Admit the required P5 evidence surfaces into the bounded closeout
+  - id: R4
+    title: Reopen the future bounded P5 final-closeout write under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and trackers
+  - id: R6
+    title: Commit and push before resuming P5
+child_acts:
+  - id: P5SA
+    description: Freeze the live post-P4 pair totals, alias totals, and explicit unsupported perimeter.
+  - id: P5SB
+    description: Produce notebook-backed governance evidence and generated verification output.
+  - id: P5SC
+    description: Widen the parent recertification surface, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p5-recertification-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p5-recertification-scope-correction-prompt.txt

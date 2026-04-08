@@ -1,0 +1,664 @@
+{
+  "plan_id": "plan:m365-persona-action-certification",
+  "phase": "G2",
+  "status": "persona_action_mapping_audit_complete",
+  "baseline": {
+    "persona_unique_actions_total": 184,
+    "active_persona_action_pairs_total": 430,
+    "direct_instruction_actions_total": 146,
+    "mixed_aliases_total": 23
+  },
+  "g2_mapping_audit": {
+    "unique_action_classification": {
+      "dead-routed": 21,
+      "legacy-stubbed": 48,
+      "mapped": 115
+    },
+    "pair_classification": {
+      "dead-routed": 116,
+      "legacy-stubbed": 49,
+      "mapped": 265
+    },
+    "canonical_crosswalked_unique_total": 59,
+    "real_wrapper_unique_total": 56,
+    "expanded_stub_pairs_extra_total": 8,
+    "expanded_stub_pairs_extra": [
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "conflict.resolve"
+      },
+      {
+        "persona_id": "calendar-management-agent",
+        "action": "reminder.send"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "email.classify"
+      },
+      {
+        "persona_id": "email-processing-agent",
+        "action": "follow-up.schedule"
+      },
+      {
+        "persona_id": "platform-manager",
+        "action": "deprovision-client-services"
+      },
+      {
+        "persona_id": "platform-manager",
+        "action": "get-client-status"
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "archive-project"
+      },
+      {
+        "persona_id": "project-manager",
+        "action": "update-project-status"
+      }
+    ],
+    "mixed_aliases_total": 23,
+    "mixed_aliases": [
+      {
+        "action": "sites.list",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "ai-engineer",
+          "analytics-reporter",
+          "backend-architect",
+          "brand-guardian",
+          "content-creator",
+          "experiment-tracker",
+          "feedback-synthesizer",
+          "finance-tracker",
+          "frontend-developer",
+          "growth-hacker",
+          "infrastructure-maintainer",
+          "legal-compliance-checker",
+          "m365-administrator",
+          "mobile-app-builder",
+          "performance-benchmarker",
+          "rapid-prototyper",
+          "studio-producer",
+          "test-results-analyzer",
+          "test-writer-fixer",
+          "tool-evaluator",
+          "trend-researcher",
+          "ui-designer",
+          "ux-researcher",
+          "visual-storyteller",
+          "whimsy-injector",
+          "workflow-optimizer"
+        ]
+      },
+      {
+        "action": "files.search",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "ai-engineer",
+          "backend-architect",
+          "brand-guardian",
+          "finance-tracker",
+          "frontend-developer",
+          "legal-compliance-checker",
+          "m365-administrator",
+          "test-results-analyzer",
+          "test-writer-fixer",
+          "ui-designer",
+          "visual-storyteller",
+          "whimsy-injector"
+        ]
+      },
+      {
+        "action": "reports.users_active",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "ai-engineer",
+          "analytics-reporter",
+          "api-tester",
+          "devops-automator",
+          "experiment-tracker",
+          "performance-benchmarker",
+          "reports",
+          "test-results-analyzer",
+          "tool-evaluator",
+          "trend-researcher"
+        ]
+      },
+      {
+        "action": "reports.teams_activity",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "ai-engineer",
+          "analytics-reporter",
+          "api-tester",
+          "devops-automator",
+          "experiment-tracker",
+          "growth-hacker",
+          "performance-benchmarker",
+          "reports",
+          "tool-evaluator",
+          "trend-researcher",
+          "workflow-optimizer"
+        ]
+      },
+      {
+        "action": "reports.email_activity",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "analytics-reporter",
+          "api-tester",
+          "devops-automator",
+          "growth-hacker",
+          "performance-benchmarker",
+          "reports",
+          "workflow-optimizer"
+        ]
+      },
+      {
+        "action": "reports.sharepoint_usage",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "analytics-reporter",
+          "api-tester",
+          "performance-benchmarker",
+          "reports",
+          "workflow-optimizer"
+        ]
+      },
+      {
+        "action": "reports.onedrive_usage",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "analytics-reporter",
+          "api-tester",
+          "performance-benchmarker",
+          "reports"
+        ]
+      },
+      {
+        "action": "health.overview",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "api-tester",
+          "devops-automator",
+          "service-health"
+        ]
+      },
+      {
+        "action": "health.issues",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "api-tester",
+          "devops-automator",
+          "service-health"
+        ]
+      },
+      {
+        "action": "health.issue_get",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "api-tester",
+          "devops-automator",
+          "service-health"
+        ]
+      },
+      {
+        "action": "client.follow-up",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "client-relationship-agent",
+          "support-responder"
+        ]
+      },
+      {
+        "action": "satisfaction.survey",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "client-relationship-agent",
+          "support-responder"
+        ]
+      },
+      {
+        "action": "feedback.analyze",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "client-relationship-agent",
+          "support-responder"
+        ]
+      },
+      {
+        "action": "compliance.check",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "compliance-monitoring-agent",
+          "legal-compliance-checker"
+        ]
+      },
+      {
+        "action": "health.messages",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "devops-automator",
+          "service-health"
+        ]
+      },
+      {
+        "action": "mail.reply",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "email-processing-agent",
+          "support-responder"
+        ]
+      },
+      {
+        "action": "teams.list",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "experiment-tracker",
+          "mobile-app-builder",
+          "rapid-prototyper",
+          "sprint-prioritizer",
+          "studio-producer",
+          "teams-manager"
+        ]
+      },
+      {
+        "action": "teams.create",
+        "statuses": [
+          "dead-routed",
+          "mapped"
+        ],
+        "owners": [
+          "m365-administrator",
+          "teams-manager"
+        ]
+      },
+      {
+        "action": "task.create",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "project-coordination-agent",
+          "project-shipper"
+        ]
+      },
+      {
+        "action": "task.assign",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "project-coordination-agent",
+          "project-shipper"
+        ]
+      },
+      {
+        "action": "deadline.track",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "project-coordination-agent",
+          "project-shipper"
+        ]
+      },
+      {
+        "action": "status.update",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "project-coordination-agent",
+          "project-shipper"
+        ]
+      },
+      {
+        "action": "report.generate",
+        "statuses": [
+          "dead-routed",
+          "legacy-stubbed"
+        ],
+        "owners": [
+          "project-coordination-agent",
+          "project-shipper"
+        ]
+      }
+    ],
+    "legacy_stubbed_unique_actions": [
+      "alerts.respond",
+      "archive-project",
+      "audit.prepare",
+      "backup.restore",
+      "backup.verify",
+      "budget.track",
+      "candidate.screen",
+      "cdn.purge",
+      "client.follow-up",
+      "compliance.check",
+      "conflict.resolve",
+      "content.curate",
+      "deadline.track",
+      "deprovision-client-services",
+      "dns.update",
+      "document.index",
+      "email.classify",
+      "engagement.plan",
+      "expense.approve",
+      "expert.connect",
+      "feedback.analyze",
+      "feedback.collect",
+      "follow-up.schedule",
+      "forecast.update",
+      "get-client-status",
+      "infrastructure.monitor",
+      "interview.schedule",
+      "invoice.process",
+      "offer.prepare",
+      "onboarding.initiate",
+      "performance.optimize",
+      "policy.validate",
+      "relationship.score",
+      "remediation.plan",
+      "reminder.send",
+      "report.generate",
+      "satisfaction.survey",
+      "search.optimize",
+      "security.scan",
+      "ssl.renew",
+      "status.update",
+      "system.health-check",
+      "task.assign",
+      "task.create",
+      "training.recommend",
+      "update-project-status",
+      "violation.report",
+      "website.deploy"
+    ],
+    "dead_routed_unique_actions": [
+      "analytics.read",
+      "campaign.create",
+      "content.create",
+      "content.update",
+      "create_bucket",
+      "create_plan",
+      "create_task",
+      "deployment.production",
+      "email.schedule",
+      "email.send_bulk",
+      "employee.offboard",
+      "employee.update_info",
+      "followup.create",
+      "list_buckets",
+      "list_plans",
+      "meeting.schedule",
+      "policy.create",
+      "review.initiate",
+      "seo.update",
+      "sites.provision",
+      "teams.add_channel"
+    ],
+    "orphaned_unique_actions": [],
+    "reverse_direct_orphans_total": 84,
+    "reverse_direct_orphans": [
+      "add_external_group_member",
+      "create_access_review",
+      "create_approval_item",
+      "create_contact",
+      "create_document",
+      "create_ediscovery_case",
+      "create_ediscovery_case_search",
+      "create_external_connection",
+      "create_external_group",
+      "create_plan_bucket",
+      "create_plan_task",
+      "create_presentation",
+      "create_workbook",
+      "delete_contact",
+      "delete_flow",
+      "delete_powerapp",
+      "disable_flow",
+      "enable_flow",
+      "get_access_review",
+      "get_activity_reports",
+      "get_approval_item",
+      "get_approval_solution",
+      "get_automation_recipe",
+      "get_contact",
+      "get_drive",
+      "get_ediscovery_case",
+      "get_ediscovery_case_search",
+      "get_external_connection",
+      "get_external_item",
+      "get_flow_admin",
+      "get_powerapp_admin",
+      "get_powerapp_environment",
+      "get_powerbi_dashboard",
+      "get_powerbi_dataset",
+      "get_powerbi_report",
+      "get_powerbi_workspace",
+      "get_report",
+      "get_secure_score_profile",
+      "get_usage_reports",
+      "invoke_flow_callback",
+      "list_access_review_decisions",
+      "list_access_reviews",
+      "list_approval_item_requests",
+      "list_approval_items",
+      "list_automation_recipes",
+      "list_contact_folders",
+      "list_contacts",
+      "list_ediscovery_case_custodians",
+      "list_ediscovery_case_legal_holds",
+      "list_ediscovery_case_searches",
+      "list_ediscovery_cases",
+      "list_external_connections",
+      "list_flow_owners",
+      "list_flow_runs",
+      "list_flows_admin",
+      "list_http_flows",
+      "list_plan_buckets",
+      "list_powerapp_environment_role_assignments",
+      "list_powerapp_environments",
+      "list_powerapp_role_assignments",
+      "list_powerapps_admin",
+      "list_powerbi_dashboards",
+      "list_powerbi_dataset_refreshes",
+      "list_powerbi_datasets",
+      "list_powerbi_reports",
+      "list_powerbi_workspaces",
+      "list_risk_detections",
+      "record_access_review_decision",
+      "refresh_powerbi_dataset",
+      "register_external_connection_schema",
+      "remove_flow_owner_role",
+      "remove_powerapp_environment_role_assignment",
+      "remove_powerapp_role_assignment",
+      "respond_to_approval_item",
+      "restore_flow",
+      "set_flow_owner_role",
+      "set_powerapp_environment_role_assignment",
+      "set_powerapp_owner",
+      "update_contact",
+      "update_document",
+      "update_presentation",
+      "update_security_incident",
+      "update_workbook",
+      "upsert_external_item"
+    ],
+    "canonical_crosswalked_unique_actions": [
+      "apps.get",
+      "apps.list",
+      "apps.update",
+      "ca.named_locations",
+      "ca.policies",
+      "ca.policy_create",
+      "ca.policy_delete",
+      "ca.policy_get",
+      "ca.policy_update",
+      "calendar.availability",
+      "calendar.create",
+      "calendar.delete",
+      "calendar.get",
+      "calendar.list",
+      "calendar.update",
+      "channels.create",
+      "channels.list",
+      "devices.actions",
+      "devices.compliance",
+      "devices.get",
+      "devices.list",
+      "directory.domains",
+      "directory.org",
+      "directory.role_members",
+      "directory.roles",
+      "drives.list",
+      "files.create_folder",
+      "files.get",
+      "files.list",
+      "files.upload",
+      "groups.add_member",
+      "groups.create",
+      "groups.get",
+      "groups.list",
+      "groups.list_members",
+      "groups.remove_member",
+      "licenses.assign",
+      "lists.create_item",
+      "lists.get",
+      "lists.items",
+      "lists.list",
+      "mail.delete",
+      "mail.folders",
+      "mail.list",
+      "mail.move",
+      "mail.read",
+      "mail.send",
+      "mailbox.settings",
+      "security.alert_get",
+      "security.alerts",
+      "security.incident_get",
+      "security.incidents",
+      "security.secure_score",
+      "service_principals.list",
+      "sites.get",
+      "teams.get",
+      "users.create",
+      "users.disable",
+      "users.update"
+    ],
+    "real_wrapper_unique_actions": [
+      "add-workspace-members",
+      "admin.audit_log",
+      "admin.get_tenant_config",
+      "admin.get_tier",
+      "admin.get_user_tier",
+      "admin.list_tiers",
+      "admin.list_users",
+      "admin.reload_config",
+      "admin.remove_user_tier",
+      "admin.set_user_tier",
+      "audit.directory",
+      "audit.provisioning",
+      "audit.signins",
+      "availability.check",
+      "calendar.schedule",
+      "channels.send_message",
+      "chat.create",
+      "chat.list",
+      "chat.send",
+      "chat.send_message",
+      "create-channels",
+      "create-project",
+      "create-workspace",
+      "deployment.preview",
+      "email.archive",
+      "email.forward",
+      "email.respond",
+      "email.send_individual",
+      "employee.onboard",
+      "files.search",
+      "files.share",
+      "get-team-status",
+      "health.issue_get",
+      "health.issues",
+      "health.messages",
+      "health.overview",
+      "list-projects",
+      "mail.forward",
+      "mail.reply",
+      "meeting.organize",
+      "provision-client-services",
+      "reports.email_activity",
+      "reports.onedrive_usage",
+      "reports.sharepoint_usage",
+      "reports.teams_activity",
+      "reports.users_active",
+      "security.alert_update",
+      "sites.list",
+      "sites.root",
+      "teams.add_member",
+      "teams.archive",
+      "teams.create",
+      "teams.list",
+      "teams.remove_member",
+      "users.list",
+      "users.read"
+    ]
+  }
+}

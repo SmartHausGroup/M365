@@ -1,0 +1,56 @@
+plan_id: m365-persona-action-p2-second-wave-notebook-evidence-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Complete
+date: '2026-04-07'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p2-second-wave-notebook-evidence-scope-correction:R0
+canonical_predecessor: plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+governance_evidence:
+  notebook: notebooks/m365/INV-M365-CS-persona-action-p2-second-wave-notebook-evidence-scope-correction-v1.ipynb
+  verification: configs/generated/persona_action_p2_second_wave_notebook_evidence_scope_correction_v1_verification.json
+objective: Produce the phase-specific notebook-backed governance evidence required to reopen the second bounded P2 legacy-stub code write.
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phases:
+    - P0
+    - P1
+    - P2S
+  blocked_write_set:
+    - src/ops_adapter/actions.py
+    - tests/test_ops_adapter.py
+  target_aliases:
+    - followup.create
+    - client.follow-up
+    - satisfaction.survey
+    - interview.schedule
+  derived_legacy_stub_backlog:
+    active_pairs: 45
+    unique_aliases: 45
+  blocker:
+    verdict: allowed:false
+    violation: map-2-code-notebook-required
+requirements:
+  - id: R0
+    title: Create the bounded P2T blocker package
+  - id: R1
+    title: Make the bounded second-wave P2 governance blocker explicit
+  - id: R2
+    title: Produce notebook-backed governance evidence for the blocked second-wave P2 write
+  - id: R3
+    title: Expand the admissible future evidence surface to include L91
+  - id: R4
+    title: Reopen the blocked second-wave P2 code-write validation under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and governance trackers truthfully
+  - id: R6
+    title: Commit and push before resuming P2
+child_acts:
+  - id: P2TA
+    description: Freeze the post-wave-1 legacy-stub backlog and exact MCP denial.
+  - id: P2TB
+    description: Produce notebook-backed governance evidence and generated verification output.
+  - id: P2TC
+    description: Reopen the blocked validation, synchronize trackers, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p2-second-wave-notebook-evidence-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p2-second-wave-notebook-evidence-scope-correction-prompt.txt

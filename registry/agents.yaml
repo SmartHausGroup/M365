@@ -79,16 +79,18 @@ agents:
     department: operations
     risk_tier: medium
     allowed_actions:
-    - deployment.preview
-    - deployment.production
-    - content.update
-    - content.create
-    - analytics.read
-    - seo.update
-    approval_rules:
-    - action: deployment.production
-      approvers:
-      - engineering-lead
+    - sites.list
+    - sites.get
+    - lists.list
+    - lists.get
+    - lists.items
+    - lists.create_item
+    - files.list
+    - files.get
+    - files.search
+    - files.create_folder
+    - files.upload
+    - files.share
   hr-generalist:
     name: HR Generalist
     department: hr
@@ -126,18 +128,27 @@ agents:
     department: project-management
     risk_tier: medium
     allowed_actions:
-    - create-project
-    - list-projects
-    - update-project-status
+    - teams.list
+    - teams.get
+    - channels.list
+    - calendar.list
+    - calendar.create
+    - calendar.get
+    - sites.list
+    - lists.list
+    - lists.items
     - archive-project
   platform-manager:
     name: Platform Manager
     department: operations
     risk_tier: medium
     allowed_actions:
-    - provision-client-services
-    - deprovision-client-services
-    - get-client-status
+    - sites.provision
+    - sites.list
+    - apps.list
+    - apps.get
+    - service_principals.list
+    - directory.org
   teams-manager:
     name: Teams Manager
     department: collaboration

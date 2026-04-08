@@ -1,0 +1,7 @@
+Follow `docs/prompts/codex-m365-direct-full-surface-certification.md`.
+
+Plan reference: `plan:m365-direct-full-surface-certification`.
+
+This program is approved to start. Stay on the current branch, call MCP `validate_action` before any mutating action, execute the phases in order, and stop on first red that escapes the allowlist or requires UCP-side work.
+
+The target is not partial readiness. The target is a truthfully certified direct M365 support matrix for the repo-local runtime.

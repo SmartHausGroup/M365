@@ -1,0 +1,25 @@
+{
+  "status": "green",
+  "lemma_id": "L89_m365_persona_action_dead_route_remediation_v1",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {
+    "enabled": true,
+    "seed": 0,
+    "mode": "deterministic-static"
+  },
+  "invariants": [
+    {
+      "id": "dead-route-backlog-frozen",
+      "status": "pass"
+    },
+    {
+      "id": "initial-write-set-frozen",
+      "status": "pass"
+    },
+    {
+      "id": "repair-truth-function-explicit",
+      "status": "pass"
+    }
+  ],
+  "determinism_certification": "green"
+}

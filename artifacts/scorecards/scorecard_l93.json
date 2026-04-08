@@ -1,0 +1,11 @@
+{
+  "lemma_id": "L93_m365_persona_action_legacy_stub_remediation_v4",
+  "status": "green",
+  "determinism_certified": true,
+  "target_aliases": [
+    "task.assign",
+    "deadline.track",
+    "status.update",
+    "report.generate"
+  ]
+}

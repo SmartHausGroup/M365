@@ -1,0 +1,95 @@
+plan_id: m365-persona-action-p1-notebook-evidence-scope-correction
+parent_plan_id: m365-persona-action-full-support-remediation
+status: Active
+date: '2026-04-07'
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-persona-action-p1-notebook-evidence-scope-correction:R0
+canonical_predecessor: plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+governance_evidence:
+  notebook: notebooks/m365/INV-M365-CO-persona-action-p1-notebook-evidence-scope-correction-v1.ipynb
+  verification: configs/generated/persona_action_p1_notebook_evidence_scope_correction_v1_verification.json
+draft_vs_active_semantics: Draft until the parent initiative remains on P1, the approval packet receives explicit go, and no sibling phase is concurrently active
+approval_governance_gates:
+  - present approval packet first
+  - wait for explicit go
+  - call MCP validate_action before every mutating action and obey the verdict
+  - stop on first red
+  - do not auto-advance to P2
+notebook_first_discipline: All P1 blocker claims and governance-unblock claims must be frozen in notebooks before dead-route code repair is re-opened
+objective: Produce the phase-specific notebook-backed governance evidence required to reopen the first P1 dead-route code write
+current_state:
+  parent_plan: plan:m365-persona-action-full-support-remediation
+  completed_parent_phase: P0
+  blocked_write_set:
+    - src/ops_adapter/actions.py
+    - src/smarthaus_common/permission_enforcer.py
+    - policies/ops.rego
+    - tests/test_ops_adapter.py
+    - tests/test_policies.py
+    - tests/test_executor_routing_v2.py
+  certified_dead_route_backlog:
+    active_pairs: 116
+    unique_aliases: 21
+  blocker:
+    verdict: allowed:false
+    violation: map-2-code-notebook-required
+scope:
+  in:
+    - Restate the P1 blocker from certification and MCP truth.
+    - Create phase-specific notebook-backed governance evidence for the blocked P1 write.
+    - Create generated verification output for that evidence.
+    - Expand the admissible future evidence surface to include the L89 dead-route notebook chain.
+    - Synchronize the parent plan and governance trackers while P1S is active.
+    - Reopen the blocked P1 code-write validation under child-plan authority.
+  out:
+    - Actual P1 dead-route code remediation.
+    - P2 legacy-stub remediation.
+    - P3 permission and alias remediation.
+    - P4 policy-fence remediation.
+    - Runtime code, registry, or test extraction beyond the blocker evidence package.
+allowlist:
+  - plans/m365-persona-action-p1-notebook-evidence-scope-correction/**
+  - docs/prompts/codex-m365-persona-action-p1-notebook-evidence-scope-correction.md
+  - docs/prompts/codex-m365-persona-action-p1-notebook-evidence-scope-correction-prompt.txt
+  - plans/m365-persona-action-full-support-remediation/m365-persona-action-full-support-remediation.md
+  - notebooks/m365/INV-M365-CO-persona-action-p1-notebook-evidence-scope-correction-v1.ipynb
+  - configs/generated/persona_action_p1_notebook_evidence_scope_correction_v1_verification.json
+  - docs/ma/lemmas/L89_m365_persona_action_dead_route_remediation_v1.md
+  - invariants/lemmas/L89_m365_persona_action_dead_route_remediation_v1.yaml
+  - notebooks/m365/INV-M365-CP-persona-action-dead-route-remediation-v1.ipynb
+  - notebooks/lemma_proofs/L89_m365_persona_action_dead_route_remediation_v1.ipynb
+  - artifacts/scorecards/scorecard_l89.json
+  - configs/generated/persona_action_dead_route_remediation_v1_verification.json
+  - Operations/EXECUTION_PLAN.md
+  - Operations/ACTION_LOG.md
+  - Operations/PROJECT_FILE_INDEX.md
+denylist:
+  - registry/**
+  - src/**
+  - tests/**
+  - ../UCP/**
+requirements:
+  - id: R0
+    title: Create the bounded P1S blocker package
+  - id: R1
+    title: Make the P1 governance blocker explicit
+  - id: R2
+    title: Produce notebook-backed governance evidence for the blocked P1 write
+  - id: R3
+    title: Expand the admissible future evidence surface to include L89
+  - id: R4
+    title: Reopen the blocked P1 code-write validation under child-plan authority
+  - id: R5
+    title: Synchronize the parent plan and governance trackers truthfully
+  - id: R6
+    title: Commit and push before resuming P1
+child_acts:
+  - id: P1SA
+    description: Freeze the certified dead-route backlog and exact MCP denial.
+  - id: P1SB
+    description: Produce notebook-backed governance evidence and generated verification output.
+  - id: P1SC
+    description: Reopen the blocked validation, synchronize trackers, validate, commit, and push.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-persona-action-p1-notebook-evidence-scope-correction.md
+  kickoff: docs/prompts/codex-m365-persona-action-p1-notebook-evidence-scope-correction-prompt.txt

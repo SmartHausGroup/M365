@@ -1,0 +1,13 @@
+{
+  "plan_id": "m365-persona-action-p2-fifth-wave-notebook-evidence-scope-correction",
+  "status": "green",
+  "target_aliases": [
+    "infrastructure.monitor",
+    "backup.verify",
+    "security.scan"
+  ],
+  "legacy_stub_backlog": {
+    "active_pairs": 28,
+    "unique_aliases": 34
+  }
+}

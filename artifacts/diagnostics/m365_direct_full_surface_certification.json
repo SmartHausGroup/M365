@@ -1,0 +1,582 @@
+{
+  "plan_id": "plan:m365-direct-full-surface-certification",
+  "phase": "F4",
+  "status": "complete",
+  "counts": {
+    "agents_total": 59,
+    "instruction_surface_total": 155,
+    "persona_alias_surface_total": 184,
+    "capability_surface_total": 340,
+    "canonical_crosswalk_total": 146,
+    "instruction_actions_mapped_to_canonical": 146,
+    "persona_aliases_mapped_to_canonical": 59,
+    "capability_actions_mapped_to_canonical": 146
+  },
+  "legacy_direct_actions_without_crosswalk": [
+    "add_channel",
+    "create_site",
+    "create_team",
+    "get_user",
+    "list_sites",
+    "list_teams",
+    "list_users",
+    "provision_service",
+    "reset_user_password"
+  ],
+  "persona_aliases_without_crosswalk_total": 125,
+  "persona_aliases_without_crosswalk_sample": [
+    "add-workspace-members",
+    "admin.audit_log",
+    "admin.get_tenant_config",
+    "admin.get_tier",
+    "admin.get_user_tier",
+    "admin.list_tiers",
+    "admin.list_users",
+    "admin.reload_config",
+    "admin.remove_user_tier",
+    "admin.set_user_tier",
+    "alerts.respond",
+    "analytics.read",
+    "archive-project",
+    "audit.directory",
+    "audit.prepare",
+    "audit.provisioning",
+    "audit.signins",
+    "availability.check",
+    "backup.restore",
+    "backup.verify",
+    "budget.track",
+    "calendar.schedule",
+    "campaign.create",
+    "candidate.screen",
+    "cdn.purge",
+    "channels.send_message",
+    "chat.create",
+    "chat.list",
+    "chat.send",
+    "chat.send_message",
+    "client.follow-up",
+    "compliance.check",
+    "conflict.resolve",
+    "content.create",
+    "content.curate",
+    "content.update",
+    "create-channels",
+    "create-project",
+    "create-workspace",
+    "create_bucket",
+    "create_plan",
+    "create_task",
+    "deadline.track",
+    "deployment.preview",
+    "deployment.production",
+    "deprovision-client-services",
+    "dns.update",
+    "document.index",
+    "email.archive",
+    "email.classify",
+    "email.forward",
+    "email.respond",
+    "email.schedule",
+    "email.send_bulk",
+    "email.send_individual",
+    "employee.offboard",
+    "employee.onboard",
+    "employee.update_info",
+    "engagement.plan",
+    "expense.approve",
+    "expert.connect",
+    "feedback.analyze",
+    "feedback.collect",
+    "files.search",
+    "files.share",
+    "follow-up.schedule",
+    "followup.create",
+    "forecast.update",
+    "get-client-status",
+    "get-team-status",
+    "health.issue_get",
+    "health.issues",
+    "health.messages",
+    "health.overview",
+    "infrastructure.monitor",
+    "interview.schedule",
+    "invoice.process",
+    "list-projects",
+    "list_buckets",
+    "list_plans"
+  ],
+  "legacy_stub_inventory": {
+    "stub_agents_total": 8,
+    "stub_actions_total": 41,
+    "by_agent": {
+      "it-operations-manager": [
+        "infrastructure.monitor",
+        "system.health-check",
+        "alerts.respond",
+        "backup.verify",
+        "security.scan"
+      ],
+      "website-operations-specialist": [
+        "website.deploy",
+        "cdn.purge",
+        "dns.update",
+        "ssl.renew",
+        "performance.optimize",
+        "backup.restore"
+      ],
+      "project-coordination-agent": [
+        "task.create",
+        "task.assign",
+        "deadline.track",
+        "status.update",
+        "report.generate"
+      ],
+      "client-relationship-agent": [
+        "client.follow-up",
+        "satisfaction.survey",
+        "feedback.analyze",
+        "relationship.score",
+        "engagement.plan"
+      ],
+      "compliance-monitoring-agent": [
+        "compliance.check",
+        "policy.validate",
+        "audit.prepare",
+        "violation.report",
+        "remediation.plan"
+      ],
+      "recruitment-assistance-agent": [
+        "candidate.screen",
+        "interview.schedule",
+        "feedback.collect",
+        "offer.prepare",
+        "onboarding.initiate"
+      ],
+      "financial-operations-agent": [
+        "invoice.process",
+        "expense.approve",
+        "budget.track",
+        "forecast.update",
+        "audit.prepare"
+      ],
+      "knowledge-management-agent": [
+        "document.index",
+        "search.optimize",
+        "content.curate",
+        "training.recommend",
+        "expert.connect"
+      ]
+    }
+  },
+  "notes": [
+    "The direct repo certification universe is not yet a single surface; it requires the v2 expansion and recipe catalog crosswalk.",
+    "The direct instruction surface still includes nine legacy actions outside the current expansion-backed canonical universe.",
+    "A material subset of persona-facing actions remains legacy stub behavior in src/ops_adapter/actions.py and cannot yet be honestly certified as real M365 execution."
+  ],
+  "f1_enablement": {
+    "status": "complete",
+    "collaboration_executor_roles_added": [
+      "Mail.ReadWrite",
+      "Mail.Send",
+      "Calendars.ReadWrite",
+      "MailboxSettings.ReadWrite",
+      "Contacts.ReadWrite"
+    ],
+    "directory_executor_roles_added": [
+      "Reports.Read.All",
+      "ServiceHealth.Read.All",
+      "ServiceMessage.Read.All"
+    ],
+    "powerplatform_management_app_registered": true,
+    "repo_local_repairs": [
+      "Power Apps client ignores warning-prefixed JSON output",
+      "Power Automate client ignores warning-prefixed JSON output",
+      "Power Automate client treats warning-only stdout as empty data instead of parser failure"
+    ],
+    "live_results": {
+      "list_messages": "pass",
+      "list_events": "pass",
+      "get_schedule": "pass",
+      "health_overview": "pass",
+      "list_powerapp_environments": "pass",
+      "list_flows_admin": "pass"
+    },
+    "notes": [
+      "The powerplatform executor application is now visible on the BusinessAppPlatform adminApplications surface.",
+      "Power Automate admin reads currently return a truthful zero-flow result for the default environment rather than failing on warning-only stdout."
+    ]
+  },
+  "f2_read_certification": {
+    "status": "complete",
+    "read_actions_total": 91,
+    "certified_green_total": 45,
+    "fenced_total": 46,
+    "repo_local_repairs": [
+      "GraphClient.list_directory_roles no longer sends unsupported $top to /directoryRoles",
+      "PowerAppsClient treats warning-only PowerShell stdout as empty data for environment role-assignment reads"
+    ],
+    "certified_green_actions": {
+      "identity": [
+        "list_users",
+        "get_user",
+        "list_groups",
+        "get_group",
+        "list_group_members",
+        "list_directory_roles",
+        "list_directory_role_members",
+        "list_domains",
+        "get_organization",
+        "list_applications",
+        "get_application",
+        "list_service_principals"
+      ],
+      "teams_sharepoint": [
+        "list_teams",
+        "get_team",
+        "list_channels",
+        "list_sites",
+        "get_site",
+        "list_site_lists",
+        "get_list",
+        "list_list_items"
+      ],
+      "files": [
+        "list_drives"
+      ],
+      "mail_calendar_contacts": [
+        "list_messages",
+        "get_message",
+        "list_mail_folders",
+        "get_mailbox_settings",
+        "list_events",
+        "get_event",
+        "get_schedule",
+        "list_contacts",
+        "get_contact",
+        "list_contact_folders"
+      ],
+      "reports": [
+        "get_report",
+        "get_usage_reports",
+        "get_activity_reports",
+        "list_powerbi_workspaces"
+      ],
+      "powerplatform": [
+        "list_powerapp_environments",
+        "get_powerapp_environment",
+        "list_powerapp_environment_role_assignments",
+        "list_powerapps_admin",
+        "get_powerapp_admin",
+        "list_powerapp_role_assignments",
+        "list_flows_admin",
+        "list_http_flows"
+      ],
+      "provisioning": [
+        "list_automation_recipes",
+        "get_automation_recipe"
+      ]
+    },
+    "fenced_actions": {
+      "files_no_sample": {
+        "actions": [
+          "get_drive",
+          "list_drive_items",
+          "get_drive_item"
+        ],
+        "reason": "The governed site probe returned zero drives, so dependent drive reads could not be certified."
+      },
+      "planner_permissions": {
+        "actions": [
+          "list_plans",
+          "list_plan_buckets"
+        ],
+        "reason": "The live Planner group-plan probe returns Graph 403: You do not have the required permissions to access this item."
+      },
+      "approvals_auth_mode": {
+        "actions": [
+          "get_approval_solution",
+          "list_approval_items",
+          "get_approval_item",
+          "list_approval_item_requests"
+        ],
+        "reason": "The approvals surface currently requires delegated or hybrid auth mode."
+      },
+      "powerplatform_no_flow_sample": {
+        "actions": [
+          "get_flow_admin",
+          "list_flow_owners",
+          "list_flow_runs"
+        ],
+        "reason": "The certified environment currently returns zero admin-visible flows."
+      },
+      "external_connections_401": {
+        "actions": [
+          "list_external_connections",
+          "get_external_connection",
+          "get_external_item"
+        ],
+        "reason": "The live external-connections probe returns Graph 401 UnknownError."
+      },
+      "devices_permissions": {
+        "actions": [
+          "list_devices",
+          "get_device",
+          "list_device_compliance_summaries"
+        ],
+        "reason": "The current executor token is missing the required Intune application roles."
+      },
+      "identity_security_permissions": {
+        "actions": [
+          "list_conditional_access_policies",
+          "get_conditional_access_policy",
+          "list_named_locations",
+          "list_risk_detections"
+        ],
+        "reason": "The current token is missing the required Conditional Access and Identity Protection scopes."
+      },
+      "security_surface_not_provisioned": {
+        "actions": [
+          "list_security_alerts",
+          "get_security_alert",
+          "list_security_incidents",
+          "get_security_incident",
+          "list_secure_scores",
+          "get_secure_score_profile"
+        ],
+        "reason": "The current tenant and token state is not provisioned for these Microsoft security surfaces, and there is no discoverable secure-score-profile sample."
+      },
+      "access_reviews_retry_path": {
+        "actions": [
+          "list_access_reviews",
+          "get_access_review",
+          "list_access_review_decisions"
+        ],
+        "reason": "The governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window."
+      },
+      "ediscovery_retry_path": {
+        "actions": [
+          "list_ediscovery_cases",
+          "get_ediscovery_case",
+          "list_ediscovery_case_searches",
+          "get_ediscovery_case_search",
+          "list_ediscovery_case_custodians",
+          "list_ediscovery_case_legal_holds"
+        ],
+        "reason": "The governed live probe remained in the Graph retry/backoff path and did not resolve within the probe window."
+      },
+      "powerbi_no_workspace_sample": {
+        "actions": [
+          "get_powerbi_workspace",
+          "list_powerbi_datasets",
+          "get_powerbi_dataset",
+          "list_powerbi_dataset_refreshes",
+          "list_powerbi_reports",
+          "get_powerbi_report",
+          "list_powerbi_dashboards",
+          "get_powerbi_dashboard"
+        ],
+        "reason": "The certified tenant probe returned zero Power BI workspaces, so dependent Power BI reads could not be certified."
+      },
+      "misclassified_mutation": {
+        "actions": [
+          "refresh_powerbi_dataset"
+        ],
+        "reason": "This is a mutating action and is explicitly fenced out of F2 read certification."
+      }
+    }
+  },
+  "f3_mutation_approval_certification": {
+    "status": "complete",
+    "bounded_actions_evaluated_total": 25,
+    "live_execute_green_total": 19,
+    "approval_boundary_green_total": 2,
+    "actor_tier_boundary_green_total": 1,
+    "fenced_total": 3,
+    "repo_local_repairs": [],
+    "notes": [
+      "F3 certified low-risk direct writes by live execution and certified high-impact writes at the pending-approval boundary instead of post-approval live execution.",
+      "The initial red rows in the mail follow-up slice were probe-shape issues rather than repo defects: mailbox settings needed a writable payload and delete_message needed the post-move message id."
+    ],
+    "live_probe_runs": {
+      "mail_calendar_contacts": [
+        "f3-mail-20260406T212930Z",
+        "f3-mail-followup-20260406T213053Z"
+      ],
+      "sharepoint_files": [
+        "f3-files-20260406T213118Z"
+      ],
+      "planner": [
+        "f3-planner-20260406T213145Z"
+      ]
+    },
+    "certified_green_actions": {
+      "mail_calendar_contacts": [
+        "send_mail",
+        "move_message",
+        "delete_message",
+        "update_mailbox_settings",
+        "create_event",
+        "update_event",
+        "delete_event",
+        "create_contact",
+        "update_contact",
+        "delete_contact"
+      ],
+      "sharepoint_files_office": [
+        "create_folder",
+        "upload_file",
+        "create_document",
+        "update_document",
+        "create_workbook",
+        "update_workbook",
+        "create_presentation",
+        "update_presentation",
+        "create_list_item"
+      ]
+    },
+    "approval_boundary_certification": {
+      "actor_tier_denials": {
+        "standard_user": [
+          "users.disable"
+        ]
+      },
+      "pending_approval_actions": [
+        "sites.provision",
+        "ca.policy_create"
+      ],
+      "notes": [
+        "A standard_user actor was denied on users.disable before approval or execution.",
+        "Global-admin requests for sites.provision and ca.policy_create returned pending_approval and persisted approval records with actor, tier, persona, executor, and risk metadata."
+      ]
+    },
+    "fenced_actions": {
+      "planner_permissions": {
+        "actions": [
+          "create_plan",
+          "create_plan_bucket",
+          "create_plan_task"
+        ],
+        "reason": "The live Planner group-plan probe still returns Graph 403: You do not have the required permissions to access this item."
+      }
+    }
+  },
+  "f4_final_support_matrix": {
+    "status": "complete",
+    "direct_instruction_surface_total": 155,
+    "certified_live_green_total": 64,
+    "fenced_total": 91,
+    "certified_live_green_breakdown": {
+      "read_actions": 45,
+      "write_actions": 19
+    },
+    "supplemental_governance_boundary_evidence": {
+      "note": "These proofs validate the governed ops-adapter boundary and are not counted in the 155 direct-instruction action totals.",
+      "actor_tier_denials": {
+        "standard_user": [
+          "users.disable"
+        ]
+      },
+      "pending_approval_actions": [
+        "sites.provision",
+        "ca.policy_create"
+      ]
+    },
+    "fenced_breakdown": {
+      "f2_fenced_reads_total": 46,
+      "f3_fenced_planner_writes_total": 3,
+      "f4_additional_fenced_writes_total": 42,
+      "f4_additional_fenced_write_groups": {
+        "workspace_and_admin_writes_need_post_approval_live_evidence": {
+          "actions": [
+            "add_channel",
+            "create_channel",
+            "create_site",
+            "create_team",
+            "provision_service",
+            "create_user",
+            "update_user",
+            "disable_user",
+            "create_group",
+            "add_group_member",
+            "remove_group_member",
+            "assign_user_license",
+            "update_application",
+            "reset_user_password"
+          ],
+          "reason": "These are high-impact or destructive admin/workspace mutations, and this program certified the governed approval boundary for that class rather than live post-approval execution."
+        },
+        "approvals_auth_mode_mutations": {
+          "actions": [
+            "create_approval_item",
+            "respond_to_approval_item"
+          ],
+          "reason": "The approvals surface currently requires delegated or hybrid auth mode."
+        },
+        "powerplatform_write_mutations_without_live_evidence": {
+          "actions": [
+            "set_flow_owner_role",
+            "remove_flow_owner_role",
+            "enable_flow",
+            "disable_flow",
+            "delete_flow",
+            "restore_flow",
+            "invoke_flow_callback",
+            "set_powerapp_owner",
+            "remove_powerapp_role_assignment",
+            "delete_powerapp",
+            "set_powerapp_environment_role_assignment",
+            "remove_powerapp_environment_role_assignment"
+          ],
+          "reason": "F1 and F2 proved the Power Platform read/admin boundary, but this initiative did not gather bounded live mutation evidence for these write paths."
+        },
+        "access_review_retry_path_mutations": {
+          "actions": [
+            "create_access_review",
+            "record_access_review_decision"
+          ],
+          "reason": "The underlying access-review surface remained in the Graph retry/backoff path during certification."
+        },
+        "external_connection_mutations_not_provisioned": {
+          "actions": [
+            "create_external_connection",
+            "register_external_connection_schema",
+            "upsert_external_item",
+            "create_external_group",
+            "add_external_group_member"
+          ],
+          "reason": "The live external-connections surface returns Graph 401 UnknownError and is not provisioned truthfully for certification."
+        },
+        "identity_security_mutations_missing_execution_scopes": {
+          "actions": [
+            "create_conditional_access_policy",
+            "update_conditional_access_policy",
+            "delete_conditional_access_policy"
+          ],
+          "reason": "The underlying identity-security execution surface still lacks the required scopes for truthful direct execution; only the approval boundary was certified."
+        },
+        "device_and_security_mutations_not_provisioned": {
+          "actions": [
+            "execute_device_action",
+            "update_security_incident"
+          ],
+          "reason": "The device and security execution surfaces are not provisioned in the current tenant/token state."
+        },
+        "ediscovery_retry_path_mutations": {
+          "actions": [
+            "create_ediscovery_case",
+            "create_ediscovery_case_search"
+          ],
+          "reason": "The underlying eDiscovery surface remained in the Graph retry/backoff path during certification."
+        }
+      }
+    },
+    "residual_surface_truth": {
+      "persona_alias_surface_total": 184,
+      "persona_aliases_without_crosswalk_total": 125,
+      "legacy_stub_actions_total": 41,
+      "legacy_stub_agents_total": 8,
+      "note": "The full persona-alias layer is not part of the certified direct support matrix and must not be implied to represent real M365 execution."
+    }
+  }
+}

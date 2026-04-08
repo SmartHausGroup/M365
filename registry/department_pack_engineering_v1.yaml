@@ -1,5 +1,5 @@
 version: 1.0.0
-last_updated: '2026-04-06T12:00:00Z'
+last_updated: '2026-04-07T16:53:23Z'
 authority:
   persona_registry: registry/persona_registry_v2.yaml
   persona_capability_map: registry/persona_capability_map.yaml
@@ -73,7 +73,7 @@ kpis:
   required_active_personas: 8
   required_registry_backed_personas: 8
   required_workflow_families: 4
-  supported_action_count: 65
+  supported_action_count: 68
 personas:
   ai-engineer:
     display_name: Alex Thompson
@@ -283,9 +283,12 @@ personas:
     - architecture_and_integration_design
     - automation_and_release_engineering
     supported_actions:
-    - provision-client-services
-    - deprovision-client-services
-    - get-client-status
+    - sites.provision
+    - sites.list
+    - apps.list
+    - apps.get
+    - service_principals.list
+    - directory.org
 bounded_claims:
   supported:
   - engineering persona census and capability-family contract

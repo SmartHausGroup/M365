@@ -22,7 +22,7 @@ This correction locks the following truth:
 - total personas: `8`
 - active personas: `8`
 - registry-backed personas: `8`
-- supported action count: `65`
+- supported action count: `68`
 - default pack state without queue pressure: `ready`
 - preserved department status taxonomy: `partial-activation`
 
@@ -36,7 +36,7 @@ The Engineering pack contains exactly `8` registry-backed personas:
 - `mobile-app-builder` — Taylor Brown (Mobile Engineer); registry-backed; actions=7
 - `rapid-prototyper` — Ethan Rivera (Prototype Engineer); registry-backed; actions=8
 - `test-writer-fixer` — Grace Lee (Test Engineer); registry-backed; actions=7
-- `platform-manager` — Andre Baptiste (Platform Engineering Manager); registry-backed; actions=3
+- `platform-manager` — Andre Baptiste (Platform Engineering Manager); registry-backed; actions=6
 
 The pack may claim only those personas and their explicit bounded workflows.
 

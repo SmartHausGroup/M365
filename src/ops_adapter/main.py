@@ -39,7 +39,7 @@ from .actions import (
     GraphAPIError,
     build_executor_identity,
     execute,
-    resolve_executor_name_for_action,
+    resolve_execution_target_for_action,
 )
 from .approvals import ApprovalsStore, GraphApprovalsStore
 from .audit import Auditor
@@ -710,7 +710,11 @@ async def actions(
     tenant_config = _require_tenant_context()
     actor_tier = get_user_tier_info(user_email, tenant_config, actor_groups)
     try:
-        executor_name = resolve_executor_name_for_action(canonical_agent, action, tenant_config)
+        executor_name, executor_domain = resolve_execution_target_for_action(
+            canonical_agent,
+            action,
+            tenant_config,
+        )
     except ValueError as exc:
         REQ_COUNT.labels(agent=canonical_agent, action=action, outcome="failed").inc()
         await AUDITOR.log(
@@ -728,7 +732,11 @@ async def actions(
             corr,
         )
         raise HTTPException(500, str(exc)) from exc
-    executor_identity = build_executor_identity(tenant_config, executor_name)
+    executor_identity = build_executor_identity(
+        tenant_config,
+        executor_name,
+        logical_domain=executor_domain,
+    )
     executor_domain = str(executor_identity.get("domain") or "")
     allowed_domains = [str(domain) for domain in (persona.get("allowed_domains") or []) if domain]
     if (
@@ -790,7 +798,7 @@ async def actions(
     params.setdefault("persona", persona)
     params.setdefault("persona_target", agent)
     params.setdefault("executor_name", executor_name)
-    params.setdefault("executor_domain", executor_identity.get("domain"))
+    params.setdefault("executor_domain", executor_domain)
     params.setdefault("executor_identity", executor_identity)
     params.setdefault("tenant", tenant_config.tenant.id)
     governance_resolution = resolve_action_approval_risk(canonical_agent, action, params)

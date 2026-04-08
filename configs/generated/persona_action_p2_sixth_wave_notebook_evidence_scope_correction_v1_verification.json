@@ -1,0 +1,17 @@
+{
+  "plan_id": "m365-persona-action-p2-sixth-wave-notebook-evidence-scope-correction",
+  "status": "green",
+  "target_aliases": [
+    "deployment.production",
+    "website.deploy",
+    "cdn.purge",
+    "dns.update",
+    "ssl.renew",
+    "performance.optimize",
+    "backup.restore"
+  ],
+  "legacy_stub_backlog": {
+    "active_pairs": 25,
+    "unique_aliases": 31
+  }
+}

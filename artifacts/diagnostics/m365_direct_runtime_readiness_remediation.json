@@ -1,0 +1,75 @@
+{
+  "plan_ref": "plan:m365-direct-runtime-readiness-remediation:R5",
+  "status": "complete",
+  "timestamp": "2026-04-06T11:59:12-04:00",
+  "local_repairs": {
+    "provisioning_api_import_boundary": "green",
+    "routing_gap_closed_from_missing_actions": 99,
+    "routing_gap_closed_to_missing_actions": 0,
+    "logical_physical_executor_projection": "green",
+    "focused_pytest": "51 passed"
+  },
+  "live_instruction_surface": {
+    "sharepoint_list_sites": {
+      "status": "success",
+      "classification": "live_repo_runtime_green"
+    },
+    "teams_list_teams": {
+      "status": "success",
+      "classification": "live_repo_runtime_green"
+    },
+    "mail_list_messages": {
+      "status": "failed",
+      "classification": "external_graph_access_denied",
+      "detail": "Graph error 403 ErrorAccessDenied"
+    },
+    "calendar_list_events": {
+      "status": "failed",
+      "classification": "external_graph_access_denied",
+      "detail": "Graph error 403 ErrorAccessDenied"
+    },
+    "powerapps_list_powerapp_environments": {
+      "status": "failed",
+      "classification": "external_local_module_missing",
+      "detail": "Microsoft.PowerApps.Administration.PowerShell not installed locally"
+    }
+  },
+  "live_ops_adapter_surface": {
+    "ucp_administrator_admin_get_tenant_config": {
+      "status": "success",
+      "classification": "live_repo_runtime_green"
+    },
+    "teams_manager_teams_list": {
+      "status": "success",
+      "classification": "live_repo_runtime_green"
+    },
+    "m365_administrator_sites_get": {
+      "status": "success",
+      "classification": "live_repo_runtime_green"
+    },
+    "service_health_overview": {
+      "status": "failed",
+      "classification": "external_graph_unknown_error",
+      "detail": "Graph returned UnknownError for service-health overview"
+    },
+    "email_processing_mail_list": {
+      "status": "failed",
+      "classification": "external_graph_access_denied",
+      "detail": "Graph error 403 ErrorAccessDenied"
+    },
+    "calendar_management_availability": {
+      "status": "failed",
+      "classification": "external_graph_access_denied",
+      "detail": "Graph error 403 ErrorAccessDenied"
+    }
+  },
+  "closeout_truth": {
+    "repo_runtime_is_direct_testable": true,
+    "remaining_local_runtime_blockers": [],
+    "remaining_external_prerequisites": [
+      "mail_and_calendar_permissions",
+      "power_apps_power_automate_powershell_modules",
+      "service_health_graph_surface"
+    ]
+  }
+}
