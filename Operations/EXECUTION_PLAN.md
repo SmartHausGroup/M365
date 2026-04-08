@@ -715,3 +715,18 @@ outside this repo slice.
 
 **Status update (2026-04-08 08:32 EDT):** Created the governed merge-to-`development` package and prompt pair for the completed persona-action full-support remediation branch. The bounded source branch head at package creation is `ce652dc`; the target `origin/development` head at package creation is `8dfa986`. No merge, `development` commit, or promotion work has been executed in this slice. The merge must preserve the final post-`P5` truth of `172` unique aliases / `445` active persona-action pairs, closing at `103 green / 36 approval-gated / 1 actor-tier-gated / 32 fenced` on the unique-alias surface and `360 green / 49 approval-gated / 1 actor-tier-gated / 35 fenced` on the active-pair surface.
 **Status update (2026-04-08 09:05 EDT):** Executed the bounded merge package under `plan:m365-persona-action-full-support-merge-to-development:R1` through `R6`. Replay-merged `codex/m365-persona-action-full-support-remediation @ b02e039` into `development` via explicit merge commit `3894971`, ran the merge-state validation slice (`python3 -m py_compile`, the three department-pack verifiers, focused pytest `163 passed`, `pre-commit run --all-files`, and `git diff --check`), and synchronized the package plus governance trackers to the successful result. `development` is now ready to be pushed and this package stops before any `staging`, `main`, or release-tag action.
+
+## Initiative: M365 Post-Remediation Branch Topology Cleanup
+
+**Initiative:** Delete merged feature-branch debt after the persona-action remediation work is fully integrated into `development`, leaving only the long-lived environment branches.
+
+**Plan:** `plans/m365-post-remediation-branch-topology-cleanup/m365-post-remediation-branch-topology-cleanup.md`
+
+**Reference:** `plan:m365-post-remediation-branch-topology-cleanup:R1`
+
+**Status:** 🟢 Active — the cleanup package exists and the next act is to verify the delete candidates still contain no unique commits beyond `development`, then delete them.
+**Current next act:** `R3` — verify zero unique commits on the approved delete-candidate branches, then execute the bounded local and remote branch cleanup.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-post-remediation-branch-topology-cleanup.md`, `docs/prompts/codex-m365-post-remediation-branch-topology-cleanup-prompt.txt`
+
+**Status update (2026-04-08 09:14 EDT):** Created the governed branch-topology cleanup package for the merged post-remediation branch set. The approved local delete set is `codex/m365-direct-function-validation`, `codex/m365-direct-runtime-readiness-remediation`, `codex/m365-persona-action-certification-plan`, and `codex/m365-persona-action-full-support-remediation`; the approved remote delete set is those four branches plus `origin/codex/m365-token-acquisition-validation` and `origin/feature/m365_personas`. No branch deletion has been executed in this package-creation slice.

@@ -229,6 +229,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-persona-action-full-support-merge-to-development.md` | Detailed prompt used for the bounded merge of `codex/m365-persona-action-full-support-remediation` into `development`. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:m365-persona-action-full-support-merge-to-development:R1` |
 | `docs/prompts/codex-m365-persona-action-full-support-merge-to-development-prompt.txt` | Kickoff prompt for the completed persona-action full-support merge-to-`development` package. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:m365-persona-action-full-support-merge-to-development:R1` |
 
+## Active M365 Post-Remediation Branch Topology Cleanup Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-post-remediation-branch-topology-cleanup/m365-post-remediation-branch-topology-cleanup.md` | Human-readable governed cleanup package for deleting merged post-remediation feature branches and leaving only the long-lived environment branches. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-remediation-branch-topology-cleanup:R1` |
+| `plans/m365-post-remediation-branch-topology-cleanup/m365-post-remediation-branch-topology-cleanup.yaml` | Structured YAML authority for the bounded post-remediation branch-topology cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-post-remediation-branch-topology-cleanup:R1` |
+| `plans/m365-post-remediation-branch-topology-cleanup/m365-post-remediation-branch-topology-cleanup.json` | Structured JSON mirror for automation and governance tooling on the post-remediation branch-topology cleanup package. | `Technical Architecture`, `Policy & Security` | `plan:m365-post-remediation-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-post-remediation-branch-topology-cleanup.md` | Detailed prompt for the bounded deletion of merged post-remediation feature branches. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:m365-post-remediation-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-post-remediation-branch-topology-cleanup-prompt.txt` | Kickoff prompt for the post-remediation branch-topology cleanup package. | `Operational Model: Self-Service & Self-Sufficient`, `Policy & Security` | `plan:m365-post-remediation-branch-topology-cleanup:R1` |
+
 ## Active E0B Workload-Universe Inventory Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

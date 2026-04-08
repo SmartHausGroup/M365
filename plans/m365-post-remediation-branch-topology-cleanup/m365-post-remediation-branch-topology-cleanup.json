@@ -1,0 +1,118 @@
+{
+  "plan_id": "plan:m365-post-remediation-branch-topology-cleanup",
+  "parent_plan_id": "plan:m365-persona-action-full-support-merge-to-development",
+  "title": "Clean up merged post-remediation feature-branch debt",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "SmartHaus",
+  "date_created": "2026-04-08",
+  "date_updated": "2026-04-08",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Post-Remediation Branch Topology Cleanup",
+  "domain": "governance",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "keep the repo auditable and reviewable by removing stale merged feature branches",
+      "preserve only long-lived environment branches as the active topology",
+      "fail closed if any delete candidate contains unique work"
+    ],
+    "anti_alignment": [
+      "Does NOT delete development, staging, or main.",
+      "Does NOT change product/runtime behavior.",
+      "Does NOT delete any branch with commits not already reachable from development."
+    ]
+  },
+  "current_state": {
+    "keep_set": [
+      "development",
+      "staging",
+      "main"
+    ],
+    "delete_local": [
+      "codex/m365-direct-function-validation",
+      "codex/m365-direct-runtime-readiness-remediation",
+      "codex/m365-persona-action-certification-plan",
+      "codex/m365-persona-action-full-support-remediation"
+    ],
+    "delete_remote": [
+      "origin/codex/m365-direct-function-validation",
+      "origin/codex/m365-direct-runtime-readiness-remediation",
+      "origin/codex/m365-persona-action-certification-plan",
+      "origin/codex/m365-persona-action-full-support-remediation",
+      "origin/codex/m365-token-acquisition-validation",
+      "origin/feature/m365_personas"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "delete the four local codex/* feature branches",
+      "delete the six remote stale feature branches",
+      "leave only development, staging, and main locally and on origin where applicable"
+    ],
+    "intent_verification": "R1 through R6 capture the bounded branch-topology cleanup required to remove merged feature-branch debt safely."
+  },
+  "scope": {
+    "in_scope": [
+      "create the cleanup package and prompt pair",
+      "verify every delete candidate has zero unique commits beyond development",
+      "delete the scoped local feature branches",
+      "delete the scoped remote feature branches",
+      "update governance trackers"
+    ],
+    "out_of_scope": [
+      "deleting development, staging, or main",
+      "product/runtime code changes",
+      "any deletion of branches with unique unmerged work"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R1",
+      "description": "Create the cleanup plan triplet and prompt pair."
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R2",
+      "description": "Record the keep set and the approved local and remote delete sets."
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R3",
+      "description": "Prove every delete-candidate branch has zero unique commits beyond development."
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R4",
+      "description": "Delete the four scoped local feature branches."
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R5",
+      "description": "Delete the six scoped remote feature branches."
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-post-remediation-branch-topology-cleanup:R6",
+      "description": "Synchronize governance tracking and leave only the long-lived environment branches active."
+    }
+  ],
+  "validation": {
+    "commands": [
+      "git status --short --branch",
+      "git branch --format='%(refname:short)'",
+      "git branch -r --format='%(refname:short)'",
+      "git rev-list --left-right --count development...<branch>",
+      "pre-commit run --all-files",
+      "git diff --check"
+    ]
+  },
+  "execution_status": {
+    "summary": [
+      "R1 begins with package creation only.",
+      "No branch deletions have been executed in this package-creation slice."
+    ]
+  }
+}

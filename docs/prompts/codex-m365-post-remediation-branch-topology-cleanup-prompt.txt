@@ -1,0 +1,11 @@
+Execute the governed package at `docs/prompts/codex-m365-post-remediation-branch-topology-cleanup.md`.
+
+Plan Reference: `plan:m365-post-remediation-branch-topology-cleanup`
+
+Read `AGENTS.md` first, then `Operations/NORTHSTAR.md`,
+`Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`,
+`Operations/PROJECT_FILE_INDEX.md`, and
+`plans/m365-post-remediation-branch-topology-cleanup/m365-post-remediation-branch-topology-cleanup.md`.
+
+This package deletes only the explicitly scoped merged feature branches and leaves
+only `development`, `staging`, and `main` as the active branch set.
