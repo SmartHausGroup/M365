@@ -75,6 +75,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `get_site` | Get a SharePoint site by id | No | `siteId` or `site_id` or `id` |
 | `list_site_lists` | List SharePoint lists for a site | No | `siteId` or `site_id` or `id`, `top?` |
 | `get_list` | Get a SharePoint list by site and list id | No | `siteId` or `site_id`, `listId` or `list_id` or `id` |
+| `create_list` | Create a SharePoint tracker or generic list | Yes | `siteId` or `site_id`, `displayName` or `display_name` or `name` or `title`, `columns?` |
 | `list_list_items` | List SharePoint list items | No | `siteId` or `site_id`, `listId` or `list_id` or `id`, `top?` |
 | `create_list_item` | Create a SharePoint list item | Yes | `siteId` or `site_id`, `listId` or `list_id` or `id`, `fields` |
 | `list_drives` | List drives for a site, group, user, or delegated self context | No | `groupId?`, `siteId?`, `userId?`, `userPrincipalName?`, `top?` |
@@ -101,6 +102,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 | `delete_flow` | Soft-delete a Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
 | `restore_flow` | Restore a soft-deleted Power Automate flow | Yes | `environmentName` or `environment_name` or `environment`, `flowName` or `flow_name` or `flowId` or `flow_id` or `id` |
 | `invoke_flow_callback` | Invoke a Power Automate HTTP callback URL with a bounded payload | Yes | `callbackUrl` or `callback_url` or `url`, `body?` or `payload?`, `headers?`, `timeoutSeconds?` |
+| `provision_team_status_workflow` | Provision a recurring meeting, tracker list, Friday reminder flow, and weekly digest flow | Yes | `siteId` or `site_id`, organizer user context, `recipients`, `meetingStart`, `meetingEnd`, `meetingSubject?`, `workflowName?`, `trackerListName?`, `timeZone?`, reminder/digest schedule overrides? |
 | `list_powerapps_admin` | List Power Apps as admin across environments or within a specific environment | No | `environmentName?` or `environment_name?` or `environment?`, `owner?`, `filter?`, `top?` |
 | `get_powerapp_admin` | Get a Power App as admin | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id` |
 | `list_powerapp_role_assignments` | List Power App role assignments for an app | No | `environmentName` or `environment_name` or `environment`, `appName` or `app_name` or `appId` or `app_id` or `id`, `userId?` |
@@ -233,6 +235,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **get_site:** `{ "site": { ... } }`
 - **list_site_lists:** `{ "lists": [ ... ], "count": N }`
 - **get_list:** `{ "list": { ... } }`
+- **create_list:** `{ "list": { ... }, "status": "created" }`
 - **list_list_items:** `{ "items": [ ... ], "count": N }`
 - **create_list_item:** `{ "item": { ... }, "status": "created" }`
 - **list_drives:** `{ "drives": [ ... ], "count": N }`
@@ -259,6 +262,7 @@ This document is the **single contract** for TAI → CAIO → M365. CAIO calls t
 - **delete_flow:** `{ "flowName": "<name>", "status": "deleted" }`
 - **restore_flow:** `{ "flowName": "<name>", "status": "restored" }`
 - **invoke_flow_callback:** `{ "invoked": true, "status_code": 2xx, "response": { ... } | "<text>" }`
+- **provision_team_status_workflow:** `{ "status": "provisioned", "environment": { ... }, "site": { ... }, "tracker_list": { ... }, "meeting": { ... }, "reminder_flow": { ... }, "digest_flow": { ... } }`
 - **list_powerapps_admin:** `{ "apps": [ ... ], "count": N }`
 - **get_powerapp_admin:** `{ "app": { ... } }`
 - **list_powerapp_role_assignments:** `{ "roles": [ ... ], "count": N }`

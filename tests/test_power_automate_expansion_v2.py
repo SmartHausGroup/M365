@@ -16,7 +16,7 @@ from smarthaus_common.executor_routing import (
     reload_executor_routing_registry,
 )
 from smarthaus_common.power_automate_client import PowerAutomateClient
-from smarthaus_common.tenant_config import AzureConfig, TenantConfig
+from smarthaus_common.tenant_config import AzureConfig, TenantConfig, TenantIdentity
 
 
 @pytest.fixture(autouse=True)
@@ -230,6 +230,40 @@ def test_e3a_power_automate_client_treats_warning_only_stdout_as_empty(
     payload = client.list_flows_admin("Default-Env")
 
     assert payload == []
+
+
+def test_e3a_operator_access_token_prefers_azure_tenant_id_over_slug(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    class _Proc:
+        returncode = 0
+        stdout = '{"accessToken":"token"}'
+        stderr = ""
+
+    def _fake_run(args: list[str], **kwargs: Any) -> _Proc:
+        captured["args"] = args
+        return _Proc()
+
+    monkeypatch.setattr("shutil.which", lambda _name: "/usr/bin/az")
+    monkeypatch.setattr("subprocess.run", _fake_run)
+
+    client = PowerAutomateClient(
+        tenant_config=TenantConfig(
+            tenant=TenantIdentity(id="smarthaus", domain="smarthausgroup.com"),
+            azure=AzureConfig(
+                tenant_id="6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+                client_id="client-id",
+                client_secret="secret",
+            ),
+        )
+    )
+
+    token = client._operator_access_token()
+
+    assert token == "token"
+    assert captured["args"][-2:] == ["--tenant", "6c4cb441-342c-430f-9a9d-79c3cdb18b75"]
 
 
 def test_e3a_invoke_flow_callback_returns_response(monkeypatch: pytest.MonkeyPatch) -> None:

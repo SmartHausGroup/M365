@@ -1,0 +1,108 @@
+{
+  "plan_id": "plan:m365-team-status-workflow-enablement",
+  "parent_plan_id": "plan:m365-power-platform-executor-auth-remediation",
+  "title": "Enable a real weekly team status workflow across Teams, SharePoint, Outlook, and Power Automate",
+  "version": "1.0",
+  "status": "complete",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-08",
+  "date_updated": "2026-04-08",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Team Status Workflow Enablement",
+  "domain": "infrastructure",
+  "math_algorithm_scope": false,
+  "governance_evidence": {
+    "notebook_path": "notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb",
+    "verification_path": "configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json"
+  },
+  "objective": "Make the direct repo runtime able to provision a recurring team meeting, shared progress tracker, Friday reminder automation, and weekly digest automation through the M365-only stack.",
+  "decision_rule": {
+    "weekly_status_workflow_ready": "EnvironmentAccessible AND TrackerProvisioning AND FlowProvisioning AND ScenarioValidation",
+    "environment_accessible": "VisiblePowerPlatformEnvironment(runtime_identity) AND ConnectorBaselineKnown",
+    "tracker_provisioning": "CreateListSupported AND ListSchemaLocked",
+    "flow_provisioning": "ReminderFlowProvisionable AND DigestFlowProvisionable",
+    "scenario_validation": "RecurringMeetingCreated AND TrackerCreated AND ReminderFlowLive AND DigestFlowLive",
+    "go": "WeeklyStatusWorkflowReady AND ScenarioValidation"
+  },
+  "scope": {
+    "in_scope": [
+      "governed plan package activation",
+      "Power Platform environment accessibility repair",
+      "tenant-generic Power Platform executor credential model repair",
+      "SharePoint tracker creation surface completion",
+      "bounded workflow provisioning path",
+      "deterministic workflow contract",
+      "live reference workflow provisioning and validation",
+      "truthful diagnostics and closeout"
+    ],
+    "out_of_scope": [
+      "UCP packaging or marketplace work",
+      "unrestricted generic workflow-engine claims",
+      "committing secrets or private keys"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R0",
+      "ref": "plan:m365-team-status-workflow-enablement:R0",
+      "description": "Create the governed package, prompt pair, and tracker activation."
+    },
+    {
+      "id": "R1",
+      "ref": "plan:m365-team-status-workflow-enablement:R1",
+      "description": "Repair Power Platform environment accessibility for the runtime identity."
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-team-status-workflow-enablement:R2",
+      "description": "Add the missing repo provisioning surfaces for tracker and workflow setup, including tenant-generic Power Platform credential resolution."
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-team-status-workflow-enablement:R3",
+      "description": "Freeze the deterministic workflow contract and template inputs."
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-team-status-workflow-enablement:R4",
+      "description": "Provision the live reference workflow."
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-team-status-workflow-enablement:R5",
+      "description": "Validate the workflow end-to-end through the repo."
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-team-status-workflow-enablement:R6",
+      "description": "Publish truthful diagnostics and closeout."
+    }
+  ],
+  "execution_order": ["R0", "R1", "R2", "R3", "R4", "R5", "R6"],
+  "validation": {
+    "focused_tests": [
+      "focused pytest for any new tracker/workflow surfaces",
+      "focused pytest for Power Platform tenant-config resolution changes"
+    ],
+    "live_probes": [
+      "Power Platform environment visibility",
+      "SharePoint tracker creation",
+      "recurring meeting creation",
+      "reminder and digest workflow visibility"
+    ],
+    "hard_gates": [
+      "pre-commit run --all-files",
+      "git diff --check"
+    ]
+  },
+  "execution_status": {
+    "r0_complete": true,
+    "r1_complete": true,
+    "r2_complete": true,
+    "r3_complete": true,
+    "r4_complete": true,
+    "r5_complete": true,
+    "r6_complete": true,
+    "next_act": "none"
+  }
+}

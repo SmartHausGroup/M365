@@ -202,3 +202,29 @@ recipes:
         action: send_mail
         workload: messaging
         purpose: Notify the stakeholders.
+  - recipeId: weekly_team_status_workflow
+    title: Weekly team status workflow
+    summary: Provision a recurring Teams meeting, SharePoint tracker list, Friday reminder, and weekly digest for one team operating loop.
+    departments: [operations, project-management]
+    primaryPersonas: [m365-administrator, project-manager]
+    workloads: [sharepoint, messaging, powerplatform]
+    riskClass: high
+    approvalProfile: high-impact
+    requiredInputs: [siteId, organizerUserPrincipalName, recipients, meetingStart, meetingEnd]
+    steps:
+      - stepId: resolve-site
+        action: get_site
+        workload: sharepoint
+        purpose: Resolve the target SharePoint site.
+      - stepId: create-tracker-list
+        action: create_list
+        workload: sharepoint
+        purpose: Create the team status tracker list.
+      - stepId: create-recurring-meeting
+        action: create_event
+        workload: messaging
+        purpose: Create the recurring weekly Teams meeting.
+      - stepId: provision-status-workflow
+        action: provision_team_status_workflow
+        workload: powerplatform
+        purpose: Provision the Friday reminder and weekly digest automation.

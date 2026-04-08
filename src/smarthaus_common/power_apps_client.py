@@ -11,9 +11,9 @@ from smarthaus_common.errors import AuthConfigurationError, SmarthausError
 from smarthaus_common.tenant_config import TenantConfig, get_tenant_config
 
 _ADMIN_MODULE = "Microsoft.PowerApps.Administration.PowerShell"
-_PW_TENANT_ENV = "SMARTHAUS_PP_TENANT_ID"
-_PW_CLIENT_ID_ENV = "SMARTHAUS_PP_CLIENT_ID"
-_PW_CLIENT_SECRET_ENV = "SMARTHAUS_PP_CLIENT_SECRET"
+_PW_TENANT_ENV = "POWERPLATFORM_TENANT_ID"
+_PW_CLIENT_ID_ENV = "POWERPLATFORM_CLIENT_ID"
+_PW_CLIENT_SECRET_ENV = "POWERPLATFORM_CLIENT_SECRET"
 
 
 def _ps_string(value: str) -> str:

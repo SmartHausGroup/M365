@@ -1,0 +1,114 @@
+{
+  "plan_id": "plan:m365-team-status-workflow-enablement",
+  "phase": "R6",
+  "status": "complete",
+  "objective": "Make the direct repo runtime able to provision a recurring weekly team meeting, shared progress tracker, Friday reminder automation, and weekly digest automation through the M365-only stack.",
+  "r1_environment_accessibility": {
+    "powerplatform_environment_visible": true,
+    "environment": {
+      "name": "Default-6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+      "display_name": "The SmartHaus Group (default)",
+      "is_default": true
+    }
+  },
+  "r2_repo_surface_completion": {
+    "public_create_list_supported": true,
+    "bounded_workflow_provisioning_supported": true,
+    "tenant_generic_powerplatform_model": {
+      "explicit_executor_preferred": true,
+      "generic_env_names_preferred": [
+        "POWERPLATFORM_TENANT_ID",
+        "POWERPLATFORM_CLIENT_ID",
+        "POWERPLATFORM_CLIENT_SECRET",
+        "POWERPLATFORM_CLIENT_CERTIFICATE_PATH",
+        "M365_POWERPLATFORM_TENANT_ID",
+        "M365_POWERPLATFORM_CLIENT_ID",
+        "M365_POWERPLATFORM_CLIENT_SECRET",
+        "M365_POWERPLATFORM_CLIENT_CERTIFICATE_PATH"
+      ],
+      "legacy_compatibility_fallback": [
+        "SMARTHAUS_PP_TENANT_ID",
+        "SMARTHAUS_PP_CLIENT_ID",
+        "SMARTHAUS_PP_CLIENT_SECRET",
+        "SMARTHAUS_PP_CLIENT_CERTIFICATE_PATH",
+        "SMARTHAUS_POWERPLATFORM_TENANT_ID",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_ID",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_SECRET",
+        "SMARTHAUS_POWERPLATFORM_CLIENT_CERTIFICATE_PATH"
+      ],
+      "shared_graph_azure_env_aliases_removed": true
+    }
+  },
+  "r3_contract_lock": {
+    "workflow_contract_locked": true,
+    "meeting_recurrence_locked": true,
+    "tracker_schema_locked": true,
+    "reminder_definition_locked": true,
+    "digest_definition_locked": true
+  },
+  "r4_live_provisioning": {
+    "status": "provisioned",
+    "environment": {
+      "name": "Default-6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+      "display_name": "The SmartHaus Group (default)"
+    },
+    "site": {
+      "display_name": "Founding Team",
+      "web_url": "https://smarthausgroup.sharepoint.com/sites/FoundingTeam"
+    },
+    "tracker_list": {
+      "status": "reused",
+      "id": "582f39f9-d80c-47b6-9e74-24edefaf22f6",
+      "display_name": "Codex Weekly Status Tracker",
+      "web_url": "https://smarthausgroup.sharepoint.com/sites/FoundingTeam/Lists/Codex%20Weekly%20Status%20Tracker"
+    },
+    "meeting": {
+      "status": "created",
+      "subject": "Codex Weekly Status Meeting"
+    },
+    "reminder_flow": {
+      "status": "created",
+      "id": "27f4f6b3-83fe-47f8-ad14-0da29c61302f",
+      "display_name": "Codex Weekly Status - Friday reminder"
+    },
+    "digest_flow": {
+      "status": "created",
+      "id": "4d65d1a1-7295-4733-8418-4d0d8b22b08a",
+      "display_name": "Codex Weekly Status - Weekly digest"
+    }
+  },
+  "r5_validation": {
+    "focused_pytest": {
+      "command": "PYTHONPATH=src .venv/bin/pytest -q tests/test_tenant_config_powerplatform.py tests/test_sharepoint_onedrive_files_expansion_v2.py tests/test_power_automate_expansion_v2.py tests/test_team_status_workflow.py",
+      "result": "21 passed"
+    },
+    "additional_focused_reruns": [
+      "8 passed",
+      "14 passed",
+      "18 passed"
+    ],
+    "compile_checks": true,
+    "live_checks": [
+      "Power Platform environment visibility",
+      "SharePoint tracker provisioning",
+      "recurring meeting creation",
+      "reminder-flow creation",
+      "digest-flow creation"
+    ]
+  },
+  "repo_fixes_applied": [
+    "powerplatform environment selection now supports live admin payload shape",
+    "create_list capability contract updated to Sites.Manage.All",
+    "meeting recurrence payload aligned to Graph event creation shape",
+    "operator access token now prefers Azure tenant GUID over tenant slug",
+    "Power Automate flow definitions now include full workflow schema envelope"
+  ],
+  "closeout": {
+    "workflow_ready": true,
+    "tenant_generic_engine_contract": true,
+    "live_reference_workflow_created": true,
+    "secrets_committed": false,
+    "remaining_boundary": "legacy_smarthaus_pp_env_names_remain_as_local_compatibility_fallback_only"
+  },
+  "next_act": "none"
+}

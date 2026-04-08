@@ -35,6 +35,7 @@ def test_e2c_instruction_schema_includes_sharepoint_files_actions() -> None:
         "get_site",
         "list_site_lists",
         "get_list",
+        "create_list",
         "list_list_items",
         "create_list_item",
         "list_drives",
@@ -49,6 +50,7 @@ def test_e2c_instruction_schema_includes_sharepoint_files_actions() -> None:
 def test_e2c_actions_route_to_sharepoint_and_use_expected_auth() -> None:
     for action, expected_auth in (
         ("get_site", "app_only"),
+        ("create_list", "app_only"),
         ("create_list_item", "app_only"),
         ("list_drives", "hybrid"),
         ("list_drive_items", "hybrid"),
@@ -86,6 +88,14 @@ def test_e2c_instruction_contract_executes_site_and_list_actions(
             assert top == 25
             return [{"id": "list-1", "displayName": "Approvals"}]
 
+        def create_list(
+            self, site_id: str, display_name: str, columns: list[dict[str, Any]] | None = None
+        ) -> dict[str, Any]:
+            assert site_id == "site-123"
+            assert display_name == "Weekly Status Tracker"
+            assert columns == [{"name": "StatusUpdate", "text": {"allowMultipleLines": True}}]
+            return {"id": "list-2", "displayName": display_name}
+
         def create_list_item(
             self, site_id: str, list_id: str, fields: dict[str, Any]
         ) -> dict[str, Any]:
@@ -107,6 +117,15 @@ def test_e2c_instruction_contract_executes_site_and_list_actions(
         params_payload={"siteId": "site-123", "top": 25},
         trace_id="trace-lists",
     )
+    create_list_payload = m365_router.execute_instruction_contract(
+        action="create_list",
+        params_payload={
+            "siteId": "site-123",
+            "displayName": "Weekly Status Tracker",
+            "columns": [{"name": "StatusUpdate", "text": {"allowMultipleLines": True}}],
+        },
+        trace_id="trace-create-list",
+    )
     create_item_payload = m365_router.execute_instruction_contract(
         action="create_list_item",
         params_payload={
@@ -123,6 +142,11 @@ def test_e2c_instruction_contract_executes_site_and_list_actions(
     assert lists_payload["result"] == {
         "lists": [{"id": "list-1", "displayName": "Approvals"}],
         "count": 1,
+    }
+    assert create_list_payload["ok"] is True
+    assert create_list_payload["result"] == {
+        "list": {"id": "list-2", "displayName": "Weekly Status Tracker"},
+        "status": "created",
     }
     assert create_item_payload["ok"] is True
     assert create_item_payload["result"] == {

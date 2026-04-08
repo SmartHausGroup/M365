@@ -1,0 +1,167 @@
+{
+  "plan_id": "plan:m365-power-platform-executor-auth-remediation",
+  "parent_plan_id": "none",
+  "title": "Repair the Power Platform executor identity and credential chain",
+  "version": "1.0",
+  "status": "complete",
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-08",
+  "date_updated": "2026-04-08",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Power Platform Executor Auth Remediation",
+  "domain": "infrastructure",
+  "math_algorithm_scope": false,
+  "governance_evidence": {
+    "notebook_path": "notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb",
+    "verification_path": "configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json"
+  },
+  "objective": "Repair the Power Platform executor identity and credential chain so direct repo Power Apps and Power Automate admin actions authenticate with the correct executor identity, use the canonical credential source, and pass live validation.",
+  "problem_statement": {
+    "live_failure": {
+      "action": "list_powerapp_environments",
+      "date": "2026-04-08",
+      "error_id": "AADSTS7000215",
+      "failing_app_id": "fe34434f-0de8-4807-a239-9ee093d4780c"
+    },
+    "documented_sharepoint_executor_app_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "runtime_drift": {
+      "powerplatform_alias": "sharepoint",
+      "power_apps_credential_source": "tenant_config.azure_or_legacy_graph",
+      "power_automate_credential_source": "tenant_config.azure_or_legacy_graph"
+    }
+  },
+  "decision_rule": {
+    "pp_executor_truth": "DedicatedExecutor(powerplatform) OR ExplicitBootstrapIdentity(powerplatform)",
+    "pp_auth_truth": "PPExecutorTruth AND ValidCredentialMaterial(powerplatform)",
+    "pp_live_read_truth": "list_powerapp_environments succeeds AND (environment_count = 0 OR (list_flows_admin succeeds AND list_http_flows succeeds))",
+    "go": "PPAuthTruth AND PPLiveReadTruth"
+  },
+  "scope": {
+    "in_scope": [
+      "governed remediation package and governance notebook backing",
+      "root-cause audit of Power Platform executor auth drift",
+      "canonical executor identity and credential model",
+      "repo-local runtime hardening for Power Platform auth resolution",
+      "focused tests for Power Platform and tenant config behavior",
+      "live repo-direct Power Platform certification",
+      "truthful closeout docs and diagnostics"
+    ],
+    "out_of_scope": [
+      "UCP runtime changes",
+      "unrelated workload fixes",
+      "committing live secrets or private keys",
+      "fake-green auth claims without live proof"
+    ],
+    "file_allowlist": [
+      "plans/m365-power-platform-executor-auth-remediation/**",
+      "docs/prompts/codex-m365-power-platform-executor-auth-remediation.md",
+      "docs/prompts/codex-m365-power-platform-executor-auth-remediation-prompt.txt",
+      "notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb",
+      "configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json",
+      "docs/commercialization/m365-config-migration-and-auth-policy.md",
+      "docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md",
+      "docs/commercialization/m365-direct-full-surface-certification.md",
+      "docs/commercialization/m365-power-platform-executor-auth-remediation.md",
+      "artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json",
+      "src/smarthaus_common/tenant_config.py",
+      "src/smarthaus_common/power_apps_client.py",
+      "src/smarthaus_common/power_automate_client.py",
+      "src/provisioning_api/routers/m365.py",
+      "tests/test_power_apps_expansion_v2.py",
+      "tests/test_power_automate_expansion_v2.py",
+      "tests/test_executor_routing_v2.py",
+      "tests/test_auth_model_v2.py",
+      "tests/test_tenant_config_powerplatform.py",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ],
+    "file_denylist": [
+      ".env",
+      "../UCP/**",
+      "any secret-bearing local file"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R0",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R0",
+      "description": "Create the governed remediation package and governance-evidence backing."
+    },
+    {
+      "id": "R1",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R1",
+      "description": "Audit and freeze the current auth-chain failure."
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R2",
+      "description": "Define the canonical Power Platform executor identity and auth model."
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R3",
+      "description": "Correct repo-local runtime credential resolution and executor mapping drift."
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R4",
+      "description": "Verify tenant/runtime enablement for the Power Platform executor."
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R5",
+      "description": "Run live repo-direct certification for environments and flows."
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-power-platform-executor-auth-remediation:R6",
+      "description": "Publish truthful closeout and diagnostics."
+    }
+  ],
+  "execution_order": [
+    "R0",
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+  ],
+  "validation": {
+    "focused_tests": [
+      "PYTHONPATH=src .venv/bin/pytest -q tests/test_power_apps_expansion_v2.py tests/test_power_automate_expansion_v2.py tests/test_executor_routing_v2.py tests/test_auth_model_v2.py tests/test_tenant_config_powerplatform.py"
+    ],
+    "live_probes": [
+      "list_powerapp_environments",
+      "list_flows_admin",
+      "list_http_flows"
+    ],
+    "hard_gates": [
+      "pre-commit run --all-files",
+      "git diff --check"
+    ]
+  },
+  "execution_status": {
+    "r0_complete": true,
+    "r1_complete": true,
+    "r2_complete": true,
+    "r3_complete": true,
+    "r4_complete": true,
+    "r5_complete": true,
+    "r6_complete": true,
+    "runtime_changes_executed": true,
+    "r1_artifacts": {
+      "commercialization_note": "docs/commercialization/m365-power-platform-executor-auth-remediation.md",
+      "diagnostics_artifact": "artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json",
+      "notebook_path": "notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb",
+      "verification_path": "configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json"
+    },
+    "live_probe_result": {
+      "list_powerapp_environments": "ok count=0",
+      "list_flows_admin": "not_applicable_no_accessible_environments",
+      "list_http_flows": "not_applicable_no_accessible_environments"
+    },
+    "next_act": "none"
+  }
+}

@@ -276,8 +276,10 @@ executor_registry:
     assert cfg.resolve_executor_name("workmanagement") == "collaboration"
     assert cfg.resolve_executor_name("reports") == "directory"
     assert cfg.resolve_executor_name("security") == "directory"
-    assert cfg.resolve_executor_name("powerplatform") == "sharepoint"
     assert cfg.resolve_executor_name("knowledge") == "sharepoint"
+
+    with pytest.raises(ValueError, match="executor_route_unmapped:powerplatform"):
+        cfg.resolve_executor_name("powerplatform")
 
 
 def test_multi_executor_contract_fails_closed_without_default_executor(

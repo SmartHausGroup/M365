@@ -15,6 +15,44 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `Operations/PROJECT_FILE_INDEX.md` | File-index governance baseline for active readiness artifacts. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 | `docs/governance/MATHS_PROMPT_TEMPLATE.md` | Canonical MATHS prompt template for execution acts. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 
+## Active Power Platform Executor Auth Remediation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.md` | Human-readable governed remediation plan for correcting Power Platform executor identity and credential drift in the direct repo runtime. | `Mission Statement`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.yaml` | Structured YAML authority for the Power Platform executor-auth remediation initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `plans/m365-power-platform-executor-auth-remediation/m365-power-platform-executor-auth-remediation.json` | Structured JSON mirror for governance tooling on the Power Platform executor-auth remediation initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `docs/prompts/codex-m365-power-platform-executor-auth-remediation.md` | Detailed execution prompt for the bounded Power Platform executor-auth remediation. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `docs/prompts/codex-m365-power-platform-executor-auth-remediation-prompt.txt` | Kickoff prompt for the Power Platform executor-auth remediation package. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb` | Governance notebook freezing the live Power Platform auth drift and establishing notebook backing for tracker activation. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json` | Machine-readable verification payload for the Power Platform executor-auth governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R0` |
+| `docs/commercialization/m365-power-platform-executor-auth-remediation.md` | Final closeout for the Power Platform executor-auth remediation, covering the canonical executor model, runtime hardening, tenant-side credential proof, and the live zero-environment certification result. | `Technical Architecture`, `Policy & Security` | `plan:m365-power-platform-executor-auth-remediation:R6` |
+| `artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json` | Machine-readable `R6` diagnostics artifact freezing the repaired Power Platform auth chain, transitional tenant enablement proof, and live `list_powerapp_environments` zero-environment success result. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-power-platform-executor-auth-remediation:R6` |
+
+## Complete Team Status Workflow Enablement Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.md` | Human-readable governed plan for making the weekly team status workflow provisionable through the direct repo runtime. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.yaml` | Structured YAML authority for the weekly team status workflow enablement initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `plans/m365-team-status-workflow-enablement/m365-team-status-workflow-enablement.json` | Structured JSON mirror for governance tooling on the weekly team status workflow enablement initiative. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/prompts/codex-m365-team-status-workflow-enablement.md` | Detailed execution prompt for the weekly team status workflow enablement package. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/prompts/codex-m365-team-status-workflow-enablement-prompt.txt` | Kickoff prompt for the weekly team status workflow enablement package. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `notebooks/m365/INV-M365-DH-team-status-workflow-plan-governance-alignment-v1.ipynb` | Governance notebook freezing the exact workflow-enablement gap and providing notebook backing for the new package activation. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `configs/generated/team_status_workflow_plan_governance_alignment_v1_verification.json` | Machine-readable verification payload for the weekly team status workflow enablement governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-team-status-workflow-enablement:R0` |
+| `docs/commercialization/m365-team-status-workflow-enablement.md` | Final closeout for the weekly team status workflow enablement package, covering the tenant-generic credential model, repo-surface completion, live provisioning fixes, and the successful end-to-end reference workflow result. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
+| `artifacts/diagnostics/m365_team_status_workflow_enablement.json` | Machine-readable `R6` diagnostics artifact freezing the visible Power Platform environment, tenant-generic Power Platform model, live tracker/meeting/flow provisioning result, and final closeout truth. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
+
+## Active Power Platform and Team Status Merge-to-Development Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.md` | Human-readable governed package for merging the completed Power Platform auth and weekly team-status workflow branch into `development` only. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.yaml` | Structured YAML authority for the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.json` | Structured JSON mirror for automation and governance tooling on the bounded merge-to-development package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md` | Detailed prompt for the bounded merge from the completed Power Platform auth and weekly team-status workflow branch into `development`. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+| `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt` | Kickoff prompt for the bounded Power Platform and team-status merge-to-development package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
+
 ## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

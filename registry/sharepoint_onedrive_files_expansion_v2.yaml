@@ -43,6 +43,16 @@ supported_actions:
     approval_profile: low-observe-create
     auth_class: app_only
     capability_registry_alias: get_list
+  create_list:
+    canonical_action_key: sharepoint.list.create
+    agent_alias: lists.create
+    runtime_handler: GraphClient.create_list
+    mutating: true
+    result_shape_keys: [list, status]
+    required_permissions: [Sites.Manage.All]
+    approval_profile: medium-operational
+    auth_class: app_only
+    capability_registry_alias: create_list
   list_list_items:
     canonical_action_key: sharepoint.list_item.list
     agent_alias: lists.items
