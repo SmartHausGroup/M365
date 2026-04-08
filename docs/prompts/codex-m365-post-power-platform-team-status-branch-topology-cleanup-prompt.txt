@@ -1,0 +1,7 @@
+Execute the governed package at `docs/prompts/codex-m365-post-power-platform-team-status-branch-topology-cleanup.md`.
+
+Plan Reference: `plan:m365-post-power-platform-team-status-branch-topology-cleanup`
+
+Verify the merged feature branch is fully contained in `development`,
+delete it locally and on origin, and leave the repo on
+`development`, `staging`, and `main` only.

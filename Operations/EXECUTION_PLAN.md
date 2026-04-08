@@ -780,3 +780,19 @@ outside this repo slice.
 
 **Status update (2026-04-08 14:12 EDT):** Created the governed merge-to-development package for the completed Power Platform auth and weekly team-status workflow branch. The bounded source branch head at package creation is `5b4efb6`, the target `origin/development` head is `541c00e`, and the merge validation slice is frozen to the touched Power Platform, SharePoint/files, CAIO contract, capability-registry, and team-status workflow surfaces. No merge into `development` has happened in this package-creation slice.
 **Status update (2026-04-08 14:12 EDT):** Executed the bounded merge-to-development package. Merged `codex/m365-power-platform-executor-auth-remediation` into `development` with explicit merge commit `7ce4a15`, then validated the merged state with `python3 -m py_compile`, `verify_sharepoint_onedrive_files_expansion.py`, `verify_power_automate_expansion.py`, `verify_capability_registry.py`, `verify_caio_m365_contract.py`, focused pytest (`23 passed`), `pre-commit run --all-files`, and `git diff --check`. The merge-state validation exposed one bounded repo issue: `mypy` rejected the team-status test doubles because `provision_team_status_workflow()` required concrete client classes instead of structural client contracts. Fixed that in `src/smarthaus_common/team_status_workflow.py` by switching to protocol-based workflow client interfaces and completed the matching test-double surface in `tests/test_team_status_workflow.py`; refreshed `configs/generated/sharepoint_onedrive_files_expansion_verification.json` and `configs/generated/capability_registry_verification.json` so merged `development` now reflects the validated `12`-action SharePoint/files surface and `342`-entry capability registry truth. No UCP, `staging`, `main`, or release-tag work was performed.
+
+## Initiative: M365 Post Power Platform and Team Status Branch Topology Cleanup
+
+**Initiative:** Delete the merged Power Platform and team-status feature branch now that its work is fully integrated into `development`.
+
+**Plan:** `plans/m365-post-power-platform-team-status-branch-topology-cleanup/m365-post-power-platform-team-status-branch-topology-cleanup.md`
+
+**Reference:** `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R4`
+
+**Status:** ✅ Complete (2026-04-08) — the merged feature branch is deleted locally and on origin, and the repo is back to the long-lived branch set only.
+**Current next act:** None — this cleanup package is complete.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-post-power-platform-team-status-branch-topology-cleanup.md`, `docs/prompts/codex-m365-post-power-platform-team-status-branch-topology-cleanup-prompt.txt`
+
+**Status update (2026-04-08 16:48 EDT):** Created the governed branch-topology cleanup package for the merged Power Platform and team-status feature branch. The approved delete target is `codex/m365-power-platform-executor-auth-remediation` locally and `origin/codex/m365-power-platform-executor-auth-remediation` remotely. The package freezes the merge proof at creation time: `development...codex/m365-power-platform-executor-auth-remediation = 2/0`, `origin/development...origin/codex/m365-power-platform-executor-auth-remediation = 2/0`, and both candidate branches are ancestors of `development`. No branch deletion has been executed in this package-creation slice.
+**Status update (2026-04-08 16:48 EDT):** Executed the bounded branch-topology cleanup under `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` through `R4`. Verified the local and remote candidate branches had `0` unique commits beyond `development`, deleted `codex/m365-power-platform-executor-auth-remediation` locally, deleted `origin/codex/m365-power-platform-executor-auth-remediation` remotely, and synchronized the cleanup package plus governance trackers to the final branch set. The repo now exposes only `development`, `staging`, and `main` locally and on origin.

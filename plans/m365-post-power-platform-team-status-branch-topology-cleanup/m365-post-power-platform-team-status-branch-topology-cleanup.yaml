@@ -1,0 +1,40 @@
+plan_id: plan:m365-post-power-platform-team-status-branch-topology-cleanup
+parent_plan_id: plan:m365-power-platform-and-team-status-merge-to-development
+title: Delete the merged Power Platform and team-status feature branch after development integration
+version: "1.0"
+status: complete
+owner: SMARTHAUS
+date_created: "2026-04-08"
+date_updated: "2026-04-08"
+north_star_ref: Operations/NORTHSTAR.md
+execution_plan_ref: "Operations/EXECUTION_PLAN.md § Initiative: M365 Post Power Platform and Team Status Branch Topology Cleanup"
+domain: governance
+math_algorithm_scope: false
+objective: >
+  Delete the merged feature branch codex/m365-power-platform-executor-auth-remediation
+  locally and on origin after proving it has no unique commits beyond development.
+requirements:
+  - id: R1
+    ref: plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1
+    description: Verify the candidate branch is fully merged into development.
+  - id: R2
+    ref: plan:m365-post-power-platform-team-status-branch-topology-cleanup:R2
+    description: Delete the local feature branch.
+  - id: R3
+    ref: plan:m365-post-power-platform-team-status-branch-topology-cleanup:R3
+    description: Delete the remote feature branch.
+  - id: R4
+    ref: plan:m365-post-power-platform-team-status-branch-topology-cleanup:R4
+    description: Synchronize this package and governance trackers truthfully.
+validation:
+  branch_checks:
+    - git rev-list --left-right --count development...codex/m365-power-platform-executor-auth-remediation
+    - git rev-list --left-right --count origin/development...origin/codex/m365-power-platform-executor-auth-remediation
+    - git merge-base --is-ancestor codex/m365-power-platform-executor-auth-remediation development
+    - git merge-base --is-ancestor origin/codex/m365-power-platform-executor-auth-remediation origin/development
+execution_status:
+  r1_complete: true
+  r2_complete: true
+  r3_complete: true
+  r4_complete: true
+  next_act: none

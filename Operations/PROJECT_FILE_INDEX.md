@@ -53,6 +53,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md` | Detailed prompt for the bounded merge from the completed Power Platform auth and weekly team-status workflow branch into `development`. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
 | `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt` | Kickoff prompt for the bounded Power Platform and team-status merge-to-development package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-power-platform-and-team-status-merge-to-development:R1` |
 
+## Complete Post Power Platform and Team Status Branch Topology Cleanup Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-post-power-platform-team-status-branch-topology-cleanup/m365-post-power-platform-team-status-branch-topology-cleanup.md` | Human-readable governed cleanup plan for deleting the merged Power Platform and team-status feature branch after `development` integration. | `Mission Statement`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` |
+| `plans/m365-post-power-platform-team-status-branch-topology-cleanup/m365-post-power-platform-team-status-branch-topology-cleanup.yaml` | Structured YAML authority for the scoped branch-cleanup package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` |
+| `plans/m365-post-power-platform-team-status-branch-topology-cleanup/m365-post-power-platform-team-status-branch-topology-cleanup.json` | Structured JSON mirror for automation and governance tooling on the scoped branch-cleanup package. | `Technical Architecture`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-post-power-platform-team-status-branch-topology-cleanup.md` | Detailed prompt for the bounded branch-cleanup pass after Power Platform auth and team-status merge completion. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` |
+| `docs/prompts/codex-m365-post-power-platform-team-status-branch-topology-cleanup-prompt.txt` | Kickoff prompt for the scoped branch-cleanup package. | `Policy & Security`, `Operational Model: Self-Service & Self-Sufficient` | `plan:m365-post-power-platform-team-status-branch-topology-cleanup:R1` |
+
 ## Active Workforce Expansion Master Plan Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
