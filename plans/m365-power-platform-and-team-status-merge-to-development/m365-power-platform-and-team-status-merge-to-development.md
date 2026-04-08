@@ -2,7 +2,7 @@
 
 **Plan ID:** `plan:m365-power-platform-and-team-status-merge-to-development`
 **Parent Plan ID:** `plan:m365-team-status-workflow-enablement`
-**Status:** `in_progress`
+**Status:** `complete`
 **Date:** `2026-04-08`
 **Owner:** `SMARTHAUS`
 **Execution plan reference:** `plan:m365-power-platform-and-team-status-merge-to-development:R1`
@@ -22,9 +22,11 @@ Merge the completed tenant-generic Power Platform auth repair and team-status wo
 ## Current State
 
 - corrected source branch:
-  - `codex/m365-power-platform-executor-auth-remediation @ 5b4efb6`
+  - `codex/m365-power-platform-executor-auth-remediation @ 9d8db22`
 - target branch at package creation:
   - `origin/development @ 541c00e`
+- validated merge commit:
+  - `development @ 7ce4a15`
 - source branch status at package creation:
   - clean and pushed
 - completed source-branch truth to preserve:
@@ -41,7 +43,7 @@ Merge the completed tenant-generic Power Platform auth repair and team-status wo
 
 `MergeTargetReady = LocalDevelopmentClean AND OriginDevelopmentFetched`
 
-`MergeScoped = MergeSurface ⊆ Diff(541c00e..5b4efb6) ∪ {merge_package_files, governance_trackers}`
+`MergeScoped = MergeSurface ⊆ Diff(541c00e..9d8db22) ∪ {merge_package_files, governance_trackers, bounded_validation_outputs}`
 
 `MergeValidated = PyCompileGreen AND VerifiersGreen AND FocusedPytestGreen AND PreCommitGreen AND DiffCheckGreen`
 
@@ -77,6 +79,8 @@ If `M1_GO` is false, this package must emit `NO-GO`, stop fail-closed, and leave
 - `Operations/EXECUTION_PLAN.md`
 - `Operations/ACTION_LOG.md`
 - `Operations/PROJECT_FILE_INDEX.md`
+- `configs/generated/sharepoint_onedrive_files_expansion_verification.json`
+- `configs/generated/capability_registry_verification.json`
 - any file already changed in the governed source-branch diff between `541c00e` and `5b4efb6`, but only when required for bounded merge conflict resolution that preserves the proven semantics
 
 ### File denylist
@@ -158,8 +162,9 @@ If `M1_GO` is false, this package must emit `NO-GO`, stop fail-closed, and leave
 ## Execution Status
 
 - `R1` pending.
-- `R2` pending.
-- `R3` pending.
-- `R4` pending.
-- `R5` pending.
-- `R6` pending.
+- `R1` complete on 2026-04-08: confirmed the source branch at `9d8db22`, confirmed local `development` matched `origin/development @ 541c00e`, and prepared the bounded merge surface.
+- `R2` complete on 2026-04-08: kept the merge bounded to `development` only and preserved the governed Power Platform auth and workflow truth.
+- `R3` complete on 2026-04-08: merged `codex/m365-power-platform-executor-auth-remediation` into `development` with explicit merge commit `7ce4a15`.
+- `R4` complete on 2026-04-08: the merged-development validation slice passed `python3 -m py_compile`, `verify_sharepoint_onedrive_files_expansion.py`, `verify_power_automate_expansion.py`, `verify_capability_registry.py`, `verify_caio_m365_contract.py`, focused pytest (`23 passed`), `pre-commit run --all-files`, and `git diff --check`.
+- `R5` complete on 2026-04-08: synchronized this merge package plus `Operations/EXECUTION_PLAN.md`, `Operations/ACTION_LOG.md`, and `Operations/PROJECT_FILE_INDEX.md` to reflect the successful merge outcome, including the bounded post-merge type-contract fix in `src/smarthaus_common/team_status_workflow.py` / `tests/test_team_status_workflow.py` and refreshed generated verifier outputs.
+- `R6` complete on 2026-04-08: pushed `development` after green validation and stopped before any `staging`, `main`, or release-tag action.

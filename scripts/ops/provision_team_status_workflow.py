@@ -6,8 +6,8 @@ import json
 import os
 from pathlib import Path
 
-from smarthaus_common.config import load_bootstrap_env
 from provisioning_api.routers.m365 import _graph_client, _power_apps_client, _power_automate_client
+from smarthaus_common.config import load_bootstrap_env
 from smarthaus_common.team_status_workflow import (
     TeamStatusWorkflowRequest,
     provision_team_status_workflow,

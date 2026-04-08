@@ -43,7 +43,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-team-status-workflow-enablement.md` | Final closeout for the weekly team status workflow enablement package, covering the tenant-generic credential model, repo-surface completion, live provisioning fixes, and the successful end-to-end reference workflow result. | `Mission Statement`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
 | `artifacts/diagnostics/m365_team_status_workflow_enablement.json` | Machine-readable `R6` diagnostics artifact freezing the visible Power Platform environment, tenant-generic Power Platform model, live tracker/meeting/flow provisioning result, and final closeout truth. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-team-status-workflow-enablement:R6` |
 
-## Active Power Platform and Team Status Merge-to-Development Artifacts
+## Complete Power Platform and Team Status Merge-to-Development Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |

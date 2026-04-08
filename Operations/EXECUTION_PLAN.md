@@ -771,11 +771,12 @@ outside this repo slice.
 
 **Plan:** `plans/m365-power-platform-and-team-status-merge-to-development/m365-power-platform-and-team-status-merge-to-development.md`
 
-**Reference:** `plan:m365-power-platform-and-team-status-merge-to-development:R1`
+**Reference:** `plan:m365-power-platform-and-team-status-merge-to-development:R6`
 
-**Status:** 🔄 In progress (2026-04-08) — merge package creation is complete and `M1` is the active next act.
-**Current next act:** Execute `M1` to merge `codex/m365-power-platform-executor-auth-remediation` into `development`, validate the merged state, and push `development` only if green.
+**Status:** ✅ Complete (2026-04-08) — the Power Platform auth and team-status workflow surface is now merged into `development` and validated.
+**Current next act:** None — this merge package is complete.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development.md`, `docs/prompts/codex-m365-power-platform-and-team-status-merge-to-development-prompt.txt`
 
 **Status update (2026-04-08 14:12 EDT):** Created the governed merge-to-development package for the completed Power Platform auth and weekly team-status workflow branch. The bounded source branch head at package creation is `5b4efb6`, the target `origin/development` head is `541c00e`, and the merge validation slice is frozen to the touched Power Platform, SharePoint/files, CAIO contract, capability-registry, and team-status workflow surfaces. No merge into `development` has happened in this package-creation slice.
+**Status update (2026-04-08 14:12 EDT):** Executed the bounded merge-to-development package. Merged `codex/m365-power-platform-executor-auth-remediation` into `development` with explicit merge commit `7ce4a15`, then validated the merged state with `python3 -m py_compile`, `verify_sharepoint_onedrive_files_expansion.py`, `verify_power_automate_expansion.py`, `verify_capability_registry.py`, `verify_caio_m365_contract.py`, focused pytest (`23 passed`), `pre-commit run --all-files`, and `git diff --check`. The merge-state validation exposed one bounded repo issue: `mypy` rejected the team-status test doubles because `provision_team_status_workflow()` required concrete client classes instead of structural client contracts. Fixed that in `src/smarthaus_common/team_status_workflow.py` by switching to protocol-based workflow client interfaces and completed the matching test-double surface in `tests/test_team_status_workflow.py`; refreshed `configs/generated/sharepoint_onedrive_files_expansion_verification.json` and `configs/generated/capability_registry_verification.json` so merged `development` now reflects the validated `12`-action SharePoint/files surface and `342`-entry capability registry truth. No UCP, `staging`, `main`, or release-tag work was performed.

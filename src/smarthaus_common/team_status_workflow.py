@@ -2,12 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+from typing import Any, Protocol
 
 from smarthaus_common.errors import SmarthausError
-from smarthaus_common.power_apps_client import PowerAppsClient
-from smarthaus_common.power_automate_client import PowerAutomateClient
-from smarthaus_graph.client import GraphClient
 
 _DEFAULT_TIME_ZONE = "Eastern Standard Time"
 _IANA_TO_WINDOWS = {
@@ -36,6 +33,58 @@ _FLOW_DEFINITION_SCHEMA = (
     "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/"
     "2016-06-01/workflowdefinition.json#"
 )
+
+
+class SharePointWorkflowClient(Protocol):
+    def get_site(self, site_id: str) -> dict[str, Any]: ...
+
+    def list_site_lists(self, site_id: str) -> list[dict[str, Any]]: ...
+
+    def get_list(self, site_id: str, list_id: str) -> dict[str, Any]: ...
+
+    def create_list(
+        self,
+        site_id: str,
+        display_name: str,
+        *,
+        columns: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]: ...
+
+
+class MessagingWorkflowClient(Protocol):
+    def list_events(
+        self,
+        *,
+        user_id_or_upn: str | None = None,
+        top: int = 25,
+        select: str = "",
+    ) -> dict[str, Any]: ...
+
+    def create_event(
+        self,
+        body: dict[str, Any],
+        *,
+        user_id_or_upn: str | None = None,
+    ) -> dict[str, Any]: ...
+
+
+class PowerAppsWorkflowClient(Protocol):
+    def list_powerapp_environments(self) -> list[dict[str, Any]]: ...
+
+
+class PowerAutomateWorkflowClient(Protocol):
+    def list_flows_operator(self, environment_name: str) -> list[dict[str, Any]]: ...
+
+    def get_flow_operator(self, environment_name: str, flow_name: str) -> dict[str, Any]: ...
+
+    def create_flow_operator(
+        self,
+        environment_name: str,
+        *,
+        display_name: str,
+        definition: dict[str, Any],
+        connection_references: dict[str, Any],
+    ) -> dict[str, Any]: ...
 
 
 @dataclass(frozen=True)
@@ -185,13 +234,13 @@ def build_reminder_flow_definition(
     time_zone: str,
 ) -> dict[str, Any]:
     body = (
-        f"<p>Please update the <a href=\"{tracker_url}\">{tracker_name}</a> "
+        f'<p>Please update the <a href="{tracker_url}">{tracker_name}</a> '
         "before the weekly digest is sent.</p>"
     )
     if meeting_link:
         body += (
-            f"<p>The recurring meeting \"{meeting_subject}\" is available here: "
-            f"<a href=\"{meeting_link}\">Join meeting</a>.</p>"
+            f'<p>The recurring meeting "{meeting_subject}" is available here: '
+            f'<a href="{meeting_link}">Join meeting</a>.</p>'
         )
     return _flow_definition_envelope(
         description=f"Send a weekly reminder to update {tracker_name}.",
@@ -283,7 +332,7 @@ def build_digest_flow_definition(
                         "Subject": f"Weekly digest: {tracker_name}",
                         "Body": (
                             _tracker_summary_html(
-                                f"Weekly digest for the <a href=\"{tracker_url}\">{tracker_name}</a>"
+                                f'Weekly digest for the <a href="{tracker_url}">{tracker_name}</a>'
                             )
                         ),
                         "Importance": "Normal",
@@ -307,7 +356,7 @@ def _select_environment(environments: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _find_existing_list(
-    sharepoint_client: GraphClient,
+    sharepoint_client: SharePointWorkflowClient,
     *,
     site_id: str,
     tracker_list_name: str,
@@ -320,7 +369,7 @@ def _find_existing_list(
 
 
 def _ensure_tracker_list(
-    sharepoint_client: GraphClient,
+    sharepoint_client: SharePointWorkflowClient,
     *,
     site_id: str,
     tracker_list_name: str,
@@ -360,7 +409,7 @@ def _build_recurrence_payload(
 
 
 def _find_existing_meeting(
-    messaging_client: GraphClient,
+    messaging_client: MessagingWorkflowClient,
     *,
     organizer_user_id_or_upn: str,
     meeting_subject: str,
@@ -380,7 +429,7 @@ def _find_existing_meeting(
 
 
 def _ensure_recurring_meeting(
-    messaging_client: GraphClient,
+    messaging_client: MessagingWorkflowClient,
     *,
     organizer_user_id_or_upn: str,
     meeting_subject: str,
@@ -404,7 +453,7 @@ def _ensure_recurring_meeting(
             "contentType": "HTML",
             "content": (
                 f"<p>Weekly team status meeting.</p><p>Progress tracker: "
-                f"<a href=\"{tracker_url}\">{tracker_url}</a></p>"
+                f'<a href="{tracker_url}">{tracker_url}</a></p>'
             ),
         },
         "start": meeting_start,
@@ -422,7 +471,7 @@ def _ensure_recurring_meeting(
 
 
 def _find_existing_flow_by_display_name(
-    power_automate_client: PowerAutomateClient,
+    power_automate_client: PowerAutomateWorkflowClient,
     *,
     environment_name: str,
     display_name: str,
@@ -435,7 +484,7 @@ def _find_existing_flow_by_display_name(
 
 
 def _resolve_connection_references(
-    power_automate_client: PowerAutomateClient,
+    power_automate_client: PowerAutomateWorkflowClient,
     *,
     environment_name: str,
 ) -> dict[str, Any]:
@@ -458,7 +507,7 @@ def _resolve_connection_references(
 
 
 def _ensure_flow(
-    power_automate_client: PowerAutomateClient,
+    power_automate_client: PowerAutomateWorkflowClient,
     *,
     environment_name: str,
     display_name: str,
@@ -483,10 +532,10 @@ def _ensure_flow(
 
 def provision_team_status_workflow(
     *,
-    sharepoint_client: GraphClient,
-    messaging_client: GraphClient,
-    power_apps_client: PowerAppsClient,
-    power_automate_client: PowerAutomateClient,
+    sharepoint_client: SharePointWorkflowClient,
+    messaging_client: MessagingWorkflowClient,
+    power_apps_client: PowerAppsWorkflowClient,
+    power_automate_client: PowerAutomateWorkflowClient,
     request: TeamStatusWorkflowRequest,
 ) -> dict[str, Any]:
     site = sharepoint_client.get_site(request.site_id)
@@ -521,9 +570,7 @@ def provision_team_status_workflow(
     )
     meeting_link = (
         str(
-            (meeting.get("onlineMeeting") or {}).get("joinUrl")
-            or meeting.get("webLink")
-            or ""
+            (meeting.get("onlineMeeting") or {}).get("joinUrl") or meeting.get("webLink") or ""
         ).strip()
         or None
     )
@@ -600,16 +647,14 @@ def provision_team_status_workflow(
             "status": reminder_status,
             "id": reminder_flow.get("name"),
             "display_name": (
-                reminder_flow.get("properties", {}).get("displayName")
-                or reminder_flow_name
+                reminder_flow.get("properties", {}).get("displayName") or reminder_flow_name
             ),
         },
         "digest_flow": {
             "status": digest_status,
             "id": digest_flow.get("name"),
             "display_name": (
-                digest_flow.get("properties", {}).get("displayName")
-                or digest_flow_name
+                digest_flow.get("properties", {}).get("displayName") or digest_flow_name
             ),
         },
     }

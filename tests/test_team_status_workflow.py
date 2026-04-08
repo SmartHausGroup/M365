@@ -5,8 +5,8 @@ from typing import Any
 import pytest
 from provisioning_api.routers import m365 as m365_router
 from smarthaus_common.team_status_workflow import (
-    _build_recurrence_payload,
     TeamStatusWorkflowRequest,
+    _build_recurrence_payload,
     build_digest_flow_definition,
     build_reminder_flow_definition,
     provision_team_status_workflow,
@@ -42,20 +42,20 @@ def test_team_status_workflow_builders_include_expected_actions() -> None:
     assert reminder["contentVersion"] == "1.0.0.0"
     assert reminder["outputs"] == {}
     assert "Send_reminder_email" in reminder["actions"]
-    assert "shared_office365" in reminder["actions"]["Send_reminder_email"]["inputs"]["host"][
-        "connection"
-    ]["name"]
+    assert (
+        "shared_office365"
+        in reminder["actions"]["Send_reminder_email"]["inputs"]["host"]["connection"]["name"]
+    )
 
     assert digest["triggers"]["Recurrence"]["type"] == "Recurrence"
     assert digest["$schema"].endswith("/workflowdefinition.json#")
     assert digest["contentVersion"] == "1.0.0.0"
     assert digest["outputs"] == {}
-    assert {"Get_tracker_items", "Create_HTML_table", "Send_digest_email"} == set(
-        digest["actions"]
+    assert {"Get_tracker_items", "Create_HTML_table", "Send_digest_email"} == set(digest["actions"])
+    assert (
+        "shared_sharepointonline"
+        in digest["actions"]["Get_tracker_items"]["inputs"]["host"]["connection"]["name"]
     )
-    assert "shared_sharepointonline" in digest["actions"]["Get_tracker_items"]["inputs"]["host"][
-        "connection"
-    ]["name"]
 
 
 def test_team_status_recurrence_payload_matches_graph_create_shape() -> None:
@@ -98,8 +98,19 @@ def test_provision_team_status_workflow_reuses_existing_assets() -> None:
                 "webUrl": "https://example.test/sites/foundingteam/lists/tracker",
             }
 
+        def create_list(
+            self,
+            site_id: str,
+            display_name: str,
+            *,
+            columns: list[dict[str, Any]] | None = None,
+        ) -> dict[str, Any]:
+            raise AssertionError("create_list should not run when the tracker already exists")
+
     class _MessagingClient:
-        def list_events(self, *, user_id_or_upn: str | None = None, top: int = 25, select: str = "") -> dict[str, Any]:
+        def list_events(
+            self, *, user_id_or_upn: str | None = None, top: int = 25, select: str = ""
+        ) -> dict[str, Any]:
             assert user_id_or_upn == "owner@example.com"
             return {
                 "value": [
@@ -112,6 +123,14 @@ def test_provision_team_status_workflow_reuses_existing_assets() -> None:
                 ]
             }
 
+        def create_event(
+            self,
+            body: dict[str, Any],
+            *,
+            user_id_or_upn: str | None = None,
+        ) -> dict[str, Any]:
+            raise AssertionError("create_event should not run when the meeting already exists")
+
     class _PowerAppsClient:
         def list_powerapp_environments(self) -> list[dict[str, Any]]:
             return [
@@ -119,7 +138,10 @@ def test_provision_team_status_workflow_reuses_existing_assets() -> None:
                     "EnvironmentName": "Default-tenant",
                     "DisplayName": "Default",
                     "IsDefault": True,
-                    "Internal": {"name": "Default-tenant", "properties": {"displayName": "Default"}},
+                    "Internal": {
+                        "name": "Default-tenant",
+                        "properties": {"displayName": "Default"},
+                    },
                 }
             ]
 
@@ -128,8 +150,14 @@ def test_provision_team_status_workflow_reuses_existing_assets() -> None:
             assert environment_name == "Default-tenant"
             return [
                 {"name": "seed-flow", "properties": {"displayName": "Seed"}},
-                {"name": "reminder-flow", "properties": {"displayName": "Weekly Status - Friday reminder"}},
-                {"name": "digest-flow", "properties": {"displayName": "Weekly Status - Weekly digest"}},
+                {
+                    "name": "reminder-flow",
+                    "properties": {"displayName": "Weekly Status - Friday reminder"},
+                },
+                {
+                    "name": "digest-flow",
+                    "properties": {"displayName": "Weekly Status - Weekly digest"},
+                },
             ]
 
         def get_flow_operator(self, environment_name: str, flow_name: str) -> dict[str, Any]:
@@ -146,8 +174,14 @@ def test_provision_team_status_workflow_reuses_existing_assets() -> None:
                     },
                 }
             if flow_name == "reminder-flow":
-                return {"name": flow_name, "properties": {"displayName": "Weekly Status - Friday reminder"}}
-            return {"name": flow_name, "properties": {"displayName": "Weekly Status - Weekly digest"}}
+                return {
+                    "name": flow_name,
+                    "properties": {"displayName": "Weekly Status - Friday reminder"},
+                }
+            return {
+                "name": flow_name,
+                "properties": {"displayName": "Weekly Status - Weekly digest"},
+            }
 
         def create_flow_operator(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
             raise AssertionError("create_flow_operator should not run when flows already exist")
@@ -217,7 +251,10 @@ def test_instruction_contract_executes_provision_team_status_workflow(
             "siteId": "site-123",
             "userPrincipalName": "owner@example.com",
             "recipients": ["team@example.com"],
-            "meetingStart": {"dateTime": "2026-04-13T14:00:00", "timeZone": "Eastern Standard Time"},
+            "meetingStart": {
+                "dateTime": "2026-04-13T14:00:00",
+                "timeZone": "Eastern Standard Time",
+            },
             "meetingEnd": {"dateTime": "2026-04-13T14:30:00", "timeZone": "Eastern Standard Time"},
             "workflowName": "Weekly Status",
         },
