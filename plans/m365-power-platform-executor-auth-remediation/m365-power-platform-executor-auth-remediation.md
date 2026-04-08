@@ -2,10 +2,10 @@
 
 **Plan ID:** `plan:m365-power-platform-executor-auth-remediation`
 **Parent Plan ID:** `none`
-**Status:** `draft`
+**Status:** `in_progress`
 **Date:** `2026-04-08`
 **Owner:** `SMARTHAUS`
-**Execution plan reference:** `plan:m365-power-platform-executor-auth-remediation:R0`
+**Execution plan reference:** `plan:m365-power-platform-executor-auth-remediation:R1`
 **North Star alignment:** `Operations/NORTHSTAR.md` — keep the repo-local M365 runtime truthful, fail-closed, and self-service by making the Power Platform executor authenticate with the correct bounded identity instead of drifting onto the wrong app registration.
 **Governance evidence:** `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb`, `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json`
 
@@ -159,8 +159,17 @@ If `GO` is false, the initiative must stay open and report the remaining blocker
 - `pre-commit run --all-files`
 - `git diff --check`
 
-## Initial Execution Status
+## Execution Status
 
-- `R0` is complete in this package-creation slice.
-- No runtime code, secret material, or tenant configuration has been changed yet.
-- The next governed act is to present the approval packet for this plan and begin `R1`, the root-cause audit and bounded auth-chain freeze.
+- `R0` is complete in the package-creation slice.
+- `R1` is complete. The root-cause audit is frozen in:
+  - `docs/commercialization/m365-power-platform-executor-auth-remediation.md`
+  - `artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json`
+  - `notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb`
+  - `configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json`
+- The audit proved:
+  - `powerplatform` still resolves onto `sharepoint`
+  - the live failing app id is still the SharePoint executor app id
+  - the direct client sees no secret while the instruction path still reaches an invalid-secret auth attempt
+- No runtime code, tenant configuration, or secret material has been changed yet.
+- The next governed act is `R2`, the canonical Power Platform executor model.

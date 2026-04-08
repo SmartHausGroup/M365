@@ -2,7 +2,7 @@ plan_id: plan:m365-power-platform-executor-auth-remediation
 parent_plan_id: none
 title: Repair the Power Platform executor identity and credential chain
 version: "1.0"
-status: draft
+status: in_progress
 owner: SMARTHAUS
 date_created: "2026-04-08"
 date_updated: "2026-04-08"
@@ -119,7 +119,13 @@ validation:
   hard_gates:
     - pre-commit run --all-files
     - git diff --check
-initial_execution_status:
+execution_status:
   r0_complete: true
+  r1_complete: true
   runtime_changes_executed: false
-  next_act: present approval packet and begin R1
+  r1_artifacts:
+    commercialization_note: docs/commercialization/m365-power-platform-executor-auth-remediation.md
+    diagnostics_artifact: artifacts/diagnostics/m365_power_platform_executor_auth_remediation.json
+    notebook_path: notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb
+    verification_path: configs/generated/power_platform_executor_auth_package_governance_alignment_v1_verification.json
+  next_act: execute R2 canonical Power Platform executor model

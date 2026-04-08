@@ -1,0 +1,67 @@
+{
+  "plan_id": "plan:m365-power-platform-executor-auth-remediation",
+  "phase": "R1",
+  "status": "complete",
+  "objective": "Freeze the current Power Platform auth failure, wrong executor evidence, and credential-resolution chain before runtime hardening.",
+  "observed_failure": {
+    "date": "2026-04-08",
+    "action": "list_powerapp_environments",
+    "instruction_response_ok": false,
+    "response_trace_id": "22501e6a-9fff-4685-a906-4f2f6e821952",
+    "error_id": "AADSTS7000215",
+    "error_reason": "invalid client secret provided",
+    "failing_app_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "microsoft_trace_id": "9ef86b83-22f6-45d5-8930-372df8faaa00",
+    "microsoft_correlation_id": "4aea70f0-4b77-4b5a-9915-60c05253a2b7",
+    "microsoft_timestamp_utc": "2026-04-08 15:10:36Z"
+  },
+  "documented_executor_contract": {
+    "sharepoint_executor_app_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "powerplatform_executor_present": false,
+    "source_doc": "docs/commercialization/m365-executor-domain-routing-and-minimum-permission-model.md"
+  },
+  "selected_tenant_runtime_state": {
+    "selected_tenant_active": true,
+    "tenant_display_name": "SMARTHAUS",
+    "tenant_domain": "smarthausgroup.com",
+    "default_executor": "sharepoint",
+    "executors": [
+      "collaboration",
+      "directory",
+      "sharepoint"
+    ],
+    "route_key": "powerplatform",
+    "resolved_executor_name": "sharepoint",
+    "resolved_executor_domain": "sharepoint",
+    "resolved_executor_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "resolved_executor_has_client_secret": false,
+    "resolved_executor_has_certificate": true
+  },
+  "credential_resolution": {
+    "power_apps_client_source": "tenant_config.azure_or_legacy_graph",
+    "power_automate_client_source": "tenant_config.azure_or_legacy_graph",
+    "direct_client_probe": {
+      "client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+      "has_client_secret": false,
+      "has_certificate": true,
+      "certificate_path": "/Users/smarthaus/.ucp/certs/smarthaus-sharepoint-executor.pem",
+      "failure_type": "AuthConfigurationError",
+      "failure_message": "Power Apps admin not configured: client_secret is required for Add-PowerAppsAccount service-principal auth."
+    },
+    "instruction_path_probe": {
+      "failure_type": "AADSTS7000215",
+      "failure_message_contains": "Invalid client secret provided"
+    }
+  },
+  "root_cause": {
+    "wrong_executor_projection": true,
+    "mixed_credential_resolution": true,
+    "dedicated_powerplatform_executor_missing": true
+  },
+  "decision_rule": {
+    "pp_executor_truth": "DedicatedExecutor(powerplatform) AND CanonicalCredentialSource(powerplatform)",
+    "pp_auth_truth": "PPExecutorTruth AND ValidCredentialMaterial(powerplatform)",
+    "go": false
+  },
+  "next_act": "plan:m365-power-platform-executor-auth-remediation:R2"
+}

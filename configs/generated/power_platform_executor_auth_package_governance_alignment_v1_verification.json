@@ -1,7 +1,7 @@
 {
   "status": "passed",
   "plan_id": "plan:m365-power-platform-executor-auth-remediation",
-  "purpose": "Verify the Power Platform executor-auth remediation package is required and notebook-backed before governance tracker activation.",
+  "purpose": "Verify the Power Platform executor-auth remediation package is required and notebook-backed before governance tracker activation, and extend that notebook backing through the R1 root-cause audit closeout.",
   "notebook_backing": {
     "path": "notebooks/m365/INV-M365-DG-power-platform-executor-auth-package-governance-alignment-v1.ipynb",
     "role": "governance_prerequisite_evidence"
@@ -19,9 +19,26 @@
   },
   "runtime_drift": {
     "tenant_config_powerplatform_alias": "sharepoint",
+    "default_executor": "sharepoint",
+    "executors": [
+      "collaboration",
+      "directory",
+      "sharepoint"
+    ],
+    "resolved_executor_name": "sharepoint",
+    "resolved_executor_client_id": "fe34434f-0de8-4807-a239-9ee093d4780c",
+    "resolved_executor_has_client_secret": false,
+    "resolved_executor_has_certificate": true,
     "power_apps_credentials_source": "tenant_config.azure_or_legacy_graph",
     "power_automate_credentials_source": "tenant_config.azure_or_legacy_graph"
   },
+  "credential_contradiction": {
+    "direct_client_failure_type": "AuthConfigurationError",
+    "direct_client_failure_message": "Power Apps admin not configured: client_secret is required for Add-PowerAppsAccount service-principal auth.",
+    "instruction_path_failure_type": "AADSTS7000215",
+    "instruction_path_failure_message_contains": "Invalid client secret provided"
+  },
+  "r1_tracker_closeout_backed": true,
   "successor_package_required": true,
   "successor_package": "plan:m365-power-platform-executor-auth-remediation"
 }
