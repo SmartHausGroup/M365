@@ -1,0 +1,24 @@
+{
+  "status": "persona_action_p5_recertification_scope_correction_ready",
+  "parent_plan": "plan:m365-persona-action-full-support-remediation",
+  "phase": "P5S",
+  "stale_published_totals": {
+    "unique_aliases": 184,
+    "active_pairs": 430
+  },
+  "live_post_p4_totals": {
+    "unique_aliases": 172,
+    "active_pairs": 445,
+    "allowed_pairs": 410,
+    "unsupported_pairs": 35,
+    "unsupported_unique_aliases": 32
+  },
+  "required_parent_evidence_surface": {
+    "lemma_doc": "docs/ma/lemmas/L96_m365_persona_action_recertification_closeout_v1.md",
+    "invariant": "invariants/lemmas/L96_m365_persona_action_recertification_closeout_v1.yaml",
+    "notebook": "notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb",
+    "lemma_notebook": "notebooks/lemma_proofs/L96_m365_persona_action_recertification_closeout_v1.ipynb",
+    "scorecard": "artifacts/scorecards/scorecard_l96.json",
+    "verification": "configs/generated/persona_action_recertification_closeout_v1_verification.json"
+  }
+}

@@ -289,4 +289,6 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
   - `PYTHONPATH=src .venv/bin/pytest -q tests/test_policies.py tests/test_ops_adapter.py` → `148 passed`
   - `pre-commit run --all-files` → passed
   - `git diff --check` → passed
-- `P5` is now the active next act.
+- `P5` is blocked by a live-universe shift between the stale published workforce certification artifact and the current post-`P4` runtime truth.
+- The bounded child blocker phase `plan:m365-persona-action-p5-recertification-scope-correction` is now created with governance notebook `INV-M365-DE` and generated verification `configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json`.
+- `P5S` is now the active next act before any final `P5` commercialization or diagnostics closeout may begin.

@@ -1,0 +1,8 @@
+Execute `plan:m365-persona-action-p5-recertification-scope-correction`.
+
+The parent remediation initiative is already at `P5`, but the published workforce certification artifact is stale after `P1` through `P4`.
+
+Create and close the bounded `P5S` scope-correction package first.
+Freeze the live `172`-alias / `445`-pair universe, publish notebook-backed governance evidence, widen the parent `P5` evidence surface truthfully, validate, commit, and push.
+
+Do not publish the final `P5` recertification artifact in this child phase.
