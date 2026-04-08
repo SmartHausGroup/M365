@@ -2,7 +2,22 @@
 
 ## Status
 
-`G0` through `G5` are complete. The workforce-graph certification initiative now closes with a final notebook-backed matrix for all `184` persona-facing aliases and all `430` active persona/action pairs.
+`G0` through `G5` are complete as the historical predecessor certification, and the successor remediation initiative now closes with the live `P5` recertification.
+
+Current published truth:
+
+- `172` live unique persona-facing aliases
+- `445` live active persona/action pairs
+- unique-alias closeout:
+  - `103` `green`
+  - `36` `approval-gated`
+  - `1` `actor-tier-gated`
+  - `32` `fenced`
+- active-pair closeout:
+  - `360` `green`
+  - `49` `approval-gated`
+  - `1` `actor-tier-gated`
+  - `35` `fenced`
 
 ## Purpose
 
@@ -349,44 +364,126 @@ The `40` fenced pairs are not dead routes. Many of them still have tier support 
 - the policy-fenced wrapper perimeter is explicit at the OPA layer
 - the initiative can now close with a full workforce matrix
 
-## G5 Closeout
+## G5 Closeout (Historical Baseline)
 
-The full workforce graph is now classified truthfully.
+The predecessor workforce graph was fully classified for the pre-remediation state, but that closeout is now historical rather than current.
+
+Historical `G5` totals:
+
+- `184` unique persona-facing aliases
+- `430` active persona/action pairs
+
+## P5 Post-Remediation Recertification Closeout
+
+`P5` republishes the workforce graph against the live post-remediation runtime instead of the stale historical `G5` surface.
+
+### What Changed
+
+The live workforce universe shifted materially during remediation:
+
+- historical `G5` publication: `184` unique aliases / `430` active pairs
+- live post-remediation universe: `172` unique aliases / `445` active pairs
+
+The support surface is now narrower, cleaner, and truthful:
+
+- `0` `permission-blocked`
+- `0` `legacy-stubbed`
+- `0` `dead-routed`
+- `0` `orphaned`
+
+Everything non-green is now explicit either as approval/actor-tier governance or as the fenced unsupported M365-only perimeter.
 
 ### Final Unique-Alias Matrix
 
-All `184` unique persona-facing aliases now close at:
+All `172` live unique persona-facing aliases now close at:
 
-- `34` `green`
-- `1` `approval-gated`
+- `103` `green`
+- `36` `approval-gated`
 - `1` `actor-tier-gated`
-- `15` `permission-blocked`
-- `64` `fenced`
-- `48` `legacy-stubbed`
-- `21` `dead-routed`
+- `32` `fenced`
+- `0` `permission-blocked`
+- `0` `legacy-stubbed`
+- `0` `dead-routed`
 - `0` `orphaned`
 
 ### Final Active Persona/Action Matrix
 
-All `430` active persona/action pairs now close at:
+All `445` live active persona/action pairs now close at:
 
-- `136` `green`
-- `1` `approval-gated`
+- `360` `green`
+- `49` `approval-gated`
 - `1` `actor-tier-gated`
-- `15` `permission-blocked`
-- `112` `fenced`
-- `49` `legacy-stubbed`
-- `116` `dead-routed`
+- `35` `fenced`
+- `0` `permission-blocked`
+- `0` `legacy-stubbed`
+- `0` `dead-routed`
 - `0` `orphaned`
 
-### Meaning
+### Preserved Governance Boundaries
 
-The workforce graph is now fully classified instead of partially implied:
+The preserved actor-tier-gated path is:
 
-- every active persona/action pair now lands in an explicit certification bucket
-- the route-level support surface is narrower than the raw registry claim surface
-- unsupported legacy wrapper aliases are explicit at the permission-tier layer
-- policy-fenced wrapper aliases are explicit at the OPA layer
-- no persona-facing alias remains orphaned
+- `m365-administrator::users.disable`
 
-The initiative is complete.
+The base `approval-gated` totals above classify default-parameter approval truth. Additional conditional approval overlays remain explicit and intentional:
+
+- `calendar-management-agent::meeting.organize` when attendee or external-attendee thresholds are exceeded
+- `email-processing-agent::email.respond` when priority or sensitivity triggers approval
+- `outreach-coordinator::email.send_bulk` when bulk-recipient thresholds are exceeded
+- `project-coordination-agent::task.assign` when hours or priority thresholds are exceeded
+- `project-shipper::task.assign` when hours or priority thresholds are exceeded
+- `support-responder::mail.send` when priority or sensitivity triggers approval
+
+### Explicit Fenced Perimeter
+
+The final fenced perimeter is the explicit runtime `unsupported_m365_only_action` surface still owned by active personas:
+
+- `audit.prepare`
+- `backup.restore`
+- `budget.track`
+- `campaign.create`
+- `candidate.screen`
+- `cdn.purge`
+- `compliance.check`
+- `conflict.resolve`
+- `content.curate`
+- `dns.update`
+- `document.index`
+- `email.classify`
+- `engagement.plan`
+- `expense.approve`
+- `expert.connect`
+- `feedback.analyze`
+- `feedback.collect`
+- `forecast.update`
+- `invoice.process`
+- `offer.prepare`
+- `onboarding.initiate`
+- `performance.optimize`
+- `policy.create`
+- `policy.validate`
+- `relationship.score`
+- `remediation.plan`
+- `review.initiate`
+- `search.optimize`
+- `ssl.renew`
+- `training.recommend`
+- `violation.report`
+- `website.deploy`
+
+### Notebook-Backed Evidence
+
+`P5` is now backed by the final successor proof chain:
+
+- [L96_m365_persona_action_recertification_closeout_v1.md](/Users/smarthaus/Projects/GitHub/M365/docs/ma/lemmas/L96_m365_persona_action_recertification_closeout_v1.md)
+- [L96_m365_persona_action_recertification_closeout_v1.yaml](/Users/smarthaus/Projects/GitHub/M365/invariants/lemmas/L96_m365_persona_action_recertification_closeout_v1.yaml)
+- [INV-M365-DF-persona-action-recertification-closeout-v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb)
+- [L96_m365_persona_action_recertification_closeout_v1.ipynb](/Users/smarthaus/Projects/GitHub/M365/notebooks/lemma_proofs/L96_m365_persona_action_recertification_closeout_v1.ipynb)
+- [scorecard_l96.json](/Users/smarthaus/Projects/GitHub/M365/artifacts/scorecards/scorecard_l96.json)
+- [persona_action_recertification_closeout_v1_verification.json](/Users/smarthaus/Projects/GitHub/M365/configs/generated/persona_action_recertification_closeout_v1_verification.json)
+
+### P5 Closeout
+
+The successor remediation initiative is complete.
+
+The workforce graph no longer carries any residual dead-route, legacy-stub, permission-blocked, or orphaned claims. The remaining non-green surface is explicit, governed, and truthful.

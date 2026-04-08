@@ -1,0 +1,20 @@
+{
+  "lemma_id": "L96",
+  "status": "green",
+  "notebook": "notebooks/m365/INV-M365-DF-persona-action-recertification-closeout-v1.ipynb",
+  "determinism": "certified",
+  "invariants": [
+    {
+      "id": "L96-live-universe",
+      "status": "pass"
+    },
+    {
+      "id": "L96-final-alias-matrix",
+      "status": "pass"
+    },
+    {
+      "id": "L96-final-pair-matrix",
+      "status": "pass"
+    }
+  ]
+}

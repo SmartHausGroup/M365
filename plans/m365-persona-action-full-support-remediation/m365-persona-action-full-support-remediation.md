@@ -6,10 +6,10 @@
 - **Parent Plan ID:** `plan:m365-persona-action-certification`
 - **Title:** `Drive the certified non-green persona/action surface to truthful full support where possible and explicitly reduce unsupported claims where not`
 - **Version:** `1.0`
-- **Status:** `active`
+- **Status:** `complete`
 - **Owner:** `SMARTHAUS`
 - **Date Created:** `2026-04-07`
-- **Date Updated:** `2026-04-07`
+- **Date Updated:** `2026-04-08`
 - **North Star Ref:** `Operations/NORTHSTAR.md`
 - **Execution Plan Ref:** `Operations/EXECUTION_PLAN.md § Initiative: M365 Persona-Action Full-Support Remediation`
 - **Domain:** `infrastructure`
@@ -298,4 +298,8 @@ Stop and re-scope if truthful remediation requires undocumented tenant changes, 
 - `P5` is blocked by a live-universe shift between the stale published workforce certification artifact and the current post-`P4` runtime truth.
 - The bounded child blocker phase `plan:m365-persona-action-p5-recertification-scope-correction` is now created with governance notebook `INV-M365-DE` and generated verification `configs/generated/persona_action_p5_recertification_scope_correction_v1_verification.json`.
 - `P5S` is complete. The child blocker phase widened the parent `P5` closeout surface to the required `L96` lemma/invariant/notebook/scorecard/generated-verification evidence chain.
-- `P5` is now the active next act again and may truthfully republish the final post-remediation workforce certification matrix against the live `172`-alias / `445`-pair universe.
+- `P5` is complete. The final successor recertification is now published against the live `172`-alias / `445`-pair universe with:
+  - unique aliases: `103 green`, `36 approval-gated`, `1 actor-tier-gated`, `32 fenced`, `0 permission-blocked`, `0 legacy-stubbed`, `0 dead-routed`, `0 orphaned`
+  - active pairs: `360 green`, `49 approval-gated`, `1 actor-tier-gated`, `35 fenced`, `0 permission-blocked`, `0 legacy-stubbed`, `0 dead-routed`, `0 orphaned`
+- The explicit fenced perimeter is now the only remaining non-green runtime surface and is fully truth-reduced to the M365-only unsupported aliases carried in `src/ops_adapter/actions.py`.
+- `C5` is complete and the successor remediation initiative is fully closed.

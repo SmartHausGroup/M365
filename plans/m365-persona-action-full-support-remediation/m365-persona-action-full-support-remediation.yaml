@@ -2,16 +2,16 @@ plan_id: plan:m365-persona-action-full-support-remediation
 parent_plan_id: plan:m365-persona-action-certification
 title: Drive the certified non-green persona/action surface to truthful full support where possible and explicitly reduce unsupported claims where not
 version: '1.0'
-status: active
+status: complete
 owner: SMARTHAUS
 date_created: '2026-04-07'
-date_updated: '2026-04-07'
+date_updated: '2026-04-08'
 north_star_ref: Operations/NORTHSTAR.md
 execution_plan_ref: 'Operations/EXECUTION_PLAN.md § Initiative: M365 Persona-Action Full-Support Remediation'
 domain: infrastructure
 math_algorithm_scope: false
 objective: Drive the certified non-green persona/action surface toward truthful full support, prioritizing dead-routed and legacy-stubbed repo-local fixes first, then permission and policy alignment, and finally recertifying the workforce graph.
-current_state: P4 policy-fence remediation is complete. Repo-local OPA now mirrors the active runtime-backed persona graph, the stale denial surface has dropped from 419 denied active pairs / 152 aliases to the explicit unsupported perimeter of 35 denied active pairs / 32 aliases, and P5 final re-certification is now the active next act.
+current_state: The successor remediation initiative is complete. P5 recertification now republishes the live workforce graph at 172 unique aliases / 445 active pairs with no remaining permission-blocked, legacy-stubbed, dead-routed, or orphaned residue.
 target_state: Every persona/action pair that can truthfully work is either green, approval-gated, or actor-tier-gated; any pair that cannot truthfully work is either explicitly fenced by intentional governance or removed from the claimed workforce surface.
 requirements:
   - id: R0
@@ -46,7 +46,7 @@ phases:
     status: completed
   - id: P5
     text: Final re-certification closeout
-    status: pending
+    status: completed
 gates:
   - id: C0
     text: Remediation package exists
@@ -65,4 +65,4 @@ gates:
     status: completed
   - id: C5
     text: Final workforce matrix republished
-    status: pending
+    status: completed
