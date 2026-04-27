@@ -15,6 +15,16 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `Operations/PROJECT_FILE_INDEX.md` | File-index governance baseline for active readiness artifacts. | `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 | `docs/governance/MATHS_PROMPT_TEMPLATE.md` | Canonical MATHS prompt template for execution acts. | `Technical Architecture`, `Core Success Metrics` | `plan:m365-enterprise-readiness-master-plan:B4A` |
 
+## Active M365 GitHub Release And UCP Handoff Closure Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-github-release-and-ucp-handoff-closure/m365-github-release-and-ucp-handoff-closure.md` | Human-readable closure plan for promoting `com.smarthaus.m365@0.1.2` from local M365-side readiness into a proper GitHub Release and M365-side UCP handoff. | `Mission Statement`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:R0` |
+| `plans/m365-github-release-and-ucp-handoff-closure/m365-github-release-and-ucp-handoff-closure.yaml` | Structured YAML authority for the GitHub Release and UCP handoff closure plan. | `Technical Architecture`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:R0` |
+| `plans/m365-github-release-and-ucp-handoff-closure/m365-github-release-and-ucp-handoff-closure.json` | Structured JSON mirror for governance tooling on the GitHub Release and UCP handoff closure plan. | `Technical Architecture`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:R0` |
+| `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure.md` | Detailed Claude/Codex execution prompt for C0-C13 release closure, branch promotion, GitHub Release creation, downloaded-release verification, and UCP handoff. | `Technical Architecture`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:R0` |
+| `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure-prompt.txt` | Short kickoff prompt that points Claude to the detailed closure prompt and plan. | `Technical Architecture`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:R0` |
+
 ## Active M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |

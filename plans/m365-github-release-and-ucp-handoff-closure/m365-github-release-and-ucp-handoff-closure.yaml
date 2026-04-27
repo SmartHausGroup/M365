@@ -1,0 +1,164 @@
+plan_id: m365-github-release-and-ucp-handoff-closure
+status: Active-ready-for-Claude-execution
+date: "2026-04-27"
+owner: SMARTHAUS
+repo: /Users/smarthaus/Projects/GitHub/M365
+required_start_branch: development
+remote: https://github.com/SmartHausGroup/M365.git
+execution_plan_reference: plan:m365-github-release-and-ucp-handoff-closure:R0
+target_release:
+  pack_id: com.smarthaus.m365
+  version: "0.1.2"
+  tag: com.smarthaus.m365-v0.1.2
+  release_title: SMARTHAUS M365 Integration Pack 0.1.2
+  bundle_name: com.smarthaus.m365-0.1.2.ucp.tar.gz
+  local_install_cache: /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2
+  canonical_authority: GitHub Release asset from SmartHausGroup/M365 tag com.smarthaus.m365-v0.1.2
+current_local_truth_at_plan_creation:
+  branch: development
+  head: 257693a33fddcc83dd2ff63ccffc328c010683a8
+  branch_state: ahead-of-origin-development-by-5
+  github_release_count: 0
+  bundle_sha256: 29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e
+  manifest_sha256: bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9
+  payload_sha256: c09625a5b89b1578e2226463d43670dc8355db7d489338f3bf42001db16cabfd
+  conformance_sha256: ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7
+  dependency_lock_sha256: 376f10bab9f3554e5bce73ef55ea157bb8fe866e3d498ea50c6895b87e8f0e0b
+north_star_alignment:
+  source: Operations/NORTHSTAR.md
+  clauses:
+    - Mission Statement
+    - Operational Model: Self-Service & Self-Sufficient
+    - Technical Architecture
+    - Policy & Security
+decision:
+  summary: GitHub Release from main is the canonical M365 Integration Pack distribution authority.
+  local_integrationpacks_role: cache/install copy only
+  ucp_admission_role: UCP must admit by release tag, release asset, checksum, manifest, and provenance.
+governing_formula: "ReleaseReady(0.1.2) = SourceClean and BranchPromoted and TagPointsToMain and GitHubReleaseOwnsAssets and DownloadVerifies and ExtractsWithoutSourceRepo and RuntimeAcceptancePasses and LocalStoreIsCacheOfRelease and UcpHandoffReferencesRelease and EvidenceSynchronized"
+requirements:
+  - id: R0
+    title: Formal closure plan and Claude handoff
+    status: active
+    acceptance: Plan triplet, prompt pair, execution plan, file index, and action log exist and point to the GitHub Release closure path.
+  - id: R1
+    title: Preflight and governance-truth reconciliation
+    status: pending
+    chunks: [C0, C1]
+    acceptance: Correct repo/branch/remote are proven and active review-truth conflicts are closed before promotion.
+  - id: R2
+    title: Development branch verification and push
+    status: pending
+    chunks: [C2, C3]
+    acceptance: Development gates pass and origin/development contains the verified release source.
+  - id: R3
+    title: Staging promotion and verification
+    status: pending
+    chunks: [C4, C5]
+    acceptance: Staging contains the verified development commit and staging gates pass.
+  - id: R4
+    title: Main promotion and clean release build
+    status: pending
+    chunks: [C6, C7]
+    acceptance: Main contains the verified staging commit and clean-main rebuild freezes release assets.
+  - id: R5
+    title: Tag and draft GitHub Release
+    status: pending
+    chunks: [C8, C9]
+    acceptance: Tag com.smarthaus.m365-v0.1.2 points to main release commit and draft release contains required assets.
+  - id: R6
+    title: Downloaded release verification and publish
+    status: pending
+    chunks: [C10, C11]
+    acceptance: Downloaded release assets verify, extract, and import without source repo; release is published non-draft.
+  - id: R7
+    title: UCP handoff and tracker closeout
+    status: pending
+    chunks: [C12, C13]
+    acceptance: M365-side UCP handoff references GitHub Release assets and all trackers are synchronized.
+chunks:
+  - id: C0
+    title: Preflight And Repository Truth
+    status: pending
+    gate: Correct repo, branch, remote, GitHub auth, release list, tags, and remote branch state recorded.
+  - id: C1
+    title: Close Review-Truth Conflicts Before Promotion
+    status: pending
+    gate: No active governance contradiction remains for 0.1.2 vs 1.1.1 or artifact hashes.
+  - id: C2
+    title: Development Branch Release Verification
+    status: pending
+    gate: Verifier, real-socket acceptance, focused pytest, install SHA256SUMS, and diff check pass.
+  - id: C3
+    title: Commit And Push Development
+    status: pending
+    gate: origin/development equals verified local development release commit.
+  - id: C4
+    title: Promote Development To Staging
+    status: pending
+    gate: origin/staging contains origin/development by fast-forward or governed PR path.
+  - id: C5
+    title: Staging Verification
+    status: pending
+    gate: Staging verifier, acceptance, focused pytest, and install SHA256SUMS pass.
+  - id: C6
+    title: Promote Staging To Main
+    status: pending
+    gate: origin/main contains origin/staging by fast-forward or governed PR path.
+  - id: C7
+    title: Clean Main Rebuild And Release Asset Freeze
+    status: pending
+    gate: Clean-main build converges and final hashes/provenance are recorded.
+  - id: C8
+    title: Create Release Tag
+    status: pending
+    gate: com.smarthaus.m365-v0.1.2 points to the final main release commit.
+  - id: C9
+    title: Create Draft GitHub Release And Upload Assets
+    status: pending
+    gate: Draft release exists with required assets.
+  - id: C10
+    title: Downloaded Release Verification
+    status: pending
+    gate: Assets downloaded from GitHub verify with SHA256SUMS and extracted runtime imports without source repo.
+  - id: C11
+    title: Publish GitHub Release
+    status: pending
+    gate: Release is non-draft and points to the final tag/main commit.
+  - id: C12
+    title: UCP Handoff Packet
+    status: pending
+    gate: M365-side handoff tells UCP to admit from GitHub Release, not source repo or local folder.
+  - id: C13
+    title: Tracker Closeout
+    status: pending
+    gate: Action log, execution plan, file index, and plan triplet reflect final release truth.
+hard_boundaries:
+  - Do not mutate UCP or sibling repos.
+  - Do not force-push.
+  - Do not use git reset --hard.
+  - Do not move an existing release tag without explicit CTO approval.
+  - Do not publish from a dirty worktree.
+  - Do not log secrets, tokens, device codes, auth codes, refresh tokens, client secrets, private keys, subject object IDs, or phone numbers.
+hard_blockers:
+  - wrong repo, branch, or remote
+  - remote branch divergence
+  - branch protection with no PR path
+  - tag exists on a different commit
+  - GitHub release permission missing
+  - downloaded release checksum mismatch
+  - clean-main rebuild cannot converge
+  - source-repo dependency reappears
+  - UCP mutation is required to finish M365 release closure
+acceptance_criteria:
+  - origin/development contains verified 0.1.2 source and evidence.
+  - origin/staging contains the verified release source.
+  - origin/main contains the verified release source.
+  - tag com.smarthaus.m365-v0.1.2 points to final main release commit.
+  - GitHub Release exists and is non-draft.
+  - required release assets are present.
+  - downloaded release assets verify with SHA256SUMS.
+  - downloaded release bundle extracts and imports without source repo paths.
+  - local IntegrationPacks is documented as cache/install copy.
+  - UCP handoff references the GitHub Release URL and exact hashes.
+

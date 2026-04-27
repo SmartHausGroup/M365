@@ -1,0 +1,9 @@
+Execute the governed M365 GitHub Release and UCP handoff closure plan.
+
+Repo: `/Users/smarthaus/Projects/GitHub/M365`
+Plan: `plans/m365-github-release-and-ucp-handoff-closure/m365-github-release-and-ucp-handoff-closure.md`
+Detailed prompt: `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure.md`
+
+Work only in the M365 repo. Continue through C0-C13 unless you hit a hard blocker.
+If MCP/UCP/governance rejects an action, fix the missing rule/process/evidence item it names and continue.
+Do not mutate UCP; produce the M365-side GitHub Release and UCP handoff only.

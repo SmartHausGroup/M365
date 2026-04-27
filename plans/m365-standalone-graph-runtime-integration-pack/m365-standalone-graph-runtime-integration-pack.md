@@ -2,7 +2,7 @@
 
 **Plan ID:** `m365-standalone-graph-runtime-integration-pack`
 **Parent plan ID:** `m365-marketplace-bundle-packaging-conformance`
-**Status:** Active - **Fix-Required / NO-GO**. The previous claim of `Complete (M365-side)` and release decision `GO` for `com.smarthaus.m365@1.1.0` is **withdrawn** as over-claimed. The later `1.1.1` fix snapshot proved real Microsoft delegated auth plus live read-only `graph.me`, but the 2026-04-27 installed-payload smoke still returned `not_ready/art`, so it is historical prerelease evidence rather than a formal ready artifact. The active corrective plan is `plans/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md`, targeting `com.smarthaus.m365@0.1.2`. Phases `P5`-`P10` remain fix-required until that plan closes green.
+**Status:** Closed-via-corrective-plan (2026-04-27). The previous `1.1.0` `GO` was withdrawn as over-claimed; the `1.1.1` snapshot is historical prerelease evidence; the corrective plan `plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix` closed `Complete-GO` for `com.smarthaus.m365@0.1.2` (bundle SHA `29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e`). The M365-side release authority is now the GitHub Release tagged `com.smarthaus.m365-v0.1.2` produced by `plan:m365-github-release-and-ucp-handoff-closure`. Historical `Fix-Required` language for phases `P5`-`P10` is superseded by that closure; do not re-open under this plan.
 **Date:** 2026-04-25
 **Owner:** SMARTHAUS
 **Execution plan reference:** `plan:m365-standalone-graph-runtime-integration-pack:R1`

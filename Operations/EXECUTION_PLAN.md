@@ -102,6 +102,22 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 5) Plan Phase 1 provisioning window
    - When ready, enable `ALLOW_M365_MUTATIONS=true` and execute bootstrap + PowerShell site creation
 
+## Initiative: M365 GitHub Release And UCP Handoff Closure
+
+**Initiative:** Promote the verified `com.smarthaus.m365@0.1.2` Integration Pack from local M365-side readiness into a proper GitHub Release and create the M365-side UCP handoff package.
+
+**Plan:** `plans/m365-github-release-and-ucp-handoff-closure/m365-github-release-and-ucp-handoff-closure.md`
+
+**Reference:** `plan:m365-github-release-and-ucp-handoff-closure:R0`
+
+**Status:** Active - ready for Claude execution. The `0.1.2` pack is locally proven and M365-side GO, but no GitHub Release exists yet and the local `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` directory is only an install/cache path, not the canonical distribution authority.
+
+**Current next act:** Execute chunks `C0` through `C13`: preflight, close review-truth conflicts, verify and push `development`, promote to `staging`, promote to `main`, rebuild from clean `main`, tag `com.smarthaus.m365-v0.1.2`, create and validate the GitHub Release, publish it, then create the M365-side UCP handoff. UCP source mutation remains out of scope.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure.md`, `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure-prompt.txt`
+
+**Status update (2026-04-27 09:12 EDT):** Opened the formal closure plan after confirming the repo is on `development`, local HEAD is `257693a33fddcc83dd2ff63ccffc328c010683a8`, the branch is ahead of `origin/development` by 5 commits, and no GitHub Release exists for the M365 pack. This plan makes GitHub Release assets from `main` the canonical distribution source and explicitly demotes `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` to a local cache/install copy. No branch promotion, release publication, UCP mutation, tenant setting, token, or secret changed in this plan-creation slice.
+
 ## Initiative: M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix
 
 **Initiative:** Correct the standalone M365 Graph runtime Integration Pack to the truthful `0.1.2` version line and repair the remaining formal pack-readiness defects.
@@ -111,7 +127,7 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 **Reference:** `plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:R0`
 
 **Status:** Complete - C0-C10 complete and gated, including C9 live installed-pack Microsoft device-code smoke and C8 clean-source rebuild; M365-side `release_decision` for `0.1.2` is `GO`.
-**Current next act:** UCP-side Marketplace activation/admission remains a sibling UCP plan boundary; M365-side pack readiness is complete.
+**Current next act:** Superseded by `plan:m365-github-release-and-ucp-handoff-closure:R0` before UCP activation. M365-side pack readiness is complete, but formal distribution is not closed until the `0.1.2` artifact is published as a GitHub Release from `main` and verified from downloaded release assets.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md`, `docs/prompts/codex-m365-standalone-graph-runtime-pack-0-1-2-readiness-fix-prompt.txt`
 

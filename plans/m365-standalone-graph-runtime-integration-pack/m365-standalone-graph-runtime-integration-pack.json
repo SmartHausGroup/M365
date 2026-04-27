@@ -3,7 +3,11 @@
   "parent_plan_id": "plan:m365-marketplace-bundle-packaging-conformance",
   "title": "M365 Standalone Graph Runtime Integration Pack",
   "version": "1.0",
-  "status": "Fix-Required",
+  "status": "Closed-via-corrective-plan",
+  "closure_reference": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix",
+  "release_authority": "github-release-com.smarthaus.m365-v0.1.2",
+  "release_bundle_sha256": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
+  "historical_status": "Fix-Required-superseded",
   "active_corrective_plan": {
     "plan_id": "m365-standalone-graph-runtime-pack-0-1-2-readiness-fix",
     "reason": "The 1.1.1 snapshot proved live delegated Graph access but failed formal installed-payload readiness with art=false and still needs dependency, real-socket acceptance, and provenance correction.",
