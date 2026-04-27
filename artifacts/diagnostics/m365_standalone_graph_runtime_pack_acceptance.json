@@ -58,14 +58,14 @@
   "install_dir": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2",
   "integrity": {
     "actual": {
-      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
-      "conformance.json": "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7",
-      "manifest.json": "01d0ca8722880f4ce99b3686cc0511c3052f347d39f8f5e949b8978ec3683e7c"
+      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
+      "conformance.json": "ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7",
+      "manifest.json": "bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9"
     },
     "expected": {
-      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
-      "conformance.json": "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7",
-      "manifest.json": "01d0ca8722880f4ce99b3686cc0511c3052f347d39f8f5e949b8978ec3683e7c"
+      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
+      "conformance.json": "ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7",
+      "manifest.json": "bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9"
     },
     "ok": true
   },

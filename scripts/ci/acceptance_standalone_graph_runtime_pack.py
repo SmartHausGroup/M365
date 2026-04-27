@@ -461,7 +461,7 @@ def main() -> int:
     }
     out = REPO / "artifacts" / "diagnostics" / "m365_standalone_graph_runtime_pack_acceptance.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     passed = sum(1 for v in clauses.values() if v)
     print(f"C5 real-socket acceptance: {decision}; clauses passed: {passed}/{len(clauses)}")
     print(f"Evidence: {out}")

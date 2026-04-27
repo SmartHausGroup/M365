@@ -318,7 +318,7 @@ def main() -> int:
     }
     out = REPO / "configs" / "generated" / "standalone_graph_runtime_pack_verification.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     if overall:
         print(f"Standalone Graph runtime pack verification PASSED ({len(results)} checks)")
         return 0
