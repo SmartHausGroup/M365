@@ -43,7 +43,7 @@
   "what_works_without_live_smoke": {
     "0_1_2_artifact_built": true,
     "0_1_2_install_dir_present": true,
-    "bundle_sha256": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
+    "bundle_sha256": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
     "dependency_contract_present": true,
     "dependency_probe_endpoint_reports_no_missing": true,
     "install_dir_sha256sums_clean": true,

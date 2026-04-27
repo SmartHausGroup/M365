@@ -603,6 +603,12 @@ def _emit_install_sha256sums(install_dir: Path, version: str) -> None:
 
 
 def main() -> int:
+    # Capture source provenance before writing generated dist/install outputs.
+    # Otherwise a clean checkout records itself dirty because this script updates
+    # tracked dist/m365_pack files as part of the build.
+    source_clean, dirty_entries = _git_porcelain_status()
+    dirty_digests = _digest_dirty_files(dirty_entries) if not source_clean else []
+
     DIST.mkdir(parents=True, exist_ok=True)
     stage_root = DIST / "_payload_stage"
     sig_dir = DIST / "signatures"
@@ -631,8 +637,6 @@ def main() -> int:
     bundle_sha = _write_bundle(bundle_path, manifest_path, payload_path, sig_dir, evidence_dir, assets_dir)
 
     install_dir = INTEGRATION_PACKS / "M365" / VERSION
-    source_clean, dirty_entries = _git_porcelain_status()
-    dirty_digests = _digest_dirty_files(dirty_entries) if not source_clean else []
     dependency_lock_sha = _dependency_lock_sha(stage_root)
     provenance = _emit_provenance(
         bundle_sha,

@@ -22,7 +22,7 @@
   },
   "content_digest": {
     "algorithm": "sha256",
-    "value": "a7abfd66c3bede86449997f54e5fca6d9c1abaf04dde72b432021589135ea5f7"
+    "value": "fb65e08ccc80240d7b871019099130a7f7ce4084b603dae219f895d55626d878"
   },
   "description": "SMARTHAUS Microsoft 365 standalone Graph runtime Integration Pack: ships the local Microsoft Graph runtime service, OAuth/app-only auth with full /v1/auth/start /v1/auth/check /v1/auth/status /v1/auth/clear lifecycle, secure token store, token-store-backed readiness, read-only Graph action runtime with legacy alias mapping, UCP-facing client/contracts, and packaging evidence.",
   "display_name": "Microsoft 365",

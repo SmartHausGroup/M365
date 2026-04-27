@@ -370,7 +370,7 @@ The final implementation must add or update validation commands for the dependen
 - [x] CTO approves implementation start. (2026-04-27 user-initiated continuation)
 - [x] MA notebooks and invariants created. (L99 bundle, scorecard green)
 - [x] Runtime/package fixes implemented. (C1, C3, C4, C5, C6, C8 changes shipped)
-- [x] `0.1.2` artifact built and installed. (deterministic SHA `df714fa6...f6650`, install-dir SHA256SUMS clean)
+- [x] `0.1.2` artifact built and installed. (deterministic SHA `9af6df20...2eee`, install-dir SHA256SUMS clean)
 - [ ] Acceptance and live smoke prove `PackReady(0.1.2)`. (mocked acceptance + verifier + regression all green; live smoke C9 passed against installed `0.1.2`; clean-source provenance C8 remains blocked on CTO commit)
 
 ## Chunk Progress (2026-04-27)
@@ -384,7 +384,7 @@ The final implementation must add or update validation commands for the dependen
 | C4 - Dependency Contract | done | Lazy `jwt`/`yaml` imports; `RUNTIME_REQUIRED_MODULES` + `_probe_required_dependencies()` + `outcome=dependency_missing` with `missing_modules` list; `/v1/health/dependencies` endpoint; staged `pack_dependencies.json`. |
 | C5 - Real Socket Acceptance | done | `scripts/ci/acceptance_standalone_graph_runtime_pack.py` rewritten to spawn a subprocess+uvicorn on a dynamic loopback port and call `execute_m365_action()` over real `httpx`; `_assert_unpatched_http_runtime_invoke` guard fails closed if `_http_runtime_invoke` is monkey-patched; 21/21 GO. |
 | C6 - Mocked Readiness To Ready | done | `test_readiness_flips_to_ready_success_with_pack_metadata_layout` proves the full readiness vector (svc, art, src, ctr, auth, tok, perm, graph, aud) flips to `ready/success` against the new layout. |
-| C7 - Deterministic Build & Install | done | Two consecutive builds produce identical bundle SHA `df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650`. Install-dir `SHA256SUMS` verifies clean. Verifier 9/9, acceptance 21/21, regression 96 passed. |
+| C7 - Deterministic Build & Install | done | Two consecutive builds produce identical bundle SHA `9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee`. Install-dir `SHA256SUMS` verifies clean. Verifier 9/9, acceptance 21/21, regression 96 passed. |
 | C8 - Provenance | done | `_emit_provenance` now records `source.clean`, `source.state`, `dirty_files`, `dirty_files_digests`, `payload_sha256`, `dependency_lock_sha256`, and a `reproducibility` block whose `claims_clean_reproducible` mirrors `source.clean`. Current state: `source.clean=false` (truthful). |
 | C9 - Live Read-Only Smoke | done | Installed `0.1.2` runtime completed Microsoft device-code sign-in for `phil@smarthausgroup.com`; `graph.me` returned success; readiness returned `ready/success`. Evidence: `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json`. |
 | C10 - Evidence & Tracker Sync | done | Action log + execution plan + project file index synchronized; release packet `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-packet.md` published with `release_decision=NO_GO` pending clean-source rebuild. |

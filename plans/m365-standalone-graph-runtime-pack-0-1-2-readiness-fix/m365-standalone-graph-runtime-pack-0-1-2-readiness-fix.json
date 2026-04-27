@@ -152,7 +152,7 @@
       ],
       "evidence": {
         "two_consecutive_builds_byte_identical": true,
-        "bundle_sha256": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
+        "bundle_sha256": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
         "provenance_records_clean_state": true,
         "current_source_clean": false,
         "claims_clean_reproducible": false,
@@ -199,10 +199,10 @@
     "C8 source.clean=false; provenance correctly records claims_clean_reproducible=false; CTO commit + clean-source rebuild required before GO."
   ],
   "deterministic_build": {
-    "bundle_sha256": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
-    "manifest_sha256": "89f71f2fe351ece18b4602f4d5a43567519a5d8da7ec95187ae66f07d90ec13f",
+    "bundle_sha256": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
+    "manifest_sha256": "01d0ca8722880f4ce99b3686cc0511c3052f347d39f8f5e949b8978ec3683e7c",
     "conformance_sha256": "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7",
-    "payload_sha256": "a7abfd66c3bede86449997f54e5fca6d9c1abaf04dde72b432021589135ea5f7",
+    "payload_sha256": "fb65e08ccc80240d7b871019099130a7f7ce4084b603dae219f895d55626d878",
     "dependency_lock_sha256": "3a01d509acf0a62a4619fd08d958566ddf19140b34af9370a2bb6e95764b2d2a",
     "two_consecutive_builds_byte_identical": true
   },
