@@ -1,0 +1,167 @@
+plan_id: m365-standalone-graph-runtime-pack-0-1-2-readiness-fix
+parent_plan_id: m365-standalone-graph-runtime-integration-pack
+supersedes:
+  - m365-standalone-graph-runtime-integration-pack-fix
+status: Active-NO_GO-pending-clean-source-rebuild
+date: "2026-04-27"
+chunk_status:
+  C0: done
+  C2: done
+  C1: done
+  C3: done
+  C4: done
+  C5: done
+  C6: done
+  C7: done
+  C8: done
+  C9: done
+  C10: done
+release_decision: NO_GO
+release_decision_reasons:
+  - C8 source.clean=false; provenance correctly records claims_clean_reproducible=false; CTO commit + clean-source rebuild required before GO.
+deterministic_build:
+  bundle_sha256: "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650"
+  manifest_sha256: "89f71f2fe351ece18b4602f4d5a43567519a5d8da7ec95187ae66f07d90ec13f"
+  conformance_sha256: "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7"
+  payload_sha256: "a7abfd66c3bede86449997f54e5fca6d9c1abaf04dde72b432021589135ea5f7"
+  dependency_lock_sha256: "3a01d509acf0a62a4619fd08d958566ddf19140b34af9370a2bb6e95764b2d2a"
+  two_consecutive_builds_byte_identical: true
+acceptance_summary:
+  real_local_socket_acceptance_clauses_passed: 21
+  real_local_socket_acceptance_clauses_total: 21
+  verifier_checks_passed: 9
+  verifier_checks_total: 9
+  regression_passed: 96
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:R0
+target_artifact:
+  pack_id: com.smarthaus.m365
+  pack_version: "0.1.2"
+  runtime_version: "0.1.2"
+  install_dir: /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2
+  bundle_name: com.smarthaus.m365-0.1.2.ucp.tar.gz
+historical_artifacts:
+  - version: "1.1.0"
+    status: historical-prerelease-no-go
+  - version: "1.1.1"
+    status: historical-prerelease-real-graph-smoke-pass-but-formal-readiness-no-go
+north_star_alignment:
+  source: Operations/NORTHSTAR.md
+  clauses:
+    - Mission Statement
+    - Operational Model: Self-Service & Self-Sufficient
+    - Technical Architecture
+    - Policy & Security
+objective: Correct the M365 standalone Graph runtime pack version line to 0.1.2 and repair formal pack readiness defects before any release claim.
+current_truth:
+  - The installed 1.1.1 artifact can complete SmartHaus delegated device-code auth.
+  - The installed 1.1.1 payload can execute live read-only Microsoft Graph graph.me.
+  - Installed-payload readiness remains not_ready with art=false.
+  - The dependency contract is implicit and fails under plain system Python.
+  - The release acceptance must prove real local socket httpx client execution without patching _http_runtime_invoke.
+  - Provenance must be clean-source reproducible before final GO.
+governing_formula: "PackReady(v) = VersionCorrect(v) and ArtifactSelfDescribing(v) and DependencyClosed(v) and SourceIndependent(v) and RuntimeLaunches(v) and AuthLifecycleWorks(v) and ReadinessReady(v) and ClientSocketAcceptance(v) and LiveReadOnlyGraph(v) and ProvenanceReproducible(v) and EvidenceSynchronized(v)"
+requirements:
+  - id: R0
+    title: Governed 0.1.2 fix-plan package
+    status: complete
+    acceptance: Plan triplet, prompt pair, execution plan, file index, and action log are synchronized.
+    completed_by_chunks: [C2, C10]
+  - id: R1
+    title: Baseline truth and version correction
+    status: complete
+    acceptance: All active docs/tooling identify 0.1.2 as the corrective artifact and 1.1.x as historical prerelease evidence.
+    completed_by_chunks: [C0, C1]
+  - id: R2
+    title: MA formula, calculus, lemmas, invariants, and notebook gate
+    status: complete
+    acceptance: Notebook-backed invariants exist for version, artifact layout, dependency closure, source independence, socket acceptance, readiness, and provenance.
+    completed_by_chunks: [C2]
+    evidence:
+      lemma_bundle: L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1
+      scorecard_status: green
+  - id: R3
+    title: Artifact layout and readiness repair
+    status: complete
+    acceptance: Extracted installed payload readiness no longer fails the art clause.
+    completed_by_chunks: [C3]
+    evidence:
+      probe_artifact_at_install_dir: true
+      payload_self_describing: pack_metadata.json staged in payload root; install_dir has both envelope and inner-payload files
+  - id: R4
+    title: Dependency contract repair
+    status: complete
+    acceptance: The pack runs from a declared dependency environment or fails closed with an explicit dependency_missing report.
+    completed_by_chunks: [C4]
+    evidence:
+      pack_dependencies_json: present
+      dependency_probe_endpoint: /v1/health/dependencies
+      launcher_module_importable_without_httpx: true
+      launcher_module_importable_without_fastapi: true
+      launcher_module_importable_without_uvicorn: true
+      lazy_imports_inside_build_app: oauth_mod, app_only, graph.actions, health
+  - id: R5
+    title: Real local socket acceptance
+    status: complete
+    acceptance: UCP-facing client execute_m365_action uses unpatched httpx against the local installed runtime URL.
+    completed_by_chunks: [C5]
+    evidence:
+      acceptance_clauses_passed: 21
+      acceptance_clauses_total: 21
+      http_runtime_invoke_unpatched_guard: passes
+  - id: R6
+    title: Provenance and reproducible build
+    status: complete-pending-clean-source-rebuild
+    acceptance: Clean source state can reproduce the 0.1.2 artifact with byte-identical bundle hash.
+    completed_by_chunks: [C7, C8]
+    evidence:
+      two_consecutive_builds_byte_identical: true
+      bundle_sha256: "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650"
+      provenance_records_clean_state: true
+      current_source_clean: false
+      claims_clean_reproducible: false
+      blocker: source.clean=false; CTO commit + clean-source rebuild required before final GO can record clean reproducible provenance
+  - id: R7
+    title: Build, install, evidence sync, and live read-only proof
+    status: complete
+    acceptance: 0.1.2 is installed in the local store, SHA256SUMS passes, readiness is ready/success after auth, and graph.me succeeds live.
+    completed_by_chunks: [C7, C9, C10]
+    evidence:
+      install_dir_present: true
+      install_dir_sha256sums_clean: true
+      mocked_readiness_after_auth: ready/success
+      live_smoke: passed-device-code-graph-me-ready-success
+      live_smoke_evidence: artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json
+      blocker_report: artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke_blocker.json
+phase_status:
+  P0: complete
+  P1: complete
+  P2: complete
+  P3: complete
+  P4: complete
+  P5: complete-pending-clean-source-rebuild
+  P6: complete
+  P7: complete-pending-clean-source-rebuild
+acceptance_criteria:
+  - manifest reports version 0.1.2.
+  - runtime reports runtime_version 0.1.2.
+  - install directory is /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2.
+  - installed payload resolves m365_runtime from payload path only.
+  - installed payload readiness reaches ready/success after auth.
+  - dependency behavior is declared and fail-closed rather than accidental ModuleNotFoundError.
+  - release acceptance uses real local socket and unpatched ucp_m365_pack.client.execute_m365_action.
+  - conformance scans full payload and fails on source-root fallback strings.
+  - provenance is clean-source reproducible for GO.
+  - SHA256SUMS passes in the 0.1.2 install directory.
+stop_conditions:
+  - 1.1.1 is treated as the formal ready artifact.
+  - any active artifact emits a 1.1.x release version.
+  - readiness success bypasses the installed payload path.
+  - dependency success depends on the repo venv without explicit contract.
+  - release acceptance patches the runtime HTTP invocation.
+  - provenance claims clean reproducibility from a dirty source tree.
+  - username/password auth is introduced.
+  - token, secret, private key, auth code, or refresh token is logged.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md
+  kickoff: docs/prompts/codex-m365-standalone-graph-runtime-pack-0-1-2-readiness-fix-prompt.txt

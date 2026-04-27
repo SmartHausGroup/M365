@@ -1,0 +1,77 @@
+{
+  "active_version": "0.1.2",
+  "clauses": {
+    "actions_count_locked": true,
+    "art_true_after_extract": true,
+    "audit_does_not_leak_access_token": true,
+    "audit_redacts_secrets_in_params": true,
+    "auth_check_is_signed_in": true,
+    "dependency_probe_no_missing": true,
+    "http_runtime_invoke_unpatched": true,
+    "install_dir_present": true,
+    "integrity_sha256sums": true,
+    "mutation_action_fenced": true,
+    "readiness_after_is_ready": true,
+    "readiness_after_label_is_success": true,
+    "runtime_http_action_succeeds": true,
+    "runtime_subprocess_no_error": true,
+    "runtime_version_locked": true,
+    "status_after_is_signed_in": true,
+    "ucp_client_directory_org_alias_fences_pkce_correctly": true,
+    "ucp_client_directory_org_alias_targets_runtime_action": true,
+    "ucp_client_legacy_alias_succeeds": true,
+    "ucp_client_legacy_alias_targets_runtime_action": true,
+    "ucp_client_routing_path_is_http_runtime": true
+  },
+  "findings": {
+    "actions_count": 11,
+    "art_after": true,
+    "art_before": true,
+    "audit_no_access_token": true,
+    "audit_redacts_secrets": true,
+    "check_state": "signed_in",
+    "dependency_missing_modules": [],
+    "dependency_present_modules": [
+      "httpx",
+      "fastapi",
+      "uvicorn"
+    ],
+    "direct_invoke_status_class": "success",
+    "http_runtime_invoke_unpatched_guard": true,
+    "mutation_status_class": "mutation_fence",
+    "readiness_after_label": "success",
+    "readiness_after_state": "ready",
+    "readiness_before_label": "auth",
+    "readiness_before_state": "not_ready",
+    "runtime_subprocess_returncode": -15,
+    "runtime_subprocess_stderr_tail": "",
+    "runtime_version": "0.1.2",
+    "start_state": "auth_started",
+    "status_after": "signed_in",
+    "status_before": "auth_required",
+    "ucp_client_audit_action": "graph.users.list",
+    "ucp_client_routing_path": "http_runtime",
+    "ucp_client_status_class": "success",
+    "ucp_org_audit_action": "graph.org_profile",
+    "ucp_org_status_class": "auth_required"
+  },
+  "install_dir": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2",
+  "integrity": {
+    "actual": {
+      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
+      "conformance.json": "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7",
+      "manifest.json": "89f71f2fe351ece18b4602f4d5a43567519a5d8da7ec95187ae66f07d90ec13f"
+    },
+    "expected": {
+      "com.smarthaus.m365-0.1.2.ucp.tar.gz": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
+      "conformance.json": "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7",
+      "manifest.json": "89f71f2fe351ece18b4602f4d5a43567519a5d8da7ec95187ae66f07d90ec13f"
+    },
+    "ok": true
+  },
+  "live_ucp_through_installed_pack": "deferred_to_sibling_ucp_plan",
+  "phase": "C5",
+  "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C5",
+  "release_decision": "GO",
+  "runtime_run_error": null
+}

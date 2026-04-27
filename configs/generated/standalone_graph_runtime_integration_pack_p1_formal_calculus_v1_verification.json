@@ -1,0 +1,62 @@
+{
+  "allowed_auth_modes": [
+    "app_only_certificate",
+    "app_only_secret",
+    "auth_code_pkce",
+    "device_code"
+  ],
+  "execute_outcomes_observed": [
+    "auth_required",
+    "graph_unreachable",
+    "internal_error",
+    "mutation_fence",
+    "permission_missing",
+    "policy_denied",
+    "success",
+    "throttled"
+  ],
+  "failure_lattice": [
+    "success",
+    "not_configured",
+    "auth_required",
+    "consent_required",
+    "permission_missing",
+    "throttled",
+    "graph_unreachable",
+    "policy_denied",
+    "mutation_fence",
+    "internal_error"
+  ],
+  "green_base_case_ready": true,
+  "mutation_fence_holds": true,
+  "negative_clause_cases": [
+    "I1_artifact_self_contained",
+    "I2_runtime_launchable",
+    "I3_auth_configured",
+    "I3b_password_rejected",
+    "I4_token_store_safe",
+    "I5_graph_reachable",
+    "I6_permissions_sufficient",
+    "I7_ucp_resolves_only_from_root",
+    "I7b_ucp_no_graph_embed",
+    "I8_audit_complete",
+    "I9_no_source_repo"
+  ],
+  "phase": "P1",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack:R2",
+  "purpose": "Symbolic verification of the readiness predicate, action-execution function, and failure lattice for the standalone M365 Graph runtime integration pack.",
+  "redaction_regex_proof": true,
+  "retry_budgets": {
+    "graph_5xx_max": 2,
+    "throttled_max": 2,
+    "token_refresh_max": 1
+  },
+  "time_bounds": {
+    "graph_default_s": 30.0,
+    "graph_max_s": 60.0,
+    "health_band_s": 10.0,
+    "launch_s": 5.0,
+    "token_refresh_s": 15.0
+  },
+  "truthful": true
+}

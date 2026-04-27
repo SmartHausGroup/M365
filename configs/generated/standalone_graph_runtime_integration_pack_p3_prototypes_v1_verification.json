@@ -1,0 +1,67 @@
+{
+  "action_registry_size": 11,
+  "allowed_auth": [
+    "app_only_certificate",
+    "app_only_secret",
+    "auth_code_pkce",
+    "device_code"
+  ],
+  "auth_classification_test_count": 6,
+  "expected_installed_layout": [
+    "manifest.json",
+    "payload.tar.gz",
+    "signatures/manifest.sig",
+    "signatures/payload.sig",
+    "evidence/conformance.json",
+    "SHA256SUMS"
+  ],
+  "expected_payload_layout_target": [
+    "manifest.json",
+    "setup_schema.json",
+    "registry/agents.yaml",
+    "registry/action_registry.yaml",
+    "ucp_m365_pack/__init__.py",
+    "ucp_m365_pack/contracts.py",
+    "ucp_m365_pack/client.py",
+    "m365_runtime/__init__.py",
+    "m365_runtime/__main__.py",
+    "m365_runtime/launcher.py",
+    "m365_runtime/auth/__init__.py",
+    "m365_runtime/auth/oauth.py",
+    "m365_runtime/auth/app_only.py",
+    "m365_runtime/auth/token_store.py",
+    "m365_runtime/graph/__init__.py",
+    "m365_runtime/graph/client.py",
+    "m365_runtime/graph/errors.py",
+    "m365_runtime/graph/registry.py",
+    "m365_runtime/health.py",
+    "m365_runtime/audit.py"
+  ],
+  "forbidden_source_repo_tokens": [
+    "M365_REPO_ROOT",
+    "SMARTHAUS_M365_REPO_ROOT",
+    "UCP_ROOT",
+    "REPOS_ROOT",
+    "UCP_REPOS_ROOT",
+    "../M365",
+    "from ops_adapter"
+  ],
+  "lattice": [
+    "success",
+    "not_configured",
+    "auth_required",
+    "consent_required",
+    "permission_missing",
+    "throttled",
+    "graph_unreachable",
+    "policy_denied",
+    "mutation_fence",
+    "internal_error"
+  ],
+  "permission_test_count": 5,
+  "phase": "P3",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack:R4",
+  "readiness_test_count": 4,
+  "token_store_test_count": 7,
+  "truthful": true
+}

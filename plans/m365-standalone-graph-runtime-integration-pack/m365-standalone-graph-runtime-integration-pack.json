@@ -1,0 +1,341 @@
+{
+  "plan_id": "plan:m365-standalone-graph-runtime-integration-pack",
+  "parent_plan_id": "plan:m365-marketplace-bundle-packaging-conformance",
+  "title": "M365 Standalone Graph Runtime Integration Pack",
+  "version": "1.0",
+  "status": "Fix-Required",
+  "active_corrective_plan": {
+    "plan_id": "m365-standalone-graph-runtime-pack-0-1-2-readiness-fix",
+    "reason": "The 1.1.1 snapshot proved live delegated Graph access but failed formal installed-payload readiness with art=false and still needs dependency, real-socket acceptance, and provenance correction.",
+    "target_version": "0.1.2"
+  },
+  "phase_status": {
+    "P0": "complete",
+    "P1": "complete",
+    "P2": "complete",
+    "P3": "complete",
+    "P4": "complete",
+    "P5": "fix-required",
+    "P6": "fix-required",
+    "P7": "fix-required",
+    "P8": "fix-required",
+    "P9": "fix-required",
+    "P10": "fix-required"
+  },
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-25",
+  "date_updated": "2026-04-25",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Standalone Graph Runtime Integration Pack",
+  "domain": "infrastructure",
+  "math_algorithm_scope": true,
+  "objective": "Build a real standalone Microsoft Graph auth/runtime integration pack that UCP can install, launch, configure, health-check, and invoke from the installed marketplace artifact.",
+  "current_truth": [
+    "The current artifact is a UCP-facing client/contract pack.",
+    "The current artifact requires a configured M365 service URL for live work.",
+    "The current artifact does not contain the full Microsoft Graph runtime service.",
+    "A real integration pack must include the runtime service and fail closed until auth and Graph health pass.",
+    "The 1.1.1 snapshot is historical prerelease evidence, not a formal ready artifact.",
+    "The active corrective target is com.smarthaus.m365@0.1.2.",
+    "Installed-payload readiness currently fails art=false."
+  ],
+  "north_star_alignment": {
+    "source": "Operations/NORTHSTAR.md",
+    "principles": [
+      "M365-only tooling",
+      "self-service and self-sufficient operation",
+      "policy-enforced actions",
+      "audit coverage",
+      "truthful commercialization boundaries"
+    ],
+    "anti_alignment": [
+      "Does not permit username/password auth storage.",
+      "Does not permit UCP-embedded Graph implementation.",
+      "Does not permit source-repo lookup from installed artifact.",
+      "Does not permit Ready=true before service, auth, token, Graph, and permission health pass."
+    ]
+  },
+  "scope": {
+    "in_scope": [
+      "MA formalization for standalone pack readiness and action execution",
+      "Microsoft OAuth delegated auth and app-only auth setup contracts",
+      "secure token storage policy",
+      "local runtime service launched from installed artifact",
+      "UCP setup/auth/health/action contracts",
+      "read-only Microsoft Graph action acceptance",
+      "reproducible marketplace artifact packaging"
+    ],
+    "out_of_scope": [
+      "username/password storage",
+      "UCP-embedded Graph implementation",
+      "runtime sibling repo lookup",
+      "write actions before separate mutation-governance approval",
+      "public SaaS hosting or webhook receivers"
+    ],
+    "file_allowlist": [
+      "plans/m365-standalone-graph-runtime-integration-pack/**",
+      "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack.md",
+      "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-prompt.txt",
+      "Operations/EXECUTION_PLAN.md",
+      "Operations/ACTION_LOG.md",
+      "Operations/PROJECT_FILE_INDEX.md"
+    ]
+  },
+  "readiness_formula": "Ready(p,c,r,u,A,h)=ArtifactSelfContained(p,r) and RuntimeLaunchable(p,r) and AuthConfigured(c) and TokenStoreSafe(c,r) and GraphReachable(c,h) and PermissionsSufficient(A,c,h) and UcpContractsResolvable(p,u) and AuditComplete(A,h) and NoSourceRepoDependency(p,r)",
+  "requirements": [
+    {
+      "id": "R0",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R0",
+      "description": "Create the governed plan package and stop before implementation.",
+      "acceptance_criteria": "Plan triplet, prompt pair, execution plan, file index, and action log are synchronized.",
+      "depends_on": []
+    },
+    {
+      "id": "R1",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R1",
+      "description": "Approve intent and current-state truth before math or code.",
+      "acceptance_criteria": "CTO approves the real-integration intent and current artifact gap truth.",
+      "depends_on": [
+        "R0"
+      ]
+    },
+    {
+      "id": "R2",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R2",
+      "description": "Produce formal readiness/action calculus.",
+      "acceptance_criteria": "Readiness and execution predicates are documented with deterministic failure classes.",
+      "depends_on": [
+        "R1"
+      ]
+    },
+    {
+      "id": "R3",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R3",
+      "description": "Produce lemmas and executable invariants.",
+      "acceptance_criteria": "Lemma docs and invariant YAML bind artifact, auth, permission, readiness, audit, and packaging obligations.",
+      "depends_on": [
+        "R2"
+      ]
+    },
+    {
+      "id": "R4",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R4",
+      "description": "Produce green notebooks and scorecard before extraction.",
+      "acceptance_criteria": "Notebook replay is green and scorecard certifies deterministic extraction readiness.",
+      "depends_on": [
+        "R3"
+      ]
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R5",
+      "description": "Build installed-artifact runtime service with real Microsoft auth.",
+      "acceptance_criteria": "Installed artifact launches runtime service and exposes real Microsoft auth setup/status/clear flows.",
+      "depends_on": [
+        "R4"
+      ]
+    },
+    {
+      "id": "R6",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R6",
+      "description": "Build read-only Graph action runtime with permission matrix and audit.",
+      "acceptance_criteria": "Read-only Graph actions execute with permission matrix, retry bounds, normalized errors, and audit.",
+      "depends_on": [
+        "R5"
+      ]
+    },
+    {
+      "id": "R7",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R7",
+      "description": "Build UCP contracts and local lifecycle launch/health behavior.",
+      "acceptance_criteria": "UCP resolves setup, auth, health, readiness, action, and lifecycle contracts from installed artifact.",
+      "depends_on": [
+        "R6"
+      ]
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R8",
+      "description": "Produce reproducible standalone marketplace artifact.",
+      "acceptance_criteria": "Final .ucp.tar.gz includes runtime service, checksums, signatures, provenance, and conformance evidence.",
+      "depends_on": [
+        "R7"
+      ]
+    },
+    {
+      "id": "R9",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R9",
+      "description": "Complete UCP activation and read-only live acceptance.",
+      "acceptance_criteria": "Source-removal and live read-only UCP-to-Graph acceptance pass.",
+      "depends_on": [
+        "R8"
+      ]
+    },
+    {
+      "id": "R10",
+      "ref": "plan:m365-standalone-graph-runtime-integration-pack:R10",
+      "description": "Publish operations, rollback, and release evidence.",
+      "acceptance_criteria": "Runbook, rollback, token recovery, version migration, and support evidence are complete.",
+      "depends_on": [
+        "R9"
+      ]
+    }
+  ],
+  "parent_child_phases": [
+    {
+      "id": "P0",
+      "title": "Intent Definition And Baseline Lock",
+      "children": [
+        "P0A current artifact autopsy",
+        "P0B target-state intent",
+        "P0C M365 versus UCP boundary lock",
+        "P0D acceptance language",
+        "P0E approval packet"
+      ],
+      "gate": "CTO approves intent explicitly; no implementation begins."
+    },
+    {
+      "id": "P1",
+      "title": "Governing Formula And Formal Calculus",
+      "children": [
+        "P1A define domains",
+        "P1B define readiness formula",
+        "P1C define action execution function",
+        "P1D define failure lattice",
+        "P1E define deterministic boundaries"
+      ],
+      "gate": "Formal calculus exists with deterministic result classes."
+    },
+    {
+      "id": "P2",
+      "title": "Lemmas And Machine Invariants",
+      "children": [
+        "P2A standalone artifact lemma",
+        "P2B launch determinism lemma",
+        "P2C auth safety lemma",
+        "P2D permission sufficiency lemma",
+        "P2E readiness lemma",
+        "P2F audit completeness lemma",
+        "P2G packaging reproducibility lemma"
+      ],
+      "gate": "Lemma docs and invariant YAML approved."
+    },
+    {
+      "id": "P3",
+      "title": "Notebook Proof And Scorecard Gate",
+      "children": [
+        "P3A notebook headers",
+        "P3B readiness functions",
+        "P3C auth-state policy checks",
+        "P3D action registry checks",
+        "P3E artifact-layout checks",
+        "P3F scorecard emission"
+      ],
+      "gate": "Scorecard green before extraction."
+    },
+    {
+      "id": "P4",
+      "title": "Runtime Service And Auth Foundation",
+      "children": [
+        "P4A service layout",
+        "P4B config schema",
+        "P4C delegated auth",
+        "P4D app-only auth",
+        "P4E token storage",
+        "P4F auth endpoints",
+        "P4G secret redaction"
+      ],
+      "gate": "Runtime launches from installed-artifact layout and auth states are deterministic."
+    },
+    {
+      "id": "P5",
+      "title": "Microsoft Graph Action Runtime",
+      "children": [
+        "P5A action registry",
+        "P5B read-only slice",
+        "P5C Graph client",
+        "P5D permission matrix",
+        "P5E audit envelope",
+        "P5F mutation fence"
+      ],
+      "gate": "Read-only Graph acceptance works; write actions remain fenced."
+    },
+    {
+      "id": "P6",
+      "title": "UCP Pack Contract And Local Lifecycle",
+      "children": [
+        "P6A manifest vNext",
+        "P6B launcher",
+        "P6C health contract",
+        "P6D UCP client/contracts",
+        "P6E lifecycle",
+        "P6F no-cross-repo verifier"
+      ],
+      "gate": "UCP contracts resolve from installed artifact only."
+    },
+    {
+      "id": "P7",
+      "title": "Packaging And Distribution",
+      "children": [
+        "P7A payload layout",
+        "P7B dependency lock",
+        "P7C manifest and signatures",
+        "P7D SBOM/provenance",
+        "P7E reproducible bundle",
+        "P7F local store copy"
+      ],
+      "gate": "SHA256SUMS and conformance pass with runtime service present."
+    },
+    {
+      "id": "P8",
+      "title": "UCP Marketplace Activation Boundary",
+      "children": [
+        "P8A M365 handoff packet",
+        "P8B UCP plan dependency",
+        "P8C install proof",
+        "P8D launch proof",
+        "P8E setup/auth proof",
+        "P8F readiness projection"
+      ],
+      "gate": "Cross-repo work is separately governed and M365 does not mutate UCP without scope approval."
+    },
+    {
+      "id": "P9",
+      "title": "Acceptance Evidence And Release",
+      "children": [
+        "P9A source-removal test",
+        "P9B mock acceptance",
+        "P9C live read-only acceptance",
+        "P9D readiness proof",
+        "P9E evidence packet",
+        "P9F release decision"
+      ],
+      "gate": "Ready=true is proven from installed artifact and live read-only Graph action succeeds through UCP."
+    },
+    {
+      "id": "P10",
+      "title": "Operations Rollback And Maintenance",
+      "children": [
+        "P10A operator runbook",
+        "P10B token recovery",
+        "P10C rollback",
+        "P10D version migration",
+        "P10E support evidence",
+        "P10F roadmap gate"
+      ],
+      "gate": "Runbook, rollback, and support evidence are complete."
+    }
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack.md",
+    "kickoff": "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-prompt.txt"
+  },
+  "stop_conditions": [
+    "claiming the current client-only artifact is a complete integration",
+    "storing Microsoft username/password credentials",
+    "extracting runtime code before MA notebooks and scorecard are green",
+    "depending on the source repo from the installed artifact",
+    "returning Ready=true with unknown auth, token, Graph, or permission state",
+    "adding write actions without separate mutation-governance approval"
+  ]
+}

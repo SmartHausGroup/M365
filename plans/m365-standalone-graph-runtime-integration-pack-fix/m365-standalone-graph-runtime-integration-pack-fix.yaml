@@ -1,0 +1,90 @@
+plan_id: m365-standalone-graph-runtime-integration-pack-fix
+parent_plan_id: m365-standalone-graph-runtime-integration-pack
+status: Superseded-Readiness-Correction-Required
+requirement_status:
+  R1: complete
+  R2: complete
+  R3: complete
+  R4: complete
+  R5: complete
+  R6: complete
+  R7: handed_off
+  R8: complete
+final_artifact:
+  pack_id: com.smarthaus.m365
+  version: "1.1.1"
+  artifact_status: historical-prerelease-real-graph-smoke-pass-but-formal-readiness-no-go
+  install_dir: /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/1.1.1
+  bundle_sha256: b4f3ae56064bdb2d1047dc15308fc6b2df2c8adac334dece11ac8c66b4b62b0f
+  manifest_sha256: 4ece998d2e17888b65bf267d79c156d6d2d5f2a198154cff8d9fb2003b3673c2
+  conformance_sha256: e9cbea708346a5b5ed8f474a90e989df61b83b4be33314f9ffc7e889b013f8fa
+  reproducible_build: true
+acceptance_summary:
+  fix_pack_clauses_passed: 20
+  fix_pack_clauses_total: 20
+  verifier_checks_passed: 9
+  verifier_checks_total: 9
+  combined_regression_passed: 76
+superseded_by:
+  plan_id: m365-standalone-graph-runtime-pack-0-1-2-readiness-fix
+  target_version: "0.1.2"
+  reason: "Live installed-payload smoke proved real Graph connectivity but formal readiness still fails art=false; dependency contract, real-socket acceptance, and provenance require correction."
+date: "2026-04-26"
+owner: SMARTHAUS
+execution_plan_reference: plan:m365-standalone-graph-runtime-integration-pack-fix:R0
+objective: Correct the incomplete standalone Graph runtime pack closeout before com.smarthaus.m365@1.1.0 is treated as final.
+current_truth:
+  - The 1.1.0 artifact exists and SHA256SUMS passes.
+  - The payload contains m365_runtime.
+  - The payload still contains source-root fallback strings in ucp_m365_pack/client.py.
+  - Conformance evidence incorrectly claims no source-repo dependency.
+  - Auth lifecycle endpoints are incomplete.
+  - Acceptance uses synthetic direct invoke rather than runtime HTTP auth/readiness and UCP client path.
+  - The referenced UCP activation plan is absent.
+requirements:
+  - id: R1
+    title: Review baseline and over-claim correction
+  - id: R2
+    title: Complete payload no-source-repo conformance
+  - id: R3
+    title: Runtime auth lifecycle and token-store readiness
+  - id: R4
+    title: UCP action ID mapping to graph runtime actions
+  - id: R5
+    title: Installed-runtime HTTP and UCP-client acceptance
+  - id: R6
+    title: Rebuilt artifact and local store copy
+  - id: R7
+    title: UCP activation plan boundary
+  - id: R8
+    title: Hash/evidence/governance synchronization
+findings:
+  - id: F1
+    title: Payload source-repo dependency claim is false
+  - id: F2
+    title: Runtime auth contract is incomplete
+  - id: F3
+    title: Acceptance harness does not prove release claim
+  - id: F4
+    title: UCP runtime action mapping is missing
+  - id: F5
+    title: UCP activation plan is referenced but missing
+  - id: F6
+    title: Evidence hashes are stale
+acceptance_criteria:
+  - Complete payload scan finds zero forbidden source-root fallback strings.
+  - Runtime auth start/check/status/clear endpoints exist and are tested.
+  - Token-store-backed readiness transitions from not_ready/auth to ready/success under mocked Graph.
+  - UCP client maps existing M365 action IDs to runtime graph.* action IDs.
+  - Acceptance uses installed artifact service and UCP-facing client path.
+  - Conformance fails on forbidden payload strings or missing auth endpoints.
+  - UCP activation plan exists or package is explicitly blocked by that missing plan.
+prompt_refs:
+  detailed: docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-fix.md
+  kickoff: docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-fix-prompt.txt
+stop_conditions:
+  - Conformance remains pass while payload contains source-root fallback.
+  - Runtime auth is claimed without start/check/token-store readiness.
+  - Final UCP acceptance is claimed without UCP plan execution.
+  - Username/password auth is introduced.
+  - Token or secret material is logged.

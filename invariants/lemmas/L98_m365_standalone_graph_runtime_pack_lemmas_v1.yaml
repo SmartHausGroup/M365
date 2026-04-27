@@ -1,0 +1,63 @@
+lemma_id: L98_m365_standalone_graph_runtime_pack_lemmas_v1
+title: M365 Standalone Graph Runtime Pack Lemmas v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-standalone-graph-runtime-integration-pack:R3
+notebook_reference: notebooks/m365/INV-M365-DM-standalone-graph-runtime-pack-p2-lemmas-v1.ipynb
+lemma_proof_reference: notebooks/lemma_proofs/L98_m365_standalone_graph_runtime_pack_lemmas_v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l98.json
+generated_verification_reference: configs/generated/standalone_graph_runtime_integration_pack_p2_lemmas_v1_verification.json
+proof_obligations:
+  L_STANDALONE:
+    - For every runtime read path produced at the installed root r, the path is contained in r.
+    - The runtime does not consult M365_REPO_ROOT, SMARTHAUS_M365_REPO_ROOT, ../M365, or any sibling-repo path.
+    - Renaming or removing the M365 source repo on the host does not change runtime behavior at r.
+  L_LAUNCH:
+    - Launch produces exactly one outcome from {started, port_conflict, config_invalid, dependency_missing, launch_unknown}.
+    - Launch outcome is observed within 5 seconds.
+    - Launch_unknown is reserved and observed only as a defect signal.
+  L_AUTH:
+    - Accepted setup configs use auth_mode in {auth_code_pkce, device_code, app_only_secret, app_only_certificate}.
+    - No code path persists or transmits Microsoft username/password credentials.
+    - No token, secret, refresh token, authorization code, client secret, or certificate private key appears in logs, audit, evidence, or notebook artifacts.
+  L_PERMISSIONS:
+    - Each action declares required_scopes (delegated) or required_roles (app-only).
+    - When bound scopes/roles are not present in the current auth state, Execute returns Denial(permission_missing) and never calls Graph.
+    - Per-tenant scope revocation is reported as permission_missing.
+  L_READINESS:
+    - Ready=true requires every P1 readiness clause to evaluate true from observed local state.
+    - Unknown, missing, partial, or stale clauses resolve to false.
+    - Cached readiness values carry an expiry and force re-probe before reporting true.
+  L_AUDIT:
+    - Every transition in setup, auth, health, action, and lifecycle produces exactly one audit envelope.
+    - The redaction regex from P1E is applied before any record is written.
+    - Audit envelope size is bounded at 8 KB before encoding; duplicates are rejected.
+  L_PACKAGING:
+    - sha256sums entries match the bytes of manifest.json, the bundle file, and conformance evidence.
+    - signatures/manifest.sig and signatures/payload.sig digest-align with the manifest and payload, respectively.
+    - manifest.content_digest.value equals the canonicalized payload SHA256.
+    - evidence/conformance.json lists every payload member declared in the manifest.
+failure_boundaries:
+  - The packaged runtime consults source-repo paths or env vars at runtime.
+  - The launcher hangs or claims success while the listener is unbound.
+  - Setup admits a username/password auth mode.
+  - An action calls Graph without checking declared scopes/roles.
+  - Readiness reports true while a clause is unknown or stale.
+  - A transition produces no audit envelope or an unredacted one.
+  - Bundle bytes do not match the manifest content_digest or the SHA256SUMS index.
+test_bindings:
+  - tests/test_m365_pack_standalone_runtime.py
+  - tests/test_m365_pack_launch_lattice.py
+  - tests/test_m365_pack_auth_safety.py
+  - tests/test_m365_pack_permission_matrix.py
+  - tests/test_m365_pack_readiness_predicate.py
+  - tests/test_m365_pack_audit_envelope.py
+  - tests/test_m365_pack_packaging_invariants.py
+ci_gate_association:
+  - git diff --check
+  - pre-commit run --all-files
+  - python3 scripts/ci/verify_standalone_graph_runtime_pack.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

@@ -1,0 +1,54 @@
+{
+  "lemma_id": "L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1",
+  "plan_reference": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C2",
+  "mode": "deterministic-static",
+  "seed_lock": {
+    "pythonhashseed": 0,
+    "python_random_seed": 0,
+    "numpy_seed": 0,
+    "mode": "deterministic-static",
+    "seed": 0
+  },
+  "target": {
+    "pack_id": "com.smarthaus.m365",
+    "pack_version": "0.1.2",
+    "runtime_version": "0.1.2",
+    "bundle_name": "com.smarthaus.m365-0.1.2.ucp.tar.gz",
+    "install_dir": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/",
+    "historical_versions": ["1.1.0", "1.1.1"]
+  },
+  "green_base_case": {
+    "V_CORRECT": true,
+    "A_SELFDESC": true,
+    "D_CLOSED": true,
+    "S_REAL": true,
+    "P_REPRO": true,
+    "PackReady_0_1_2": true
+  },
+  "negative_cases": [
+    {"case": "V_manifest_version_wrong", "pack_ready": false},
+    {"case": "V_runtime_constant_wrong", "pack_ready": false},
+    {"case": "V_active_release_1_1_1", "pack_ready": false},
+    {"case": "A_missing_manifest_at_root", "pack_ready": false},
+    {"case": "A_reads_source_repo", "pack_ready": false},
+    {"case": "A_reads_m365_repo_root_env", "pack_ready": false},
+    {"case": "D_no_dependency_manifest", "pack_ready": false},
+    {"case": "D_no_startup_probe", "pack_ready": false},
+    {"case": "D_raw_module_not_found", "pack_ready": false},
+    {"case": "D_depends_on_repo_dot_venv", "pack_ready": false},
+    {"case": "S_http_runtime_invoke_patched", "pack_ready": false},
+    {"case": "S_no_subprocess", "pack_ready": false},
+    {"case": "S_no_legacy_alias_over_http", "pack_ready": false},
+    {"case": "S_mock_transport", "pack_ready": false},
+    {"case": "P_hash_mismatch", "pack_ready": false},
+    {"case": "P_claims_clean_while_dirty", "pack_ready": false},
+    {"case": "P_missing_required_key", "pack_ready": false}
+  ],
+  "truth_table": {
+    "rows": 32,
+    "true_rows": 1,
+    "false_rows": 31,
+    "all_true_row": [true, true, true, true, true]
+  },
+  "overall_ok": true
+}

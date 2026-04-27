@@ -1,0 +1,13 @@
+Execute the governed fix package at:
+
+`docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-fix.md`
+
+Repo:
+
+`/Users/smarthaus/Projects/GitHub/M365`
+
+Plan:
+
+`plans/m365-standalone-graph-runtime-integration-pack-fix/m365-standalone-graph-runtime-integration-pack-fix.md`
+
+The current `com.smarthaus.m365@1.1.0` closeout is incomplete. Fix the payload source-root fallback, auth lifecycle endpoints, token-store readiness, UCP action mapping, acceptance harness, UCP activation boundary, and stale evidence hashes. Continue until complete unless a true hard blocker is reached.

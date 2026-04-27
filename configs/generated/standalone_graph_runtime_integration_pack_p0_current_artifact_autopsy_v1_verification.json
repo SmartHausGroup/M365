@@ -1,0 +1,85 @@
+{
+  "bundle_inventory": [
+    "assets/README.md",
+    "evidence/conformance.json",
+    "manifest.json",
+    "payload.tar.gz",
+    "signatures/manifest.sig",
+    "signatures/payload.sig"
+  ],
+  "client_repo_root_env": [
+    "M365_REPO_ROOT",
+    "SMARTHAUS_M365_REPO_ROOT"
+  ],
+  "client_repo_root_walk": [
+    "registry/agents.yaml",
+    "src/ops_adapter"
+  ],
+  "conformance_local": "conformant",
+  "invariants": {
+    "I1_payload_only_contracts": true,
+    "I2_setup_external_service_only": true,
+    "I3_client_walks_source_tree": true,
+    "I4_server_requires_source_tree": true,
+    "I5_no_graph_runtime_in_payload": true
+  },
+  "manifest": {
+    "capabilities_exposed": [
+      "m365_directory",
+      "m365_sites",
+      "m365_users",
+      "m365_email",
+      "m365_security"
+    ],
+    "distribution_mode": "marketplace",
+    "entrypoint": {
+      "adapter_class": "M365PackAdapter",
+      "contract_module": "ucp_m365_pack.contracts"
+    },
+    "pack_id": "com.smarthaus.m365",
+    "setup_schema_ref": "setup_schema.json",
+    "version": "1.0.0"
+  },
+  "missing_runtime_indicators": [
+    "m365_server packaged inside payload",
+    "smarthaus_graph packaged inside payload",
+    "ops_adapter packaged inside payload",
+    "OAuth Authorization Code + PKCE flow",
+    "Device-code fallback",
+    "App-only client secret or certificate flow",
+    "macOS Keychain or encrypted token store",
+    "Graph client with retry / throttle / normalized errors"
+  ],
+  "payload_inventory": [
+    "registry/agents.yaml",
+    "setup_schema.json",
+    "ucp_m365_pack/__init__.py",
+    "ucp_m365_pack/client.py",
+    "ucp_m365_pack/contracts.py"
+  ],
+  "phase": "P0A",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack:R1",
+  "purpose": "Current artifact autopsy: prove the marketplace artifact is a UCP client/contract pack, not a real Microsoft Graph integration runtime.",
+  "server_imports_ops_adapter": "from ops_adapter.main import app",
+  "server_sibling_lookup_env": [
+    "M365_APP_ROOT",
+    "UCP_ROOT",
+    "REPOS_ROOT",
+    "UCP_REPOS_ROOT"
+  ],
+  "setup_property_fields": [
+    "M365_OPS_ADAPTER_URL",
+    "M365_SERVICE_ACTOR_UPN",
+    "M365_SERVICE_JWT_AUDIENCE",
+    "M365_SERVICE_JWT_HS256_SECRET",
+    "M365_SERVICE_JWT_ISSUER"
+  ],
+  "setup_required_fields": [
+    "M365_OPS_ADAPTER_URL",
+    "M365_SERVICE_ACTOR_UPN",
+    "M365_SERVICE_JWT_HS256_SECRET"
+  ],
+  "sha256sums_match_provenance": true,
+  "truthful": true,
+  "verdict": "current_artifact_is_ucp_client_contract_pack_only"
+}

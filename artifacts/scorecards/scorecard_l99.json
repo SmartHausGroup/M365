@@ -1,0 +1,28 @@
+{
+  "status": "green",
+  "lemma_id": "L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1",
+  "plan_reference": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C2",
+  "notebook_reference": "notebooks/m365/INV-M365-DO-standalone-graph-runtime-pack-0-1-2-readiness-fix-v1.ipynb",
+  "lemma_proof_reference": "notebooks/lemma_proofs/L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1.ipynb",
+  "generated_verification_reference": "configs/generated/standalone_graph_runtime_pack_0_1_2_readiness_fix_v1_verification.json",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {
+    "enabled": true,
+    "seed": 0,
+    "mode": "deterministic-static"
+  },
+  "invariants": [
+    { "id": "L_VERSION_CORRECT", "status": "pass" },
+    { "id": "L_ARTIFACT_SELFDESC", "status": "pass" },
+    { "id": "L_DEPENDENCY_CLOSED", "status": "pass" },
+    { "id": "L_SOCKET_REAL", "status": "pass" },
+    { "id": "L_PROVENANCE_REPRO", "status": "pass" },
+    { "id": "PackReady_0_1_2", "status": "pass" }
+  ],
+  "negative_case_count": 17,
+  "truth_table_rows": 32,
+  "truth_table_true_rows": 1,
+  "truth_table_false_rows": 31,
+  "determinism_certification": "green",
+  "ready_for_chunks": ["C1", "C3", "C4", "C5", "C6", "C7", "C8"]
+}

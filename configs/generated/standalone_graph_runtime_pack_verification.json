@@ -1,0 +1,83 @@
+{
+  "overall_ok": true,
+  "phase": "fix-R2",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R2",
+  "results": [
+    {
+      "check": "C1_runtime_layout",
+      "missing": [],
+      "ok": true,
+      "present_count": 17
+    },
+    {
+      "check": "C2_no_forbidden_tokens",
+      "offenders": [],
+      "ok": true
+    },
+    {
+      "check": "C3_no_forbidden_imports",
+      "offenders": [],
+      "ok": true
+    },
+    {
+      "check": "C4_setup_schema",
+      "missing_properties": [],
+      "missing_required": [],
+      "ok": true
+    },
+    {
+      "check": "C5_client_routing",
+      "direct_import_unavailable": true,
+      "has_alias_function": true,
+      "has_alias_table": true,
+      "has_runtime_url": true,
+      "ok": true,
+      "runtime_path_first": true
+    },
+    {
+      "capabilities": [
+        "m365_runtime",
+        "m365_directory",
+        "m365_sites",
+        "m365_users",
+        "m365_groups",
+        "m365_teams",
+        "m365_drives",
+        "m365_email_health",
+        "m365_calendar_health",
+        "m365_servicehealth"
+      ],
+      "check": "C6_manifest_marker",
+      "description": "SMARTHAUS Microsoft 365 standalone Graph runtime Integration Pack: ships the local Microsoft Graph runtime service, OAuth/app-only auth with full /v1/auth/start /v1/auth/check /v1/auth/status /v1/auth/clear lifecycle, secure token store, token-store-backed readiness, read-only Graph action runtime with legacy alias mapping, UCP-facing client/contracts, and packaging evidence.",
+      "ok": true,
+      "runtime_claim": true
+    },
+    {
+      "check": "C7_full_payload_scan",
+      "offenders": [],
+      "ok": true
+    },
+    {
+      "check": "C8_manifest_auth_lifecycle",
+      "missing": [],
+      "ok": true,
+      "runtime": {
+        "auth_check_path": "/v1/auth/check",
+        "auth_clear_path": "/v1/auth/clear",
+        "auth_start_path": "/v1/auth/start",
+        "auth_status_path": "/v1/auth/status"
+      }
+    },
+    {
+      "check": "C9_payload_launcher_auth_lifecycle",
+      "markers": {
+        "auth_check_route": true,
+        "auth_clear_route": true,
+        "auth_start_route": true,
+        "auth_status_route": true,
+        "token_store_imported": true
+      },
+      "ok": true
+    }
+  ]
+}

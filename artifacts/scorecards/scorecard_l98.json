@@ -1,0 +1,22 @@
+{
+  "status": "green",
+  "lemma_id": "L98_m365_standalone_graph_runtime_pack_lemmas_v1",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {
+    "enabled": true,
+    "seed": 0,
+    "mode": "deterministic-static"
+  },
+  "invariants": [
+    { "id": "L_STANDALONE", "status": "pass" },
+    { "id": "L_LAUNCH", "status": "pass" },
+    { "id": "L_AUTH", "status": "pass" },
+    { "id": "L_PERMISSIONS", "status": "pass" },
+    { "id": "L_READINESS", "status": "pass" },
+    { "id": "L_AUDIT", "status": "pass" },
+    { "id": "L_PACKAGING", "status": "pass" },
+    { "id": "BundledStandaloneRuntimeTruth", "status": "pass" }
+  ],
+  "negative_case_count": 17,
+  "determinism_certification": "green"
+}

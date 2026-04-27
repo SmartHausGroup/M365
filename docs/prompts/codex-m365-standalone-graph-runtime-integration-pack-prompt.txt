@@ -1,0 +1,12 @@
+Execute the governed draft package at `docs/prompts/codex-m365-standalone-graph-runtime-integration-pack.md`.
+
+Plan Reference: `plan:m365-standalone-graph-runtime-integration-pack`
+
+Read `AGENTS.md`, `Operations/NORTHSTAR.md`, `Operations/EXECUTION_PLAN.md`,
+`Operations/ACTION_LOG.md`, `Operations/PROJECT_FILE_INDEX.md`, and the detailed
+plan under `plans/m365-standalone-graph-runtime-integration-pack/`.
+
+This slice is M365-only. It defines and executes the path to a real standalone
+Microsoft Graph auth/runtime integration pack, not a client-only contract pack.
+
+Do not implement until explicit owner approval.

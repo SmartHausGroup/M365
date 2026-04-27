@@ -1,0 +1,35 @@
+{
+  "bundled_predicate": "StandaloneRuntimeTruth = AND(L_STANDALONE,L_LAUNCH,L_AUTH,L_PERMISSIONS,L_READINESS,L_AUDIT,L_PACKAGING)",
+  "green_base_case_truth": true,
+  "lemmas": [
+    "L_STANDALONE",
+    "L_LAUNCH",
+    "L_AUTH",
+    "L_PERMISSIONS",
+    "L_READINESS",
+    "L_AUDIT",
+    "L_PACKAGING"
+  ],
+  "negative_cases": [
+    "L_STANDALONE_path_outside_root",
+    "L_STANDALONE_uses_repo_root_env",
+    "L_STANDALONE_walks_sibling_repo",
+    "L_LAUNCH_outcome_unknown_class",
+    "L_LAUNCH_too_slow",
+    "L_AUTH_password_rejected",
+    "L_AUTH_token_in_logs",
+    "L_PERMISSIONS_called_without_scope",
+    "L_PERMISSIONS_no_scope_check",
+    "L_READINESS_unknown_clause",
+    "L_READINESS_clause_false",
+    "L_AUDIT_no_transition_recorded",
+    "L_AUDIT_unredacted",
+    "L_AUDIT_oversize",
+    "L_AUDIT_duplicate",
+    "L_PACKAGING_bundle_sha_mismatch",
+    "L_PACKAGING_content_digest_mismatch"
+  ],
+  "phase": "P2",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack:R3",
+  "truthful": true
+}

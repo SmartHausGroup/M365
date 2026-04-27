@@ -1,0 +1,73 @@
+{
+  "status": "green",
+  "scorecard_id": "scorecard_standalone_graph_runtime_pack_p3",
+  "plan_ref": "plan:m365-standalone-graph-runtime-integration-pack:R4",
+  "phase": "P3",
+  "purpose": "Notebook proof and scorecard gate for the standalone Graph runtime integration pack. Authorizes runtime extraction in P4.",
+  "notebook_evidence": {
+    "p3_prototypes": {
+      "path": "notebooks/m365/INV-M365-DN-standalone-graph-runtime-pack-p3-prototypes-v1.ipynb",
+      "verification": "configs/generated/standalone_graph_runtime_integration_pack_p3_prototypes_v1_verification.json",
+      "status": "green"
+    },
+    "p2_lemmas": {
+      "path": "notebooks/m365/INV-M365-DM-standalone-graph-runtime-pack-p2-lemmas-v1.ipynb",
+      "lemma_proof": "notebooks/lemma_proofs/L98_m365_standalone_graph_runtime_pack_lemmas_v1.ipynb",
+      "scorecard": "artifacts/scorecards/scorecard_l98.json",
+      "status": "green"
+    },
+    "p1_calculus": {
+      "path": "notebooks/m365/INV-M365-DL-standalone-graph-runtime-pack-p1-formal-calculus-v1.ipynb",
+      "verification": "configs/generated/standalone_graph_runtime_integration_pack_p1_formal_calculus_v1_verification.json",
+      "status": "green"
+    },
+    "p0_autopsy": {
+      "path": "notebooks/m365/INV-M365-DK-standalone-graph-runtime-pack-p0-current-artifact-autopsy-v1.ipynb",
+      "verification": "configs/generated/standalone_graph_runtime_integration_pack_p0_current_artifact_autopsy_v1_verification.json",
+      "status": "green"
+    }
+  },
+  "invariants": [
+    { "id": "P3A_notebook_headers_present", "status": "pass" },
+    { "id": "P3B_readiness_function_total_and_deterministic", "status": "pass" },
+    { "id": "P3C_auth_classification_total_and_deterministic", "status": "pass" },
+    { "id": "P3C_token_store_policy_classifies_safe_or_unsafe", "status": "pass" },
+    { "id": "P3D_action_registry_read_only_and_lattice_admissible", "status": "pass" },
+    { "id": "P3D_permission_matrix_returns_admit_or_denied", "status": "pass" },
+    { "id": "P3E_expected_installed_layout_locked", "status": "pass" },
+    { "id": "P3E_expected_payload_layout_target_locked", "status": "pass" },
+    { "id": "P3E_forbidden_source_repo_tokens_locked", "status": "pass" },
+    { "id": "P3F_scorecard_emitted", "status": "pass" }
+  ],
+  "extraction_certification": {
+    "ready_for_extraction": true,
+    "extraction_target_paths": [
+      "src/m365_runtime/__init__.py",
+      "src/m365_runtime/__main__.py",
+      "src/m365_runtime/launcher.py",
+      "src/m365_runtime/auth/oauth.py",
+      "src/m365_runtime/auth/app_only.py",
+      "src/m365_runtime/auth/token_store.py",
+      "src/m365_runtime/graph/client.py",
+      "src/m365_runtime/graph/errors.py",
+      "src/m365_runtime/graph/registry.py",
+      "src/m365_runtime/health.py",
+      "src/m365_runtime/audit.py",
+      "src/m365_runtime/state.py",
+      "src/m365_runtime/setup.py"
+    ],
+    "extraction_constraints": [
+      "Runtime modules must read only from the installed artifact root.",
+      "Runtime modules must not import ops_adapter, smarthaus_graph, or any sibling-repo path.",
+      "Runtime modules must implement the redaction regex declared in P1E.",
+      "Runtime modules must implement the failure lattice declared in P1D and the readiness predicate declared in P1B.",
+      "Runtime modules must implement only read-only Graph actions until a separate mutation-governance plan is approved."
+    ]
+  },
+  "seed_lock": {
+    "enabled": true,
+    "seed": 0,
+    "mode": "deterministic-static"
+  },
+  "determinism_certification": "green"
+}

@@ -1,0 +1,67 @@
+{
+  "plan_id": "plan:m365-standalone-graph-runtime-integration-pack-fix",
+  "parent_plan_id": "plan:m365-standalone-graph-runtime-integration-pack",
+  "title": "M365 Standalone Graph Runtime Integration Pack Fix Pack",
+  "version": "1.0",
+  "status": "Superseded-Readiness-Correction-Required",
+  "requirement_status": {
+    "R1": "complete",
+    "R2": "complete",
+    "R3": "complete",
+    "R4": "complete",
+    "R5": "complete",
+    "R6": "complete",
+    "R7": "handed_off",
+    "R8": "complete"
+  },
+  "final_artifact": {
+    "pack_id": "com.smarthaus.m365",
+    "version": "1.1.1",
+    "artifact_status": "historical-prerelease-real-graph-smoke-pass-but-formal-readiness-no-go",
+    "install_dir": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/1.1.1",
+    "bundle_sha256": "b4f3ae56064bdb2d1047dc15308fc6b2df2c8adac334dece11ac8c66b4b62b0f",
+    "manifest_sha256": "4ece998d2e17888b65bf267d79c156d6d2d5f2a198154cff8d9fb2003b3673c2",
+    "conformance_sha256": "e9cbea708346a5b5ed8f474a90e989df61b83b4be33314f9ffc7e889b013f8fa",
+    "reproducible_build": true
+  },
+  "acceptance_summary": {
+    "fix_pack_clauses_passed": 20,
+    "fix_pack_clauses_total": 20,
+    "verifier_checks_passed": 9,
+    "verifier_checks_total": 9,
+    "combined_regression_passed": 76
+  },
+  "superseded_by": {
+    "plan_id": "m365-standalone-graph-runtime-pack-0-1-2-readiness-fix",
+    "reason": "Live installed-payload smoke proved real Graph connectivity but formal readiness still fails art=false; dependency contract, real-socket acceptance, and provenance require correction.",
+    "target_version": "0.1.2"
+  },
+  "owner": "SMARTHAUS",
+  "date_created": "2026-04-26",
+  "date_updated": "2026-04-26",
+  "north_star_ref": "Operations/NORTHSTAR.md",
+  "execution_plan_ref": "Operations/EXECUTION_PLAN.md § Initiative: M365 Standalone Graph Runtime Integration Pack Fix Pack",
+  "objective": "Correct the incomplete standalone Graph runtime pack closeout before com.smarthaus.m365@1.1.0 is treated as final.",
+  "findings": [
+    {"id": "F1", "title": "Payload source-repo dependency claim is false"},
+    {"id": "F2", "title": "Runtime auth contract is incomplete"},
+    {"id": "F3", "title": "Acceptance harness does not prove release claim"},
+    {"id": "F4", "title": "UCP runtime action mapping is missing"},
+    {"id": "F5", "title": "UCP activation plan is referenced but missing"},
+    {"id": "F6", "title": "Evidence hashes are stale"}
+  ],
+  "requirements": [
+    {"id": "R1", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R1", "description": "Publish review baseline and correct the previous over-claim."},
+    {"id": "R2", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R2", "description": "Complete payload no-source-repo conformance."},
+    {"id": "R3", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R3", "description": "Complete runtime auth lifecycle and token-store readiness."},
+    {"id": "R4", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R4", "description": "Map existing UCP M365 action IDs to runtime graph actions."},
+    {"id": "R5", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R5", "description": "Replace acceptance with installed-runtime HTTP and UCP-client acceptance."},
+    {"id": "R6", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R6", "description": "Rebuild artifact and local store copy."},
+    {"id": "R7", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R7", "description": "Open or complete the UCP activation plan boundary."},
+    {"id": "R8", "ref": "plan:m365-standalone-graph-runtime-integration-pack-fix:R8", "description": "Synchronize hashes and governance trackers."}
+  ],
+  "prompt_refs": {
+    "detailed": "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-fix.md",
+    "kickoff": "docs/prompts/codex-m365-standalone-graph-runtime-integration-pack-fix-prompt.txt"
+  }
+}

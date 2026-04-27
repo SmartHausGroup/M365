@@ -1,0 +1,60 @@
+{
+  "blocker_class": "cto_action_required",
+  "blocker_reasons": [
+    "Historical blocker resolved: installed 0.1.2 live Microsoft device-code sign-in completed for phil@smarthausgroup.com.",
+    "Historical blocker resolved: installed 0.1.2 graph.me succeeded and readiness returned ready/success."
+  ],
+  "chunk": "C9",
+  "cto_action_to_unblock": {
+    "step_1_set_tenant_env": [
+      "export M365_TENANT_ID=<tenant_id>",
+      "export M365_CLIENT_ID=<client_id>",
+      "export M365_AUTH_MODE=device_code",
+      "export M365_SERVICE_ACTOR_UPN=<actor_upn>",
+      "export M365_GRANTED_SCOPES=User.Read,Sites.Read.All,Organization.Read.All",
+      "export M365_TOKEN_STORE=keychain"
+    ],
+    "step_2_launch_runtime": "cd /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2 && python -m m365_runtime --host 127.0.0.1 --port 9300",
+    "step_3_start_auth": "curl -s -X POST http://127.0.0.1:9300/v1/auth/start -H 'Content-Type: application/json' -d '{}'",
+    "step_4_visit_url_and_sign_in_with_user_code": "open the verification_uri returned by step 3 and enter the user_code at microsoft.com/devicelogin",
+    "step_5_check": "curl -s -X POST http://127.0.0.1:9300/v1/auth/check -H 'Content-Type: application/json' -d '{}'",
+    "step_6_invoke_graph_me": "curl -s -X POST http://127.0.0.1:9300/v1/actions/graph.me/invoke -H 'Content-Type: application/json' -d '{}'",
+    "step_7_confirm_readiness": "curl -s http://127.0.0.1:9300/v1/health/readiness"
+  },
+  "live_ucp_through_installed_pack": "deferred_to_sibling_ucp_plan",
+  "no_secrets_logged": true,
+  "outcome": "resolved-live-smoke-passed",
+  "phase": "live read-only smoke",
+  "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C9",
+  "release_decision_path_to_go": [
+    "CTO commits the dirty source tree (or rebuilds 0.1.2 from a clean commit so provenance.source.clean=true).",
+    "Re-run scripts/ci/build_standalone_graph_runtime_pack.py and scripts/ci/acceptance_standalone_graph_runtime_pack.py from the clean commit.",
+    "Verify install-dir SHA256SUMS still passes and rerun live smoke sanity."
+  ],
+  "release_decision_reasons": [
+    "Source tree is dirty; provenance correctly records claims_clean_reproducible=false (C8 invariant)."
+  ],
+  "release_decision_today": "NO_GO",
+  "remaining_no_go_clauses": {
+    "source_clean_for_reproducibility": "false_pending_cto_commit_and_clean_source_rebuild"
+  },
+  "resolution_evidence": "artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json",
+  "resolved_at_local": "2026-04-27 08:13:40 EDT",
+  "what_works_without_live_smoke": {
+    "0_1_2_artifact_built": true,
+    "0_1_2_install_dir_present": true,
+    "bundle_sha256": "df714fa62420b77709c37e1bc647566f9c4ab48f653e85669a4b5684b62f6650",
+    "dependency_contract_present": true,
+    "dependency_probe_endpoint_reports_no_missing": true,
+    "install_dir_sha256sums_clean": true,
+    "live_graph_me_succeeds": true,
+    "live_microsoft_device_code_signed_in": true,
+    "live_readiness_after_signin": "ready/success",
+    "probe_artifact_at_install_dir": true,
+    "probe_no_source_repo_dependency_at_install_dir": true,
+    "real_socket_acceptance_clauses_passed": "21/21",
+    "regression_suite_passed": "96/96",
+    "two_build_byte_identical": true,
+    "verifier_checks_passed": "9/9"
+  }
+}

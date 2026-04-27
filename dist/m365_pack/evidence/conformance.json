@@ -1,11 +1,11 @@
 {
   "candidate": {
-    "bundle_name": "com.smarthaus.m365-1.0.0.ucp.tar.gz",
+    "bundle_name": "com.smarthaus.m365-0.1.2.ucp.tar.gz",
     "current_ucp_version": "1.1.0",
     "pack_id": "com.smarthaus.m365",
-    "schema_version": "0.1.0",
+    "schema_version": "0.2.0",
     "supported_sdk_major": 1,
-    "version": "1.0.0"
+    "version": "0.1.2"
   },
   "checks": [
     {
@@ -31,6 +31,36 @@
     {
       "check": "entrypoint_contract",
       "detail": "entrypoint and entitlement declarations stay within the public adapter boundary",
+      "status": "pass"
+    },
+    {
+      "check": "runtime_contract",
+      "detail": "runtime entrypoint command, health path, auth path, and action paths are declared",
+      "status": "pass"
+    },
+    {
+      "check": "auth_lifecycle_contract",
+      "detail": "runtime declares /v1/auth/start, /v1/auth/check, /v1/auth/status, /v1/auth/clear and supports auth_code_pkce, device_code, app_only_secret, app_only_certificate",
+      "status": "pass"
+    },
+    {
+      "check": "legacy_action_alias_contract",
+      "detail": "ucp_m365_pack/client.py exposes LEGACY_ACTION_TO_RUNTIME_ACTION and map_legacy_action_to_runtime, projecting legacy IDs onto graph.* runtime IDs",
+      "status": "pass"
+    },
+    {
+      "check": "payload_self_describing_contract",
+      "detail": "payload root carries pack_metadata.json so the runtime satisfies probe_artifact() at the chosen installed_root without depending on the outer envelope",
+      "status": "pass"
+    },
+    {
+      "check": "dependency_contract_present",
+      "detail": "payload root carries pack_dependencies.json declaring required, auth-mode-conditional, and ucp-adapter-optional Python modules",
+      "status": "pass"
+    },
+    {
+      "check": "read_only_contract",
+      "detail": "runtime is declared read-only and mutation fence is on",
       "status": "pass"
     },
     {
@@ -62,6 +92,11 @@
       "check": "public_evidence_posture",
       "detail": "conformance evidence file is present",
       "status": "pass"
+    },
+    {
+      "check": "no_source_repo_dependency_contract",
+      "detail": "payload contains no M365_REPO_ROOT, sibling-repo lookup, or source-tree assumption",
+      "status": "pass"
     }
   ],
   "errors": [],
@@ -75,21 +110,47 @@
       "signatures/payload.sig"
     ],
     "capabilities_exposed": [
+      "m365_runtime",
       "m365_directory",
-      "m365_email",
-      "m365_security",
       "m365_sites",
-      "m365_users"
+      "m365_users",
+      "m365_groups",
+      "m365_teams",
+      "m365_drives",
+      "m365_email_health",
+      "m365_calendar_health",
+      "m365_servicehealth"
     ],
     "evidence_files": [
       "evidence/conformance.json"
     ],
     "payload_source_paths": [
+      "m365_runtime/__init__.py",
+      "m365_runtime/__main__.py",
+      "m365_runtime/_forbidden_tokens.py",
+      "m365_runtime/audit.py",
+      "m365_runtime/auth/__init__.py",
+      "m365_runtime/auth/app_only.py",
+      "m365_runtime/auth/oauth.py",
+      "m365_runtime/auth/token_store.py",
+      "m365_runtime/graph/__init__.py",
+      "m365_runtime/graph/actions.py",
+      "m365_runtime/graph/client.py",
+      "m365_runtime/graph/errors.py",
+      "m365_runtime/graph/registry.py",
+      "m365_runtime/health.py",
+      "m365_runtime/launcher.py",
+      "m365_runtime/setup.py",
+      "m365_runtime/state.py",
+      "pack_dependencies.json",
+      "pack_metadata.json",
+      "registry/action_registry.yaml",
       "registry/agents.yaml",
       "setup_schema.json",
       "ucp_m365_pack/__init__.py",
       "ucp_m365_pack/client.py",
-      "ucp_m365_pack/contracts.py"
+      "ucp_m365_pack/contracts.py",
+      "ucp_m365_pack/setup_schema.json"
     ],
     "private_host_imports": [],
     "required_bundle_files": [

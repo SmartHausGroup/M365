@@ -1,0 +1,69 @@
+lemma_id: L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1
+title: M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix Invariants v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C2
+notebook_reference: notebooks/m365/INV-M365-DO-standalone-graph-runtime-pack-0-1-2-readiness-fix-v1.ipynb
+lemma_proof_reference: notebooks/lemma_proofs/L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l99.json
+generated_verification_reference: configs/generated/standalone_graph_runtime_pack_0_1_2_readiness_fix_v1_verification.json
+predecessor_lemma_bundle: L98_m365_standalone_graph_runtime_pack_lemmas_v1
+target:
+  pack_id: com.smarthaus.m365
+  pack_version: 0.1.2
+  runtime_version: 0.1.2
+  bundle_name: com.smarthaus.m365-0.1.2.ucp.tar.gz
+  install_dir: /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/
+  historical_versions:
+    - 1.1.0
+    - 1.1.1
+proof_obligations:
+  L_VERSION_CORRECT:
+    - The active manifest.json declares version="0.1.2".
+    - src/m365_runtime/__init__.py declares RUNTIME_VERSION="0.1.2".
+    - The runtime /v1/runtime/version endpoint returns "0.1.2".
+    - The bundle file is named com.smarthaus.m365-0.1.2.ucp.tar.gz.
+    - The install dir resolves to /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/.
+    - No active release authority document claims 1.1.0 or 1.1.1 as formally ready; references to 1.1.x exist only as labeled historical evidence.
+  L_ARTIFACT_SELFDESC:
+    - After extracting the outer .ucp.tar.gz and inner payload.tar.gz, launching m365_runtime from the chosen installed_root makes probe_artifact() return True.
+    - Required artifact files (manifest.json + setup_schema.json + registry/agents.yaml, plus any layout-contract additions from C3) are present at the chosen installed_root.
+    - The runtime never resolves required artifacts through the M365 source repo, sibling repos, or the M365_REPO_ROOT / SMARTHAUS_M365_REPO_ROOT env vars.
+  L_DEPENDENCY_CLOSED:
+    - The pack carries a declared Python dependency manifest or lock readable from the installed payload.
+    - A startup dependency probe runs before the listener binds and reports any missing module name list.
+    - Missing dependencies surface as a structured outcome class "dependency_missing" - never as a raw ModuleNotFoundError.
+    - The runtime does not silently inherit the M365 repo .venv site-packages.
+    - Optional certificate/JWT branches do not block delegated device_code import unless declared as required.
+  L_SOCKET_REAL:
+    - Release acceptance extracts the outer bundle and the inner payload, launches python -m m365_runtime as a subprocess, and binds a dynamic loopback port.
+    - Release acceptance sets M365_RUNTIME_URL and calls ucp_m365_pack.client.execute_m365_action() over real httpx to the local socket.
+    - _http_runtime_invoke is never monkeypatched in release acceptance; a guard fails the run if patching is detected.
+    - At least one legacy alias mapping (for example users.read -> graph.users.list, directory.org -> graph.org_profile) is exercised over real HTTP.
+  L_PROVENANCE_REPRO:
+    - Two consecutive deterministic builds produce byte-identical bundle SHA256 values.
+    - provenance.json records source_commit, source_branch, source_clean, dependency_lock_sha, payload_sha, bundle_sha, manifest_sha, conformance_sha.
+    - provenance.json never claims clean reproducibility while the source tree is dirty.
+    - Final GO requires source_clean == True; a dirty worktree forces a separate dirty-tree digest and stays NO_GO unless the CTO explicitly accepts the weaker state.
+failure_boundaries:
+  - manifest, runtime constant, runtime endpoint, bundle filename, or install dir reads any 1.1.x value as the active release authority.
+  - probe_artifact() returns False from the chosen installed_root after extraction.
+  - the runtime resolves any required artifact through source repo / sibling repo / M365_REPO_ROOT env vars.
+  - missing dependencies surface as raw ModuleNotFoundError instead of dependency_missing.
+  - the pack quietly inherits the M365 repo .venv site-packages.
+  - release acceptance uses TestClient or in-process transport, monkeypatches _http_runtime_invoke, or skips the legacy alias HTTP proof.
+  - provenance bundle SHAs differ between two consecutive deterministic builds.
+  - provenance.json claims clean while the source tree is dirty.
+test_bindings:
+  - tests/test_m365_runtime_0_1_2_readiness_fix.py
+  - tests/test_m365_runtime_p7_packaging.py
+  - scripts/ci/verify_standalone_graph_runtime_pack.py
+  - scripts/ci/acceptance_standalone_graph_runtime_pack.py
+ci_gate_association:
+  - python3 scripts/ci/verify_standalone_graph_runtime_pack.py
+  - python3 scripts/ci/acceptance_standalone_graph_runtime_pack.py
+  - cd /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2 && shasum -a 256 -c SHA256SUMS
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

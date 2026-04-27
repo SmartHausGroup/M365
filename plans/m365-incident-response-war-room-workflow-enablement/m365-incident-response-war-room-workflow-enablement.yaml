@@ -105,7 +105,7 @@ execution_status:
   r1_complete: true
   r1_evidence_chain_created: true
   r1_blocked: false
-  blocked_reason: live tenant proof recorded the exact remaining external blockers: Team visibility was still 404 during the probe window and Planner returned Graph 403 on /groups/{groupId}/planner/plans
+  blocked_reason: "live tenant proof recorded the exact remaining external blockers: Team visibility was still 404 during the probe window and Planner returned Graph 403 on /groups/{groupId}/planner/plans"
   active_blocker_package: none
   child_blocker_package_complete: true
   r2_complete: true

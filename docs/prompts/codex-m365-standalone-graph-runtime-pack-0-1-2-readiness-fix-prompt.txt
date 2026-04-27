@@ -1,0 +1,11 @@
+Continue `plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix` in `/Users/smarthaus/Projects/GitHub/M365` only.
+
+Read `docs/prompts/codex-m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md` first, then execute the plan through completion unless a true hard blocker is reached.
+
+The target artifact is `com.smarthaus.m365@0.1.2`, not `1.1.x`.
+
+Before C0, verify `pwd` and `git rev-parse --show-toplevel` are `/Users/smarthaus/Projects/GitHub/M365`, branch is `development`, and origin is `https://github.com/SmartHausGroup/M365.git`. If not, fail closed and ask.
+
+Do not mutate UCP, UCP-codex-stable, other sibling repos, or old IntegrationPacks versions. Only write the final artifact under `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/`.
+
+If UCP/MCP/governance returns a rules-process error, fix the missing plan/evidence/scope/metadata exactly as UCP says, rerun the gate, and continue.
