@@ -11,11 +11,11 @@
 ## Pack Identity (artifact hashes)
 
 ```
-bundle_sha256       389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda
-manifest_sha256     8aa88d0791fe7e50881dff44d53114fc15f0a1037d26f10d3ce42a1879f3b851
-conformance_sha256  4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7
-payload_sha256      7d072a6f7ba20d43c660fd882f12b47859507a65af599464607627e61f2fdee9
-dependency_lock_sha 3a01d509acf0a62a4619fd08d958566ddf19140b34af9370a2bb6e95764b2d2a
+bundle_sha256       29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e
+manifest_sha256     bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9
+conformance_sha256  ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7
+payload_sha256      c09625a5b89b1578e2226463d43670dc8355db7d489338f3bf42001db16cabfd
+dependency_lock_sha 376f10bab9f3554e5bce73ef55ea157bb8fe866e3d498ea50c6895b87e8f0e0b
 ```
 
 Two consecutive deterministic builds produced byte-identical bundle SHA values.

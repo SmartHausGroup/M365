@@ -62,6 +62,16 @@ DESCRIPTION = (
 )
 DISPLAY_NAME = "Microsoft 365"
 PUBLISHER = {"name": "SMARTHAUS", "contact": "engineering@smarthaus.dev"}
+
+
+def _stable_json(data: Any) -> str:
+    return json.dumps(data, indent=2, sort_keys=True) + "\n"
+
+
+def _stable_compact_json(data: Any) -> str:
+    return json.dumps(data, sort_keys=True) + "\n"
+
+
 ENTRYPOINT = {
     "adapter_class": "M365PackAdapter",
     "contract_module": "ucp_m365_pack.contracts",
@@ -138,12 +148,10 @@ def _stage_payload(stage_root: Path) -> None:
     # satisfy probe_artifact() at the chosen installed_root regardless of
     # extraction order.
     pack_metadata = _emit_pack_metadata()
-    (stage_root / "pack_metadata.json").write_text(
-        json.dumps(pack_metadata, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (stage_root / "pack_metadata.json").write_text(_stable_json(pack_metadata), encoding="utf-8")
     pack_dependencies = _emit_pack_dependencies()
     (stage_root / "pack_dependencies.json").write_text(
-        json.dumps(pack_dependencies, indent=2, sort_keys=True), encoding="utf-8"
+        _stable_json(pack_dependencies), encoding="utf-8"
     )
 
 
@@ -634,11 +642,11 @@ def _emit_assets_readme(assets_dir: Path) -> None:
 def _emit_signatures(sig_dir: Path, manifest_sha: str, payload_sha: str) -> None:
     sig_dir.mkdir(parents=True, exist_ok=True)
     (sig_dir / "manifest.sig").write_text(
-        json.dumps({"alg": "sha256-detached", "sha256": manifest_sha}, sort_keys=True),
+        _stable_compact_json({"alg": "sha256-detached", "sha256": manifest_sha}),
         encoding="utf-8",
     )
     (sig_dir / "payload.sig").write_text(
-        json.dumps({"alg": "sha256-detached", "sha256": payload_sha}, sort_keys=True),
+        _stable_compact_json({"alg": "sha256-detached", "sha256": payload_sha}),
         encoding="utf-8",
     )
 
@@ -733,16 +741,14 @@ def main() -> int:
     payload_sha = _build_payload_tar(stage_root, payload_path)
 
     manifest = _emit_manifest(payload_sha)
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True), encoding="utf-8")
+    manifest_path.write_text(_stable_json(manifest), encoding="utf-8")
     manifest_sha = _sha256(manifest_path)
 
     _emit_signatures(sig_dir, manifest_sha, payload_sha)
 
     evidence_dir.mkdir(parents=True, exist_ok=True)
     conformance = _emit_conformance(stage_root, manifest, payload_files)
-    (evidence_dir / "conformance.json").write_text(
-        json.dumps(conformance, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (evidence_dir / "conformance.json").write_text(_stable_json(conformance), encoding="utf-8")
     conformance_sha = _sha256(evidence_dir / "conformance.json")
 
     _emit_assets_readme(assets_dir)
@@ -763,9 +769,7 @@ def main() -> int:
         dirty_entries=dirty_entries,
         dirty_digests=dirty_digests,
     )
-    (DIST / "provenance.json").write_text(
-        json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8"
-    )
+    (DIST / "provenance.json").write_text(_stable_json(provenance), encoding="utf-8")
 
     _emit_sha256sums(DIST, [bundle_path.name, "manifest.json", "evidence/conformance.json"])
 

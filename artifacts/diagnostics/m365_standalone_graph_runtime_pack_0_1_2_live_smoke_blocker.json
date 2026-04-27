@@ -6,7 +6,7 @@
   ],
   "chunk": "C9",
   "clean_source_rebuild": {
-    "bundle_sha256": "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda",
+    "bundle_sha256": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
     "claims_clean_reproducible": true,
     "commit": "recorded-in-installed-provenance",
     "source_clean": true
@@ -44,7 +44,7 @@
   "what_works_without_live_smoke": {
     "0_1_2_artifact_built": true,
     "0_1_2_install_dir_present": true,
-    "bundle_sha256": "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda",
+    "bundle_sha256": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
     "dependency_contract_present": true,
     "dependency_probe_endpoint_reports_no_missing": true,
     "install_dir_sha256sums_clean": true,
