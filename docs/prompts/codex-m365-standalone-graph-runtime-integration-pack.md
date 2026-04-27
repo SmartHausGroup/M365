@@ -1,9 +1,9 @@
 # Execution Prompt - M365 Standalone Graph Runtime Integration Pack
 
-Plan Reference: `plan:m365-standalone-graph-runtime-integration-pack`  
-Parent Plan: `plan:m365-marketplace-bundle-packaging-conformance`  
-North Star: `Operations/NORTHSTAR.md`  
-Execution Plan: `Operations/EXECUTION_PLAN.md`  
+Plan Reference: `plan:m365-standalone-graph-runtime-integration-pack`
+Parent Plan: `plan:m365-marketplace-bundle-packaging-conformance`
+North Star: `Operations/NORTHSTAR.md`
+Execution Plan: `Operations/EXECUTION_PLAN.md`
 Detailed Plan: `plans/m365-standalone-graph-runtime-integration-pack/m365-standalone-graph-runtime-integration-pack.md`
 
 ## Mission

@@ -67,14 +67,27 @@ def load_setup(values: dict[str, Any]) -> SetupConfig:
     if not actor_upn:
         raise SetupConfigError("actor_upn_missing")
     redirect_uri = str(values.get("M365_REDIRECT_URI") or "").strip() or None
-    device_code_fallback = str(values.get("M365_DEVICE_CODE_FALLBACK") or "").strip().lower() in {"1","true","yes","on"}
+    device_code_fallback = str(values.get("M365_DEVICE_CODE_FALLBACK") or "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
     app_only_secret_ref = str(values.get("M365_APP_ONLY_CLIENT_SECRET_REF") or "").strip() or None
-    app_only_certificate_ref = str(values.get("M365_APP_ONLY_CERTIFICATE_REF") or "").strip() or None
+    app_only_certificate_ref = (
+        str(values.get("M365_APP_ONLY_CERTIFICATE_REF") or "").strip() or None
+    )
     token_store = str(values.get("M365_TOKEN_STORE") or "keychain").strip().lower()
     keychain_service = str(values.get("M365_KEYCHAIN_SERVICE") or "ai.smarthaus.m365").strip()
-    encrypted_pack_local_allowed = str(values.get("M365_ENCRYPTED_PACK_LOCAL_ALLOWED") or "").strip().lower() in {"1","true","yes","on"}
+    encrypted_pack_local_allowed = str(
+        values.get("M365_ENCRYPTED_PACK_LOCAL_ALLOWED") or ""
+    ).strip().lower() in {"1", "true", "yes", "on"}
     granted_raw = str(values.get("M365_GRANTED_SCOPES") or "").strip()
-    granted = frozenset({s.strip() for s in granted_raw.split(",") if s.strip()}) if granted_raw else frozenset()
+    granted = (
+        frozenset({s.strip() for s in granted_raw.split(",") if s.strip()})
+        if granted_raw
+        else frozenset()
+    )
     cfg = SetupConfig(
         tenant_id=tenant_id,
         client_id=client_id,
@@ -111,20 +124,63 @@ def write_default_schema(installed_root: Path) -> Path:
         "title": "SMARTHAUS M365 Standalone Graph Runtime Pack Setup",
         "type": "object",
         "properties": {
-            "M365_TENANT_ID": {"type": "string", "minLength": 1, "description": "Microsoft Entra tenant ID."},
-            "M365_CLIENT_ID": {"type": "string", "minLength": 1, "description": "Microsoft Entra application (client) ID."},
-            "M365_AUTH_MODE": {"type": "string", "enum": sorted(ALLOWED_AUTH_MODES), "description": "Auth flow. Username/password is forbidden."},
-            "M365_SERVICE_ACTOR_UPN": {"type": "string", "minLength": 1, "description": "Operator or service principal UPN bound to delegated requests."},
-            "M365_REDIRECT_URI": {"type": "string", "description": "Local loopback redirect URI (auth_code_pkce only)."},
-            "M365_DEVICE_CODE_FALLBACK": {"type": "string", "description": "true/false to allow device-code fallback."},
-            "M365_APP_ONLY_CLIENT_SECRET_REF": {"type": "string", "description": "Reference (e.g. keychain item name) for the app-only client secret. Never the secret itself."},
-            "M365_APP_ONLY_CERTIFICATE_REF": {"type": "string", "description": "Reference for the app-only certificate. Never the private key bytes."},
-            "M365_TOKEN_STORE": {"type": "string", "enum": ["keychain","encrypted_pack_local"], "default": "keychain"},
+            "M365_TENANT_ID": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Microsoft Entra tenant ID.",
+            },
+            "M365_CLIENT_ID": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Microsoft Entra application (client) ID.",
+            },
+            "M365_AUTH_MODE": {
+                "type": "string",
+                "enum": sorted(ALLOWED_AUTH_MODES),
+                "description": "Auth flow. Username/password is forbidden.",
+            },
+            "M365_SERVICE_ACTOR_UPN": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Operator or service principal UPN bound to delegated requests.",
+            },
+            "M365_REDIRECT_URI": {
+                "type": "string",
+                "description": "Local loopback redirect URI (auth_code_pkce only).",
+            },
+            "M365_DEVICE_CODE_FALLBACK": {
+                "type": "string",
+                "description": "true/false to allow device-code fallback.",
+            },
+            "M365_APP_ONLY_CLIENT_SECRET_REF": {
+                "type": "string",
+                "description": "Reference (e.g. keychain item name) for the app-only client secret. Never the secret itself.",
+            },
+            "M365_APP_ONLY_CERTIFICATE_REF": {
+                "type": "string",
+                "description": "Reference for the app-only certificate. Never the private key bytes.",
+            },
+            "M365_TOKEN_STORE": {
+                "type": "string",
+                "enum": ["keychain", "encrypted_pack_local"],
+                "default": "keychain",
+            },
             "M365_KEYCHAIN_SERVICE": {"type": "string", "default": "ai.smarthaus.m365"},
-            "M365_ENCRYPTED_PACK_LOCAL_ALLOWED": {"type": "string", "description": "true/false; only true if approved policy allows pack-local encrypted storage."},
-            "M365_GRANTED_SCOPES": {"type": "string", "description": "Comma-separated list of granted Microsoft Graph permission names."},
+            "M365_ENCRYPTED_PACK_LOCAL_ALLOWED": {
+                "type": "string",
+                "description": "true/false; only true if approved policy allows pack-local encrypted storage.",
+            },
+            "M365_GRANTED_SCOPES": {
+                "type": "string",
+                "description": "Comma-separated list of granted Microsoft Graph permission names.",
+            },
         },
-        "required": ["M365_TENANT_ID","M365_CLIENT_ID","M365_AUTH_MODE","M365_SERVICE_ACTOR_UPN"],
+        "required": [
+            "M365_TENANT_ID",
+            "M365_CLIENT_ID",
+            "M365_AUTH_MODE",
+            "M365_SERVICE_ACTOR_UPN",
+        ],
         "additionalProperties": True,
     }
     path = setup_schema_path(installed_root)

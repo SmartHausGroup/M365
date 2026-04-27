@@ -46,7 +46,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-
 REPO = Path(__file__).resolve().parents[2]
 DIST = REPO / "dist" / "m365_pack"
 INTEGRATION_PACKS = Path("/Users/smarthaus/Projects/GitHub/IntegrationPacks")
@@ -124,7 +123,9 @@ def _stage_payload(stage_root: Path) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, target)
     # setup_schema and registry
-    shutil.copy2(REPO / "src" / "ucp_m365_pack" / "setup_schema.json", stage_root / "setup_schema.json")
+    shutil.copy2(
+        REPO / "src" / "ucp_m365_pack" / "setup_schema.json", stage_root / "setup_schema.json"
+    )
     (stage_root / "registry").mkdir(parents=True, exist_ok=True)
     shutil.copy2(REPO / "registry" / "agents.yaml", stage_root / "registry" / "agents.yaml")
     # action registry from the runtime
@@ -137,9 +138,13 @@ def _stage_payload(stage_root: Path) -> None:
     # satisfy probe_artifact() at the chosen installed_root regardless of
     # extraction order.
     pack_metadata = _emit_pack_metadata()
-    (stage_root / "pack_metadata.json").write_text(json.dumps(pack_metadata, indent=2, sort_keys=True), encoding="utf-8")
+    (stage_root / "pack_metadata.json").write_text(
+        json.dumps(pack_metadata, indent=2, sort_keys=True), encoding="utf-8"
+    )
     pack_dependencies = _emit_pack_dependencies()
-    (stage_root / "pack_dependencies.json").write_text(json.dumps(pack_dependencies, indent=2, sort_keys=True), encoding="utf-8")
+    (stage_root / "pack_dependencies.json").write_text(
+        json.dumps(pack_dependencies, indent=2, sort_keys=True), encoding="utf-8"
+    )
 
 
 def _emit_pack_dependencies() -> dict[str, Any]:
@@ -149,22 +154,57 @@ def _emit_pack_dependencies() -> dict[str, Any]:
         "version": VERSION,
         "python_requires": ">=3.10",
         "required": [
-            {"name": "httpx", "module": "httpx", "constraint": ">=0.27,<1.0", "purpose": "HTTP client for Microsoft Graph and runtime invoke"},
-            {"name": "fastapi", "module": "fastapi", "constraint": ">=0.110,<1.0", "purpose": "runtime launcher web framework"},
-            {"name": "uvicorn", "module": "uvicorn", "constraint": ">=0.27,<1.0", "purpose": "ASGI server for runtime launch"},
+            {
+                "name": "httpx",
+                "module": "httpx",
+                "constraint": ">=0.27,<1.0",
+                "purpose": "HTTP client for Microsoft Graph and runtime invoke",
+            },
+            {
+                "name": "fastapi",
+                "module": "fastapi",
+                "constraint": ">=0.110,<1.0",
+                "purpose": "runtime launcher web framework",
+            },
+            {
+                "name": "uvicorn",
+                "module": "uvicorn",
+                "constraint": ">=0.27,<1.0",
+                "purpose": "ASGI server for runtime launch",
+            },
         ],
         "auth_mode_dependencies": {
             "auth_code_pkce": [],
             "device_code": [],
             "app_only_secret": [],
             "app_only_certificate": [
-                {"name": "PyJWT", "module": "jwt", "constraint": ">=2.8,<3.0", "purpose": "client_assertion JWT minting (RS256)"},
+                {
+                    "name": "PyJWT",
+                    "module": "jwt",
+                    "constraint": ">=2.8,<3.0",
+                    "purpose": "client_assertion JWT minting (RS256)",
+                },
             ],
         },
         "ucp_adapter_optional": [
-            {"name": "PyJWT", "module": "jwt", "constraint": ">=2.8,<3.0", "purpose": "service-token minting for the legacy ops-adapter shim path"},
-            {"name": "PyYAML", "module": "yaml", "constraint": ">=6.0,<7.0", "purpose": "in-pack agents.yaml registry parsing for the legacy adapter path"},
-            {"name": "smarthaus_mcp_sdk", "module": "smarthaus_mcp_sdk", "constraint": ">=1.0,<2.0", "purpose": "UCP MCP SDK contracts; only loaded when the pack adapter class is constructed"},
+            {
+                "name": "PyJWT",
+                "module": "jwt",
+                "constraint": ">=2.8,<3.0",
+                "purpose": "service-token minting for the legacy ops-adapter shim path",
+            },
+            {
+                "name": "PyYAML",
+                "module": "yaml",
+                "constraint": ">=6.0,<7.0",
+                "purpose": "in-pack agents.yaml registry parsing for the legacy adapter path",
+            },
+            {
+                "name": "smarthaus_mcp_sdk",
+                "module": "smarthaus_mcp_sdk",
+                "constraint": ">=1.0,<2.0",
+                "purpose": "UCP MCP SDK contracts; only loaded when the pack adapter class is constructed",
+            },
         ],
         "fail_closed_outcome_class": "dependency_missing",
         "probe_endpoint": "/v1/health/dependencies",
@@ -313,7 +353,9 @@ def _emit_manifest(payload_sha: str) -> dict[str, Any]:
     return manifest
 
 
-def _emit_conformance(stage_root: Path, manifest: dict[str, Any], payload_files: list[str]) -> dict[str, Any]:
+def _emit_conformance(
+    stage_root: Path, manifest: dict[str, Any], payload_files: list[str]
+) -> dict[str, Any]:
     return {
         "candidate": {
             "bundle_name": f"{PACK_ID}-{VERSION}.ucp.tar.gz",
@@ -324,36 +366,88 @@ def _emit_conformance(stage_root: Path, manifest: dict[str, Any], payload_files:
             "version": VERSION,
         },
         "checks": [
-            {"check": c, "detail": d, "status": "pass"} for c, d in (
-                ("payload_sources_contract", "candidate payload sources are present and structurally valid"),
-                ("manifest_schema_contract", "manifest schema version, identity, and publisher fields are valid"),
-                ("public_classification_contract", "visibility and distribution mode stay within the public pack boundary"),
-                ("compatibility_contract", "UCP version, required capabilities, and SDK major are compatible"),
-                ("entrypoint_contract", "entrypoint and entitlement declarations stay within the public adapter boundary"),
-                ("runtime_contract", "runtime entrypoint command, health path, auth path, and action paths are declared"),
-                ("auth_lifecycle_contract", "runtime declares /v1/auth/start, /v1/auth/check, /v1/auth/status, /v1/auth/clear and supports auth_code_pkce, device_code, app_only_secret, app_only_certificate"),
-                ("legacy_action_alias_contract", "ucp_m365_pack/client.py exposes LEGACY_ACTION_TO_RUNTIME_ACTION and map_legacy_action_to_runtime, projecting legacy IDs onto graph.* runtime IDs"),
-                ("payload_self_describing_contract", "payload root carries pack_metadata.json so the runtime satisfies probe_artifact() at the chosen installed_root without depending on the outer envelope"),
-                ("dependency_contract_present", "payload root carries pack_dependencies.json declaring required, auth-mode-conditional, and ucp-adapter-optional Python modules"),
+            {"check": c, "detail": d, "status": "pass"}
+            for c, d in (
+                (
+                    "payload_sources_contract",
+                    "candidate payload sources are present and structurally valid",
+                ),
+                (
+                    "manifest_schema_contract",
+                    "manifest schema version, identity, and publisher fields are valid",
+                ),
+                (
+                    "public_classification_contract",
+                    "visibility and distribution mode stay within the public pack boundary",
+                ),
+                (
+                    "compatibility_contract",
+                    "UCP version, required capabilities, and SDK major are compatible",
+                ),
+                (
+                    "entrypoint_contract",
+                    "entrypoint and entitlement declarations stay within the public adapter boundary",
+                ),
+                (
+                    "runtime_contract",
+                    "runtime entrypoint command, health path, auth path, and action paths are declared",
+                ),
+                (
+                    "auth_lifecycle_contract",
+                    "runtime declares /v1/auth/start, /v1/auth/check, /v1/auth/status, /v1/auth/clear and supports auth_code_pkce, device_code, app_only_secret, app_only_certificate",
+                ),
+                (
+                    "legacy_action_alias_contract",
+                    "ucp_m365_pack/client.py exposes LEGACY_ACTION_TO_RUNTIME_ACTION and map_legacy_action_to_runtime, projecting legacy IDs onto graph.* runtime IDs",
+                ),
+                (
+                    "payload_self_describing_contract",
+                    "payload root carries pack_metadata.json so the runtime satisfies probe_artifact() at the chosen installed_root without depending on the outer envelope",
+                ),
+                (
+                    "dependency_contract_present",
+                    "payload root carries pack_dependencies.json declaring required, auth-mode-conditional, and ucp-adapter-optional Python modules",
+                ),
                 ("read_only_contract", "runtime is declared read-only and mutation fence is on"),
                 ("bundle_structure_contract", "bundle name and required bundle files are valid"),
-                ("digest_integrity_contract", "manifest and bundle digests align on sha256 integrity"),
+                (
+                    "digest_integrity_contract",
+                    "manifest and bundle digests align on sha256 integrity",
+                ),
                 ("signature_contract", "detached signature metadata is present and digest-aligned"),
-                ("setup_schema_contract", "setup schema references stay within the payload boundary"),
+                (
+                    "setup_schema_contract",
+                    "setup schema references stay within the payload boundary",
+                ),
                 ("private_host_boundary", "payload sources stay within the public SDK boundary"),
                 ("public_evidence_posture", "conformance evidence file is present"),
-                ("no_source_repo_dependency_contract", "payload contains no M365_REPO_ROOT, sibling-repo lookup, or source-tree assumption"),
+                (
+                    "no_source_repo_dependency_contract",
+                    "payload contains no M365_REPO_ROOT, sibling-repo lookup, or source-tree assumption",
+                ),
             )
         ],
         "errors": [],
         "warnings": [],
         "evidence": {
-            "bundle_files": ["assets/README.md", "evidence/conformance.json", "manifest.json", "payload.tar.gz", "signatures/manifest.sig", "signatures/payload.sig"],
+            "bundle_files": [
+                "assets/README.md",
+                "evidence/conformance.json",
+                "manifest.json",
+                "payload.tar.gz",
+                "signatures/manifest.sig",
+                "signatures/payload.sig",
+            ],
             "capabilities_exposed": CAPABILITIES_EXPOSED,
             "evidence_files": ["evidence/conformance.json"],
             "payload_source_paths": payload_files,
             "private_host_imports": [],
-            "required_bundle_files": ["manifest.json", "payload.tar.gz", "signatures/manifest.sig", "signatures/payload.sig"],
+            "required_bundle_files": [
+                "manifest.json",
+                "payload.tar.gz",
+                "signatures/manifest.sig",
+                "signatures/payload.sig",
+            ],
             "required_capabilities": COMPATIBILITY["required_capabilities"],
             "setup_schema_ref": manifest["setup_schema_ref"],
         },
@@ -364,7 +458,9 @@ def _emit_conformance(stage_root: Path, manifest: dict[str, Any], payload_files:
 
 def _git_head_commit() -> str:
     try:
-        out = subprocess.check_output(["git", "-C", str(REPO), "rev-parse", "HEAD"], text=True).strip()
+        out = subprocess.check_output(
+            ["git", "-C", str(REPO), "rev-parse", "HEAD"], text=True
+        ).strip()
         return out or "unknown"
     except Exception:
         return "unknown"
@@ -375,9 +471,7 @@ def _git_porcelain_status() -> tuple[bool, list[dict[str, str]]]:
     ``status`` (two-char code) and ``path`` (repo-relative).
     """
     try:
-        raw = subprocess.check_output(
-            ["git", "-C", str(REPO), "status", "--porcelain"], text=True
-        )
+        raw = subprocess.check_output(["git", "-C", str(REPO), "status", "--porcelain"], text=True)
     except Exception:
         return False, [{"status": "??", "path": "unknown_git_failure"}]
     entries: list[dict[str, str]] = []
@@ -491,7 +585,14 @@ def _emit_provenance(
     }
 
 
-def _write_bundle(bundle_path: Path, manifest_path: Path, payload_path: Path, sig_dir: Path, evidence_dir: Path, assets_dir: Path) -> str:
+def _write_bundle(
+    bundle_path: Path,
+    manifest_path: Path,
+    payload_path: Path,
+    sig_dir: Path,
+    evidence_dir: Path,
+    assets_dir: Path,
+) -> str:
     if bundle_path.exists():
         bundle_path.unlink()
     items: list[tuple[Path, str]] = [
@@ -532,8 +633,14 @@ def _emit_assets_readme(assets_dir: Path) -> None:
 
 def _emit_signatures(sig_dir: Path, manifest_sha: str, payload_sha: str) -> None:
     sig_dir.mkdir(parents=True, exist_ok=True)
-    (sig_dir / "manifest.sig").write_text(json.dumps({"alg": "sha256-detached", "sha256": manifest_sha}, sort_keys=True), encoding="utf-8")
-    (sig_dir / "payload.sig").write_text(json.dumps({"alg": "sha256-detached", "sha256": payload_sha}, sort_keys=True), encoding="utf-8")
+    (sig_dir / "manifest.sig").write_text(
+        json.dumps({"alg": "sha256-detached", "sha256": manifest_sha}, sort_keys=True),
+        encoding="utf-8",
+    )
+    (sig_dir / "payload.sig").write_text(
+        json.dumps({"alg": "sha256-detached", "sha256": payload_sha}, sort_keys=True),
+        encoding="utf-8",
+    )
 
 
 def _emit_sha256sums(dist_dir: Path, names: list[str]) -> None:
@@ -548,7 +655,10 @@ def _emit_sha256sums(dist_dir: Path, names: list[str]) -> None:
 def _copy_to_integration_packs(dist_dir: Path, version: str) -> Path:
     install_dir = INTEGRATION_PACKS / "M365" / version
     install_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(dist_dir / f"com.smarthaus.m365-{version}.ucp.tar.gz", install_dir / f"com.smarthaus.m365-{version}.ucp.tar.gz")
+    shutil.copy2(
+        dist_dir / f"com.smarthaus.m365-{version}.ucp.tar.gz",
+        install_dir / f"com.smarthaus.m365-{version}.ucp.tar.gz",
+    )
     shutil.copy2(dist_dir / "manifest.json", install_dir / "manifest.json")
     shutil.copy2(dist_dir / "evidence" / "conformance.json", install_dir / "conformance.json")
     # Extract the inner payload into install_dir so the install dir is a
@@ -630,11 +740,15 @@ def main() -> int:
 
     evidence_dir.mkdir(parents=True, exist_ok=True)
     conformance = _emit_conformance(stage_root, manifest, payload_files)
-    (evidence_dir / "conformance.json").write_text(json.dumps(conformance, indent=2, sort_keys=True), encoding="utf-8")
+    (evidence_dir / "conformance.json").write_text(
+        json.dumps(conformance, indent=2, sort_keys=True), encoding="utf-8"
+    )
     conformance_sha = _sha256(evidence_dir / "conformance.json")
 
     _emit_assets_readme(assets_dir)
-    bundle_sha = _write_bundle(bundle_path, manifest_path, payload_path, sig_dir, evidence_dir, assets_dir)
+    bundle_sha = _write_bundle(
+        bundle_path, manifest_path, payload_path, sig_dir, evidence_dir, assets_dir
+    )
 
     install_dir = INTEGRATION_PACKS / "M365" / VERSION
     dependency_lock_sha = _dependency_lock_sha(stage_root)
@@ -649,7 +763,9 @@ def main() -> int:
         dirty_entries=dirty_entries,
         dirty_digests=dirty_digests,
     )
-    (DIST / "provenance.json").write_text(json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8")
+    (DIST / "provenance.json").write_text(
+        json.dumps(provenance, indent=2, sort_keys=True), encoding="utf-8"
+    )
 
     _emit_sha256sums(DIST, [bundle_path.name, "manifest.json", "evidence/conformance.json"])
 

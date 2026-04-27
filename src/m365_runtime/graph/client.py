@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 from urllib.parse import urlencode
@@ -21,7 +22,9 @@ RETRY_AFTER_MAX_SECONDS = 30
 
 class GraphInvocationError(RuntimeError):
     def __init__(self, normalized: NormalizedGraphError) -> None:
-        super().__init__(f"GraphInvocationError {normalized.status_class}/{normalized.http_status}/{normalized.code}")
+        super().__init__(
+            f"GraphInvocationError {normalized.status_class}/{normalized.http_status}/{normalized.code}"
+        )
         self.normalized = normalized
 
 
@@ -41,7 +44,7 @@ def graph_get(
     params: dict[str, Any] | None = None,
     timeout: float = DEFAULT_TIMEOUT,
     transport: httpx.BaseTransport | None = None,
-    sleep: callable = time.sleep,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> GraphResult:
     timeout = min(timeout, MAX_TIMEOUT)
     url = endpoint if endpoint.startswith("https://") else f"{GRAPH_BASE}{endpoint}"
@@ -57,7 +60,9 @@ def graph_get(
             try:
                 response = client.get(url, headers=headers)
             except httpx.HTTPError as exc:
-                last_normalized = NormalizedGraphError("graph_unreachable", 0, "transport_error", str(exc), None, None)
+                last_normalized = NormalizedGraphError(
+                    "graph_unreachable", 0, "transport_error", str(exc), None, None
+                )
                 break
         body: dict[str, Any] | None = None
         try:
@@ -66,12 +71,22 @@ def graph_get(
             body = None
         normalized = normalize_response(response.status_code, body, dict(response.headers))
         if normalized.status_class == "success":
-            return GraphResult(normalized.status_class, response.status_code, body, normalized.correlation_id, normalized.retry_after_seconds)
+            return GraphResult(
+                normalized.status_class,
+                response.status_code,
+                body,
+                normalized.correlation_id,
+                normalized.retry_after_seconds,
+            )
         if normalized.status_class == "throttled" and throttle_attempts < THROTTLE_RETRY_BUDGET:
             throttle_attempts += 1
             sleep(min(normalized.retry_after_seconds or 1, RETRY_AFTER_MAX_SECONDS))
             continue
-        if normalized.status_class == "graph_unreachable" and 500 <= response.status_code < 600 and five_xx_attempts < GRAPH_5XX_RETRY_BUDGET:
+        if (
+            normalized.status_class == "graph_unreachable"
+            and 500 <= response.status_code < 600
+            and five_xx_attempts < GRAPH_5XX_RETRY_BUDGET
+        ):
             five_xx_attempts += 1
             sleep(backoff)
             backoff *= 4
@@ -79,5 +94,13 @@ def graph_get(
         last_normalized = normalized
         break
     if last_normalized is None:
-        last_normalized = NormalizedGraphError("internal_error", 0, "unknown", "no response", None, None)
-    return GraphResult(last_normalized.status_class, last_normalized.http_status, None, last_normalized.correlation_id, last_normalized.retry_after_seconds)
+        last_normalized = NormalizedGraphError(
+            "internal_error", 0, "unknown", "no response", None, None
+        )
+    return GraphResult(
+        last_normalized.status_class,
+        last_normalized.http_status,
+        None,
+        last_normalized.correlation_id,
+        last_normalized.retry_after_seconds,
+    )

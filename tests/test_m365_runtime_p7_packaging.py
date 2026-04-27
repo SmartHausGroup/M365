@@ -8,7 +8,6 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
-import shutil
 import subprocess
 import sys
 import tarfile
@@ -32,6 +31,7 @@ def _active_version() -> str:
     spec = importlib.util.spec_from_file_location(
         "build_pack_m365", REPO / "scripts" / "ci" / "build_standalone_graph_runtime_pack.py"
     )
+    assert spec is not None
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -43,13 +43,18 @@ def _active_install_dir() -> Path:
 
 
 @pytest.fixture(scope="module")
-def built_pack(tmp_path_factory):
-    out = subprocess.run([sys.executable, str(REPO / "scripts/ci/build_standalone_graph_runtime_pack.py")], capture_output=True, text=True, cwd=str(REPO))
+def built_pack(tmp_path_factory: pytest.TempPathFactory) -> str:
+    out = subprocess.run(
+        [sys.executable, str(REPO / "scripts/ci/build_standalone_graph_runtime_pack.py")],
+        capture_output=True,
+        text=True,
+        cwd=str(REPO),
+    )
     assert out.returncode == 0, out.stderr or out.stdout
     return out.stdout
 
 
-def test_dist_layout_contains_runtime_bundle(built_pack):
+def test_dist_layout_contains_runtime_bundle(built_pack: str) -> None:
     dist = REPO / "dist" / "m365_pack"
     assert (dist / "manifest.json").exists()
     assert (dist / "payload.tar.gz").exists()
@@ -60,7 +65,7 @@ def test_dist_layout_contains_runtime_bundle(built_pack):
     assert bundles
 
 
-def test_payload_includes_m365_runtime(built_pack):
+def test_payload_includes_m365_runtime(built_pack: str) -> None:
     payload = REPO / "dist" / "m365_pack" / "payload.tar.gz"
     with tarfile.open(payload) as tf:
         names = {m.name for m in tf.getmembers() if m.isfile()}
@@ -86,7 +91,7 @@ def test_payload_includes_m365_runtime(built_pack):
     assert "pack_metadata.json" in names
 
 
-def test_manifest_declares_runtime(built_pack):
+def test_manifest_declares_runtime(built_pack: str) -> None:
     manifest = json.loads((REPO / "dist" / "m365_pack" / "manifest.json").read_text())
     assert manifest["pack_id"] == "com.smarthaus.m365"
     assert manifest["schema_version"] == "0.2.0"
@@ -100,7 +105,7 @@ def test_manifest_declares_runtime(built_pack):
     assert runtime["invoke_path_template"] == "/v1/actions/{action_id}/invoke"
 
 
-def test_sha256sums_match_files(built_pack):
+def test_sha256sums_match_files(built_pack: str) -> None:
     dist = REPO / "dist" / "m365_pack"
     sums_path = dist / "SHA256SUMS"
     expected = {}
@@ -115,7 +120,7 @@ def test_sha256sums_match_files(built_pack):
         assert _sha(path) == sha, name
 
 
-def test_install_dir_contains_runtime_pack(built_pack):
+def test_install_dir_contains_runtime_pack(built_pack: str) -> None:
     latest = _active_version()
     install = _active_install_dir()
     bundle = install / f"com.smarthaus.m365-{latest}.ucp.tar.gz"
@@ -128,7 +133,7 @@ def test_install_dir_contains_runtime_pack(built_pack):
         assert required.exists(), str(required)
 
 
-def test_installed_pack_contains_runtime_when_extracted(tmp_path):
+def test_installed_pack_contains_runtime_when_extracted(tmp_path: Path) -> None:
     install_dir = _active_install_dir()
     bundle = next(install_dir.glob("com.smarthaus.m365-*.ucp.tar.gz"))
     extract = tmp_path / "extract"
@@ -144,7 +149,7 @@ def test_installed_pack_contains_runtime_when_extracted(tmp_path):
     assert (extract / "m365_runtime" / "graph" / "actions.py").exists()
 
 
-def test_installed_pack_runtime_runs_without_repo_root(tmp_path):
+def test_installed_pack_runtime_runs_without_repo_root(tmp_path: Path) -> None:
     install_dir = _active_install_dir()
     bundle = next(install_dir.glob("com.smarthaus.m365-*.ucp.tar.gz"))
     extract = tmp_path / "extract"
@@ -155,7 +160,11 @@ def test_installed_pack_runtime_runs_without_repo_root(tmp_path):
         tf.extractall(extract)
     env = {"PATH": "/Users/smarthaus/Projects/GitHub/M365/.venv/bin:/usr/bin:/bin"}
     proc = subprocess.run(
-        [sys.executable, "-c", "import m365_runtime; from m365_runtime.launcher import plan_launch; from m365_runtime.graph.registry import READ_ONLY_REGISTRY; print(m365_runtime.RUNTIME_VERSION); print(len(READ_ONLY_REGISTRY)); print(plan_launch().outcome)"],
+        [
+            sys.executable,
+            "-c",
+            "import m365_runtime; from m365_runtime.launcher import plan_launch; from m365_runtime.graph.registry import READ_ONLY_REGISTRY; print(m365_runtime.RUNTIME_VERSION); print(len(READ_ONLY_REGISTRY)); print(plan_launch().outcome)",
+        ],
         env={**env, "PYTHONPATH": str(extract)},
         capture_output=True,
         text=True,
@@ -167,7 +176,7 @@ def test_installed_pack_runtime_runs_without_repo_root(tmp_path):
     assert out[2] == "started"
 
 
-def test_installed_provenance_records_graph_runtime_in_payload():
+def test_installed_provenance_records_graph_runtime_in_payload() -> None:
     install_dir = _active_install_dir()
     provenance = json.loads((install_dir / "provenance.json").read_text())
     assert provenance["policy"]["runtime_packaged"] is True

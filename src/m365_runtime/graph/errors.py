@@ -21,7 +21,9 @@ class NormalizedGraphError:
     correlation_id: str | None
 
 
-def normalize_response(http_status: int, body: dict[str, Any] | None, headers: dict[str, str] | None = None) -> NormalizedGraphError:
+def normalize_response(
+    http_status: int, body: dict[str, Any] | None, headers: dict[str, str] | None = None
+) -> NormalizedGraphError:
     body = body or {}
     headers = headers or {}
     correlation_id = headers.get("client-request-id") or headers.get("request-id")
@@ -33,26 +35,55 @@ def normalize_response(http_status: int, body: dict[str, Any] | None, headers: d
         except ValueError:
             retry_after_seconds = None
 
-    err = ((body.get("error") or {}) if isinstance(body.get("error"), dict) else {})
+    err = (body.get("error") or {}) if isinstance(body.get("error"), dict) else {}
     code = err.get("code") if isinstance(err, dict) else None
-    message = (err.get("message") if isinstance(err, dict) else None) or body.get("error_description") or ""
+    message = (
+        (err.get("message") if isinstance(err, dict) else None)
+        or body.get("error_description")
+        or ""
+    )
 
     if 200 <= http_status < 300:
-        return NormalizedGraphError("success", http_status, code, message, retry_after_seconds, correlation_id)
+        return NormalizedGraphError(
+            "success", http_status, code, message, retry_after_seconds, correlation_id
+        )
 
     if http_status == 401:
-        return NormalizedGraphError("auth_required", http_status, code, message, retry_after_seconds, correlation_id)
+        return NormalizedGraphError(
+            "auth_required", http_status, code, message, retry_after_seconds, correlation_id
+        )
     if http_status == 403:
-        scope_hint = isinstance(message, str) and any(t in message.lower() for t in ("scope", "permission", "insufficient"))
+        scope_hint = isinstance(message, str) and any(
+            t in message.lower() for t in ("scope", "permission", "insufficient")
+        )
         if scope_hint or (code and "permission" in code.lower()):
-            return NormalizedGraphError("permission_missing", http_status, code, message, retry_after_seconds, correlation_id)
+            return NormalizedGraphError(
+                "permission_missing",
+                http_status,
+                code,
+                message,
+                retry_after_seconds,
+                correlation_id,
+            )
         if code and "consent" in code.lower():
-            return NormalizedGraphError("consent_required", http_status, code, message, retry_after_seconds, correlation_id)
-        return NormalizedGraphError("policy_denied", http_status, code, message, retry_after_seconds, correlation_id)
+            return NormalizedGraphError(
+                "consent_required", http_status, code, message, retry_after_seconds, correlation_id
+            )
+        return NormalizedGraphError(
+            "policy_denied", http_status, code, message, retry_after_seconds, correlation_id
+        )
     if http_status == 429 or (code and code.lower() == "throttled"):
-        return NormalizedGraphError("throttled", http_status, code, message, retry_after_seconds, correlation_id)
+        return NormalizedGraphError(
+            "throttled", http_status, code, message, retry_after_seconds, correlation_id
+        )
     if 500 <= http_status < 600:
-        return NormalizedGraphError("graph_unreachable", http_status, code, message, retry_after_seconds, correlation_id)
+        return NormalizedGraphError(
+            "graph_unreachable", http_status, code, message, retry_after_seconds, correlation_id
+        )
     if 400 <= http_status < 500:
-        return NormalizedGraphError("internal_error", http_status, code, message, retry_after_seconds, correlation_id)
-    return NormalizedGraphError("internal_error", http_status, code, message, retry_after_seconds, correlation_id)
+        return NormalizedGraphError(
+            "internal_error", http_status, code, message, retry_after_seconds, correlation_id
+        )
+    return NormalizedGraphError(
+        "internal_error", http_status, code, message, retry_after_seconds, correlation_id
+    )

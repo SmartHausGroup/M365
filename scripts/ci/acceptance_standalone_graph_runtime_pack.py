@@ -41,7 +41,6 @@ import hashlib
 import importlib.util
 import json
 import os
-import shutil
 import socket
 import subprocess
 import sys
@@ -59,6 +58,7 @@ def _active_version() -> str:
     spec = importlib.util.spec_from_file_location(
         "build_pack_m365", REPO / "scripts" / "ci" / "build_standalone_graph_runtime_pack.py"
     )
+    assert spec is not None
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -109,7 +109,7 @@ def _pick_free_port() -> int:
     return port
 
 
-_RUNTIME_SUBPROCESS_SCRIPT = '''
+_RUNTIME_SUBPROCESS_SCRIPT = """
 import json, os, sys, threading
 sys.path.insert(0, os.environ["PACK_ROOT"])
 from pathlib import Path
@@ -195,7 +195,7 @@ def _signal_ready():
 
 threading.Thread(target=_signal_ready, daemon=True).start()
 server.run()
-'''
+"""
 
 
 def _launch_runtime_subprocess(extract_dir: Path, port: int, ready_file: Path) -> subprocess.Popen:
@@ -252,6 +252,7 @@ def _assert_unpatched_http_runtime_invoke(extract_dir: Path) -> None:
     """
     sys.path.insert(0, str(extract_dir))
     import ucp_m365_pack.client as ucp_client  # use the live module if loaded
+
     func = ucp_client._http_runtime_invoke
     func_module = getattr(func, "__module__", None)
     func_qualname = getattr(func, "__qualname__", "")
@@ -283,7 +284,9 @@ def _real_socket_acceptance(extract_dir: Path) -> dict[str, Any]:
                 findings["actions_count"] = actions_resp.json()["count"]
 
                 # Pre-auth state.
-                findings["status_before"] = client.get(f"{runtime_url}/v1/auth/status").json()["state"]
+                findings["status_before"] = client.get(f"{runtime_url}/v1/auth/status").json()[
+                    "state"
+                ]
                 readiness_before = client.get(f"{runtime_url}/v1/health/readiness").json()
                 findings["readiness_before_state"] = readiness_before["state"]["state"]
                 findings["readiness_before_label"] = readiness_before["state"]["label"]
@@ -306,7 +309,9 @@ def _real_socket_acceptance(extract_dir: Path) -> dict[str, Any]:
                     json={"code": "AUTH_CODE", "state": expected_state},
                 ).json()
                 findings["check_state"] = check["state"]
-                findings["status_after"] = client.get(f"{runtime_url}/v1/auth/status").json()["state"]
+                findings["status_after"] = client.get(f"{runtime_url}/v1/auth/status").json()[
+                    "state"
+                ]
                 readiness_after = client.get(f"{runtime_url}/v1/health/readiness").json()
                 findings["readiness_after_state"] = readiness_after["state"]["state"]
                 findings["readiness_after_label"] = readiness_after["state"]["label"]
@@ -333,9 +338,14 @@ def _real_socket_acceptance(extract_dir: Path) -> dict[str, Any]:
                 # Audit redaction proof.
                 redact_check = client.post(
                     f"{runtime_url}/v1/actions/graph.org_profile/invoke",
-                    json={"actor": "acceptance@example.com", "params": {"client_secret": "MUST_BE_REDACTED"}},
+                    json={
+                        "actor": "acceptance@example.com",
+                        "params": {"client_secret": "MUST_BE_REDACTED"},
+                    },
                 ).json()
-                findings["audit_redacts_secrets"] = "MUST_BE_REDACTED" not in json.dumps(redact_check)
+                findings["audit_redacts_secrets"] = "MUST_BE_REDACTED" not in json.dumps(
+                    redact_check
+                )
 
             # UCP-facing client over real HTTP socket. NO _http_runtime_invoke
             # monkeypatching: execute_m365_action() must call the real httpx
@@ -364,16 +374,14 @@ def _real_socket_acceptance(extract_dir: Path) -> dict[str, Any]:
                 "selected_live_path"
             )
 
-            ucp_org = ucp_client.execute_m365_action(
-                "m365-administrator", "directory.org", {}
-            )
+            ucp_org = ucp_client.execute_m365_action("m365-administrator", "directory.org", {})
             findings["ucp_org_status_class"] = ucp_org.get("status_class")
             findings["ucp_org_audit_action"] = ucp_org.get("audit", {}).get("action")
 
             # Final guard re-check after execute_m365_action: function still unpatched.
-            assert ucp_client._http_runtime_invoke.__module__ == "ucp_m365_pack.client", (
-                "_http_runtime_invoke was replaced during the acceptance run"
-            )
+            assert (
+                ucp_client._http_runtime_invoke.__module__ == "ucp_m365_pack.client"
+            ), "_http_runtime_invoke was replaced during the acceptance run"
 
         finally:
             rc, stdout, stderr = _stop_runtime_subprocess(proc)
@@ -385,7 +393,11 @@ def _real_socket_acceptance(extract_dir: Path) -> dict[str, Any]:
 
 def main() -> int:
     install_dir = _active_install_dir()
-    integrity = _verify_integrity(install_dir) if install_dir.exists() else {"ok": False, "reason": "install_dir_missing"}
+    integrity = (
+        _verify_integrity(install_dir)
+        if install_dir.exists()
+        else {"ok": False, "reason": "install_dir_missing"}
+    )
 
     findings: dict[str, Any] = {}
     runtime_run_error: str | None = None
@@ -418,13 +430,16 @@ def main() -> int:
         "mutation_action_fenced": findings.get("mutation_status_class") == "mutation_fence",
         "runtime_http_action_succeeds": findings.get("direct_invoke_status_class") == "success",
         "dependency_probe_no_missing": findings.get("dependency_missing_modules") == [],
-        "http_runtime_invoke_unpatched": findings.get("http_runtime_invoke_unpatched_guard") is True,
+        "http_runtime_invoke_unpatched": findings.get("http_runtime_invoke_unpatched_guard")
+        is True,
         "ucp_client_legacy_alias_succeeds": findings.get("ucp_client_status_class") == "success",
         "ucp_client_legacy_alias_targets_runtime_action": findings.get("ucp_client_audit_action")
         == "graph.users.list",
         "ucp_client_routing_path_is_http_runtime": findings.get("ucp_client_routing_path")
         == "http_runtime",
-        "ucp_client_directory_org_alias_targets_runtime_action": findings.get("ucp_org_audit_action")
+        "ucp_client_directory_org_alias_targets_runtime_action": findings.get(
+            "ucp_org_audit_action"
+        )
         == "graph.org_profile",
         "ucp_client_directory_org_alias_fences_pkce_correctly": findings.get("ucp_org_status_class")
         == "auth_required",

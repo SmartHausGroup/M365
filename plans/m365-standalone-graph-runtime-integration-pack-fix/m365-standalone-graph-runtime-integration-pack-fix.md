@@ -1,12 +1,12 @@
 # Plan: M365 Standalone Graph Runtime Integration Pack Fix Pack
 
-**Plan ID:** `m365-standalone-graph-runtime-integration-pack-fix`  
-**Parent plan ID:** `m365-standalone-graph-runtime-integration-pack`  
-**Status:** Superseded / readiness correction required - `R1`-`R8` produced the historical `1.1.1` snapshot, but the 2026-04-27 installed-payload live smoke proved formal readiness is still false (`art=false`) and the active corrective target is now `com.smarthaus.m365@0.1.2`.  
-**Date:** 2026-04-26  
-**Owner:** SMARTHAUS  
-**Execution plan reference:** `plan:m365-standalone-graph-runtime-integration-pack-fix:R0`  
-**North Star alignment:** `Operations/NORTHSTAR.md` - truthful M365-only integration, fail-closed readiness, secure auth, policy enforcement, and audit coverage.  
+**Plan ID:** `m365-standalone-graph-runtime-integration-pack-fix`
+**Parent plan ID:** `m365-standalone-graph-runtime-integration-pack`
+**Status:** Superseded / readiness correction required - `R1`-`R8` produced the historical `1.1.1` snapshot, but the 2026-04-27 installed-payload live smoke proved formal readiness is still false (`art=false`) and the active corrective target is now `com.smarthaus.m365@0.1.2`.
+**Date:** 2026-04-26
+**Owner:** SMARTHAUS
+**Execution plan reference:** `plan:m365-standalone-graph-runtime-integration-pack-fix:R0`
+**North Star alignment:** `Operations/NORTHSTAR.md` - truthful M365-only integration, fail-closed readiness, secure auth, policy enforcement, and audit coverage.
 **Purpose:** Correct the incomplete Claude closeout for `com.smarthaus.m365@1.1.0` before it is treated as a finished real Microsoft 365 integration pack.
 
 ## Review Verdict

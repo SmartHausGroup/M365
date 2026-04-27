@@ -1,57 +1,61 @@
 {
-  "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C9",
-  "artifact": "com.smarthaus.m365@0.1.2",
-  "installed_root": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2",
-  "executed_at_local": "2026-04-27 08:13:40 EDT",
-  "auth_mode": "device_code",
   "actor_upn": "phil@smarthausgroup.com",
-  "tenant_id": "6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+  "artifact": "com.smarthaus.m365@0.1.2",
+  "auth_mode": "device_code",
+  "checks": {
+    "auth_status_after_device_code": "signed_in",
+    "dependency_probe_missing_modules": [],
+    "graph_me_status_class": "success",
+    "graph_me_subject_display_name": "Philip Siniscalchi",
+    "graph_me_subject_upn": "phil@smarthausgroup.com",
+    "install_dir_sha256sums_clean": true,
+    "probe_artifact_at_install_dir": true,
+    "probe_no_source_repo_dependency_at_install_dir": true,
+    "readiness_label": "success",
+    "readiness_state": "ready",
+    "readiness_vector": {
+      "art": true,
+      "aud": true,
+      "auth": true,
+      "ctr": true,
+      "graph": true,
+      "perm": true,
+      "src": true,
+      "svc": true,
+      "tok": true
+    }
+  },
   "client_id": "e6fd71d3-4116-401e-a4f1-b2fda4318a8b",
+  "executed_at_local": "2026-04-27 08:13:40 EDT",
   "granted_scopes": [
     "User.Read",
     "Directory.Read.All"
   ],
-  "token_store": {
-    "backend": "keychain",
-    "service": "ai.smarthaus.m365.0.1.2.live-smoke",
-    "plaintext_token_logged": false
-  },
-  "checks": {
-    "install_dir_sha256sums_clean": true,
-    "probe_artifact_at_install_dir": true,
-    "probe_no_source_repo_dependency_at_install_dir": true,
-    "dependency_probe_missing_modules": [],
-    "auth_status_after_device_code": "signed_in",
-    "graph_me_status_class": "success",
-    "graph_me_subject_upn": "phil@smarthausgroup.com",
-    "graph_me_subject_display_name": "Philip Siniscalchi",
-    "readiness_state": "ready",
-    "readiness_label": "success",
-    "readiness_vector": {
-      "svc": true,
-      "auth": true,
-      "tok": true,
-      "graph": true,
-      "perm": true,
-      "ctr": true,
-      "art": true,
-      "src": true,
-      "aud": true
-    }
-  },
+  "installed_root": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2",
+  "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C9",
   "redaction": {
     "access_token_logged": false,
-    "refresh_token_logged": false,
-    "device_code_logged_after_completion": false,
     "auth_code_logged": false,
     "client_secret_logged": false,
+    "device_code_logged_after_completion": false,
+    "phone_number_logged": false,
     "private_key_logged": false,
-    "subject_object_id_logged": false,
-    "phone_number_logged": false
+    "refresh_token_logged": false,
+    "subject_object_id_logged": false
   },
   "release_effect": {
     "c9_live_smoke": "passed",
-    "release_decision_after_c9": "NO_GO",
-    "remaining_blocker": "source.clean=false until CTO commit plus clean-source rebuild"
+    "claims_clean_reproducible": true,
+    "clean_source_commit": "recorded-in-installed-provenance",
+    "final_release_decision_after_clean_rebuild": "GO",
+    "release_decision_after_c9": "GO-after-clean-source-rebuild",
+    "remaining_blocker": "cleared-clean-source-rebuild-provenance-true",
+    "source_clean": true
+  },
+  "tenant_id": "6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+  "token_store": {
+    "backend": "keychain",
+    "plaintext_token_logged": false,
+    "service": "ai.smarthaus.m365.0.1.2.live-smoke"
   }
 }

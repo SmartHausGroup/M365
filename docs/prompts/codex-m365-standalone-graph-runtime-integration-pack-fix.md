@@ -1,8 +1,8 @@
 # Execution Prompt - Fix The M365 Standalone Graph Runtime Integration Pack
 
-Plan Reference: `plan:m365-standalone-graph-runtime-integration-pack-fix`  
-Parent Plan: `plan:m365-standalone-graph-runtime-integration-pack`  
-Repo: `/Users/smarthaus/Projects/GitHub/M365`  
+Plan Reference: `plan:m365-standalone-graph-runtime-integration-pack-fix`
+Parent Plan: `plan:m365-standalone-graph-runtime-integration-pack`
+Repo: `/Users/smarthaus/Projects/GitHub/M365`
 Primary Fix Plan: `plans/m365-standalone-graph-runtime-integration-pack-fix/m365-standalone-graph-runtime-integration-pack-fix.md`
 
 ## Mission

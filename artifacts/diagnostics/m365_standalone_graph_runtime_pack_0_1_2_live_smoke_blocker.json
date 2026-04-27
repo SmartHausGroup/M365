@@ -5,6 +5,12 @@
     "Historical blocker resolved: installed 0.1.2 graph.me succeeded and readiness returned ready/success."
   ],
   "chunk": "C9",
+  "clean_source_rebuild": {
+    "bundle_sha256": "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda",
+    "claims_clean_reproducible": true,
+    "commit": "recorded-in-installed-provenance",
+    "source_clean": true
+  },
   "cto_action_to_unblock": {
     "step_1_set_tenant_env": [
       "export M365_TENANT_ID=<tenant_id>",
@@ -23,27 +29,22 @@
   },
   "live_ucp_through_installed_pack": "deferred_to_sibling_ucp_plan",
   "no_secrets_logged": true,
-  "outcome": "resolved-live-smoke-passed",
+  "outcome": "resolved-release-go",
   "phase": "live read-only smoke",
   "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C9",
-  "release_decision_path_to_go": [
-    "CTO commits the dirty source tree (or rebuilds 0.1.2 from a clean commit so provenance.source.clean=true).",
-    "Re-run scripts/ci/build_standalone_graph_runtime_pack.py and scripts/ci/acceptance_standalone_graph_runtime_pack.py from the clean commit.",
-    "Verify install-dir SHA256SUMS still passes and rerun live smoke sanity."
-  ],
+  "release_decision_path_to_go": [],
   "release_decision_reasons": [
-    "Source tree is dirty; provenance correctly records claims_clean_reproducible=false (C8 invariant)."
+    "Live installed-pack Microsoft device-code smoke passed.",
+    "Clean-source rebuild passed with provenance.source.clean=true."
   ],
-  "release_decision_today": "NO_GO",
-  "remaining_no_go_clauses": {
-    "source_clean_for_reproducibility": "false_pending_cto_commit_and_clean_source_rebuild"
-  },
+  "release_decision_today": "GO",
+  "remaining_no_go_clauses": {},
   "resolution_evidence": "artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json",
   "resolved_at_local": "2026-04-27 08:13:40 EDT",
   "what_works_without_live_smoke": {
     "0_1_2_artifact_built": true,
     "0_1_2_install_dir_present": true,
-    "bundle_sha256": "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee",
+    "bundle_sha256": "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda",
     "dependency_contract_present": true,
     "dependency_probe_endpoint_reports_no_missing": true,
     "install_dir_sha256sums_clean": true,

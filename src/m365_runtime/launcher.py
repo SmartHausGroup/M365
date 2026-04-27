@@ -27,7 +27,6 @@ from .audit import build_envelope
 from .auth.token_store import TokenStore, TokenStoreError
 from .graph.registry import READ_ONLY_REGISTRY
 from .setup import SetupConfig, SetupConfigError, load_setup_from_env
-from .state import HealthVector, readiness
 
 # Submodules that transitively import third-party deps (httpx, fastapi,
 # uvicorn) are NOT imported at module load. They are imported lazily inside
@@ -39,7 +38,13 @@ from .state import HealthVector, readiness
 # structured `outcome=dependency_missing` instead of crashing at import.
 
 
-LAUNCH_OUTCOMES = ("started", "port_conflict", "config_invalid", "dependency_missing", "launch_unknown")
+LAUNCH_OUTCOMES = (
+    "started",
+    "port_conflict",
+    "config_invalid",
+    "dependency_missing",
+    "launch_unknown",
+)
 TOKEN_ACCOUNT_ACCESS = "access_token"
 TOKEN_ACCOUNT_REFRESH = "refresh_token"
 
@@ -56,6 +61,7 @@ def _probe_required_dependencies(*, auth_mode: str | None = None) -> tuple[list[
     ``auth_mode`` is provided, also probes the auth-mode conditional set.
     """
     import importlib
+
     present: list[str] = []
     missing: list[str] = []
     targets: list[str] = list(RUNTIME_REQUIRED_MODULES)
@@ -91,14 +97,30 @@ def installed_root_from_module() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def plan_launch(*, host: str | None = None, port: int | None = None, env: dict[str, str] | None = None) -> LaunchPlan:
+def plan_launch(
+    *, host: str | None = None, port: int | None = None, env: dict[str, str] | None = None
+) -> LaunchPlan:
     started_at = time.monotonic()
     try:
         installed_root = installed_root_from_module()
     except Exception as exc:
-        return LaunchPlan(outcome="dependency_missing", installed_root=Path("."), setup=None, listen_host=host or "127.0.0.1", listen_port=port or 9300, detail={"reason": "installed_root_unresolved", "exception": str(exc)})
+        return LaunchPlan(
+            outcome="dependency_missing",
+            installed_root=Path("."),
+            setup=None,
+            listen_host=host or "127.0.0.1",
+            listen_port=port or 9300,
+            detail={"reason": "installed_root_unresolved", "exception": str(exc)},
+        )
     if not installed_root.is_dir():
-        return LaunchPlan(outcome="dependency_missing", installed_root=installed_root, setup=None, listen_host=host or "127.0.0.1", listen_port=port or 9300, detail={"reason": "installed_root_not_dir"})
+        return LaunchPlan(
+            outcome="dependency_missing",
+            installed_root=installed_root,
+            setup=None,
+            listen_host=host or "127.0.0.1",
+            listen_port=port or 9300,
+            detail={"reason": "installed_root_not_dir"},
+        )
     present, missing = _probe_required_dependencies()
     if missing:
         return LaunchPlan(
@@ -114,11 +136,21 @@ def plan_launch(*, host: str | None = None, port: int | None = None, env: dict[s
                 "remediation": "install the missing modules in the pack runtime environment",
             },
         )
-    listen_host = host or os.getenv("M365_RUNTIME_HOST", "127.0.0.1")
+    listen_host = host if host is not None else (os.getenv("M365_RUNTIME_HOST") or "127.0.0.1")
     try:
-        listen_port = int(port or os.getenv("M365_RUNTIME_PORT", "9300"))
+        port_value: int | str = (
+            port if port is not None else (os.getenv("M365_RUNTIME_PORT") or "9300")
+        )
+        listen_port = int(port_value)
     except ValueError:
-        return LaunchPlan(outcome="config_invalid", installed_root=installed_root, setup=None, listen_host=listen_host, listen_port=0, detail={"reason": "invalid_port"})
+        return LaunchPlan(
+            outcome="config_invalid",
+            installed_root=installed_root,
+            setup=None,
+            listen_host=listen_host,
+            listen_port=0,
+            detail={"reason": "invalid_port"},
+        )
     setup_obj: SetupConfig | None = None
     setup_detail: dict[str, Any] = {"loaded": False}
     if env is not None:
@@ -135,8 +167,22 @@ def plan_launch(*, host: str | None = None, port: int | None = None, env: dict[s
             setup_detail = {"loaded": False, "reason": str(exc)}
     elapsed = time.monotonic() - started_at
     if elapsed > 5.0:
-        return LaunchPlan(outcome="launch_unknown", installed_root=installed_root, setup=setup_obj, listen_host=listen_host, listen_port=listen_port, detail={"reason": "exceeded_5s_budget", "elapsed_s": round(elapsed, 3)})
-    return LaunchPlan(outcome="started", installed_root=installed_root, setup=setup_obj, listen_host=listen_host, listen_port=listen_port, detail={"setup": setup_detail, "elapsed_s": round(elapsed, 3)})
+        return LaunchPlan(
+            outcome="launch_unknown",
+            installed_root=installed_root,
+            setup=setup_obj,
+            listen_host=listen_host,
+            listen_port=listen_port,
+            detail={"reason": "exceeded_5s_budget", "elapsed_s": round(elapsed, 3)},
+        )
+    return LaunchPlan(
+        outcome="started",
+        installed_root=installed_root,
+        setup=setup_obj,
+        listen_host=listen_host,
+        listen_port=listen_port,
+        detail={"setup": setup_detail, "elapsed_s": round(elapsed, 3)},
+    )
 
 
 def load_setup_from_env_dict(env: dict[str, str]) -> SetupConfig:
@@ -159,7 +205,9 @@ def _make_token_store(plan: LaunchPlan) -> TokenStore | None:
         return None
 
 
-def _store_access_token(store: TokenStore | None, access_token: str | None, refresh_token: str | None = None) -> bool:
+def _store_access_token(
+    store: TokenStore | None, access_token: str | None, refresh_token: str | None = None
+) -> bool:
     if store is None or not access_token:
         return False
     try:
@@ -181,7 +229,9 @@ def _clear_stored_tokens(store: TokenStore | None) -> None:
             continue
 
 
-def _looked_up_secret_or_cert_ref(setup: SetupConfig, store: TokenStore | None, ref_kind: str) -> str | None:
+def _looked_up_secret_or_cert_ref(
+    setup: SetupConfig, store: TokenStore | None, ref_kind: str
+) -> str | None:
     """Resolve a configured secret/cert reference into raw material at request time.
 
     Production deployments place the secret value (or PEM private key) in the
@@ -204,7 +254,9 @@ def _looked_up_secret_or_cert_ref(setup: SetupConfig, store: TokenStore | None, 
         return None
 
 
-def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_transport: Any | None = None):
+def build_app(
+    plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_transport: Any | None = None
+) -> Any:
     """Build the FastAPI app for this launch plan.
 
     `oauth_transport` and `graph_transport` are httpx mock seams used by the
@@ -219,7 +271,8 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
 
     from .auth import oauth as oauth_mod
     from .auth.app_only import CertificateMaterial, acquire_with_certificate, acquire_with_secret
-    from .graph.actions import invoke as invoke_action, list_actions
+    from .graph.actions import invoke as invoke_action
+    from .graph.actions import list_actions
     from .health import compose_readiness
 
     app = FastAPI(title=f"SMARTHAUS M365 Runtime {RUNTIME_VERSION}")
@@ -238,8 +291,16 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
     def current_setup() -> SetupConfig | None:
         return plan.setup
 
-    def emit_audit(actor: str, action: str, status: str, *, extra: dict[str, Any] | None = None) -> dict[str, Any]:
-        return build_envelope(actor=actor, action=action, status_class=status, extra=extra or {}, correlation_id=str(uuid.uuid4()))
+    def emit_audit(
+        actor: str, action: str, status: str, *, extra: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
+        return build_envelope(
+            actor=actor,
+            action=action,
+            status_class=status,
+            extra=extra or {},
+            correlation_id=str(uuid.uuid4()),
+        )
 
     @app.get("/v1/runtime/version")
     def version() -> dict[str, Any]:
@@ -255,7 +316,12 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
     def dependencies_endpoint() -> dict[str, Any]:
         auth_mode = plan.setup.auth_mode if plan.setup else None
         present, missing = _probe_required_dependencies(auth_mode=auth_mode)
-        envelope = emit_audit("system", "health.dependencies", "success" if not missing else "dependency_missing", extra={"present": present, "missing": missing, "auth_mode": auth_mode})
+        envelope = emit_audit(
+            "system",
+            "health.dependencies",
+            "success" if not missing else "dependency_missing",
+            extra={"present": present, "missing": missing, "auth_mode": auth_mode},
+        )
         return {
             "required_modules": list(RUNTIME_REQUIRED_MODULES),
             "conditional_modules": {k: list(v) for k, v in RUNTIME_CONDITIONAL_MODULES.items()},
@@ -267,8 +333,16 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
 
     @app.get("/v1/health/readiness")
     def readiness_endpoint() -> dict[str, Any]:
-        result = compose_readiness(plan.installed_root, plan.setup, token_store, state.get("access_token"), transport=graph_transport)
-        envelope = emit_audit("system", "health.readiness", result.detail["state"], extra=result.detail)
+        result = compose_readiness(
+            plan.installed_root,
+            plan.setup,
+            token_store,
+            state.get("access_token"),
+            transport=graph_transport,
+        )
+        envelope = emit_audit(
+            "system", "health.readiness", result.detail["state"], extra=result.detail
+        )
         return {"vector": result.vector.as_dict(), "state": result.detail, "audit": envelope}
 
     @app.get("/v1/auth/status")
@@ -280,7 +354,11 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
         if state.get("device_code_session"):
             return {"state": "consent_required", "auth_mode": state["auth_mode"]}
         if state.get("auth_failure"):
-            return {"state": "auth_required", "auth_mode": state["auth_mode"], "reason": state["auth_failure"]}
+            return {
+                "state": "auth_required",
+                "auth_mode": state["auth_mode"],
+                "reason": state["auth_failure"],
+            }
         return {"state": "auth_required", "auth_mode": state["auth_mode"]}
 
     @app.post("/v1/auth/clear")
@@ -299,15 +377,28 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
         body = body or {}
         setup = current_setup()
         if setup is None:
-            return {"state": "unconfigured", "audit": emit_audit("system", "auth.start", "not_configured")}
+            return {
+                "state": "unconfigured",
+                "audit": emit_audit("system", "auth.start", "not_configured"),
+            }
         scopes = list(setup.granted_scopes) or ["https://graph.microsoft.com/.default"]
         actor = str(body.get("actor") or setup.actor_upn)
         if setup.auth_mode == "auth_code_pkce":
             if not setup.redirect_uri:
-                return {"state": "config_invalid", "reason": "redirect_uri_missing", "audit": emit_audit(actor, "auth.start", "not_configured")}
+                return {
+                    "state": "config_invalid",
+                    "reason": "redirect_uri_missing",
+                    "audit": emit_audit(actor, "auth.start", "not_configured"),
+                }
             pkce = oauth_mod.make_pkce()
-            url = oauth_mod.authorize_url(setup.tenant_id, setup.client_id, setup.redirect_uri, scopes, pkce)
-            state["pkce_session"] = {"verifier": pkce.code_verifier, "state": pkce.state, "scopes": scopes}
+            url = oauth_mod.authorize_url(
+                setup.tenant_id, setup.client_id, setup.redirect_uri, scopes, pkce
+            )
+            state["pkce_session"] = {
+                "verifier": pkce.code_verifier,
+                "state": pkce.state,
+                "scopes": scopes,
+            }
             state["device_code_session"] = None
             state["auth_failure"] = None
             return {
@@ -315,14 +406,24 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
                 "auth_mode": "auth_code_pkce",
                 "authorize_url": url,
                 "expected_state": pkce.state,
-                "audit": emit_audit(actor, "auth.start", "auth_started", extra={"flow": "auth_code_pkce"}),
+                "audit": emit_audit(
+                    actor, "auth.start", "auth_started", extra={"flow": "auth_code_pkce"}
+                ),
             }
         if setup.auth_mode == "device_code":
             try:
-                resp = oauth_mod.request_device_code(setup.tenant_id, setup.client_id, scopes, transport=oauth_transport)
+                resp = oauth_mod.request_device_code(
+                    setup.tenant_id, setup.client_id, scopes, transport=oauth_transport
+                )
             except oauth_mod.OAuthError as exc:
                 state["auth_failure"] = exc.code
-                return {"state": "auth_required", "reason": exc.code, "audit": emit_audit(actor, "auth.start", "auth_required", extra={"reason": exc.code})}
+                return {
+                    "state": "auth_required",
+                    "reason": exc.code,
+                    "audit": emit_audit(
+                        actor, "auth.start", "auth_required", extra={"reason": exc.code}
+                    ),
+                }
             state["device_code_session"] = {
                 "device_code": resp["device_code"],
                 "user_code": resp["user_code"],
@@ -339,37 +440,77 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
                 "user_code": resp["user_code"],
                 "verification_uri": resp["verification_uri"],
                 "interval": resp.get("interval", 5),
-                "audit": emit_audit(actor, "auth.start", "consent_required", extra={"flow": "device_code"}),
+                "audit": emit_audit(
+                    actor, "auth.start", "consent_required", extra={"flow": "device_code"}
+                ),
             }
         if setup.auth_mode == "app_only_secret":
             secret = _looked_up_secret_or_cert_ref(setup, token_store, "secret")
             if not secret:
-                return {"state": "config_invalid", "reason": "client_secret_unresolved", "audit": emit_audit(actor, "auth.start", "not_configured")}
+                return {
+                    "state": "config_invalid",
+                    "reason": "client_secret_unresolved",
+                    "audit": emit_audit(actor, "auth.start", "not_configured"),
+                }
             try:
-                token = acquire_with_secret(setup.tenant_id, setup.client_id, secret, scopes, transport=oauth_transport)
+                token = acquire_with_secret(
+                    setup.tenant_id, setup.client_id, secret, scopes, transport=oauth_transport
+                )
             except oauth_mod.OAuthError as exc:
                 state["auth_failure"] = exc.code
-                return {"state": "auth_required", "reason": exc.code, "audit": emit_audit(actor, "auth.start", "auth_required", extra={"reason": exc.code})}
+                return {
+                    "state": "auth_required",
+                    "reason": exc.code,
+                    "audit": emit_audit(
+                        actor, "auth.start", "auth_required", extra={"reason": exc.code}
+                    ),
+                }
             _ingest_token_response(state, token_store, token)
-            return {"state": "signed_in", "auth_mode": "app_only_secret", "audit": emit_audit(actor, "auth.start", "success", extra={"flow": "app_only_secret"})}
+            return {
+                "state": "signed_in",
+                "auth_mode": "app_only_secret",
+                "audit": emit_audit(
+                    actor, "auth.start", "success", extra={"flow": "app_only_secret"}
+                ),
+            }
         if setup.auth_mode == "app_only_certificate":
             pem = _looked_up_secret_or_cert_ref(setup, token_store, "certificate")
             thumbprint = ""
             if token_store is not None and setup.app_only_certificate_ref:
                 try:
-                    thumbprint = (token_store.get(f"{setup.app_only_certificate_ref}::thumbprint") or "").strip()
+                    thumbprint = (
+                        token_store.get(f"{setup.app_only_certificate_ref}::thumbprint") or ""
+                    ).strip()
                 except Exception:
                     thumbprint = ""
             if not pem or not thumbprint:
-                return {"state": "config_invalid", "reason": "certificate_material_unresolved", "audit": emit_audit(actor, "auth.start", "not_configured")}
+                return {
+                    "state": "config_invalid",
+                    "reason": "certificate_material_unresolved",
+                    "audit": emit_audit(actor, "auth.start", "not_configured"),
+                }
             cert = CertificateMaterial(pem_private_key=pem, thumbprint_sha1_hex=thumbprint)
             try:
-                token = acquire_with_certificate(setup.tenant_id, setup.client_id, cert, scopes, transport=oauth_transport)
+                token = acquire_with_certificate(
+                    setup.tenant_id, setup.client_id, cert, scopes, transport=oauth_transport
+                )
             except oauth_mod.OAuthError as exc:
                 state["auth_failure"] = exc.code
-                return {"state": "auth_required", "reason": exc.code, "audit": emit_audit(actor, "auth.start", "auth_required", extra={"reason": exc.code})}
+                return {
+                    "state": "auth_required",
+                    "reason": exc.code,
+                    "audit": emit_audit(
+                        actor, "auth.start", "auth_required", extra={"reason": exc.code}
+                    ),
+                }
             _ingest_token_response(state, token_store, token)
-            return {"state": "signed_in", "auth_mode": "app_only_certificate", "audit": emit_audit(actor, "auth.start", "success", extra={"flow": "app_only_certificate"})}
+            return {
+                "state": "signed_in",
+                "auth_mode": "app_only_certificate",
+                "audit": emit_audit(
+                    actor, "auth.start", "success", extra={"flow": "app_only_certificate"}
+                ),
+            }
         return {"state": "auth_required", "reason": "auth_mode_unsupported"}
 
     @app.post("/v1/auth/check")
@@ -377,17 +518,28 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
         body = body or {}
         setup = current_setup()
         if setup is None:
-            return {"state": "unconfigured", "audit": emit_audit("system", "auth.check", "not_configured")}
+            return {
+                "state": "unconfigured",
+                "audit": emit_audit("system", "auth.check", "not_configured"),
+            }
         actor = str(body.get("actor") or setup.actor_upn)
         if setup.auth_mode == "auth_code_pkce":
             session = state.get("pkce_session")
             if session is None:
-                return {"state": "auth_required", "reason": "no_pkce_session", "audit": emit_audit(actor, "auth.check", "auth_required")}
+                return {
+                    "state": "auth_required",
+                    "reason": "no_pkce_session",
+                    "audit": emit_audit(actor, "auth.check", "auth_required"),
+                }
             received_state = str(body.get("state") or "")
             code = str(body.get("code") or "")
             if not code or received_state != session["state"]:
                 state["auth_failure"] = "pkce_state_mismatch"
-                return {"state": "auth_required", "reason": "pkce_state_mismatch", "audit": emit_audit(actor, "auth.check", "auth_required")}
+                return {
+                    "state": "auth_required",
+                    "reason": "pkce_state_mismatch",
+                    "audit": emit_audit(actor, "auth.check", "auth_required"),
+                }
             try:
                 token = oauth_mod.exchange_authorization_code(
                     setup.tenant_id,
@@ -400,26 +552,62 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
                 )
             except oauth_mod.OAuthError as exc:
                 state["auth_failure"] = exc.code
-                return {"state": "auth_required", "reason": exc.code, "audit": emit_audit(actor, "auth.check", "auth_required", extra={"reason": exc.code})}
+                return {
+                    "state": "auth_required",
+                    "reason": exc.code,
+                    "audit": emit_audit(
+                        actor, "auth.check", "auth_required", extra={"reason": exc.code}
+                    ),
+                }
             _ingest_token_response(state, token_store, token)
             state["pkce_session"] = None
-            return {"state": "signed_in", "auth_mode": "auth_code_pkce", "audit": emit_audit(actor, "auth.check", "success")}
+            return {
+                "state": "signed_in",
+                "auth_mode": "auth_code_pkce",
+                "audit": emit_audit(actor, "auth.check", "success"),
+            }
         if setup.auth_mode == "device_code":
             session = state.get("device_code_session")
             if session is None:
-                return {"state": "auth_required", "reason": "no_device_code_session", "audit": emit_audit(actor, "auth.check", "auth_required")}
+                return {
+                    "state": "auth_required",
+                    "reason": "no_device_code_session",
+                    "audit": emit_audit(actor, "auth.check", "auth_required"),
+                }
             try:
-                token = oauth_mod.poll_device_code(setup.tenant_id, setup.client_id, session["device_code"], transport=oauth_transport)
+                token = oauth_mod.poll_device_code(
+                    setup.tenant_id,
+                    setup.client_id,
+                    session["device_code"],
+                    transport=oauth_transport,
+                )
             except oauth_mod.OAuthError as exc:
                 state["auth_failure"] = exc.code
-                return {"state": "auth_required", "reason": exc.code, "audit": emit_audit(actor, "auth.check", "auth_required", extra={"reason": exc.code})}
+                return {
+                    "state": "auth_required",
+                    "reason": exc.code,
+                    "audit": emit_audit(
+                        actor, "auth.check", "auth_required", extra={"reason": exc.code}
+                    ),
+                }
             if token.get("pending"):
-                return {"state": "device_code_pending", "auth_mode": "device_code", "audit": emit_audit(actor, "auth.check", "consent_required")}
+                return {
+                    "state": "device_code_pending",
+                    "auth_mode": "device_code",
+                    "audit": emit_audit(actor, "auth.check", "consent_required"),
+                }
             _ingest_token_response(state, token_store, token)
             state["device_code_session"] = None
-            return {"state": "signed_in", "auth_mode": "device_code", "audit": emit_audit(actor, "auth.check", "success")}
+            return {
+                "state": "signed_in",
+                "auth_mode": "device_code",
+                "audit": emit_audit(actor, "auth.check", "success"),
+            }
         # App-only modes complete on auth.start, so check just reports current state.
-        return {"state": "signed_in" if state.get("access_token") else "auth_required", "auth_mode": setup.auth_mode}
+        return {
+            "state": "signed_in" if state.get("access_token") else "auth_required",
+            "auth_mode": setup.auth_mode,
+        }
 
     @app.get("/v1/actions")
     def actions() -> dict[str, Any]:
@@ -431,9 +619,26 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
         actor = str(body.get("actor") or (plan.setup.actor_upn if plan.setup else "unknown"))
         params = dict(body.get("params") or {})
         if action_id not in READ_ONLY_REGISTRY:
-            return {"status_class": "mutation_fence", "reason": "action_not_in_read_only_registry", "audit": build_envelope(actor=actor, action=action_id, status_class="mutation_fence", extra={"params": params})}
+            return {
+                "status_class": "mutation_fence",
+                "reason": "action_not_in_read_only_registry",
+                "audit": build_envelope(
+                    actor=actor,
+                    action=action_id,
+                    status_class="mutation_fence",
+                    extra={"params": params},
+                ),
+            }
         if plan.setup is None:
-            return {"status_class": "not_configured", "audit": build_envelope(actor=actor, action=action_id, status_class="not_configured", extra={"params": params})}
+            return {
+                "status_class": "not_configured",
+                "audit": build_envelope(
+                    actor=actor,
+                    action=action_id,
+                    status_class="not_configured",
+                    extra={"params": params},
+                ),
+            }
         result = invoke_action(
             action_id=action_id,
             actor=actor,
@@ -453,7 +658,9 @@ def build_app(plan: LaunchPlan, *, oauth_transport: Any | None = None, graph_tra
     return app
 
 
-def _ingest_token_response(state: dict[str, Any], token_store: TokenStore | None, token: dict[str, Any]) -> None:
+def _ingest_token_response(
+    state: dict[str, Any], token_store: TokenStore | None, token: dict[str, Any]
+) -> None:
     state["access_token"] = token.get("access_token")
     state["refresh_token"] = token.get("refresh_token")
     state["token_expires_at"] = token.get("expires_at") or 0
@@ -472,5 +679,10 @@ def run(host: str = "127.0.0.1", port: int = 9300) -> int:
         sys.stderr.write("uvicorn missing; cannot run server\n")
         return 1
     app = build_app(plan)
-    uvicorn.run(app, host=plan.listen_host, port=plan.listen_port, log_level=os.getenv("M365_RUNTIME_LOG_LEVEL", "info").lower())
+    uvicorn.run(
+        app,
+        host=plan.listen_host,
+        port=plan.listen_port,
+        log_level=os.getenv("M365_RUNTIME_LOG_LEVEL", "info").lower(),
+    )
     return 0

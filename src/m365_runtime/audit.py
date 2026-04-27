@@ -22,7 +22,10 @@ def _redact_value(value: Any) -> Any:
             return SENTINEL
         return value
     if isinstance(value, dict):
-        return {k: (SENTINEL if REDACT_PATTERN.search(str(k)) else _redact_value(v)) for k, v in value.items()}
+        return {
+            k: (SENTINEL if REDACT_PATTERN.search(str(k)) else _redact_value(v))
+            for k, v in value.items()
+        }
     if isinstance(value, list | tuple):
         return [_redact_value(v) for v in value]
     return value

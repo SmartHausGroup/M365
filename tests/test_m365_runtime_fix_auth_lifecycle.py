@@ -5,17 +5,17 @@ Plan: plan:m365-standalone-graph-runtime-integration-pack-fix:R3
 
 from __future__ import annotations
 
-from pathlib import Path
 import shutil
+from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 import httpx
 import pytest
 
 pytest.importorskip("fastapi")
-from fastapi.testclient import TestClient
-
-from m365_runtime.launcher import build_app, plan_launch
+from fastapi.testclient import TestClient  # noqa: E402
+from m365_runtime.launcher import build_app, plan_launch  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -49,7 +49,9 @@ def installed_pack_root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path
     (pack / "registry").mkdir(parents=True)
     (pack / "m365_runtime").mkdir()
     shutil.copyfile(repo_root / "registry" / "agents.yaml", pack / "registry" / "agents.yaml")
-    shutil.copyfile(repo_root / "src" / "ucp_m365_pack" / "setup_schema.json", pack / "setup_schema.json")
+    shutil.copyfile(
+        repo_root / "src" / "ucp_m365_pack" / "setup_schema.json", pack / "setup_schema.json"
+    )
     (pack / "manifest.json").write_text("{}", encoding="utf-8")
     (pack / "m365_runtime" / "marker").write_text("ok", encoding="utf-8")
     return pack
@@ -59,10 +61,9 @@ def installed_pack_root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path
 def memory_store(monkeypatch: pytest.MonkeyPatch) -> _MemoryTokenStore:
     store = _MemoryTokenStore()
 
-    def _from_setup(_setup, _root):
-        return store
-
-    monkeypatch.setattr("m365_runtime.auth.token_store.TokenStore.from_setup", classmethod(lambda cls, s, r: store))
+    monkeypatch.setattr(
+        "m365_runtime.auth.token_store.TokenStore.from_setup", classmethod(lambda cls, s, r: store)
+    )
     return store
 
 
@@ -93,7 +94,12 @@ def _setup_env_app_only() -> dict[str, str]:
     return env
 
 
-def _make_client(installed_pack_root: Path, env: dict[str, str], oauth_handler, graph_handler):
+def _make_client(
+    installed_pack_root: Path,
+    env: dict[str, str],
+    oauth_handler: Callable[[httpx.Request], httpx.Response],
+    graph_handler: Callable[[httpx.Request], httpx.Response],
+) -> tuple[TestClient, Any]:
     plan = plan_launch(env=env)
     plan = plan.__class__(
         outcome=plan.outcome,
@@ -114,10 +120,12 @@ def _make_client(installed_pack_root: Path, env: dict[str, str], oauth_handler, 
 def test_pkce_auth_lifecycle_completes_through_http_endpoints(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     def oauth_handler(request: httpx.Request) -> httpx.Response:
         if request.url.path.endswith("/oauth2/v2.0/token"):
-            return httpx.Response(200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600})
+            return httpx.Response(
+                200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600}
+            )
         return httpx.Response(404, json={"error": "unexpected"})
 
     def graph_handler(request: httpx.Request) -> httpx.Response:
@@ -153,7 +161,7 @@ def test_pkce_auth_lifecycle_completes_through_http_endpoints(
 def test_pkce_check_rejects_state_mismatch(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     def oauth_handler(_req: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"access_token": "AT", "expires_in": 3600})
 
@@ -170,15 +178,21 @@ def test_pkce_check_rejects_state_mismatch(
 def test_device_code_lifecycle_pending_then_signed_in(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     poll_calls = {"n": 0}
 
     def oauth_handler(request: httpx.Request) -> httpx.Response:
         if request.url.path.endswith("/devicecode"):
-            return httpx.Response(200, json={
-                "device_code": "DC", "user_code": "ABC-DEF", "verification_uri": "https://microsoft.com/devicelogin",
-                "expires_in": 900, "interval": 5,
-            })
+            return httpx.Response(
+                200,
+                json={
+                    "device_code": "DC",
+                    "user_code": "ABC-DEF",
+                    "verification_uri": "https://microsoft.com/devicelogin",
+                    "expires_in": 900,
+                    "interval": 5,
+                },
+            )
         if request.url.path.endswith("/oauth2/v2.0/token"):
             poll_calls["n"] += 1
             if poll_calls["n"] == 1:
@@ -207,7 +221,7 @@ def test_device_code_lifecycle_pending_then_signed_in(
 def test_app_only_secret_resolves_secret_from_token_store(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     memory_store.put("kc::ai.smarthaus.m365::client_secret", "REAL_CLIENT_SECRET")
 
     def oauth_handler(request: httpx.Request) -> httpx.Response:
@@ -218,7 +232,9 @@ def test_app_only_secret_resolves_secret_from_token_store(
     def graph_handler(_req: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"value": []})
 
-    client, _ = _make_client(installed_pack_root, _setup_env_app_only(), oauth_handler, graph_handler)
+    client, _ = _make_client(
+        installed_pack_root, _setup_env_app_only(), oauth_handler, graph_handler
+    )
     start = client.post("/v1/auth/start", json={}).json()
     assert start["state"] == "signed_in"
     readiness = client.get("/v1/health/readiness").json()
@@ -228,9 +244,11 @@ def test_app_only_secret_resolves_secret_from_token_store(
 def test_auth_clear_returns_to_auth_required_and_clears_store(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     def oauth_handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600})
+        return httpx.Response(
+            200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600}
+        )
 
     def graph_handler(_req: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"value": []})
@@ -249,16 +267,20 @@ def test_auth_clear_returns_to_auth_required_and_clears_store(
 def test_auth_audit_does_not_leak_tokens(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     def oauth_handler(_req: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json={"access_token": "VERY_SECRET", "refresh_token": "RT", "expires_in": 3600})
+        return httpx.Response(
+            200, json={"access_token": "VERY_SECRET", "refresh_token": "RT", "expires_in": 3600}
+        )
 
     def graph_handler(_req: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"value": []})
 
     client, _ = _make_client(installed_pack_root, _setup_env_pkce(), oauth_handler, graph_handler)
     start = client.post("/v1/auth/start", json={}).json()
-    check = client.post("/v1/auth/check", json={"code": "x", "state": start["expected_state"]}).json()
+    check = client.post(
+        "/v1/auth/check", json={"code": "x", "state": start["expected_state"]}
+    ).json()
     audit_blob = str(check.get("audit", {}))
     assert "VERY_SECRET" not in audit_blob
 
@@ -266,7 +288,7 @@ def test_auth_audit_does_not_leak_tokens(
 def test_invoke_action_uses_stored_access_token(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
-):
+) -> None:
     captured: dict[str, str] = {}
 
     def oauth_handler(request: httpx.Request) -> httpx.Response:
@@ -276,9 +298,13 @@ def test_invoke_action_uses_stored_access_token(
         captured["auth"] = request.headers.get("Authorization", "")
         return httpx.Response(200, json={"id": "tenant", "displayName": "Acme"})
 
-    client, _ = _make_client(installed_pack_root, _setup_env_app_only(), oauth_handler, graph_handler)
+    client, _ = _make_client(
+        installed_pack_root, _setup_env_app_only(), oauth_handler, graph_handler
+    )
     memory_store.put("kc::ai.smarthaus.m365::client_secret", "S")
     client.post("/v1/auth/start", json={})
-    invoke = client.post("/v1/actions/graph.org_profile/invoke", json={"actor": "ops@example.com"}).json()
+    invoke = client.post(
+        "/v1/actions/graph.org_profile/invoke", json={"actor": "ops@example.com"}
+    ).json()
     assert invoke["status_class"] == "success"
     assert captured["auth"] == "Bearer AT_STORED"

@@ -13,7 +13,6 @@ from .graph.registry import READ_ONLY_REGISTRY
 from .setup import SetupConfig
 from .state import HealthVector, readiness
 
-
 REQUIRED_PAYLOAD_FILES = (
     "setup_schema.json",
     "registry/agents.yaml",
@@ -94,7 +93,14 @@ def probe_contracts(installed_root: Path) -> bool:
     return schema.is_file()
 
 
-def compose_readiness(installed_root: Path, setup: SetupConfig | None, store: TokenStore | None, access_token: str | None, *, transport: Any | None = None) -> HealthProbeResult:
+def compose_readiness(
+    installed_root: Path,
+    setup: SetupConfig | None,
+    store: TokenStore | None,
+    access_token: str | None,
+    *,
+    transport: Any | None = None,
+) -> HealthProbeResult:
     vec = HealthVector()
     vec.svc = probe_service(installed_root)
     vec.art = probe_artifact(installed_root)

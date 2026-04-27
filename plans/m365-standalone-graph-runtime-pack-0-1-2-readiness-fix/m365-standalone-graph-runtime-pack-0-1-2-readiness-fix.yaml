@@ -2,7 +2,7 @@ plan_id: m365-standalone-graph-runtime-pack-0-1-2-readiness-fix
 parent_plan_id: m365-standalone-graph-runtime-integration-pack
 supersedes:
   - m365-standalone-graph-runtime-integration-pack-fix
-status: Active-NO_GO-pending-clean-source-rebuild
+status: Complete-GO
 date: "2026-04-27"
 chunk_status:
   C0: done
@@ -16,14 +16,15 @@ chunk_status:
   C8: done
   C9: done
   C10: done
-release_decision: NO_GO
+release_decision: GO
 release_decision_reasons:
-  - C8 source.clean=false; provenance correctly records claims_clean_reproducible=false; CTO commit + clean-source rebuild required before GO.
+  - C9 live installed-pack Microsoft device-code smoke passed; graph.me succeeded and readiness returned ready/success.
+  - C8 clean-source rebuild passed; provenance.source.clean=true and claims_clean_reproducible=true.
 deterministic_build:
-  bundle_sha256: "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee"
-  manifest_sha256: "01d0ca8722880f4ce99b3686cc0511c3052f347d39f8f5e949b8978ec3683e7c"
+  bundle_sha256: "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda"
+  manifest_sha256: "8aa88d0791fe7e50881dff44d53114fc15f0a1037d26f10d3ce42a1879f3b851"
   conformance_sha256: "4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7"
-  payload_sha256: "fb65e08ccc80240d7b871019099130a7f7ce4084b603dae219f895d55626d878"
+  payload_sha256: "7d072a6f7ba20d43c660fd882f12b47859507a65af599464607627e61f2fdee9"
   dependency_lock_sha256: "3a01d509acf0a62a4619fd08d958566ddf19140b34af9370a2bb6e95764b2d2a"
   two_consecutive_builds_byte_identical: true
 acceptance_summary:
@@ -53,13 +54,20 @@ north_star_alignment:
     - Technical Architecture
     - Policy & Security
 objective: Correct the M365 standalone Graph runtime pack version line to 0.1.2 and repair formal pack readiness defects before any release claim.
-current_truth:
+baseline_defect_truth:
   - The installed 1.1.1 artifact can complete SmartHaus delegated device-code auth.
   - The installed 1.1.1 payload can execute live read-only Microsoft Graph graph.me.
   - Installed-payload readiness remains not_ready with art=false.
   - The dependency contract is implicit and fails under plain system Python.
   - The release acceptance must prove real local socket httpx client execution without patching _http_runtime_invoke.
   - Provenance must be clean-source reproducible before final GO.
+current_truth:
+  - The installed 0.1.2 artifact is the active M365-side release authority.
+  - Live installed-pack device-code auth succeeded for phil@smarthausgroup.com.
+  - Live graph.me returned success and readiness returned ready/success.
+  - The dependency contract fails closed with structured dependency_missing outcomes.
+  - Real local socket acceptance uses unpatched httpx through ucp_m365_pack.client.
+  - Clean-source rebuild provenance is true for the installed 0.1.2 artifact.
 governing_formula: "PackReady(v) = VersionCorrect(v) and ArtifactSelfDescribing(v) and DependencyClosed(v) and SourceIndependent(v) and RuntimeLaunches(v) and AuthLifecycleWorks(v) and ReadinessReady(v) and ClientSocketAcceptance(v) and LiveReadOnlyGraph(v) and ProvenanceReproducible(v) and EvidenceSynchronized(v)"
 requirements:
   - id: R0
@@ -111,16 +119,17 @@ requirements:
       http_runtime_invoke_unpatched_guard: passes
   - id: R6
     title: Provenance and reproducible build
-    status: complete-pending-clean-source-rebuild
+    status: complete
     acceptance: Clean source state can reproduce the 0.1.2 artifact with byte-identical bundle hash.
     completed_by_chunks: [C7, C8]
     evidence:
       two_consecutive_builds_byte_identical: true
-      bundle_sha256: "9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee"
+      bundle_sha256: "389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda"
       provenance_records_clean_state: true
-      current_source_clean: false
-      claims_clean_reproducible: false
-      blocker: source.clean=false; CTO commit + clean-source rebuild required before final GO can record clean reproducible provenance
+      current_source_clean: true
+      claims_clean_reproducible: true
+      clean_source_commit: recorded-in-installed-provenance
+      blocker: cleared-clean-source-rebuild-provenance-true
   - id: R7
     title: Build, install, evidence sync, and live read-only proof
     status: complete
@@ -139,9 +148,9 @@ phase_status:
   P2: complete
   P3: complete
   P4: complete
-  P5: complete-pending-clean-source-rebuild
+  P5: complete
   P6: complete
-  P7: complete-pending-clean-source-rebuild
+  P7: complete
 acceptance_criteria:
   - manifest reports version 0.1.2.
   - runtime reports runtime_version 0.1.2.

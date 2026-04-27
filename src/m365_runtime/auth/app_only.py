@@ -44,7 +44,9 @@ def acquire_with_secret(
     with httpx.Client(transport=transport, timeout=GRAPH_DEFAULT_TIMEOUT_SECONDS) as client:
         response = client.post(url, data=data)
     if response.status_code != 200:
-        raise OAuthError(str(response.status_code), "client_credentials_failed", _safe_error(response))
+        raise OAuthError(
+            str(response.status_code), "client_credentials_failed", _safe_error(response)
+        )
     return _normalize_token_response(response.json())
 
 
@@ -70,7 +72,9 @@ def acquire_with_certificate(
     with httpx.Client(transport=transport, timeout=GRAPH_DEFAULT_TIMEOUT_SECONDS) as client:
         response = client.post(url, data=data)
     if response.status_code != 200:
-        raise OAuthError(str(response.status_code), "client_credentials_failed", _safe_error(response))
+        raise OAuthError(
+            str(response.status_code), "client_credentials_failed", _safe_error(response)
+        )
     return _normalize_token_response(response.json())
 
 
@@ -78,7 +82,11 @@ def _build_client_assertion(tenant_id: str, client_id: str, cert: CertificateMat
     try:
         import jwt  # PyJWT is only needed for app_only_certificate auth.
     except ImportError as exc:
-        raise OAuthError("500", "dependency_missing", "PyJWT is required for app_only_certificate auth: install PyJWT") from exc
+        raise OAuthError(
+            "500",
+            "dependency_missing",
+            "PyJWT is required for app_only_certificate auth: install PyJWT",
+        ) from exc
     now = int(time.time())
     headers = {
         "alg": "RS256",

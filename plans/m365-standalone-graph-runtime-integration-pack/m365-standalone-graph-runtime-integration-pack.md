@@ -1,12 +1,12 @@
 # Plan: M365 Standalone Graph Runtime Integration Pack
 
-**Plan ID:** `m365-standalone-graph-runtime-integration-pack`  
-**Parent plan ID:** `m365-marketplace-bundle-packaging-conformance`  
-**Status:** Active - **Fix-Required / NO-GO**. The previous claim of `Complete (M365-side)` and release decision `GO` for `com.smarthaus.m365@1.1.0` is **withdrawn** as over-claimed. The later `1.1.1` fix snapshot proved real Microsoft delegated auth plus live read-only `graph.me`, but the 2026-04-27 installed-payload smoke still returned `not_ready/art`, so it is historical prerelease evidence rather than a formal ready artifact. The active corrective plan is `plans/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md`, targeting `com.smarthaus.m365@0.1.2`. Phases `P5`-`P10` remain fix-required until that plan closes green.  
-**Date:** 2026-04-25  
-**Owner:** SMARTHAUS  
-**Execution plan reference:** `plan:m365-standalone-graph-runtime-integration-pack:R1`  
-**North Star alignment:** `Operations/NORTHSTAR.md` - M365-only tooling, self-service operation, policy enforcement, audit coverage, and truthful commercialization boundaries.  
+**Plan ID:** `m365-standalone-graph-runtime-integration-pack`
+**Parent plan ID:** `m365-marketplace-bundle-packaging-conformance`
+**Status:** Active - **Fix-Required / NO-GO**. The previous claim of `Complete (M365-side)` and release decision `GO` for `com.smarthaus.m365@1.1.0` is **withdrawn** as over-claimed. The later `1.1.1` fix snapshot proved real Microsoft delegated auth plus live read-only `graph.me`, but the 2026-04-27 installed-payload smoke still returned `not_ready/art`, so it is historical prerelease evidence rather than a formal ready artifact. The active corrective plan is `plans/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix/m365-standalone-graph-runtime-pack-0-1-2-readiness-fix.md`, targeting `com.smarthaus.m365@0.1.2`. Phases `P5`-`P10` remain fix-required until that plan closes green.
+**Date:** 2026-04-25
+**Owner:** SMARTHAUS
+**Execution plan reference:** `plan:m365-standalone-graph-runtime-integration-pack:R1`
+**North Star alignment:** `Operations/NORTHSTAR.md` - M365-only tooling, self-service operation, policy enforcement, audit coverage, and truthful commercialization boundaries.
 **Governance mode:** AGENTS.md, `.cursor/rules/*.mdc`, MCP `validate_action`, plan-first execution, project-file index enforcement, action-log closure, and MA notebook-first extraction for runtime code.
 
 ## Current Status Truth

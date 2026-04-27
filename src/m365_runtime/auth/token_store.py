@@ -31,13 +31,23 @@ class TokenStore:
     encrypted_pack_local_allowed: bool
 
     @classmethod
-    def from_setup(cls, setup, installed_root: Path) -> "TokenStore":
+    def from_setup(cls, setup: Any, installed_root: Path) -> TokenStore:
         backend = setup.token_store
         if backend == "keychain":
-            return cls(backend="keychain", keychain_service=setup.keychain_service, pack_local_path=None, encrypted_pack_local_allowed=False)
+            return cls(
+                backend="keychain",
+                keychain_service=setup.keychain_service,
+                pack_local_path=None,
+                encrypted_pack_local_allowed=False,
+            )
         if backend == "encrypted_pack_local" and setup.encrypted_pack_local_allowed:
             path = installed_root / "var" / "tokens.enc"
-            return cls(backend="encrypted_pack_local", keychain_service=setup.keychain_service, pack_local_path=path, encrypted_pack_local_allowed=True)
+            return cls(
+                backend="encrypted_pack_local",
+                keychain_service=setup.keychain_service,
+                pack_local_path=path,
+                encrypted_pack_local_allowed=True,
+            )
         raise TokenStoreError(f"token_store_unsafe:{backend}")
 
     def put(self, key: str, value: str) -> None:
@@ -75,15 +85,27 @@ def _keychain_security_path() -> str:
 
 def _keychain_set(service: str, account: str, value: str) -> None:
     sec = _keychain_security_path()
-    subprocess.run([sec, "delete-generic-password", "-a", account, "-s", service], check=False, capture_output=True)
-    proc = subprocess.run([sec, "add-generic-password", "-a", account, "-s", service, "-w", value, "-U"], capture_output=True, text=True)
+    subprocess.run(
+        [sec, "delete-generic-password", "-a", account, "-s", service],
+        check=False,
+        capture_output=True,
+    )
+    proc = subprocess.run(
+        [sec, "add-generic-password", "-a", account, "-s", service, "-w", value, "-U"],
+        capture_output=True,
+        text=True,
+    )
     if proc.returncode != 0:
         raise TokenStoreError(f"keychain_set_failed:{proc.returncode}")
 
 
 def _keychain_get(service: str, account: str) -> str | None:
     sec = _keychain_security_path()
-    proc = subprocess.run([sec, "find-generic-password", "-a", account, "-s", service, "-w"], capture_output=True, text=True)
+    proc = subprocess.run(
+        [sec, "find-generic-password", "-a", account, "-s", service, "-w"],
+        capture_output=True,
+        text=True,
+    )
     if proc.returncode != 0:
         return None
     return proc.stdout.strip()
@@ -91,7 +113,11 @@ def _keychain_get(service: str, account: str) -> str | None:
 
 def _keychain_delete(service: str, account: str) -> None:
     sec = _keychain_security_path()
-    subprocess.run([sec, "delete-generic-password", "-a", account, "-s", service], check=False, capture_output=True)
+    subprocess.run(
+        [sec, "delete-generic-password", "-a", account, "-s", service],
+        check=False,
+        capture_output=True,
+    )
 
 
 def _pack_local_key(service: str) -> bytes:

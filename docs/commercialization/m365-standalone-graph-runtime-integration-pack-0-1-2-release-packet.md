@@ -6,15 +6,15 @@
 **Bundle file:** `com.smarthaus.m365-0.1.2.ucp.tar.gz`
 **Install dir:** `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/`
 **Build date:** 2026-04-27 (UTC, deterministic gzip mtime=0 + normalized TarInfo)
-**Status:** `NO_GO` pending clean-source rebuild
+**Status:** `GO`
 
 ## Pack Identity (artifact hashes)
 
 ```
-bundle_sha256       9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee
-manifest_sha256     01d0ca8722880f4ce99b3686cc0511c3052f347d39f8f5e949b8978ec3683e7c
+bundle_sha256       389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda
+manifest_sha256     8aa88d0791fe7e50881dff44d53114fc15f0a1037d26f10d3ce42a1879f3b851
 conformance_sha256  4ce8aa952dfc42bf571865c1813d5202f760503d4719a5172041a460172f84c7
-payload_sha256      fb65e08ccc80240d7b871019099130a7f7ce4084b603dae219f895d55626d878
+payload_sha256      7d072a6f7ba20d43c660fd882f12b47859507a65af599464607627e61f2fdee9
 dependency_lock_sha 3a01d509acf0a62a4619fd08d958566ddf19140b34af9370a2bb6e95764b2d2a
 ```
 
@@ -146,9 +146,10 @@ layout, and provenance never claims clean while dirty.
   `reproducibility.release_blocker_if_dirty=true`,
   `reproducibility.two_build_byte_identical_required=true`.
 
-Current state: `source.clean=false` because the worktree has the readiness
-fix work in progress. `claims_clean_reproducible=false` is recorded
-truthfully. Final `GO` requires CTO commit + clean-source rebuild.
+Current state: `source.clean=true` after the committed clean-source rebuild
+from the final clean-source commit recorded in installed `provenance.json`.
+`claims_clean_reproducible=true` is recorded truthfully in the installed
+artifact provenance.
 
 ## Live Read-Only Smoke
 
@@ -163,28 +164,32 @@ Evidence: `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_s
 No access token, refresh token, auth code, client secret, private key, subject
 object ID, or phone number is recorded in the evidence packet.
 
-## Release Decision: NO_GO
+## Release Decision: GO
 
-The M365-side `release_decision` for `com.smarthaus.m365@0.1.2` is `NO_GO`
-until clean-source provenance is rebuilt.
+The M365-side `release_decision` for `com.smarthaus.m365@0.1.2` is `GO`.
 
-### Remaining Blocker - C8 Source Cleanliness
+### Release Basis
 
-`provenance.source.clean=false`. Final `GO` requires the worktree to be
-committed and the deterministic build to be re-run from the clean commit so
-`provenance.source.clean=true` and `claims_clean_reproducible=true`.
+1. Installed `0.1.2` live Microsoft device-code smoke passed.
+2. `graph.me` succeeded for `phil@smarthausgroup.com`.
+3. Runtime readiness returned `ready/success`.
+4. Clean-source rebuild passed with `provenance.source.clean=true`.
+5. Verifier, real-socket acceptance, focused regression, and install-dir
+   `SHA256SUMS` gates passed.
 
-## Path to GO
+Directory-safe checksum command:
 
-1. CTO commits the readiness-fix worktree.
-2. Re-run `.venv/bin/python scripts/ci/build_standalone_graph_runtime_pack.py`
-   from the clean commit (deterministic, identical bundle SHA expected).
-3. Re-run `.venv/bin/python scripts/ci/verify_standalone_graph_runtime_pack.py`.
-4. Re-run `.venv/bin/python scripts/ci/acceptance_standalone_graph_runtime_pack.py`
-   against the freshly-rebuilt install dir.
-5. Verify `cd /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2 && shasum -a 256 -c SHA256SUMS` (the `SHA256SUMS` index lists files by relative path, so the command must run from the install directory).
-6. Update this packet's `Release Decision` section to `GO` with
-   `provenance.source.clean=true`.
+```bash
+cd /Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2 && shasum -a 256 -c SHA256SUMS
+```
+
+## Closed GO Path
+
+The previous path-to-GO is closed. The committed clean-source rebuild and live
+smoke evidence are recorded in:
+
+- `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json`
+- `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/provenance.json`
 
 ## Boundary
 

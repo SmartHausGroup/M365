@@ -22,7 +22,6 @@ from urllib.parse import urlencode
 
 import httpx
 
-
 GRAPH_DEFAULT_TIMEOUT_SECONDS = 30.0
 TOKEN_REFRESH_TIMEOUT_SECONDS = 15.0
 
@@ -50,10 +49,14 @@ def make_pkce() -> PkceMaterial:
     code_challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
     state = secrets.token_urlsafe(16)
     nonce = secrets.token_urlsafe(16)
-    return PkceMaterial(code_verifier=code_verifier, code_challenge=code_challenge, state=state, nonce=nonce)
+    return PkceMaterial(
+        code_verifier=code_verifier, code_challenge=code_challenge, state=state, nonce=nonce
+    )
 
 
-def authorize_url(tenant_id: str, client_id: str, redirect_uri: str, scopes: list[str], pkce: PkceMaterial) -> str:
+def authorize_url(
+    tenant_id: str, client_id: str, redirect_uri: str, scopes: list[str], pkce: PkceMaterial
+) -> str:
     base = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize"
     params = {
         "client_id": client_id,
@@ -91,7 +94,13 @@ def exchange_authorization_code(
     return _post_token(url, data, transport=transport)
 
 
-def request_device_code(tenant_id: str, client_id: str, scopes: list[str], *, transport: httpx.BaseTransport | None = None) -> dict[str, Any]:
+def request_device_code(
+    tenant_id: str,
+    client_id: str,
+    scopes: list[str],
+    *,
+    transport: httpx.BaseTransport | None = None,
+) -> dict[str, Any]:
     url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/devicecode"
     data = {
         "client_id": client_id,
@@ -100,7 +109,9 @@ def request_device_code(tenant_id: str, client_id: str, scopes: list[str], *, tr
     with httpx.Client(transport=transport, timeout=GRAPH_DEFAULT_TIMEOUT_SECONDS) as client:
         response = client.post(url, data=data)
     if response.status_code != 200:
-        raise OAuthError(str(response.status_code), "device_code_request_failed", _safe_error(response))
+        raise OAuthError(
+            str(response.status_code), "device_code_request_failed", _safe_error(response)
+        )
     body = response.json()
     return {
         "device_code": body["device_code"],
@@ -150,7 +161,13 @@ def refresh_access_token(
     return _normalize_token_response(response.json())
 
 
-def _post_token(url: str, data: dict[str, str], *, transport: httpx.BaseTransport | None, allow_pending: bool = False) -> dict[str, Any]:
+def _post_token(
+    url: str,
+    data: dict[str, str],
+    *,
+    transport: httpx.BaseTransport | None,
+    allow_pending: bool = False,
+) -> dict[str, Any]:
     with httpx.Client(transport=transport, timeout=GRAPH_DEFAULT_TIMEOUT_SECONDS) as client:
         response = client.post(url, data=data)
     if response.status_code == 200:
@@ -163,7 +180,11 @@ def _post_token(url: str, data: dict[str, str], *, transport: httpx.BaseTranspor
             pass
         err = str(body.get("error") or "")
         if err in {"authorization_pending", "slow_down", "expired_token", "access_denied"}:
-            return {"pending": True, "error": err, "error_description": body.get("error_description")}
+            return {
+                "pending": True,
+                "error": err,
+                "error_description": body.get("error_description"),
+            }
     raise OAuthError(str(response.status_code), "token_request_failed", _safe_error(response))
 
 

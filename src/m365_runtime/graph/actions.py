@@ -18,13 +18,14 @@ from __future__ import annotations
 
 import time
 import uuid
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
 import httpx
 
 from ..audit import build_envelope
-from .client import GraphResult, graph_get
+from .client import graph_get
 from .registry import READ_ONLY_REGISTRY, admit, get_action
 
 
@@ -45,7 +46,7 @@ def invoke(
     access_token: str | None,
     params: dict[str, Any] | None = None,
     transport: httpx.BaseTransport | None = None,
-    sleep: callable = time.sleep,
+    sleep: Callable[[float], None] = time.sleep,
 ) -> ActionInvocation:
     correlation_id = str(uuid.uuid4())
     params = params or {}
@@ -58,23 +59,50 @@ def invoke(
             extra={"reason": reason, "params": params},
             correlation_id=correlation_id,
         )
-        return ActionInvocation(status_class=_denial_to_status(reason), payload=None, audit=envelope, correlation_id=correlation_id)
+        return ActionInvocation(
+            status_class=_denial_to_status(reason),
+            payload=None,
+            audit=envelope,
+            correlation_id=correlation_id,
+        )
     if not access_token:
-        envelope = build_envelope(actor=actor, action=action_id, status_class="auth_required", extra={"params": params}, correlation_id=correlation_id)
+        envelope = build_envelope(
+            actor=actor,
+            action=action_id,
+            status_class="auth_required",
+            extra={"params": params},
+            correlation_id=correlation_id,
+        )
         return ActionInvocation("auth_required", None, envelope, correlation_id)
     spec = get_action(action_id)
     endpoint = spec.endpoint
     if "?search=" in endpoint and "search" in params:
         endpoint = f"{endpoint}{httpx.QueryParams({'search': str(params['search'])})}"[:1024]
     elif endpoint.endswith("?search="):
-        envelope = build_envelope(actor=actor, action=action_id, status_class="internal_error", extra={"reason": "search_param_missing"}, correlation_id=correlation_id)
+        envelope = build_envelope(
+            actor=actor,
+            action=action_id,
+            status_class="internal_error",
+            extra={"reason": "search_param_missing"},
+            correlation_id=correlation_id,
+        )
         return ActionInvocation("internal_error", None, envelope, correlation_id)
-    result = graph_get(access_token, endpoint, params=params if "?search=" not in spec.endpoint else None, transport=transport, sleep=sleep)
+    result = graph_get(
+        access_token,
+        endpoint,
+        params=params if "?search=" not in spec.endpoint else None,
+        transport=transport,
+        sleep=sleep,
+    )
     envelope = build_envelope(
         actor=actor,
         action=action_id,
         status_class=result.status_class,
-        after={"http_status": result.http_status, "correlation_id_graph": result.correlation_id, "retry_after_seconds": result.retry_after_seconds},
+        after={
+            "http_status": result.http_status,
+            "correlation_id_graph": result.correlation_id,
+            "retry_after_seconds": result.retry_after_seconds,
+        },
         extra={"params": params},
         correlation_id=correlation_id,
     )
@@ -84,15 +112,17 @@ def invoke(
 def list_actions() -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for spec in READ_ONLY_REGISTRY.values():
-        out.append({
-            "action_id": spec.action_id,
-            "workload": spec.workload,
-            "endpoint": spec.endpoint,
-            "auth_modes": sorted(spec.auth_modes),
-            "scopes": sorted(spec.scopes),
-            "risk": spec.risk,
-            "rw": spec.rw,
-        })
+        out.append(
+            {
+                "action_id": spec.action_id,
+                "workload": spec.workload,
+                "endpoint": spec.endpoint,
+                "auth_modes": sorted(spec.auth_modes),
+                "scopes": sorted(spec.scopes),
+                "risk": spec.risk,
+                "rw": spec.rw,
+            }
+        )
     return sorted(out, key=lambda x: x["action_id"])
 
 

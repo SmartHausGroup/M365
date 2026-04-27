@@ -81,11 +81,24 @@ def check_runtime_layout() -> dict[str, Any]:
     }
     present = {str(p.relative_to(REPO)) for p in _runtime_files()}
     missing = sorted(expected - present)
-    return {"check": "C1_runtime_layout", "ok": not missing, "missing": missing, "present_count": len(present)}
+    return {
+        "check": "C1_runtime_layout",
+        "ok": not missing,
+        "missing": missing,
+        "present_count": len(present),
+    }
 
 
 def check_no_forbidden_tokens() -> dict[str, Any]:
-    forbidden = ("M365_REPO_ROOT", "SMARTHAUS_M365_REPO_ROOT", "UCP_ROOT", "REPOS_ROOT", "UCP_REPOS_ROOT", "../M365", "from ops_adapter")
+    forbidden = (
+        "M365_REPO_ROOT",
+        "SMARTHAUS_M365_REPO_ROOT",
+        "UCP_ROOT",
+        "REPOS_ROOT",
+        "UCP_REPOS_ROOT",
+        "../M365",
+        "from ops_adapter",
+    )
     offenders: list[str] = []
     for path in _runtime_files():
         if path.name == FORBIDDEN_TOKENS_FILE:
@@ -125,12 +138,24 @@ def check_setup_schema() -> dict[str, Any]:
     schema = json.loads(schema_path.read_text())
     required = set(schema.get("required", []))
     properties = set(schema.get("properties", {}).keys())
-    expected_required = {"M365_TENANT_ID", "M365_CLIENT_ID", "M365_AUTH_MODE", "M365_SERVICE_ACTOR_UPN"}
+    expected_required = {
+        "M365_TENANT_ID",
+        "M365_CLIENT_ID",
+        "M365_AUTH_MODE",
+        "M365_SERVICE_ACTOR_UPN",
+    }
     expected_properties = {
-        "M365_RUNTIME_URL", "M365_TENANT_ID", "M365_CLIENT_ID", "M365_AUTH_MODE",
-        "M365_REDIRECT_URI", "M365_DEVICE_CODE_FALLBACK",
-        "M365_APP_ONLY_CLIENT_SECRET_REF", "M365_APP_ONLY_CERTIFICATE_REF",
-        "M365_TOKEN_STORE", "M365_KEYCHAIN_SERVICE", "M365_ENCRYPTED_PACK_LOCAL_ALLOWED",
+        "M365_RUNTIME_URL",
+        "M365_TENANT_ID",
+        "M365_CLIENT_ID",
+        "M365_AUTH_MODE",
+        "M365_REDIRECT_URI",
+        "M365_DEVICE_CODE_FALLBACK",
+        "M365_APP_ONLY_CLIENT_SECRET_REF",
+        "M365_APP_ONLY_CERTIFICATE_REF",
+        "M365_TOKEN_STORE",
+        "M365_KEYCHAIN_SERVICE",
+        "M365_ENCRYPTED_PACK_LOCAL_ALLOWED",
         "M365_GRANTED_SCOPES",
     }
     missing_required = sorted(expected_required - required)
@@ -147,13 +172,19 @@ def check_client_routing() -> dict[str, Any]:
     client_src = (REPO / "src" / "ucp_m365_pack" / "client.py").read_text()
     pattern = re.compile(r"_configured_runtime_url\s*\(", re.MULTILINE)
     has_runtime_url = pattern.search(client_src) is not None
-    runtime_path_first = client_src.find("runtime_url is not None") < client_src.find("service_url is not None")
+    runtime_path_first = client_src.find("runtime_url is not None") < client_src.find(
+        "service_url is not None"
+    )
     direct_import_unavailable = '"direct_import_available": False' in client_src
     has_alias_table = "LEGACY_ACTION_TO_RUNTIME_ACTION" in client_src
     has_alias_function = "def map_legacy_action_to_runtime" in client_src
     return {
         "check": "C5_client_routing",
-        "ok": has_runtime_url and runtime_path_first and direct_import_unavailable and has_alias_table and has_alias_function,
+        "ok": has_runtime_url
+        and runtime_path_first
+        and direct_import_unavailable
+        and has_alias_table
+        and has_alias_function,
         "has_runtime_url": has_runtime_url,
         "runtime_path_first": runtime_path_first,
         "direct_import_unavailable": direct_import_unavailable,
@@ -165,12 +196,22 @@ def check_client_routing() -> dict[str, Any]:
 def check_manifest_marker() -> dict[str, Any]:
     manifest_path = DIST / "manifest.json"
     if not manifest_path.exists():
-        return {"check": "C6_manifest_marker", "ok": True, "skipped": "no_dist_manifest_present_yet"}
+        return {
+            "check": "C6_manifest_marker",
+            "ok": True,
+            "skipped": "no_dist_manifest_present_yet",
+        }
     manifest = json.loads(manifest_path.read_text())
     description = str(manifest.get("description") or "")
     capabilities = list(manifest.get("capabilities_exposed") or [])
     runtime_claim = "runtime" in description.lower() or "m365_runtime" in capabilities
-    return {"check": "C6_manifest_marker", "ok": runtime_claim, "description": description, "capabilities": capabilities, "runtime_claim": runtime_claim}
+    return {
+        "check": "C6_manifest_marker",
+        "ok": runtime_claim,
+        "description": description,
+        "capabilities": capabilities,
+        "runtime_claim": runtime_claim,
+    }
 
 
 def check_full_payload_no_forbidden_tokens() -> dict[str, Any]:
@@ -225,14 +266,22 @@ def check_manifest_declares_auth_lifecycle() -> dict[str, Any]:
 def check_payload_launcher_has_auth_lifecycle() -> dict[str, Any]:
     payload_path = DIST / "payload.tar.gz"
     if not payload_path.exists():
-        return {"check": "C9_payload_launcher_auth_lifecycle", "ok": False, "reason": "payload_missing"}
+        return {
+            "check": "C9_payload_launcher_auth_lifecycle",
+            "ok": False,
+            "reason": "payload_missing",
+        }
     with tempfile.TemporaryDirectory(prefix="m365-verify-launcher-") as tmp_str:
         tmp = Path(tmp_str)
         with tarfile.open(payload_path) as tf:
             tf.extractall(tmp)
         launcher = tmp / "m365_runtime" / "launcher.py"
         if not launcher.is_file():
-            return {"check": "C9_payload_launcher_auth_lifecycle", "ok": False, "reason": "launcher_missing"}
+            return {
+                "check": "C9_payload_launcher_auth_lifecycle",
+                "ok": False,
+                "reason": "launcher_missing",
+            }
         text = launcher.read_text(encoding="utf-8")
         markers = {
             "auth_start_route": "/v1/auth/start" in text,

@@ -17,7 +17,9 @@ from .launcher import run
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="m365-runtime", description="SMARTHAUS standalone M365 Graph runtime service")
+    parser = argparse.ArgumentParser(
+        prog="m365-runtime", description="SMARTHAUS standalone M365 Graph runtime service"
+    )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=9300)
     args = parser.parse_args(argv)

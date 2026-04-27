@@ -8,9 +8,8 @@ from __future__ import annotations
 import pytest
 
 pytest.importorskip("fastapi")
-from fastapi.testclient import TestClient
-
-from m365_runtime.launcher import build_app, plan_launch
+from fastapi.testclient import TestClient  # noqa: E402
+from m365_runtime.launcher import build_app, plan_launch  # noqa: E402
 
 
 def _build_setup_env() -> dict[str, str]:
@@ -23,7 +22,7 @@ def _build_setup_env() -> dict[str, str]:
     }
 
 
-def test_runtime_app_exposes_version_and_actions():
+def test_runtime_app_exposes_version_and_actions() -> None:
     plan = plan_launch(env=_build_setup_env())
     assert plan.outcome == "started"
     app = build_app(plan)
@@ -36,7 +35,7 @@ def test_runtime_app_exposes_version_and_actions():
     assert any(a["action_id"] == "graph.org_profile" for a in actions["actions"])
 
 
-def test_runtime_app_readiness_returns_lattice_state():
+def test_runtime_app_readiness_returns_lattice_state() -> None:
     plan = plan_launch(env=_build_setup_env())
     app = build_app(plan)
     client = TestClient(app)
@@ -46,7 +45,7 @@ def test_runtime_app_readiness_returns_lattice_state():
     assert ready["state"]["label"]
 
 
-def test_runtime_app_invoke_unknown_action_is_mutation_fenced():
+def test_runtime_app_invoke_unknown_action_is_mutation_fenced() -> None:
     plan = plan_launch(env=_build_setup_env())
     app = build_app(plan)
     client = TestClient(app)
@@ -55,7 +54,7 @@ def test_runtime_app_invoke_unknown_action_is_mutation_fenced():
     assert body["status_class"] == "mutation_fence"
 
 
-def test_runtime_app_invoke_known_action_without_token_is_auth_required():
+def test_runtime_app_invoke_known_action_without_token_is_auth_required() -> None:
     plan = plan_launch(env=_build_setup_env())
     app = build_app(plan)
     client = TestClient(app)
@@ -64,8 +63,15 @@ def test_runtime_app_invoke_known_action_without_token_is_auth_required():
     assert body["status_class"] in ("auth_required", "permission_missing")
 
 
-def test_runtime_app_auth_status_reports_unconfigured_when_no_setup():
-    plan = plan_launch(env={"M365_TENANT_ID": "", "M365_CLIENT_ID": "", "M365_AUTH_MODE": "", "M365_SERVICE_ACTOR_UPN": ""})
+def test_runtime_app_auth_status_reports_unconfigured_when_no_setup() -> None:
+    plan = plan_launch(
+        env={
+            "M365_TENANT_ID": "",
+            "M365_CLIENT_ID": "",
+            "M365_AUTH_MODE": "",
+            "M365_SERVICE_ACTOR_UPN": "",
+        }
+    )
     app = build_app(plan)
     client = TestClient(app)
     response = client.get("/v1/auth/status").json()

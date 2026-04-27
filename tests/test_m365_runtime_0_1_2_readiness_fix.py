@@ -16,39 +16,42 @@ from __future__ import annotations
 
 import importlib.util
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
+from types import ModuleType
+from typing import Any
 
 import pytest
-
 
 REPO = Path(__file__).resolve().parents[1]
 SRC = REPO / "src"
 BUILD_SCRIPT = REPO / "scripts" / "ci" / "build_standalone_graph_runtime_pack.py"
 
 
-def _import_build_script():
+def _import_build_script() -> ModuleType:
     sys.path.insert(0, str(SRC))
     spec = importlib.util.spec_from_file_location("build_pack_m365", BUILD_SCRIPT)
+    assert spec is not None
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
 
 
-def _import_health():
+def _import_health() -> ModuleType:
     sys.path.insert(0, str(SRC))
     import importlib
+
     if "m365_runtime.health" in sys.modules:
         return importlib.reload(sys.modules["m365_runtime.health"])
     return importlib.import_module("m365_runtime.health")
 
 
-def test_runtime_version_constant_is_0_1_2():
+def test_runtime_version_constant_is_0_1_2() -> None:
     sys.path.insert(0, str(SRC))
     import importlib
+
     if "m365_runtime" in sys.modules:
         m365_runtime = importlib.reload(sys.modules["m365_runtime"])
     else:
@@ -56,12 +59,14 @@ def test_runtime_version_constant_is_0_1_2():
     assert m365_runtime.RUNTIME_VERSION == "0.1.2"
 
 
-def test_pack_metadata_in_staged_payload(tmp_path):
+def test_pack_metadata_in_staged_payload(tmp_path: Path) -> None:
     build_pack = _import_build_script()
     stage_root = tmp_path / "stage"
     build_pack._stage_payload(stage_root)
     metadata_path = stage_root / "pack_metadata.json"
-    assert metadata_path.is_file(), f"pack_metadata.json missing from staged payload at {stage_root}"
+    assert (
+        metadata_path.is_file()
+    ), f"pack_metadata.json missing from staged payload at {stage_root}"
     metadata = json.loads(metadata_path.read_text())
     assert metadata["pack_id"] == "com.smarthaus.m365"
     assert metadata["version"] == "0.1.2"
@@ -72,7 +77,7 @@ def test_pack_metadata_in_staged_payload(tmp_path):
     assert "device_code" in metadata["runtime"]["supported_auth_modes"]
 
 
-def test_probe_artifact_succeeds_on_payload_root(tmp_path):
+def test_probe_artifact_succeeds_on_payload_root(tmp_path: Path) -> None:
     build_pack = _import_build_script()
     health = _import_health()
     stage_root = tmp_path / "payload_only"
@@ -83,7 +88,7 @@ def test_probe_artifact_succeeds_on_payload_root(tmp_path):
     assert health.probe_artifact(stage_root) is True
 
 
-def test_probe_artifact_succeeds_on_overlay_layout(tmp_path):
+def test_probe_artifact_succeeds_on_overlay_layout(tmp_path: Path) -> None:
     """Outer envelope + inner payload extracted into the same directory.
 
     This mirrors the live-installed-pack flow: the user (or _copy_to_integration_packs)
@@ -99,7 +104,9 @@ def test_probe_artifact_succeeds_on_overlay_layout(tmp_path):
     build_pack._stage_payload(overlay)
     payload_sha_placeholder = "0" * 64
     outer_manifest = build_pack._emit_manifest(payload_sha_placeholder)
-    (overlay / "manifest.json").write_text(json.dumps(outer_manifest, indent=2, sort_keys=True), encoding="utf-8")
+    (overlay / "manifest.json").write_text(
+        json.dumps(outer_manifest, indent=2, sort_keys=True), encoding="utf-8"
+    )
     # All four self-describing files now sit at the install root.
     assert (overlay / "manifest.json").is_file()
     assert (overlay / "pack_metadata.json").is_file()
@@ -108,7 +115,7 @@ def test_probe_artifact_succeeds_on_overlay_layout(tmp_path):
     assert health.probe_artifact(overlay) is True
 
 
-def test_probe_artifact_fails_when_payload_missing(tmp_path):
+def test_probe_artifact_fails_when_payload_missing(tmp_path: Path) -> None:
     health = _import_health()
     bare = tmp_path / "bare"
     bare.mkdir()
@@ -120,7 +127,8 @@ def test_probe_artifact_fails_when_payload_missing(tmp_path):
 
 # --- L_DEPENDENCY_CLOSED ---------------------------------------------------
 
-def test_pack_dependencies_in_staged_payload(tmp_path):
+
+def test_pack_dependencies_in_staged_payload(tmp_path: Path) -> None:
     build_pack = _import_build_script()
     stage_root = tmp_path / "stage"
     build_pack._stage_payload(stage_root)
@@ -131,12 +139,14 @@ def test_pack_dependencies_in_staged_payload(tmp_path):
     assert deps["version"] == "0.1.2"
     required_names = {entry["module"] for entry in deps["required"]}
     assert {"httpx", "fastapi", "uvicorn"}.issubset(required_names)
-    cert_modules = {entry["module"] for entry in deps["auth_mode_dependencies"]["app_only_certificate"]}
+    cert_modules = {
+        entry["module"] for entry in deps["auth_mode_dependencies"]["app_only_certificate"]
+    }
     assert "jwt" in cert_modules
     assert deps["fail_closed_outcome_class"] == "dependency_missing"
 
 
-def test_jwt_not_imported_at_module_load_for_app_only():
+def test_jwt_not_imported_at_module_load_for_app_only() -> None:
     """L_DEPENDENCY_CLOSED: PyJWT must not be a module-load-time dependency
     of m365_runtime.auth.app_only. Verified statically by reading the source
     so the test does not need to manipulate sys.modules (which would risk
@@ -154,7 +164,9 @@ def test_jwt_not_imported_at_module_load_for_app_only():
             )
 
 
-def test_launcher_returns_dependency_missing_when_required_module_absent(monkeypatch):
+def test_launcher_returns_dependency_missing_when_required_module_absent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """L_DEPENDENCY_CLOSED: missing required module surfaces as
     structured dependency_missing outcome, not raw ModuleNotFoundError.
 
@@ -165,6 +177,7 @@ def test_launcher_returns_dependency_missing_when_required_module_absent(monkeyp
     """
     sys.path.insert(0, str(SRC))
     import importlib
+
     if "m365_runtime.launcher" in sys.modules:
         del sys.modules["m365_runtime.launcher"]
     launcher = importlib.import_module("m365_runtime.launcher")
@@ -176,13 +189,13 @@ def test_launcher_returns_dependency_missing_when_required_module_absent(monkeyp
     assert "httpx" in plan.detail.get("missing_modules", [])
 
 
-def _subprocess_probe(blocked_module: str) -> dict:
+def _subprocess_probe(blocked_module: str) -> dict[str, Any]:
     """Spawn a Python subprocess where ``blocked_module`` is poisoned in
     ``sys.modules`` BEFORE ``m365_runtime.launcher`` is imported, then
     import the launcher and call ``plan_launch()``. Returns the parsed
     JSON the subprocess emits on stdout (or an error envelope).
     """
-    script = f'''
+    script = f"""
 import json, sys
 # Block the target module BEFORE m365_runtime.launcher is imported.
 sys.modules[{blocked_module!r}] = None
@@ -207,7 +220,7 @@ except Exception as exc:
         "exception_message": str(exc)[:200],
     }}
 print(json.dumps(out))
-'''
+"""
     proc = subprocess.run(
         [sys.executable, "-c", script],
         env={
@@ -228,7 +241,7 @@ print(json.dumps(out))
         return {"_parse_error": out[-1], "stderr": proc.stderr}
 
 
-def test_launcher_imports_when_httpx_absent_at_import_time():
+def test_launcher_imports_when_httpx_absent_at_import_time() -> None:
     """F1 hard invariant: importing m365_runtime.launcher must succeed
     even when httpx is genuinely absent at import time, and plan_launch()
     must return outcome=dependency_missing with httpx listed as missing.
@@ -240,7 +253,7 @@ def test_launcher_imports_when_httpx_absent_at_import_time():
     assert "httpx" in result.get("missing_modules", []), result
 
 
-def test_launcher_imports_when_fastapi_absent_at_import_time():
+def test_launcher_imports_when_fastapi_absent_at_import_time() -> None:
     """F1 hard invariant: same proof, but with fastapi blocked."""
     result = _subprocess_probe("fastapi")
     assert result.get("module_import_succeeded") is True, result
@@ -248,7 +261,7 @@ def test_launcher_imports_when_fastapi_absent_at_import_time():
     assert "fastapi" in result.get("missing_modules", []), result
 
 
-def test_launcher_imports_when_uvicorn_absent_at_import_time():
+def test_launcher_imports_when_uvicorn_absent_at_import_time() -> None:
     """F1 hard invariant: same proof, but with uvicorn blocked."""
     result = _subprocess_probe("uvicorn")
     assert result.get("module_import_succeeded") is True, result
@@ -256,7 +269,7 @@ def test_launcher_imports_when_uvicorn_absent_at_import_time():
     assert "uvicorn" in result.get("missing_modules", []), result
 
 
-def test_launcher_top_level_does_not_import_dependency_sensitive_submodules():
+def test_launcher_top_level_does_not_import_dependency_sensitive_submodules() -> None:
     """F1 static guard: the launcher source must not import the
     dependency-sensitive submodules at module load. The dangerous imports
     must be inside function bodies (indented).
@@ -278,13 +291,14 @@ def test_launcher_top_level_does_not_import_dependency_sensitive_submodules():
                 )
 
 
-def test_dependency_probe_endpoint_reports_present_modules():
+def test_dependency_probe_endpoint_reports_present_modules() -> None:
     """L_DEPENDENCY_CLOSED: /v1/health/dependencies surfaces present and
     missing module names so operators can diagnose without reading raw
     Python tracebacks.
     """
     sys.path.insert(0, str(SRC))
     import importlib
+
     if "m365_runtime.launcher" in sys.modules:
         del sys.modules["m365_runtime.launcher"]
     launcher = importlib.import_module("m365_runtime.launcher")
@@ -298,18 +312,20 @@ def test_dependency_probe_endpoint_reports_present_modules():
 
 # --- L_SOCKET_REAL ---------------------------------------------------------
 
-def _import_acceptance_script():
+
+def _import_acceptance_script() -> ModuleType:
     spec = importlib.util.spec_from_file_location(
         "acceptance_pack_m365",
         REPO / "scripts" / "ci" / "acceptance_standalone_graph_runtime_pack.py",
     )
+    assert spec is not None
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
 
 
-def test_acceptance_script_does_not_monkeypatch_http_runtime_invoke():
+def test_acceptance_script_does_not_monkeypatch_http_runtime_invoke() -> None:
     """L_SOCKET_REAL: the C5 acceptance script must not contain the legacy
     `ucp_client._http_runtime_invoke = ...` monkey-patch line.
     """
@@ -319,7 +335,7 @@ def test_acceptance_script_does_not_monkeypatch_http_runtime_invoke():
     assert "_assert_unpatched_http_runtime_invoke" in text
 
 
-def test_acceptance_unpatched_guard_passes_for_real_function():
+def test_acceptance_unpatched_guard_passes_for_real_function() -> None:
     """The guard must accept the unpatched real implementation defined in
     ucp_m365_pack.client.
     """
@@ -331,7 +347,7 @@ def test_acceptance_unpatched_guard_passes_for_real_function():
     acceptance._assert_unpatched_http_runtime_invoke(SRC)
 
 
-def test_acceptance_unpatched_guard_fails_when_patched(monkeypatch):
+def test_acceptance_unpatched_guard_fails_when_patched(monkeypatch: pytest.MonkeyPatch) -> None:
     """L_SOCKET_REAL: monkey-patching `_http_runtime_invoke` must trip the
     guard so release acceptance fails closed.
     """
@@ -339,7 +355,7 @@ def test_acceptance_unpatched_guard_fails_when_patched(monkeypatch):
     sys.path.insert(0, str(SRC))
     import ucp_m365_pack.client as ucp_client
 
-    def _fake(*a, **kw):  # different __module__ than the real function
+    def _fake(*a: Any, **kw: Any) -> dict[str, str]:  # different __module__ than the real function
         return {"status_class": "fake"}
 
     # Use monkeypatch.setattr so the live module is restored after the test
@@ -349,7 +365,7 @@ def test_acceptance_unpatched_guard_fails_when_patched(monkeypatch):
         acceptance._assert_unpatched_http_runtime_invoke(SRC)
 
 
-def test_acceptance_uses_subprocess_and_uvicorn():
+def test_acceptance_uses_subprocess_and_uvicorn() -> None:
     """L_SOCKET_REAL: the acceptance script must spawn a runtime subprocess
     bound to a real loopback port via uvicorn, not an in-process TestClient
     or in-process transport.
@@ -366,7 +382,11 @@ def test_acceptance_uses_subprocess_and_uvicorn():
 
 # --- L_READINESS_READY (C6) ------------------------------------------------
 
-def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, monkeypatch):
+
+def test_readiness_flips_to_ready_success_with_pack_metadata_layout(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """C6 mocked-acceptance gate: with the new pack_metadata.json layout
     staged at installed_root and OAuth+Graph mocked at the transport
     boundary, the full readiness vector must flip to ready/success after
@@ -379,6 +399,7 @@ def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, mo
 
     sys.path.insert(0, str(SRC))
     import importlib
+
     if "m365_runtime.launcher" in sys.modules:
         del sys.modules["m365_runtime.launcher"]
     if "m365_runtime.health" in sys.modules:
@@ -394,13 +415,17 @@ def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, mo
         keychain_service = "ai.smarthaus.m365.c6"
         encrypted_pack_local_allowed = False
         pack_local_path = None
-        def __init__(self):
+
+        def __init__(self) -> None:
             self._v: dict[str, str] = {}
-        def put(self, k, v):
+
+        def put(self, k: str, v: str) -> None:
             self._v[k] = v
-        def get(self, k):
+
+        def get(self, k: str) -> str | None:
             return self._v.get(k)
-        def clear(self, k):
+
+        def clear(self, k: str) -> None:
             self._v.pop(k, None)
 
     store = _MemStore()
@@ -429,12 +454,14 @@ def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, mo
         detail=plan.detail,
     )
 
-    def oauth_handler(req):
+    def oauth_handler(req: httpx.Request) -> httpx.Response:
         if req.url.path.endswith("/oauth2/v2.0/token"):
-            return httpx.Response(200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600})
+            return httpx.Response(
+                200, json={"access_token": "AT", "refresh_token": "RT", "expires_in": 3600}
+            )
         return httpx.Response(404, json={"error": "unhandled"})
 
-    def graph_handler(req):
+    def graph_handler(req: httpx.Request) -> httpx.Response:
         if req.url.path == "/v1.0/organization":
             return httpx.Response(200, json={"value": [{"id": "tenant-c6"}]})
         return httpx.Response(404, json={"error": "unhandled"})
@@ -453,7 +480,9 @@ def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, mo
 
     start = client.post("/v1/auth/start", json={}).json()
     assert start["state"] == "auth_started"
-    check = client.post("/v1/auth/check", json={"code": "X", "state": start["expected_state"]}).json()
+    check = client.post(
+        "/v1/auth/check", json={"code": "X", "state": start["expected_state"]}
+    ).json()
     assert check["state"] == "signed_in"
 
     readiness_after = client.get("/v1/health/readiness").json()
@@ -473,7 +502,8 @@ def test_readiness_flips_to_ready_success_with_pack_metadata_layout(tmp_path, mo
 
 # --- L_PROVENANCE_REPRO (C8) -----------------------------------------------
 
-def test_provenance_records_required_keys_for_reproducibility():
+
+def test_provenance_records_required_keys_for_reproducibility() -> None:
     """C8 gate: provenance.json (built into the active install dir) must
     record source commit/branch/clean state, payload SHA, bundle SHA,
     manifest SHA, conformance SHA, dependency lock SHA, and an explicit
@@ -485,23 +515,46 @@ def test_provenance_records_required_keys_for_reproducibility():
     provenance = json.loads((install_dir / "provenance.json").read_text())
     artifact = provenance["artifact"]
     for key in (
-        "id", "bundle_file", "bundle_sha256", "payload_file", "payload_sha256",
-        "manifest_file", "manifest_sha256", "conformance_file", "conformance_sha256",
-        "dependency_lock_file", "dependency_lock_sha256",
+        "id",
+        "bundle_file",
+        "bundle_sha256",
+        "payload_file",
+        "payload_sha256",
+        "manifest_file",
+        "manifest_sha256",
+        "conformance_file",
+        "conformance_sha256",
+        "dependency_lock_file",
+        "dependency_lock_sha256",
     ):
         assert key in artifact, f"provenance.artifact missing {key}"
     source = provenance["source"]
-    for key in ("repository", "branch", "commit", "clean", "state", "dirty_files", "dirty_files_digests"):
+    for key in (
+        "repository",
+        "branch",
+        "commit",
+        "clean",
+        "state",
+        "dirty_files",
+        "dirty_files_digests",
+    ):
         assert key in source, f"provenance.source missing {key}"
     repro = provenance["reproducibility"]
-    for key in ("claims_clean_reproducible", "release_blocker_if_dirty", "two_build_byte_identical_required"):
+    for key in (
+        "claims_clean_reproducible",
+        "release_blocker_if_dirty",
+        "two_build_byte_identical_required",
+    ):
         assert key in repro
     assert repro["release_blocker_if_dirty"] is True
     # Honesty: claims_clean_reproducible must mirror source.clean.
     assert repro["claims_clean_reproducible"] is source["clean"]
 
 
-def test_provenance_does_not_lie_about_clean_state(tmp_path, monkeypatch):
+def test_provenance_does_not_lie_about_clean_state(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """C8 invariant: `_emit_provenance` must NEVER mark
     `claims_clean_reproducible=True` while `source_clean=False`. Drives
     `_emit_provenance` directly with a forced dirty state and asserts the
@@ -509,7 +562,10 @@ def test_provenance_does_not_lie_about_clean_state(tmp_path, monkeypatch):
     """
     build_pack = _import_build_script()
     prov = build_pack._emit_provenance(
-        "0" * 64, "0" * 64, "0" * 64, tmp_path / "install_x",
+        "0" * 64,
+        "0" * 64,
+        "0" * 64,
+        tmp_path / "install_x",
         payload_sha="0" * 64,
         dependency_lock_sha="0" * 64,
         source_clean=False,

@@ -55,7 +55,7 @@ Claude must run `pwd`, `git rev-parse --show-toplevel`, `git branch --show-curre
 
 The correct move is a new `0.1.2` governed patch release. The live smoke test proved the important product claim - delegated Microsoft sign-in plus read-only Graph execution can work from the installed payload - but it also proved formal readiness is still false. A version bump alone would preserve the same defect. A `0.1.2` fix must repair the package mechanics and evidence chain at the same time.
 
-## Current Truth
+## Baseline Defect Truth
 
 - The installed `com.smarthaus.m365@1.1.1` artifact exists at `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/1.1.1/`.
 - `SHA256SUMS` passed for the installed `1.1.1` artifact.
@@ -67,6 +67,15 @@ The correct move is a new `0.1.2` governed patch release. The live smoke test pr
 - The acceptance harness still needs a real local socket path through `ucp_m365_pack.client.execute_m365_action()` without patching `_http_runtime_invoke`.
 - The installed `1.1.1` provenance points at a commit that does not by itself reproduce the dirty worktree implementation.
 - The parent plan/fix plan/tracker set contains conflicting readiness language.
+
+## Current Truth
+
+- The installed `com.smarthaus.m365@0.1.2` artifact is the active M365-side release authority.
+- Live installed-pack device-code auth succeeded for `phil@smarthausgroup.com`.
+- Live `graph.me` returned success and readiness returned `ready/success`.
+- The dependency contract fails closed with structured `dependency_missing` outcomes.
+- Real local socket acceptance uses unpatched `httpx` through `ucp_m365_pack.client`.
+- Clean-source rebuild provenance is true for the installed `0.1.2` artifact.
 
 ## Target Truth
 
@@ -370,8 +379,8 @@ The final implementation must add or update validation commands for the dependen
 - [x] CTO approves implementation start. (2026-04-27 user-initiated continuation)
 - [x] MA notebooks and invariants created. (L99 bundle, scorecard green)
 - [x] Runtime/package fixes implemented. (C1, C3, C4, C5, C6, C8 changes shipped)
-- [x] `0.1.2` artifact built and installed. (deterministic SHA `9af6df20...2eee`, install-dir SHA256SUMS clean)
-- [ ] Acceptance and live smoke prove `PackReady(0.1.2)`. (mocked acceptance + verifier + regression all green; live smoke C9 passed against installed `0.1.2`; clean-source provenance C8 remains blocked on CTO commit)
+- [x] `0.1.2` artifact built and installed. (deterministic SHA `389acf3a...43bda`, install-dir SHA256SUMS clean)
+- [x] Acceptance and live smoke prove `PackReady(0.1.2)`. (mocked acceptance, verifier, regression, live smoke C9, and clean-source provenance C8 are green)
 
 ## Chunk Progress (2026-04-27)
 
@@ -384,11 +393,14 @@ The final implementation must add or update validation commands for the dependen
 | C4 - Dependency Contract | done | Lazy `jwt`/`yaml` imports; `RUNTIME_REQUIRED_MODULES` + `_probe_required_dependencies()` + `outcome=dependency_missing` with `missing_modules` list; `/v1/health/dependencies` endpoint; staged `pack_dependencies.json`. |
 | C5 - Real Socket Acceptance | done | `scripts/ci/acceptance_standalone_graph_runtime_pack.py` rewritten to spawn a subprocess+uvicorn on a dynamic loopback port and call `execute_m365_action()` over real `httpx`; `_assert_unpatched_http_runtime_invoke` guard fails closed if `_http_runtime_invoke` is monkey-patched; 21/21 GO. |
 | C6 - Mocked Readiness To Ready | done | `test_readiness_flips_to_ready_success_with_pack_metadata_layout` proves the full readiness vector (svc, art, src, ctr, auth, tok, perm, graph, aud) flips to `ready/success` against the new layout. |
-| C7 - Deterministic Build & Install | done | Two consecutive builds produce identical bundle SHA `9af6df20616d652eaf974ca61914da5e9a636b4e5d96f0fc8eccc779cea22eee`. Install-dir `SHA256SUMS` verifies clean. Verifier 9/9, acceptance 21/21, regression 96 passed. |
-| C8 - Provenance | done | `_emit_provenance` now records `source.clean`, `source.state`, `dirty_files`, `dirty_files_digests`, `payload_sha256`, `dependency_lock_sha256`, and a `reproducibility` block whose `claims_clean_reproducible` mirrors `source.clean`. Current state: `source.clean=false` (truthful). |
+| C7 - Deterministic Build & Install | done | Two consecutive builds produce identical bundle SHA `389acf3a5952af4e2a4b6c7b52c6071725b2fda81dd46917224ffedb95243bda`. Install-dir `SHA256SUMS` verifies clean. Verifier 9/9, acceptance 21/21, regression 96 passed. |
+| C8 - Provenance | done | `_emit_provenance` now records `source.clean`, `source.state`, `dirty_files`, `dirty_files_digests`, `payload_sha256`, `dependency_lock_sha256`, and a `reproducibility` block whose `claims_clean_reproducible` mirrors `source.clean`. Current state: `source.clean=true` after committed clean-source rebuild. |
 | C9 - Live Read-Only Smoke | done | Installed `0.1.2` runtime completed Microsoft device-code sign-in for `phil@smarthausgroup.com`; `graph.me` returned success; readiness returned `ready/success`. Evidence: `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_2_live_smoke.json`. |
-| C10 - Evidence & Tracker Sync | done | Action log + execution plan + project file index synchronized; release packet `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-packet.md` published with `release_decision=NO_GO` pending clean-source rebuild. |
+| C10 - Evidence & Tracker Sync | done | Action log + execution plan + project file index synchronized; release packet `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-packet.md` published with `release_decision=GO`. |
 
-**Current M365-side release decision (2026-04-27 08:14 EDT):** `NO_GO`. One blocker remains:
+**Final M365-side release decision (2026-04-27 08:14 EDT):** `GO`.
 
-1. C8 source cleanliness must reach `provenance.source.clean=true` via a clean-source rebuild from a committed worktree.
+Release basis:
+
+1. C9 live read-only smoke passed against the installed `0.1.2` runtime with `graph.me` succeeding and readiness reaching `ready/success`.
+2. C8 source cleanliness passed after committed clean-source rebuild: `provenance.source.clean=true` and `claims_clean_reproducible=true`.
