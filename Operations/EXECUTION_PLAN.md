@@ -110,13 +110,15 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 
 **Reference:** `plan:m365-github-release-and-ucp-handoff-closure:R0`
 
-**Status:** Active - ready for Claude execution. The `0.1.2` pack is locally proven and M365-side GO, but no GitHub Release exists yet and the local `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` directory is only an install/cache path, not the canonical distribution authority.
+**Status:** Complete-Released (2026-04-27). Chunks C0-C13 executed. The canonical M365-side release authority for `com.smarthaus.m365@0.1.2` is the GitHub Release at https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.2 (target commit `687b69b65d8904457a1c72046e66c8e5f868f635` on `main`, bundle SHA `29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e`). The local `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` directory is now formally labeled cache/install only.
 
-**Current next act:** Execute chunks `C0` through `C13`: preflight, close review-truth conflicts, verify and push `development`, promote to `staging`, promote to `main`, rebuild from clean `main`, tag `com.smarthaus.m365-v0.1.2`, create and validate the GitHub Release, publish it, then create the M365-side UCP handoff. UCP source mutation remains out of scope.
+**Current next act:** Sibling UCP plan to admit the published GitHub Release asset; that work is explicitly out of M365 repo scope.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure.md`, `docs/prompts/codex-m365-github-release-and-ucp-handoff-closure-prompt.txt`
 
 **Status update (2026-04-27 09:12 EDT):** Opened the formal closure plan after confirming the repo is on `development`, local HEAD is `257693a33fddcc83dd2ff63ccffc328c010683a8`, the branch is ahead of `origin/development` by 5 commits, and no GitHub Release exists for the M365 pack. This plan makes GitHub Release assets from `main` the canonical distribution source and explicitly demotes `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` to a local cache/install copy. No branch promotion, release publication, UCP mutation, tenant setting, token, or secret changed in this plan-creation slice.
+
+**Status update (2026-04-27 09:45 EDT):** Closed C0-C13. Promoted `development` -> `staging` -> `main` via fast-forward (all three branches now at `687b69b65d8904457a1c72046e66c8e5f868f635`); created and pushed annotated tag `com.smarthaus.m365-v0.1.2`; created the draft GitHub Release with 11 assets (bundle, SHA256SUMS, manifest, conformance, provenance, payload, pack_metadata, pack_dependencies, manifest.sig, payload.sig, release notes); ran the downloaded-release verification from `mktemp -d` (LC_ALL=C SHA256SUMS OK, runtime imports `m365_runtime@0.1.2` from temp dir without source-repo path, provenance commit matches origin/main); published the release as Latest; wrote the M365-side UCP handoff packet at `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md` (no UCP repo file mutated). UCP through-the-installed-pack admission/activation remains the explicit boundary of a sibling UCP plan.
 
 ## Initiative: M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix
 

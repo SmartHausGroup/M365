@@ -1,12 +1,53 @@
 # M365 GitHub Release And UCP Handoff Closure Plan
 
 Plan ID: `m365-github-release-and-ucp-handoff-closure`
-Status: `Active - ready for Claude execution`
+Status: `Complete-Released` (closed 2026-04-27)
 Date: `2026-04-27`
 Repo: `/Users/smarthaus/Projects/GitHub/M365`
 Required branch at start: `development`
 Remote: `https://github.com/SmartHausGroup/M365.git`
 Execution plan reference: `plan:m365-github-release-and-ucp-handoff-closure:R0`
+
+## Closure Outcome
+
+| Field | Value |
+| --- | --- |
+| GitHub Release URL | https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.2 |
+| Release tag | `com.smarthaus.m365-v0.1.2` |
+| Release target commit | `687b69b65d8904457a1c72046e66c8e5f868f635` (`main`) |
+| Release name | SMARTHAUS M365 Integration Pack 0.1.2 |
+| Draft / Prerelease / Latest | false / false / true |
+| Asset count | 11 |
+| Bundle SHA256 | `29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e` |
+| Manifest SHA256 | `bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9` |
+| Conformance SHA256 | `ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7` |
+| Payload SHA256 | `c09625a5b89b1578e2226463d43670dc8355db7d489338f3bf42001db16cabfd` |
+| Pack-metadata SHA256 | `7ff9c21b465916c7d28fd0e470e465e84b69351413e625b9df339f69a8a577fd` |
+| Pack-dependencies SHA256 | `376f10bab9f3554e5bce73ef55ea157bb8fe866e3d498ea50c6895b87e8f0e0b` |
+| Downloaded-release verification | passed (LC_ALL=C SHA256SUMS OK; runtime imports without `PYTHONPATH=src`) |
+| UCP handoff packet | [docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md](../../docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md) |
+| Release notes asset | [docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-notes.md](../../docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-notes.md) |
+| Local cache role | `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.2/` is now cache/install only |
+| Next step (out of scope here) | sibling UCP plan to admit the GitHub Release asset |
+
+## Chunk Status
+
+| Chunk | Status | Outcome |
+| --- | --- | --- |
+| C0 - Preflight | done | branch `development` @ `257693a3`, ahead 5 of origin; staging/main both at `e871e19`; tag absent; gh auth OK |
+| C1 - Review-truth gate | done | parent integration plan moved to `Closed-via-corrective-plan`; runbook points active artifact at 0.1.2; remaining grep hits are explicitly historical/labeled |
+| C2 - Development verification | done | verifier 9/9, real-socket acceptance 21/21 GO, focused pytest 84 passed, install-dir SHA256SUMS OK, `git diff --check` clean |
+| C3 - Commit + push development | done | commit `687b69b6 Prepare M365 0.1.2 release closure`, fast-forward `e871e19..687b69b6` |
+| C4 - dev -> staging | done | fast-forward `e871e19..687b69b6`, ancestry verified |
+| C5 - Staging verification | done | verifier 9/9, real-socket acceptance 21/21 GO, readiness-fix tests 20 passed, install-dir SHA256SUMS OK |
+| C6 - staging -> main | done | fast-forward `e871e19..687b69b6`, ancestry verified |
+| C7 - Clean-main rebuild + asset freeze | done | two-build-stable bundle SHA `29c1d05b...46fd9e`, install-dir SHA256SUMS OK, verifier 9/9; `git status --short` clean post-build |
+| C8 - Release tag | done | annotated tag `com.smarthaus.m365-v0.1.2` created on main commit `687b69b6` and pushed |
+| C9 - Draft release | done | `gh release create --draft --target main` with 11 assets including release notes |
+| C10 - Downloaded-release verification | done | `gh release download` to `mktemp -d`, LC_ALL=C SHA256SUMS OK, bundle+payload extracted, `m365_runtime` imports from temp dir without source-repo path, manifest version 0.1.2, provenance commit matches origin/main |
+| C11 - Publish | done | `gh release edit --draft=false --latest`; release is published, marked latest |
+| C12 - UCP handoff packet | done | M365-side handoff packet written; no UCP repo file mutated; references the published release URL and exact final hashes |
+| C13 - Tracker closeout | done | this entry; trackers synchronized; `git diff --check` clean; JSON/YAML parse OK |
 
 ## Intent Definition
 

@@ -1,7 +1,31 @@
 {
   "plan_id": "m365-github-release-and-ucp-handoff-closure",
-  "status": "Active-ready-for-Claude-execution",
+  "status": "Complete-Released",
   "date": "2026-04-27",
+  "chunk_status": {
+    "C0": "done", "C1": "done", "C2": "done", "C3": "done", "C4": "done",
+    "C5": "done", "C6": "done", "C7": "done", "C8": "done", "C9": "done",
+    "C10": "done", "C11": "done", "C12": "done", "C13": "done"
+  },
+  "release_outcome": {
+    "github_release_url": "https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.2",
+    "release_tag": "com.smarthaus.m365-v0.1.2",
+    "release_target_commit": "687b69b65d8904457a1c72046e66c8e5f868f635",
+    "is_draft": false,
+    "is_prerelease": false,
+    "is_latest": true,
+    "asset_count": 11,
+    "bundle_sha256": "29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e",
+    "manifest_sha256": "bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9",
+    "conformance_sha256": "ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7",
+    "payload_sha256": "c09625a5b89b1578e2226463d43670dc8355db7d489338f3bf42001db16cabfd",
+    "pack_metadata_sha256": "7ff9c21b465916c7d28fd0e470e465e84b69351413e625b9df339f69a8a577fd",
+    "pack_dependencies_sha256": "376f10bab9f3554e5bce73ef55ea157bb8fe866e3d498ea50c6895b87e8f0e0b",
+    "downloaded_release_verification": "passed",
+    "ucp_handoff_packet": "docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md",
+    "release_notes": "docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-notes.md",
+    "next_step_outside_m365_scope": "sibling UCP plan to admit the GitHub Release asset"
+  },
   "owner": "SMARTHAUS",
   "repo": "/Users/smarthaus/Projects/GitHub/M365",
   "required_start_branch": "development",
