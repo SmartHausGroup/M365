@@ -61,74 +61,74 @@
     {
       "id": "R0",
       "title": "Formal closure plan and Claude handoff",
-      "status": "active",
+      "status": "complete",
       "acceptance": "Plan triplet, prompt pair, execution plan, file index, and action log exist and point to the GitHub Release closure path."
     },
     {
       "id": "R1",
       "title": "Preflight and governance-truth reconciliation",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C0", "C1"],
       "acceptance": "Correct repo/branch/remote are proven and active review-truth conflicts are closed before promotion."
     },
     {
       "id": "R2",
       "title": "Development branch verification and push",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C2", "C3"],
       "acceptance": "Development gates pass and origin/development contains the verified release source."
     },
     {
       "id": "R3",
       "title": "Staging promotion and verification",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C4", "C5"],
       "acceptance": "Staging contains the verified development commit and staging gates pass."
     },
     {
       "id": "R4",
       "title": "Main promotion and clean release build",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C6", "C7"],
       "acceptance": "Main contains the verified staging commit and clean-main rebuild freezes release assets."
     },
     {
       "id": "R5",
       "title": "Tag and draft GitHub Release",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C8", "C9"],
       "acceptance": "Tag com.smarthaus.m365-v0.1.2 points to main release commit and draft release contains required assets."
     },
     {
       "id": "R6",
       "title": "Downloaded release verification and publish",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C10", "C11"],
       "acceptance": "Downloaded release assets verify, extract, and import without source repo; release is published non-draft."
     },
     {
       "id": "R7",
       "title": "UCP handoff and tracker closeout",
-      "status": "pending",
+      "status": "complete",
       "chunks": ["C12", "C13"],
       "acceptance": "M365-side UCP handoff references GitHub Release assets and all trackers are synchronized."
     }
   ],
   "chunks": [
-    {"id": "C0", "title": "Preflight And Repository Truth", "status": "pending"},
-    {"id": "C1", "title": "Close Review-Truth Conflicts Before Promotion", "status": "pending"},
-    {"id": "C2", "title": "Development Branch Release Verification", "status": "pending"},
-    {"id": "C3", "title": "Commit And Push Development", "status": "pending"},
-    {"id": "C4", "title": "Promote Development To Staging", "status": "pending"},
-    {"id": "C5", "title": "Staging Verification", "status": "pending"},
-    {"id": "C6", "title": "Promote Staging To Main", "status": "pending"},
-    {"id": "C7", "title": "Clean Main Rebuild And Release Asset Freeze", "status": "pending"},
-    {"id": "C8", "title": "Create Release Tag", "status": "pending"},
-    {"id": "C9", "title": "Create Draft GitHub Release And Upload Assets", "status": "pending"},
-    {"id": "C10", "title": "Downloaded Release Verification", "status": "pending"},
-    {"id": "C11", "title": "Publish GitHub Release", "status": "pending"},
-    {"id": "C12", "title": "UCP Handoff Packet", "status": "pending"},
-    {"id": "C13", "title": "Tracker Closeout", "status": "pending"}
+    {"id": "C0", "title": "Preflight And Repository Truth", "status": "done"},
+    {"id": "C1", "title": "Close Review-Truth Conflicts Before Promotion", "status": "done"},
+    {"id": "C2", "title": "Development Branch Release Verification", "status": "done"},
+    {"id": "C3", "title": "Commit And Push Development", "status": "done"},
+    {"id": "C4", "title": "Promote Development To Staging", "status": "done"},
+    {"id": "C5", "title": "Staging Verification", "status": "done"},
+    {"id": "C6", "title": "Promote Staging To Main", "status": "done"},
+    {"id": "C7", "title": "Clean Main Rebuild And Release Asset Freeze", "status": "done"},
+    {"id": "C8", "title": "Create Release Tag", "status": "done"},
+    {"id": "C9", "title": "Create Draft GitHub Release And Upload Assets", "status": "done"},
+    {"id": "C10", "title": "Downloaded Release Verification", "status": "done"},
+    {"id": "C11", "title": "Publish GitHub Release", "status": "done"},
+    {"id": "C12", "title": "UCP Handoff Packet", "status": "done"},
+    {"id": "C13", "title": "Tracker Closeout", "status": "done"}
   ],
   "hard_boundaries": [
     "Do not mutate UCP or sibling repos.",
@@ -151,4 +151,3 @@
     "UCP handoff references the GitHub Release URL and exact hashes."
   ]
 }
-

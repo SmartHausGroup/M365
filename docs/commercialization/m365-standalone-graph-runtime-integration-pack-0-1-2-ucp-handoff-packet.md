@@ -30,7 +30,7 @@ required_assets:
   com.smarthaus.m365-0.1.2.ucp.tar.gz: 29c1d05bc30f570373d09a2ebb38313bda8466d4faa31e70a2e865e1c046fd9e
   manifest.json:                       bfc52d4b4e585604cac426d546153e5a7d54180630cadbf9a2b7f7c62a8584e9
   conformance.json:                    ab03f4277ecf700e4b032da843b8d45760358c3dd13a6b42c94033a154af3da7
-  SHA256SUMS:                          # bundle + manifest + conformance integrity index (downloaded asset)
+  SHA256SUMS:                          4788ed7b512fa1e3407475cc061a7c49e36a1c1114a312594c15a31ffe6227a4
 
 recommended_assets:
   payload.tar.gz:                      c09625a5b89b1578e2226463d43670dc8355db7d489338f3bf42001db16cabfd
@@ -42,7 +42,7 @@ recommended_assets:
   m365-standalone-graph-runtime-integration-pack-0-1-2-release-notes.md
 ```
 
-UCP **must** verify the downloaded `SHA256SUMS` before extracting or installing.
+UCP **must** verify the downloaded `SHA256SUMS` before extracting or installing the core envelope. The current `SHA256SUMS` release asset covers exactly `com.smarthaus.m365-0.1.2.ucp.tar.gz`, `manifest.json`, and `conformance.json`. The recommended ancillary assets above are verified by their listed SHA256 values and GitHub release asset digests, not by the current `SHA256SUMS` file.
 
 ## Pack identity from the release manifest
 
@@ -138,7 +138,7 @@ UCP must materialize the installed payload under its OWN runtime root, derived f
 UCP MUST:
 
 1. **Admit from GitHub Release asset.** Do not scan the M365 source repo. Do not hand-copy from a developer machine path. Do not use `M365_REPO_ROOT` / `SMARTHAUS_M365_REPO_ROOT` / `M365_REGISTRY_PATH` / parent-walk lookups. Do not consult any sibling repo path (`UCP_ROOT`, `REPOS_ROOT`, etc.).
-2. **Verify SHA256SUMS before install.** Compute SHA256 of each downloaded asset and compare against the values in the downloaded `SHA256SUMS`. Refuse to install on mismatch.
+2. **Verify integrity before install.** Run the downloaded `SHA256SUMS` against the core envelope assets (`com.smarthaus.m365-0.1.2.ucp.tar.gz`, `manifest.json`, `conformance.json`) and refuse to install on mismatch. If UCP downloads ancillary assets (`payload.tar.gz`, `pack_metadata.json`, `pack_dependencies.json`, signatures, provenance, or release notes), verify them against the SHA256 values listed in this handoff and the GitHub release asset digests; do not assume the current `SHA256SUMS` file covers those ancillary assets.
 3. **Materialize the installed payload under a UCP-owned runtime root.** Extract the outer `.ucp.tar.gz` and the inner `payload.tar.gz` into the same root so `pack_metadata.json` + `setup_schema.json` + `registry/agents.yaml` (and the staged `m365_runtime/` and `ucp_m365_pack/`) all sit at the chosen root.
 4. **Launch the runtime from the installed artifact.** Use the manifest's `runtime.entrypoint_command` (`python -m m365_runtime`) with the chosen root on `PYTHONPATH`. Do not require any M365 source checkout.
 5. **Drive the auth lifecycle through the declared endpoints.**

@@ -72,99 +72,99 @@ governing_formula: "ReleaseReady(0.1.2) = SourceClean and BranchPromoted and Tag
 requirements:
   - id: R0
     title: Formal closure plan and Claude handoff
-    status: active
+    status: complete
     acceptance: Plan triplet, prompt pair, execution plan, file index, and action log exist and point to the GitHub Release closure path.
   - id: R1
     title: Preflight and governance-truth reconciliation
-    status: pending
+    status: complete
     chunks: [C0, C1]
     acceptance: Correct repo/branch/remote are proven and active review-truth conflicts are closed before promotion.
   - id: R2
     title: Development branch verification and push
-    status: pending
+    status: complete
     chunks: [C2, C3]
     acceptance: Development gates pass and origin/development contains the verified release source.
   - id: R3
     title: Staging promotion and verification
-    status: pending
+    status: complete
     chunks: [C4, C5]
     acceptance: Staging contains the verified development commit and staging gates pass.
   - id: R4
     title: Main promotion and clean release build
-    status: pending
+    status: complete
     chunks: [C6, C7]
     acceptance: Main contains the verified staging commit and clean-main rebuild freezes release assets.
   - id: R5
     title: Tag and draft GitHub Release
-    status: pending
+    status: complete
     chunks: [C8, C9]
     acceptance: Tag com.smarthaus.m365-v0.1.2 points to main release commit and draft release contains required assets.
   - id: R6
     title: Downloaded release verification and publish
-    status: pending
+    status: complete
     chunks: [C10, C11]
     acceptance: Downloaded release assets verify, extract, and import without source repo; release is published non-draft.
   - id: R7
     title: UCP handoff and tracker closeout
-    status: pending
+    status: complete
     chunks: [C12, C13]
     acceptance: M365-side UCP handoff references GitHub Release assets and all trackers are synchronized.
 chunks:
   - id: C0
     title: Preflight And Repository Truth
-    status: pending
+    status: done
     gate: Correct repo, branch, remote, GitHub auth, release list, tags, and remote branch state recorded.
   - id: C1
     title: Close Review-Truth Conflicts Before Promotion
-    status: pending
+    status: done
     gate: No active governance contradiction remains for 0.1.2 vs 1.1.1 or artifact hashes.
   - id: C2
     title: Development Branch Release Verification
-    status: pending
+    status: done
     gate: Verifier, real-socket acceptance, focused pytest, install SHA256SUMS, and diff check pass.
   - id: C3
     title: Commit And Push Development
-    status: pending
+    status: done
     gate: origin/development equals verified local development release commit.
   - id: C4
     title: Promote Development To Staging
-    status: pending
+    status: done
     gate: origin/staging contains origin/development by fast-forward or governed PR path.
   - id: C5
     title: Staging Verification
-    status: pending
+    status: done
     gate: Staging verifier, acceptance, focused pytest, and install SHA256SUMS pass.
   - id: C6
     title: Promote Staging To Main
-    status: pending
+    status: done
     gate: origin/main contains origin/staging by fast-forward or governed PR path.
   - id: C7
     title: Clean Main Rebuild And Release Asset Freeze
-    status: pending
+    status: done
     gate: Clean-main build converges and final hashes/provenance are recorded.
   - id: C8
     title: Create Release Tag
-    status: pending
+    status: done
     gate: com.smarthaus.m365-v0.1.2 points to the final main release commit.
   - id: C9
     title: Create Draft GitHub Release And Upload Assets
-    status: pending
+    status: done
     gate: Draft release exists with required assets.
   - id: C10
     title: Downloaded Release Verification
-    status: pending
+    status: done
     gate: Assets downloaded from GitHub verify with SHA256SUMS and extracted runtime imports without source repo.
   - id: C11
     title: Publish GitHub Release
-    status: pending
+    status: done
     gate: Release is non-draft and points to the final tag/main commit.
   - id: C12
     title: UCP Handoff Packet
-    status: pending
+    status: done
     gate: M365-side handoff tells UCP to admit from GitHub Release, not source repo or local folder.
   - id: C13
     title: Tracker Closeout
-    status: pending
+    status: done
     gate: Action log, execution plan, file index, and plan triplet reflect final release truth.
 hard_boundaries:
   - Do not mutate UCP or sibling repos.
@@ -194,4 +194,3 @@ acceptance_criteria:
   - downloaded release bundle extracts and imports without source repo paths.
   - local IntegrationPacks is documented as cache/install copy.
   - UCP handoff references the GitHub Release URL and exact hashes.
-

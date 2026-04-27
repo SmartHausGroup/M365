@@ -194,4 +194,3 @@ When complete, report:
 - local IntegrationPacks cache state
 - UCP handoff doc path
 - any remaining UCP-side work, explicitly outside this M365 plan
-

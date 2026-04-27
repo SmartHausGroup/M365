@@ -44,7 +44,7 @@ Execution plan reference: `plan:m365-github-release-and-ucp-handoff-closure:R0`
 | C7 - Clean-main rebuild + asset freeze | done | two-build-stable bundle SHA `29c1d05b...46fd9e`, install-dir SHA256SUMS OK, verifier 9/9; `git status --short` clean post-build |
 | C8 - Release tag | done | annotated tag `com.smarthaus.m365-v0.1.2` created on main commit `687b69b6` and pushed |
 | C9 - Draft release | done | `gh release create --draft --target main` with 11 assets including release notes |
-| C10 - Downloaded-release verification | done | `gh release download` to `mktemp -d`, LC_ALL=C SHA256SUMS OK, bundle+payload extracted, `m365_runtime` imports from temp dir without source-repo path, manifest version 0.1.2, provenance commit matches origin/main |
+| C10 - Downloaded-release verification | done | `gh release download` to `mktemp -d`, LC_ALL=C SHA256SUMS OK, bundle+payload extracted, `m365_runtime` imports from temp dir without source-repo path, manifest version 0.1.2, provenance commit matches the release tag commit `687b69b65d8904457a1c72046e66c8e5f868f635` |
 | C11 - Publish | done | `gh release edit --draft=false --latest`; release is published, marked latest |
 | C12 - UCP handoff packet | done | M365-side handoff packet written; no UCP repo file mutated; references the published release URL and exact final hashes |
 | C13 - Tracker closeout | done | this entry; trackers synchronized; `git diff --check` clean; JSON/YAML parse OK |
