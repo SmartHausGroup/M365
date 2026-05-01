@@ -724,6 +724,25 @@ def build_app(
     def actions() -> dict[str, Any]:
         return {"count": len(READ_ONLY_REGISTRY), "actions": list_actions()}
 
+    @app.post("/v1/auth/preflight")
+    def auth_preflight(body: dict[str, Any] | None = None) -> dict[str, Any]:
+        # plan:m365-cps-trkA-p3-preflight-intersection:T3 / L102
+        # Pure read; returns the registry partition for this session.
+        from .graph.preflight import compute_intersection
+
+        body = body or {}
+        # Derive auth_mode from body, else from current session, else None.
+        auth_mode = body.get("auth_mode")
+        if not auth_mode:
+            setup = current_setup()
+            auth_mode = setup.auth_mode if setup is not None else None
+        # Derive granted_scopes similarly.
+        scopes = body.get("granted_scopes")
+        if not scopes:
+            setup = current_setup()
+            scopes = list(setup.granted_scopes) if setup is not None else []
+        return compute_intersection(auth_mode, scopes)
+
     @app.get("/v1/inventory")
     def inventory_endpoint() -> dict[str, Any]:
         # plan:m365-cps-trkA-p2-inventory-tool:T2 / L101.InventoryContractValid

@@ -1,0 +1,15 @@
+{
+  "lemma_id": "L102_m365_cps_preflight_intersection_v1",
+  "plan_reference": "plan:m365-cps-trkA-p3-preflight-intersection:T2",
+  "verification_mode": "deterministic-static",
+  "seed": 0,
+  "predicates": {
+    "L_INVOKABLE_INCLUSION": {"result": "pass"},
+    "L_BLOCKED_BY_AUTH_MODE_DISJOINT": {"result": "pass"},
+    "L_BLOCKED_BY_SCOPES_DISJOINT": {"result": "pass"},
+    "L_PARTITION_COMPLETE": {"result": "pass"},
+    "L_NO_MUTATION": {"result": "pass"}
+  },
+  "conjunction": {"name": "PreflightIntersectionValid", "result": "pass"},
+  "determinism_certification": "green"
+}

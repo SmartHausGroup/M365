@@ -1,0 +1,33 @@
+lemma_id: L102_m365_cps_preflight_intersection_v1
+title: M365 Capability Pack Preflight Intersection v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkA-p3-preflight-intersection:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-A3-preflight-intersection-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l102.json
+generated_verification_reference: configs/generated/m365_cps_preflight_intersection_v1_verification.json
+predecessor_lemma_bundle: L101_m365_cps_capability_inventory_v1
+target:
+  module: src/m365_runtime/graph/preflight.py
+  function: compute_intersection
+  endpoint: /v1/auth/preflight
+proof_obligations:
+  L_INVOKABLE_INCLUSION:
+    - a in invokable iff session.auth_mode in a.auth_modes AND a.scopes subset_eq session.granted_scopes
+  L_BLOCKED_BY_AUTH_MODE_DISJOINT:
+    - blocked_by_auth_mode disjoint from invokable
+  L_BLOCKED_BY_SCOPES_DISJOINT:
+    - blocked_by_scopes disjoint from invokable
+    - blocked_by_scopes disjoint from blocked_by_auth_mode
+  L_PARTITION_COMPLETE:
+    - invokable + blocked_by_auth_mode + blocked_by_scopes == REGISTRY (size and content)
+  L_NO_MUTATION:
+    - function is pure; no I/O; no Graph call; no state change
+test_bindings:
+  - tests/test_m365_runtime_preflight_intersection.py
+ci_gate_association:
+  - .venv/bin/python -m pytest tests/test_m365_runtime_preflight_intersection.py -x
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

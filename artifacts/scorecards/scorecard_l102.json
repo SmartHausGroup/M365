@@ -1,0 +1,23 @@
+{
+  "status": "green",
+  "lemma_id": "L102_m365_cps_preflight_intersection_v1",
+  "plan_reference": "plan:m365-cps-trkA-p3-preflight-intersection:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-A3-preflight-intersection-v1.ipynb",
+  "generated_verification_reference": "configs/generated/m365_cps_preflight_intersection_v1_verification.json",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_INVOKABLE_INCLUSION", "status": "pass"},
+    {"id": "L_BLOCKED_BY_AUTH_MODE_DISJOINT", "status": "pass"},
+    {"id": "L_BLOCKED_BY_SCOPES_DISJOINT", "status": "pass"},
+    {"id": "L_PARTITION_COMPLETE", "status": "pass"},
+    {"id": "L_NO_MUTATION", "status": "pass"},
+    {"id": "PreflightIntersectionValid", "status": "pass"}
+  ],
+  "negative_case_count": 5,
+  "truth_table_rows": 32,
+  "truth_table_true_rows": 1,
+  "truth_table_false_rows": 31,
+  "determinism_certification": "green",
+  "ready_for_tasks": ["T3", "T4", "T5", "T6", "T7"]
+}
