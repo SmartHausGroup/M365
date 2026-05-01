@@ -1,0 +1,16 @@
+{
+  "status": "green",
+  "lemma_id": "L103_m365_cps_b1_sharepoint_reads_v1",
+  "plan_reference": "plan:m365-cps-trkB-p1-sharepoint-reads:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-B1-sharepoint-reads-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_PATH_SUBST_CORRECT", "status": "pass"},
+    {"id": "L_NEW_ENTRIES_REGISTERED", "status": "pass"},
+    {"id": "L_ALIASES_RESOLVE", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "SharePointReadsCovered", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}

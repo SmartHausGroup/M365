@@ -1,0 +1,40 @@
+lemma_id: L103_m365_cps_b1_sharepoint_reads_v1
+title: M365 Capability Pack B1 SharePoint Reads v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p1-sharepoint-reads:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B1-sharepoint-reads-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l103.json
+predecessor_lemma_bundle: L102_m365_cps_preflight_intersection_v1
+target:
+  modules:
+    - src/m365_runtime/graph/actions.py
+    - src/m365_runtime/graph/registry.py
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_PATH_SUBST_CORRECT:
+    - invoke() substitutes brace placeholders from params before graph_get
+    - unfilled placeholders return internal_error with reason endpoint_param_missing
+  L_NEW_ENTRIES_REGISTERED:
+    - graph.sites.get in READ_ONLY_REGISTRY
+    - graph.lists.list in READ_ONLY_REGISTRY
+    - graph.lists.get in READ_ONLY_REGISTRY
+    - graph.lists.items in READ_ONLY_REGISTRY
+    - graph.drives.children in READ_ONLY_REGISTRY
+  L_ALIASES_RESOLVE:
+    - sites.list maps to graph.sites.search
+    - sites.get maps to graph.sites.get
+    - lists.list maps to graph.lists.list
+    - lists.get maps to graph.lists.get
+    - lists.items maps to graph.lists.items
+    - files.list maps to graph.drives.children
+  L_NO_REGRESSION:
+    - all Track A tests still pass
+test_bindings:
+  - tests/test_m365_runtime_b1_sharepoint_reads.py
+ci_gate_association:
+  - .venv/bin/python -m pytest tests/test_m365_runtime_b1_sharepoint_reads.py -x
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

@@ -89,6 +89,13 @@ LEGACY_ACTION_TO_RUNTIME_ACTION: dict[str, str] = {
     "calendar.read_health": "graph.calendar.health",
     "servicehealth.read": "graph.servicehealth",
     "service_health.read": "graph.servicehealth",
+    # plan:m365-cps-trkB-p1-sharepoint-reads:T2 / L103.L_ALIASES_RESOLVE
+    "sites.list": "graph.sites.search",
+    "sites.get": "graph.sites.get",
+    "lists.list": "graph.lists.list",
+    "lists.get": "graph.lists.get",
+    "lists.items": "graph.lists.items",
+    "files.list": "graph.drives.children",
 }
 
 

@@ -133,6 +133,52 @@ READ_ONLY_REGISTRY: dict[str, ActionSpec] = {
             "low",
             "read",
         ),
+        # plan:m365-cps-trkB-p1-sharepoint-reads:T2 / L103.L_NEW_ENTRIES_REGISTERED
+        ActionSpec(
+            "graph.sites.get",
+            "sharepoint",
+            "/sites/{siteId}",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Sites.Read.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.lists.list",
+            "sharepoint",
+            "/sites/{siteId}/lists",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Sites.Read.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.lists.get",
+            "sharepoint",
+            "/sites/{siteId}/lists/{listId}",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Sites.Read.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.lists.items",
+            "sharepoint",
+            "/sites/{siteId}/lists/{listId}/items",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Sites.Read.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.drives.children",
+            "sharepoint",
+            "/drives/{driveId}/items/{itemId}/children",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Files.Read.All"}),
+            "low",
+            "read",
+        ),
     )
 }
 

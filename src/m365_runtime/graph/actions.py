@@ -76,6 +76,19 @@ def invoke(
         return ActionInvocation("auth_required", None, envelope, correlation_id)
     spec = get_action(action_id)
     endpoint = spec.endpoint
+    # plan:m365-cps-trkB-p1-sharepoint-reads:T2 / L103.L_PATH_SUBST_CORRECT
+    # Substitute {name} placeholders in the endpoint from params before
+    # any further query-string handling.
+    endpoint, missing_path_params = _substitute_path_params(endpoint, params)
+    if missing_path_params:
+        envelope = build_envelope(
+            actor=actor,
+            action=action_id,
+            status_class="internal_error",
+            extra={"reason": "endpoint_param_missing", "missing": missing_path_params},
+            correlation_id=correlation_id,
+        )
+        return ActionInvocation("internal_error", None, envelope, correlation_id)
     if "?search=" in endpoint and "search" in params:
         endpoint = f"{endpoint}{httpx.QueryParams({'search': str(params['search'])})}"[:1024]
     elif endpoint.endswith("?search="):
@@ -124,6 +137,38 @@ def list_actions() -> list[dict[str, Any]]:
             }
         )
     return sorted(out, key=lambda x: x["action_id"])
+
+
+_PATH_PARAM_RE = __import__("re").compile(r"\{([A-Za-z_][A-Za-z0-9_]*)\}")
+
+
+def _substitute_path_params(
+    endpoint: str, params: dict[str, Any]
+) -> tuple[str, list[str]]:
+    """Substitute {name} placeholders in an endpoint from params.
+
+    plan:m365-cps-trkB-p1-sharepoint-reads:T2 / L103.L_PATH_SUBST_CORRECT
+
+    Returns (endpoint_with_substitutions, missing_param_names).
+    Path-param names consumed from `params` so they do not also become
+    query-string args.
+    """
+    placeholders = _PATH_PARAM_RE.findall(endpoint)
+    missing: list[str] = []
+    if not placeholders:
+        return endpoint, missing
+    for name in placeholders:
+        if name not in params:
+            missing.append(name)
+    if missing:
+        return endpoint, missing
+    rendered = endpoint
+    for name in placeholders:
+        rendered = rendered.replace("{" + name + "}", str(params[name]))
+    # Consume path params from the dict so callers won't also pass them as query args.
+    for name in placeholders:
+        params.pop(name, None)
+    return rendered, missing
 
 
 def _denial_to_status(reason: str) -> str:
