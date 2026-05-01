@@ -47,10 +47,12 @@ def invoke(
     params: dict[str, Any] | None = None,
     transport: httpx.BaseTransport | None = None,
     sleep: Callable[[float], None] = time.sleep,
+    current_tier: str = "read-only",
 ) -> ActionInvocation:
     correlation_id = str(uuid.uuid4())
     params = params or {}
-    decision, reason = admit(action_id, granted_scopes, current_auth_mode)
+    # plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L113.L_INVOKE_FORWARDS_TIER
+    decision, reason = admit(action_id, granted_scopes, current_auth_mode, current_tier)
     if decision == "denied":
         envelope = build_envelope(
             actor=actor,
