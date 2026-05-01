@@ -48,6 +48,9 @@ LAUNCH_OUTCOMES = (
 TOKEN_ACCOUNT_ACCESS = "access_token"
 TOKEN_ACCOUNT_REFRESH = "refresh_token"
 TOKEN_ACCOUNT_EXPIRES_AT = "token_expires_at"
+# plan:m365-cps-trkB-p6-auth-mode-tiers:T3 / L113.L_TOKEN_STORE_PERSISTS_TIER
+TOKEN_ACCOUNT_SESSION_TIER = "session_tier"
+DEFAULT_SESSION_TIER = "read-only"
 TOKEN_REFRESH_MARGIN_SECONDS = 300
 DELEGATED_AUTH_MODES = frozenset({"auth_code_pkce", "device_code"})
 
@@ -320,6 +323,20 @@ def build_app(
     app = FastAPI(title=f"SMARTHAUS M365 Runtime {RUNTIME_VERSION}")
 
     token_store = _make_token_store(plan)
+    # plan:m365-cps-trkB-p6-auth-mode-tiers:T3 / L113.L_TOKEN_STORE_PERSISTS_TIER
+    # Restore session tier from token store on rebuild; default read-only.
+    persisted_tier: str | None = None
+    if token_store is not None:
+        try:
+            persisted_tier = token_store.get(TOKEN_ACCOUNT_SESSION_TIER)
+        except Exception:
+            persisted_tier = None
+    from .graph.registry import ALLOWED_TIERS as _ALLOWED_TIERS  # noqa: WPS433
+
+    initial_tier = (
+        persisted_tier if persisted_tier in _ALLOWED_TIERS else DEFAULT_SESSION_TIER
+    )
+
     state: dict[str, Any] = {
         "access_token": None,
         "refresh_token": None,
@@ -328,6 +345,7 @@ def build_app(
         "device_code_session": None,
         "pkce_session": None,
         "auth_failure": None,
+        "session_tier": initial_tier,
     }
 
     def current_setup() -> SetupConfig | None:
@@ -486,12 +504,36 @@ def build_app(
     @app.post("/v1/auth/start")
     def auth_start(body: dict[str, Any] | None = None) -> dict[str, Any]:
         body = body or {}
+        # plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L113.L_TIER_VALIDATED
+        # Validate tier BEFORE the setup check so bad input fails fast.
+        requested_tier = body.get("tier")
+        if requested_tier is not None and requested_tier not in _ALLOWED_TIERS:
+            return {
+                "state": "config_invalid",
+                "reason": "invalid_tier",
+                "allowed_tiers": sorted(_ALLOWED_TIERS),
+                "audit": emit_audit(
+                    str(body.get("actor") or "system"),
+                    "auth.start",
+                    "config_invalid",
+                    extra={"reason": "invalid_tier", "tier": requested_tier},
+                ),
+            }
         setup = current_setup()
         if setup is None:
             return {
                 "state": "unconfigured",
                 "audit": emit_audit("system", "auth.start", "not_configured"),
             }
+        # L113.L_AUTH_START_ACCEPTS_TIER — record validated tier in state + token store
+        if requested_tier is not None:
+            state["session_tier"] = requested_tier
+            if token_store is not None:
+                try:
+                    token_store.put(TOKEN_ACCOUNT_SESSION_TIER, requested_tier)
+                except Exception:
+                    # Persistence failure is non-fatal; in-memory tier still applies.
+                    pass
         scopes = list(setup.granted_scopes) or ["https://graph.microsoft.com/.default"]
         actor = str(body.get("actor") or setup.actor_upn)
         if setup.auth_mode == "auth_code_pkce":
@@ -827,6 +869,7 @@ def build_app(
                     extra={"params": params},
                 ),
             }
+        # plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L113.L_INVOKE_FORWARDS_TIER
         result = invoke_action(
             action_id=action_id,
             actor=actor,
@@ -835,6 +878,7 @@ def build_app(
             access_token=state.get("access_token") if _ensure_access_token_current() else None,
             params=params,
             transport=graph_transport,
+            current_tier=state.get("session_tier", DEFAULT_SESSION_TIER),
         )
         return {
             "status_class": result.status_class,

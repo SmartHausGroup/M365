@@ -1,0 +1,31 @@
+lemma_id: L113_m365_cps_b6_auth_start_tier_v1
+title: M365 Capability Pack B6 Auth-Start Tier Integration v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p6-auth-mode-tiers:T2,T3
+notebook_reference: notebooks/m365/INV-M365-CPS-B6-auth-start-tier-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l113.json
+predecessor_lemma_bundle: L108_m365_cps_b6_auth_tiers_v1
+target:
+  modules:
+    - src/m365_runtime/launcher.py
+    - src/m365_runtime/graph/actions.py
+    - src/m365_runtime/auth/token_store.py
+proof_obligations:
+  L_AUTH_START_ACCEPTS_TIER:
+    - POST /v1/auth/start accepts body.tier and stores in state["session_tier"]
+  L_TIER_VALIDATED:
+    - invalid tier returns state="config_invalid" reason="invalid_tier"
+  L_TOKEN_STORE_PERSISTS_TIER:
+    - token store records "session_tier" account on auth completion
+    - state["session_tier"] restored from token_store on rebuild
+  L_INVOKE_FORWARDS_TIER:
+    - actions.invoke accepts current_tier and passes to admit
+  L_DEFAULT_PRESERVED:
+    - missing tier defaults to "read-only" everywhere
+test_bindings:
+  - tests/test_m365_runtime_b6_auth_start_tier.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

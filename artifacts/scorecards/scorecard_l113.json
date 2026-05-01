@@ -1,0 +1,17 @@
+{
+  "status": "green",
+  "lemma_id": "L113_m365_cps_b6_auth_start_tier_v1",
+  "plan_reference": "plan:m365-cps-trkB-p6-auth-mode-tiers:T2,T3",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-B6-auth-start-tier-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_AUTH_START_ACCEPTS_TIER", "status": "pass"},
+    {"id": "L_TIER_VALIDATED", "status": "pass"},
+    {"id": "L_TOKEN_STORE_PERSISTS_TIER", "status": "pass"},
+    {"id": "L_INVOKE_FORWARDS_TIER", "status": "pass"},
+    {"id": "L_DEFAULT_PRESERVED", "status": "pass"},
+    {"id": "AuthStartTierIntegrated", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}
