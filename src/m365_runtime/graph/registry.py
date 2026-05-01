@@ -15,6 +15,27 @@ class ActionRegistryError(KeyError):
     pass
 
 
+# plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L108
+# Tier hierarchy. read-only is the default and covers every action shipped
+# through Track B (all reads). standard and admin are reserved for future
+# write actions that are out of master plan scope.
+_TIER_ORDER: dict[str, int] = {"read-only": 0, "standard": 1, "admin": 2}
+ALLOWED_TIERS: frozenset[str] = frozenset(_TIER_ORDER.keys())
+
+
+def tier_at_or_above(have: str | None, need: str | None) -> bool:
+    """Return True iff session tier `have` is at or above the required `need`.
+
+    Unknown tier strings are treated as below read-only (i.e. denied).
+    None on either side fails closed.
+    """
+    if have is None or need is None:
+        return False
+    if have not in _TIER_ORDER or need not in _TIER_ORDER:
+        return False
+    return _TIER_ORDER[have] >= _TIER_ORDER[need]
+
+
 @dataclass(frozen=True)
 class ActionSpec:
     action_id: str
@@ -24,11 +45,14 @@ class ActionSpec:
     scopes: frozenset[str]
     risk: str
     rw: str
+    min_tier: str = "read-only"
 
     def __post_init__(self) -> None:
         for mode in self.auth_modes:
             if mode not in ALLOWED_AUTH_MODES:
                 raise ActionRegistryError(f"invalid_auth_mode:{mode}")
+        if self.min_tier not in ALLOWED_TIERS:
+            raise ActionRegistryError(f"invalid_min_tier:{self.min_tier}")
 
 
 READ_ONLY_REGISTRY: dict[str, ActionSpec] = {
@@ -375,8 +399,19 @@ def get_action(action_id: str) -> ActionSpec:
 
 
 def admit(
-    action_id: str, granted_scopes: frozenset[str], current_auth_mode: str
+    action_id: str,
+    granted_scopes: frozenset[str],
+    current_auth_mode: str,
+    current_tier: str = "read-only",
 ) -> tuple[str, str]:
+    """Admit or deny a Graph action invocation.
+
+    plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L108 — current_tier defaults
+    to "read-only" so existing callers (no tier passed) keep working
+    unchanged. Future write actions will declare a higher min_tier and
+    sessions admitted at a lower tier will get denial reason
+    "tier_insufficient".
+    """
     try:
         spec = get_action(action_id)
     except ActionRegistryError:
@@ -385,6 +420,8 @@ def admit(
         return ("denied", "auth_mode_mismatch")
     if not spec.scopes.issubset(granted_scopes):
         return ("denied", "permission_missing")
+    if not tier_at_or_above(current_tier, spec.min_tier):
+        return ("denied", "tier_insufficient")
     if spec.rw != "read":
         return ("denied", "mutation_fence")
     return ("admit", "ok")

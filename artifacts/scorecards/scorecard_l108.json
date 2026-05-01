@@ -1,0 +1,16 @@
+{
+  "status": "green",
+  "lemma_id": "L108_m365_cps_b6_auth_tiers_v1",
+  "plan_reference": "plan:m365-cps-trkB-p6-auth-mode-tiers:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-B6-auth-tiers-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_TIER_DEFAULT_READ_ONLY", "status": "pass"},
+    {"id": "L_TIER_ORDERING_TRANSITIVE", "status": "pass"},
+    {"id": "L_ADMIT_REJECTS_INSUFFICIENT", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "AuthTiersEnforced", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}

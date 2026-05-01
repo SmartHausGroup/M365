@@ -1,0 +1,29 @@
+lemma_id: L108_m365_cps_b6_auth_tiers_v1
+title: M365 Capability Pack B6 Auth-Mode Tiers v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p6-auth-mode-tiers:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B6-auth-tiers-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l108.json
+predecessor_lemma_bundle: L107_m365_cps_b5_directory_teams_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+proof_obligations:
+  L_TIER_DEFAULT_READ_ONLY:
+    - ActionSpec.min_tier defaults to "read-only"
+    - existing entries do not require editing
+  L_TIER_ORDERING_TRANSITIVE:
+    - tier_at_or_above("admin", "read-only") is True
+    - tier_at_or_above("read-only", "admin") is False
+    - tier_at_or_above(t, t) is True for every t
+  L_ADMIT_REJECTS_INSUFFICIENT:
+    - admit returns ("denied", "tier_insufficient") if spec.min_tier > current_tier
+  L_NO_REGRESSION:
+    - all pre-B6 tests pass
+test_bindings:
+  - tests/test_m365_runtime_b6_auth_tiers.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static
