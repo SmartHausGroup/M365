@@ -42,6 +42,13 @@ def _active_install_dir() -> Path:
     return INTEGRATION_PACKS / _active_version()
 
 
+def _current_git_branch() -> str:
+    out = subprocess.check_output(
+        ["git", "-C", str(REPO), "branch", "--show-current"], text=True
+    ).strip()
+    return out or "detached"
+
+
 @pytest.fixture(scope="module")
 def built_pack(tmp_path_factory: pytest.TempPathFactory) -> str:
     out = subprocess.run(
@@ -181,3 +188,12 @@ def test_installed_provenance_records_graph_runtime_in_payload() -> None:
     provenance = json.loads((install_dir / "provenance.json").read_text())
     assert provenance["policy"]["runtime_packaged"] is True
     assert provenance["policy"]["graph_runtime_in_payload"] is True
+
+
+def test_installed_provenance_records_current_release_source() -> None:
+    install_dir = _active_install_dir()
+    provenance = json.loads((install_dir / "provenance.json").read_text())
+    assert provenance["source"]["branch"] == _current_git_branch()
+    assert provenance["ucp_local_distribution"]["plan_ref"] == (
+        "plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R6"
+    )

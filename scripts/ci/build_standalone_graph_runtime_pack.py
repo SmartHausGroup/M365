@@ -52,6 +52,7 @@ INTEGRATION_PACKS = Path("/Users/smarthaus/Projects/GitHub/IntegrationPacks")
 
 PACK_ID = "com.smarthaus.m365"
 VERSION = "0.1.3"
+RELEASE_PLAN_REF = "plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R6"
 DESCRIPTION = (
     "SMARTHAUS Microsoft 365 standalone Graph runtime Integration Pack: "
     "ships the local Microsoft Graph runtime service, OAuth/app-only auth "
@@ -474,6 +475,16 @@ def _git_head_commit() -> str:
         return "unknown"
 
 
+def _git_current_branch() -> str:
+    try:
+        out = subprocess.check_output(
+            ["git", "-C", str(REPO), "branch", "--show-current"], text=True
+        ).strip()
+        return out or "detached"
+    except Exception:
+        return "unknown"
+
+
 def _git_porcelain_status() -> tuple[bool, list[dict[str, str]]]:
     """Return (clean, dirty_entries). dirty_entries items have keys
     ``status`` (two-char code) and ``path`` (repo-relative).
@@ -555,7 +566,7 @@ def _emit_provenance(
         },
         "source": {
             "repository": "https://github.com/SmartHausGroup/M365.git",
-            "branch": "development",
+            "branch": _git_current_branch(),
             "commit": _git_head_commit(),
             "clean": source_clean,
             "state": state,
@@ -580,7 +591,7 @@ def _emit_provenance(
             "graph_runtime_in_payload": True,
         },
         "ucp_local_distribution": {
-            "plan_ref": "plan:m365-standalone-graph-runtime-pack-0-1-2-readiness-fix:C8",
+            "plan_ref": RELEASE_PLAN_REF,
             "repo_path": f"IntegrationPacks/M365/{VERSION}/{PACK_ID}-{VERSION}.ucp.tar.gz",
             "purpose": (
                 "Standalone M365 Graph runtime Integration Pack distributable "
