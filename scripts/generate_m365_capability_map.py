@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+"""Generate the operator-facing M365 capability map markdown.
+
+plan:m365-cps-trkC-p4-operator-capability-map:T2 / L112
+
+Reads the live runtime registry, the alias table, and
+`registry/agents.yaml`, and emits a deterministic markdown doc with
+three sections:
+
+  1. Implemented actions (from READ_ONLY_REGISTRY)
+  2. Legacy aliases (from LEGACY_ACTION_TO_RUNTIME_ACTION)
+  3. Coverage status by agent (per-agent action breakdown)
+
+Usage:
+    .venv/bin/python scripts/generate_m365_capability_map.py
+    .venv/bin/python scripts/generate_m365_capability_map.py --out docs/m365_capability_map.md
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SRC = REPO_ROOT / "src"
+if str(SRC) not in sys.path:
+    sys.path.insert(0, str(SRC))
+
+import yaml  # noqa: E402
+
+from m365_runtime.graph.registry import READ_ONLY_REGISTRY  # noqa: E402
+from ucp_m365_pack.client import (  # noqa: E402
+    LEGACY_ACTION_TO_RUNTIME_ACTION,
+    compute_coverage_status,
+)
+
+
+def _section_implemented() -> list[str]:
+    lines = ["## Implemented actions", ""]
+    lines.append(
+        f"There are **{len(READ_ONLY_REGISTRY)}** read actions implemented in the runtime."
+    )
+    lines.append("")
+    lines.append("| Action ID | Workload | Endpoint | Scopes | Auth modes | Min tier |")
+    lines.append("|---|---|---|---|---|---|")
+    for action_id in sorted(READ_ONLY_REGISTRY.keys()):
+        spec = READ_ONLY_REGISTRY[action_id]
+        scopes = ", ".join(sorted(spec.scopes))
+        modes = ", ".join(sorted(spec.auth_modes))
+        # Escape pipes in cell values to avoid breaking the table
+        endpoint = spec.endpoint.replace("|", r"\|")
+        lines.append(
+            f"| `{action_id}` | {spec.workload} | `{endpoint}` | {scopes} | {modes} | {spec.min_tier} |"
+        )
+    lines.append("")
+    return lines
+
+
+def _section_aliases() -> list[str]:
+    lines = ["## Legacy aliases", ""]
+    lines.append(
+        f"There are **{len(LEGACY_ACTION_TO_RUNTIME_ACTION)}** legacy action names that "
+        "resolve to runtime actions via the alias table."
+    )
+    lines.append("")
+    lines.append("| Legacy name | Runtime action | Status |")
+    lines.append("|---|---|---|")
+    for legacy in sorted(LEGACY_ACTION_TO_RUNTIME_ACTION.keys()):
+        runtime = LEGACY_ACTION_TO_RUNTIME_ACTION[legacy]
+        status = "implemented" if runtime in READ_ONLY_REGISTRY else "broken alias"
+        lines.append(f"| `{legacy}` | `{runtime}` | {status} |")
+    lines.append("")
+    return lines
+
+
+def _section_agents(agents_yaml_path: Path) -> list[str]:
+    lines = ["## Coverage status by agent", ""]
+    if not agents_yaml_path.is_file():
+        lines.append("_agents.yaml not found at the expected path_")
+        lines.append("")
+        return lines
+    data = yaml.safe_load(agents_yaml_path.read_text()) or {}
+    agents = data.get("agents") or {}
+    lines.append(
+        f"There are **{len(agents)}** agents declared in `registry/agents.yaml`. "
+        "For each agent, actions are classified by coverage status:"
+    )
+    lines.append("")
+    lines.append("- **implemented** — `action_id` is a key in `READ_ONLY_REGISTRY`.")
+    lines.append("- **aliased** — `action_id` resolves through the alias table to an implemented action.")
+    lines.append(
+        "- **planned** — declared in `agents.yaml` but neither implemented nor aliased; "
+        "calling returns `status_class=not_yet_implemented`."
+    )
+    lines.append("")
+
+    for agent_id in sorted(agents.keys()):
+        cfg = agents[agent_id]
+        if not isinstance(cfg, dict):
+            continue
+        allowed = cfg.get("allowed_actions") or []
+        actions = sorted({a for a in allowed if isinstance(a, str)})
+        if not actions:
+            continue
+        buckets: dict[str, list[str]] = {
+            "implemented": [],
+            "aliased": [],
+            "planned": [],
+        }
+        for action in actions:
+            buckets[compute_coverage_status(action)].append(action)
+        total = len(actions)
+        impl = len(buckets["implemented"])
+        alias = len(buckets["aliased"])
+        planned = len(buckets["planned"])
+        risk = cfg.get("risk_tier", "unknown")
+        lines.append(
+            f"### `{agent_id}` (risk: {risk}; total {total}; implemented {impl}; aliased {alias}; planned {planned})"
+        )
+        lines.append("")
+        for bucket_name in ["implemented", "aliased", "planned"]:
+            if not buckets[bucket_name]:
+                continue
+            lines.append(f"**{bucket_name}** ({len(buckets[bucket_name])}):")
+            lines.append("")
+            for a in buckets[bucket_name]:
+                lines.append(f"- `{a}`")
+            lines.append("")
+    return lines
+
+
+def render(agents_yaml_path: Path) -> str:
+    parts = ["# M365 Capability Map", ""]
+    parts.append(
+        "_Auto-generated by `scripts/generate_m365_capability_map.py` from the "
+        "live runtime registry, alias table, and `registry/agents.yaml`._"
+    )
+    parts.append("")
+    parts.append(
+        f"- Implemented runtime actions: **{len(READ_ONLY_REGISTRY)}**"
+    )
+    parts.append(
+        f"- Legacy aliases: **{len(LEGACY_ACTION_TO_RUNTIME_ACTION)}**"
+    )
+    parts.append("")
+    parts.append("Plan reference: `plan:m365-cps-trkC-p4-operator-capability-map:T2`. ")
+    parts.append("Lemma: `L112_m365_cps_c4_capability_map_v1`.")
+    parts.append("")
+    parts.extend(_section_implemented())
+    parts.extend(_section_aliases())
+    parts.extend(_section_agents(agents_yaml_path))
+    return "\n".join(parts).rstrip() + "\n"
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--agents-yaml",
+        type=Path,
+        default=REPO_ROOT / "registry" / "agents.yaml",
+    )
+    parser.add_argument(
+        "--out",
+        type=Path,
+        default=None,
+        help="Write to this path (default: stdout).",
+    )
+    args = parser.parse_args(argv)
+
+    text = render(args.agents_yaml)
+    if args.out:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(text)
+    else:
+        sys.stdout.write(text)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

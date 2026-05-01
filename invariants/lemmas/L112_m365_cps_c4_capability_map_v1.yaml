@@ -1,0 +1,29 @@
+lemma_id: L112_m365_cps_c4_capability_map_v1
+title: M365 Capability Pack C4 Operator Capability Map v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkC-p4-operator-capability-map:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-C4-capability-map-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l112.json
+predecessor_lemma_bundle: L111_m365_cps_c3_docstring_audit_v1
+target:
+  modules:
+    - scripts/generate_m365_capability_map.py
+    - docs/m365_capability_map.md
+proof_obligations:
+  L_GENERATOR_PRESENT:
+    - scripts/generate_m365_capability_map.py exists and is invokable
+  L_OUTPUT_DETERMINISTIC:
+    - two consecutive runs produce byte-identical output
+  L_DOC_HAS_THREE_SECTIONS:
+    - "## Implemented actions" header present
+    - "## Legacy aliases" header present
+    - "## Coverage status by agent" header present
+  L_DOC_REFERENCES_LIVE_DATA:
+    - totals in doc match len(REGISTRY), len(alias map), len(agents)
+test_bindings:
+  - tests/test_m365_runtime_c4_capability_map.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static
