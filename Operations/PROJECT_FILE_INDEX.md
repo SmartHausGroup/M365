@@ -46,7 +46,7 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `dist/m365_pack/manifest.json` | Rebuilt local `0.1.3` pack manifest for the auth-persistence reconnect remediation. | `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
 | `dist/m365_pack/payload.tar.gz` | Rebuilt local `0.1.3` runtime payload containing the remediated auth lifecycle. | `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
 
-## Active M365 0.1.3 GitHub Release And UCP Handoff Closure Artifacts
+## Completed M365 0.1.3 GitHub Release And UCP Handoff Closure Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
 | --- | --- | --- | --- |

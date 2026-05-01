@@ -3,7 +3,8 @@
 **Pack identity:** `com.smarthaus.m365@0.1.3`
 **Release tag:** `com.smarthaus.m365-v0.1.3`
 **Release source repo:** `https://github.com/SmartHausGroup/M365`
-**Release source commit:** `pending`
+**Release source commit:** `ca3fe24295d2814b10432f4d98a6ba8c4715a30d`
+**Release URL:** `https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.3`
 **Release date:** 2026-05-01
 **Plan:** `plan:m365-0-1-3-github-release-and-ucp-handoff-closure`
 
@@ -41,7 +42,20 @@ Microsoft username/password auth is not supported. Tokens land in the configured
 
 ## Release assets
 
-Final asset SHA256 values are recorded in the GitHub Release, `SHA256SUMS`, provenance, and UCP handoff packet.
+Published asset SHA256 values:
+
+- `com.smarthaus.m365-0.1.3.ucp.tar.gz`: `d26278c6c47a650a8750ff0dc6b914fde418b778395661ebd5bba2f440981c4e`
+- `manifest.json`: `6294067aadb7909065e32bd7d89562dfbf86e4c0453f114163c76b147735af0e`
+- `conformance.json`: `de77f6d111f7f4a4f99671e2773c0afb17c6531a6347dbb6263861f53036e938`
+- `provenance.json`: `f03ce347d9e9288ed1592c545cf7f7842352b7e5095c066f703c2171008fc894`
+- `SHA256SUMS`: `7f7bf35b186def0e97ac321de3eeb85aab08e0ff3f503f6c7130d3bd24e789eb`
+- `payload.tar.gz`: `2e0eaf502ccf657ce8294397d101b35706b367785b01d09e58ebba7849b90d9b`
+- `manifest.sig`: `e56c7189cb3b54243a853a471ab2471dfc0ab28861c9cac2e6b1af423634388a`
+- `payload.sig`: `66712ed70e910ce97df8b68de50eaf87d3ca823aff1997c456186d2fc565bb03`
+- `pack_metadata.json`: `0909f5bbd3f49e867e948db8ea5a6c7a4d02973dcaca9d823f8c3fb6e35b8dc2`
+- `pack_dependencies.json`: `56d12d3c1888914f90e96b7a1badd3158af39567202def09e05a57198e5426b6`
+
+Downloaded public-release verification passed against the release-surface `SHA256SUMS`.
 
 ## Distribution boundary
 

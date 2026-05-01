@@ -1,7 +1,7 @@
 # M365 0.1.3 GitHub Release And UCP Handoff Closure Plan
 
 Plan ID: `m365-0-1-3-github-release-and-ucp-handoff-closure`
-Status: `Active`
+Status: `Complete-GO`
 Date: `2026-05-01`
 Repo: `/Users/smarthaus/Projects/GitHub/M365`
 Source branch: `codex/m365-auth-persistence-reconnect-remediation`
@@ -124,4 +124,12 @@ Downloaded-release verification must not rely on the M365 source checkout.
 
 ## Execution Outcome
 
-Pending.
+Complete-GO on 2026-05-01.
+
+- Feature branch commit: `576eda7`
+- Release provenance repair commit: `ca3fe24295d2814b10432f4d98a6ba8c4715a30d`
+- Published release: `https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.3`
+- Release tag: `com.smarthaus.m365-v0.1.3`
+- Bundle SHA256: `d26278c6c47a650a8750ff0dc6b914fde418b778395661ebd5bba2f440981c4e`
+- Public-release verification: passed against release-surface `SHA256SUMS`.
+- UCP handoff: M365-side handoff packet complete; UCP repository mutation remains out of scope.

@@ -148,13 +148,15 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 
 **Reference:** `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0`
 
-**Status:** Active (2026-05-01). The CTO explicitly requested commit, push, governed promotion through `development` -> `staging` -> `main`, clean-source rebuild, tag `com.smarthaus.m365-v0.1.3`, and GitHub Release publication.
+**Status:** Complete-GO (2026-05-01). The GitHub Release is published and verified at `https://github.com/SmartHausGroup/M365/releases/tag/com.smarthaus.m365-v0.1.3`.
 
-**Current next act:** Execute `R1`, the feature-branch validation and commit.
+**Current next act:** Hand off to the separate UCP-side admission plan; no M365 repo mutation remains for this release.
 
 **Prompt artifacts:** `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure.md`, `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure-prompt.txt`
 
 **Status update (2026-05-01 08:25 EDT):** Opened the governed `0.1.3` release-closure package after confirming the auth-remediation plan intentionally stopped at local package/live-smoke proof and explicitly excluded GitHub Release publication. The new release-closure scope is bounded to M365: commit the feature branch, push it, promote to `development`, `staging`, and `main`, rebuild from clean source, tag `com.smarthaus.m365-v0.1.3`, publish the GitHub Release with verified assets, and write an M365-side UCP handoff packet that tells UCP to request `offline_access` for durable delegated reconnect. No UCP repo file, tenant setting, token, refresh token, auth code, device code after completion, client secret, certificate private key, phone number, or subject object ID changed in this plan-creation slice.
+
+**Status update (2026-05-01 08:40 EDT):** Closed the governed `0.1.3` release path. Feature commit `576eda7` was pushed and fast-forward-promoted through `development`, `staging`, and `main`; release-provenance repair commit `ca3fe24` corrected the pack builder so `provenance.json` records `source.branch=main`, `source.commit=ca3fe24295d2814b10432f4d98a6ba8c4715a30d`, `source.clean=true`, and the `0.1.3` release plan ref. The clean-source rebuild produced bundle SHA `d26278c6c47a650a8750ff0dc6b914fde418b778395661ebd5bba2f440981c4e`; annotated tag `com.smarthaus.m365-v0.1.3` was pushed; the GitHub Release was created, verified from downloaded assets, and published. Public-release verification passed against release-surface `SHA256SUMS` with all package, manifest, conformance, provenance, payload, signature, metadata, and dependency assets intact. No UCP repo file, tenant setting, token, refresh token, auth code, device code after completion, client secret, certificate private key, phone number, or subject object ID was recorded.
 
 ## Initiative: M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix
 
