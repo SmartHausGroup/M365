@@ -216,6 +216,34 @@ READ_ONLY_REGISTRY: dict[str, ActionSpec] = {
             "low",
             "read",
         ),
+        # plan:m365-cps-trkB-p3-mail-reads:T2 / L105
+        ActionSpec(
+            "graph.mail.list",
+            "exchange",
+            "/me/messages",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Mail.Read"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.mail.message_get",
+            "exchange",
+            "/me/messages/{messageId}",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Mail.Read"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.mail.attachments",
+            "exchange",
+            "/me/messages/{messageId}/attachments",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Mail.Read"}),
+            "low",
+            "read",
+        ),
     )
 }
 

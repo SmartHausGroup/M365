@@ -1,0 +1,30 @@
+lemma_id: L105_m365_cps_b3_mail_reads_v1
+title: M365 Capability Pack B3 Mail Reads v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p3-mail-reads:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B3-mail-reads-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l105.json
+predecessor_lemma_bundle: L104_m365_cps_b2_calendar_reads_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_NEW_ENTRIES_REGISTERED:
+    - graph.mail.list in READ_ONLY_REGISTRY
+    - graph.mail.message_get in READ_ONLY_REGISTRY
+    - graph.mail.attachments in READ_ONLY_REGISTRY
+  L_ALIASES_RESOLVE:
+    - mail.list maps to graph.mail.list
+    - mail.read maps to graph.mail.message_get
+    - mail.attachments maps to graph.mail.attachments
+    - mail.folders maps to graph.mail.health
+  L_NO_REGRESSION:
+    - all prior tests pass
+test_bindings:
+  - tests/test_m365_runtime_b3_mail_reads.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static
