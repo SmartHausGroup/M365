@@ -1,0 +1,16 @@
+{
+  "status": "green",
+  "lemma_id": "L110_m365_cps_c2_planned_short_circuit_v1",
+  "plan_reference": "plan:m365-cps-trkC-p2-agents-yaml-schema:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-C2-planned-short-circuit-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_COVERAGE_STATUS_CORRECT", "status": "pass"},
+    {"id": "L_PLANNED_RETURNS_NOT_YET_IMPLEMENTED", "status": "pass"},
+    {"id": "L_IMPLEMENTED_PASSES_THROUGH", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "PlannedShortCircuitValid", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}
