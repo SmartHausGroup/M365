@@ -317,6 +317,52 @@ READ_ONLY_REGISTRY: dict[str, ActionSpec] = {
             "low",
             "read",
         ),
+        # plan:m365-cps-trkB-p5-directory-and-teams:T2 / L107
+        ActionSpec(
+            "graph.directory.domains",
+            "directory",
+            "/domains",
+            frozenset({"app_only_secret", "app_only_certificate", "auth_code_pkce"}),
+            frozenset({"Domain.Read.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.directory.roles",
+            "directory",
+            "/directoryRoles",
+            frozenset({"app_only_secret", "app_only_certificate", "auth_code_pkce"}),
+            frozenset({"RoleManagement.Read.Directory"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.teams.get",
+            "teams",
+            "/teams/{teamId}",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Team.ReadBasic.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.channels.list",
+            "teams",
+            "/teams/{teamId}/channels",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Channel.ReadBasic.All"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.channels.get",
+            "teams",
+            "/teams/{teamId}/channels/{channelId}",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Channel.ReadBasic.All"}),
+            "low",
+            "read",
+        ),
     )
 }
 

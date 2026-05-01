@@ -1,0 +1,26 @@
+lemma_id: L107_m365_cps_b5_directory_teams_v1
+title: M365 Capability Pack B5 Directory and Teams Reads v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p5-directory-and-teams:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B5-directory-teams-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l107.json
+predecessor_lemma_bundle: L106_m365_cps_b4_health_reports_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_NEW_ENTRIES_REGISTERED:
+    - graph.directory.domains, graph.directory.roles
+    - graph.teams.get, graph.channels.list, graph.channels.get
+  L_ALIASES_RESOLVE:
+    - directory.domains, directory.roles, teams.get, channels.list, channels.get
+  L_NO_REGRESSION:
+    - all prior tests pass
+test_bindings:
+  - tests/test_m365_runtime_b5_directory_teams.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

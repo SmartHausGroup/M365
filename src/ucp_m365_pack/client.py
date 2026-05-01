@@ -115,6 +115,12 @@ LEGACY_ACTION_TO_RUNTIME_ACTION: dict[str, str] = {
     "reports.teams_activity": "graph.reports.teams_activity",
     "reports.sharepoint_usage": "graph.reports.sharepoint_usage",
     "reports.onedrive_usage": "graph.reports.onedrive_usage",
+    # plan:m365-cps-trkB-p5-directory-and-teams:T2 / L107.L_ALIASES_RESOLVE
+    "directory.domains": "graph.directory.domains",
+    "directory.roles": "graph.directory.roles",
+    "teams.get": "graph.teams.get",
+    "channels.list": "graph.channels.list",
+    "channels.get": "graph.channels.get",
 }
 
 
