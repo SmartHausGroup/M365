@@ -1,0 +1,7 @@
+Execute M365 0.1.3 GitHub Release And UCP Handoff Closure.
+
+Read and execute the detailed prompt at docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure.md.
+
+Plan Reference: plan:m365-0-1-3-github-release-and-ucp-handoff-closure
+
+Approved scope: commit, push, promote through development/staging/main, clean-rebuild, tag com.smarthaus.m365-v0.1.3, publish the GitHub Release, verify downloaded assets, and write the M365-side UCP handoff.

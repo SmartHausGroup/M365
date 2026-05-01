@@ -1,0 +1,42 @@
+{
+  "contract": {
+    "checks": [
+      {
+        "expected": true,
+        "id": "refresh_token_reused"
+      },
+      {
+        "expected": true,
+        "id": "fresh_access_token_required"
+      },
+      {
+        "expected": true,
+        "id": "stale_access_rejected"
+      },
+      {
+        "expected": true,
+        "id": "refresh_failure_auth_required"
+      },
+      {
+        "expected": true,
+        "id": "token_values_excluded_from_evidence"
+      },
+      {
+        "expected": true,
+        "id": "local_pack_version_corrected"
+      }
+    ],
+    "invariant_id": "INV-M365-DP-auth-persistence-reconnect-v1",
+    "plan_ref": "plan:m365-auth-persistence-reconnect-remediation:R0-R8",
+    "target_pack_version": "0.1.3"
+  },
+  "deterministic": true,
+  "failure_boundary": {
+    "expired_access_without_refresh": "auth_required",
+    "no_refresh_no_expiry": "auth_required",
+    "refresh_failed": "auth_required",
+    "token_leakage": "fail_closed"
+  },
+  "secret_material_present": false,
+  "status": "green"
+}

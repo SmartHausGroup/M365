@@ -48,7 +48,7 @@ def _import_health() -> ModuleType:
     return importlib.import_module("m365_runtime.health")
 
 
-def test_runtime_version_constant_is_0_1_2() -> None:
+def test_runtime_version_constant_matches_pack_builder_version() -> None:
     sys.path.insert(0, str(SRC))
     import importlib
 
@@ -56,7 +56,8 @@ def test_runtime_version_constant_is_0_1_2() -> None:
         m365_runtime = importlib.reload(sys.modules["m365_runtime"])
     else:
         m365_runtime = importlib.import_module("m365_runtime")
-    assert m365_runtime.RUNTIME_VERSION == "0.1.2"
+    build_pack = _import_build_script()
+    assert m365_runtime.RUNTIME_VERSION == build_pack.VERSION
 
 
 def test_pack_metadata_in_staged_payload(tmp_path: Path) -> None:
@@ -69,7 +70,7 @@ def test_pack_metadata_in_staged_payload(tmp_path: Path) -> None:
     ), f"pack_metadata.json missing from staged payload at {stage_root}"
     metadata = json.loads(metadata_path.read_text())
     assert metadata["pack_id"] == "com.smarthaus.m365"
-    assert metadata["version"] == "0.1.2"
+    assert metadata["version"] == build_pack.VERSION
     assert metadata["runtime"]["module"] == "m365_runtime"
     assert metadata["runtime"]["read_only"] is True
     assert metadata["runtime"]["mutation_fence"] is True
@@ -136,7 +137,7 @@ def test_pack_dependencies_in_staged_payload(tmp_path: Path) -> None:
     assert deps_path.is_file(), "pack_dependencies.json missing from staged payload"
     deps = json.loads(deps_path.read_text())
     assert deps["pack_id"] == "com.smarthaus.m365"
-    assert deps["version"] == "0.1.2"
+    assert deps["version"] == build_pack.VERSION
     required_names = {entry["module"] for entry in deps["required"]}
     assert {"httpx", "fastapi", "uvicorn"}.issubset(required_names)
     cert_modules = {

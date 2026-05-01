@@ -1,0 +1,66 @@
+{
+  "actor_upn": "phil@smarthausgroup.com",
+  "artifact": "com.smarthaus.m365@0.1.3",
+  "auth_mode": "device_code",
+  "checks": {
+    "baseline_without_offline_access": {
+      "forced_expiry_restart_state": "auth_required",
+      "forced_expiry_restart_reason": "lazy_refresh:refresh_token_missing",
+      "graph_me_status_class_before_forced_expiry": "success",
+      "readiness_before_forced_expiry": "ready/success",
+      "restart_without_reauth_before_forced_expiry": "signed_in",
+      "finding": "Microsoft did not issue a refresh token for the original scope set User.Read,Directory.Read.All."
+    },
+    "offline_access_refresh_path": {
+      "auth_status_after_device_code": "signed_in",
+      "expires_at_repaired_after_forced_stale_restart": true,
+      "forced_stale_expiry_value": "1",
+      "graph_me_status_class": "success",
+      "graph_me_subject_display_name": "Philip Siniscalchi",
+      "graph_me_subject_upn": "phil@smarthausgroup.com",
+      "readiness_label": "success",
+      "readiness_state": "ready",
+      "readiness_vector": {
+        "art": true,
+        "aud": true,
+        "auth": true,
+        "ctr": true,
+        "graph": true,
+        "perm": true,
+        "src": true,
+        "svc": true,
+        "tok": true
+      },
+      "refresh_token_present_after_device_code": true,
+      "refresh_token_still_present_after_refresh": true,
+      "restart_after_forced_stale_expiry_auth_status": "signed_in",
+      "restart_after_forced_stale_expiry_graph_me_status_class": "success",
+      "restart_after_forced_stale_expiry_readiness": "ready/success"
+    }
+  },
+  "client_id": "e6fd71d3-4116-401e-a4f1-b2fda4318a8b",
+  "executed_at_local": "2026-05-01 08:12:40 EDT",
+  "granted_scopes": [
+    "User.Read",
+    "Directory.Read.All",
+    "offline_access"
+  ],
+  "installed_root": "/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.3",
+  "plan_ref": "plan:m365-auth-persistence-reconnect-remediation:R7",
+  "redaction": {
+    "access_token_logged": false,
+    "auth_code_logged": false,
+    "client_secret_logged": false,
+    "device_code_logged_after_completion": false,
+    "phone_number_logged": false,
+    "private_key_logged": false,
+    "refresh_token_logged": false,
+    "subject_object_id_logged": false
+  },
+  "tenant_id": "6c4cb441-342c-430f-9a9d-79c3cdb18b75",
+  "token_store": {
+    "backend": "keychain",
+    "plaintext_token_logged": false,
+    "service": "ai.smarthaus.m365.0.1.3.live-smoke-refresh"
+  }
+}

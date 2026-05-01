@@ -51,7 +51,7 @@ DIST = REPO / "dist" / "m365_pack"
 INTEGRATION_PACKS = Path("/Users/smarthaus/Projects/GitHub/IntegrationPacks")
 
 PACK_ID = "com.smarthaus.m365"
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 DESCRIPTION = (
     "SMARTHAUS Microsoft 365 standalone Graph runtime Integration Pack: "
     "ships the local Microsoft Graph runtime service, OAuth/app-only auth "

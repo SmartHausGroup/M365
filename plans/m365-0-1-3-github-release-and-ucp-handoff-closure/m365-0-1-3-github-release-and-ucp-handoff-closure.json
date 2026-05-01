@@ -1,0 +1,68 @@
+{
+  "plan_id": "m365-0-1-3-github-release-and-ucp-handoff-closure",
+  "status": "active",
+  "date": "2026-05-01",
+  "repo": "/Users/smarthaus/Projects/GitHub/M365",
+  "source_branch": "codex/m365-auth-persistence-reconnect-remediation",
+  "remote": "https://github.com/SmartHausGroup/M365.git",
+  "plan_ref": "plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0",
+  "governance_evidence": {
+    "notebook": "notebooks/m365/INV-M365-DP-auth-persistence-reconnect-v1.ipynb",
+    "generated": "configs/generated/auth_persistence_reconnect_v1_verification.json"
+  },
+  "objective": "Promote com.smarthaus.m365@0.1.3 to a canonical GitHub Release after live auth-persistence validation.",
+  "scope": {
+    "in": [
+      "commit_feature_branch",
+      "push_feature_branch",
+      "promote_development_staging_main",
+      "clean_source_rebuild",
+      "tag_com_smarthaus_m365_v0_1_3",
+      "publish_github_release",
+      "downloaded_release_verification",
+      "m365_side_ucp_handoff"
+    ],
+    "out": [
+      "ucp_repo_mutation",
+      "ucp_marketplace_admission",
+      "microsoft_tenant_permission_mutation",
+      "apple_notarization"
+    ]
+  },
+  "requirements": [
+    {"id": "R0", "title": "Governed release package", "status": "active"},
+    {"id": "R1", "title": "Feature branch commit", "status": "pending"},
+    {"id": "R2", "title": "Feature branch push", "status": "pending"},
+    {"id": "R3", "title": "Development promotion", "status": "pending"},
+    {"id": "R4", "title": "Staging promotion", "status": "pending"},
+    {"id": "R5", "title": "Main promotion", "status": "pending"},
+    {"id": "R6", "title": "Clean-source rebuild", "status": "pending"},
+    {"id": "R7", "title": "Release tag", "status": "pending"},
+    {"id": "R8", "title": "Draft release", "status": "pending"},
+    {"id": "R9", "title": "Downloaded release verification", "status": "pending"},
+    {"id": "R10", "title": "Publish release", "status": "pending"},
+    {"id": "R11", "title": "UCP handoff", "status": "pending"},
+    {"id": "R12", "title": "Tracker closeout", "status": "pending"}
+  ],
+  "gates": {
+    "force_push": "forbidden",
+    "reset_hard": "forbidden",
+    "tag_rewrite": "forbidden",
+    "dirty_release_publication": "forbidden",
+    "ucp_repo_mutation": "forbidden",
+    "secret_material_in_evidence": "forbidden"
+  },
+  "release": {
+    "pack_id": "com.smarthaus.m365",
+    "version": "0.1.3",
+    "tag": "com.smarthaus.m365-v0.1.3",
+    "bundle_asset": "com.smarthaus.m365-0.1.3.ucp.tar.gz",
+    "initial_live_tested_bundle_sha256": "d26278c6c47a650a8750ff0dc6b914fde418b778395661ebd5bba2f440981c4e",
+    "github_release_url": "pending"
+  },
+  "live_findings": {
+    "offline_access_required_for_refresh_token_reconnect": true,
+    "baseline_without_offline_access": "forced_expiry_restart_failed_closed_lazy_refresh_refresh_token_missing",
+    "with_offline_access": "forced_expiry_restart_refreshed_and_stayed_signed_in"
+  }
+}

@@ -9,6 +9,7 @@ import shutil
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qs
 
 import httpx
 import pytest
@@ -117,6 +118,11 @@ def _make_client(
     return TestClient(app), plan
 
 
+def _form(request: httpx.Request) -> dict[str, str]:
+    parsed = parse_qs(request.content.decode("utf-8"))
+    return {key: values[-1] for key, values in parsed.items()}
+
+
 def test_pkce_auth_lifecycle_completes_through_http_endpoints(
     installed_pack_root: Path,
     memory_store: _MemoryTokenStore,
@@ -146,6 +152,7 @@ def test_pkce_auth_lifecycle_completes_through_http_endpoints(
     check = client.post("/v1/auth/check", json={"code": "AUTH_CODE", "state": pkce_state}).json()
     assert check["state"] == "signed_in"
     assert "access_token" not in str(check.get("audit", {}))  # redacted
+    assert memory_store.get("token_expires_at") is not None
 
     status_after = client.get("/v1/auth/status").json()
     assert status_after["state"] == "signed_in"
@@ -308,3 +315,108 @@ def test_invoke_action_uses_stored_access_token(
     ).json()
     assert invoke["status_class"] == "success"
     assert captured["auth"] == "Bearer AT_STORED"
+
+
+def test_startup_refreshes_stored_refresh_token_without_user_reauth(
+    installed_pack_root: Path,
+    memory_store: _MemoryTokenStore,
+) -> None:
+    memory_store.put("access_token", "AT_STALE")
+    memory_store.put("refresh_token", "RT_STORED")
+    captured: dict[str, str] = {}
+
+    def oauth_handler(request: httpx.Request) -> httpx.Response:
+        body = _form(request)
+        captured["grant_type"] = body.get("grant_type", "")
+        captured["refresh_token"] = body.get("refresh_token", "")
+        return httpx.Response(200, json={"access_token": "AT_REFRESHED", "expires_in": 3600})
+
+    def graph_handler(request: httpx.Request) -> httpx.Response:
+        captured["graph_auth"] = request.headers.get("Authorization", "")
+        return httpx.Response(200, json={"id": "tenant", "displayName": "Acme"})
+
+    client, _ = _make_client(installed_pack_root, _setup_env_device(), oauth_handler, graph_handler)
+
+    assert captured["grant_type"] == "refresh_token"
+    assert captured["refresh_token"] == "RT_STORED"
+    assert client.get("/v1/auth/status").json()["state"] == "signed_in"
+    assert memory_store.get("access_token") == "AT_REFRESHED"
+    assert memory_store.get("refresh_token") == "RT_STORED"
+    assert memory_store.get("token_expires_at") is not None
+
+    invoke = client.post("/v1/actions/graph.me/invoke", json={"actor": "ops@example.com"}).json()
+    assert invoke["status_class"] == "success"
+    assert captured["graph_auth"] == "Bearer AT_REFRESHED"
+
+
+def test_startup_refresh_failure_is_auth_required_and_does_not_use_stale_token(
+    installed_pack_root: Path,
+    memory_store: _MemoryTokenStore,
+) -> None:
+    memory_store.put("access_token", "AT_STALE")
+    memory_store.put("refresh_token", "RT_STORED")
+    graph_calls = {"count": 0}
+
+    def oauth_handler(request: httpx.Request) -> httpx.Response:
+        body = _form(request)
+        assert body.get("grant_type") == "refresh_token"
+        return httpx.Response(400, json={"error": "invalid_grant"})
+
+    def graph_handler(_request: httpx.Request) -> httpx.Response:
+        graph_calls["count"] += 1
+        return httpx.Response(200, json={"unexpected": True})
+
+    client, _ = _make_client(installed_pack_root, _setup_env_device(), oauth_handler, graph_handler)
+
+    status = client.get("/v1/auth/status").json()
+    assert status["state"] == "auth_required"
+    assert status["reason"] == "refresh_failed"
+
+    invoke = client.post("/v1/actions/graph.me/invoke", json={"actor": "ops@example.com"}).json()
+    assert invoke["status_class"] == "auth_required"
+    assert graph_calls["count"] == 0
+
+
+def test_stored_access_without_expiry_or_refresh_is_not_signed_in(
+    installed_pack_root: Path,
+    memory_store: _MemoryTokenStore,
+) -> None:
+    memory_store.put("access_token", "AT_UNKNOWN_EXPIRY")
+
+    def oauth_handler(_request: httpx.Request) -> httpx.Response:
+        raise AssertionError("refresh must not be attempted without refresh token")
+
+    def graph_handler(_request: httpx.Request) -> httpx.Response:
+        raise AssertionError("Graph must not be called with unknown-expiry access token")
+
+    client, _ = _make_client(installed_pack_root, _setup_env_device(), oauth_handler, graph_handler)
+    status = client.get("/v1/auth/status").json()
+    assert status["state"] == "auth_required"
+    assert status["reason"] in {
+        "stored_access_token_unusable",
+        "lazy_refresh:refresh_token_missing",
+    }
+
+
+def test_unexpired_stored_access_token_can_hydrate_without_refresh(
+    installed_pack_root: Path,
+    memory_store: _MemoryTokenStore,
+) -> None:
+    import time
+
+    memory_store.put("access_token", "AT_UNEXPIRED")
+    memory_store.put("token_expires_at", str(int(time.time()) + 3600))
+    captured: dict[str, str] = {}
+
+    def oauth_handler(_request: httpx.Request) -> httpx.Response:
+        raise AssertionError("fresh stored access token should not refresh")
+
+    def graph_handler(request: httpx.Request) -> httpx.Response:
+        captured["graph_auth"] = request.headers.get("Authorization", "")
+        return httpx.Response(200, json={"id": "tenant"})
+
+    client, _ = _make_client(installed_pack_root, _setup_env_device(), oauth_handler, graph_handler)
+    assert client.get("/v1/auth/status").json()["state"] == "signed_in"
+    invoke = client.post("/v1/actions/graph.me/invoke", json={"actor": "ops@example.com"}).json()
+    assert invoke["status_class"] == "success"
+    assert captured["graph_auth"] == "Bearer AT_UNEXPIRED"

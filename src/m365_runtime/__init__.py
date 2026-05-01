@@ -17,7 +17,7 @@ __all__ = [
     "RUNTIME_VERSION",
 ]
 
-RUNTIME_VERSION = "0.1.2"
+RUNTIME_VERSION = "0.1.3"
 
 FAILURE_LATTICE = (
     "success",

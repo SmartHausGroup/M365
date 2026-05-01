@@ -171,7 +171,7 @@ def test_installed_pack_runtime_runs_without_repo_root(tmp_path: Path) -> None:
     )
     assert proc.returncode == 0, proc.stderr
     out = proc.stdout.strip().splitlines()
-    assert out[0] == "0.1.2"
+    assert out[0] == _active_version()
     assert out[1] == "11"
     assert out[2] == "started"
 

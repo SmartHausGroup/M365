@@ -47,6 +47,9 @@ LAUNCH_OUTCOMES = (
 )
 TOKEN_ACCOUNT_ACCESS = "access_token"
 TOKEN_ACCOUNT_REFRESH = "refresh_token"
+TOKEN_ACCOUNT_EXPIRES_AT = "token_expires_at"
+TOKEN_REFRESH_MARGIN_SECONDS = 300
+DELEGATED_AUTH_MODES = frozenset({"auth_code_pkce", "device_code"})
 
 RUNTIME_REQUIRED_MODULES = ("httpx", "fastapi", "uvicorn")
 RUNTIME_CONDITIONAL_MODULES = {
@@ -206,7 +209,10 @@ def _make_token_store(plan: LaunchPlan) -> TokenStore | None:
 
 
 def _store_access_token(
-    store: TokenStore | None, access_token: str | None, refresh_token: str | None = None
+    store: TokenStore | None,
+    access_token: str | None,
+    refresh_token: str | None = None,
+    expires_at: int | None = None,
 ) -> bool:
     if store is None or not access_token:
         return False
@@ -214,6 +220,8 @@ def _store_access_token(
         store.put(TOKEN_ACCOUNT_ACCESS, access_token)
         if refresh_token:
             store.put(TOKEN_ACCOUNT_REFRESH, refresh_token)
+        if expires_at:
+            store.put(TOKEN_ACCOUNT_EXPIRES_AT, str(int(expires_at)))
         return True
     except Exception:
         return False
@@ -222,11 +230,45 @@ def _store_access_token(
 def _clear_stored_tokens(store: TokenStore | None) -> None:
     if store is None:
         return
-    for account in (TOKEN_ACCOUNT_ACCESS, TOKEN_ACCOUNT_REFRESH):
+    for account in (TOKEN_ACCOUNT_ACCESS, TOKEN_ACCOUNT_REFRESH, TOKEN_ACCOUNT_EXPIRES_AT):
         try:
             store.clear(account)
         except Exception:
             continue
+
+
+def _store_get(store: TokenStore | None, account: str) -> str | None:
+    if store is None:
+        return None
+    try:
+        value = store.get(account)
+    except Exception:
+        return None
+    if value is None:
+        return None
+    value = str(value).strip()
+    return value or None
+
+
+def _coerce_expires_at(raw: Any) -> int | None:
+    if raw in (None, ""):
+        return None
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return None
+    return value if value > 0 else None
+
+
+def _token_is_fresh(expires_at: int | None, *, now: int | None = None) -> bool:
+    if expires_at is None:
+        return False
+    now_value = int(time.time()) if now is None else now
+    return expires_at - now_value > TOKEN_REFRESH_MARGIN_SECONDS
+
+
+def _delegated_refresh_supported(setup: SetupConfig | None) -> bool:
+    return setup is not None and setup.auth_mode in DELEGATED_AUTH_MODES
 
 
 def _looked_up_secret_or_cert_ref(
@@ -291,6 +333,71 @@ def build_app(
     def current_setup() -> SetupConfig | None:
         return plan.setup
 
+    def _scopes_for_refresh(setup: SetupConfig) -> list[str]:
+        return list(setup.granted_scopes) or ["https://graph.microsoft.com/.default"]
+
+    def _clear_in_memory_access(reason: str) -> None:
+        state["access_token"] = None
+        state["token_expires_at"] = None
+        state["auth_failure"] = reason
+
+    def _refresh_from_stored_token(reason: str) -> bool:
+        setup = current_setup()
+        if not _delegated_refresh_supported(setup):
+            return False
+        assert setup is not None
+        refresh_token = state.get("refresh_token") or _store_get(token_store, TOKEN_ACCOUNT_REFRESH)
+        if not refresh_token:
+            _clear_in_memory_access(f"{reason}:refresh_token_missing")
+            return False
+        state["refresh_token"] = refresh_token
+        try:
+            token = oauth_mod.refresh_access_token(
+                setup.tenant_id,
+                setup.client_id,
+                refresh_token,
+                _scopes_for_refresh(setup),
+                transport=oauth_transport,
+            )
+        except oauth_mod.OAuthError as exc:
+            _clear_in_memory_access(exc.code)
+            return False
+        _ingest_token_response(state, token_store, token)
+        return bool(state.get("access_token"))
+
+    def _hydrate_auth_state_from_store() -> None:
+        setup = current_setup()
+        if setup is None or token_store is None:
+            return
+        stored_access = _store_get(token_store, TOKEN_ACCOUNT_ACCESS)
+        stored_refresh = _store_get(token_store, TOKEN_ACCOUNT_REFRESH)
+        stored_expires_at = _coerce_expires_at(_store_get(token_store, TOKEN_ACCOUNT_EXPIRES_AT))
+        if stored_refresh:
+            state["refresh_token"] = stored_refresh
+        if stored_access and _token_is_fresh(stored_expires_at):
+            state["access_token"] = stored_access
+            state["token_expires_at"] = stored_expires_at
+            state["auth_failure"] = None
+            return
+        if stored_refresh and _delegated_refresh_supported(setup):
+            _refresh_from_stored_token("startup_refresh")
+            return
+        if stored_access:
+            _clear_in_memory_access("stored_access_token_unusable")
+
+    def _ensure_access_token_current() -> bool:
+        access_token = state.get("access_token")
+        expires_at = _coerce_expires_at(state.get("token_expires_at"))
+        if access_token and _token_is_fresh(expires_at):
+            return True
+        if _delegated_refresh_supported(current_setup()):
+            return _refresh_from_stored_token("lazy_refresh")
+        if access_token:
+            _clear_in_memory_access("access_token_expired")
+        return False
+
+    _hydrate_auth_state_from_store()
+
     def emit_audit(
         actor: str, action: str, status: str, *, extra: dict[str, Any] | None = None
     ) -> dict[str, Any]:
@@ -333,6 +440,7 @@ def build_app(
 
     @app.get("/v1/health/readiness")
     def readiness_endpoint() -> dict[str, Any]:
+        _ensure_access_token_current()
         result = compose_readiness(
             plan.installed_root,
             plan.setup,
@@ -347,7 +455,10 @@ def build_app(
 
     @app.get("/v1/auth/status")
     def auth_status() -> dict[str, Any]:
-        if state.get("access_token"):
+        _ensure_access_token_current()
+        if state.get("access_token") and _token_is_fresh(
+            _coerce_expires_at(state.get("token_expires_at"))
+        ):
             return {"state": "signed_in", "auth_mode": state["auth_mode"]}
         if plan.setup is None:
             return {"state": "unconfigured"}
@@ -644,7 +755,7 @@ def build_app(
             actor=actor,
             granted_scopes=plan.setup.granted_scopes,
             current_auth_mode=plan.setup.auth_mode,
-            access_token=state.get("access_token"),
+            access_token=state.get("access_token") if _ensure_access_token_current() else None,
             params=params,
             transport=graph_transport,
         )
@@ -662,10 +773,15 @@ def _ingest_token_response(
     state: dict[str, Any], token_store: TokenStore | None, token: dict[str, Any]
 ) -> None:
     state["access_token"] = token.get("access_token")
-    state["refresh_token"] = token.get("refresh_token")
+    state["refresh_token"] = token.get("refresh_token") or state.get("refresh_token")
     state["token_expires_at"] = token.get("expires_at") or 0
     state["auth_failure"] = None
-    _store_access_token(token_store, state["access_token"], state.get("refresh_token"))
+    _store_access_token(
+        token_store,
+        state["access_token"],
+        state.get("refresh_token"),
+        _coerce_expires_at(state.get("token_expires_at")),
+    )
 
 
 def run(host: str = "127.0.0.1", port: int = 9300) -> int:

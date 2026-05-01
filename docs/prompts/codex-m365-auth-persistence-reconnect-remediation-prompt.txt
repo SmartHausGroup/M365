@@ -1,0 +1,7 @@
+Execute M365 Auth Persistence Reconnect Remediation.
+
+Read and follow `docs/prompts/codex-m365-auth-persistence-reconnect-remediation.md`.
+
+Plan Reference: `plan:m365-auth-persistence-reconnect-remediation:R0-R8`
+
+Approved to implement. Execute immediately, stay inside the plan allowlist, call UCP `validate_action` before mutating actions, and stop only for a hard blocker.

@@ -120,6 +120,42 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 
 **Status update (2026-04-27 09:45 EDT):** Closed C0-C13. Promoted `development` -> `staging` -> `main` via fast-forward to release commit `687b69b65d8904457a1c72046e66c8e5f868f635`; created and pushed annotated tag `com.smarthaus.m365-v0.1.2` at that release commit; created the draft GitHub Release with 11 assets (bundle, SHA256SUMS, manifest, conformance, provenance, payload, pack_metadata, pack_dependencies, manifest.sig, payload.sig, release notes); ran the downloaded-release verification from `mktemp -d` (LC_ALL=C SHA256SUMS OK, runtime imports `m365_runtime@0.1.2` from temp dir without source-repo path, provenance commit matches the release tag commit); published the release as Latest; wrote the M365-side UCP handoff packet at `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md` (no UCP repo file mutated). C13 then committed tracker/handoff closeout as `732ed407d9ceca7a5e02f0d89a67c80a754625e4` and fast-forwarded `development`, `staging`, and `main` to that post-release governance commit while leaving the release tag and release provenance locked to `687b69b65d8904457a1c72046e66c8e5f868f635`. UCP through-the-installed-pack admission/activation remains the explicit boundary of a sibling UCP plan.
 
+## Initiative: M365 Auth Persistence Reconnect Remediation
+
+**Initiative:** Repair the standalone M365 Graph runtime auth lifecycle so persisted delegated tokens are rehydrated/refreshed after runtime restart, with truthful `auth_required` reconnect behavior when Microsoft refresh fails.
+
+**Plan:** `plans/m365-auth-persistence-reconnect-remediation/m365-auth-persistence-reconnect-remediation.md`
+
+**Reference:** `plan:m365-auth-persistence-reconnect-remediation:R0`
+
+**Status:** Complete-GO (2026-05-01). Runtime token-store hydration/refresh remediation is implemented and locally packaged as `com.smarthaus.m365@0.1.3`.
+
+**Current next act:** Sibling UCP reconnect/status UI work, if desired, must be opened under a separate UCP-repo plan. This M365 plan did not mutate UCP files.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-auth-persistence-reconnect-remediation.md`, `docs/prompts/codex-m365-auth-persistence-reconnect-remediation-prompt.txt`
+
+**Status update (2026-05-01 07:05 EDT):** Created the governed auth-persistence reconnect remediation package after code investigation proved the exact defect: `src/m365_runtime/launcher.py` writes access and refresh tokens into the configured token store, but runtime startup initializes auth state from empty memory and never hydrates or refreshes stored tokens before status, readiness, or action invocation. The package targets `com.smarthaus.m365@0.1.3` so the already-published `0.1.2` GitHub Release remains historical and is not silently overwritten. No runtime code, UCP repo file, tenant setting, token, client secret, auth code, or device code changed in this plan-creation slice.
+
+**Status update (2026-05-01 07:15 EDT):** Closed `R1-R8` for the M365 auth-persistence reconnect remediation. `src/m365_runtime/launcher.py` now hydrates persisted delegated auth state from `TokenStore`, refreshes stored refresh tokens on startup and before `/v1/auth/status`, `/v1/health/readiness`, and action invocation, preserves refresh tokens when Microsoft refresh responses omit a replacement token, stores `token_expires_at`, and fails closed as `auth_required` without sending stale access tokens to Graph when refresh fails. Updated active runtime/build line to `0.1.3` in `src/m365_runtime/__init__.py` and `scripts/ci/build_standalone_graph_runtime_pack.py`; updated focused tests and packaging assertions accordingly. Final validation: focused pytest `44 passed`; scoped pre-commit on changed Python files passed; pack build installed `/Users/smarthaus/Projects/GitHub/IntegrationPacks/M365/0.1.3` with bundle SHA `d26278c6c47a650a8750ff0dc6b914fde418b778395661ebd5bba2f440981c4e`; pack verifier `PASSED (9 checks)`; real-socket acceptance `GO; clauses passed: 21/21`; `git diff --check` clean. No UCP repo file, Microsoft tenant setting, token, refresh token, auth code, device code, client secret, or certificate material was recorded.
+
+**Status update (2026-05-01 08:12 EDT):** Completed the live installed-pack Microsoft smoke for `com.smarthaus.m365@0.1.3` before UCP-side work. The first live run with `User.Read,Directory.Read.All` proved device-code sign-in, live `graph.me`, readiness `ready/success`, and restart without another browser login while the access token remained fresh; forcing stored expiry stale then failed closed as `auth_required` with reason `lazy_refresh:refresh_token_missing`, proving Microsoft had not issued a refresh token for that scope set. The second live run added `offline_access`; Keychain then contained a refresh token, live `graph.me` succeeded, readiness returned `ready/success`, and after forcing `token_expires_at=1` plus restarting the installed runtime, `/v1/auth/status` returned `signed_in`, live `graph.me` returned `success`, readiness returned `ready/success`, and `token_expires_at` was repaired. Evidence: `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_3_live_smoke.json`. UCP-side setup must request `offline_access` for true long-lived reconnect semantics. No UCP repo file, tenant setting, token, refresh token, auth code, device code after completion, client secret, certificate private key, phone number, or subject object ID was recorded.
+
+## Initiative: M365 0.1.3 GitHub Release And UCP Handoff Closure
+
+**Initiative:** Promote the live-tested `com.smarthaus.m365@0.1.3` auth-persistence reconnect remediation into a canonical GitHub Release and create the M365-side UCP handoff packet.
+
+**Plan:** `plans/m365-0-1-3-github-release-and-ucp-handoff-closure/m365-0-1-3-github-release-and-ucp-handoff-closure.md`
+
+**Reference:** `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0`
+
+**Status:** Active (2026-05-01). The CTO explicitly requested commit, push, governed promotion through `development` -> `staging` -> `main`, clean-source rebuild, tag `com.smarthaus.m365-v0.1.3`, and GitHub Release publication.
+
+**Current next act:** Execute `R1`, the feature-branch validation and commit.
+
+**Prompt artifacts:** `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure.md`, `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure-prompt.txt`
+
+**Status update (2026-05-01 08:25 EDT):** Opened the governed `0.1.3` release-closure package after confirming the auth-remediation plan intentionally stopped at local package/live-smoke proof and explicitly excluded GitHub Release publication. The new release-closure scope is bounded to M365: commit the feature branch, push it, promote to `development`, `staging`, and `main`, rebuild from clean source, tag `com.smarthaus.m365-v0.1.3`, publish the GitHub Release with verified assets, and write an M365-side UCP handoff packet that tells UCP to request `offline_access` for durable delegated reconnect. No UCP repo file, tenant setting, token, refresh token, auth code, device code after completion, client secret, certificate private key, phone number, or subject object ID changed in this plan-creation slice.
+
 ## Initiative: M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix
 
 **Initiative:** Correct the standalone M365 Graph runtime Integration Pack to the truthful `0.1.2` version line and repair the remaining formal pack-readiness defects.

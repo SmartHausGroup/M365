@@ -27,6 +27,37 @@ This baseline indexes the governance-critical and active enterprise-readiness ar
 | `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-release-notes.md` | GitHub Release notes asset for `com.smarthaus.m365-v0.1.2`; declares canonical release identity, asset SHA256s, scope guarantees, distribution boundary, and local-verification recipe. | `Mission Statement`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:C9` |
 | `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-2-ucp-handoff-packet.md` | M365-side UCP handoff packet: tells UCP to admit from the GitHub Release asset (repo, tag, asset, SHA256), declares manifest/runtime/auth/dependency contracts, and records the explicit MUST/MUST NOT list for UCP-side admission. No UCP repo file is mutated. | `Mission Statement`, `Policy & Security` | `plan:m365-github-release-and-ucp-handoff-closure:C12` |
 
+## Active M365 Auth Persistence Reconnect Remediation Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-auth-persistence-reconnect-remediation/m365-auth-persistence-reconnect-remediation.md` | Human-readable governed plan for repairing standalone runtime token hydration, refresh, and reconnect truth. | `Mission Statement`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `plans/m365-auth-persistence-reconnect-remediation/m365-auth-persistence-reconnect-remediation.yaml` | Structured YAML authority for the auth persistence reconnect remediation package. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `plans/m365-auth-persistence-reconnect-remediation/m365-auth-persistence-reconnect-remediation.json` | Structured JSON mirror for governance tooling on the auth persistence reconnect remediation package. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `docs/prompts/codex-m365-auth-persistence-reconnect-remediation.md` | Detailed execution prompt for repairing token-store hydration/refresh behavior and validating the corrected local `0.1.3` artifact line. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `docs/prompts/codex-m365-auth-persistence-reconnect-remediation-prompt.txt` | Short kickoff prompt for the auth persistence reconnect remediation package. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `notebooks/m365/INV-M365-DP-auth-persistence-reconnect-v1.ipynb` | Governance notebook backing the fail-closed token hydration/refresh contract for code-scope admission. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `configs/generated/auth_persistence_reconnect_v1_verification.json` | Deterministic generated verification payload for the auth persistence reconnect governance notebook. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R0` |
+| `src/m365_runtime/launcher.py` | Runtime auth lifecycle implementation that now hydrates/refreshes persisted delegated tokens and fails closed on refresh failure. | `Technical Architecture`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R2-R4` |
+| `tests/test_m365_runtime_fix_auth_lifecycle.py` | Focused auth lifecycle regression tests for startup refresh, refresh failure, persisted expiry, and delegated stored-token hydration. | `Core Success Metrics`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R5` |
+| `scripts/ci/build_standalone_graph_runtime_pack.py` | Active local pack builder line moved to `com.smarthaus.m365@0.1.3` for this remediation. | `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R6` |
+| `artifacts/diagnostics/m365_standalone_graph_runtime_pack_acceptance.json` | Real-local-socket acceptance evidence regenerated for the rebuilt `0.1.3` runtime pack. | `Core Success Metrics`, `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
+| `artifacts/diagnostics/m365_standalone_graph_runtime_pack_0_1_3_live_smoke.json` | Redacted live Microsoft tenant smoke for installed `0.1.3`, including the offline_access refresh-token reconnect proof. | `Core Success Metrics`, `Policy & Security` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
+| `dist/m365_pack/manifest.json` | Rebuilt local `0.1.3` pack manifest for the auth-persistence reconnect remediation. | `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
+| `dist/m365_pack/payload.tar.gz` | Rebuilt local `0.1.3` runtime payload containing the remediated auth lifecycle. | `Technical Architecture` | `plan:m365-auth-persistence-reconnect-remediation:R7` |
+
+## Active M365 0.1.3 GitHub Release And UCP Handoff Closure Artifacts
+
+| Path | Purpose | North Star Clause | Execution Plan Reference |
+| --- | --- | --- | --- |
+| `plans/m365-0-1-3-github-release-and-ucp-handoff-closure/m365-0-1-3-github-release-and-ucp-handoff-closure.md` | Human-readable release-closure plan for promoting the live-tested `com.smarthaus.m365@0.1.3` pack into a canonical GitHub Release and M365-side UCP handoff. | `Mission Statement`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0` |
+| `plans/m365-0-1-3-github-release-and-ucp-handoff-closure/m365-0-1-3-github-release-and-ucp-handoff-closure.yaml` | Structured YAML authority for the `0.1.3` GitHub Release closure plan. | `Technical Architecture`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0` |
+| `plans/m365-0-1-3-github-release-and-ucp-handoff-closure/m365-0-1-3-github-release-and-ucp-handoff-closure.json` | Structured JSON mirror for governance tooling on the `0.1.3` GitHub Release closure plan. | `Technical Architecture`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0` |
+| `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure.md` | Detailed execution prompt for committing, pushing, promoting, clean-rebuilding, tagging, publishing, and verifying the `0.1.3` GitHub Release. | `Technical Architecture`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0` |
+| `docs/prompts/codex-m365-0-1-3-github-release-and-ucp-handoff-closure-prompt.txt` | Short kickoff prompt for the `0.1.3` release closure package. | `Technical Architecture`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R0` |
+| `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-3-release-notes.md` | GitHub Release notes asset for `com.smarthaus.m365-v0.1.3`, including the auth persistence change and `offline_access` reconnect finding. | `Mission Statement`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R8` |
+| `docs/commercialization/m365-standalone-graph-runtime-integration-pack-0-1-3-ucp-handoff-packet.md` | M365-side UCP handoff packet for `0.1.3`; tells UCP to admit from the GitHub Release and request `offline_access` for durable delegated reconnect. | `Mission Statement`, `Policy & Security` | `plan:m365-0-1-3-github-release-and-ucp-handoff-closure:R11` |
+
 ## Active M365 Standalone Graph Runtime Pack 0.1.2 Readiness Fix Artifacts
 
 | Path | Purpose | North Star Clause | Execution Plan Reference |
