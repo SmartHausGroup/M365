@@ -1,0 +1,16 @@
+Plan: plan:m365-cps-trkA-p4-end-to-end:T1
+Task: Live UCP+M365 spin-up integration test
+Branch: feat/m365-cps-trkA
+Detailed prompt: docs/prompts/codex-m365-cps-trkA-p4-end-to-end-T1.md
+
+Governance:
+1. Read M365 AGENTS.md (or UCP CLAUDE.md, identical)
+2. Read parent phase plan: plans/m365-cps-trkA-p4-end-to-end/m365-cps-trkA-p4-end-to-end.md
+3. Read master plan: plans/m365-capability-pack-surface-remediation/m365-capability-pack-surface-remediation.md
+4. Read the detailed prompt above
+
+Approval: this prompt is pre-approved as part of plan:m365-capability-pack-surface-remediation.
+Execute T1 only. Do NOT proceed past this task. Do NOT push.
+
+Validation command (must exit 0):
+cd $UCP_ROOT && .venv/bin/python tests/integration/m365_cps_trkA_e2e.py

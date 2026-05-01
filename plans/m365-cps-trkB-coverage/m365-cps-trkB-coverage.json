@@ -1,0 +1,414 @@
+{
+  "plan_id": "plan:m365-cps-trkB-coverage",
+  "parent_plan_id": "plan:m365-capability-pack-surface-remediation",
+  "title": "Track B \u2014 Coverage Build-Out",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track B",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Execute Track B per master plan."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T7 drive each parent-phase plan to completion."
+  },
+  "objective": "Track B \u2014 Coverage Build-Out",
+  "current_state": "Track B parent-phase plans defined; status draft; no execution started.",
+  "target_state": "All Track B parent-phase plans status: complete; branch feat/m365-cps-trkB merged.",
+  "scope": {
+    "in_scope": [
+      "plan:m365-cps-trkB-p1-sharepoint-reads",
+      "plan:m365-cps-trkB-p2-calendar-reads",
+      "plan:m365-cps-trkB-p3-mail-reads",
+      "plan:m365-cps-trkB-p4-health-and-reports",
+      "plan:m365-cps-trkB-p5-directory-and-teams",
+      "plan:m365-cps-trkB-p6-auth-mode-tiers",
+      "plan:m365-cps-trkB-p7-end-to-end-and-repackage"
+    ],
+    "out_of_scope": [
+      "Anything covered by sibling tracks"
+    ],
+    "file_allowlist": [
+      "src/ucp/m365_tools.py",
+      "src/ucp/runtime/release_artifacts.py",
+      "src/ucp/runtime/m365_runtime_health.py",
+      "tests/test_m365_*.py",
+      "configs/mcp_packs.yaml",
+      "docs/platform/CODDEX_ACTION_LOG.md",
+      "docs/platform/EXECUTION_PLAN.md",
+      "docs/platform/PROJECT_STATUS.md",
+      "plans/m365-capability-pack-surface-remediation/**",
+      "plans/m365-cps-*/**",
+      "docs/prompts/codex-m365-cps-*.md",
+      "docs/prompts/codex-m365-cps-*.txt",
+      "src/m365_runtime/graph/registry.py",
+      "src/m365_runtime/graph/actions.py",
+      "src/m365_runtime/graph/client.py",
+      "src/ucp_m365_pack/client.py",
+      "src/ucp_m365_pack/contracts.py",
+      "registry/action_registry.yaml",
+      "registry/agents.yaml",
+      "tests/**",
+      "Operations/ACTION_LOG.md",
+      "Operations/EXECUTION_PLAN.md",
+      "plans/m365-capability-pack-surface-remediation/**",
+      "plans/m365-cps-*/**",
+      "docs/prompts/codex-m365-cps-*.md",
+      "docs/prompts/codex-m365-cps-*.txt",
+      "CHANGELOG.md"
+    ],
+    "file_denylist": [
+      "apps/desktop/**",
+      "src/ucp/runtime/pack_registry.py",
+      "Power Platform executor sources",
+      "archived/**",
+      "Any file not in allowlist of the active child-phase plan"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R4",
+      "ref": "plan:m365-cps-trkB-coverage:R4",
+      "description": "Track B requirement carry-through from master plan R4.",
+      "acceptance_criteria": "All parent phases satisfying master R4 are complete.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R4"
+    },
+    {
+      "id": "R5",
+      "ref": "plan:m365-cps-trkB-coverage:R5",
+      "description": "Track B requirement carry-through from master plan R5.",
+      "acceptance_criteria": "All parent phases satisfying master R5 are complete.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R5"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkB-coverage:R8",
+      "description": "Track B requirement carry-through from master plan R8.",
+      "acceptance_criteria": "All parent phases satisfying master R8 are complete.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkB-coverage:T1",
+      "name": "SharePoint Reads",
+      "description": "Add sites.list, sites.get, lists.list, lists.get, lists.items, drives.children to runtime registry + alias table + YAML mirror. Coverage gap closure for SharePoint.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p1-sharepoint-reads status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p1-sharepoint-reads GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p1-sharepoint-reads",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p1-sharepoint-reads",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkB-coverage:T2",
+      "name": "Calendar Reads",
+      "description": "Add calendar.list, calendar.get, events.list, calendar.availability to runtime + alias + YAML.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p2-calendar-reads status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p2-calendar-reads GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p2-calendar-reads",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p2-calendar-reads",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkB-coverage:T3",
+      "name": "Mail Reads",
+      "description": "Add mail.list, mail.message_get, mail.attachments to runtime + alias + YAML.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p3-mail-reads status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p3-mail-reads GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p3-mail-reads",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p3-mail-reads",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkB-coverage:T4",
+      "name": "Service Health & Reports",
+      "description": "Add health.overview, health.issues, health.messages, reports.users_active, reports.email_activity, reports.teams_activity, reports.sharepoint_usage, reports.onedrive_usage.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p4-health-and-reports status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p4-health-and-reports GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p4-health-and-reports",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p4-health-and-reports",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkB-coverage:T5",
+      "name": "Directory & Teams Reads",
+      "description": "Add directory.domains, directory.roles, teams.get, channels.list, channels.get.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p5-directory-and-teams status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p5-directory-and-teams GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p5-directory-and-teams",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p5-directory-and-teams",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T6",
+      "ref": "plan:m365-cps-trkB-coverage:T6",
+      "name": "Auth-Mode Tier System",
+      "description": "Introduce read-only / standard / admin tiers at m365_auth_start. Token store records tier; registry actions declare min_tier; admit() enforces.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T5"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p6-auth-mode-tiers status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p6-auth-mode-tiers GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p6-auth-mode-tiers",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p6-auth-mode-tiers",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T7",
+      "ref": "plan:m365-cps-trkB-coverage:T7",
+      "name": "Track B End-to-End & Repackage",
+      "description": "Full live-tenant coverage e2e; cut M365 1.2.0 release; bind UCP to it; governance closure.",
+      "requirement_refs": [
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "depends_on": [
+        "T6"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "plan:m365-cps-trkB-p7-end-to-end-and-repackage status: complete"
+      ],
+      "exit_criteria": [
+        "plan:m365-cps-trkB-p7-end-to-end-and-repackage GATE green; commit + push to feat/m365-cps-trkB"
+      ],
+      "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p7-end-to-end-and-repackage",
+      "implementation_notes": "Sub-plan: plan:m365-cps-trkB-p7-end-to-end-and-repackage",
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C1",
+        "name": "Parent Phase B1 \u2014 SharePoint Reads complete",
+        "description": "plan:m365-cps-trkB-p1-sharepoint-reads status == complete with GATE evidence",
+        "task_ref": "T1",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p1-sharepoint-reads",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C2",
+        "name": "Parent Phase B2 \u2014 Calendar Reads complete",
+        "description": "plan:m365-cps-trkB-p2-calendar-reads status == complete with GATE evidence",
+        "task_ref": "T2",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p2-calendar-reads",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C3",
+        "name": "Parent Phase B3 \u2014 Mail Reads complete",
+        "description": "plan:m365-cps-trkB-p3-mail-reads status == complete with GATE evidence",
+        "task_ref": "T3",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p3-mail-reads",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C4",
+        "name": "Parent Phase B4 \u2014 Service Health & Reports complete",
+        "description": "plan:m365-cps-trkB-p4-health-and-reports status == complete with GATE evidence",
+        "task_ref": "T4",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p4-health-and-reports",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C5",
+        "name": "Parent Phase B5 \u2014 Directory & Teams Reads complete",
+        "description": "plan:m365-cps-trkB-p5-directory-and-teams status == complete with GATE evidence",
+        "task_ref": "T5",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p5-directory-and-teams",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C6",
+        "name": "Parent Phase B6 \u2014 Auth-Mode Tier System complete",
+        "description": "plan:m365-cps-trkB-p6-auth-mode-tiers status == complete with GATE evidence",
+        "task_ref": "T6",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p6-auth-mode-tiers",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      },
+      {
+        "id": "CHECK:C7",
+        "name": "Parent Phase B7 \u2014 Track B End-to-End & Repackage complete",
+        "description": "plan:m365-cps-trkB-p7-end-to-end-and-repackage status == complete with GATE evidence",
+        "task_ref": "T7",
+        "validation_command": ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkB-p7-end-to-end-and-repackage",
+        "pass_criteria": "Plan status complete; GATE validation_command exit 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any parent-phase plan in Track B fails its GATE",
+      "Branch feat/m365-cps-trkB merge conflict that cannot be resolved without scope drift"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Track B parent phase scope creep",
+        "impact": "medium",
+        "mitigation": "Per-parent allowlist; scope fence",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

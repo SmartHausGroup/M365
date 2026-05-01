@@ -1,0 +1,351 @@
+{
+  "plan_id": "plan:m365-cps-trkB-p6-auth-mode-tiers",
+  "parent_plan_id": "plan:m365-cps-trkB-coverage",
+  "title": "Parent Phase B6 \u2014 Auth-Mode Tier System",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track B P6",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Introduce read-only / standard / admin tiers at m365_auth_start. Token store records tier; registry actions declare min_tier; admit() enforces."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T8 together satisfy this parent phase's objective."
+  },
+  "objective": "Introduce read-only / standard / admin tiers at m365_auth_start. Token store records tier; registry actions declare min_tier; admit() enforces.",
+  "current_state": "Parent phase scope draft; no implementation yet.",
+  "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkB.",
+  "scope": {
+    "in_scope": [
+      "Define scope tier sets",
+      "Update m365_auth_start to accept tier",
+      "Update token store to record tier",
+      "Update registry actions to declare min_tier",
+      "Update admit() to enforce tier",
+      "Unit tests both repos",
+      "Live tenant smoke (each tier)",
+      "Pre-commit + commit"
+    ],
+    "out_of_scope": [
+      "Anything outside this parent's allowlist"
+    ],
+    "file_allowlist": [
+      "M365: src/m365_runtime/auth/oauth.py",
+      "M365: src/m365_runtime/auth/token_store.py",
+      "M365: src/m365_runtime/graph/registry.py",
+      "M365: tests/test_m365_auth_tiers.py",
+      "M365: tests/test_token_store_tier.py",
+      "M365: tests/test_m365_admit_tier.py",
+      "UCP: src/ucp/m365_tools.py",
+      "UCP: tests/test_m365_integration.py",
+      "M365: docs/contracts/m365_auth_tiers.md"
+    ],
+    "file_denylist": [
+      "Files outside auth/registry surface",
+      "Any file not in allowlist of the active child-phase task"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R5",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:R5",
+      "description": "Carry-through of master R5; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R5"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:R8",
+      "description": "Carry-through of master R8; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "T8"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T1",
+      "name": "Define scope tier sets",
+      "description": "Document the three tiers and their Graph scope sets: read-only={User.Read, Mail.Read, Calendars.Read, Sites.Read.All, Files.Read.All, Team.ReadBasic.All}; standard=read-only + write scopes for Mail/Calendar/Files; admin=standard + Directory.ReadWrite.All, RoleManagement.ReadWrite.Directory.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "docs/contracts/m365_auth_tiers.md"
+      ],
+      "exit_criteria": [
+        "Doc committed"
+      ],
+      "validation_command": "test -f $M365_ROOT/docs/contracts/m365_auth_tiers.md",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: docs/contracts/m365_auth_tiers.md (new)"
+      ]
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T2",
+      "name": "Update m365_auth_start to accept tier",
+      "description": "Add tier parameter to m365_auth_start endpoint and OAuth flow. Default tier=read-only.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/auth/oauth.py with tier param"
+      ],
+      "exit_criteria": [
+        "m365_auth_start(tier='standard') succeeds; scope set matches"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_auth_tiers.py -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/auth/oauth.py"
+      ]
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T3",
+      "name": "Update token store to record tier",
+      "description": "Token store schema gains tier field. Migration: existing tokens default to read-only.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/auth/token_store.py with tier"
+      ],
+      "exit_criteria": [
+        "token_store.read() returns tier"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_token_store_tier.py -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/auth/token_store.py"
+      ]
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T4",
+      "name": "Update registry actions to declare min_tier",
+      "description": "Each ActionSpec gains min_tier field (read-only by default; admin reads use admin).",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/graph/registry.py with min_tier on each spec"
+      ],
+      "exit_criteria": [
+        "get_action returns spec with min_tier"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from m365_runtime.graph.registry import get_action; assert get_action('graph.users.list').min_tier == 'read-only'\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/registry.py"
+      ]
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T5",
+      "name": "Update admit() to enforce tier",
+      "description": "admit() rejects with 'tier_insufficient' if session.tier < spec.min_tier.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/graph/registry.py admit() updated"
+      ],
+      "exit_criteria": [
+        "admit('admin-action', session_tier='read-only') returns ('denied', 'tier_insufficient')"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_admit_tier.py -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/registry.py"
+      ]
+    },
+    {
+      "id": "T6",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T6",
+      "name": "Unit tests both repos",
+      "description": "M365: test_m365_auth_tiers, test_m365_admit_tier. UCP: test_m365_auth_start_tier_passthrough.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T5"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Test files added"
+      ],
+      "exit_criteria": [
+        "pytest exits 0"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest -k tier -x && cd $UCP_ROOT && .venv/bin/python -m pytest -k tier -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T7",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T7",
+      "name": "Live tenant smoke (each tier)",
+      "description": "Auth at each tier; verify scope set returned by Graph matches expected.",
+      "requirement_refs": [
+        "R5"
+      ],
+      "depends_on": [
+        "T6"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Diagnostic evidence"
+      ],
+      "exit_criteria": [
+        "All three tiers work"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_auth_tiers_live.py",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T8",
+      "ref": "plan:m365-cps-trkB-p6-auth-mode-tiers:T8",
+      "name": "Pre-commit + commit",
+      "description": "Standard validation + commit.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T7"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Commit in both repos"
+      ],
+      "exit_criteria": [
+        "git log shows commit"
+      ],
+      "validation_command": "cd $M365_ROOT && pre-commit run --all-files && make test && git log --oneline -1 | grep 'plan:m365-cps-trkB-p6'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Parent phase B6 integration",
+        "description": "All child tasks T1..T8 green; integration test pass",
+        "task_ref": "T1..T8",
+        "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_auth_tiers_e2e.py",
+        "pass_criteria": "Integration test exit code 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any child task fails its validation_command",
+      "Parent GATE integration test fails",
+      "File outside parent allowlist touched"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Cross-repo drift during edits",
+        "impact": "medium",
+        "mitigation": "Per-task allowlist explicit per repo",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

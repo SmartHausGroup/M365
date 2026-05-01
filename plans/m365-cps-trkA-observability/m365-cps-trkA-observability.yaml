@@ -1,0 +1,339 @@
+plan_id: "plan:m365-cps-trkA-observability"
+parent_plan_id: "plan:m365-capability-pack-surface-remediation"
+title: Track A — Observability and Diagnostics
+version: 1.0
+status: draft
+owner: Phil Siniscalchi (Founder/Owner)
+date_created: 2026-05-01
+date_updated: 2026-05-01
+north_star_ref: docs/NORTH_STAR.md
+execution_plan_ref: docs/platform/EXECUTION_PLAN.md - M365 CPS Track A
+domain: framework
+math_algorithm_scope: false
+north_star_alignment:
+  source: docs/NORTH_STAR.md
+  principles:
+    - Gates-by-construction integrity (denials must be honest)
+    - Tool-first determinism (capability surface must equal advertised surface)
+    - "Fail-closed semantics (unknown action != blocked write)"
+    - Operator observability (the system must explain its own state)
+    - Plan-first execution with strict per-phase gates
+  anti_alignment:
+    - Mutation fence on actual write actions stays on
+    - Risk-tier classification per agent stays unchanged
+    - Audit envelope format stays unchanged
+    - Two-phase confirmation gate for high-risk mutations stays on
+intent_capture:
+  user_stated_requirements:
+    - Execute Track A per master plan.
+  intent_doc_ref: captured in this plan
+  intent_verification: Tasks T1..T4 drive each parent-phase plan to completion.
+objective: Track A — Observability and Diagnostics
+current_state: Track A parent-phase plans defined; status draft; no execution started.
+target_state: "All Track A parent-phase plans status: complete; branch feat/m365-cps-trkA merged."
+scope:
+  in_scope:
+    - "plan:m365-cps-trkA-p1-status-code-semantics"
+    - "plan:m365-cps-trkA-p2-inventory-tool"
+    - "plan:m365-cps-trkA-p3-preflight-intersection"
+    - "plan:m365-cps-trkA-p4-end-to-end"
+  out_of_scope:
+    - Anything covered by sibling tracks
+  file_allowlist:
+    - src/ucp/m365_tools.py
+    - src/ucp/runtime/release_artifacts.py
+    - src/ucp/runtime/m365_runtime_health.py
+    - "tests/test_m365_*.py"
+    - configs/mcp_packs.yaml
+    - docs/platform/CODDEX_ACTION_LOG.md
+    - docs/platform/EXECUTION_PLAN.md
+    - docs/platform/PROJECT_STATUS.md
+    - "plans/m365-capability-pack-surface-remediation/**"
+    - "plans/m365-cps-*/**"
+    - "docs/prompts/codex-m365-cps-*.md"
+    - "docs/prompts/codex-m365-cps-*.txt"
+    - src/m365_runtime/graph/registry.py
+    - src/m365_runtime/graph/actions.py
+    - src/m365_runtime/graph/client.py
+    - src/ucp_m365_pack/client.py
+    - src/ucp_m365_pack/contracts.py
+    - registry/action_registry.yaml
+    - registry/agents.yaml
+    - "tests/**"
+    - Operations/ACTION_LOG.md
+    - Operations/EXECUTION_PLAN.md
+    - "plans/m365-capability-pack-surface-remediation/**"
+    - "plans/m365-cps-*/**"
+    - "docs/prompts/codex-m365-cps-*.md"
+    - "docs/prompts/codex-m365-cps-*.txt"
+    - CHANGELOG.md
+  file_denylist:
+    - "apps/desktop/**"
+    - src/ucp/runtime/pack_registry.py
+    - Power Platform executor sources
+    - "archived/**"
+    - Any file not in allowlist of the active child-phase plan
+requirements:
+  - id: R1
+    ref: "plan:m365-cps-trkA-observability:R1"
+    description: Track A requirement carry-through from master plan R1.
+    acceptance_criteria: All parent phases satisfying master R1 are complete.
+    depends_on:
+      - none
+    user_intent_trace: Master R1
+  - id: R2
+    ref: "plan:m365-cps-trkA-observability:R2"
+    description: Track A requirement carry-through from master plan R2.
+    acceptance_criteria: All parent phases satisfying master R2 are complete.
+    depends_on:
+      - none
+    user_intent_trace: Master R2
+  - id: R3
+    ref: "plan:m365-cps-trkA-observability:R3"
+    description: Track A requirement carry-through from master plan R3.
+    acceptance_criteria: All parent phases satisfying master R3 are complete.
+    depends_on:
+      - none
+    user_intent_trace: Master R3
+  - id: R8
+    ref: "plan:m365-cps-trkA-observability:R8"
+    description: Track A requirement carry-through from master plan R8.
+    acceptance_criteria: All parent phases satisfying master R8 are complete.
+    depends_on:
+      - none
+    user_intent_trace: Master R8
+execution_sequence:
+  ordering:
+    - T1
+    - T2
+    - T3
+    - T4
+  stop_on_first_failure: true
+  maths_phase_mapping: null
+tasks:
+  - id: T1
+    ref: "plan:m365-cps-trkA-observability:T1"
+    name: Status Code Semantics Fix
+    description: Fix _denial_to_status to preserve unknown_action as a distinct status (not mutation_fence). Plumb the new status through M365 runtime and UCP tools surface. Unit + integration tests.
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+      - R8
+    depends_on: []
+    maths_phase: null
+    deliverables:
+      - "plan:m365-cps-trkA-p1-status-code-semantics status: complete"
+    exit_criteria:
+      - "plan:m365-cps-trkA-p1-status-code-semantics GATE green; commit + push to feat/m365-cps-trkA"
+    validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p1-status-code-semantics"
+    implementation_notes: "Sub-plan: plan:m365-cps-trkA-p1-status-code-semantics"
+    files_to_read: []
+    files_to_modify: []
+  - id: T2
+    ref: "plan:m365-cps-trkA-observability:T2"
+    name: Capability Inventory Tool
+    description: Add /v1/inventory endpoint to m365_runtime and m365_inventory MCP tool to UCP. Operators see implemented vs advertised vs aliased actions in one call.
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+      - R8
+    depends_on:
+      - T1
+    maths_phase: null
+    deliverables:
+      - "plan:m365-cps-trkA-p2-inventory-tool status: complete"
+    exit_criteria:
+      - "plan:m365-cps-trkA-p2-inventory-tool GATE green; commit + push to feat/m365-cps-trkA"
+    validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p2-inventory-tool"
+    implementation_notes: "Sub-plan: plan:m365-cps-trkA-p2-inventory-tool"
+    files_to_read: []
+    files_to_modify: []
+  - id: T3
+    ref: "plan:m365-cps-trkA-observability:T3"
+    name: Pre-flight Scope/Registry Intersection
+    description: Add token-vs-registry intersection to /v1/auth/check and pass through UCP. Operators know what their session can do before they call.
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+      - R8
+    depends_on:
+      - T2
+    maths_phase: null
+    deliverables:
+      - "plan:m365-cps-trkA-p3-preflight-intersection status: complete"
+    exit_criteria:
+      - "plan:m365-cps-trkA-p3-preflight-intersection GATE green; commit + push to feat/m365-cps-trkA"
+    validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p3-preflight-intersection"
+    implementation_notes: "Sub-plan: plan:m365-cps-trkA-p3-preflight-intersection"
+    files_to_read: []
+    files_to_modify: []
+  - id: T4
+    ref: "plan:m365-cps-trkA-observability:T4"
+    name: Track A End-to-End Integration
+    description: Live UCP+M365 e2e validation of Track A; governance closure; commit + push + merge.
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+      - R8
+    depends_on:
+      - T3
+    maths_phase: null
+    deliverables:
+      - "plan:m365-cps-trkA-p4-end-to-end status: complete"
+    exit_criteria:
+      - "plan:m365-cps-trkA-p4-end-to-end GATE green; commit + push to feat/m365-cps-trkA"
+    validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p4-end-to-end"
+    implementation_notes: "Sub-plan: plan:m365-cps-trkA-p4-end-to-end"
+    files_to_read: []
+    files_to_modify: []
+gates:
+  checks:
+    - id: "CHECK:C1"
+      name: Parent Phase A1 — Status Code Semantics Fix complete
+      description: "plan:m365-cps-trkA-p1-status-code-semantics status == complete with GATE evidence"
+      task_ref: T1
+      validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p1-status-code-semantics"
+      pass_criteria: Plan status complete; GATE validation_command exit 0
+      fail_action: block
+    - id: "CHECK:C2"
+      name: Parent Phase A2 — Capability Inventory Tool complete
+      description: "plan:m365-cps-trkA-p2-inventory-tool status == complete with GATE evidence"
+      task_ref: T2
+      validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p2-inventory-tool"
+      pass_criteria: Plan status complete; GATE validation_command exit 0
+      fail_action: block
+    - id: "CHECK:C3"
+      name: Parent Phase A3 — Pre-flight Scope/Registry Intersection complete
+      description: "plan:m365-cps-trkA-p3-preflight-intersection status == complete with GATE evidence"
+      task_ref: T3
+      validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p3-preflight-intersection"
+      pass_criteria: Plan status complete; GATE validation_command exit 0
+      fail_action: block
+    - id: "CHECK:C4"
+      name: Parent Phase A4 — Track A End-to-End Integration complete
+      description: "plan:m365-cps-trkA-p4-end-to-end status == complete with GATE evidence"
+      task_ref: T4
+      validation_command: ".venv/bin/python scripts/check_plan_complete.py plan:m365-cps-trkA-p4-end-to-end"
+      pass_criteria: Plan status complete; GATE validation_command exit 0
+      fail_action: block
+  decision:
+    go_rule: All gates pass
+    no_go_rule: Any gate fails
+  no_go_triggers:
+    - Any parent-phase plan in Track A fails its GATE
+    - Branch feat/m365-cps-trkA merge conflict that cannot be resolved without scope drift
+determinism: null
+artifacts: []
+environment:
+  python_version: ">=3.11"
+  venv: .venv/bin/python
+  additional_dependencies: []
+  hardware: standard CI; live tenant for GATE smoke tests
+  external_data:
+    - live M365 tenant (smarthausgroup.com)
+  pre_notebook_check: N/A
+implementation_approach:
+  options_considered:
+    - id: A
+      description: All-at-once monolithic change
+      pros:
+        - fewer commits
+      cons:
+        - drift risk
+        - no per-phase gates
+    - id: B
+      description: Per-track / per-parent / per-child phase hierarchy
+      pros:
+        - enforced cadence
+        - per-task scope fence
+      cons:
+        - more files
+  chosen: B
+  rationale: Granular commits enforce cadence; per-task MATHS prompts give executor zero drift opportunity.
+  rejected_rationale:
+    A: Too coarse; would require massive PR review and lose per-phase gate value
+  adr_ref: null
+risks:
+  items:
+    - risk: Track A parent phase scope creep
+      impact: medium
+      mitigation: Per-parent allowlist; scope fence
+      status: mitigated
+  hard_blockers: []
+rollback:
+  procedure:
+    - Revert commits on the feature branch.
+    - "If parent phase pushed: revert push via new revert commits."
+    - Update ACTION_LOG with rollback entry.
+    - Set this plan status to cancelled.
+  files_to_revert:
+    - all files in this plan's allowlist that were modified
+  artifacts_to_delete:
+    - any generated artifact files for this plan
+  governance_updates_on_rollback:
+    - ACTION_LOG entry with rollback reason
+    - EXECUTION_PLAN revert progress
+    - "This plan: status to cancelled"
+prompt_references:
+  maths_template: agent_governance/master-maths-prompt-template.md
+  prompt_doc: null
+  prompt_kickoff: null
+  per_task_prompts: []
+traceability:
+  files_created:
+    notebooks: []
+    invariants: []
+    lemmas: []
+    code_files: []
+    config_artifacts: []
+  index_updates:
+    traceability_index: null
+    invariant_index: null
+    math_readme: null
+    lemmas_appendix: null
+governance_closure:
+  action_log: docs/platform/CODDEX_ACTION_LOG.md (UCP) / Operations/ACTION_LOG.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  project_status: docs/platform/PROJECT_STATUS.md (UCP)
+  invariant_promotions: []
+  lemma_promotions: []
+execution_outcome:
+  task_checklist: []
+  gate_checklist: []
+  final_decision: null
+  approved_by: null
+  completion_timestamp: null
+when_blocked:
+  format: "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}"
+  escalation:
+    primary: Phil Siniscalchi (Founder/Owner)
+    secondary: Engineering lead
+agent_constraints:
+  - Do not touch files outside Section 5 file allowlist.
+  - Do not skip or reorder tasks (Section 7 strict ordering).
+  - Do not modify thresholds or invariants to make gates green without owner approval.
+  - Do not execute until plan status is approved.
+  - "Reference plan:{plan-id}:{task-id} in all action log entries and commits."
+  - Do not add tasks, gates, or deliverables not in this plan without owner approval.
+  - Use .venv/bin/python for all Python commands.
+  - Call validate_action MCP tool before any write operation (UCP server).
+  - Each child phase commits locally; no push until parent-phase GATE is green.
+  - Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.
+  - Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green.
+references:
+  north_star: docs/NORTH_STAR.md (UCP) / Operations/NORTHSTAR.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  applicable_rules:
+    - ".cursor/rules/**/*.mdc (M365)"
+  related_plans:
+    - "plan:m365-capability-pack-surface-remediation"
+  related_docs: []
+  maths_prompt_template: agent_governance/master-maths-prompt-template.md
+_template:
+  version: 1.0
+  last_updated: 2026-05-01
+  schema_json: agent_governance/PLAN_TEMPLATE_SCHEMA.json

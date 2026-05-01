@@ -1,0 +1,323 @@
+{
+  "plan_id": "plan:m365-cps-trkA-p2-inventory-tool",
+  "parent_plan_id": "plan:m365-cps-trkA-observability",
+  "title": "Parent Phase A2 \u2014 Capability Inventory Tool",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track A P2",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Add /v1/inventory endpoint to m365_runtime and m365_inventory MCP tool to UCP. Operators see implemented vs advertised vs aliased actions in one call."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T7 together satisfy this parent phase's objective."
+  },
+  "objective": "Add /v1/inventory endpoint to m365_runtime and m365_inventory MCP tool to UCP. Operators see implemented vs advertised vs aliased actions in one call.",
+  "current_state": "Parent phase scope draft; no implementation yet.",
+  "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkA.",
+  "scope": {
+    "in_scope": [
+      "Define inventory contract schema",
+      "Implement runtime /v1/inventory endpoint",
+      "Runtime endpoint unit tests",
+      "Add UCP m365_inventory MCP tool",
+      "MCP tool unit tests",
+      "Pre-commit + make test in both repos",
+      "Commit child phases (no push)"
+    ],
+    "out_of_scope": [
+      "Anything outside this parent's allowlist"
+    ],
+    "file_allowlist": [
+      "M365: src/m365_runtime/graph/inventory.py",
+      "M365: src/m365_runtime/__main__.py",
+      "M365: tests/test_m365_inventory_endpoint.py",
+      "UCP: src/ucp/m365_tools.py",
+      "UCP: tests/test_m365_integration.py",
+      "M365: docs/contracts/m365_inventory_schema.json"
+    ],
+    "file_denylist": [
+      "Files outside the inventory + MCP tool surface",
+      "Any file not in allowlist of the active child-phase task"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R2",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:R2",
+      "description": "Carry-through of master R2; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R2"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:R8",
+      "description": "Carry-through of master R8; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T1",
+      "name": "Define inventory contract schema",
+      "description": "Define JSON schema for the inventory response: {implemented_actions, alias_map, advertised_only, auth_mode_capability}. Document each field semantically.",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "docs/contracts/m365_inventory_schema.json or inline in code"
+      ],
+      "exit_criteria": [
+        "Schema document committed; reviewed for completeness"
+      ],
+      "validation_command": "test -f $M365_ROOT/docs/contracts/m365_inventory_schema.json || echo 'inline-acceptable'",
+      "implementation_notes": "Schema can live inline in m365_runtime/graph/inventory.py or as a separate JSON file.",
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T2",
+      "name": "Implement runtime /v1/inventory endpoint",
+      "description": "Add /v1/inventory endpoint in m365_runtime that returns the inventory contract: list READ_ONLY_REGISTRY actions, the alias map (loaded from ucp_m365_pack.client), and the advertised-but-unimplemented set (agents.yaml allowed_actions minus alias keys minus registry keys).",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "m365_runtime endpoint /v1/inventory"
+      ],
+      "exit_criteria": [
+        "GET /v1/inventory returns 200 with valid JSON matching schema"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_inventory_endpoint.py -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/inventory.py (new)",
+        "M365: src/m365_runtime/__main__.py (route wiring)"
+      ]
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T3",
+      "name": "Runtime endpoint unit tests",
+      "description": "Add tests/test_m365_inventory_endpoint.py covering: (a) implemented_actions matches READ_ONLY_REGISTRY keys, (b) alias_map matches LEGACY_ACTION_TO_RUNTIME_ACTION, (c) advertised_only correctly diffs agents.yaml.",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "tests/test_m365_inventory_endpoint.py"
+      ],
+      "exit_criteria": [
+        "pytest -k inventory_endpoint -x exits 0"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_inventory_endpoint.py -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: tests/test_m365_inventory_endpoint.py"
+      ]
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T4",
+      "name": "Add UCP m365_inventory MCP tool",
+      "description": "Add @mcp.tool() m365_inventory in src/ucp/m365_tools.py that fetches the runtime /v1/inventory and returns the parsed JSON. Include shape validation against the contract schema.",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "UCP src/ucp/m365_tools.py with m365_inventory tool"
+      ],
+      "exit_criteria": [
+        "MCP tool m365_inventory listed in tool registry; returns expected shape"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python -c \"from ucp.m365_tools import m365_inventory; print('importable')\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "UCP: src/ucp/m365_tools.py"
+      ]
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T5",
+      "name": "MCP tool unit tests",
+      "description": "Add test_m365_inventory_tool_shape in tests/test_m365_integration.py validating UCP mcp tool returns the contract.",
+      "requirement_refs": [
+        "R2"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "tests/test_m365_integration.py with inventory shape test"
+      ],
+      "exit_criteria": [
+        "pytest -k inventory_tool -x exits 0"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python -m pytest tests/test_m365_integration.py -k inventory_tool -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "UCP: tests/test_m365_integration.py"
+      ]
+    },
+    {
+      "id": "T6",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T6",
+      "name": "Pre-commit + make test in both repos",
+      "description": "Standard validation gate before commit.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T5"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "pre-commit clean",
+        "make test green"
+      ],
+      "exit_criteria": [
+        "exit 0 in both repos"
+      ],
+      "validation_command": "cd $M365_ROOT && pre-commit run --all-files && make test && cd $UCP_ROOT && pre-commit run --all-files && make test",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T7",
+      "ref": "plan:m365-cps-trkA-p2-inventory-tool:T7",
+      "name": "Commit child phases (no push)",
+      "description": "Commit format 'plan:m365-cps-trkA-p2: T1-T6 inventory tool'.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T6"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Commit in both repos"
+      ],
+      "exit_criteria": [
+        "git log shows the commit"
+      ],
+      "validation_command": "cd $UCP_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkA-p2' && cd $M365_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkA-p2'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Parent phase A2 integration",
+        "description": "All child tasks T1..T7 green; integration test pass",
+        "task_ref": "T1..T7",
+        "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_inventory_e2e.py",
+        "pass_criteria": "Integration test exit code 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any child task fails its validation_command",
+      "Parent GATE integration test fails",
+      "File outside parent allowlist touched"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Cross-repo drift during edits",
+        "impact": "medium",
+        "mitigation": "Per-task allowlist explicit per repo",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

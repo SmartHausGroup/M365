@@ -1,0 +1,299 @@
+plan_id: "plan:m365-cps-trkA-p4-end-to-end"
+parent_plan_id: "plan:m365-cps-trkA-observability"
+title: Parent Phase A4 — Track A End-to-End Integration
+version: 1.0
+status: draft
+owner: Phil Siniscalchi (Founder/Owner)
+date_created: 2026-05-01
+date_updated: 2026-05-01
+north_star_ref: docs/NORTH_STAR.md
+execution_plan_ref: docs/platform/EXECUTION_PLAN.md - M365 CPS Track A P4
+domain: framework
+math_algorithm_scope: false
+north_star_alignment:
+  source: docs/NORTH_STAR.md
+  principles:
+    - Gates-by-construction integrity (denials must be honest)
+    - Tool-first determinism (capability surface must equal advertised surface)
+    - "Fail-closed semantics (unknown action != blocked write)"
+    - Operator observability (the system must explain its own state)
+    - Plan-first execution with strict per-phase gates
+  anti_alignment:
+    - Mutation fence on actual write actions stays on
+    - Risk-tier classification per agent stays unchanged
+    - Audit envelope format stays unchanged
+    - Two-phase confirmation gate for high-risk mutations stays on
+intent_capture:
+  user_stated_requirements:
+    - Live UCP+M365 e2e validation of Track A; governance closure; commit + push + merge.
+  intent_doc_ref: captured in this plan
+  intent_verification: Tasks T1..T4 together satisfy this parent phase's objective.
+objective: Live UCP+M365 e2e validation of Track A; governance closure; commit + push + merge.
+current_state: Parent phase scope draft; no implementation yet.
+target_state: All child tasks complete; GATE green; commit + push to feat/m365-cps-trkA.
+scope:
+  in_scope:
+    - Live UCP+M365 spin-up integration test
+    - Verify status semantics on real failed calls
+    - Verify pre-flight diagnostic against live tenant
+    - Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG (both repos)
+  out_of_scope:
+    - Anything outside this parent's allowlist
+  file_allowlist:
+    - "UCP: tests/integration/m365_cps_trkA_e2e.py"
+    - "UCP: tests/integration/m365_unknown_action_live.py"
+    - "UCP: tests/integration/m365_preflight_live.py"
+    - "UCP: docs/platform/EXECUTION_PLAN.md"
+    - "UCP: docs/platform/CODDEX_ACTION_LOG.md"
+    - "M365: Operations/EXECUTION_PLAN.md"
+    - "M365: Operations/ACTION_LOG.md"
+    - "M365: CHANGELOG.md"
+  file_denylist:
+    - Source files (those are p1-p3)
+    - Any file not in allowlist of the active child-phase task
+requirements:
+  - id: R1
+    ref: "plan:m365-cps-trkA-p4-end-to-end:R1"
+    description: Carry-through of master R1; this parent phase contributes scoped behavior.
+    acceptance_criteria: Per-task exit criteria; parent GATE passes.
+    depends_on:
+      - none
+    user_intent_trace: Master R1
+  - id: R2
+    ref: "plan:m365-cps-trkA-p4-end-to-end:R2"
+    description: Carry-through of master R2; this parent phase contributes scoped behavior.
+    acceptance_criteria: Per-task exit criteria; parent GATE passes.
+    depends_on:
+      - none
+    user_intent_trace: Master R2
+  - id: R3
+    ref: "plan:m365-cps-trkA-p4-end-to-end:R3"
+    description: Carry-through of master R3; this parent phase contributes scoped behavior.
+    acceptance_criteria: Per-task exit criteria; parent GATE passes.
+    depends_on:
+      - none
+    user_intent_trace: Master R3
+  - id: R8
+    ref: "plan:m365-cps-trkA-p4-end-to-end:R8"
+    description: Carry-through of master R8; this parent phase contributes scoped behavior.
+    acceptance_criteria: Per-task exit criteria; parent GATE passes.
+    depends_on:
+      - none
+    user_intent_trace: Master R8
+execution_sequence:
+  ordering:
+    - T1
+    - T2
+    - T3
+    - T4
+  stop_on_first_failure: true
+  maths_phase_mapping: null
+tasks:
+  - id: T1
+    ref: "plan:m365-cps-trkA-p4-end-to-end:T1"
+    name: Live UCP+M365 spin-up integration test
+    description: "Spin up UCP MCP server and M365 runtime locally. Authenticate via device-code. Run end-to-end: m365_inventory call, m365_auth_check call, unknown action call."
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+    depends_on: []
+    maths_phase: null
+    deliverables:
+      - Live integration evidence in artifacts/diagnostics/m365_cps_trkA_e2e.json
+    exit_criteria:
+      - All three calls return correct shapes; status codes honest
+    validation_command: "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_cps_trkA_e2e.py"
+    implementation_notes: null
+    files_to_read: []
+    files_to_modify:
+      - "UCP: tests/integration/m365_cps_trkA_e2e.py (new)"
+  - id: T2
+    ref: "plan:m365-cps-trkA-p4-end-to-end:T2"
+    name: Verify status semantics on real failed calls
+    description: Trigger known unknown actions against the live runtime. Verify response status_class == 'unknown_action'.
+    requirement_refs:
+      - R1
+    depends_on:
+      - T1
+    maths_phase: null
+    deliverables:
+      - Diagnostic evidence captured
+    exit_criteria:
+      - unknown_action observed for sites.list, calendar.list, mail.folders, etc.
+    validation_command: "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_unknown_action_live.py"
+    implementation_notes: null
+    files_to_read: []
+    files_to_modify: []
+  - id: T3
+    ref: "plan:m365-cps-trkA-p4-end-to-end:T3"
+    name: Verify pre-flight diagnostic against live tenant
+    description: Call m365_auth_check after sign-in. Validate preflight.invokable_actions matches device-code-compatible actions and blocked_by_auth_mode shows the rest.
+    requirement_refs:
+      - R3
+    depends_on:
+      - T2
+    maths_phase: null
+    deliverables:
+      - Diagnostic evidence captured
+    exit_criteria:
+      - preflight intersection accurate vs. registry auth_modes
+    validation_command: "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_preflight_live.py"
+    implementation_notes: null
+    files_to_read: []
+    files_to_modify: []
+  - id: T4
+    ref: "plan:m365-cps-trkA-p4-end-to-end:T4"
+    name: Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG (both repos)
+    description: Add Track A complete entries to CHANGELOG (M365), EXECUTION_PLAN.md (UCP and M365), and ACTION_LOG (both).
+    requirement_refs:
+      - R8
+    depends_on:
+      - T3
+    maths_phase: null
+    deliverables:
+      - CHANGELOG entry
+      - EXECUTION_PLAN entries
+      - ACTION_LOG entries
+    exit_criteria:
+      - All four governance docs updated
+    validation_command: "cd $UCP_ROOT && git diff --stat docs/platform/EXECUTION_PLAN.md docs/platform/CODDEX_ACTION_LOG.md && cd $M365_ROOT && git diff --stat Operations/EXECUTION_PLAN.md Operations/ACTION_LOG.md CHANGELOG.md"
+    implementation_notes: null
+    files_to_read: []
+    files_to_modify:
+      - "UCP: docs/platform/EXECUTION_PLAN.md"
+      - "UCP: docs/platform/CODDEX_ACTION_LOG.md"
+      - "M365: Operations/EXECUTION_PLAN.md"
+      - "M365: Operations/ACTION_LOG.md"
+      - "M365: CHANGELOG.md"
+gates:
+  checks:
+    - id: "CHECK:C0"
+      name: Parent phase A4 integration
+      description: All child tasks T1..T4 green; integration test pass
+      task_ref: T1..T4
+      validation_command: "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_cps_trkA_e2e.py"
+      pass_criteria: Integration test exit code 0
+      fail_action: block
+  decision:
+    go_rule: All gates pass
+    no_go_rule: Any gate fails
+  no_go_triggers:
+    - Any child task fails its validation_command
+    - Parent GATE integration test fails
+    - File outside parent allowlist touched
+determinism: null
+artifacts: []
+environment:
+  python_version: ">=3.11"
+  venv: .venv/bin/python
+  additional_dependencies: []
+  hardware: standard CI; live tenant for GATE smoke tests
+  external_data:
+    - live M365 tenant (smarthausgroup.com)
+  pre_notebook_check: N/A
+implementation_approach:
+  options_considered:
+    - id: A
+      description: All-at-once monolithic change
+      pros:
+        - fewer commits
+      cons:
+        - drift risk
+        - no per-phase gates
+    - id: B
+      description: Per-track / per-parent / per-child phase hierarchy
+      pros:
+        - enforced cadence
+        - per-task scope fence
+      cons:
+        - more files
+  chosen: B
+  rationale: Granular commits enforce cadence; per-task MATHS prompts give executor zero drift opportunity.
+  rejected_rationale:
+    A: Too coarse; would require massive PR review and lose per-phase gate value
+  adr_ref: null
+risks:
+  items:
+    - risk: Cross-repo drift during edits
+      impact: medium
+      mitigation: Per-task allowlist explicit per repo
+      status: mitigated
+  hard_blockers: []
+rollback:
+  procedure:
+    - Revert commits on the feature branch.
+    - "If parent phase pushed: revert push via new revert commits."
+    - Update ACTION_LOG with rollback entry.
+    - Set this plan status to cancelled.
+  files_to_revert:
+    - all files in this plan's allowlist that were modified
+  artifacts_to_delete:
+    - any generated artifact files for this plan
+  governance_updates_on_rollback:
+    - ACTION_LOG entry with rollback reason
+    - EXECUTION_PLAN revert progress
+    - "This plan: status to cancelled"
+prompt_references:
+  maths_template: agent_governance/master-maths-prompt-template.md
+  prompt_doc: null
+  prompt_kickoff: null
+  per_task_prompts:
+    - docs/prompts/codex-m365-cps-trkA-p4-end-to-end-T1.md
+    - docs/prompts/codex-m365-cps-trkA-p4-end-to-end-T2.md
+    - docs/prompts/codex-m365-cps-trkA-p4-end-to-end-T3.md
+    - docs/prompts/codex-m365-cps-trkA-p4-end-to-end-T4.md
+traceability:
+  files_created:
+    notebooks: []
+    invariants: []
+    lemmas: []
+    code_files: []
+    config_artifacts: []
+  index_updates:
+    traceability_index: null
+    invariant_index: null
+    math_readme: null
+    lemmas_appendix: null
+governance_closure:
+  action_log: docs/platform/CODDEX_ACTION_LOG.md (UCP) / Operations/ACTION_LOG.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  project_status: docs/platform/PROJECT_STATUS.md (UCP)
+  invariant_promotions: []
+  lemma_promotions: []
+execution_outcome:
+  task_checklist: []
+  gate_checklist: []
+  final_decision: null
+  approved_by: null
+  completion_timestamp: null
+when_blocked:
+  format: "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}"
+  escalation:
+    primary: Phil Siniscalchi (Founder/Owner)
+    secondary: Engineering lead
+agent_constraints:
+  - Do not touch files outside Section 5 file allowlist.
+  - Do not skip or reorder tasks (Section 7 strict ordering).
+  - Do not modify thresholds or invariants to make gates green without owner approval.
+  - Do not execute until plan status is approved.
+  - "Reference plan:{plan-id}:{task-id} in all action log entries and commits."
+  - Do not add tasks, gates, or deliverables not in this plan without owner approval.
+  - Use .venv/bin/python for all Python commands.
+  - Call validate_action MCP tool before any write operation (UCP server).
+  - Each child phase commits locally; no push until parent-phase GATE is green.
+  - Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.
+  - Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green.
+references:
+  north_star: docs/NORTH_STAR.md (UCP) / Operations/NORTHSTAR.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  applicable_rules:
+    - ".cursor/rules/**/*.mdc (M365)"
+  related_plans:
+    - "plan:m365-cps-trkA-observability"
+  related_docs: []
+  maths_prompt_template: agent_governance/master-maths-prompt-template.md
+_template:
+  version: 1.0
+  last_updated: 2026-05-01
+  schema_json: agent_governance/PLAN_TEMPLATE_SCHEMA.json

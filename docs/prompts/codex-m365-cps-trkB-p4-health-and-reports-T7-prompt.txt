@@ -1,0 +1,16 @@
+Plan: plan:m365-cps-trkB-p4-health-and-reports:T7
+Task: Add graph.reports.teams_activity registry entry
+Branch: feat/m365-cps-trkB
+Detailed prompt: docs/prompts/codex-m365-cps-trkB-p4-health-and-reports-T7.md
+
+Governance:
+1. Read M365 AGENTS.md (or UCP CLAUDE.md, identical)
+2. Read parent phase plan: plans/m365-cps-trkB-p4-health-and-reports/m365-cps-trkB-p4-health-and-reports.md
+3. Read master plan: plans/m365-capability-pack-surface-remediation/m365-capability-pack-surface-remediation.md
+4. Read the detailed prompt above
+
+Approval: this prompt is pre-approved as part of plan:m365-capability-pack-surface-remediation.
+Execute T7 only. Do NOT proceed past this task. Do NOT push.
+
+Validation command (must exit 0):
+cd $M365_ROOT && .venv/bin/python -c "from m365_runtime.graph.registry import get_action; spec = get_action('graph.reports.teams_activity'); assert spec.workload == 'reports'; print('OK')"

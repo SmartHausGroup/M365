@@ -1,0 +1,16 @@
+Plan: plan:m365-cps-trkA-p1-status-code-semantics:T4
+Task: Update UCP m365_tools.py to surface unknown_action
+Branch: feat/m365-cps-trkA
+Detailed prompt: docs/prompts/codex-m365-cps-trkA-p1-status-code-semantics-T4.md
+
+Governance:
+1. Read M365 AGENTS.md (or UCP CLAUDE.md, identical)
+2. Read parent phase plan: plans/m365-cps-trkA-p1-status-code-semantics/m365-cps-trkA-p1-status-code-semantics.md
+3. Read master plan: plans/m365-capability-pack-surface-remediation/m365-capability-pack-surface-remediation.md
+4. Read the detailed prompt above
+
+Approval: this prompt is pre-approved as part of plan:m365-capability-pack-surface-remediation.
+Execute T4 only. Do NOT proceed past this task. Do NOT push.
+
+Validation command (must exit 0):
+cd $UCP_ROOT && grep -n 'unknown_action\|mutation_fence' src/ucp/m365_tools.py || true

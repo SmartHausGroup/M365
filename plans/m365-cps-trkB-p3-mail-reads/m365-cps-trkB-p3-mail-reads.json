@@ -1,0 +1,405 @@
+{
+  "plan_id": "plan:m365-cps-trkB-p3-mail-reads",
+  "parent_plan_id": "plan:m365-cps-trkB-coverage",
+  "title": "Parent Phase B3 \u2014 Mail Reads",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track B P3",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Add mail.list, mail.message_get, mail.attachments to runtime + alias + YAML."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T10 together satisfy this parent phase's objective."
+  },
+  "objective": "Add mail.list, mail.message_get, mail.attachments to runtime + alias + YAML.",
+  "current_state": "Parent phase scope draft; no implementation yet.",
+  "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkB.",
+  "scope": {
+    "in_scope": [
+      "Read context for parent phase",
+      "Add graph.mail.list registry entry",
+      "Add graph.mail.message_get registry entry",
+      "Add graph.mail.attachments registry entry",
+      "Update legacy alias table",
+      "Update YAML registry mirror",
+      "M365 unit tests",
+      "UCP routing unit tests",
+      "Pre-commit + make test",
+      "Commit (no push)"
+    ],
+    "out_of_scope": [
+      "Anything outside this parent's allowlist"
+    ],
+    "file_allowlist": [
+      "M365: src/m365_runtime/graph/registry.py",
+      "M365: src/ucp_m365_pack/client.py",
+      "M365: registry/action_registry.yaml",
+      "M365: tests/test_m365_pack_client.py",
+      "UCP: tests/test_m365_integration.py"
+    ],
+    "file_denylist": [
+      "Files outside mail coverage scope",
+      "Any file not in allowlist of the active child-phase task"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R4",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:R4",
+      "description": "Carry-through of master R4; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R4"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:R8",
+      "description": "Carry-through of master R8; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "T8",
+      "T9",
+      "T10"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T1",
+      "name": "Read context for parent phase",
+      "description": "Read existing m365_runtime/graph/registry.py, ucp_m365_pack/client.py alias table, registry/action_registry.yaml. Document existing patterns to match.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "Read confirmation"
+      ],
+      "exit_criteria": [
+        "All three files read"
+      ],
+      "validation_command": "test -f $M365_ROOT/src/m365_runtime/graph/registry.py",
+      "implementation_notes": null,
+      "files_to_read": [
+        "M365: src/m365_runtime/graph/registry.py",
+        "M365: src/ucp_m365_pack/client.py",
+        "M365: registry/action_registry.yaml"
+      ],
+      "files_to_modify": []
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T2",
+      "name": "Add graph.mail.list registry entry",
+      "description": "Add ActionSpec for graph.mail.list (workload exchange; auth_modes ['auth_code_pkce', 'device_code']; scopes ['Mail.Read']; risk low; rw read) to READ_ONLY_REGISTRY in src/m365_runtime/graph/registry.py. Endpoint per parent plan B-action spec table.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/graph/registry.py with graph.mail.list ActionSpec"
+      ],
+      "exit_criteria": [
+        "get_action('graph.mail.list') returns the spec; admit() works"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from m365_runtime.graph.registry import get_action; spec = get_action('graph.mail.list'); assert spec.workload == 'exchange'; print('OK')\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/registry.py"
+      ]
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T3",
+      "name": "Add graph.mail.message_get registry entry",
+      "description": "Add ActionSpec for graph.mail.message_get (workload exchange; auth_modes ['auth_code_pkce', 'device_code']; scopes ['Mail.Read']; risk low; rw read) to READ_ONLY_REGISTRY in src/m365_runtime/graph/registry.py. Endpoint per parent plan B-action spec table.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/graph/registry.py with graph.mail.message_get ActionSpec"
+      ],
+      "exit_criteria": [
+        "get_action('graph.mail.message_get') returns the spec; admit() works"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from m365_runtime.graph.registry import get_action; spec = get_action('graph.mail.message_get'); assert spec.workload == 'exchange'; print('OK')\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/registry.py"
+      ]
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T4",
+      "name": "Add graph.mail.attachments registry entry",
+      "description": "Add ActionSpec for graph.mail.attachments (workload exchange; auth_modes ['auth_code_pkce', 'device_code']; scopes ['Mail.Read']; risk low; rw read) to READ_ONLY_REGISTRY in src/m365_runtime/graph/registry.py. Endpoint per parent plan B-action spec table.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/m365_runtime/graph/registry.py with graph.mail.attachments ActionSpec"
+      ],
+      "exit_criteria": [
+        "get_action('graph.mail.attachments') returns the spec; admit() works"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from m365_runtime.graph.registry import get_action; spec = get_action('graph.mail.attachments'); assert spec.workload == 'exchange'; print('OK')\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/registry.py"
+      ]
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T5",
+      "name": "Update legacy alias table",
+      "description": "Update LEGACY_ACTION_TO_RUNTIME_ACTION in ucp_m365_pack/client.py with legacy_name -> graph.X.Y mappings for the new actions.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "src/ucp_m365_pack/client.py with new alias entries"
+      ],
+      "exit_criteria": [
+        "map_legacy_action_to_runtime() returns expected runtime action_id for each legacy name"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from ucp_m365_pack.client import map_legacy_action_to_runtime, LEGACY_ACTION_TO_RUNTIME_ACTION; assert len(LEGACY_ACTION_TO_RUNTIME_ACTION) > 22\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/ucp_m365_pack/client.py"
+      ]
+    },
+    {
+      "id": "T6",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T6",
+      "name": "Update YAML registry mirror",
+      "description": "Update registry/action_registry.yaml with corresponding stanzas for the new graph.* actions.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T5"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "registry/action_registry.yaml with new entries"
+      ],
+      "exit_criteria": [
+        "yaml.safe_load passes; new keys present"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"import yaml; data=yaml.safe_load(open('registry/action_registry.yaml')); assert len(data['actions']) > 11\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: registry/action_registry.yaml"
+      ]
+    },
+    {
+      "id": "T7",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T7",
+      "name": "M365 unit tests",
+      "description": "Add per-action unit tests in tests/test_m365_pack_client.py covering: registry lookup, admit() success, admit() denial when missing scope.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T6"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Updated test file"
+      ],
+      "exit_criteria": [
+        "pytest exits 0"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_pack_client.py -k 'p3' -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: tests/test_m365_pack_client.py"
+      ]
+    },
+    {
+      "id": "T8",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T8",
+      "name": "UCP routing unit tests",
+      "description": "Add UCP-side test_m365_integration entries that exercise execute_m365_action with the new actions through the alias table.",
+      "requirement_refs": [
+        "R4"
+      ],
+      "depends_on": [
+        "T7"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Updated UCP test file"
+      ],
+      "exit_criteria": [
+        "pytest exits 0"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python -m pytest tests/test_m365_integration.py -k 'p3' -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "UCP: tests/test_m365_integration.py"
+      ]
+    },
+    {
+      "id": "T9",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T9",
+      "name": "Pre-commit + make test",
+      "description": "Standard validation gate.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T8"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "pre-commit + make test green in both repos"
+      ],
+      "exit_criteria": [
+        "exit 0"
+      ],
+      "validation_command": "cd $M365_ROOT && pre-commit run --all-files && make test && cd $UCP_ROOT && pre-commit run --all-files && make test",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T10",
+      "ref": "plan:m365-cps-trkB-p3-mail-reads:T10",
+      "name": "Commit (no push)",
+      "description": "Commit format 'plan:m365-cps-trkB-p3: T1-T9 <parent name>'.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T9"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Commit in both repos"
+      ],
+      "exit_criteria": [
+        "git log shows commit"
+      ],
+      "validation_command": "cd $UCP_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkB-p3' && cd $M365_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkB-p3'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Parent phase B3 integration",
+        "description": "All child tasks T1..T10 green; integration test pass",
+        "task_ref": "T1..T10",
+        "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_mail_e2e.py",
+        "pass_criteria": "Integration test exit code 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any child task fails its validation_command",
+      "Parent GATE integration test fails",
+      "File outside parent allowlist touched"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Cross-repo drift during edits",
+        "impact": "medium",
+        "mitigation": "Per-task allowlist explicit per repo",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

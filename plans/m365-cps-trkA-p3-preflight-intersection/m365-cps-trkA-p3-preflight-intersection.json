@@ -1,0 +1,319 @@
+{
+  "plan_id": "plan:m365-cps-trkA-p3-preflight-intersection",
+  "parent_plan_id": "plan:m365-cps-trkA-observability",
+  "title": "Parent Phase A3 \u2014 Pre-flight Scope/Registry Intersection",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track A P3",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Add token-vs-registry intersection to /v1/auth/check and pass through UCP. Operators know what their session can do before they call."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T7 together satisfy this parent phase's objective."
+  },
+  "objective": "Add token-vs-registry intersection to /v1/auth/check and pass through UCP. Operators know what their session can do before they call.",
+  "current_state": "Parent phase scope draft; no implementation yet.",
+  "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkA.",
+  "scope": {
+    "in_scope": [
+      "Define intersection algorithm",
+      "Implement intersection in runtime",
+      "Surface in /v1/auth/check response",
+      "Surface in UCP m365_auth_check",
+      "Unit tests both repos",
+      "Pre-commit + make test",
+      "Commit (no push)"
+    ],
+    "out_of_scope": [
+      "Anything outside this parent's allowlist"
+    ],
+    "file_allowlist": [
+      "M365: src/m365_runtime/graph/preflight.py",
+      "M365: src/m365_runtime/auth/oauth.py",
+      "M365: tests/test_m365_auth_check.py",
+      "UCP: src/ucp/m365_tools.py",
+      "UCP: tests/test_m365_integration.py",
+      "M365: docs/contracts/m365_preflight_intersection.md"
+    ],
+    "file_denylist": [
+      "Files outside auth/preflight surface",
+      "Any file not in allowlist of the active child-phase task"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R3",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:R3",
+      "description": "Carry-through of master R3; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R3"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:R8",
+      "description": "Carry-through of master R8; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T1",
+      "name": "Define intersection algorithm",
+      "description": "Document the algorithm for token-vs-registry intersection: invokable = {a in REGISTRY : session.auth_mode in a.auth_modes AND a.scopes <= session.granted_scopes}. blocked_by_auth_mode = REGISTRY \\ invokable filtered by auth_mode. blocked_by_scopes = REGISTRY \\ invokable filtered by scopes.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "Algorithm doc in docs/contracts/m365_preflight_intersection.md or inline"
+      ],
+      "exit_criteria": [
+        "Doc committed; reviewed"
+      ],
+      "validation_command": "test -f $M365_ROOT/docs/contracts/m365_preflight_intersection.md || echo 'inline-acceptable'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T2",
+      "name": "Implement intersection in runtime",
+      "description": "Add compute_intersection(session_state) function in m365_runtime that returns {invokable_actions, blocked_by_auth_mode, blocked_by_scopes}.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "m365_runtime/graph/preflight.py with compute_intersection"
+      ],
+      "exit_criteria": [
+        "Function callable; returns the contract"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -c \"from m365_runtime.graph.preflight import compute_intersection; print('importable')\"",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/graph/preflight.py (new)"
+      ]
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T3",
+      "name": "Surface in /v1/auth/check response",
+      "description": "Update auth_check handler in m365_runtime to call compute_intersection and include the result under 'preflight' key in response.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Updated /v1/auth/check response shape"
+      ],
+      "exit_criteria": [
+        "GET /v1/auth/check response includes preflight key"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest tests/test_m365_auth_check.py -k preflight -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "M365: src/m365_runtime/auth/oauth.py or wherever auth_check lives"
+      ]
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T4",
+      "name": "Surface in UCP m365_auth_check",
+      "description": "Update UCP m365_auth_check tool to pass through the preflight intersection in its return.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "UCP m365_auth_check returns preflight key"
+      ],
+      "exit_criteria": [
+        "MCP call m365_auth_check shows preflight"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python -m pytest tests/test_m365_integration.py -k auth_check_preflight -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "UCP: src/ucp/m365_tools.py"
+      ]
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T5",
+      "name": "Unit tests both repos",
+      "description": "M365: test_compute_intersection coverage. UCP: test_auth_check_preflight_passthrough.",
+      "requirement_refs": [
+        "R3"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Test files updated in both repos"
+      ],
+      "exit_criteria": [
+        "pytest -k preflight -x exits 0 in both"
+      ],
+      "validation_command": "cd $M365_ROOT && .venv/bin/python -m pytest -k preflight -x && cd $UCP_ROOT && .venv/bin/python -m pytest -k preflight -x",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T6",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T6",
+      "name": "Pre-commit + make test",
+      "description": "Standard validation.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T5"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "green in both repos"
+      ],
+      "exit_criteria": [
+        "exit 0"
+      ],
+      "validation_command": "cd $M365_ROOT && pre-commit run --all-files && make test && cd $UCP_ROOT && pre-commit run --all-files && make test",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T7",
+      "ref": "plan:m365-cps-trkA-p3-preflight-intersection:T7",
+      "name": "Commit (no push)",
+      "description": "Commit message 'plan:m365-cps-trkA-p3: T1-T6 preflight intersection'.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T6"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Commit in both repos"
+      ],
+      "exit_criteria": [
+        "git log shows commit"
+      ],
+      "validation_command": "cd $UCP_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkA-p3' && cd $M365_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkA-p3'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Parent phase A3 integration",
+        "description": "All child tasks T1..T7 green; integration test pass",
+        "task_ref": "T1..T7",
+        "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_preflight_e2e.py",
+        "pass_criteria": "Integration test exit code 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any child task fails its validation_command",
+      "Parent GATE integration test fails",
+      "File outside parent allowlist touched"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Cross-repo drift during edits",
+        "impact": "medium",
+        "mitigation": "Per-task allowlist explicit per repo",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

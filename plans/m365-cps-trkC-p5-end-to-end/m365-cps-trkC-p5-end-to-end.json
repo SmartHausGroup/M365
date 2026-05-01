@@ -1,0 +1,280 @@
+{
+  "plan_id": "plan:m365-cps-trkC-p5-end-to-end",
+  "parent_plan_id": "plan:m365-cps-trkC-truth-in-advertising",
+  "title": "Parent Phase C5 \u2014 Track C End-to-End",
+  "version": "1.0",
+  "status": "draft",
+  "owner": "Phil Siniscalchi (Founder/Owner)",
+  "date_created": "2026-05-01",
+  "date_updated": "2026-05-01",
+  "north_star_ref": "docs/NORTH_STAR.md",
+  "execution_plan_ref": "docs/platform/EXECUTION_PLAN.md - M365 CPS Track C P5",
+  "domain": "framework",
+  "math_algorithm_scope": false,
+  "north_star_alignment": {
+    "source": "docs/NORTH_STAR.md",
+    "principles": [
+      "Gates-by-construction integrity (denials must be honest)",
+      "Tool-first determinism (capability surface must equal advertised surface)",
+      "Fail-closed semantics (unknown action != blocked write)",
+      "Operator observability (the system must explain its own state)",
+      "Plan-first execution with strict per-phase gates"
+    ],
+    "anti_alignment": [
+      "Mutation fence on actual write actions stays on",
+      "Risk-tier classification per agent stays unchanged",
+      "Audit envelope format stays unchanged",
+      "Two-phase confirmation gate for high-risk mutations stays on"
+    ]
+  },
+  "intent_capture": {
+    "user_stated_requirements": [
+      "Live e2e of planned vs implemented action behavior; docstring linter green; governance closure."
+    ],
+    "intent_doc_ref": "captured in this plan",
+    "intent_verification": "Tasks T1..T5 together satisfy this parent phase's objective."
+  },
+  "objective": "Live e2e of planned vs implemented action behavior; docstring linter green; governance closure.",
+  "current_state": "Parent phase scope draft; no implementation yet.",
+  "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkC.",
+  "scope": {
+    "in_scope": [
+      "E2E: invoke planned action returns not_yet_implemented",
+      "E2E: invoke implemented action returns success",
+      "E2E: docstrings match registry",
+      "Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG",
+      "Final commit (Track C complete)"
+    ],
+    "out_of_scope": [
+      "Anything outside this parent's allowlist"
+    ],
+    "file_allowlist": [
+      "UCP: tests/integration/m365_planned_action_live.py",
+      "UCP: tests/integration/m365_implemented_action_live.py",
+      "UCP: docs/platform/EXECUTION_PLAN.md",
+      "UCP: docs/platform/CODDEX_ACTION_LOG.md",
+      "M365: Operations/EXECUTION_PLAN.md",
+      "M365: Operations/ACTION_LOG.md",
+      "M365: CHANGELOG.md"
+    ],
+    "file_denylist": [
+      "Source files (those are p1-p4)",
+      "Any file not in allowlist of the active child-phase task"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "R6",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:R6",
+      "description": "Carry-through of master R6; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R6"
+    },
+    {
+      "id": "R7",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:R7",
+      "description": "Carry-through of master R7; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R7"
+    },
+    {
+      "id": "R8",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:R8",
+      "description": "Carry-through of master R8; this parent phase contributes scoped behavior.",
+      "acceptance_criteria": "Per-task exit criteria; parent GATE passes.",
+      "depends_on": [
+        "none"
+      ],
+      "user_intent_trace": "Master R8"
+    }
+  ],
+  "execution_sequence": {
+    "ordering": [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5"
+    ],
+    "stop_on_first_failure": true,
+    "maths_phase_mapping": null
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:T1",
+      "name": "E2E: invoke planned action returns not_yet_implemented",
+      "description": "Live test: pick a known planned action; call via UCP; assert status_class == 'not_yet_implemented'.",
+      "requirement_refs": [
+        "R6"
+      ],
+      "depends_on": [],
+      "maths_phase": null,
+      "deliverables": [
+        "Diagnostic evidence"
+      ],
+      "exit_criteria": [
+        "Status correct"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_planned_action_live.py",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T2",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:T2",
+      "name": "E2E: invoke implemented action returns success",
+      "description": "Live test on an implemented action; assert success.",
+      "requirement_refs": [
+        "R6"
+      ],
+      "depends_on": [
+        "T1"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Diagnostic evidence"
+      ],
+      "exit_criteria": [
+        "Status correct"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_implemented_action_live.py",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T3",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:T3",
+      "name": "E2E: docstrings match registry",
+      "description": "Run docstring linter against current registry state; assert no drift.",
+      "requirement_refs": [
+        "R7"
+      ],
+      "depends_on": [
+        "T2"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Linter green"
+      ],
+      "exit_criteria": [
+        "exit 0"
+      ],
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python scripts/check_docstring_markers.py",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    },
+    {
+      "id": "T4",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:T4",
+      "name": "Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG",
+      "description": "Track C completion entries.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T3"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Governance docs updated"
+      ],
+      "exit_criteria": [
+        "git diff shows updates"
+      ],
+      "validation_command": "cd $UCP_ROOT && git diff --stat docs/platform/EXECUTION_PLAN.md && cd $M365_ROOT && git diff --stat Operations/EXECUTION_PLAN.md",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": [
+        "UCP: docs/platform/EXECUTION_PLAN.md",
+        "UCP: docs/platform/CODDEX_ACTION_LOG.md",
+        "M365: Operations/EXECUTION_PLAN.md",
+        "M365: Operations/ACTION_LOG.md",
+        "M365: CHANGELOG.md"
+      ]
+    },
+    {
+      "id": "T5",
+      "ref": "plan:m365-cps-trkC-p5-end-to-end:T5",
+      "name": "Final commit (Track C complete)",
+      "description": "Commit + ready for merge.",
+      "requirement_refs": [
+        "R8"
+      ],
+      "depends_on": [
+        "T4"
+      ],
+      "maths_phase": null,
+      "deliverables": [
+        "Final commit"
+      ],
+      "exit_criteria": [
+        "git log shows commit"
+      ],
+      "validation_command": "cd $M365_ROOT && git log --oneline -1 | grep 'plan:m365-cps-trkC-p5'",
+      "implementation_notes": null,
+      "files_to_read": [],
+      "files_to_modify": []
+    }
+  ],
+  "gates": {
+    "checks": [
+      {
+        "id": "CHECK:C0",
+        "name": "Parent phase C5 integration",
+        "description": "All child tasks T1..T5 green; integration test pass",
+        "task_ref": "T1..T5",
+        "validation_command": "cd $UCP_ROOT && .venv/bin/python tests/integration/m365_cps_trkC_e2e.py",
+        "pass_criteria": "Integration test exit code 0",
+        "fail_action": "block"
+      }
+    ],
+    "decision": {
+      "go_rule": "All gates pass",
+      "no_go_rule": "Any gate fails"
+    },
+    "no_go_triggers": [
+      "Any child task fails its validation_command",
+      "Parent GATE integration test fails",
+      "File outside parent allowlist touched"
+    ]
+  },
+  "risks": {
+    "items": [
+      {
+        "risk": "Cross-repo drift during edits",
+        "impact": "medium",
+        "mitigation": "Per-task allowlist explicit per repo",
+        "status": "mitigated"
+      }
+    ],
+    "hard_blockers": []
+  },
+  "agent_constraints": [
+    "Do not touch files outside Section 5 file allowlist.",
+    "Do not skip or reorder tasks (Section 7 strict ordering).",
+    "Do not modify thresholds or invariants to make gates green without owner approval.",
+    "Do not execute until plan status is approved.",
+    "Reference plan:{plan-id}:{task-id} in all action log entries and commits.",
+    "Do not add tasks, gates, or deliverables not in this plan without owner approval.",
+    "Use .venv/bin/python for all Python commands.",
+    "Call validate_action MCP tool before any write operation (UCP server).",
+    "Each child phase commits locally; no push until parent-phase GATE is green.",
+    "Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.",
+    "Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green."
+  ],
+  "_template": {
+    "version": "1.0",
+    "last_updated": "2026-05-01",
+    "schema_yaml": "agent_governance/PLAN_TEMPLATE_SCHEMA.yaml"
+  }
+}

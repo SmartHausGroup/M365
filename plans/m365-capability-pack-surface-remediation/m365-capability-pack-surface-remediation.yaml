@@ -1,0 +1,385 @@
+plan_id: "plan:m365-capability-pack-surface-remediation"
+parent_plan_id: null
+title: M365 Capability Pack Surface Remediation
+version: 1.0
+status: draft
+owner: Phil Siniscalchi (Founder/Owner)
+date_created: 2026-05-01
+date_updated: 2026-05-01
+north_star_ref: docs/NORTH_STAR.md
+execution_plan_ref: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365) - M365 Capability Pack Remediation
+domain: framework
+math_algorithm_scope: false
+north_star_alignment:
+  source: docs/NORTH_STAR.md
+  principles:
+    - Gates-by-construction integrity (denials must be honest)
+    - Tool-first determinism (capability surface must equal advertised surface)
+    - "Fail-closed semantics (unknown action != blocked write)"
+    - Operator observability (the system must explain its own state)
+    - Plan-first execution with strict per-phase gates
+  anti_alignment:
+    - Mutation fence on actual write actions stays on
+    - Risk-tier classification per agent stays unchanged
+    - Audit envelope format stays unchanged
+    - Two-phase confirmation gate for high-risk mutations stays on
+intent_capture:
+  user_stated_requirements:
+    - Make the gate's denial reasons honest - unknown action must not masquerade as mutation_fence.
+    - Build out the missing read coverage so the runtime actually implements what agents.yaml advertises.
+    - Surface coverage status in the contract so operators see the gap explicitly instead of finding it call-by-call.
+    - Master plan with three tracks; granular child phases so an executing agent does not drift.
+    - Each child commits, each parent commits + pushes, each track merges. Test before each gate.
+  intent_doc_ref: captured in this plan
+  intent_verification: "Track A (status semantics + observability) -> user requirement 1. Track B (coverage build-out) -> user requirement 2. Track C (coverage status contract) -> user requirement 3. Section 7 strict ordering + per-phase validation commands -> user requirements 4 + 5."
+objective: Remediate the M365 capability pack so its advertised surface matches its implemented surface, denials are semantically honest, and operators have a pre-flight diagnostic to see the gap. Delivered in three tracks of increasing scope.
+current_state: "Of 161 actions advertised in agents.yaml, only 11 are implemented in READ_ONLY_REGISTRY (~7% coverage). _denial_to_status() collapses unknown_action into mutation_fence, making denials misleading. There is no introspection of the runtime's own surface. UCP exposes 23+ m365_* MCP tools whose docstrings advertise actions the runtime does not know."
+target_state: "Track A complete: denial reasons honest; m365_inventory tool exists; auth_check surfaces token-vs-registry intersection. Track B complete: SharePoint/Calendar/Mail/Health/Reports/Directory/Teams reads implemented; auth-mode tiers (read-only/standard/admin) supported. Track C complete: every advertised action carries coverage_status; not_yet_implemented status code exists; capability map doc auto-generated."
+scope:
+  in_scope:
+    - Status code semantics fix in m365_runtime/graph/registry.py + actions.py (Track A)
+    - Capability inventory endpoint + MCP tool (Track A)
+    - Pre-flight scope/registry intersection in auth_check (Track A)
+    - Read action implementations in m365_runtime + alias table updates (Track B)
+    - Auth-mode tier system at m365_auth_start (Track B)
+    - Coverage-status field in agents.yaml schema (Track C)
+    - not_yet_implemented status code (Track C)
+    - Operator capability map doc generation (Track C)
+  out_of_scope:
+    - Mutation/write actions (covered by separate mutation-governance plan)
+    - Risk-tier reclassification of existing agents
+    - New MCP tools beyond m365_inventory
+    - Frontend changes to apps/desktop
+    - M365 version bump unless Track B p7 explicitly cuts a new release
+    - Power Platform executor changes
+    - Mathematical Autopsy / invariant promotion (this work is non-math scope)
+  file_allowlist:
+    - src/ucp/m365_tools.py
+    - src/ucp/runtime/release_artifacts.py
+    - src/ucp/runtime/m365_runtime_health.py
+    - "tests/test_m365_*.py"
+    - configs/mcp_packs.yaml
+    - docs/platform/CODDEX_ACTION_LOG.md
+    - docs/platform/EXECUTION_PLAN.md
+    - docs/platform/PROJECT_STATUS.md
+    - "plans/m365-capability-pack-surface-remediation/**"
+    - "plans/m365-cps-*/**"
+    - "docs/prompts/codex-m365-cps-*.md"
+    - "docs/prompts/codex-m365-cps-*.txt"
+    - src/m365_runtime/graph/registry.py
+    - src/m365_runtime/graph/actions.py
+    - src/m365_runtime/graph/client.py
+    - src/ucp_m365_pack/client.py
+    - src/ucp_m365_pack/contracts.py
+    - registry/action_registry.yaml
+    - registry/agents.yaml
+    - "tests/**"
+    - Operations/ACTION_LOG.md
+    - Operations/EXECUTION_PLAN.md
+    - "plans/m365-capability-pack-surface-remediation/**"
+    - "plans/m365-cps-*/**"
+    - "docs/prompts/codex-m365-cps-*.md"
+    - "docs/prompts/codex-m365-cps-*.txt"
+    - CHANGELOG.md
+  file_denylist:
+    - "apps/desktop/**"
+    - src/ucp/runtime/pack_registry.py
+    - Power Platform executor sources
+    - "archived/**"
+    - Any file not in allowlist of the active child-phase plan
+requirements:
+  - id: R1
+    ref: "plan:m365-capability-pack-surface-remediation:R1"
+    description: Denial reasons returned by the runtime must be semantically distinct. unknown_action MUST NOT be reported as mutation_fence.
+    acceptance_criteria: Calling an action not in READ_ONLY_REGISTRY returns status_class == "unknown_action" (not "mutation_fence"). Verified by unit test test_unknown_action_returns_unknown_action_status in M365 and integration test test_m365_unknown_action_routing in UCP.
+    depends_on:
+      - none
+    user_intent_trace: User requirement 1 (make denials honest)
+  - id: R2
+    ref: "plan:m365-capability-pack-surface-remediation:R2"
+    description: An inventory endpoint and MCP tool MUST exist that report which actions are implemented in the runtime, which legacy aliases exist, and which agents advertise actions that have no runtime implementation.
+    acceptance_criteria: m365_inventory MCP tool returns JSON with keys {implemented_actions, alias_map, advertised_only, auth_mode_capability}. Verified by test_m365_inventory_tool_shape and live integration call.
+    depends_on:
+      - R1
+    user_intent_trace: User requirements 1 and 3
+  - id: R3
+    ref: "plan:m365-capability-pack-surface-remediation:R3"
+    description: m365_auth_check response MUST include a token-vs-registry intersection showing which registered actions the current session can actually invoke.
+    acceptance_criteria: m365_auth_check returns {invokable_actions, blocked_by_auth_mode, blocked_by_scopes}. Verified by test_auth_check_intersection.
+    depends_on:
+      - R1
+    user_intent_trace: User requirements 1 and 3
+  - id: R4
+    ref: "plan:m365-capability-pack-surface-remediation:R4"
+    description: Coverage of read actions across SharePoint, Calendar, Mail, Service Health, Reports, Directory, and Teams MUST be implemented in READ_ONLY_REGISTRY with matching alias entries.
+    acceptance_criteria: Every action listed in Track B parent phases B1-B5 has a registry entry, an alias entry where named differently, a YAML mirror, unit tests, and a live tenant smoke test pass.
+    depends_on:
+      - R1
+      - R2
+    user_intent_trace: User requirement 2
+  - id: R5
+    ref: "plan:m365-capability-pack-surface-remediation:R5"
+    description: Auth-mode tiers (read-only / standard / admin) MUST be selectable at m365_auth_start and enforced at admit().
+    acceptance_criteria: m365_auth_start accepts {tier}; token store records tier; admit() rejects calls whose registry entry requires a higher tier than session holds. Verified by test_auth_tier_enforcement.
+    depends_on:
+      - R4
+    user_intent_trace: User requirement 2
+  - id: R6
+    ref: "plan:m365-capability-pack-surface-remediation:R6"
+    description: Every entry in agents.yaml allowed_actions MUST carry a coverage_status field of {implemented, aliased, planned}. Calling a planned action MUST return status_class == "not_yet_implemented".
+    acceptance_criteria: agents.yaml schema updated; existing entries migrated; validate_agent_action surfaces coverage_status; runtime returns not_yet_implemented for planned actions.
+    depends_on:
+      - R1
+    user_intent_trace: User requirement 3
+  - id: R7
+    ref: "plan:m365-capability-pack-surface-remediation:R7"
+    description: An operator-facing capability map document MUST be auto-generated from registry + agents.yaml + alias table and committed to docs/.
+    acceptance_criteria: Doc exists; CI regenerates on registry changes; doc matches runtime state on every commit.
+    depends_on:
+      - R6
+    user_intent_trace: User requirement 3
+  - id: R8
+    ref: "plan:m365-capability-pack-surface-remediation:R8"
+    description: Each child phase commits locally; each parent phase commits + pushes; each track merges. Tests pass at each gate before the next phase opens.
+    acceptance_criteria: Git history shows the cadence; each parent-phase plan's GATE task records validation_command output as evidence.
+    depends_on:
+      - none
+    user_intent_trace: User requirements 4 and 5
+execution_sequence:
+  ordering:
+    - T1
+    - T2
+    - T3
+  stop_on_first_failure: true
+  maths_phase_mapping: null
+tasks:
+  - id: T1
+    ref: "plan:m365-capability-pack-surface-remediation:T1"
+    name: Execute Track A
+    description: "Execute plan:m365-cps-trkA-observability end-to-end across all 4 parent phases."
+    requirement_refs:
+      - R1
+      - R2
+      - R3
+      - R8
+    depends_on: []
+    maths_phase: null
+    deliverables:
+      - "All Track A parent-phase plans status: complete"
+      - feat/m365-cps-trkA branch merged to development (UCP) and main (M365)
+    exit_criteria:
+      - "plan:m365-cps-trkA-observability status == complete"
+      - All Track A gates green
+      - Live integration test pass
+    validation_command: .venv/bin/python scripts/check_track_complete.py trkA
+    implementation_notes: "Sub-plan: plan:m365-cps-trkA-observability"
+    files_to_read: []
+    files_to_modify: []
+  - id: T2
+    ref: "plan:m365-capability-pack-surface-remediation:T2"
+    name: Execute Track B
+    description: "Execute plan:m365-cps-trkB-coverage end-to-end across all 7 parent phases."
+    requirement_refs:
+      - R4
+      - R5
+      - R8
+    depends_on:
+      - T1
+    maths_phase: null
+    deliverables:
+      - Track B merged
+      - New M365 marketplace artifact published
+    exit_criteria:
+      - "plan:m365-cps-trkB-coverage status == complete"
+      - Live tenant smoke pass on every parent phase
+    validation_command: .venv/bin/python scripts/check_track_complete.py trkB
+    implementation_notes: "Sub-plan: plan:m365-cps-trkB-coverage. Cuts new M365 release."
+    files_to_read: []
+    files_to_modify: []
+  - id: T3
+    ref: "plan:m365-capability-pack-surface-remediation:T3"
+    name: Execute Track C
+    description: "Execute plan:m365-cps-trkC-truth-in-advertising end-to-end across all 5 parent phases."
+    requirement_refs:
+      - R6
+      - R7
+      - R8
+    depends_on:
+      - T2
+    maths_phase: null
+    deliverables:
+      - Track C merged
+      - Capability map doc published
+    exit_criteria:
+      - "plan:m365-cps-trkC-truth-in-advertising status == complete"
+    validation_command: .venv/bin/python scripts/check_track_complete.py trkC
+    implementation_notes: "Sub-plan: plan:m365-cps-trkC-truth-in-advertising"
+    files_to_read: []
+    files_to_modify: []
+gates:
+  checks:
+    - id: "CHECK:C0"
+      name: Plan schema valid
+      description: Master plan + all sub-plans validate against PLAN_TEMPLATE_SCHEMA
+      task_ref: T1, T2, T3
+      validation_command: .venv/bin/python scripts/validate_plan_schema.py plans/m365-capability-pack-surface-remediation/m365-capability-pack-surface-remediation.yaml
+      pass_criteria: exit code 0
+      fail_action: block
+    - id: "CHECK:C1"
+      name: Track A complete
+      description: All Track A parent phases green; live integration pass
+      task_ref: T1
+      validation_command: .venv/bin/python scripts/check_track_complete.py trkA
+      pass_criteria: All parent-phase plan statuses == complete
+      fail_action: block
+    - id: "CHECK:C2"
+      name: Track B complete
+      description: All Track B parent phases green; live tenant smoke pass
+      task_ref: T2
+      validation_command: .venv/bin/python scripts/check_track_complete.py trkB
+      pass_criteria: All parent-phase plan statuses == complete
+      fail_action: block
+    - id: "CHECK:C3"
+      name: Track C complete
+      description: All Track C parent phases green
+      task_ref: T3
+      validation_command: .venv/bin/python scripts/check_track_complete.py trkC
+      pass_criteria: All parent-phase plan statuses == complete
+      fail_action: block
+  decision:
+    go_rule: All gates pass
+    no_go_rule: Any gate fails
+  no_go_triggers:
+    - Any track plan in failed or blocked state
+    - Any parent-phase plan unable to complete its GATE
+    - Live tenant smoke regression on previously-green action
+    - Schema validation fails on any plan file
+determinism: null
+artifacts: []
+environment:
+  python_version: ">=3.11"
+  venv: .venv/bin/python
+  additional_dependencies: []
+  hardware: standard CI; live tenant for GATE smoke tests
+  external_data:
+    - live M365 tenant (smarthausgroup.com)
+  pre_notebook_check: N/A
+implementation_approach:
+  options_considered:
+    - id: A
+      description: All-at-once monolithic change
+      pros:
+        - fewer commits
+      cons:
+        - drift risk
+        - no per-phase gates
+    - id: B
+      description: Per-track / per-parent / per-child phase hierarchy
+      pros:
+        - enforced cadence
+        - per-task scope fence
+      cons:
+        - more files
+  chosen: B
+  rationale: Granular commits enforce cadence; per-task MATHS prompts give executor zero drift opportunity.
+  rejected_rationale:
+    A: Too coarse; would require massive PR review and lose per-phase gate value
+  adr_ref: null
+risks:
+  items:
+    - risk: Live tenant rate limits during smoke tests
+      impact: medium
+      mitigation: Backoff + spread across parent phases; cache token
+      status: open
+    - risk: Track B coverage scope grows beyond plan
+      impact: high
+      mitigation: Per-parent-phase allowlist enforces scope fence
+      status: mitigated
+    - risk: Cross-repo drift between UCP and M365 plan copies
+      impact: medium
+      mitigation: Generator script as single source of truth; re-run to sync
+      status: mitigated
+    - risk: Status code change breaks downstream consumers
+      impact: medium
+      mitigation: Track A introduces new code without removing old behavior; deprecation in Track C
+      status: mitigated
+    - risk: Re-packaging M365 release breaks UCP binding
+      impact: high
+      mitigation: release_artifacts.py SHA pinning; release artifact acceptance test
+      status: mitigated
+  hard_blockers:
+    - M365 main branch frozen during release cut
+    - Tenant unavailability during GATE smoke tests
+    - PLAN_TEMPLATE_SCHEMA changes mid-execution
+rollback:
+  procedure:
+    - Revert commits on the feature branch.
+    - "If parent phase pushed: revert push via new revert commits."
+    - Update ACTION_LOG with rollback entry.
+    - Set this plan status to cancelled.
+  files_to_revert:
+    - all files in this plan's allowlist that were modified
+  artifacts_to_delete:
+    - any generated artifact files for this plan
+  governance_updates_on_rollback:
+    - ACTION_LOG entry with rollback reason
+    - EXECUTION_PLAN revert progress
+    - "This plan: status to cancelled"
+prompt_references:
+  maths_template: agent_governance/master-maths-prompt-template.md
+  prompt_doc: null
+  prompt_kickoff: null
+  per_task_prompts: []
+traceability:
+  files_created:
+    notebooks: []
+    invariants: []
+    lemmas: []
+    code_files: []
+    config_artifacts: []
+  index_updates:
+    traceability_index: null
+    invariant_index: null
+    math_readme: null
+    lemmas_appendix: null
+governance_closure:
+  action_log: docs/platform/CODDEX_ACTION_LOG.md (UCP) / Operations/ACTION_LOG.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  project_status: docs/platform/PROJECT_STATUS.md (UCP)
+  invariant_promotions: []
+  lemma_promotions: []
+execution_outcome:
+  task_checklist: []
+  gate_checklist: []
+  final_decision: null
+  approved_by: null
+  completion_timestamp: null
+when_blocked:
+  format: "STATUS: BLOCKED / TASK: {id} / REASON: {desc} / MISSING: {list} / NEXT ALLOWED ACTION: {path}"
+  escalation:
+    primary: Phil Siniscalchi (Founder/Owner)
+    secondary: Engineering lead
+agent_constraints:
+  - Do not touch files outside Section 5 file allowlist.
+  - Do not skip or reorder tasks (Section 7 strict ordering).
+  - Do not modify thresholds or invariants to make gates green without owner approval.
+  - Do not execute until plan status is approved.
+  - "Reference plan:{plan-id}:{task-id} in all action log entries and commits."
+  - Do not add tasks, gates, or deliverables not in this plan without owner approval.
+  - Use .venv/bin/python for all Python commands.
+  - Call validate_action MCP tool before any write operation (UCP server).
+  - Each child phase commits locally; no push until parent-phase GATE is green.
+  - Each parent-phase GATE pushes to feat/m365-cps-trk{X} branch only.
+  - Each track GATE merges to development (UCP) and main (M365) only after live tenant smoke green.
+references:
+  north_star: docs/NORTH_STAR.md (UCP) / Operations/NORTHSTAR.md (M365)
+  execution_plan: docs/platform/EXECUTION_PLAN.md (UCP) / Operations/EXECUTION_PLAN.md (M365)
+  applicable_rules:
+    - ".cursor/rules/**/*.mdc (M365)"
+  related_plans: []
+  related_docs: []
+  maths_prompt_template: agent_governance/master-maths-prompt-template.md
+_template:
+  version: 1.0
+  last_updated: 2026-05-01
+  schema_json: agent_governance/PLAN_TEMPLATE_SCHEMA.json
