@@ -1,0 +1,15 @@
+{
+  "status": "green",
+  "lemma_id": "L104_m365_cps_b2_calendar_reads_v1",
+  "plan_reference": "plan:m365-cps-trkB-p2-calendar-reads:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-B2-calendar-reads-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_NEW_ENTRIES_REGISTERED", "status": "pass"},
+    {"id": "L_ALIASES_RESOLVE", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "CalendarReadsCovered", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}

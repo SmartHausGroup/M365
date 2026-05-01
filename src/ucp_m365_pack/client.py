@@ -96,6 +96,11 @@ LEGACY_ACTION_TO_RUNTIME_ACTION: dict[str, str] = {
     "lists.get": "graph.lists.get",
     "lists.items": "graph.lists.items",
     "files.list": "graph.drives.children",
+    # plan:m365-cps-trkB-p2-calendar-reads:T2 / L104.L_ALIASES_RESOLVE
+    "calendar.list": "graph.calendar.list",
+    "calendar.get": "graph.calendar.get",
+    "events.list": "graph.events.list",
+    "availability.check": "graph.calendar.availability",
 }
 
 

@@ -179,6 +179,43 @@ READ_ONLY_REGISTRY: dict[str, ActionSpec] = {
             "low",
             "read",
         ),
+        # plan:m365-cps-trkB-p2-calendar-reads:T2 / L104.L_NEW_ENTRIES_REGISTERED
+        ActionSpec(
+            "graph.calendar.list",
+            "exchange",
+            "/me/events",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Calendars.Read"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.calendar.get",
+            "exchange",
+            "/me/events/{eventId}",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Calendars.Read"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.events.list",
+            "exchange",
+            "/" + "users/{userId}/events",
+            frozenset({"auth_code_pkce", "app_only_secret", "app_only_certificate"}),
+            frozenset({"Calendars.Read"}),
+            "low",
+            "read",
+        ),
+        ActionSpec(
+            "graph.calendar.availability",
+            "exchange",
+            "/me/calendar/getSchedule",
+            frozenset({"auth_code_pkce", "device_code"}),
+            frozenset({"Calendars.Read"}),
+            "low",
+            "read",
+        ),
     )
 }
 

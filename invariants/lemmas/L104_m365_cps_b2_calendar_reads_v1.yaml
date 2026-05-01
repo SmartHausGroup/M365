@@ -1,0 +1,33 @@
+lemma_id: L104_m365_cps_b2_calendar_reads_v1
+title: M365 Capability Pack B2 Calendar Reads v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p2-calendar-reads:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B2-calendar-reads-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l104.json
+predecessor_lemma_bundle: L103_m365_cps_b1_sharepoint_reads_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_NEW_ENTRIES_REGISTERED:
+    - graph.calendar.list in READ_ONLY_REGISTRY
+    - graph.calendar.get in READ_ONLY_REGISTRY
+    - graph.events.list in READ_ONLY_REGISTRY
+    - graph.calendar.availability in READ_ONLY_REGISTRY
+  L_ALIASES_RESOLVE:
+    - calendar.list maps to graph.calendar.list
+    - calendar.get maps to graph.calendar.get
+    - events.list maps to graph.events.list
+    - availability.check maps to graph.calendar.availability
+  L_NO_REGRESSION:
+    - all prior tests pass
+test_bindings:
+  - tests/test_m365_runtime_b2_calendar_reads.py
+ci_gate_association:
+  - .venv/bin/python -m pytest tests/test_m365_runtime_b2_calendar_reads.py -x
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static
