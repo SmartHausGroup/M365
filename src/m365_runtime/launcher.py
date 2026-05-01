@@ -730,13 +730,16 @@ def build_app(
         actor = str(body.get("actor") or (plan.setup.actor_upn if plan.setup else "unknown"))
         params = dict(body.get("params") or {})
         if action_id not in READ_ONLY_REGISTRY:
+            # plan:m365-cps-trkA-p1-status-code-semantics:T2 / L100.L_FIX_UNKNOWN_ACTION
+            # Unknown actions surface distinctly from mutation_fence so callers can
+            # diagnose "I don't know that action" vs "I refused to write".
             return {
-                "status_class": "mutation_fence",
+                "status_class": "unknown_action",
                 "reason": "action_not_in_read_only_registry",
                 "audit": build_envelope(
                     actor=actor,
                     action=action_id,
-                    status_class="mutation_fence",
+                    status_class="unknown_action",
                     extra={"params": params},
                 ),
             }
