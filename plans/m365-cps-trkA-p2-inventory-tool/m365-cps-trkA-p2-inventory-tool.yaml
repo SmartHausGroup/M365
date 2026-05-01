@@ -2,7 +2,7 @@ plan_id: "plan:m365-cps-trkA-p2-inventory-tool"
 parent_plan_id: "plan:m365-cps-trkA-observability"
 title: Parent Phase A2 — Capability Inventory Tool
 version: 1.0
-status: draft
+status: approved
 owner: Phil Siniscalchi (Founder/Owner)
 date_created: 2026-05-01
 date_updated: 2026-05-01

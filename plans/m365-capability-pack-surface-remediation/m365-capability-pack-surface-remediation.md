@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `null`
 - **Title:** M365 Capability Pack Surface Remediation
 - **Version:** 1.0
-- **Status:** draft
+- **Status:** approved
 - **Owner:** Phil Siniscalchi (Founder/Owner)
 - **Date Created:** 2026-05-01
 - **Date Updated:** 2026-05-01

@@ -2,7 +2,7 @@ plan_id: "plan:m365-cps-trkA-p1-status-code-semantics"
 parent_plan_id: "plan:m365-cps-trkA-observability"
 title: Parent Phase A1 — Status Code Semantics Fix
 version: 1.0
-status: draft
+status: approved
 owner: Phil Siniscalchi (Founder/Owner)
 date_created: 2026-05-01
 date_updated: 2026-05-01

@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `plan:m365-cps-trkB-coverage`
 - **Title:** Parent Phase B3 — Mail Reads
 - **Version:** 1.0
-- **Status:** draft
+- **Status:** approved
 - **Owner:** Phil Siniscalchi (Founder/Owner)
 - **Date Created:** 2026-05-01
 - **Date Updated:** 2026-05-01

@@ -2,7 +2,7 @@ plan_id: "plan:m365-cps-trkB-p5-directory-and-teams"
 parent_plan_id: "plan:m365-cps-trkB-coverage"
 title: "Parent Phase B5 — Directory & Teams Reads"
 version: 1.0
-status: draft
+status: approved
 owner: Phil Siniscalchi (Founder/Owner)
 date_created: 2026-05-01
 date_updated: 2026-05-01

@@ -6,7 +6,7 @@
 - **Parent Plan ID:** `plan:m365-cps-trkA-observability`
 - **Title:** Parent Phase A3 — Pre-flight Scope/Registry Intersection
 - **Version:** 1.0
-- **Status:** draft
+- **Status:** approved
 - **Owner:** Phil Siniscalchi (Founder/Owner)
 - **Date Created:** 2026-05-01
 - **Date Updated:** 2026-05-01
