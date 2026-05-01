@@ -132,7 +132,7 @@ def _denial_to_status(reason: str) -> str:
     if reason == "auth_mode_mismatch":
         return "auth_required"
     if reason == "unknown_action":
-        return "mutation_fence"
+        return "unknown_action"
     if reason == "mutation_fence":
         return "mutation_fence"
     return "policy_denied"

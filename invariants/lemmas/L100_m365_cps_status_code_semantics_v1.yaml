@@ -1,0 +1,47 @@
+lemma_id: L100_m365_cps_status_code_semantics_v1
+title: M365 Capability Pack Surface Status Code Semantics v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkA-p1-status-code-semantics:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-A1-T2-status-code-semantics-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l100.json
+generated_verification_reference: configs/generated/m365_cps_status_code_semantics_v1_verification.json
+predecessor_lemma_bundle: L99_m365_standalone_graph_runtime_pack_0_1_2_readiness_fix_v1
+target:
+  module: src/m365_runtime/graph/actions.py
+  function: _denial_to_status
+  line_anchor: 129
+  change_type: branch_return_value
+  branch: unknown_action
+  prior_value: mutation_fence
+  new_value: unknown_action
+proof_obligations:
+  L_PRESERVE_PERMISSION_MISSING:
+    - _denial_to_status("permission_missing") == "permission_missing"
+  L_PRESERVE_AUTH_REQUIRED:
+    - _denial_to_status("auth_mode_mismatch") == "auth_required"
+  L_FIX_UNKNOWN_ACTION:
+    - _denial_to_status("unknown_action") == "unknown_action"
+    - prior implementation returned "mutation_fence" for this input; that was the bug
+  L_PRESERVE_MUTATION_FENCE:
+    - _denial_to_status("mutation_fence") == "mutation_fence"
+  L_PRESERVE_DEFAULT:
+    - _denial_to_status("anything_else") == "policy_denied"
+    - _denial_to_status("") == "policy_denied"
+failure_boundaries:
+  - any branch other than unknown_action returns a different value than before the fix.
+  - the unknown_action branch returns mutation_fence after the fix.
+  - the function signature changes (still must accept a single str and return a str).
+  - downstream callsites in actions.py (lines 58 and 63) start remapping unknown_action.
+  - UCP m365_tools.py starts collapsing unknown_action back into mutation_fence.
+test_bindings:
+  - tests/test_m365_pack_client.py
+  - tests/test_m365_pack_contracts.py
+  - $UCP_ROOT/tests/test_m365_integration.py
+ci_gate_association:
+  - .venv/bin/python -m pytest tests/test_m365_pack_client.py -k unknown_action -x
+  - .venv/bin/python -m pytest tests/test_m365_pack_contracts.py -x
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

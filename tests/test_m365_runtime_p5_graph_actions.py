@@ -53,7 +53,13 @@ def test_invoke_admit_path_calls_graph_and_emits_audit() -> None:
     assert result.audit["status_class"] == "success"
 
 
-def test_invoke_denies_unknown_action_with_mutation_fence() -> None:
+def test_invoke_denies_unknown_action_with_unknown_action_status() -> None:
+    """plan:m365-cps-trkA-p1-status-code-semantics:T5 / L100.L_FIX_UNKNOWN_ACTION.
+
+    Pre-fix: status collapsed to "mutation_fence". Post-fix: distinct
+    "unknown_action" so callers can distinguish "I don't know that action"
+    from "I refused to write".
+    """
     result = invoke(
         action_id="graph.unknown",
         actor="ops@acme.com",
@@ -61,8 +67,21 @@ def test_invoke_denies_unknown_action_with_mutation_fence() -> None:
         current_auth_mode="auth_code_pkce",
         access_token="AT",
     )
-    assert result.status_class == "mutation_fence"
-    assert result.audit["status_class"] == "mutation_fence"
+    assert result.status_class == "unknown_action"
+    assert result.audit["status_class"] == "unknown_action"
+
+
+def test_unknown_action_is_distinct_from_mutation_fence() -> None:
+    """L100.StatusDenialHonest — unknown_action and mutation_fence are different statuses."""
+    from m365_runtime.graph.actions import _denial_to_status
+
+    assert _denial_to_status("unknown_action") == "unknown_action"
+    assert _denial_to_status("mutation_fence") == "mutation_fence"
+    assert _denial_to_status("unknown_action") != _denial_to_status("mutation_fence")
+    # Other branches preserved
+    assert _denial_to_status("permission_missing") == "permission_missing"
+    assert _denial_to_status("auth_mode_mismatch") == "auth_required"
+    assert _denial_to_status("anything_else") == "policy_denied"
 
 
 def test_invoke_denies_when_scopes_missing() -> None:
@@ -187,6 +206,11 @@ def test_invoke_emits_redacted_audit_envelope() -> None:
 
 
 def test_invoke_action_invocation_struct_shape() -> None:
+    """Updated for plan:m365-cps-trkA-p1-status-code-semantics:T2 / L100.
+
+    Previously asserted "mutation_fence" for an unknown action; post-fix the
+    distinct status is "unknown_action" so callers can diagnose correctly.
+    """
     result = invoke(
         action_id="graph.unknown",
         actor="ops@acme.com",
@@ -197,4 +221,4 @@ def test_invoke_action_invocation_struct_shape() -> None:
     assert isinstance(result, ActionInvocation)
     assert result.correlation_id
     assert result.audit["correlation_id"] == result.correlation_id
-    assert result.status_class == "mutation_fence"
+    assert result.status_class == "unknown_action"

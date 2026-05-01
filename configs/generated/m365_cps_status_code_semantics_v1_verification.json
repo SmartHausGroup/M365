@@ -1,0 +1,44 @@
+{
+  "lemma_id": "L100_m365_cps_status_code_semantics_v1",
+  "plan_reference": "plan:m365-cps-trkA-p1-status-code-semantics:T2",
+  "verification_mode": "deterministic-static",
+  "seed": 0,
+  "target": {
+    "module": "src/m365_runtime/graph/actions.py",
+    "function": "_denial_to_status",
+    "line_anchor": 129
+  },
+  "predicates": {
+    "L_PRESERVE_PERMISSION_MISSING": {
+      "input": "permission_missing",
+      "expected_output": "permission_missing",
+      "result": "pass"
+    },
+    "L_PRESERVE_AUTH_REQUIRED": {
+      "input": "auth_mode_mismatch",
+      "expected_output": "auth_required",
+      "result": "pass"
+    },
+    "L_FIX_UNKNOWN_ACTION": {
+      "input": "unknown_action",
+      "expected_output": "unknown_action",
+      "prior_output": "mutation_fence",
+      "result": "pass"
+    },
+    "L_PRESERVE_MUTATION_FENCE": {
+      "input": "mutation_fence",
+      "expected_output": "mutation_fence",
+      "result": "pass"
+    },
+    "L_PRESERVE_DEFAULT": {
+      "input_examples": ["", "anything_else", "foo", "bar"],
+      "expected_output": "policy_denied",
+      "result": "pass"
+    }
+  },
+  "conjunction": {
+    "name": "StatusDenialHonest",
+    "result": "pass"
+  },
+  "determinism_certification": "green"
+}
