@@ -1,0 +1,27 @@
+lemma_id: L106_m365_cps_b4_health_reports_v1
+title: M365 Capability Pack B4 Service Health and Reports v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkB-p4-health-and-reports:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-B4-health-reports-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l106.json
+predecessor_lemma_bundle: L105_m365_cps_b3_mail_reads_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_NEW_ENTRIES_REGISTERED:
+    - graph.health.overview, graph.health.issues, graph.health.messages
+    - graph.reports.users_active, graph.reports.email_activity, graph.reports.teams_activity
+    - graph.reports.sharepoint_usage, graph.reports.onedrive_usage
+  L_ALIASES_RESOLVE:
+    - health.overview, health.issues, health.messages, reports.* aliases
+  L_NO_REGRESSION:
+    - all prior tests pass
+test_bindings:
+  - tests/test_m365_runtime_b4_health_reports.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

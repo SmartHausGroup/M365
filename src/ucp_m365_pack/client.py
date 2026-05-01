@@ -106,6 +106,15 @@ LEGACY_ACTION_TO_RUNTIME_ACTION: dict[str, str] = {
     "mail.read": "graph.mail.message_get",
     "mail.attachments": "graph.mail.attachments",
     "mail.folders": "graph.mail.health",
+    # plan:m365-cps-trkB-p4-health-and-reports:T2 / L106.L_ALIASES_RESOLVE
+    "health.overview": "graph.health.overview",
+    "health.issues": "graph.health.issues",
+    "health.messages": "graph.health.messages",
+    "reports.users_active": "graph.reports.users_active",
+    "reports.email_activity": "graph.reports.email_activity",
+    "reports.teams_activity": "graph.reports.teams_activity",
+    "reports.sharepoint_usage": "graph.reports.sharepoint_usage",
+    "reports.onedrive_usage": "graph.reports.onedrive_usage",
 }
 
 

@@ -1,0 +1,15 @@
+{
+  "status": "green",
+  "lemma_id": "L106_m365_cps_b4_health_reports_v1",
+  "plan_reference": "plan:m365-cps-trkB-p4-health-and-reports:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-B4-health-reports-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_NEW_ENTRIES_REGISTERED", "status": "pass"},
+    {"id": "L_ALIASES_RESOLVE", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "HealthReportsCovered", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}
