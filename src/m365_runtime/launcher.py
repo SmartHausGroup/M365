@@ -724,6 +724,61 @@ def build_app(
     def actions() -> dict[str, Any]:
         return {"count": len(READ_ONLY_REGISTRY), "actions": list_actions()}
 
+    @app.get("/v1/inventory")
+    def inventory_endpoint() -> dict[str, Any]:
+        # plan:m365-cps-trkA-p2-inventory-tool:T2 / L101.InventoryContractValid
+        # Surfaces what the runtime actually implements vs what agents.yaml advertises.
+        # GET-only; no body, no auth, no Graph call.
+        try:
+            from ucp_m365_pack.client import LEGACY_ACTION_TO_RUNTIME_ACTION
+        except Exception:
+            LEGACY_ACTION_TO_RUNTIME_ACTION = {}
+
+        agents_data: dict[str, Any] = {}
+        try:
+            import yaml as _yaml
+
+            registry_yaml_path = (
+                Path(__file__).resolve().parent.parent.parent / "registry" / "agents.yaml"
+            )
+            if registry_yaml_path.is_file():
+                agents_data = _yaml.safe_load(registry_yaml_path.read_text()) or {}
+        except Exception:
+            agents_data = {}
+
+        advertised: set[str] = set()
+        agent_summary: dict[str, dict[str, int]] = {}
+        impl_keys = set(READ_ONLY_REGISTRY.keys())
+        alias_keys = set(LEGACY_ACTION_TO_RUNTIME_ACTION.keys())
+        for agent_id, agent_cfg in (agents_data.get("agents") or {}).items():
+            if not isinstance(agent_cfg, dict):
+                continue
+            allowed = agent_cfg.get("allowed_actions") or []
+            agent_advertised: set[str] = set()
+            for entry in allowed:
+                if isinstance(entry, str):
+                    agent_advertised.add(entry)
+            advertised |= agent_advertised
+            implemented = sum(1 for a in agent_advertised if a in impl_keys)
+            aliased = sum(1 for a in agent_advertised if a in alias_keys)
+            planned = len(agent_advertised) - implemented - aliased
+            agent_summary[agent_id] = {
+                "total": len(agent_advertised),
+                "implemented": implemented,
+                "aliased": aliased,
+                "planned": max(planned, 0),
+            }
+
+        advertised_only = sorted(advertised - alias_keys - impl_keys)
+
+        return {
+            "implemented_actions": list_actions(),
+            "alias_map": dict(LEGACY_ACTION_TO_RUNTIME_ACTION),
+            "advertised_only": advertised_only,
+            "agent_summary": agent_summary,
+            "runtime_version": RUNTIME_VERSION,
+        }
+
     @app.post("/v1/actions/{action_id}/invoke")
     def invoke_endpoint(action_id: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
         body = body or {}

@@ -1,0 +1,23 @@
+{
+  "status": "green",
+  "lemma_id": "L101_m365_cps_capability_inventory_v1",
+  "plan_reference": "plan:m365-cps-trkA-p2-inventory-tool:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-A2-inventory-tool-v1.ipynb",
+  "generated_verification_reference": "configs/generated/m365_cps_capability_inventory_v1_verification.json",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_IMPL_LIST_FROM_REGISTRY", "status": "pass"},
+    {"id": "L_ALIAS_MAP_FROM_CLIENT", "status": "pass"},
+    {"id": "L_ADVERTISED_ONLY_DIFF", "status": "pass"},
+    {"id": "L_RESPONSE_SHAPE_STABLE", "status": "pass"},
+    {"id": "L_NO_MUTATION", "status": "pass"},
+    {"id": "InventoryContractValid", "status": "pass"}
+  ],
+  "negative_case_count": 5,
+  "truth_table_rows": 32,
+  "truth_table_true_rows": 1,
+  "truth_table_false_rows": 31,
+  "determinism_certification": "green",
+  "ready_for_tasks": ["T3", "T4", "T5", "T6", "T7"]
+}

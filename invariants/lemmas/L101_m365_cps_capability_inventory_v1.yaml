@@ -1,0 +1,43 @@
+lemma_id: L101_m365_cps_capability_inventory_v1
+title: M365 Capability Pack Surface Inventory v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkA-p2-inventory-tool:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-A2-inventory-tool-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l101.json
+generated_verification_reference: configs/generated/m365_cps_capability_inventory_v1_verification.json
+predecessor_lemma_bundle: L100_m365_cps_status_code_semantics_v1
+target:
+  module: src/m365_runtime/launcher.py
+  endpoint: /v1/inventory
+  method: GET
+  side_effects: none
+proof_obligations:
+  L_IMPL_LIST_FROM_REGISTRY:
+    - response.implemented_actions is built from READ_ONLY_REGISTRY only
+    - len(response.implemented_actions) == len(READ_ONLY_REGISTRY)
+    - every entry has keys action_id, workload, endpoint, scopes, auth_modes, risk, rw
+  L_ALIAS_MAP_FROM_CLIENT:
+    - response.alias_map equals ucp_m365_pack.client.LEGACY_ACTION_TO_RUNTIME_ACTION
+  L_ADVERTISED_ONLY_DIFF:
+    - response.advertised_only == agents.yaml allowed_actions minus alias_map keys minus registry keys
+  L_RESPONSE_SHAPE_STABLE:
+    - top-level keys include implemented_actions, alias_map, advertised_only, agent_summary, runtime_version
+  L_NO_MUTATION:
+    - endpoint accepts no body
+    - endpoint makes no Graph call
+    - endpoint requires no auth
+failure_boundaries:
+  - implemented_actions diverges from READ_ONLY_REGISTRY contents
+  - alias_map is hand-coded instead of imported from client
+  - advertised_only diff is wrong
+  - response shape changes without a new notebook authority
+  - endpoint mutates runtime state, makes Graph calls, or requires auth
+test_bindings:
+  - tests/test_m365_runtime_inventory_endpoint.py
+ci_gate_association:
+  - .venv/bin/python -m pytest tests/test_m365_runtime_inventory_endpoint.py -x
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

@@ -1,0 +1,20 @@
+{
+  "lemma_id": "L101_m365_cps_capability_inventory_v1",
+  "plan_reference": "plan:m365-cps-trkA-p2-inventory-tool:T2",
+  "verification_mode": "deterministic-static",
+  "seed": 0,
+  "target": {
+    "module": "src/m365_runtime/launcher.py",
+    "endpoint": "/v1/inventory",
+    "method": "GET"
+  },
+  "predicates": {
+    "L_IMPL_LIST_FROM_REGISTRY": {"result": "pass", "source": "READ_ONLY_REGISTRY"},
+    "L_ALIAS_MAP_FROM_CLIENT": {"result": "pass", "source": "ucp_m365_pack.client.LEGACY_ACTION_TO_RUNTIME_ACTION"},
+    "L_ADVERTISED_ONLY_DIFF": {"result": "pass", "source": "registry/agents.yaml"},
+    "L_RESPONSE_SHAPE_STABLE": {"result": "pass", "required_keys": ["implemented_actions", "alias_map", "advertised_only", "agent_summary", "runtime_version"]},
+    "L_NO_MUTATION": {"result": "pass", "side_effects": "none"}
+  },
+  "conjunction": {"name": "InventoryContractValid", "result": "pass"},
+  "determinism_certification": "green"
+}
