@@ -405,6 +405,62 @@ def map_legacy_action_to_runtime(action: str) -> str:
     return LEGACY_ACTION_TO_RUNTIME_ACTION.get(text, text)
 
 
+def compute_coverage_status(action: str) -> str:
+    """Classify an action_id against the live runtime registry and alias map.
+
+    plan:m365-cps-trkC-p2-agents-yaml-schema:T2 / L110.L_COVERAGE_STATUS_CORRECT
+
+    Returns one of:
+      - "implemented": action is a key in READ_ONLY_REGISTRY directly.
+      - "aliased":     action is a key in LEGACY_ACTION_TO_RUNTIME_ACTION
+                       whose value resolves to an implemented action.
+      - "planned":     action is declared (e.g. in agents.yaml) but neither
+                       implemented nor aliased.
+
+    Reads the runtime registry lazily so notebook tests do not need to import
+    the runtime module unless they invoke this function.
+    """
+    text = (action or "").strip()
+    if not text:
+        return "planned"
+    try:
+        from m365_runtime.graph.registry import READ_ONLY_REGISTRY  # noqa: WPS433
+    except Exception:
+        # Runtime not importable in this context; treat everything as planned.
+        return "planned"
+    if text in READ_ONLY_REGISTRY:
+        return "implemented"
+    runtime_id = LEGACY_ACTION_TO_RUNTIME_ACTION.get(text)
+    if runtime_id and runtime_id in READ_ONLY_REGISTRY:
+        return "aliased"
+    return "planned"
+
+
+def _planned_action_envelope(
+    agent: str,
+    action: str,
+    params: dict[str, Any],
+    correlation_id: str,
+) -> dict[str, Any]:
+    """Construct the not_yet_implemented envelope for a planned action.
+
+    plan:m365-cps-trkC-p2-agents-yaml-schema:T2 / L110.L_PLANNED_RETURNS_NOT_YET_IMPLEMENTED
+    """
+    return {
+        "status_class": "not_yet_implemented",
+        "coverage_status": "planned",
+        "agent": agent,
+        "action": action,
+        "params": params,
+        "correlation_id": correlation_id,
+        "reason": (
+            "Action is declared in agents.yaml but the runtime does not "
+            "implement it yet. See docs/m365_capability_map.md for the "
+            "current coverage state."
+        ),
+    }
+
+
 def _http_runtime_invoke(
     runtime_url: str,
     action_id: str,
@@ -553,6 +609,12 @@ def execute_m365_action(
 ) -> dict[str, Any]:
     params = params or {}
     correlation_id = correlation_id or str(uuid.uuid4())
+
+    # plan:m365-cps-trkC-p2-agents-yaml-schema:T2 / L110.L_PLANNED_RETURNS_NOT_YET_IMPLEMENTED
+    # Short-circuit planned actions before any HTTP / stub round-trip.
+    coverage = compute_coverage_status(action)
+    if coverage == "planned":
+        return _planned_action_envelope(agent, action, params, correlation_id)
 
     runtime_url = _configured_runtime_url()
     if runtime_url is not None:

@@ -1,0 +1,27 @@
+lemma_id: L109_m365_cps_c1_coverage_status_contract_v1
+title: M365 Capability Pack C1 Coverage-Status Contract v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkC-p1-coverage-status-contract:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-C1-coverage-status-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l109.json
+predecessor_lemma_bundle: L108_m365_cps_b6_auth_tiers_v1
+target:
+  modules:
+    - src/m365_runtime/graph/registry.py
+    - src/m365_runtime/graph/actions.py
+proof_obligations:
+  L_ENUM_COMPLETE:
+    - COVERAGE_STATUS_VALUES is frozenset of {implemented, aliased, planned, deprecated}
+  L_NOT_YET_IMPLEMENTED_DISTINCT:
+    - not_yet_implemented is distinct from unknown_action, mutation_fence, permission_missing, auth_required, policy_denied, tier_insufficient
+  L_DENIAL_REASON_PLANNED:
+    - _denial_to_status("planned_action") returns "not_yet_implemented"
+  L_NO_REGRESSION:
+    - all Track A and Track B tests pass
+test_bindings:
+  - tests/test_m365_runtime_c1_coverage_status.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

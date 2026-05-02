@@ -22,6 +22,15 @@ class ActionRegistryError(KeyError):
 _TIER_ORDER: dict[str, int] = {"read-only": 0, "standard": 1, "admin": 2}
 ALLOWED_TIERS: frozenset[str] = frozenset(_TIER_ORDER.keys())
 
+# plan:m365-cps-trkC-p1-coverage-status-contract:T2 / L109
+# Four-value coverage status: implemented (in REGISTRY), aliased (alias
+# table key resolves to REGISTRY), planned (in agents.yaml but neither
+# implemented nor aliased — runtime returns not_yet_implemented), or
+# deprecated (was implemented/aliased and has been removed).
+COVERAGE_STATUS_VALUES: frozenset[str] = frozenset(
+    {"implemented", "aliased", "planned", "deprecated"}
+)
+
 
 def tier_at_or_above(have: str | None, need: str | None) -> bool:
     """Return True iff session tier `have` is at or above the required `need`.

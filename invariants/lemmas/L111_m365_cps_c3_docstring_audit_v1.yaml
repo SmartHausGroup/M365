@@ -1,0 +1,26 @@
+lemma_id: L111_m365_cps_c3_docstring_audit_v1
+title: M365 Capability Pack C3 Docstring Audit v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkC-p3-mcp-tool-docstrings:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-C3-docstring-audit-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l111.json
+predecessor_lemma_bundle: L110_m365_cps_c2_planned_short_circuit_v1
+target:
+  modules:
+    - scripts/audit_m365_docstring_coverage.py
+proof_obligations:
+  L_AUDIT_SCRIPT_PRESENT:
+    - scripts/audit_m365_docstring_coverage.py exists and is invokable
+  L_AUDIT_OUTPUT_VALID:
+    - script emits JSON with implemented, aliased, planned, deprecated, totals, coverage_pct_concrete
+  L_LINTER_DETERMINISTIC:
+    - same inputs produce same JSON output (sorted lists)
+  L_NO_REGRESSION:
+    - all prior tests pass
+test_bindings:
+  - tests/test_m365_runtime_c3_docstring_audit.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

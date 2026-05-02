@@ -1,0 +1,16 @@
+{
+  "status": "green",
+  "lemma_id": "L109_m365_cps_c1_coverage_status_contract_v1",
+  "plan_reference": "plan:m365-cps-trkC-p1-coverage-status-contract:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-C1-coverage-status-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_ENUM_COMPLETE", "status": "pass"},
+    {"id": "L_NOT_YET_IMPLEMENTED_DISTINCT", "status": "pass"},
+    {"id": "L_DENIAL_REASON_PLANNED", "status": "pass"},
+    {"id": "L_NO_REGRESSION", "status": "pass"},
+    {"id": "CoverageStatusContractValid", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}

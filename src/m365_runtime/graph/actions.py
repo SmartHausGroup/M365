@@ -144,9 +144,7 @@ def list_actions() -> list[dict[str, Any]]:
 _PATH_PARAM_RE = __import__("re").compile(r"\{([A-Za-z_][A-Za-z0-9_]*)\}")
 
 
-def _substitute_path_params(
-    endpoint: str, params: dict[str, Any]
-) -> tuple[str, list[str]]:
+def _substitute_path_params(endpoint: str, params: dict[str, Any]) -> tuple[str, list[str]]:
     """Substitute {name} placeholders in an endpoint from params.
 
     plan:m365-cps-trkB-p1-sharepoint-reads:T2 / L103.L_PATH_SUBST_CORRECT
@@ -182,4 +180,10 @@ def _denial_to_status(reason: str) -> str:
         return "unknown_action"
     if reason == "mutation_fence":
         return "mutation_fence"
+    # plan:m365-cps-trkB-p6-auth-mode-tiers:T2 / L108
+    if reason == "tier_insufficient":
+        return "tier_insufficient"
+    # plan:m365-cps-trkC-p1-coverage-status-contract:T2 / L109
+    if reason == "planned_action":
+        return "not_yet_implemented"
     return "policy_denied"

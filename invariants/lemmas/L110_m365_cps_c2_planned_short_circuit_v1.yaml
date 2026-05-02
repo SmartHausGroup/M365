@@ -1,0 +1,29 @@
+lemma_id: L110_m365_cps_c2_planned_short_circuit_v1
+title: M365 Capability Pack C2 Planned-Action Short-Circuit v1
+status: active
+owner: SMARTHAUS
+plan_reference: plan:m365-cps-trkC-p2-agents-yaml-schema:T2
+notebook_reference: notebooks/m365/INV-M365-CPS-C2-planned-short-circuit-v1.ipynb
+scorecard_reference: artifacts/scorecards/scorecard_l110.json
+predecessor_lemma_bundle: L109_m365_cps_c1_coverage_status_contract_v1
+target:
+  modules:
+    - src/ucp_m365_pack/client.py
+proof_obligations:
+  L_COVERAGE_STATUS_CORRECT:
+    - compute_coverage_status returns "implemented" for action_ids in REGISTRY
+    - compute_coverage_status returns "aliased" for keys in alias map
+    - compute_coverage_status returns "planned" otherwise
+  L_PLANNED_RETURNS_NOT_YET_IMPLEMENTED:
+    - execute_m365_action with a planned action returns status_class=not_yet_implemented without HTTP call
+  L_IMPLEMENTED_PASSES_THROUGH:
+    - execute_m365_action with an implemented action falls through to existing runtime/service/stub path
+  L_NO_REGRESSION:
+    - validate_agent_action signature unchanged
+    - Track A and Track B tests still pass
+test_bindings:
+  - tests/test_m365_runtime_c2_planned_short_circuit.py
+determinism:
+  seed_locked: true
+  seed: 0
+  mode: deterministic-static

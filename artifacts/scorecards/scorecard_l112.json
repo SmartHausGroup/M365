@@ -1,0 +1,16 @@
+{
+  "status": "green",
+  "lemma_id": "L112_m365_cps_c4_capability_map_v1",
+  "plan_reference": "plan:m365-cps-trkC-p4-operator-capability-map:T2",
+  "notebook_reference": "notebooks/m365/INV-M365-CPS-C4-capability-map-v1.ipynb",
+  "notebook_hash_mode": "static-governed",
+  "seed_lock": {"enabled": true, "seed": 0, "mode": "deterministic-static"},
+  "invariants": [
+    {"id": "L_GENERATOR_PRESENT", "status": "pass"},
+    {"id": "L_OUTPUT_DETERMINISTIC", "status": "pass"},
+    {"id": "L_DOC_HAS_THREE_SECTIONS", "status": "pass"},
+    {"id": "L_DOC_REFERENCES_LIVE_DATA", "status": "pass"},
+    {"id": "CapabilityMapValid", "status": "pass"}
+  ],
+  "determinism_certification": "green"
+}
