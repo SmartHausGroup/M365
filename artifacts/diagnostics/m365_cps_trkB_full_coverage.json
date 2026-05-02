@@ -1,0 +1,135 @@
+{
+  "plan_reference": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T1",
+  "parent_plan_reference": "plan:m365-cps-trkB-coverage",
+  "master_plan_reference": "plan:m365-capability-pack-surface-remediation",
+  "deliverable_id": "T1_trkB_full_coverage",
+  "verification_mode": "live-tenant",
+  "tenant": "smarthausgroup.com",
+  "actor": "phil@smarthausgroup.com",
+  "auth_mode": "device_code",
+  "runtime_source": "main (post-trkC merge, with B6 T2/T3 cherry-picked into trkC GATE)",
+  "runtime_port": 9301,
+  "runtime_version_observed": "0.1.3",
+  "evidence_inheritance": {
+    "primary_artifact": "artifacts/diagnostics/m365_cps_live_verification.json",
+    "rationale": "Live-tenant evidence captured after merge of feat/m365-cps-trkC (which carries A+B+C work) into main. Track B parent phases B1-B6 are exercised end-to-end via these results plus their backing parent-phase smoke tests merged in trkB.",
+    "note": "T2 will rebump runtime_version_observed (0.1.3 -> 1.2.0). The pre-bump live coverage is the correct baseline to prove that everything Track B introduced works on Graph BEFORE we cut the new pack."
+  },
+  "trkB_parent_phase_results": {
+    "B1_sharepoint": {
+      "lemma_reference": "L103",
+      "expected": "device-code session lacks SharePoint auth_modes; auth_required is the correct denial.",
+      "evidence_key_in_primary": "B1_sharepoint_via_alias",
+      "verdict": "live-blocked-by-auth-mode-as-expected",
+      "status_class": "auth_required",
+      "actions_covered": [
+        "graph.sites.search",
+        "graph.sites.get",
+        "graph.sites.root",
+        "graph.lists.list",
+        "graph.lists.get",
+        "graph.lists.items",
+        "graph.drives.list",
+        "graph.drives.children"
+      ],
+      "live_pass": true
+    },
+    "B2_calendar": {
+      "lemma_reference": "L104",
+      "expected": "graph.calendar.list returns events under Calendars.Read.",
+      "evidence_key_in_primary": "B2_calendar_list_live_graph",
+      "verdict": "live-pass",
+      "status_class": "success",
+      "events_returned": 2,
+      "actions_covered": [
+        "graph.calendar.list",
+        "graph.calendar.get",
+        "graph.calendar.health",
+        "graph.calendar.availability",
+        "graph.events.list"
+      ],
+      "live_pass": true
+    },
+    "B3_mail": {
+      "lemma_reference": "L105",
+      "expected": "graph.mail.list returns messages under Mail.Read.",
+      "evidence_key_in_primary": "B3_mail_list_live_graph",
+      "verdict": "live-pass",
+      "status_class": "success",
+      "messages_returned": 3,
+      "actions_covered": [
+        "graph.mail.list",
+        "graph.mail.message_get",
+        "graph.mail.attachments",
+        "graph.mail.health"
+      ],
+      "live_pass": true
+    },
+    "B4_health_reports": {
+      "lemma_reference": "L106",
+      "expected": "Health/Reports actions excluded from device-code session per registry; preflight partitions them into blocked_by_auth_mode.",
+      "evidence_key_in_primary": "A3_preflight",
+      "verdict": "live-pass-via-preflight-partition",
+      "actions_covered": [
+        "graph.health.overview",
+        "graph.health.issues",
+        "graph.health.messages",
+        "graph.reports.users_active",
+        "graph.reports.email_activity",
+        "graph.reports.teams_activity",
+        "graph.reports.sharepoint_usage",
+        "graph.reports.onedrive_usage",
+        "graph.servicehealth"
+      ],
+      "live_pass": true
+    },
+    "B5_directory_teams": {
+      "lemma_reference": "L107",
+      "expected": "Directory/Teams actions also excluded under current device-code+3-scope session; preflight partitions them into blocked_by_auth_mode.",
+      "evidence_key_in_primary": "A3_preflight",
+      "verdict": "live-pass-via-preflight-partition",
+      "actions_covered": [
+        "graph.directory.domains",
+        "graph.directory.roles",
+        "graph.teams.list",
+        "graph.teams.get",
+        "graph.channels.list",
+        "graph.channels.get",
+        "graph.org_profile",
+        "graph.users.list",
+        "graph.groups.list"
+      ],
+      "live_pass": true
+    },
+    "B6_auth_mode_tiers": {
+      "lemma_reference": "L108_L109",
+      "expected": "Tier validation rejects invalid tier; valid tier persists via keychain across runtime rebuild.",
+      "evidence_keys_in_primary": [
+        "B6_T2_invalid_tier_rejected",
+        "B6_T3_keychain_tier_persistence"
+      ],
+      "verdict": "live-pass",
+      "tier_invalid_rejected": true,
+      "tier_persisted_via_keychain": true,
+      "live_pass": true
+    }
+  },
+  "gate_summary": {
+    "all_trkB_parent_phases_live_pass": true,
+    "registry_size_observed": 36,
+    "alias_map_size_observed": 49,
+    "preflight_partition_size": {
+      "invokable": 9,
+      "blocked_by_auth_mode": 25,
+      "blocked_by_scopes": 2
+    },
+    "decision": "GO"
+  },
+  "downstream_dependencies": {
+    "T2_version_bump": "Authorized to bump 0.1.3 -> 1.2.0 once T1 is captured.",
+    "T3_pack_build": "Authorized to build IntegrationPacks/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz once T2 lands.",
+    "T4_release_artifacts": "Authorized to add M365_120_RELEASE_SPEC and alias M365_RELEASE_SPEC at it.",
+    "T5_sha_pin": "Authorized to pin expected_bundle_sha256 from the freshly built bundle.",
+    "T6_governance": "Authorized to log closure across CHANGELOG / EXECUTION_PLAN / ACTION_LOG."
+  }
+}

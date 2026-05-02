@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "smarthaus-m365"
-version = "0.2.0"
+version = "1.2.0"
 description = "SMARTHAUS M365 SOA: libraries, API, and CLI"
 readme = "README.md"
 requires-python = ">=3.14"
