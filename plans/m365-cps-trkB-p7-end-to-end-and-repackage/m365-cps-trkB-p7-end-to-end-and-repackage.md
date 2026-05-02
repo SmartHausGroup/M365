@@ -33,13 +33,13 @@
 ## Section 3: Intent Capture
 
 - **User's stated requirements:**
-  - Full live-tenant coverage e2e; cut M365 1.2.0 release; bind UCP to it; governance closure.
+  - Full live-tenant coverage e2e; cut M365 0.1.4 release; bind UCP to it; governance closure.
 - **Intent doc ref:** captured in this plan
 - **Intent verification:** Tasks T1..T6 together satisfy this parent phase's objective.
 
 ## Section 4: Objective
 
-- **Objective:** Full live-tenant coverage e2e; cut M365 1.2.0 release; bind UCP to it; governance closure.
+- **Objective:** Full live-tenant coverage e2e; cut M365 0.1.4 release; bind UCP to it; governance closure.
 - **Current state:** Parent phase scope draft; no implementation yet.
 - **Target state:** All child tasks complete; GATE green; commit + push to feat/m365-cps-trkB.
 
@@ -69,7 +69,7 @@
 - `UCP: docs/platform/EXECUTION_PLAN.md`
 - `UCP: docs/platform/CODDEX_ACTION_LOG.md`
 - `UCP: tests/integration/m365_cps_trkB_full_coverage.py`
-- `IntegrationPacks/M365/1.2.0/**`
+- `IntegrationPacks/M365/0.1.4/**`
 
 ### File denylist
 
@@ -131,15 +131,15 @@ Agent must STOP and re-scope if any file outside the allowlist is needed. Emit B
 ### T2 — Re-bump M365 version
 
 - **Ref:** `plan:m365-cps-trkB-p7-end-to-end-and-repackage:T2`
-- **Description:** Update src/m365_runtime/**init**.py version constant to 1.2.0; update pyproject.toml.
+- **Description:** Update src/m365_runtime/**init**.py version constant to 0.1.4; update pyproject.toml.
 - **Requirement refs:** R4
 - **Depends on:** T1
 - **MATHS phase:** N/A
 - **Deliverables:**
   - Version bumped
 - **Exit criteria:**
-  - pip show smarthaus_m365 | grep 1.2.0
-- **Validation command:** `cd $M365_ROOT && grep -n '1.2.0' src/m365_runtime/__init__.py pyproject.toml`
+  - pip show smarthaus_m365 | grep 0.1.4
+- **Validation command:** `cd $M365_ROOT && grep -n '0.1.4' src/m365_runtime/__init__.py pyproject.toml`
 - **Files to modify:**
   - M365: src/m365_runtime/**init**.py
   - M365: pyproject.toml
@@ -147,37 +147,37 @@ Agent must STOP and re-scope if any file outside the allowlist is needed. Emit B
 ### T3 — Re-package marketplace artifact
 
 - **Ref:** `plan:m365-cps-trkB-p7-end-to-end-and-repackage:T3`
-- **Description:** Run make pack to produce com.smarthaus.m365-1.2.0.ucp.tar.gz and IntegrationPacks/M365/1.2.0/ contents.
+- **Description:** Run make pack to produce com.smarthaus.m365-0.1.4.ucp.tar.gz and IntegrationPacks/M365/0.1.4/ contents.
 - **Requirement refs:** R4
 - **Depends on:** T2
 - **MATHS phase:** N/A
 - **Deliverables:**
-  - IntegrationPacks/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz
+  - IntegrationPacks/M365/0.1.4/com.smarthaus.m365-0.1.4.ucp.tar.gz
 - **Exit criteria:**
   - Tarball exists; SHA256SUMS valid
-- **Validation command:** `ls $INTEGRATION_PACKS_ROOT/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz`
+- **Validation command:** `ls $INTEGRATION_PACKS_ROOT/M365/0.1.4/com.smarthaus.m365-0.1.4.ucp.tar.gz`
 - **Files to modify:**
-  - IntegrationPacks/M365/1.2.0/** (generated)
+  - IntegrationPacks/M365/0.1.4/** (generated)
 
 ### T4 — Update UCP release_artifacts.py spec
 
 - **Ref:** `plan:m365-cps-trkB-p7-end-to-end-and-repackage:T4`
-- **Description:** Add M365_120_RELEASE_SPEC; update M365_RELEASE_SPEC alias to point at 1.2.0.
+- **Description:** Add M365_014_RELEASE_SPEC; update M365_RELEASE_SPEC alias to point at 0.1.4.
 - **Requirement refs:** R4
 - **Depends on:** T3
 - **MATHS phase:** N/A
 - **Deliverables:**
-  - src/ucp/runtime/release_artifacts.py with M365_120_RELEASE_SPEC
+  - src/ucp/runtime/release_artifacts.py with M365_014_RELEASE_SPEC
 - **Exit criteria:**
-  - Import succeeds; spec.version == 1.2.0
-- **Validation command:** `cd $UCP_ROOT && .venv/bin/python -c "from ucp.runtime.release_artifacts import M365_RELEASE_SPEC; assert M365_RELEASE_SPEC.version == '1.2.0'"`
+  - Import succeeds; spec.version == 0.1.4
+- **Validation command:** `cd $UCP_ROOT && .venv/bin/python -c "from ucp.runtime.release_artifacts import M365_RELEASE_SPEC; assert M365_RELEASE_SPEC.version == '0.1.4'"`
 - **Files to modify:**
   - UCP: src/ucp/runtime/release_artifacts.py
 
 ### T5 — Re-verify SHA256 + provenance
 
 - **Ref:** `plan:m365-cps-trkB-p7-end-to-end-and-repackage:T5`
-- **Description:** Update expected_bundle_sha256 in M365_120_RELEASE_SPEC; run release artifact acceptance test.
+- **Description:** Update expected_bundle_sha256 in M365_014_RELEASE_SPEC; run release artifact acceptance test.
 - **Requirement refs:** R4
 - **Depends on:** T4
 - **MATHS phase:** N/A
@@ -185,12 +185,12 @@ Agent must STOP and re-scope if any file outside the allowlist is needed. Emit B
   - SHA pinned
 - **Exit criteria:**
   - scripts/verify_release_artifact.py exits 0
-- **Validation command:** `cd $UCP_ROOT && .venv/bin/python scripts/verify_release_artifact.py M365_120_RELEASE_SPEC`
+- **Validation command:** `cd $UCP_ROOT && .venv/bin/python scripts/verify_release_artifact.py M365_014_RELEASE_SPEC`
 
 ### T6 — Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG
 
 - **Ref:** `plan:m365-cps-trkB-p7-end-to-end-and-repackage:T6`
-- **Description:** Document Track B completion + 1.2.0 release in CHANGELOG (M365), EXECUTION_PLAN (both), ACTION_LOG (both).
+- **Description:** Document Track B completion + 0.1.4 release in CHANGELOG (M365), EXECUTION_PLAN (both), ACTION_LOG (both).
 - **Requirement refs:** R8
 - **Depends on:** T5
 - **MATHS phase:** N/A
@@ -237,8 +237,8 @@ N/A — non-math scope. Tests must be hermetic; live tenant only in GATE smoke t
 |------|--------|----------|------------|------------|
 | artifacts/diagnostics/m365_cps_trkB_full_coverage.json | JSON | T1 | per-task | see Section 8 / T1 |
 | Version bumped | varies | T2 | per-task | see Section 8 / T2 |
-| IntegrationPacks/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz | varies | T3 | per-task | see Section 8 / T3 |
-| src/ucp/runtime/release_artifacts.py with M365_120_RELEASE_SPEC | varies | T4 | per-task | see Section 8 / T4 |
+| IntegrationPacks/M365/0.1.4/com.smarthaus.m365-0.1.4.ucp.tar.gz | varies | T3 | per-task | see Section 8 / T3 |
+| src/ucp/runtime/release_artifacts.py with M365_014_RELEASE_SPEC | varies | T4 | per-task | see Section 8 / T4 |
 | SHA pinned | varies | T5 | per-task | see Section 8 / T5 |
 | Governance docs updated | varies | T6 | per-task | see Section 8 / T6 |
 

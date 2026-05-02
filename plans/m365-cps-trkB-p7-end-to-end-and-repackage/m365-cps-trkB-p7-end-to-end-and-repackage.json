@@ -29,12 +29,12 @@
   },
   "intent_capture": {
     "user_stated_requirements": [
-      "Full live-tenant coverage e2e; cut M365 1.2.0 release; bind UCP to it; governance closure."
+      "Full live-tenant coverage e2e; cut M365 0.1.4 release; bind UCP to it; governance closure."
     ],
     "intent_doc_ref": "captured in this plan",
     "intent_verification": "Tasks T1..T6 together satisfy this parent phase's objective."
   },
-  "objective": "Full live-tenant coverage e2e; cut M365 1.2.0 release; bind UCP to it; governance closure.",
+  "objective": "Full live-tenant coverage e2e; cut M365 0.1.4 release; bind UCP to it; governance closure.",
   "current_state": "Parent phase scope draft; no implementation yet.",
   "target_state": "All child tasks complete; GATE green; commit + push to feat/m365-cps-trkB.",
   "scope": {
@@ -59,7 +59,7 @@
       "UCP: docs/platform/EXECUTION_PLAN.md",
       "UCP: docs/platform/CODDEX_ACTION_LOG.md",
       "UCP: tests/integration/m365_cps_trkB_full_coverage.py",
-      "IntegrationPacks/M365/1.2.0/**"
+      "IntegrationPacks/M365/0.1.4/**"
     ],
     "file_denylist": [
       "Source files (those are p1-p6)",
@@ -137,7 +137,7 @@
       "id": "T2",
       "ref": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T2",
       "name": "Re-bump M365 version",
-      "description": "Update src/m365_runtime/__init__.py version constant to 1.2.0; update pyproject.toml.",
+      "description": "Update src/m365_runtime/__init__.py version constant to 0.1.4; update pyproject.toml.",
       "requirement_refs": [
         "R4"
       ],
@@ -149,9 +149,9 @@
         "Version bumped"
       ],
       "exit_criteria": [
-        "pip show smarthaus_m365 | grep 1.2.0"
+        "pip show smarthaus_m365 | grep 0.1.4"
       ],
-      "validation_command": "cd $M365_ROOT && grep -n '1.2.0' src/m365_runtime/__init__.py pyproject.toml",
+      "validation_command": "cd $M365_ROOT && grep -n '0.1.4' src/m365_runtime/__init__.py pyproject.toml",
       "implementation_notes": null,
       "files_to_read": [],
       "files_to_modify": [
@@ -163,7 +163,7 @@
       "id": "T3",
       "ref": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T3",
       "name": "Re-package marketplace artifact",
-      "description": "Run make pack to produce com.smarthaus.m365-1.2.0.ucp.tar.gz and IntegrationPacks/M365/1.2.0/ contents.",
+      "description": "Run make pack to produce com.smarthaus.m365-0.1.4.ucp.tar.gz and IntegrationPacks/M365/0.1.4/ contents.",
       "requirement_refs": [
         "R4"
       ],
@@ -172,23 +172,23 @@
       ],
       "maths_phase": null,
       "deliverables": [
-        "IntegrationPacks/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz"
+        "IntegrationPacks/M365/0.1.4/com.smarthaus.m365-0.1.4.ucp.tar.gz"
       ],
       "exit_criteria": [
         "Tarball exists; SHA256SUMS valid"
       ],
-      "validation_command": "ls $INTEGRATION_PACKS_ROOT/M365/1.2.0/com.smarthaus.m365-1.2.0.ucp.tar.gz",
+      "validation_command": "ls $INTEGRATION_PACKS_ROOT/M365/0.1.4/com.smarthaus.m365-0.1.4.ucp.tar.gz",
       "implementation_notes": null,
       "files_to_read": [],
       "files_to_modify": [
-        "IntegrationPacks/M365/1.2.0/** (generated)"
+        "IntegrationPacks/M365/0.1.4/** (generated)"
       ]
     },
     {
       "id": "T4",
       "ref": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T4",
       "name": "Update UCP release_artifacts.py spec",
-      "description": "Add M365_120_RELEASE_SPEC; update M365_RELEASE_SPEC alias to point at 1.2.0.",
+      "description": "Add M365_014_RELEASE_SPEC; update M365_RELEASE_SPEC alias to point at 0.1.4.",
       "requirement_refs": [
         "R4"
       ],
@@ -197,12 +197,12 @@
       ],
       "maths_phase": null,
       "deliverables": [
-        "src/ucp/runtime/release_artifacts.py with M365_120_RELEASE_SPEC"
+        "src/ucp/runtime/release_artifacts.py with M365_014_RELEASE_SPEC"
       ],
       "exit_criteria": [
-        "Import succeeds; spec.version == 1.2.0"
+        "Import succeeds; spec.version == 0.1.4"
       ],
-      "validation_command": "cd $UCP_ROOT && .venv/bin/python -c \"from ucp.runtime.release_artifacts import M365_RELEASE_SPEC; assert M365_RELEASE_SPEC.version == '1.2.0'\"",
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python -c \"from ucp.runtime.release_artifacts import M365_RELEASE_SPEC; assert M365_RELEASE_SPEC.version == '0.1.4'\"",
       "implementation_notes": null,
       "files_to_read": [],
       "files_to_modify": [
@@ -213,7 +213,7 @@
       "id": "T5",
       "ref": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T5",
       "name": "Re-verify SHA256 + provenance",
-      "description": "Update expected_bundle_sha256 in M365_120_RELEASE_SPEC; run release artifact acceptance test.",
+      "description": "Update expected_bundle_sha256 in M365_014_RELEASE_SPEC; run release artifact acceptance test.",
       "requirement_refs": [
         "R4"
       ],
@@ -227,7 +227,7 @@
       "exit_criteria": [
         "scripts/verify_release_artifact.py exits 0"
       ],
-      "validation_command": "cd $UCP_ROOT && .venv/bin/python scripts/verify_release_artifact.py M365_120_RELEASE_SPEC",
+      "validation_command": "cd $UCP_ROOT && .venv/bin/python scripts/verify_release_artifact.py M365_014_RELEASE_SPEC",
       "implementation_notes": null,
       "files_to_read": [],
       "files_to_modify": []
@@ -236,7 +236,7 @@
       "id": "T6",
       "ref": "plan:m365-cps-trkB-p7-end-to-end-and-repackage:T6",
       "name": "Update CHANGELOG / EXECUTION_PLAN / ACTION_LOG",
-      "description": "Document Track B completion + 1.2.0 release in CHANGELOG (M365), EXECUTION_PLAN (both), ACTION_LOG (both).",
+      "description": "Document Track B completion + 0.1.4 release in CHANGELOG (M365), EXECUTION_PLAN (both), ACTION_LOG (both).",
       "requirement_refs": [
         "R8"
       ],
