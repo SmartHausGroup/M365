@@ -1,7 +1,7 @@
 # SMARTHAUS AI Workforce — Codex Execution Plan
 
 ## Mission & Scope
-- Mission: Deliver a production-ready AI Workforce on Microsoft 365 only (SharePoint, Teams, Power Automate, Power Apps, Power BI, Outlook, Azure AD), with 39 agents managed via interactive dashboards and automated cross‑department workflows.
+- Mission: Deliver a production-ready AI Workforce on Microsoft 365 only (SharePoint, Teams, Power Automate, Power Apps, Power BI, Outlook, Azure AD), with 59 agents managed via interactive dashboards and automated cross‑department workflows.
 - Scope: Infrastructure setup, agent configuration, interactive dashboards, workflow automation, analytics, testing, security, go‑live, and training — strictly within M365 tooling and this repo’s services.
 
 ## Documents Reviewed (order)
@@ -14,7 +14,7 @@
 1) Infrastructure Setup (Weeks 1–2)
    - 10 SharePoint sites + libraries, 10 Teams workspaces + channels, shared mailboxes, Power Platform perms. Baseline dashboards online.
 2) Agent Configuration (Weeks 3–6)
-   - 39 agents mapped to SharePoint lists/libraries, Teams channels, Outlook rules, Power Automate flows per agent.
+   - 59 agents mapped to SharePoint lists/libraries, Teams channels, Outlook rules, Power Automate flows per agent.
 3) Interactive Dashboards (Weeks 7–8)
    - Agent overview + detail pages, status telemetry, task assignment, work review, approvals, basic real‑time updates.
 4) Automation & Integration (Weeks 9–10)
@@ -53,7 +53,7 @@ Phase 1 — Infrastructure (Weeks 1–2)
   - Enable provisioning once ready: `ALLOW_M365_MUTATIONS=true`
 
 Phase 2 — Agent Configuration (Weeks 3–6)
-- Map 39 agents in `registry/ai_team.json` + `registry/agents.yaml`
+- Map 59 agents in `registry/ai_team.json` + `registry/agents.yaml`
 - Create agent SharePoint lists, Teams channels; wire Outlook rules
 - Author baseline Power Automate flows: onboarding, deployment, campaigns, approvals
 - Generate/validate OPA policies from registry: `scripts/generate-policies.py`
@@ -86,7 +86,7 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
 - DLP/Compliance: SharePoint/Teams/Email DLP policies; audit logging; retention policies
 
 ## Success Metrics
-- Technical: 39 agents live; 99.9% uptime; <2s response; 100% security compliance; workflows automated
+- Technical: 59 agents live; 99.9% uptime; <2s response; 100% security compliance; workflows automated
 - Business: 90% task automation; 50% manual reduction; 95% user satisfaction; zero extra software cost; +25% efficiency
 
 ## Immediate Next Actions (Safe to start now)
@@ -101,6 +101,38 @@ Phase 5 — Testing & Go‑Live (Weeks 11–12)
    - Review `config/services.json`; align with departments; dry‑run `scripts/bootstrap_m365_services.py`
 5) Plan Phase 1 provisioning window
    - When ready, enable `ALLOW_M365_MUTATIONS=true` and execute bootstrap + PowerShell site creation
+
+## Initiative: M365 Persona Agent Contracts for UCP
+
+**Initiative:** Generate the UCP-facing M365 persona contract and inference-binding
+projection from M365 source registries so Studio can show every company persona
+without hand-maintained UCP rows.
+
+**Plan:** UCP-owned `plans/m365-persona-agent-contracts/m365-persona-agent-contracts.md`
+
+**Reference:** `plan:m365-persona-agent-contracts:R1-R9`
+
+**Status:** Complete-GO (2026-05-06). M365 emits a deterministic UCP inference
+binding and agent-contract projection for all 59 source personas: 54
+active/action-backed personas, 5 planned/persona-contract-only personas, and 445
+generated action contracts.
+
+**Current next act:** UCP consumes the generated
+`configs/marketplace/m365_inference_binding.json` and projects the full agent
+surface in Studio. Any future persona/action changes should update M365 source
+registries first, then regenerate the binding.
+
+**Status update (2026-05-06 16:57 EDT):** Added
+`scripts/generate_ucp_m365_inference_binding.py`, generated
+`configs/generated/m365_inference_binding.json` and
+`configs/generated/m365_agent_contracts.json`, and added focused drift-guard
+tests at `tests/test_ucp_m365_inference_binding_generation.py`. The generator
+preserves selected persona identity through UCP's generic `m365_action` executor
+and marks planned personas as visible but non-executable. Validation passed:
+generator execution completed, focused pytest reported `4 passed`, and
+`git diff --check` passed. No Microsoft tenant call, token, refresh token, auth
+code, device code, client secret, certificate private key, phone number, or
+subject object ID was created or recorded.
 
 ## Initiative: M365 GitHub Release And UCP Handoff Closure
 
@@ -223,7 +255,7 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 ## Initiative: M365 AI Workforce Expansion Master Plan
 
-**Initiative:** Expand the bounded standalone SMARTHAUS M365 v1 slice into the full agentic workforce program: all departments, all 39 personas, the full explicitly-inventoried governable M365 capability universe, bounded executors, and Claude -> UCP -> M365 delegation.
+**Initiative:** Expand the bounded standalone SMARTHAUS M365 v1 slice into the full agentic workforce program: all departments, all 59 personas, the full explicitly-inventoried governable M365 capability universe, bounded executors, and Claude -> UCP -> M365 delegation.
 
 **Plan:** `plans/m365-ai-workforce-expansion-master-plan/m365-ai-workforce-expansion-master-plan.md`
 
@@ -276,7 +308,7 @@ Per-repo detailed plans and Codex prompts live in TAI, MAIA, CAIO, and VFE repos
 
 **Status update (2026-03-20 23:29 EDT):** `E4E` is complete. The workforce-expansion program now has a machine-readable admin/governance authority at `registry/admin_governance_surface_expansion_v2.yaml`, a human-readable contract at `docs/commercialization/m365-admin-governance-surface-expansion-v2.md`, notebook-backed `L42` evidence, a bounded admin/governance runtime at `src/smarthaus_common/admin_governance_client.py`, and expanded instruction-router coverage in `src/provisioning_api/routers/m365.py` for `get_report`, `get_usage_reports`, `get_activity_reports`, `list_access_reviews`, `get_access_review`, `create_access_review`, `list_access_review_decisions`, and `record_access_review_decision`. The CAIO, capability, routing, auth, and approval contracts are synchronized, and generated proof now exists at `configs/generated/admin_governance_surface_expansion_verification.json`. Validation passed with `PYTHONPATH=src python3 scripts/ci/build_capability_registry.py`, `python3 -m py_compile src/smarthaus_common/admin_governance_client.py src/provisioning_api/routers/m365.py scripts/ci/verify_admin_governance_surface_expansion.py tests/test_admin_governance_surface_expansion_v2.py scripts/ci/verify_caio_m365_contract.py scripts/ci/build_capability_registry.py`, `PYTHONPATH=src .venv/bin/pytest -q tests/test_admin_governance_surface_expansion_v2.py` (`3 passed`), `PYTHONPATH=src .venv/bin/pytest -q tests/test_executor_routing_v2.py tests/test_auth_model_v2.py tests/test_approval_risk_v2.py tests/test_admin_governance_surface_expansion_v2.py` (`20 passed`), `PYTHONPATH=src python3 scripts/ci/verify_admin_governance_surface_expansion.py` (`PASSED (8 actions)`), `PYTHONPATH=src python3 scripts/ci/verify_capability_registry.py`, `PYTHONPATH=src python3 scripts/ci/verify_caio_m365_contract.py`, and `git diff --check`. `E5A` is now the active next act.
 
-**Status update (2026-03-20 23:42 EDT):** `E5A` is complete. The workforce-expansion program now has an authoritative persona registry at `registry/persona_registry_v2.yaml`, a human-readable contract at `docs/commercialization/m365-persona-registry-v2.md`, notebook-backed `L43` evidence, and a shared runtime loader/validator in `src/ops_adapter/personas.py` that constrains persona resolution to the roster-bound `39` digital employees instead of the mixed `59`-entry inventory. Deterministic builder and verifier commands now exist at `scripts/ci/build_persona_registry_v2.py` and `scripts/ci/verify_persona_registry_v2.py`, with generated proof at `configs/generated/persona_registry_v2_verification.json`. Validation passed with `PYTHONPATH=src python3 scripts/ci/build_persona_registry_v2.py`, `python3 -m py_compile src/ops_adapter/personas.py scripts/ci/build_persona_registry_v2.py scripts/ci/verify_persona_registry_v2.py tests/test_persona_registry_v2.py`, `PYTHONPATH=src .venv/bin/pytest -q tests/test_persona_registry_v2.py` (`3 passed`), `PYTHONPATH=src python3 scripts/ci/verify_persona_registry_v2.py` (`PASSED (39 personas, 4 active, 35 planned)`), and `git diff --check`. `E5B` is now the active next act.
+**Status update (2026-03-20 23:42 EDT):** `E5A` is complete. The workforce-expansion program now has an authoritative persona registry at `registry/persona_registry_v2.yaml`, a human-readable contract at `docs/commercialization/m365-persona-registry-v2.md`, notebook-backed `L43` evidence, and a shared runtime loader/validator in `src/ops_adapter/personas.py` that constrains persona resolution to the roster-bound `39` digital employees instead of the mixed `59`-entry inventory. Deterministic builder and verifier commands now exist at `scripts/ci/build_persona_registry_v2.py` and `scripts/ci/verify_persona_registry_v2.py`, with generated proof at `configs/generated/persona_registry_v2_verification.json`. Validation passed with `PYTHONPATH=src python3 scripts/ci/build_persona_registry_v2.py`, `python3 -m py_compile src/ops_adapter/personas.py scripts/ci/build_persona_registry_v2.py scripts/ci/verify_persona_registry_v2.py tests/test_persona_registry_v2.py`, `PYTHONPATH=src .venv/bin/pytest -q tests/test_persona_registry_v2.py` (`3 passed`), `PYTHONPATH=src python3 scripts/ci/verify_persona_registry_v2.py` (`PASSED (59 personas, 4 active, 35 planned)`), and `git diff --check`. `E5B` is now the active next act.
 
 **Status update (2026-03-20 23:52 EDT):** `E5B` is complete. The workforce-expansion program now has a machine-readable humanized delegation authority at `registry/humanized_delegation_interface_v1.yaml`, a human-readable contract at `docs/commercialization/m365-humanized-delegation-interface-v1.md`, notebook-backed `L44` evidence, shared natural-language persona resolution in `src/ops_adapter/personas.py`, and bounded resolution endpoints in `src/ops_adapter/main.py` plus `src/ops_adapter/app.py`. Deterministic verifier coverage now exists at `scripts/ci/verify_humanized_delegation_interface_v1.py`, with generated proof at `configs/generated/humanized_delegation_interface_v1_verification.json`. Validation passed with `python3 -m py_compile src/ops_adapter/personas.py src/ops_adapter/app.py src/ops_adapter/main.py scripts/ci/verify_humanized_delegation_interface_v1.py tests/test_humanized_delegation_interface_v1.py`, `PYTHONPATH=src .venv/bin/pytest -q tests/test_humanized_delegation_interface_v1.py` (`4 passed`), `PYTHONPATH=src python3 scripts/ci/verify_humanized_delegation_interface_v1.py` (`PASSED (5 patterns)`), and `git diff --check`. `E5C` is now the active next act.
 

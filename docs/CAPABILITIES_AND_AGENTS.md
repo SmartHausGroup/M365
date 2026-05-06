@@ -40,10 +40,20 @@
 ## 2. M365 agents — what/who they are and whether we use them
 
 **What they are:**
-M365 “agents” in this repo are **personas/roles** defined in `registry/agents.yaml`. Each has a **name**, **department**, **risk_tier**, **allowed_actions** (list of action names), and optional **approval_rules**. They are **not** conversational AI agents; they are **identity/role definitions** used for:
+M365 “agents” in this repo are **personas/roles** defined by the authoritative registry set:
+
+- `registry/ai_team.json` — named workforce roster
+- `registry/persona_registry_v2.yaml` — normalized persona contract registry
+- `registry/agents.yaml` — allowed action registry
+- `registry/persona_capability_map.yaml` — risk, approval, workload, and capability-family map
+
+The current source-truth count is **59 personas**: **54 active/action-backed** and
+**5 planned/persona-contract-only**. Each persona has a name, title, department,
+risk tier, allowed actions, approval profile, and contract boundaries.
 
 1. **Ops-adapter:** When a request hits `/actions/<agent_id>/<action>`, the adapter loads the registry, checks that the agent has that action in `allowed_actions`, and (optionally) consults OPA and approval rules. So the **ops-adapter uses the registry** for policy and routing.
-2. **Provisioning API:** **GET** `/api/m365/agents` returns this registry (so dashboards or CAIO can list “who” exists). The **instruction API** itself does **not** take an agent_id in the request — it just takes `action` + `params`. So for the **CAIO ↔ M365 instruction API**, we are **not** currently “using” agents in the sense of “CAIO sends agent_id”. We **are** using the registry to **expose** the list of personas (e.g. for a future dashboard or for approval routing in ops-adapter).
+2. **Provisioning API:** **GET** `/api/m365/agents` returns this registry so dashboards can list “who” exists.
+3. **UCP Marketplace inference binding:** `scripts/generate_ucp_m365_inference_binding.py` projects the authoritative registry into `configs/generated/m365_inference_binding.json`. UCP Studio consumes that generated binding so users can talk to a selected persona in plain English through SAID, while UCP still validates the locked intent against the persona contract before execution.
 
 **Who they are (examples from `registry/agents.yaml`):**
 
@@ -58,7 +68,7 @@ M365 “agents” in this repo are **personas/roles** defined in `registry/agent
 - **Marketing, design, etc.** — More roles, some with empty allowed_actions.
 
 **Summary:**
-We **are** using the agents in the **ops-adapter** (policy + approvals). We **expose** them via **GET /api/m365/agents** for the provisioning/dashboard side. The **instruction API** used by CAIO does **not** require an agent_id; it is a single API that executes actions. So “M365 agents” = registry of personas/roles used for policy and visibility; the instruction API is agent-agnostic.
+We use agents as governed persona contracts. M365 owns the source truth and generated binding; UCP owns host admission and execution gating. Planned personas remain visible for transparency but must not execute actions until their upstream action surface exists.
 
 **Design note (personas as real roles, edge contract for VFE):**
-See **`docs/PERSONAS_AGENTS_AND_CAIO_EDGE.md`**. Personas should map to real subsets of the M365 capability set \(\mathcal{O}\); the contract on the edge (agent ↔ CAIO) is the **entire response** so it can be handed off to VFE and the person is “talking back” to the user. Not yet implemented — captured for when we do it.
+See **`docs/PERSONAS_AGENTS_AND_CAIO_EDGE.md`**. Personas map to real subsets of the M365 capability set \(\mathcal{O}\); the UCP inference binding is now the host-facing edge contract for SAID-mediated natural-language interaction.

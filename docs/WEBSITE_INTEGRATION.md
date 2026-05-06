@@ -22,7 +22,7 @@ export default function AIWorkforce() {
     <div className="max-w-7xl mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8">Meet Our AI Workforce</h1>
       <p className="text-xl mb-12 text-gray-600">
-        Our 39 AI employees work 24/7 to deliver exceptional results.
+        Our 59 AI employees work 24/7 to deliver exceptional results.
       </p>
       {Object.entries(departments).map(([dept, members]) => (
         <section key={dept} className="mb-12">

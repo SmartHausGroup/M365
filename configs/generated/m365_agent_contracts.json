@@ -1,0 +1,2821 @@
+{
+  "contracts": [
+    {
+      "agent_id": "ai-engineer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search",
+            "reports.users_active",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:ai-engineer:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Alex Thompson",
+          "persona_id": "ai-engineer",
+          "title": "ML Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "ML Engineer",
+      "person_name": "Alex Thompson",
+      "status": "active"
+    },
+    {
+      "agent_id": "analytics-reporter",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity",
+            "reports.sharepoint_usage",
+            "reports.onedrive_usage",
+            "sites.list",
+            "lists.list",
+            "lists.get",
+            "lists.items"
+          ],
+          "allowed_domains": [
+            "reports",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:analytics-reporter:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-lead:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Amanda Foster",
+          "persona_id": "analytics-reporter",
+          "title": "Data Scientist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Data Scientist",
+      "person_name": "Amanda Foster",
+      "status": "active"
+    },
+    {
+      "agent_id": "api-tester",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "health.overview",
+            "health.issues",
+            "health.issue_get",
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity",
+            "reports.sharepoint_usage",
+            "reports.onedrive_usage"
+          ],
+          "allowed_domains": [
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:testing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:api-tester:v1",
+        "identity": {
+          "department": "testing",
+          "escalation_owner": "department-lead:testing",
+          "manager": "department-lead:testing",
+          "person_name": "Nina Shah",
+          "persona_id": "api-tester",
+          "title": "QA Automation Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "QA Automation Lead",
+      "person_name": "Nina Shah",
+      "status": "active"
+    },
+    {
+      "agent_id": "app-store-optimizer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:app-store-optimizer:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Jake Thompson",
+          "persona_id": "app-store-optimizer",
+          "title": "ASO Specialist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "ASO Specialist",
+      "person_name": "Jake Thompson",
+      "status": "planned"
+    },
+    {
+      "agent_id": "audit-operations",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "audit.directory",
+            "audit.signins",
+            "audit.provisioning"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:operations",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:audit-operations:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Naomi Brooks",
+          "persona_id": "audit-operations",
+          "title": "Audit Operations Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Audit Operations Lead",
+      "person_name": "Naomi Brooks",
+      "status": "active"
+    },
+    {
+      "agent_id": "backend-architect",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "apps.list",
+            "apps.get",
+            "service_principals.list",
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.get",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "directory",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:backend-architect:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Jordan Kim",
+          "persona_id": "backend-architect",
+          "title": "Principal Backend Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Principal Backend Engineer",
+      "person_name": "Jordan Kim",
+      "status": "active"
+    },
+    {
+      "agent_id": "brand-guardian",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "files.search",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:design",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:brand-guardian:v1",
+        "identity": {
+          "department": "design",
+          "escalation_owner": "department-lead:design",
+          "manager": "department-lead:design",
+          "person_name": "Isabella Rossi",
+          "persona_id": "brand-guardian",
+          "title": "Brand Guardian"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Brand Guardian",
+      "person_name": "Isabella Rossi",
+      "status": "active"
+    },
+    {
+      "agent_id": "calendar-management-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "calendar.list",
+            "calendar.create",
+            "calendar.get",
+            "calendar.update",
+            "calendar.delete",
+            "calendar.availability",
+            "calendar.schedule",
+            "meeting.organize",
+            "availability.check",
+            "reminder.send",
+            "conflict.resolve"
+          ],
+          "allowed_domains": [
+            "messaging"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "executive-assistant",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:calendar-management-agent:v1",
+        "identity": {
+          "department": "communication",
+          "escalation_owner": "department-owner:communication",
+          "manager": "department-lead:communication",
+          "person_name": "Mateo Alvarez",
+          "persona_id": "calendar-management-agent",
+          "title": "Calendar Operations Coordinator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Calendar Operations Coordinator",
+      "person_name": "Mateo Alvarez",
+      "status": "active"
+    },
+    {
+      "agent_id": "client-relationship-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "client.follow-up",
+            "satisfaction.survey",
+            "feedback.analyze",
+            "relationship.score",
+            "engagement.plan"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "account-manager",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:client-relationship-agent:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-owner:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Priya Mehta",
+          "persona_id": "client-relationship-agent",
+          "title": "Client Relationship Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Client Relationship Manager",
+      "person_name": "Priya Mehta",
+      "status": "active"
+    },
+    {
+      "agent_id": "compliance-monitoring-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "compliance.check",
+            "policy.validate",
+            "audit.prepare",
+            "violation.report",
+            "remediation.plan"
+          ],
+          "allowed_domains": [
+            "compliance"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "legal",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "critical"
+        },
+        "contract_id": "m365-agent-contract:compliance-monitoring-agent:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Farah Alvi",
+          "persona_id": "compliance-monitoring-agent",
+          "title": "Compliance Monitoring Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Compliance Monitoring Lead",
+      "person_name": "Farah Alvi",
+      "status": "active"
+    },
+    {
+      "agent_id": "content-creator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:content-creator:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Taylor Swift",
+          "persona_id": "content-creator",
+          "title": "Content Strategist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Content Strategist",
+      "person_name": "Taylor Swift",
+      "status": "active"
+    },
+    {
+      "agent_id": "device-management",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "devices.list",
+            "devices.get",
+            "devices.compliance",
+            "devices.actions"
+          ],
+          "allowed_domains": [
+            "devices"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "it-operations-manager",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:device-management:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Connor Walsh",
+          "persona_id": "device-management",
+          "title": "Endpoint Operations Administrator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Endpoint Operations Administrator",
+      "person_name": "Connor Walsh",
+      "status": "active"
+    },
+    {
+      "agent_id": "devops-automator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "devices.list",
+            "devices.get",
+            "devices.compliance",
+            "health.overview",
+            "health.issues",
+            "health.issue_get",
+            "health.messages",
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "devices",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:devops-automator:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Casey Johnson",
+          "persona_id": "devops-automator",
+          "title": "DevOps Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "DevOps Engineer",
+      "person_name": "Casey Johnson",
+      "status": "active"
+    },
+    {
+      "agent_id": "email-processing-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "mail.list",
+            "mail.read",
+            "mail.send",
+            "mail.reply",
+            "mail.forward",
+            "mail.move",
+            "mail.delete",
+            "mail.folders",
+            "mailbox.settings",
+            "email.classify",
+            "email.respond",
+            "email.forward",
+            "email.archive",
+            "follow-up.schedule"
+          ],
+          "allowed_domains": [
+            "messaging"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "legal",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:email-processing-agent:v1",
+        "identity": {
+          "department": "communication",
+          "escalation_owner": "department-owner:communication",
+          "manager": "department-lead:communication",
+          "person_name": "Hannah Kim",
+          "persona_id": "email-processing-agent",
+          "title": "Email Operations Specialist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Email Operations Specialist",
+      "person_name": "Hannah Kim",
+      "status": "active"
+    },
+    {
+      "agent_id": "experiment-tracker",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "teams.list",
+            "channels.list",
+            "reports.users_active",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "collaboration",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:project-management",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:experiment-tracker:v1",
+        "identity": {
+          "department": "project-management",
+          "escalation_owner": "department-lead:project-management",
+          "manager": "department-lead:project-management",
+          "person_name": "Emily Carter",
+          "persona_id": "experiment-tracker",
+          "title": "Experimentation PM"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Experimentation PM",
+      "person_name": "Emily Carter",
+      "status": "active"
+    },
+    {
+      "agent_id": "feedback-synthesizer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "mail.list",
+            "mail.read",
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list"
+          ],
+          "allowed_domains": [
+            "messaging",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:product",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:feedback-synthesizer:v1",
+        "identity": {
+          "department": "product",
+          "escalation_owner": "department-lead:product",
+          "manager": "department-lead:product",
+          "person_name": "Maya Patel",
+          "persona_id": "feedback-synthesizer",
+          "title": "User Research Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "User Research Lead",
+      "person_name": "Maya Patel",
+      "status": "active"
+    },
+    {
+      "agent_id": "finance-tracker",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:finance-tracker:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-lead:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Lisa Chang",
+          "persona_id": "finance-tracker",
+          "title": "Chief Financial Officer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Chief Financial Officer",
+      "person_name": "Lisa Chang",
+      "status": "active"
+    },
+    {
+      "agent_id": "financial-operations-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "invoice.process",
+            "expense.approve",
+            "budget.track",
+            "forecast.update",
+            "audit.prepare"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "finance-director",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "critical"
+        },
+        "contract_id": "m365-agent-contract:financial-operations-agent:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-owner:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Luis Carvalho",
+          "persona_id": "financial-operations-agent",
+          "title": "Financial Operations Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Financial Operations Manager",
+      "person_name": "Luis Carvalho",
+      "status": "active"
+    },
+    {
+      "agent_id": "frontend-developer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "files.list",
+            "files.get",
+            "files.search",
+            "files.create_folder",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:frontend-developer:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Riley Martinez",
+          "persona_id": "frontend-developer",
+          "title": "UI/UX Developer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "UI/UX Developer",
+      "person_name": "Riley Martinez",
+      "status": "active"
+    },
+    {
+      "agent_id": "growth-hacker",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "mail.list",
+            "mail.read",
+            "mail.send",
+            "calendar.list",
+            "reports.email_activity",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "messaging",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:growth-hacker:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Morgan Davis",
+          "persona_id": "growth-hacker",
+          "title": "Growth Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Growth Lead",
+      "person_name": "Morgan Davis",
+      "status": "active"
+    },
+    {
+      "agent_id": "hr-generalist",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "employee.onboard",
+            "employee.update_info",
+            "employee.offboard",
+            "policy.create",
+            "review.initiate"
+          ],
+          "allowed_domains": [
+            "directory"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "hr-manager",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "critical"
+        },
+        "contract_id": "m365-agent-contract:hr-generalist:v1",
+        "identity": {
+          "department": "hr",
+          "escalation_owner": "department-lead:hr",
+          "manager": "department-lead:hr",
+          "person_name": "Sarah Williams",
+          "persona_id": "hr-generalist",
+          "title": "HR Director"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "HR Director",
+      "person_name": "Sarah Williams",
+      "status": "active"
+    },
+    {
+      "agent_id": "identity-security",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "ca.policies",
+            "ca.policy_get",
+            "ca.policy_create",
+            "ca.policy_update",
+            "ca.policy_delete",
+            "ca.named_locations"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "ciso",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "critical"
+        },
+        "contract_id": "m365-agent-contract:identity-security:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Amara Okoye",
+          "persona_id": "identity-security",
+          "title": "Identity Security Administrator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Identity Security Administrator",
+      "person_name": "Amara Okoye",
+      "status": "active"
+    },
+    {
+      "agent_id": "infrastructure-maintainer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "devices.list",
+            "devices.get",
+            "devices.compliance",
+            "security.alerts",
+            "security.alert_get",
+            "sites.list",
+            "files.list",
+            "files.get"
+          ],
+          "allowed_domains": [
+            "devices",
+            "security",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:infrastructure-maintainer:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-lead:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Jennifer Liu",
+          "persona_id": "infrastructure-maintainer",
+          "title": "Site Reliability Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Site Reliability Engineer",
+      "person_name": "Jennifer Liu",
+      "status": "active"
+    },
+    {
+      "agent_id": "instagram-curator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:instagram-curator:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Zoe Martinez",
+          "persona_id": "instagram-curator",
+          "title": "Visual Content Specialist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Visual Content Specialist",
+      "person_name": "Zoe Martinez",
+      "status": "planned"
+    },
+    {
+      "agent_id": "it-operations-manager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "infrastructure.monitor",
+            "system.health-check",
+            "alerts.respond",
+            "backup.verify",
+            "security.scan"
+          ],
+          "allowed_domains": [
+            "security"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "ciso",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:it-operations-manager:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Peter Novak",
+          "persona_id": "it-operations-manager",
+          "title": "IT Operations Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "IT Operations Manager",
+      "person_name": "Peter Novak",
+      "status": "active"
+    },
+    {
+      "agent_id": "knowledge-management-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "document.index",
+            "search.optimize",
+            "content.curate",
+            "training.recommend",
+            "expert.connect"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:knowledge-management-agent:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-owner:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Leah Goldstein",
+          "persona_id": "knowledge-management-agent",
+          "title": "Knowledge Operations Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Knowledge Operations Lead",
+      "person_name": "Leah Goldstein",
+      "status": "active"
+    },
+    {
+      "agent_id": "legal-compliance-checker",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "compliance.check",
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "files.search"
+          ],
+          "allowed_domains": [
+            "compliance",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:legal-compliance-checker:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-lead:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Robert Kim",
+          "persona_id": "legal-compliance-checker",
+          "title": "Legal Counsel"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Legal Counsel",
+      "person_name": "Robert Kim",
+      "status": "active"
+    },
+    {
+      "agent_id": "m365-administrator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "users.list",
+            "users.read",
+            "users.create",
+            "users.update",
+            "users.disable",
+            "licenses.assign",
+            "groups.list",
+            "groups.get",
+            "groups.create",
+            "groups.add_member",
+            "groups.remove_member",
+            "groups.list_members",
+            "sites.list",
+            "sites.get",
+            "sites.root",
+            "sites.provision",
+            "lists.list",
+            "lists.get",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search",
+            "files.create_folder",
+            "files.upload",
+            "files.share",
+            "drives.list",
+            "directory.roles",
+            "directory.role_members",
+            "directory.domains",
+            "directory.org",
+            "apps.list",
+            "apps.get",
+            "apps.update",
+            "service_principals.list",
+            "teams.create",
+            "teams.add_channel"
+          ],
+          "allowed_domains": [
+            "directory",
+            "sharepoint",
+            "collaboration"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "global_admin",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:m365-administrator:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-lead:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Marcus Chen",
+          "persona_id": "m365-administrator",
+          "title": "Senior IT Administrator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Senior IT Administrator",
+      "person_name": "Marcus Chen",
+      "status": "active"
+    },
+    {
+      "agent_id": "mobile-app-builder",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "files.list",
+            "files.get",
+            "files.create_folder",
+            "drives.list",
+            "teams.list",
+            "channels.list"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "collaboration"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:mobile-app-builder:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Taylor Brown",
+          "persona_id": "mobile-app-builder",
+          "title": "Mobile Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Mobile Engineer",
+      "person_name": "Taylor Brown",
+      "status": "active"
+    },
+    {
+      "agent_id": "outreach-coordinator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "email.send_individual",
+            "email.send_bulk",
+            "email.schedule",
+            "meeting.schedule",
+            "followup.create",
+            "campaign.create",
+            "mail.send"
+          ],
+          "allowed_domains": [
+            "messaging"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "marketing-lead",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:outreach-coordinator:v1",
+        "identity": {
+          "department": "communication",
+          "escalation_owner": "department-lead:communication",
+          "manager": "department-lead:communication",
+          "person_name": "David Park",
+          "persona_id": "outreach-coordinator",
+          "title": "Communications Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Communications Manager",
+      "person_name": "David Park",
+      "status": "active"
+    },
+    {
+      "agent_id": "performance-benchmarker",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity",
+            "reports.sharepoint_usage",
+            "reports.onedrive_usage",
+            "sites.list",
+            "lists.list",
+            "lists.items"
+          ],
+          "allowed_domains": [
+            "reports",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:testing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:performance-benchmarker:v1",
+        "identity": {
+          "department": "testing",
+          "escalation_owner": "department-lead:testing",
+          "manager": "department-lead:testing",
+          "person_name": "Omar Haddad",
+          "persona_id": "performance-benchmarker",
+          "title": "Performance Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Performance Engineer",
+      "person_name": "Omar Haddad",
+      "status": "active"
+    },
+    {
+      "agent_id": "platform-manager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.provision",
+            "sites.list",
+            "apps.list",
+            "apps.get",
+            "service_principals.list",
+            "directory.org"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "directory"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:platform-manager:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-owner:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Andre Baptiste",
+          "persona_id": "platform-manager",
+          "title": "Platform Engineering Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Platform Engineering Manager",
+      "person_name": "Andre Baptiste",
+      "status": "active"
+    },
+    {
+      "agent_id": "project-coordination-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "task.create",
+            "task.assign",
+            "deadline.track",
+            "status.update",
+            "report.generate",
+            "list_plans",
+            "create_plan",
+            "list_buckets",
+            "create_bucket",
+            "create_task"
+          ],
+          "allowed_domains": [
+            "collaboration"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "project-manager",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:project-coordination-agent:v1",
+        "identity": {
+          "department": "project-management",
+          "escalation_owner": "department-owner:project-management",
+          "manager": "department-lead:project-management",
+          "person_name": "Sofia Petrova",
+          "persona_id": "project-coordination-agent",
+          "title": "Project Coordinator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Project Coordinator",
+      "person_name": "Sofia Petrova",
+      "status": "active"
+    },
+    {
+      "agent_id": "project-manager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "teams.list",
+            "teams.get",
+            "channels.list",
+            "calendar.list",
+            "calendar.create",
+            "calendar.get",
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "archive-project"
+          ],
+          "allowed_domains": [
+            "collaboration",
+            "messaging",
+            "sharepoint",
+            "workmanagement"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:project-management",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:project-manager:v1",
+        "identity": {
+          "department": "project-management",
+          "escalation_owner": "department-owner:project-management",
+          "manager": "department-lead:project-management",
+          "person_name": "Haruto Tanaka",
+          "persona_id": "project-manager",
+          "title": "Project Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Project Manager",
+      "person_name": "Haruto Tanaka",
+      "status": "active"
+    },
+    {
+      "agent_id": "project-shipper",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "list_plans",
+            "list_buckets",
+            "create_bucket",
+            "create_task",
+            "task.create",
+            "task.assign",
+            "deadline.track",
+            "status.update",
+            "report.generate"
+          ],
+          "allowed_domains": [
+            "collaboration",
+            "workmanagement"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:project-management",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:project-shipper:v1",
+        "identity": {
+          "department": "project-management",
+          "escalation_owner": "department-lead:project-management",
+          "manager": "department-lead:project-management",
+          "person_name": "Ben Foster",
+          "persona_id": "project-shipper",
+          "title": "Release Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Release Manager",
+      "person_name": "Ben Foster",
+      "status": "active"
+    },
+    {
+      "agent_id": "rapid-prototyper",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "teams.list",
+            "channels.list"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "collaboration"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:rapid-prototyper:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Ethan Rivera",
+          "persona_id": "rapid-prototyper",
+          "title": "Prototype Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Prototype Engineer",
+      "person_name": "Ethan Rivera",
+      "status": "active"
+    },
+    {
+      "agent_id": "recruitment-assistance-agent",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "candidate.screen",
+            "interview.schedule",
+            "feedback.collect",
+            "offer.prepare",
+            "onboarding.initiate"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "hr-director",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:recruitment-assistance-agent:v1",
+        "identity": {
+          "department": "hr",
+          "escalation_owner": "department-owner:hr",
+          "manager": "department-lead:hr",
+          "person_name": "Camila Torres",
+          "persona_id": "recruitment-assistance-agent",
+          "title": "Recruiting Coordinator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Recruiting Coordinator",
+      "person_name": "Camila Torres",
+      "status": "active"
+    },
+    {
+      "agent_id": "reddit-community-builder",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:reddit-community-builder:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Priya Singh",
+          "persona_id": "reddit-community-builder",
+          "title": "Community Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Community Manager",
+      "person_name": "Priya Singh",
+      "status": "planned"
+    },
+    {
+      "agent_id": "reports",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "reports.users_active",
+            "reports.email_activity",
+            "reports.teams_activity",
+            "reports.sharepoint_usage",
+            "reports.onedrive_usage"
+          ],
+          "allowed_domains": [
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:reports:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-owner:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Youssef Haddad",
+          "persona_id": "reports",
+          "title": "Reporting and KPI Analyst"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Reporting and KPI Analyst",
+      "person_name": "Youssef Haddad",
+      "status": "active"
+    },
+    {
+      "agent_id": "security-operations",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "security.alerts",
+            "security.alert_get",
+            "security.alert_update",
+            "security.incidents",
+            "security.incident_get",
+            "security.secure_score"
+          ],
+          "allowed_domains": [
+            "security"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "ciso",
+          "approval_profile": "high-impact",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "high"
+        },
+        "contract_id": "m365-agent-contract:security-operations:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Tunde Adeyemi",
+          "persona_id": "security-operations",
+          "title": "Security Operations Lead"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Security Operations Lead",
+      "person_name": "Tunde Adeyemi",
+      "status": "active"
+    },
+    {
+      "agent_id": "service-health",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "health.overview",
+            "health.issues",
+            "health.issue_get",
+            "health.messages"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:operations",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:service-health:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Chloe Martin",
+          "persona_id": "service-health",
+          "title": "Service Reliability Coordinator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Service Reliability Coordinator",
+      "person_name": "Chloe Martin",
+      "status": "active"
+    },
+    {
+      "agent_id": "sprint-prioritizer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "teams.list",
+            "teams.get",
+            "channels.list",
+            "channels.create",
+            "calendar.list",
+            "calendar.create",
+            "calendar.get",
+            "calendar.availability"
+          ],
+          "allowed_domains": [
+            "collaboration",
+            "messaging"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:product",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:sprint-prioritizer:v1",
+        "identity": {
+          "department": "product",
+          "escalation_owner": "department-lead:product",
+          "manager": "department-lead:product",
+          "person_name": "Sam Chen",
+          "persona_id": "sprint-prioritizer",
+          "title": "Product Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Product Manager",
+      "person_name": "Sam Chen",
+      "status": "active"
+    },
+    {
+      "agent_id": "studio-producer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "teams.list",
+            "teams.get",
+            "channels.list",
+            "calendar.list",
+            "calendar.create",
+            "calendar.get",
+            "sites.list",
+            "lists.list",
+            "lists.items"
+          ],
+          "allowed_domains": [
+            "collaboration",
+            "messaging",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:project-management",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:studio-producer:v1",
+        "identity": {
+          "department": "project-management",
+          "escalation_owner": "department-lead:project-management",
+          "manager": "department-lead:project-management",
+          "person_name": "Olivia Park",
+          "persona_id": "studio-producer",
+          "title": "Studio Producer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Studio Producer",
+      "person_name": "Olivia Park",
+      "status": "active"
+    },
+    {
+      "agent_id": "support-responder",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "mail.list",
+            "mail.read",
+            "mail.send",
+            "mail.reply",
+            "mail.folders",
+            "client.follow-up",
+            "satisfaction.survey",
+            "feedback.analyze"
+          ],
+          "allowed_domains": [
+            "messaging",
+            "composite"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:studio-operations",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:support-responder:v1",
+        "identity": {
+          "department": "studio-operations",
+          "escalation_owner": "department-lead:studio-operations",
+          "manager": "department-lead:studio-operations",
+          "person_name": "Mike Rodriguez",
+          "persona_id": "support-responder",
+          "title": "Customer Success Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Customer Success Manager",
+      "person_name": "Mike Rodriguez",
+      "status": "active"
+    },
+    {
+      "agent_id": "teams-manager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "teams.list",
+            "teams.get",
+            "teams.create",
+            "teams.archive",
+            "teams.add_member",
+            "teams.remove_member",
+            "channels.list",
+            "channels.create",
+            "channels.send_message",
+            "chat.create",
+            "chat.send_message",
+            "chat.send",
+            "chat.list",
+            "create-workspace",
+            "add-workspace-members",
+            "create-channels",
+            "get-team-status"
+          ],
+          "allowed_domains": [
+            "collaboration"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "it-director",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:teams-manager:v1",
+        "identity": {
+          "department": "communication",
+          "escalation_owner": "department-owner:communication",
+          "manager": "department-lead:communication",
+          "person_name": "Alicia Nguyen",
+          "persona_id": "teams-manager",
+          "title": "Teams Collaboration Administrator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Teams Collaboration Administrator",
+      "person_name": "Alicia Nguyen",
+      "status": "active"
+    },
+    {
+      "agent_id": "test-results-analyzer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "files.search",
+            "reports.users_active"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:testing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:test-results-analyzer:v1",
+        "identity": {
+          "department": "testing",
+          "escalation_owner": "department-lead:testing",
+          "manager": "department-lead:testing",
+          "person_name": "Sofia Alvarez",
+          "persona_id": "test-results-analyzer",
+          "title": "Quality Analyst"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Quality Analyst",
+      "person_name": "Sofia Alvarez",
+      "status": "active"
+    },
+    {
+      "agent_id": "test-writer-fixer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:engineering",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:test-writer-fixer:v1",
+        "identity": {
+          "department": "engineering",
+          "escalation_owner": "department-lead:engineering",
+          "manager": "department-lead:engineering",
+          "person_name": "Grace Lee",
+          "persona_id": "test-writer-fixer",
+          "title": "Test Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Test Engineer",
+      "person_name": "Grace Lee",
+      "status": "active"
+    },
+    {
+      "agent_id": "tiktok-strategist",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:tiktok-strategist:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Ryan O'Connor",
+          "persona_id": "tiktok-strategist",
+          "title": "Short-form Video Expert"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Short-form Video Expert",
+      "person_name": "Ryan O'Connor",
+      "status": "planned"
+    },
+    {
+      "agent_id": "tool-evaluator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "reports.users_active",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:testing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:tool-evaluator:v1",
+        "identity": {
+          "department": "testing",
+          "escalation_owner": "department-lead:testing",
+          "manager": "department-lead:testing",
+          "person_name": "Liam Nguyen",
+          "persona_id": "tool-evaluator",
+          "title": "Dev Tools Strategist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Dev Tools Strategist",
+      "person_name": "Liam Nguyen",
+      "status": "active"
+    },
+    {
+      "agent_id": "trend-researcher",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "reports.users_active",
+            "reports.teams_activity"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:product",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:trend-researcher:v1",
+        "identity": {
+          "department": "product",
+          "escalation_owner": "department-lead:product",
+          "manager": "department-lead:product",
+          "person_name": "Chris Wong",
+          "persona_id": "trend-researcher",
+          "title": "Market Analyst"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Market Analyst",
+      "person_name": "Chris Wong",
+      "status": "active"
+    },
+    {
+      "agent_id": "twitter-engager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:marketing",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:twitter-engager:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-lead:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Jamie Lee",
+          "persona_id": "twitter-engager",
+          "title": "Social Media Director"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Social Media Director",
+      "person_name": "Jamie Lee",
+      "status": "planned"
+    },
+    {
+      "agent_id": "ucp-administrator",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "admin.list_tiers",
+            "admin.get_tier",
+            "admin.list_users",
+            "admin.get_user_tier",
+            "admin.set_user_tier",
+            "admin.remove_user_tier",
+            "admin.get_tenant_config",
+            "admin.reload_config",
+            "admin.audit_log"
+          ],
+          "allowed_domains": [
+            "directory"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "global_admin",
+          "approval_profile": "critical-regulated",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "critical"
+        },
+        "contract_id": "m365-agent-contract:ucp-administrator:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-owner:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Omar El-Masry",
+          "persona_id": "ucp-administrator",
+          "title": "UCP Control Plane Administrator"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "UCP Control Plane Administrator",
+      "person_name": "Omar El-Masry",
+      "status": "active"
+    },
+    {
+      "agent_id": "ui-designer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "files.list",
+            "files.get",
+            "files.search",
+            "files.create_folder",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:design",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:ui-designer:v1",
+        "identity": {
+          "department": "design",
+          "escalation_owner": "department-lead:design",
+          "manager": "department-lead:design",
+          "person_name": "Noah Anderson",
+          "persona_id": "ui-designer",
+          "title": "UI Designer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "UI Designer",
+      "person_name": "Noah Anderson",
+      "status": "active"
+    },
+    {
+      "agent_id": "ux-researcher",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "mail.list",
+            "mail.read",
+            "calendar.list",
+            "calendar.create",
+            "sites.list",
+            "files.list",
+            "files.get"
+          ],
+          "allowed_domains": [
+            "messaging",
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:design",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:ux-researcher:v1",
+        "identity": {
+          "department": "design",
+          "escalation_owner": "department-lead:design",
+          "manager": "department-lead:design",
+          "person_name": "Mila Novak",
+          "persona_id": "ux-researcher",
+          "title": "UX Researcher"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "UX Researcher",
+      "person_name": "Mila Novak",
+      "status": "active"
+    },
+    {
+      "agent_id": "visual-storyteller",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "files.list",
+            "files.get",
+            "files.search",
+            "files.create_folder",
+            "drives.list"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:design",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:visual-storyteller:v1",
+        "identity": {
+          "department": "design",
+          "escalation_owner": "department-lead:design",
+          "manager": "department-lead:design",
+          "person_name": "Diego Alvarez",
+          "persona_id": "visual-storyteller",
+          "title": "Visual Storyteller"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Visual Storyteller",
+      "person_name": "Diego Alvarez",
+      "status": "active"
+    },
+    {
+      "agent_id": "website-manager",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "sites.get",
+            "lists.list",
+            "lists.get",
+            "lists.items",
+            "lists.create_item",
+            "files.list",
+            "files.get",
+            "files.search",
+            "files.create_folder",
+            "files.upload",
+            "files.share"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "engineering-lead",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:website-manager:v1",
+        "identity": {
+          "department": "operations",
+          "escalation_owner": "department-lead:operations",
+          "manager": "department-lead:operations",
+          "person_name": "Elena Rodriguez",
+          "persona_id": "website-manager",
+          "title": "Website Manager"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Website Manager",
+      "person_name": "Elena Rodriguez",
+      "status": "active"
+    },
+    {
+      "agent_id": "website-operations-specialist",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "website.deploy",
+            "cdn.purge",
+            "dns.update",
+            "ssl.renew",
+            "performance.optimize",
+            "backup.restore"
+          ],
+          "allowed_domains": [],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "it-director",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "medium"
+        },
+        "contract_id": "m365-agent-contract:website-operations-specialist:v1",
+        "identity": {
+          "department": "marketing",
+          "escalation_owner": "department-owner:marketing",
+          "manager": "department-lead:marketing",
+          "person_name": "Lucia Fernandez",
+          "persona_id": "website-operations-specialist",
+          "title": "Website Operations Specialist"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Website Operations Specialist",
+      "person_name": "Lucia Fernandez",
+      "status": "active"
+    },
+    {
+      "agent_id": "whimsy-injector",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "files.list",
+            "files.get",
+            "files.search",
+            "drives.list",
+            "lists.list",
+            "lists.items"
+          ],
+          "allowed_domains": [
+            "sharepoint"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:design",
+          "approval_profile": "low-observe-create",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:whimsy-injector:v1",
+        "identity": {
+          "department": "design",
+          "escalation_owner": "department-lead:design",
+          "manager": "department-lead:design",
+          "person_name": "Luna Park",
+          "persona_id": "whimsy-injector",
+          "title": "Delight Designer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Delight Designer",
+      "person_name": "Luna Park",
+      "status": "active"
+    },
+    {
+      "agent_id": "workflow-optimizer",
+      "contract": {
+        "access_boundary": {
+          "allowed_actions": [
+            "sites.list",
+            "lists.list",
+            "lists.items",
+            "files.list",
+            "files.get",
+            "reports.teams_activity",
+            "reports.email_activity",
+            "reports.sharepoint_usage"
+          ],
+          "allowed_domains": [
+            "sharepoint",
+            "reports"
+          ],
+          "denied_by_default": true,
+          "external_presence_policy": "internal_only"
+        },
+        "approval_profile": {
+          "approval_owner": "department-owner:testing",
+          "approval_profile": "medium-operational",
+          "mutations_require": [
+            "UCP Execute",
+            "operator admission"
+          ],
+          "risk_tier": "low"
+        },
+        "contract_id": "m365-agent-contract:workflow-optimizer:v1",
+        "identity": {
+          "department": "testing",
+          "escalation_owner": "department-lead:testing",
+          "manager": "department-lead:testing",
+          "person_name": "Ava Johnson",
+          "persona_id": "workflow-optimizer",
+          "title": "Process Engineer"
+        },
+        "said_scope": {
+          "allowed": "SAID may lock only one action listed in this persona contract.",
+          "refuse": "SAID must refuse requests outside this persona contract.",
+          "repair": "SAID must request exact missing parameters before action execution."
+        }
+      },
+      "display_name": "Process Engineer",
+      "person_name": "Ava Johnson",
+      "status": "active"
+    }
+  ],
+  "schema_version": "m365-agent-contracts-v1",
+  "source_binding": "com.smarthaus.m365.inference-binding.v1",
+  "summary": {
+    "action_count": 445,
+    "active_personas": 54,
+    "persona_contract_only_personas": 5,
+    "persona_count": 59,
+    "planned_personas": 5,
+    "registry_backed_personas": 54,
+    "source_registry_agents": 59,
+    "source_total_agents": 59
+  }
+}
